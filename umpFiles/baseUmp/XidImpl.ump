@@ -1,0 +1,98 @@
+namespace com.sleepycat.je.log;
+
+class XidImpl
+{
+  isA Xid;
+  depend de.ovgu.cide.jakutil.*;
+  depend javax.transaction.xa.Xid;
+  depend java.sql.Timestamp;
+  depend java.nio.ByteBuffer;
+    private int formatId;
+
+    private byte[] gid;
+
+    private byte[] bqual;
+
+    public XidImpl(int formatId, byte[] gid, byte[] bqual) {
+	this.formatId = formatId;
+	this.gid = gid;
+	this.bqual = bqual;
+    }
+
+    public int getFormatId() {
+	return formatId;
+    }
+
+    public byte[] getGlobalTransactionId() {
+	return gid;
+    }
+
+    public byte[] getBranchQualifier() {
+	return bqual;
+    }
+
+    public boolean equals(Object o) {
+	if (!(o instanceof XidImpl)) {
+	    return false;
+	}
+	XidImpl xid = (XidImpl) o;
+	if (xid.getFormatId() != formatId) {
+	    return false;
+	}
+	if (compareByteArrays(xid.getGlobalTransactionId(), gid)
+		&& compareByteArrays(xid.getBranchQualifier(), bqual)) {
+	    return true;
+	}
+	return false;
+    }
+
+    public int hashCode() {
+	int code = formatId;
+	if (gid != null) {
+	    for (int i = 0; i < gid.length; i++) {
+		code += gid[i];
+	    }
+	}
+	if (bqual != null) {
+	    for (int i = 0; i < bqual.length; i++) {
+		code += bqual[i];
+	    }
+	}
+	return code;
+    }
+
+    private boolean compareByteArrays(byte[] b1, byte[] b2) {
+	if (b1 == null || b2 == null) {
+	    return b1 == b2;
+	}
+	if (b1.length != b2.length) {
+	    return false;
+	}
+	for (int i = 0; i < b1.length; i++) {
+	    if (b1[i] != b2[i]) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public String toString() {
+	StringBuffer sb = new StringBuffer();
+	sb.append("<Xid formatId=\"").append(formatId);
+	sb.append("\" gTxnId=\"");
+	if (gid == null) {
+	    sb.append("null");
+	} else {
+	    sb.append(new String(gid));
+	}
+	sb.append("\" bqual=\"");
+	if (bqual == null) {
+	    sb.append("null");
+	} else {
+	    sb.append(new String(bqual));
+	}
+	sb.append("\"/>");
+	return sb.toString();
+    }
+
+}

@@ -1,0 +1,65 @@
+namespace com.sleepycat.bind.serial;
+
+class ClassInfo
+{
+  isA Serializable;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.util.UtfOps;
+  depend com.sleepycat.util.RuntimeExceptionWrapper;
+  depend com.sleepycat.je.OperationStatus;
+  depend com.sleepycat.je.LockMode;
+  depend com.sleepycat.je.EnvironmentConfig;
+  depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.DatabaseEntry;
+  depend com.sleepycat.je.DatabaseConfig;
+  depend com.sleepycat.je.Database;
+  depend com.sleepycat.je.CursorConfig;
+  depend com.sleepycat.je.Cursor;
+  depend com.sleepycat.compat.DbCompat;
+  depend java.util.HashMap;
+  depend java.math.BigInteger;
+  depend java.io.Serializable;
+  depend java.io.ObjectStreamClass;
+  depend java.io.ObjectOutputStream;
+  depend java.io.ObjectInputStream;
+  depend java.io.IOException;
+  depend java.io.ByteArrayOutputStream;
+  depend java.io.ByteArrayInputStream;
+    private byte[] classID;
+
+    private transient ObjectStreamClass classFormat;
+
+    ClassInfo() {
+    }
+
+    ClassInfo(DatabaseEntry dbt) {
+	byte[] data = dbt.getData();
+	int len = data[0];
+	classID = new byte[len];
+	System.arraycopy(data, 1, classID, 0, len);
+    }
+
+    void toDbt(DatabaseEntry dbt) {
+	byte[] data = new byte[1 + classID.length];
+	data[0] = (byte) classID.length;
+	System.arraycopy(classID, 0, data, 1, classID.length);
+	dbt.setData(data);
+    }
+
+    void setClassID(byte[] classID) {
+	this.classID = classID;
+    }
+
+    byte[] getClassID() {
+	return classID;
+    }
+
+    ObjectStreamClass getClassFormat() {
+	return classFormat;
+    }
+
+    void setClassFormat(ObjectStreamClass classFormat) {
+	this.classFormat = classFormat;
+    }
+
+}

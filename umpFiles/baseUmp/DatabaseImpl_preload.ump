@@ -1,0 +1,91 @@
+namespace com.sleepycat.je.dbi;
+
+class DatabaseImpl_preload
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.TestHook;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.utilint.CmdUtil;
+  depend com.sleepycat.je.txn.ThreadLocker;
+  depend com.sleepycat.je.txn.Locker;
+  depend com.sleepycat.je.tree.WithRootLatched;
+  depend com.sleepycat.je.tree.TreeWalkerStatsAccumulator;
+  depend com.sleepycat.je.tree.TreeUtils;
+  depend com.sleepycat.je.tree.Tree;
+  depend com.sleepycat.je.tree.Node;
+  depend com.sleepycat.je.tree.ChildReference;
+  depend com.sleepycat.je.log.LogWritable;
+  depend com.sleepycat.je.log.LogUtils;
+  depend com.sleepycat.je.log.LogReadable;
+  depend com.sleepycat.je.log.LogException;
+  depend com.sleepycat.je.log.LogEntryType;
+  depend com.sleepycat.je.dbi.SortedLSNTreeWalker.TreeNodeProcessor;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.cleaner.UtilizationTracker;
+  depend com.sleepycat.je.SecondaryDatabase;
+  depend com.sleepycat.je.PreloadStatus;
+  depend com.sleepycat.je.PreloadStats;
+  depend com.sleepycat.je.PreloadConfig;
+  depend com.sleepycat.je.OperationStatus;
+  depend com.sleepycat.je.LockMode;
+  depend com.sleepycat.je.DbInternal;
+  depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.DatabaseEntry;
+  depend com.sleepycat.je.DatabaseConfig;
+  depend com.sleepycat.je.Database;
+  depend com.sleepycat.je.Cursor;
+  depend java.util.Set;
+  depend java.util.Map;
+  depend java.util.Iterator;
+  depend java.util.HashSet;
+  depend java.util.HashMap;
+  depend java.util.Comparator;
+  depend java.util.Collections;
+  depend java.nio.ByteBuffer;
+  depend java.io.PrintStream;
+    protected DatabaseImpl _this;
+
+    protected PreloadConfig config;
+
+    protected long maxBytes;
+
+    protected long maxMillisecs;
+
+    protected long targetTime;
+
+    protected long cacheBudget;
+
+    protected PreloadStats ret;
+
+    protected PreloadProcessor callback;
+
+    protected SortedLSNTreeWalker walker;
+
+    DatabaseImpl_preload(DatabaseImpl _this, PreloadConfig config) {
+	this._this = _this;
+	this.config = config;
+    }
+
+    PreloadStats execute() throws DatabaseException {
+	maxBytes = config.getMaxBytes();
+	maxMillisecs = config.getMaxMillisecs();
+	targetTime = Long.MAX_VALUE;
+	if (maxMillisecs > 0) {
+	    targetTime = System.currentTimeMillis() + maxMillisecs;
+	}
+	this.hook290();
+	ret = new PreloadStats();
+	callback = new PreloadProcessor(_this.envImpl, maxBytes, targetTime, ret);
+	walker = new PreloadLSNTreeWalker(_this, callback, config);
+	this.hook287();
+	return ret;
+    }
+
+    protected void hook287() throws DatabaseException {
+	walker.walk();
+    }
+
+    protected void hook290() throws DatabaseException {
+    }
+
+}

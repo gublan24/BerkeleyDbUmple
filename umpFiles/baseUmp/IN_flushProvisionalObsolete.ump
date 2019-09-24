@@ -1,0 +1,58 @@
+namespace com.sleepycat.je.tree;
+
+class IN_flushProvisionalObsolete
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.Tracer;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.log.entry.INLogEntry;
+  depend com.sleepycat.je.log.LoggableObject;
+  depend com.sleepycat.je.log.LogUtils;
+  depend com.sleepycat.je.log.LogReadable;
+  depend com.sleepycat.je.log.LogManager;
+  depend com.sleepycat.je.log.LogFileNotFoundException;
+  depend com.sleepycat.je.log.LogException;
+  depend com.sleepycat.je.log.LogEntryType;
+  depend com.sleepycat.je.dbi.MemoryBudget;
+  depend com.sleepycat.je.dbi.INList;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DbTree;
+  depend com.sleepycat.je.dbi.DbConfigManager;
+  depend com.sleepycat.je.dbi.DatabaseImpl;
+  depend com.sleepycat.je.dbi.DatabaseId;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.cleaner.UtilizationTracker;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.logging.Logger;
+  depend java.util.logging.Level;
+  depend java.util.List;
+  depend java.util.Comparator;
+  depend java.util.ArrayList;
+  depend java.nio.ByteBuffer;
+    protected IN _this;
+
+    protected LogManager logManager;
+
+    protected int memDelta;
+
+    IN_flushProvisionalObsolete(IN _this, LogManager logManager) {
+	this._this = _this;
+	this.logManager = logManager;
+    }
+
+    void execute() throws DatabaseException {
+	if (_this.provisionalObsolete != null) {
+	    this.hook656();
+	    logManager.countObsoleteINs(_this.provisionalObsolete);
+	    _this.provisionalObsolete = null;
+	    this.hook655();
+	}
+    }
+
+    protected void hook655() throws DatabaseException {
+    }
+
+    protected void hook656() throws DatabaseException {
+    }
+
+}

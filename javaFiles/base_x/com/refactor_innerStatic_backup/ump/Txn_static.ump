@@ -1,0 +1,75 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/txn/Txn.java
+namespace com.sleepycat.je.txn;
+class Txn {
+  private static class DatabaseCleanupInfo {
+      DatabaseImpl dbImpl;
+      boolean deleteAtCommit;
+      DatabaseCleanupInfo(    DatabaseImpl dbImpl,    boolean deleteAtCommit){
+        this.dbImpl=dbImpl;
+        this.deleteAtCommit=deleteAtCommit;
+      }
+    }
+}
+  @MethodObject static class Txn_addLock {
+      Txn_addLock(    Txn _this,    Long nodeId,    Lock lock,    LockType type,    LockGrantType grantStatus){
+        this._this=_this;
+        this.nodeId=nodeId;
+        this.lock=lock;
+        this.type=type;
+        this.grantStatus=grantStatus;
+      }
+      void execute() throws DatabaseException {
+  synchronized (_this) {
+          this.hook815();
+          if (type.isWriteLock()) {
+            if (_this.writeInfo == null) {
+              _this.writeInfo=new HashMap();
+              _this.undoDatabases=new HashMap();
+              this.hook818();
+            }
+            _this.writeInfo.put(nodeId,new WriteLockInfo(lock));
+            this.hook817();
+            if ((grantStatus == LockGrantType.PROMOTION) || (grantStatus == LockGrantType.WAIT_PROMOTION)) {
+              _this.readLocks.remove(lock);
+              this.hook819();
+            }
+            this.hook816();
+          }
+   else {
+            _this.addReadLock(lock);
+          }
+        }
+      }
+      protected Txn _this;
+      protected Long nodeId;
+      protected Lock lock;
+      protected LockType type;
+      protected LockGrantType grantStatus;
+      protected int delta;
+      protected void hook815() throws DatabaseException {
+      }
+      protected void hook816() throws DatabaseException {
+      }
+      protected void hook817() throws DatabaseException {
+      }
+      protected void hook818() throws DatabaseException {
+      }
+      protected void hook819() throws DatabaseException {
+      }
+    }
+}
+  @MethodObject static class Txn_traceCommit {
+      Txn_traceCommit(    Txn _this,    int numWriteLocks,    int numReadLocks){
+        this._this=_this;
+        this.numWriteLocks=numWriteLocks;
+        this.numReadLocks=numReadLocks;
+      }
+      void execute(){
+      }
+      protected Txn _this;
+      protected int numWriteLocks;
+      protected int numReadLocks;
+      protected Logger logger;
+      protected StringBuffer sb;
+    }
+}

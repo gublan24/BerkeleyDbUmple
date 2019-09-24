@@ -1,0 +1,46 @@
+namespace com.sleepycat.je.log;
+
+class EntryInfo
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.tree.LN;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.log.entry.LogEntry;
+  depend com.sleepycat.je.log.entry.LNLogEntry;
+  depend com.sleepycat.je.log.entry.INLogEntry;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DatabaseId;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.Map;
+  depend java.util.HashMap;
+  depend java.nio.ByteBuffer;
+  depend java.io.IOException;
+    public LogEntry targetLogEntry;
+
+    public byte targetCategory;
+
+    EntryInfo(LogEntry targetLogEntry, byte targetCategory) {
+	this.targetLogEntry = targetLogEntry;
+	this.targetCategory = targetCategory;
+    }
+
+    public int count;
+
+    public int provisionalCount;
+
+    public long totalBytes;
+
+    public int minBytes;
+
+    public int maxBytes;
+
+    EntryInfo() {
+	count = 0;
+	provisionalCount = 0;
+	totalBytes = 0;
+	minBytes = 0;
+	maxBytes = 0;
+    }
+
+}

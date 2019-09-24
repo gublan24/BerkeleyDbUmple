@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl_createDaemons
+{
+  depend com.sleepycat.je.incomp.INCompressor;
+    protected void hook332() throws DatabaseException {
+	compressorWakeupInterval = PropUtil
+		.microsToMillis(_this.configManager.getLong(EnvironmentParams.COMPRESSOR_WAKEUP_INTERVAL));
+	_this.inCompressor = new INCompressor(_this, compressorWakeupInterval, "INCompressor");
+	original();
+    }
+
+}

@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.utilint;
+
+class InternalException
+{
+  isA DatabaseException;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseException;
+    public InternalException() {
+	super();
+    }
+
+    public InternalException(String message) {
+	super(message);
+    }
+
+}

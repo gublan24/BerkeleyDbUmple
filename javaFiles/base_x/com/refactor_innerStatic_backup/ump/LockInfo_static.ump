@@ -1,0 +1,6 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/txn/LockInfo.java
+namespace com.sleepycat.je.txn;
+class LockInfo {
+  private static class StackTraceAtLockTime extends Exception {
+    }
+}

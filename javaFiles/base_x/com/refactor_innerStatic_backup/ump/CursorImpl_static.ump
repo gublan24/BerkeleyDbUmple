@@ -1,0 +1,372 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/CursorImpl.java
+namespace com.sleepycat.je.dbi;
+class CursorImpl {
+    static class SearchMode {
+      public static final SearchMode SET=new SearchMode(true,false,"SET");
+      public static final SearchMode BOTH=new SearchMode(true,true,"BOTH");
+      public static final SearchMode SET_RANGE=new SearchMode(false,false,"SET_RANGE");
+      public static final SearchMode BOTH_RANGE=new SearchMode(false,true,"BOTH_RANGE");
+      private boolean exactSearch;
+      private boolean dataSearch;
+      private String name;
+      private SearchMode(    boolean exactSearch,    boolean dataSearch,    String name){
+        this.exactSearch=exactSearch;
+        this.dataSearch=dataSearch;
+        this.name="SearchMode." + name;
+      }
+      /** 
+   * Returns true when the key or key/data search is exact, i.e., for SET
+   * and BOTH.
+   */
+      public final boolean isExactSearch(){
+        return exactSearch;
+      }
+      /** 
+   * Returns true when the data value is included in the search, i.e., for
+   * BOTH and BOTH_RANGE.
+   */
+      public final boolean isDataSearch(){
+        return dataSearch;
+      }
+      public String toString(){
+        return name;
+      }
+    }
+}
+    static class KeyChangeStatus {
+      /** 
+   * Operation status;
+   */
+      public OperationStatus status;
+      /** 
+   * Whether the operation moved to a new key.
+   */
+      public boolean keyChange;
+      public KeyChangeStatus(    OperationStatus status,    boolean keyChange){
+        this.status=status;
+        this.keyChange=keyChange;
+      }
+    }
+}
+  @MethodObject static class CursorImpl_latchBIN {
+  CursorImpl_latchBIN(CursorImpl _this){
+  this._this=_this;
+  }
+  BIN execute() throws DatabaseException {
+  try {
+  this.hook244();
+  throw ReturnHack.returnObject;
+  }
+   catch (ReturnObject r) {
+  return (BIN)r.value;
+  }
+  }
+  protected CursorImpl _this;
+  protected BIN waitingOn;
+  protected void hook244() throws DatabaseException {
+  this.hook245();
+  }
+  protected void hook245() throws DatabaseException {
+  throw new ReturnObject(_this.bin);
+  }
+  }
+}
+  @MethodObject static class CursorImpl_latchDBIN {
+  CursorImpl_latchDBIN(CursorImpl _this){
+  this._this=_this;
+  }
+  DBIN execute() throws DatabaseException {
+  try {
+  this.hook246();
+  throw ReturnHack.returnObject;
+  }
+   catch (ReturnObject r) {
+  return (DBIN)r.value;
+  }
+  }
+  protected CursorImpl _this;
+  protected BIN waitingOn;
+  protected void hook246() throws DatabaseException {
+  this.hook247();
+  }
+  protected void hook247() throws DatabaseException {
+  throw new ReturnObject(_this.dupBin);
+  }
+  }
+}
+  @MethodObject static class CursorImpl_lockNextKeyForInsert {
+  CursorImpl_lockNextKeyForInsert(CursorImpl _this,DatabaseEntry key,DatabaseEntry data){
+  this._this=_this;
+  this.key=key;
+  this.data=data;
+  }
+  void execute() throws DatabaseException {
+  tempKey=new DatabaseEntry(key.getData(),key.getOffset(),key.getSize());
+  tempData=new DatabaseEntry(data.getData(),data.getOffset(),data.getSize());
+  tempKey.setPartial(0,0,true);
+  tempData.setPartial(0,0,true);
+  lockedNextKey=false;
+  searchMode=_this.database.getSortedDuplicates() ? SearchMode.BOTH_RANGE : SearchMode.SET_RANGE;
+  this.hook248();
+  if (!lockedNextKey) {
+  _this.lockEofNode(LockType.RANGE_INSERT);
+  }
+  }
+  protected CursorImpl _this;
+  protected DatabaseEntry key;
+  protected DatabaseEntry data;
+  protected DatabaseEntry tempKey;
+  protected DatabaseEntry tempData;
+  protected boolean lockedNextKey;
+  protected SearchMode searchMode;
+  protected boolean latched;
+  protected int searchResult;
+  protected OperationStatus status;
+  protected void hook248() throws DatabaseException {
+  searchResult=_this.searchAndPosition(tempKey,tempData,searchMode,LockType.RANGE_INSERT);
+  if ((searchResult & _this.FOUND) != 0 && (searchResult & _this.FOUND_LAST) == 0) {
+  {
+  }
+  if ((searchResult & _this.EXACT_KEY) != 0) {
+    status=_this.getNext(tempKey,tempData,LockType.RANGE_INSERT,true,true);
+  }
+   else {
+    status=_this.getNextNoDup(tempKey,tempData,LockType.RANGE_INSERT,true,true);
+  }
+  if (status == OperationStatus.SUCCESS) {
+    lockedNextKey=true;
+  }
+  this.hook249();
+  }
+  }
+  protected void hook249() throws DatabaseException {
+  }
+  }
+}
+  @MethodObject static class CursorImpl_getNextDuplicate {
+  CursorImpl_getNextDuplicate(CursorImpl _this,DatabaseEntry foundKey,DatabaseEntry foundData,LockType lockType,boolean forward,boolean alreadyLatched){
+  this._this=_this;
+  this.foundKey=foundKey;
+  this.foundData=foundData;
+  this.lockType=lockType;
+  this.forward=forward;
+  this.alreadyLatched=alreadyLatched;
+  }
+  OperationStatus execute() throws DatabaseException {
+  try {
+  assert _this.assertCursorState(true) : _this.dumpToString(true);
+  this.hook250();
+  try {
+    while (_this.dupBin != null) {
+      this.hook251();
+      this.hook279();
+      if ((forward && ++_this.dupIndex < _this.dupBin.getNEntries()) || (!forward && --_this.dupIndex > -1)) {
+        ret=OperationStatus.SUCCESS;
+        if (foundKey != null) {
+          ret=_this.getCurrentAlreadyLatched(foundKey,foundData,lockType,forward);
+        }
+   else {
+          this.hook252();
+        }
+        if (ret == OperationStatus.SUCCESS) {
+          _this.incrementLNCount();
+          return ret;
+        }
+   else {
+          this.hook253();
+          if (_this.dupBinToBeRemoved != null) {
+            _this.flushDBINToBeRemoved();
+          }
+          continue;
+        }
+      }
+   else {
+        if (_this.dupBinToBeRemoved != null) {
+          _this.flushDBINToBeRemoved();
+        }
+        _this.dupBinToBeRemoved=_this.dupBin;
+        _this.dupBin=null;
+        this.hook255();
+        this.hook275();
+        this.hook254();
+  {
+        }
+        if (forward) {
+          newDupBin=(DBIN)_this.database.getTree().getNextBin(_this.dupBinToBeRemoved,true);
+        }
+   else {
+          newDupBin=(DBIN)_this.database.getTree().getPrevBin(_this.dupBinToBeRemoved,true);
+        }
+        if (newDupBin == null) {
+          return OperationStatus.NOTFOUND;
+        }
+   else {
+          if (forward) {
+            _this.dupIndex=-1;
+          }
+   else {
+            _this.dupIndex=newDupBin.getNEntries();
+          }
+          _this.addCursor(newDupBin);
+          _this.dupBin=newDupBin;
+          this.hook256();
+        }
+      }
+    }
+  }
+    finally {
+    this.hook257();
+    if (_this.dupBinToBeRemoved != null) {
+      _this.flushDBINToBeRemoved();
+    }
+  }
+  return OperationStatus.NOTFOUND;
+  }
+   catch (ReturnObject r) {
+  return (OperationStatus)r.value;
+  }
+  }
+  protected CursorImpl _this;
+  protected DatabaseEntry foundKey;
+  protected DatabaseEntry foundData;
+  protected LockType lockType;
+  protected boolean forward;
+  protected boolean alreadyLatched;
+  protected OperationStatus ret;
+  protected TreeWalkerStatsAccumulator treeStatsAccumulator;
+  protected DIN duplicateRoot;
+  protected DupCountLN dcl;
+  protected DBIN newDupBin;
+  protected void hook250() throws DatabaseException {
+  }
+  protected void hook251() throws DatabaseException {
+  }
+  protected void hook252() throws DatabaseException {
+  }
+  protected void hook253() throws DatabaseException {
+  }
+  protected void hook254() throws DatabaseException {
+  }
+  protected void hook255() throws DatabaseException {
+  }
+  protected void hook256() throws DatabaseException {
+  }
+  protected void hook257() throws DatabaseException {
+  }
+  protected void hook275() throws DatabaseException {
+  }
+  protected void hook279() throws DatabaseException {
+  }
+  }
+}
+  @MethodObject static class CursorImpl_fetchCurrent {
+  CursorImpl_fetchCurrent(CursorImpl _this,DatabaseEntry foundKey,DatabaseEntry foundData,LockType lockType,boolean first){
+  this._this=_this;
+  this.foundKey=foundKey;
+  this.foundData=foundData;
+  this.lockType=lockType;
+  this.first=first;
+  }
+  OperationStatus execute() throws DatabaseException {
+  try {
+  treeStatsAccumulator=_this.getTreeStatsAccumulator();
+  duplicateFetch=_this.setTargetBin();
+  if (_this.targetBin == null) {
+    return OperationStatus.NOTFOUND;
+  }
+  this.hook259();
+  n=null;
+  if (_this.targetIndex < 0 || _this.targetIndex >= _this.targetBin.getNEntries() || _this.targetBin.isEntryKnownDeleted(_this.targetIndex)) {
+  }
+   else {
+    if (_this.targetBin.isEntryPendingDeleted(_this.targetIndex)) {
+      this.hook280();
+    }
+    this.hook260();
+  }
+  if (n == null) {
+    if (treeStatsAccumulator != null) {
+      treeStatsAccumulator.incrementDeletedLNCount();
+    }
+    this.hook261();
+    return OperationStatus.KEYEMPTY;
+  }
+  _this.addCursor(_this.targetBin);
+  if (n.containsDuplicates()) {
+    assert !duplicateFetch;
+    duplicateRoot=(DIN)n;
+    this.hook262();
+    if (_this.positionFirstOrLast(first,duplicateRoot)) {
+      this.hook263();
+    }
+   else {
+      return OperationStatus.NOTFOUND;
+    }
+  }
+  ln=(LN)n;
+  assert TestHookExecute.doHookIfSet(_this.testHook);
+  lockResult=_this.lockLN(ln,lockType);
+  this.hook258();
+  throw ReturnHack.returnObject;
+  }
+   catch (ReturnObject r) {
+  return (OperationStatus)r.value;
+  }
+  }
+  protected CursorImpl _this;
+  protected DatabaseEntry foundKey;
+  protected DatabaseEntry foundData;
+  protected LockType lockType;
+  protected boolean first;
+  protected TreeWalkerStatsAccumulator treeStatsAccumulator;
+  protected boolean duplicateFetch;
+  protected Node n;
+  protected EnvironmentImpl envImpl;
+  protected DIN duplicateRoot;
+  protected LN ln;
+  protected LockResult lockResult;
+  protected byte[] lnData;
+  protected void hook258() throws DatabaseException {
+  ln=lockResult.getLN();
+  lnData=(ln != null) ? ln.getData() : null;
+  if (ln == null || lnData == null) {
+  if (treeStatsAccumulator != null) {
+    treeStatsAccumulator.incrementDeletedLNCount();
+  }
+  throw new ReturnObject(OperationStatus.KEYEMPTY);
+  }
+  duplicateFetch=_this.setTargetBin();
+  if (duplicateFetch) {
+  if (foundData != null) {
+    _this.setDbt(foundData,_this.targetBin.getKey(_this.targetIndex));
+  }
+  if (foundKey != null) {
+    _this.setDbt(foundKey,_this.targetBin.getDupKey());
+  }
+  }
+   else {
+  if (foundData != null) {
+    _this.setDbt(foundData,lnData);
+  }
+  if (foundKey != null) {
+    _this.setDbt(foundKey,_this.targetBin.getKey(_this.targetIndex));
+  }
+  }
+  throw new ReturnObject(OperationStatus.SUCCESS);
+  }
+  protected void hook259() throws DatabaseException {
+  }
+  protected void hook260() throws DatabaseException {
+  n=_this.targetBin.fetchTarget(_this.targetIndex);
+  }
+  protected void hook261() throws DatabaseException {
+  }
+  protected void hook262() throws DatabaseException {
+  }
+  protected void hook263() throws DatabaseException {
+  throw new ReturnObject(_this.fetchCurrent(foundKey,foundData,lockType,first));
+  }
+  protected void hook280() throws DatabaseException {
+  }
+  }
+}

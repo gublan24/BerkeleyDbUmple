@@ -1,0 +1,64 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/FileReader.java
+namespace com.sleepycat.je.log;
+class FileReader {
+  private static class EOFException extends Exception {
+    }
+}
+  @MethodObject static class FileReader_readNextEntry {
+      FileReader_readNextEntry(    FileReader _this){
+        this._this=_this;
+      }
+      boolean execute() throws DatabaseException, IOException {
+        foundEntry=false;
+        try {
+          while ((!_this.eof) && (!foundEntry)) {
+            _this.getLogEntryInReadBuffer();
+            dataBuffer=_this.readData(LogManager.HEADER_BYTES,true);
+            _this.readHeader(dataBuffer);
+            isTargetEntry=_this.isTargetEntry(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
+            this.hook476();
+            collectData=isTargetEntry;
+            this.hook475();
+            dataBuffer=_this.readData(_this.currentEntrySize,collectData);
+            if (_this.forward) {
+              _this.currentEntryOffset=_this.nextEntryOffset;
+              _this.nextEntryOffset+=LogManager.HEADER_BYTES + _this.currentEntrySize;
+            }
+            this.hook474();
+            if (isTargetEntry) {
+              if (_this.processEntry(dataBuffer)) {
+                foundEntry=true;
+                _this.nRead++;
+              }
+            }
+   else           if (collectData) {
+              _this.threadSafeBufferPosition(dataBuffer,_this.threadSafeBufferPosition(dataBuffer) + _this.currentEntrySize);
+            }
+          }
+        }
+   catch (      EOFException e) {
+          _this.eof=true;
+        }
+  catch (      DatabaseException e) {
+          this.hook468();
+          throw e;
+        }
+        return foundEntry;
+      }
+      protected FileReader _this;
+      protected boolean foundEntry;
+      protected ByteBuffer dataBuffer;
+      protected boolean isTargetEntry;
+      protected boolean doValidate;
+      protected boolean collectData;
+      protected LogEntryType problemType;
+      protected void hook468() throws DatabaseException, IOException {
+      }
+      protected void hook474() throws DatabaseException, IOException, EOFException {
+      }
+      protected void hook475() throws DatabaseException, IOException, EOFException {
+      }
+      protected void hook476() throws DatabaseException, IOException, EOFException {
+      }
+    }
+}

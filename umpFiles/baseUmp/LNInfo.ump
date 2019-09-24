@@ -1,0 +1,40 @@
+namespace com.sleepycat.je.cleaner;
+
+class LNInfo
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.tree.LN;
+  depend com.sleepycat.je.dbi.MemoryBudget;
+  depend com.sleepycat.je.dbi.DatabaseId;
+    private LN ln;
+
+    private DatabaseId dbId;
+
+    private byte[] key;
+
+    private byte[] dupKey;
+
+    public LNInfo(LN ln, DatabaseId dbId, byte[] key, byte[] dupKey) {
+	this.ln = ln;
+	this.dbId = dbId;
+	this.key = key;
+	this.dupKey = dupKey;
+    }
+
+    LN getLN() {
+	return ln;
+    }
+
+    DatabaseId getDbId() {
+	return dbId;
+    }
+
+    byte[] getKey() {
+	return key;
+    }
+
+    byte[] getDupKey() {
+	return dupKey;
+    }
+
+}

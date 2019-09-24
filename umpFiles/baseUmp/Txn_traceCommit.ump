@@ -1,0 +1,56 @@
+namespace com.sleepycat.je.txn;
+
+class Txn_traceCommit
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.Tracer;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.tree.TreeLocation;
+  depend com.sleepycat.je.tree.LN;
+  depend com.sleepycat.je.recovery.RecoveryManager;
+  depend com.sleepycat.je.log.entry.LNLogEntry;
+  depend com.sleepycat.je.log.LogWritable;
+  depend com.sleepycat.je.log.LogUtils;
+  depend com.sleepycat.je.log.LogReadable;
+  depend com.sleepycat.je.log.LogManager;
+  depend com.sleepycat.je.dbi.MemoryBudget;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DatabaseImpl;
+  depend com.sleepycat.je.dbi.DatabaseId;
+  depend com.sleepycat.je.dbi.CursorImpl;
+  depend com.sleepycat.je.TransactionConfig;
+  depend com.sleepycat.je.RunRecoveryException;
+  depend com.sleepycat.je.LockStats;
+  depend com.sleepycat.je.DbInternal;
+  depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.Database;
+  depend javax.transaction.xa.Xid;
+  depend javax.transaction.xa.XAResource;
+  depend java.util.logging.Logger;
+  depend java.util.logging.Level;
+  depend java.util.Set;
+  depend java.util.Map;
+  depend java.util.Iterator;
+  depend java.util.HashSet;
+  depend java.util.HashMap;
+  depend java.nio.ByteBuffer;
+    protected Txn _this;
+
+    protected int numWriteLocks;
+
+    protected int numReadLocks;
+
+    protected Logger logger;
+
+    protected StringBuffer sb;
+
+    Txn_traceCommit(Txn _this, int numWriteLocks, int numReadLocks) {
+	this._this = _this;
+	this.numWriteLocks = numWriteLocks;
+	this.numReadLocks = numReadLocks;
+    }
+
+    void execute() {
+    }
+
+}

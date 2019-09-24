@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.tree;
+
+class NodeNotEmptyException
+{
+  isA Exception;
+  depend de.ovgu.cide.jakutil.*;
+    public static final NodeNotEmptyException NODE_NOT_EMPTY = new NodeNotEmptyException();
+
+    private NodeNotEmptyException() {
+    }
+
+}

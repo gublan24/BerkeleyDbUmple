@@ -1,0 +1,23 @@
+namespace com.sleepycat.je;
+
+class DatabaseNotFoundException
+{
+  isA DatabaseException;
+  depend de.ovgu.cide.jakutil.*;
+    public DatabaseNotFoundException() {
+	super();
+    }
+
+    public DatabaseNotFoundException(Throwable t) {
+	super(t);
+    }
+
+    public DatabaseNotFoundException(String message) {
+	super(message);
+    }
+
+    public DatabaseNotFoundException(String message, Throwable t) {
+	super(message, t);
+    }
+
+}

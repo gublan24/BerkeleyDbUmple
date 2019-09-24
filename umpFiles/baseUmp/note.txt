@@ -1,0 +1,2 @@
+1) FileManager.ump: the nested classes (not static) are considered outerclass. Also the dependecies may not be added properly as the nested classes are going to be normal classes. 
+Also, the above change may need to change some definitions. 

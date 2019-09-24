@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.log;
+
+class LogException
+{
+  isA DatabaseException;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseException;
+    public LogException(String message) {
+	super(message);
+    }
+
+    public LogException(String message, Exception e) {
+	super(message, e);
+    }
+
+}

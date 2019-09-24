@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.txn;
+
+class Txn_traceCommit
+{
+    before execute {
+	logger = envImpl.getLogger(); //< error because of envImp !
+	//- original();
+    }
+
+}

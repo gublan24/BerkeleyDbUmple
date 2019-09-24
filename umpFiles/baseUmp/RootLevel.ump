@@ -1,0 +1,58 @@
+namespace com.sleepycat.je.dbi;
+
+class RootLevel
+{
+  isA WithRootLatched;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.txn.Locker;
+  depend com.sleepycat.je.txn.LockType;
+  depend com.sleepycat.je.txn.BasicLocker;
+  depend com.sleepycat.je.txn.AutoTxn;
+  depend com.sleepycat.je.tree.WithRootLatched;
+  depend com.sleepycat.je.tree.TreeUtils;
+  depend com.sleepycat.je.tree.Tree;
+  depend com.sleepycat.je.tree.NameLN;
+  depend com.sleepycat.je.tree.MapLN;
+  depend com.sleepycat.je.tree.LN;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.tree.ChildReference;
+  depend com.sleepycat.je.log.LoggableObject;
+  depend com.sleepycat.je.log.LogUtils;
+  depend com.sleepycat.je.log.LogReadable;
+  depend com.sleepycat.je.log.LogException;
+  depend com.sleepycat.je.log.LogEntryType;
+  depend com.sleepycat.je.dbi.CursorImpl.SearchMode;
+  depend com.sleepycat.je.TransactionConfig;
+  depend com.sleepycat.je.OperationStatus;
+  depend com.sleepycat.je.DeadlockException;
+  depend com.sleepycat.je.DatabaseNotFoundException;
+  depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.DatabaseEntry;
+  depend com.sleepycat.je.DatabaseConfig;
+  depend com.sleepycat.je.Database;
+  depend java.util.Map;
+  depend java.util.List;
+  depend java.util.ArrayList;
+  depend java.nio.ByteBuffer;
+  depend java.io.UnsupportedEncodingException;
+  depend java.io.PrintStream;
+    private DatabaseImpl db;
+
+    private int rootLevel;
+
+    RootLevel(DatabaseImpl db) {
+	this.db = db;
+	rootLevel = 0;
+    }
+
+    public IN doWork(ChildReference root) throws DatabaseException {
+	IN rootIN = (IN) root.fetchTarget(db, null);
+	rootLevel = rootIN.getLevel();
+	return null;
+    }
+
+    int getRootLevel() {
+	return rootLevel;
+    }
+
+}

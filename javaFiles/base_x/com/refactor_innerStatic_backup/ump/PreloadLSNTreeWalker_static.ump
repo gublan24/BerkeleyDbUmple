@@ -1,0 +1,12 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+namespace com.sleepycat.je.dbi;
+class PreloadLSNTreeWalker {
+  private static class INEntry {
+      INEntry(    IN in,    int index){
+        this.in=in;
+        this.index=index;
+      }
+      IN in;
+      int index;
+    }
+}

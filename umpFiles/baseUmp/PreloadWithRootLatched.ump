@@ -1,0 +1,20 @@
+namespace com.sleepycat.je.dbi;
+
+class PreloadWithRootLatched
+{
+  isA WithRootLatched;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.tree.WithRootLatched;
+  depend com.sleepycat.je.tree.Node;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.tree.ChildReference;
+  depend com.sleepycat.je.PreloadConfig;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.Map;
+  depend java.util.HashMap;
+    public IN doWork(ChildReference root) throws DatabaseException {
+	walkInternal();
+	return null;
+    }
+
+}

@@ -1,0 +1,178 @@
+namespace com.sleepycat.je.cleaner;
+
+class UtilizationProfile_populateCache
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.txn.Locker;
+  depend com.sleepycat.je.txn.LockType;
+  depend com.sleepycat.je.txn.BasicLocker;
+  depend com.sleepycat.je.txn.AutoTxn;
+  depend com.sleepycat.je.tree.TreeLocation;
+  depend com.sleepycat.je.tree.Tree;
+  depend com.sleepycat.je.tree.FileSummaryLN;
+  depend com.sleepycat.je.tree.BIN;
+  depend com.sleepycat.je.log.entry.LNLogEntry;
+  depend com.sleepycat.je.log.FileManager;
+  depend com.sleepycat.je.dbi.CursorImpl.SearchMode;
+  depend com.sleepycat.je.dbi.MemoryBudget;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.EnvConfigObserver;
+  depend com.sleepycat.je.dbi.DbTree;
+  depend com.sleepycat.je.dbi.DbConfigManager;
+  depend com.sleepycat.je.dbi.DatabaseImpl;
+  depend com.sleepycat.je.dbi.DatabaseId;
+  depend com.sleepycat.je.dbi.CursorImpl;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.TransactionConfig;
+  depend com.sleepycat.je.OperationStatus;
+  depend com.sleepycat.je.DbInternal;
+  depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.DatabaseEntry;
+  depend com.sleepycat.je.DatabaseConfig;
+  depend java.util.logging.Level;
+  depend java.util.TreeMap;
+  depend java.util.StringTokenizer;
+  depend java.util.SortedSet;
+  depend java.util.SortedMap;
+  depend java.util.Set;
+  depend java.util.List;
+  depend java.util.Iterator;
+  depend java.util.Arrays;
+  depend java.util.ArrayList;
+  depend java.io.File;
+    protected UtilizationProfile _this;
+
+    protected int oldMemorySize;
+
+    protected Long[] existingFiles;
+
+    protected Locker locker;
+
+    protected CursorImpl cursor;
+
+    protected DatabaseEntry keyEntry;
+
+    protected DatabaseEntry dataEntry;
+
+    protected OperationStatus status;
+
+    protected FileSummaryLN ln;
+
+    protected byte[] keyBytes;
+
+    protected boolean isOldVersion;
+
+    protected long fileNum;
+
+    protected Long fileNumLong;
+
+    protected int newMemorySize;
+
+    protected MemoryBudget mb;
+
+    UtilizationProfile_populateCache(UtilizationProfile _this) {
+	this._this = _this;
+    }
+
+    boolean execute() throws DatabaseException {
+	assert !_this.cachePopulated;
+	if (!_this.openFileSummaryDatabase()) {
+	    return false;
+	}
+	this.hook194();
+	existingFiles = _this.env.getFileManager().getAllFileNumbers();
+	locker = null;
+	cursor = null;
+	try {
+	    locker = new BasicLocker(_this.env);
+	    cursor = new CursorImpl(_this.fileSummaryDb, locker);
+	    keyEntry = new DatabaseEntry();
+	    dataEntry = new DatabaseEntry();
+	    if (cursor.positionFirstOrLast(true, null)) {
+		status = cursor.getCurrentAlreadyLatched(keyEntry, dataEntry, LockType.NONE, true);
+		if (status != OperationStatus.SUCCESS) {
+		    status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
+		}
+		while (status == OperationStatus.SUCCESS) {
+		    this.hook176();
+		    ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
+		    if (ln == null) {
+			status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
+			continue;
+		    }
+		    keyBytes = keyEntry.getData();
+		    isOldVersion = ln.hasStringKey(keyBytes);
+		    fileNum = ln.getFileNumber(keyBytes);
+		    fileNumLong = new Long(fileNum);
+		    if (Arrays.binarySearch(existingFiles, fileNumLong) >= 0) {
+			_this.fileSummaryMap.put(fileNumLong, ln.getBaseSummary());
+			if (isOldVersion) {
+			    _this.insertFileSummary(ln, fileNum, 0);
+			    this.hook182();
+			    cursor.delete();
+			    this.hook181();
+			} else {
+			    this.hook191();
+			}
+		    } else {
+			_this.fileSummaryMap.remove(fileNumLong);
+			if (isOldVersion) {
+			    this.hook184();
+			    cursor.delete();
+			    this.hook183();
+			} else {
+			    _this.deleteFileSummary(fileNumLong);
+			}
+		    }
+		    if (isOldVersion) {
+			status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
+		    } else {
+			if (!_this.getFirstFSLN(cursor, fileNum + 1, keyEntry, dataEntry, LockType.NONE)) {
+			    status = OperationStatus.NOTFOUND;
+			}
+		    }
+		}
+	    }
+	} finally {
+	    if (cursor != null) {
+		this.hook185();
+		cursor.close();
+	    }
+	    if (locker != null) {
+		locker.operationEnd();
+	    }
+	    this.hook195();
+	}
+	_this.cachePopulated = true;
+	return true;
+    }
+
+    protected void hook176() throws DatabaseException {
+    }
+
+    protected void hook181() throws DatabaseException {
+    }
+
+    protected void hook182() throws DatabaseException {
+    }
+
+    protected void hook183() throws DatabaseException {
+    }
+
+    protected void hook184() throws DatabaseException {
+    }
+
+    protected void hook185() throws DatabaseException {
+    }
+
+    protected void hook191() throws DatabaseException {
+    }
+
+    protected void hook194() throws DatabaseException {
+    }
+
+    protected void hook195() throws DatabaseException {
+    }
+
+}

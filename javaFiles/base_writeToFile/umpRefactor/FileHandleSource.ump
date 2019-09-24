@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.log;
+
+class FileHandleSource
+{
+  isA FileSource;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseException;
+    private FileHandle fileHandle;
+
+    FileHandleSource(FileHandle fileHandle, int readBufferSize, FileManager fileManager) {
+	super(fileHandle.getFile(), readBufferSize, fileManager);
+	this.fileHandle = fileHandle;
+    }
+
+}

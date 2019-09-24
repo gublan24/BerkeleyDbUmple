@@ -1,0 +1,120 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer_selectDirtyINs
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.Tracer;
+  depend com.sleepycat.je.utilint.PropUtil;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.utilint.DaemonThread;
+  depend com.sleepycat.je.tree.Tree;
+  depend com.sleepycat.je.tree.SearchResult;
+  depend com.sleepycat.je.tree.Node;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.tree.BIN;
+  depend com.sleepycat.je.log.LogManager;
+  depend com.sleepycat.je.dbi.MemoryBudget;
+  depend com.sleepycat.je.dbi.INList;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DbTree;
+  depend com.sleepycat.je.dbi.DbConfigManager;
+  depend com.sleepycat.je.dbi.DatabaseImpl;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.cleaner.UtilizationProfile;
+  depend com.sleepycat.je.cleaner.TrackedFileSummary;
+  depend com.sleepycat.je.cleaner.Cleaner;
+  depend com.sleepycat.je.DbInternal;
+  depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.CheckpointConfig;
+  depend java.util.logging.Level;
+  depend java.util.TreeMap;
+  depend java.util.SortedMap;
+  depend java.util.Set;
+  depend java.util.Map;
+  depend java.util.Iterator;
+  depend java.util.HashSet;
+    protected Checkpointer _this;
+
+    protected boolean flushAll;
+
+    protected boolean flushExtraLevel;
+
+    protected SortedMap newDirtyMap;
+
+    protected INList inMemINs;
+
+    protected long totalSize;
+
+    protected MemoryBudget mb;
+
+    protected Iterator iter;
+
+    protected IN in;
+
+    protected Integer level;
+
+    protected Set dirtySet;
+
+    Checkpointer_selectDirtyINs(Checkpointer _this, boolean flushAll, boolean flushExtraLevel) {
+	this._this = _this;
+	this.flushAll = flushAll;
+	this.flushExtraLevel = flushExtraLevel;
+    }
+
+    SortedMap execute() throws DatabaseException {
+	newDirtyMap = new TreeMap();
+	inMemINs = _this.envImpl.getInMemoryINs();
+	this.hook529();
+	this.hook553();
+	this.hook528();
+	return newDirtyMap;
+    }
+
+    protected void hook528() throws DatabaseException {
+	iter = inMemINs.iterator();
+	while (iter.hasNext()) {
+	    in = (IN) iter.next();
+	    in.latch(false);
+	    this.hook530();
+	}
+	this.hook554();
+	if (newDirtyMap.size() > 0) {
+	    if (flushAll) {
+		_this.highestFlushLevel = _this.envImpl.getDbMapTree().getHighestLevel();
+	    } else {
+		_this.highestFlushLevel = ((Integer) newDirtyMap.lastKey()).intValue();
+		if (flushExtraLevel) {
+		    _this.highestFlushLevel += 1;
+		}
+	    }
+	} else {
+	    _this.highestFlushLevel = IN.MAX_LEVEL;
+	}
+    }
+
+    protected void hook529() throws DatabaseException {
+    }
+
+    protected void hook530() throws DatabaseException {
+	if (in.getDirty()) {
+	    level = new Integer(in.getLevel());
+	    {
+	    }
+	    if (newDirtyMap.containsKey(level)) {
+		dirtySet = (Set) newDirtyMap.get(level);
+	    } else {
+		dirtySet = new HashSet();
+		newDirtyMap.put(level, dirtySet);
+	    }
+	    dirtySet.add(new CheckpointReference(in.getDatabase(), in.getNodeId(), in.containsDuplicates(),
+		    in.isDbRoot(), in.getMainTreeKey(), in.getDupTreeKey()));
+	}
+    }
+
+    protected void hook553() throws DatabaseException {
+    }
+
+    protected void hook554() throws DatabaseException {
+    }
+
+}

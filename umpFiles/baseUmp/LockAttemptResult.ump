@@ -1,0 +1,34 @@
+namespace com.sleepycat.je.txn;
+
+class LockAttemptResult
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.dbi.RangeRestartException;
+  depend com.sleepycat.je.dbi.MemoryBudget;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.EnvConfigObserver;
+  depend com.sleepycat.je.dbi.DbConfigManager;
+  depend com.sleepycat.je.dbi.DatabaseImpl;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.RunRecoveryException;
+  depend com.sleepycat.je.LockStats;
+  depend com.sleepycat.je.DeadlockException;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.Set;
+  depend java.util.Map;
+  depend java.util.Iterator;
+  depend java.util.HashSet;
+  depend java.util.HashMap;
+    boolean success;
+
+    Lock useLock;
+
+    LockGrantType lockGrant;
+
+    LockAttemptResult(Lock useLock, LockGrantType lockGrant, boolean success) {
+	this.useLock = useLock;
+	this.lockGrant = lockGrant;
+	this.success = success;
+    }
+
+}

@@ -1,0 +1,200 @@
+Start: ---------------------------------------------------------
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/OffsetList.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/OffsetList.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/OffsetList.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/OffsetList.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/FileProcessor.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/FileProcessor.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/FileProcessor.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/FileProcessor.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/UtilizationProfile.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/UtilizationProfile.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/UtilizationProfile.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/UtilizationProfile.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/Cleaner.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/Cleaner.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/Cleaner.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/Cleaner.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/TrackedFileSummary.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/TrackedFileSummary.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/cleaner/TrackedFileSummary.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/TrackedFileSummary.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/DIN.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/DIN.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/DIN.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/DIN.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/Tree.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/Tree.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/Tree.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/Tree.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/IN.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/IN.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/tree/IN.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/IN.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/util/DbRunAction.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/util/DbRunAction.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/util/DbRunAction.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/DbRunAction.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/util/DbSpace.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/util/DbSpace.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/util/DbSpace.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/DbSpace.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/EnvironmentImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/EnvironmentImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/EnvironmentImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/EnvironmentImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/SortedLSNTreeWalker.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/PreloadLSNTreeWalker.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/MemoryBudget.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/MemoryBudget.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/MemoryBudget.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/MemoryBudget.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/CursorImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/CursorImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/CursorImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/CursorImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DbEnvPool.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DbEnvPool.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DbEnvPool.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/DbEnvPool.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/INList.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/INList.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/INList.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/INList.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DatabaseImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DatabaseImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DatabaseImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/DatabaseImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DbTree.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DbTree.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/dbi/DbTree.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/DbTree.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/LockInfo.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/LockInfo.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/LockInfo.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/LockInfo.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/LockManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/LockManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/LockManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/LockManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/Txn.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/Txn.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/txn/Txn.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/Txn.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/utilint/TinyHashSet.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/utilint/TinyHashSet.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/utilint/TinyHashSet.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/TinyHashSet.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/CleanerFileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/CleanerFileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/CleanerFileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/CleanerFileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/StatsFileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/StatsFileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/StatsFileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/StatsFileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/FileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/FileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/FileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/FileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/FileManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/FileManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/FileManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/FileManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/LogManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/LogManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/LogManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/LogManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/LogUtils.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/LogUtils.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/log/LogUtils.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/LogUtils.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/recovery/Checkpointer.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/recovery/Checkpointer.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/recovery/Checkpointer.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/Checkpointer.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/recovery/RecoveryManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/recovery/RecoveryManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/recovery/RecoveryManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/RecoveryManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/Database.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/Database.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/je/Database.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/Database.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/bind/serial/StoredClassCatalog.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/bind/serial/StoredClassCatalog.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile/com/sleepycat/bind/serial/StoredClassCatalog.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_writeToFile//refactor_innerStaticClass_backup/StoredClassCatalog.java
+End: ---------------------------------------------------------

@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.tree;
+
+class BINBoundary
+{
+  depend de.ovgu.cide.jakutil.*;
+    /** 
+     * The last BIN was returned. 
+     */
+    public boolean isLastBin;
+
+    /** 
+     * The first BIN was returned. 
+     */
+    public boolean isFirstBin;
+
+}

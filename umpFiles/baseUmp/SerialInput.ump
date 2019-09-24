@@ -1,0 +1,61 @@
+namespace com.sleepycat.bind.serial;
+
+class SerialInput
+{
+  isA ObjectInputStream;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.util.RuntimeExceptionWrapper;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.io.ObjectStreamClass;
+  depend java.io.ObjectInputStream;
+  depend java.io.InputStream;
+  depend java.io.IOException;
+    private ClassCatalog classCatalog;
+
+    private ClassLoader classLoader;
+
+    /** 
+     * Creates a serial input stream.
+     * @param inis the input stream from which compact serialized objects willbe read.
+     * @param classCatalogis the catalog containing the class descriptions for theserialized objects.
+     */
+    public SerialInput(InputStream in, ClassCatalog classCatalog) throws IOException {
+	this(in, classCatalog, null);
+    }
+
+    /** 
+     * Creates a serial input stream.
+     * @param inis the input stream from which compact serialized objects willbe read.
+     * @param classCatalogis the catalog containing the class descriptions for theserialized objects.
+     * @param classLoaderis the class loader to use, or null if a default class loadershould be used.
+     */
+    public SerialInput(InputStream in, ClassCatalog classCatalog, ClassLoader classLoader) throws IOException {
+	super(in);
+	this.classCatalog = classCatalog;
+	this.classLoader = classLoader;
+    }
+
+    protected ObjectStreamClass readClassDescriptor() throws IOException, ClassNotFoundException {
+	try {
+	    byte len = readByte();
+	    byte[] id = new byte[len];
+	    readFully(id);
+	    return classCatalog.getClassFormat(id);
+	} catch (DatabaseException e) {
+	    throw new RuntimeExceptionWrapper(e);
+	}
+    }
+
+    protected Class resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
+	if (classLoader != null) {
+	    try {
+		return Class.forName(desc.getName(), false, classLoader);
+	    } catch (ClassNotFoundException e) {
+		return super.resolveClass(desc);
+	    }
+	} else {
+	    return super.resolveClass(desc);
+	}
+    }
+
+}

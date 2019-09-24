@@ -1,0 +1,52 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/Database.java
+namespace com.sleepycat.je;
+class Database {
+  static class DbState {
+      private String stateName;
+      DbState(    String stateName){
+        this.stateName=stateName;
+      }
+      public String toString(){
+        return "DbState." + stateName;
+      }
+    }
+}
+  @MethodObject static class Database_acquireTriggerListReadLock {
+      Database_acquireTriggerListReadLock(    Database _this){
+        this._this=_this;
+      }
+      void execute() throws DatabaseException {
+        if (_this.triggerList == null) {
+          _this.triggerList=new ArrayList();
+        }
+      }
+      protected Database _this;
+      protected EnvironmentImpl env;
+    }
+}
+  @MethodObject static class Database_acquireTriggerListWriteLock {
+      Database_acquireTriggerListWriteLock(    Database _this){
+        this._this=_this;
+      }
+      void execute() throws DatabaseException {
+        if (_this.triggerList == null) {
+          _this.triggerList=new ArrayList();
+        }
+      }
+      protected Database _this;
+      protected EnvironmentImpl env;
+    }
+}
+  @MethodObject static class Database_releaseTriggerListWriteLock {
+      Database_releaseTriggerListWriteLock(    Database _this){
+        this._this=_this;
+      }
+      void execute() throws DatabaseException {
+        if (_this.triggerList.size() == 0) {
+          _this.triggerList=null;
+        }
+      }
+      protected Database _this;
+      protected EnvironmentImpl env;
+    }
+}

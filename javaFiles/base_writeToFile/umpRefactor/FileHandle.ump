@@ -1,0 +1,38 @@
+namespace com.sleepycat.je.log;
+
+class FileHandle
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.io.RandomAccessFile;
+  depend java.io.IOException;
+    private RandomAccessFile file;
+
+    private boolean oldHeaderVersion;
+
+    FileHandle(RandomAccessFile file, String fileName, EnvironmentImpl env, boolean oldHeaderVersion) {
+	this.file = file;
+	this.oldHeaderVersion = oldHeaderVersion;
+	this.hook444(fileName, env);
+    }
+
+    RandomAccessFile getFile() {
+	return file;
+    }
+
+    boolean isOldHeaderVersion() {
+	return oldHeaderVersion;
+    }
+
+    void close() throws IOException {
+	if (file != null) {
+	    file.close();
+	    file = null;
+	}
+    }
+
+    protected void hook444(String fileName, EnvironmentImpl env) {
+    }
+
+}

@@ -1,0 +1,181 @@
+namespace com.sleepycat.je.tree;
+
+class Tree_forceSplit
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.Tracer;
+  depend com.sleepycat.je.utilint.TestHookExecute;
+  depend com.sleepycat.je.utilint.TestHook;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.txn.WriteLockInfo;
+  depend com.sleepycat.je.txn.Locker;
+  depend com.sleepycat.je.txn.LockType;
+  depend com.sleepycat.je.txn.LockResult;
+  depend com.sleepycat.je.txn.LockGrantType;
+  depend com.sleepycat.je.txn.BasicLocker;
+  depend com.sleepycat.je.recovery.RecoveryManager;
+  depend com.sleepycat.je.log.LogWritable;
+  depend com.sleepycat.je.log.LogUtils;
+  depend com.sleepycat.je.log.LogReadable;
+  depend com.sleepycat.je.log.LogManager;
+  depend com.sleepycat.je.dbi.INList;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DbTree;
+  depend com.sleepycat.je.dbi.DbConfigManager;
+  depend com.sleepycat.je.dbi.DatabaseImpl;
+  depend com.sleepycat.je.dbi.CursorImpl;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.cleaner.UtilizationTracker;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.logging.Logger;
+  depend java.util.logging.Level;
+  depend java.util.ListIterator;
+  depend java.util.List;
+  depend java.util.ArrayList;
+  depend java.nio.ByteBuffer;
+    protected Tree _this;
+
+    protected IN parent;
+
+    protected byte[] key;
+
+    protected ArrayList nodeLadder;
+
+    protected boolean allLeftSideDescent;
+
+    protected boolean allRightSideDescent;
+
+    protected int index;
+
+    protected IN child;
+
+    protected IN origParent;
+
+    protected ListIterator iter;
+
+    protected boolean isRootLatched;
+
+    protected boolean success;
+
+    protected boolean startedSplits;
+
+    protected LogManager logManager;
+
+    protected long lastParentForSplit;
+
+    protected SplitInfo info1;
+
+    protected int maxEntriesPerNode;
+
+    protected long newLsn;
+
+    protected SplitInfo info2;
+
+    Tree_forceSplit(Tree _this, IN parent, byte[] key) {
+	this._this = _this;
+	this.parent = parent;
+	this.key = key;
+    }
+
+    void execute() throws DatabaseException, SplitRequiredException {
+	nodeLadder = new ArrayList();
+	allLeftSideDescent = true;
+	allRightSideDescent = true;
+	{
+	}
+	child = null;
+	origParent = parent;
+	iter = null;
+	this.hook722();
+	success = false;
+	try {
+	    this.hook723();
+	    if (origParent.needsSplitting() || !origParent.isRoot()) {
+		throw _this.splitRequiredException;
+	    }
+	    do {
+		if (parent.getNEntries() == 0) {
+		    break;
+		} else {
+		    index = parent.findEntry(key, false, false);
+		    if (index != 0) {
+			allLeftSideDescent = false;
+		    }
+		    if (index != (parent.getNEntries() - 1)) {
+			allRightSideDescent = false;
+		    }
+		}
+		assert index >= 0;
+		child = (IN) parent.getTarget(index);
+		if (child == null) {
+		    break;
+		} else {
+		    this.hook724();
+		    nodeLadder.add(new SplitInfo(parent, child, index));
+		}
+		parent = child;
+	    } while (!(parent instanceof BIN));
+	    startedSplits = false;
+	    logManager = _this.database.getDbEnvironment().getLogManager();
+	    iter = nodeLadder.listIterator(nodeLadder.size());
+	    lastParentForSplit = -1;
+	    while (iter.hasPrevious()) {
+		info1 = (SplitInfo) iter.previous();
+		child = info1.child;
+		parent = info1.parent;
+		index = info1.index;
+		if (child.needsSplitting()) {
+		    maxEntriesPerNode = (child.containsDuplicates() ? _this.maxDupTreeEntriesPerNode
+			    : _this.maxMainTreeEntriesPerNode);
+		    if (allLeftSideDescent || allRightSideDescent) {
+			child.splitSpecial(parent, index, maxEntriesPerNode, key, allLeftSideDescent);
+		    } else {
+			child.split(parent, index, maxEntriesPerNode);
+		    }
+		    lastParentForSplit = parent.getNodeId();
+		    startedSplits = true;
+		    if (parent.isDbRoot()) {
+			this.hook726();
+			_this.root.setLsn(parent.getLastFullVersion());
+			parent.setDirty(true);
+		    }
+		} else {
+		    if (startedSplits) {
+			newLsn = 0;
+			if (lastParentForSplit == child.getNodeId()) {
+			    newLsn = child.getLastFullVersion();
+			} else {
+			    newLsn = child.log(logManager);
+			}
+			parent.updateEntry(index, newLsn);
+		    }
+		}
+		this.hook725();
+		child = null;
+		iter.remove();
+	    }
+	    success = true;
+	} finally {
+	    this.hook727();
+	}
+    }
+
+    protected void hook722() throws DatabaseException, SplitRequiredException {
+    }
+
+    protected void hook723() throws DatabaseException, SplitRequiredException {
+    }
+
+    protected void hook724() throws DatabaseException, SplitRequiredException {
+    }
+
+    protected void hook725() throws DatabaseException, SplitRequiredException {
+    }
+
+    protected void hook726() throws DatabaseException, SplitRequiredException {
+    }
+
+    protected void hook727() throws DatabaseException, SplitRequiredException {
+    }
+
+}

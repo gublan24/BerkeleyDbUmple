@@ -1,0 +1,47 @@
+namespace com.sleepycat.bind.tuple;
+
+class IntegerBinding
+{
+  isA TupleBinding;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseEntry;
+    private static final int INT_SIZE = 4;
+
+    public Object entryToObject(TupleInput input) {
+	return new Integer(input.readInt());
+    }
+
+    public void objectToEntry(Object object, TupleOutput output) {
+	output.writeInt(((Number) object).intValue());
+    }
+
+    protected TupleOutput getTupleOutput(Object object) {
+	return sizedOutput();
+    }
+
+    /** 
+     * Converts an entry buffer into a simple <code>int</code> value.
+     * @param entryis the source entry buffer.
+     * @return the resulting value.
+     */
+    public static int entryToInt(DatabaseEntry entry) {
+	return entryToInput(entry).readInt();
+    }
+
+    /** 
+     * Converts a simple <code>int</code> value into an entry buffer.
+     * @param valis the source value.
+     * @param entryis the destination entry buffer.
+     */
+    public static void intToEntry(int val, DatabaseEntry entry) {
+	outputToEntry(sizedOutput().writeInt(val), entry);
+    }
+
+    /** 
+     * Returns a tuple output object of the exact size needed, to avoid wasting space when a single primitive is output.
+     */
+    private static TupleOutput sizedOutput() {
+	return new TupleOutput(new byte[INT_SIZE]);
+    }
+
+}

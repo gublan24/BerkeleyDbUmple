@@ -1,0 +1,25 @@
+namespace com.sleepycat.je.log.entry;
+
+interface INContainingEntry
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DatabaseId;
+  depend com.sleepycat.je.DatabaseException;
+    /** 
+     * @return the IN held within this log entry.
+     */
+    public IN getIN(EnvironmentImpl env) throws DatabaseException;
+
+    /** 
+     * @return the database id held within this log entry.
+     */
+    public DatabaseId getDbId();
+
+    /** 
+     * @return the LSN that represents this IN.
+     */
+    public long getLsnOfIN(long lastReadLsn);
+
+}

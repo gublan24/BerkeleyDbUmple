@@ -1,0 +1,18 @@
+namespace com.sleepycat.je.log;
+
+interface LogWritable
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend java.nio.ByteBuffer;
+    /** 
+     * @return number of bytes used to store this object.
+     */
+    public int getLogSize();
+
+    /** 
+     * Serialize this object into the buffer. 
+     * @param logBuffer is the destination buffer
+     */
+    public void writeToLog(ByteBuffer logBuffer);
+
+}

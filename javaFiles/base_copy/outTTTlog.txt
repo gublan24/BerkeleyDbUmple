@@ -1,0 +1,101 @@
+Start: ---------------------------------------------------------
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/cleaner/OffsetList.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/OffsetList.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/cleaner/FileProcessor.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/FileProcessor.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/cleaner/UtilizationProfile.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/UtilizationProfile.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/cleaner/Cleaner.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/Cleaner.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/cleaner/TrackedFileSummary.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/TrackedFileSummary.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/tree/DIN.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/DIN.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/tree/Tree.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/Tree.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/tree/IN.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/IN.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/util/DbRunAction.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/DbRunAction.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/util/DbSpace.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/DbSpace.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/EnvironmentImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/EnvironmentImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/SortedLSNTreeWalker.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/PreloadLSNTreeWalker.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/MemoryBudget.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/MemoryBudget.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/CursorImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/CursorImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/DbEnvPool.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/DbEnvPool.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/INList.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/INList.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/DatabaseImpl.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/DatabaseImpl.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/dbi/DbTree.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/DbTree.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/txn/LockInfo.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/LockInfo.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/txn/LockManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/LockManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/txn/Txn.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/Txn.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/utilint/TinyHashSet.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/TinyHashSet.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/log/CleanerFileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/CleanerFileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/log/StatsFileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/StatsFileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/log/FileReader.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/FileReader.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/log/FileManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/FileManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/log/LogManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/LogManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/log/LogUtils.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/LogUtils.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/recovery/Checkpointer.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/Checkpointer.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/recovery/RecoveryManager.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/RecoveryManager.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/je/Database.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/Database.java
+/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/bind/serial/StoredClassCatalog.java
+ 			>>
+ 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/outTTT/StoredClassCatalog.java
+End: ---------------------------------------------------------

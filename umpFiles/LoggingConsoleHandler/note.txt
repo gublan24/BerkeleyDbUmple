@@ -1,0 +1,6 @@
+1) As Umple raises warning for the below string, it cause problem to inner mixsets: 
+   private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	    + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+
+2) DbRunAction.java has the static class DbRunAction_main.
