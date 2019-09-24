@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.utilint;
+
+class TestHookExecute
+{
+  depend de.ovgu.cide.jakutil.*;
+    public static boolean doHookIfSet(TestHook testHook) {
+	if (testHook != null) {
+	    testHook.doHook();
+	}
+	return true;
+    }
+
+}

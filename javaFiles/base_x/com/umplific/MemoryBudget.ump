@@ -1,0 +1,79 @@
+namespace com.sleepycat.je.dbi;
+
+class MemoryBudget
+{
+  isA EnvConfigObserver;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.tree.DIN;
+  depend com.sleepycat.je.tree.DBIN;
+  depend com.sleepycat.je.tree.BIN;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.Iterator;
+    public final static long MIN_MAX_MEMORY_SIZE = 96 * 1024;
+
+    public final static String MIN_MAX_MEMORY_SIZE_STRING = Long.toString(MIN_MAX_MEMORY_SIZE);
+
+    private final static long N_64MB = (1 << 26);
+
+    private long maxMemory;
+
+    private long logBufferBudget;
+
+    private EnvironmentImpl envImpl;
+
+    private static void sinit() {
+	new MemoryBudget_sinit().execute();
+    }
+
+    MemoryBudget(EnvironmentImpl envImpl, DbConfigManager configManager) throws DatabaseException {
+	this.envImpl = envImpl;
+	envImpl.addConfigObserver(this);
+	reset(configManager);
+	this.hook351(configManager);
+    }
+
+    /** 
+     * Respond to config updates.
+     */
+    public void envConfigUpdate(DbConfigManager configManager) throws DatabaseException {
+	long oldLogBufferBudget = logBufferBudget;
+	reset(configManager);
+	if (oldLogBufferBudget != logBufferBudget) {
+	    envImpl.getLogManager().resetPool(configManager);
+	}
+    }
+
+    /** 
+     * Initialize at construction time and when the cache is resized.
+     */
+    private void reset(DbConfigManager configManager) throws DatabaseException {
+	new MemoryBudget_reset(this, configManager).execute();
+    }
+
+    /** 
+     * Returns Runtime.maxMemory(), accounting for a MacOS bug. May return Long.MAX_VALUE if there is no inherent limit. Used by unit tests as well as by this class.
+     */
+    public static long getRuntimeMaxMemory() {
+	if ("Mac OS X".equals(System.getProperty("os.name"))) {
+	    String jvmVersion = System.getProperty("java.version");
+	    if (jvmVersion != null && jvmVersion.startsWith("1.4.2")) {
+		return Long.MAX_VALUE;
+	    }
+	}
+	return Runtime.getRuntime().maxMemory();
+    }
+
+    public long getLogBufferBudget() {
+	return logBufferBudget;
+    }
+
+    public long getMaxMemory() {
+	return maxMemory;
+    }
+
+    protected void hook351(DbConfigManager configManager) throws DatabaseException {
+    }
+
+}

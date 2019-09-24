@@ -1,0 +1,82 @@
+namespace com.sleepycat.je.log.entry;
+
+class SingleItemLogEntry
+{
+  isA LogEntry;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.log.LogReadable;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.nio.ByteBuffer;
+    private Class logClass;
+
+    LogReadable item;
+
+    public SingleItemLogEntry(Class logClass) {
+	this.logClass = logClass;
+    }
+
+    /** 
+     * @see LogEntry#readEntry
+     */
+    public void readEntry(ByteBuffer entryBuffer, int entrySize, byte entryTypeVersion, boolean readFullItem)
+	    throws DatabaseException {
+	try {
+	    item = (LogReadable) logClass.newInstance();
+	    item.readFromLog(entryBuffer, entryTypeVersion);
+	} catch (IllegalAccessException e) {
+	    throw new DatabaseException(e);
+	} catch (InstantiationException e) {
+	    throw new DatabaseException(e);
+	}
+    }
+
+    /** 
+     * @see LogEntry#dumpEntry
+     */
+    public StringBuffer dumpEntry(StringBuffer sb, boolean verbose) {
+	item.dumpLog(sb, verbose);
+	return sb;
+    }
+
+    /** 
+     * @see LogEntry#getMainItem
+     */
+    public Object getMainItem() {
+	return item;
+    }
+
+    /** 
+     * @see LogEntry#clone
+     */
+    public Object clone() throws CloneNotSupportedException {
+	return super.clone();
+    }
+
+    /** 
+     * @see LogEntry#isTransactional
+     */
+    public boolean isTransactional() {
+	return item.logEntryIsTransactional();
+    }
+
+    /** 
+     * @see LogEntry#getTransactionId
+     */
+    public long getTransactionId() {
+	return item.getTransactionId();
+    }
+
+    /** 
+     * @return a new instance
+     */
+    public LogEntry getNewInstance() throws DatabaseException {
+	try {
+	    return (LogEntry) logClass.newInstance();
+	} catch (InstantiationException e) {
+	    throw new DatabaseException(e);
+	} catch (IllegalAccessException e) {
+	    throw new DatabaseException(e);
+	}
+    }
+
+}

@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.dbi;
+
+class RangeRestartException
+{
+  isA DatabaseException;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseException;
+    public RangeRestartException() {
+	super();
+    }
+
+}

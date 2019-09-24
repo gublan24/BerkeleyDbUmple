@@ -1,0 +1,17 @@
+namespace com.sleepycat.je.utilint;
+
+class ExceptionEventTrace
+{
+  isA EventTrace;
+  depend de.ovgu.cide.jakutil.*;
+    private Exception event;
+
+    public ExceptionEventTrace() {
+	event = new Exception();
+    }
+
+    public String toString() {
+	return Tracer.getStackTrace(event);
+    }
+
+}

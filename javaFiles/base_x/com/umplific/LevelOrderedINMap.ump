@@ -1,0 +1,21 @@
+namespace com.sleepycat.je.utilint;
+
+class LevelOrderedINMap
+{
+  isA TreeMap;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.tree.IN;
+  depend java.util.TreeMap;
+  depend java.util.Set;
+  depend java.util.HashSet;
+    public void putIN(IN in) {
+	Integer level = new Integer(in.getLevel());
+	Set inSet = (Set) get(level);
+	if (inSet == null) {
+	    inSet = new HashSet();
+	    put(level, inSet);
+	}
+	inSet.add(in);
+    }
+
+}

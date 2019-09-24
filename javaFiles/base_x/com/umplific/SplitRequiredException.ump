@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.tree;
+
+class SplitRequiredException
+{
+  isA Exception;
+  depend de.ovgu.cide.jakutil.*;
+    public SplitRequiredException() {
+    }
+
+}

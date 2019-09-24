@@ -1,0 +1,92 @@
+namespace com.sleepycat.je.log;
+
+class LogEndFileDescriptor
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.HexFormatter;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.utilint.Adler32;
+  depend com.sleepycat.je.log.entry.LogEntry;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.dbi.DbConfigManager;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.RunRecoveryException;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.zip.Checksum;
+  depend java.util.Set;
+  depend java.util.Random;
+  depend java.util.Map;
+  depend java.util.LinkedList;
+  depend java.util.Iterator;
+  depend java.util.Hashtable;
+  depend java.util.HashMap;
+  depend java.util.Arrays;
+  depend java.nio.channels.OverlappingFileLockException;
+  depend java.nio.channels.FileLock;
+  depend java.nio.channels.FileChannel;
+  depend java.nio.channels.ClosedChannelException;
+  depend java.nio.ByteBuffer;
+  depend java.io.RandomAccessFile;
+  depend java.io.IOException;
+  depend java.io.FileNotFoundException;
+  depend java.io.File;
+    private RandomAccessFile endOfLogRWFile = null;
+
+    private RandomAccessFile endOfLogSyncFile = null;
+
+    /** 
+     * getWritableFile must be called under the log write latch.
+     */
+    RandomAccessFile getWritableFile(long fileNumber) throws RunRecoveryException {
+	try {
+	    if (endOfLogRWFile == null) {
+		endOfLogRWFile = makeFileHandle(fileNumber, FileMode.READWRITE_MODE).getFile();
+		endOfLogSyncFile = makeFileHandle(fileNumber, FileMode.READWRITE_MODE).getFile();
+	    }
+	    return endOfLogRWFile;
+	} catch (Exception e) {
+	    throw new RunRecoveryException(envImpl, e);
+	}
+    }
+
+    /** 
+     * FSync the log file that makes up the end of the log.
+     */
+    void force() throws DatabaseException, IOException {
+	RandomAccessFile file = endOfLogSyncFile;
+	if (file != null) {
+	    FileChannel channel = file.getChannel();
+	    try {
+		channel.force(false);
+	    } catch (ClosedChannelException e) {
+		throw new RunRecoveryException(envImpl, "Channel closed, may be due to thread interrupt", e);
+	    }
+	    assert EnvironmentImpl.maybeForceYield();
+	}
+    }
+
+    /** 
+     * Close the end of the log file descriptor. Use atomic assignment to ensure that we won't force and close on the same descriptor.
+     */
+    void close() throws IOException {
+	IOException firstException = null;
+	if (endOfLogRWFile != null) {
+	    RandomAccessFile file = endOfLogRWFile;
+	    endOfLogRWFile = null;
+	    try {
+		file.close();
+	    } catch (IOException e) {
+		firstException = e;
+	    }
+	}
+	if (endOfLogSyncFile != null) {
+	    RandomAccessFile file = endOfLogSyncFile;
+	    endOfLogSyncFile = null;
+	    file.close();
+	}
+	if (firstException != null) {
+	    throw firstException;
+	}
+    }
+
+}

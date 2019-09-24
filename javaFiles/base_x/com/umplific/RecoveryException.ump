@@ -1,0 +1,17 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryException
+{
+  isA RunRecoveryException;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.RunRecoveryException;
+    public RecoveryException(EnvironmentImpl env, String message, Throwable t) {
+	super(env, message, t);
+    }
+
+    public RecoveryException(EnvironmentImpl env, String message) {
+	super(env, message);
+    }
+
+}
