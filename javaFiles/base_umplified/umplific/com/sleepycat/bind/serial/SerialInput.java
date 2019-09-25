@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.IOException;
 
 // line 3 "../../../../SerialInput.ump"
-public class SerialInput
+public class SerialInput implements ObjectInputStream
 {
 
   //------------------------

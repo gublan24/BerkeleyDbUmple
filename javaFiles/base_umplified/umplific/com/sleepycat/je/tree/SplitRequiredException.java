@@ -3,9 +3,10 @@
 
 package com.sleepycat.je.tree;
 import de.ovgu.cide.jakutil.*;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../SplitRequiredException.ump"
-public class SplitRequiredException
+public class SplitRequiredException implements Exception
 {
 
   //------------------------

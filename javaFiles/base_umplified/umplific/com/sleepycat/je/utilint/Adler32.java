@@ -5,9 +5,10 @@ package com.sleepycat.je.utilint;
 import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 import java.util.zip.Checksum;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../Adler32.ump"
-public class Adler32
+public class Adler32 implements Checksum
 {
 
   //------------------------

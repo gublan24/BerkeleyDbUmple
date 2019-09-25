@@ -29,11 +29,12 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
+import com.sleepycat.bind.serial.*;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../IN.ump"
 // line 3 "../../../../IN_static.ump"
-public class IN extends Node implements LoggableObject,LogReadable
+public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
   //------------------------

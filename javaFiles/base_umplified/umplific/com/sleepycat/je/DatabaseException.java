@@ -3,9 +3,10 @@
 
 package com.sleepycat.je;
 import de.ovgu.cide.jakutil.*;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../DatabaseException.ump"
-public class DatabaseException
+public class DatabaseException implements Exception
 {
 
   //------------------------

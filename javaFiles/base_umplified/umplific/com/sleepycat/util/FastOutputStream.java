@@ -6,9 +6,10 @@ import de.ovgu.cide.jakutil.*;
 import java.io.UnsupportedEncodingException;
 import java.io.OutputStream;
 import java.io.IOException;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../FastOutputStream.ump"
-public class FastOutputStream
+public class FastOutputStream implements OutputStream
 {
 
   //------------------------

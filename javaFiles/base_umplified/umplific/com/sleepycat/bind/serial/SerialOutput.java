@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
 // line 3 "../../../../SerialOutput.ump"
-public class SerialOutput
+public class SerialOutput implements ObjectOutputStream
 {
 
   //------------------------

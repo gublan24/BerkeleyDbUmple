@@ -9,9 +9,10 @@ import com.sleepycat.je.DatabaseException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../DaemonThread.ump"
-public class DaemonThread implements DaemonRunner
+public class DaemonThread implements DaemonRunner,Runnable
 {
 
   //------------------------

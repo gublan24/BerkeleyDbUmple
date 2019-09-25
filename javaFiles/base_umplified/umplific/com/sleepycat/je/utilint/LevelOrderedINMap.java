@@ -7,9 +7,10 @@ import com.sleepycat.je.tree.IN;
 import java.util.TreeMap;
 import java.util.Set;
 import java.util.HashSet;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../LevelOrderedINMap.ump"
-public class LevelOrderedINMap
+public class LevelOrderedINMap implements TreeMap
 {
 
   //------------------------

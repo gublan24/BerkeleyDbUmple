@@ -5,9 +5,10 @@ package com.sleepycat.util;
 import de.ovgu.cide.jakutil.*;
 import java.io.InputStream;
 import java.io.IOException;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../FastInputStream.ump"
-public class FastInputStream
+public class FastInputStream implements InputStream
 {
 
   //------------------------

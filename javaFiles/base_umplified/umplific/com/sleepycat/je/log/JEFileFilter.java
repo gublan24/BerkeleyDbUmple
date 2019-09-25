@@ -7,9 +7,10 @@ import java.util.StringTokenizer;
 import java.io.FilenameFilter;
 import java.io.File;
 import java.util.*;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../JEFileFilter.ump"
-public class JEFileFilter
+public class JEFileFilter implements FilenameFilter
 {
 
   //------------------------

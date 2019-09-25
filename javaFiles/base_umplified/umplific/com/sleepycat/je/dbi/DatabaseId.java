@@ -9,10 +9,11 @@ import com.sleepycat.je.log.LogReadable;
 import com.sleepycat.je.DatabaseException;
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
+import com.sleepycat.bind.serial.*;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DatabaseId.ump"
-public class DatabaseId implements LogWritable,LogReadable
+public class DatabaseId implements Comparable,LogWritable,LogReadable
 {
 
   //------------------------

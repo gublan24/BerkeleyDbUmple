@@ -4,9 +4,10 @@
 package com.sleepycat.util;
 import de.ovgu.cide.jakutil.*;
 import java.io.IOException;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../IOExceptionWrapper.ump"
-public class IOExceptionWrapper implements ExceptionWrapper
+public class IOExceptionWrapper implements ExceptionWrapper,IOException
 {
 
   //------------------------

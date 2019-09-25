@@ -5,9 +5,10 @@ package com.sleepycat.je.tree;
 import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.DatabaseEntry;
 import java.util.Comparator;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../Key.ump"
-public class Key
+public class Key implements Comparable
 {
 
   //------------------------

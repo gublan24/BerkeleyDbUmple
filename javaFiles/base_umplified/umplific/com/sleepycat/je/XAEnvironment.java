@@ -9,9 +9,10 @@ import javax.transaction.xa.Xid;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.XAException;
 import java.io.File;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../XAEnvironment.ump"
-public class XAEnvironment extends Environment
+public class XAEnvironment extends Environment implements XAResource
 {
 
   //------------------------

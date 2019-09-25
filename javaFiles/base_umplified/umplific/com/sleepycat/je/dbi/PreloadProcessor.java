@@ -7,9 +7,10 @@ import com.sleepycat.je.utilint.DbLsn;
 import com.sleepycat.je.log.LogEntryType;
 import com.sleepycat.je.dbi.SortedLSNTreeWalker.TreeNodeProcessor;
 import com.sleepycat.je.PreloadStats;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../PreloadProcessor.ump"
-public class PreloadProcessor
+public class PreloadProcessor implements TreeNodeProcessor
 {
 
   //------------------------

@@ -3,9 +3,10 @@
 
 package com.sleepycat.je.utilint;
 import de.ovgu.cide.jakutil.*;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../NotImplementedYetException.ump"
-public class NotImplementedYetException
+public class NotImplementedYetException implements RuntimeException
 {
 
   //------------------------

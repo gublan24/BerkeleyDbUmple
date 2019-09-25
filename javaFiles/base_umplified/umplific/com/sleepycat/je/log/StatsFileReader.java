@@ -299,9 +299,10 @@ public class StatsFileReader extends DumpFileReader
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   package com.sleepycat.je.log;
+  import com.sleepycat.bind.serial.*;
   
   // line 18 "../../../../StatsFileReader_static.ump"
-  public static class LogEntryTypeComparator
+  public static class LogEntryTypeComparator implements Comparator
   {
   
     //------------------------

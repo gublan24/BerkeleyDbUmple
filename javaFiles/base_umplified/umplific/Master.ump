@@ -249,3 +249,4 @@ use TupleBase.ump;
 use TupleTupleBinding.ump;
 
 use ../com/ump_static/Master.ump;
+use ../interfaces_required.ump;

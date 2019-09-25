@@ -623,9 +623,10 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   package com.sleepycat.je.dbi;
+  import com.sleepycat.bind.serial.*;
   
   // line 4 "../../../../DatabaseImpl_static.ump"
-  public static class ObsoleteProcessor
+  public static class ObsoleteProcessor implements TreeNodeProcessor
   {
   
     //------------------------
@@ -669,9 +670,10 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   package com.sleepycat.je.dbi;
+  import com.sleepycat.bind.serial.*;
   
   // line 15 "../../../../DatabaseImpl_static.ump"
-  public static class LNCounter
+  public static class LNCounter implements TreeNodeProcessor
   {
   
     //------------------------
@@ -717,9 +719,10 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   package com.sleepycat.je.dbi;
+  import com.sleepycat.bind.serial.*;
   
   // line 28 "../../../../DatabaseImpl_static.ump"
-  public static class HaltPreloadException
+  public static class HaltPreloadException implements RuntimeException
   {
   
     //------------------------

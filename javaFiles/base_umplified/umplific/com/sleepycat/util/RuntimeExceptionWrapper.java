@@ -3,9 +3,10 @@
 
 package com.sleepycat.util;
 import de.ovgu.cide.jakutil.*;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../RuntimeExceptionWrapper.ump"
-public class RuntimeExceptionWrapper implements ExceptionWrapper
+public class RuntimeExceptionWrapper implements ExceptionWrapper,RuntimeException
 {
 
   //------------------------
