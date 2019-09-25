@@ -1,3 +1,8 @@
+
+
+// add the missing interfaces; file implements them have no implement keyword as in the original files
+ 
+
 external interface 	  Checksum	{	}
 external interface 	  Comparable	{	}
 external interface 	  Comparator	{	}
