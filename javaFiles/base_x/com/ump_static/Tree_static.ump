@@ -1,14 +1,58 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/tree/Tree.java
 namespace com.sleepycat.je.tree;
 class Tree {
-    static class SearchType {
+  static class SearchType {
       public static final SearchType NORMAL=new SearchType();
       public static final SearchType LEFT=new SearchType();
       public static final SearchType RIGHT=new SearchType();
       private SearchType(){
       }
     }
-}
+  inner class RootChildReference extends ChildReference {
+      private RootChildReference(){
+        super();
+      }
+      private RootChildReference(    Node target,    byte[] key,    long lsn){
+        super(target,key,lsn);
+      }
+      private RootChildReference(    Node target,    byte[] key,    long lsn,    byte existingState){
+        super(target,key,lsn,existingState);
+      }
+      public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
+        this.hook666();
+        return super.fetchTarget(database,in);
+      }
+      public void setTarget(    Node target){
+        this.hook667();
+        super.setTarget(target);
+      }
+      public void clearTarget(){
+        this.hook668();
+        super.clearTarget();
+      }
+      public void setLsn(    long lsn){
+        this.hook669();
+        super.setLsn(lsn);
+      }
+      protected void hook666() throws DatabaseException {
+      }
+      protected void hook667(){
+      }
+      protected void hook668(){
+      }
+      protected void hook669(){
+      }
+    }
+  static  class SplitInfo {
+      IN parent;
+      IN child;
+      int index;
+      SplitInfo(    IN parent,    IN child,    int index){
+        this.parent=parent;
+        this.child=child;
+        this.index=index;
+      }
+    }
   @MethodObject static class Tree_searchSplitsAllowed {
       Tree_searchSplitsAllowed(    Tree _this,    byte[] key,    long nid,    boolean updateGeneration){
         this._this=_this;
@@ -74,7 +118,6 @@ class Tree {
       protected void hook721() throws DatabaseException {
       }
     }
-}
   @MethodObject static class Tree_forceSplit {
       Tree_forceSplit(    Tree _this,    IN parent,    byte[] key){
         this._this=_this;
@@ -201,4 +244,3 @@ class Tree {
       protected void hook727() throws DatabaseException, SplitRequiredException {
       }
     }
-}

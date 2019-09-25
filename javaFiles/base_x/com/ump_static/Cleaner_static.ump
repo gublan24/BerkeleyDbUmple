@@ -38,4 +38,3 @@ class Cleaner {
       protected void hook114() throws DatabaseException {
       }
     }
-}

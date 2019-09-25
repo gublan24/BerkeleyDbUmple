@@ -36,9 +36,11 @@ import de.ovgu.cide.jakutil.*;
  * there are no more nodes to be fetched for this database's tree.
  */
 public class SortedLSNTreeWalker {
-public interface TreeNodeProcessor {
-    void processLSN(    long childLSN,    LogEntryType childType);
-  }
+// START_OF_STATIC_CLASS 
+// interface TreeNodeProcessor {
+//     void processLSN(    long childLSN,    LogEntryType childType);
+//   }
+// END_OF_STATIC_CLASS 
   protected DatabaseImpl dbImpl;
   private EnvironmentImpl envImpl;
   private long rootLsn;

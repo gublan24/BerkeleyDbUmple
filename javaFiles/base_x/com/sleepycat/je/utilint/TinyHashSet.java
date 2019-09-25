@@ -84,7 +84,7 @@ public class TinyHashSet {
     }
   }
 // START_OF_STATIC_CLASS 
-//   static class SingleElementIterator implements Iterator {
+// static class SingleElementIterator implements Iterator {
 //     Object theObject;
 //     TinyHashSet theSet;
 //     boolean returnedTheObject=false;

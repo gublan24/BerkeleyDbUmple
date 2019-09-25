@@ -1,0 +1,12 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/utilint/EventTrace.java
+namespace com.sleepycat.je.utilint;
+class EventTrace {
+  static  class ExceptionEventTrace extends EventTrace {
+      private Exception event;
+      public ExceptionEventTrace(){
+        event=new Exception();
+      }
+      public String toString(){
+        return Tracer.getStackTrace(event);
+      }
+    }

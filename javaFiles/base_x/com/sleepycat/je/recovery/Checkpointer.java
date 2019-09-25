@@ -251,7 +251,7 @@ public class Checkpointer {
     inSet.add(new CheckpointReference(in.getDatabase(),in.getNodeId(),in.containsDuplicates(),in.isDbRoot(),in.getMainTreeKey(),in.getDupTreeKey()));
   }
 // START_OF_STATIC_CLASS 
-//   static class CheckpointReference {
+// static class CheckpointReference {
 //     DatabaseImpl db;
 //     long nodeId;
 //     boolean containsDuplicates;

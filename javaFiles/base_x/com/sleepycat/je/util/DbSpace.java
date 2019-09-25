@@ -140,7 +140,7 @@ public class DbSpace {
     totals.print(out);
   }
 // START_OF_STATIC_CLASS 
-// private static class Summary implements Comparable {
+// static class Summary implements Comparable {
 //     static final String HEADER="  File    Size (KB)  % Used\n" + "--------  ---------  ------";
 //     Long fileNum;
 //     long totalSize;

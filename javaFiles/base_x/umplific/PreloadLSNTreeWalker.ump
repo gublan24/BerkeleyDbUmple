@@ -1,0 +1,56 @@
+namespace com.sleepycat.je.dbi;
+
+class PreloadLSNTreeWalker
+{
+  isA SortedLSNTreeWalker;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.tree.WithRootLatched;
+  depend com.sleepycat.je.tree.Node;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.tree.ChildReference;
+  depend com.sleepycat.je.PreloadConfig;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.Map;
+  depend java.util.HashMap;
+    private Map lsnINMap = new HashMap();
+
+    PreloadLSNTreeWalker(DatabaseImpl db, TreeNodeProcessor callback, PreloadConfig conf) throws DatabaseException {
+	super(db, false, false, db.tree.getRootLsn(), callback);
+	accumulateLNs = conf.getLoadLNs();
+    }
+
+    public void walk() throws DatabaseException {
+	WithRootLatched preloadWRL = new PreloadWithRootLatched();
+	dbImpl.getTree().withRootLatchedExclusive(preloadWRL);
+    }
+
+    protected IN getRootIN(long rootLsn) throws DatabaseException {
+	return dbImpl.getTree().getRootIN(false);
+    }
+
+    protected void addToLsnINMap(Long lsn, IN in, int index) {
+	assert in.getDatabase() != null;
+	lsnINMap.put(lsn, new INEntry(in, index));
+    }
+
+    protected Node fetchLSN(long lsn) throws DatabaseException {
+	try {
+	    INEntry inEntry = (INEntry) lsnINMap.remove(new Long(lsn));
+	    assert (inEntry != null);
+	    IN in = inEntry.in;
+	    this.hook352(lsn, inEntry, in);
+	    throw ReturnHack.returnObject;
+	} catch (ReturnObject r) {
+	    return (Node) r.value;
+	}
+    }
+
+    protected void hook352(long lsn, INEntry inEntry, IN in) throws DatabaseException {
+	int index = inEntry.index;
+	if (in.isEntryKnownDeleted(index) || in.getLsn(index) != lsn) {
+	    throw new ReturnObject(null);
+	}
+	throw new ReturnObject(in.fetchTarget(index));
+    }
+
+}

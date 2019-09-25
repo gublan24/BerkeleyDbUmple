@@ -61,4 +61,3 @@ class LogManager {
       protected void hook508() throws DatabaseException, ClosedChannelException, Exception {
       }
     }
-}

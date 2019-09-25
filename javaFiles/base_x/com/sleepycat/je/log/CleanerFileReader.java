@@ -143,7 +143,7 @@ public class CleanerFileReader extends FileReader {
     return ((LNLogEntry)targetLogEntry).getDupKey();
   }
 // START_OF_STATIC_CLASS 
-// private static class EntryInfo {
+// static class EntryInfo {
 //     public LogEntry targetLogEntry;
 //     public byte targetCategory;
 //     EntryInfo(    LogEntry targetLogEntry,    byte targetCategory){

@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/txn/Txn.java
 namespace com.sleepycat.je.txn;
 class Txn {
-  private static class DatabaseCleanupInfo {
+  static class DatabaseCleanupInfo {
       DatabaseImpl dbImpl;
       boolean deleteAtCommit;
       DatabaseCleanupInfo(    DatabaseImpl dbImpl,    boolean deleteAtCommit){
@@ -9,7 +9,6 @@ class Txn {
         this.deleteAtCommit=deleteAtCommit;
       }
     }
-}
   @MethodObject static class Txn_addLock {
       Txn_addLock(    Txn _this,    Long nodeId,    Lock lock,    LockType type,    LockGrantType grantStatus){
         this._this=_this;
@@ -57,7 +56,6 @@ class Txn {
       protected void hook819() throws DatabaseException {
       }
     }
-}
   @MethodObject static class Txn_traceCommit {
       Txn_traceCommit(    Txn _this,    int numWriteLocks,    int numReadLocks){
         this._this=_this;
@@ -72,4 +70,3 @@ class Txn {
       protected Logger logger;
       protected StringBuffer sb;
     }
-}

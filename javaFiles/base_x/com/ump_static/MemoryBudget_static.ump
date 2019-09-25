@@ -13,7 +13,6 @@ class MemoryBudget {
       protected void hook348(){
       }
     }
-}
   @MethodObject static class MemoryBudget_reset {
       MemoryBudget_reset(    MemoryBudget _this,    DbConfigManager configManager){
         this._this=_this;
@@ -77,4 +76,3 @@ class MemoryBudget {
       protected void hook350() throws DatabaseException {
       }
     }
-}

@@ -318,7 +318,7 @@ class FileProcessor extends DaemonThread {
     }
   }
 // START_OF_STATIC_CLASS 
-// private static class RootDoWork implements WithRootLatched {
+// static class RootDoWork implements WithRootLatched {
 //     private DatabaseImpl db;
 //     private IN inClone;
 //     private long lsn;

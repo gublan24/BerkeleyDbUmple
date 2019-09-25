@@ -20,4 +20,3 @@ class EnvironmentImpl {
       protected void hook332() throws DatabaseException {
       }
     }
-}

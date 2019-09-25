@@ -24,7 +24,6 @@ class INList {
         _this.addAndSetMemory(_this.ins,in);
       }
     }
-}
   @MethodObject static class INList_addAndSetMemory {
       INList_addAndSetMemory(    INList _this,    Set set,    IN in){
         this._this=_this;
@@ -41,4 +40,3 @@ class INList {
       protected boolean addOk;
       protected MemoryBudget mb;
     }
-}

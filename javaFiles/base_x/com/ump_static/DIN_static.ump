@@ -14,7 +14,6 @@ class DIN {
       protected long oldSize;
       protected long newSize;
     }
-}
   @MethodObject static class DIN_updateDupCountLNRefAndNullTarget {
       DIN_updateDupCountLNRefAndNullTarget(    DIN _this,    long newLsn){
         this._this=_this;
@@ -33,4 +32,3 @@ class DIN {
       protected void hook614(){
       }
     }
-}

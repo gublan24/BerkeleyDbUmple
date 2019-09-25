@@ -1,6 +1,9 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
 namespace com.sleepycat.je.dbi;
 class SortedLSNTreeWalker {
+  interface TreeNodeProcessor {
+      void processLSN(    long childLSN,    LogEntryType childType);
+    }
   @MethodObject static class SortedLSNTreeWalker_extractINsForDb {
       SortedLSNTreeWalker_extractINsForDb(    SortedLSNTreeWalker _this,    INList inList){
         this._this=_this;
@@ -66,4 +69,3 @@ class SortedLSNTreeWalker {
       protected void hook362() throws DatabaseException {
       }
     }
-}

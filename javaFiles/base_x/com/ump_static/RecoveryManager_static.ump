@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/recovery/RecoveryManager.java
 namespace com.sleepycat.je.recovery;
 class RecoveryManager {
-  private static class TxnNodeId {
+  static class TxnNodeId {
       long nodeId;
       long txnId;
       TxnNodeId(    long nodeId,    long txnId){
@@ -27,8 +27,7 @@ class RecoveryManager {
         return "txnId=" + txnId + "/nodeId="+ nodeId;
       }
     }
-}
-  private static class RootDeleter implements WithRootLatched {
+  static class RootDeleter implements WithRootLatched {
       Tree tree;
       RootDeleter(    Tree tree){
         this.tree=tree;
@@ -41,7 +40,6 @@ class RecoveryManager {
         return null;
       }
     }
-}
   @MethodObject static class RecoveryManager_trace {
       RecoveryManager_trace(    Level level,    DatabaseImpl database,    String debugType,    boolean success,    Node node,    long logLsn,    IN parent,    boolean found,    boolean replaced,    boolean inserted,    long replacedLsn,    long abortLsn,    int index){
         this.level=level;
@@ -77,4 +75,3 @@ class RecoveryManager {
       protected Level useLevel;
       protected StringBuffer sb;
     }
-}

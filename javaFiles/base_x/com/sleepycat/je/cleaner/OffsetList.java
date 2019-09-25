@@ -105,7 +105,7 @@ public class OffsetList {
  * public for Sizeof.
  */
 // START_OF_STATIC_CLASS 
-//   static class Segment {
+// static class Segment {
 //     private int index;
 //     private Segment next;
 //     private int[] values;

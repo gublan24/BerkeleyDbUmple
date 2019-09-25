@@ -229,7 +229,7 @@ public class StoredClassCatalog implements ClassCatalog {
  * information per class.
  */
 // START_OF_STATIC_CLASS 
-// private static class ClassInfo implements Serializable {
+// static class ClassInfo implements Serializable {
 //     private byte[] classID;
 //     private transient ObjectStreamClass classFormat;
 //     ClassInfo(){

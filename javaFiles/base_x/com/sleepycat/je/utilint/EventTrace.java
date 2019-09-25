@@ -1,3 +1,4 @@
+// Original file location:  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/utilint/EventTrace.java
 package com.sleepycat.je.utilint;
 import de.ovgu.cide.jakutil.*;
 /** 
@@ -55,13 +56,15 @@ public class EventTrace {
       j++;
     }
   }
-static public class ExceptionEventTrace extends EventTrace {
-    private Exception event;
-    public ExceptionEventTrace(){
-      event=new Exception();
-    }
-    public String toString(){
-      return Tracer.getStackTrace(event);
-    }
-  }
+// START_OF_STATIC_CLASS 
+// static  class ExceptionEventTrace extends EventTrace {
+//     private Exception event;
+//     public ExceptionEventTrace(){
+//       event=new Exception();
+//     }
+//     public String toString(){
+//       return Tracer.getStackTrace(event);
+//     }
+//   }
+// END_OF_STATIC_CLASS 
 }

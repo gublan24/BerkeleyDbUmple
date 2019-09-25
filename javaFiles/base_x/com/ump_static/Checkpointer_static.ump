@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/recovery/Checkpointer.java
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-    static class CheckpointReference {
+  static class CheckpointReference {
       DatabaseImpl db;
       long nodeId;
       boolean containsDuplicates;
@@ -27,7 +27,6 @@ class Checkpointer {
         return (int)nodeId;
       }
     }
-}
   @MethodObject static class Checkpointer_getWakeupPeriod {
       Checkpointer_getWakeupPeriod(    DbConfigManager configManager){
         this.configManager=configManager;
@@ -50,7 +49,6 @@ class Checkpointer {
       protected void hook541() throws IllegalArgumentException, DatabaseException {
       }
     }
-}
   @MethodObject static class Checkpointer_isRunnable {
       Checkpointer_isRunnable(    Checkpointer _this,    CheckpointConfig config){
         this._this=_this;
@@ -97,7 +95,6 @@ class Checkpointer {
       protected void hook544() throws DatabaseException {
       }
     }
-}
   @MethodObject static class Checkpointer_doCheckpoint {
       Checkpointer_doCheckpoint(    Checkpointer _this,    CheckpointConfig config,    boolean flushAll,    String invokingSource){
         this._this=_this;
@@ -216,7 +213,6 @@ class Checkpointer {
       protected void hook552() throws DatabaseException {
       }
     }
-}
   @MethodObject static class Checkpointer_selectDirtyINs {
       Checkpointer_selectDirtyINs(    Checkpointer _this,    boolean flushAll,    boolean flushExtraLevel){
         this._this=_this;
@@ -287,4 +283,3 @@ class Checkpointer {
       protected void hook554() throws DatabaseException {
       }
     }
-}

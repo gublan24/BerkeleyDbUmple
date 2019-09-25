@@ -12,7 +12,7 @@ import de.ovgu.cide.jakutil.*;
 class PreloadLSNTreeWalker extends SortedLSNTreeWalker {
   private Map lsnINMap=new HashMap();
 // START_OF_STATIC_CLASS 
-// private static class INEntry {
+// static class INEntry {
 //     INEntry(    IN in,    int index){
 //       this.in=in;
 //       this.index=index;
@@ -25,12 +25,14 @@ class PreloadLSNTreeWalker extends SortedLSNTreeWalker {
     super(db,false,false,db.tree.getRootLsn(),callback);
     accumulateLNs=conf.getLoadLNs();
   }
-private final class PreloadWithRootLatched implements WithRootLatched {
-    public IN doWork(    ChildReference root) throws DatabaseException {
-      walkInternal();
-      return null;
-    }
-  }
+// START_OF_STATIC_CLASS 
+// inner class PreloadWithRootLatched implements WithRootLatched {
+//     public IN doWork(    ChildReference root) throws DatabaseException {
+//       walkInternal();
+//       return null;
+//     }
+//   }
+// END_OF_STATIC_CLASS 
   public void walk() throws DatabaseException {
     WithRootLatched preloadWRL=new PreloadWithRootLatched();
     dbImpl.getTree().withRootLatchedExclusive(preloadWRL);

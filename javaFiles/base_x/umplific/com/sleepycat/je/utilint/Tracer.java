@@ -1,0 +1,119 @@
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+
+package com.sleepycat.je.utilint;
+import de.ovgu.cide.jakutil.*;
+import com.sleepycat.je.log.LoggableObject;
+import com.sleepycat.je.log.LogUtils;
+import com.sleepycat.je.log.LogReadable;
+import com.sleepycat.je.log.LogEntryType;
+import com.sleepycat.je.dbi.EnvironmentImpl;
+import com.sleepycat.je.config.ConfigParam;
+import com.sleepycat.je.DatabaseException;
+import java.util.logging.Level;
+import java.util.Calendar;
+import java.sql.Timestamp;
+import java.nio.ByteBuffer;
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
+// line 3 "../../../../Tracer.ump"
+public class Tracer
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public Tracer()
+  {}
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public void delete()
+  {}
+
+
+  /**
+   * 
+   * Create a new debug record.
+   */
+  // line 29 "../../../../Tracer.ump"
+   public  Tracer(String msg){
+    this.time = getCurrentTimestamp();
+	this.msg = msg;
+  }
+
+
+  /**
+   * 
+   * Logger method for recording a general message.
+   */
+  // line 37 "../../../../Tracer.ump"
+   public static  void trace(Level logLevel, EnvironmentImpl envImpl, String msg){
+    
+  }
+
+
+  /**
+   * 
+   * Parse a logging level config parameter, and return a more explanatory error message if it doesn't parse.
+   */
+  // line 43 "../../../../Tracer.ump"
+   public static  Level parseLevel(EnvironmentImpl envImpl, ConfigParam configParam) throws DatabaseException{
+    Level level = null;
+	try {
+	    String levelVal = envImpl.getConfigManager().get(configParam);
+	    level = Level.parse(levelVal);
+	} catch (IllegalArgumentException e) {
+	    throw new DatabaseException("Problem parsing parameter " + configParam.getName() + ": " + e.getMessage(),
+		    e);
+	}
+	return level;
+  }
+
+
+  /**
+   * 
+   * @return a timestamp for "now"
+   */
+  // line 58 "../../../../Tracer.ump"
+   private Timestamp getCurrentTimestamp(){
+    Calendar cal = Calendar.getInstance();
+	return new Timestamp(cal.getTime().getTime());
+  }
+
+
+  /**
+   * 
+   * @return the stacktrace for an exception
+   */
+  // line 66 "../../../../Tracer.ump"
+   public static  String getStackTrace(Throwable t){
+    StringWriter s = new StringWriter();
+	t.printStackTrace(new PrintWriter(s));
+	String stackTrace = s.toString();
+	stackTrace = stackTrace.replaceAll("<", "&lt;");
+	stackTrace = stackTrace.replaceAll(">", "&gt;");
+	return stackTrace;
+  }
+  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 19 "../../../../Tracer.ump"
+  public static final String INFO_FILES = "je.info" ;
+// line 21 "../../../../Tracer.ump"
+  private Timestamp time ;
+// line 23 "../../../../Tracer.ump"
+  private String msg ;
+
+  
+}

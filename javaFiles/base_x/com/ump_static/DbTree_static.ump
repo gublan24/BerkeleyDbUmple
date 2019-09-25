@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/DbTree.java
 namespace com.sleepycat.je.dbi;
 class DbTree {
-  private static class RewriteMapLN implements WithRootLatched {
+  static class RewriteMapLN implements WithRootLatched {
       private CursorImpl cursor;
       RewriteMapLN(    CursorImpl cursor){
         this.cursor=cursor;
@@ -12,14 +12,12 @@ class DbTree {
         return null;
       }
     }
-}
-  private static class NameLockResult {
+  static class NameLockResult {
       CursorImpl nameCursor;
       DatabaseImpl dbImpl;
       NameLN nameLN;
     }
-}
-  private static class RootLevel implements WithRootLatched {
+  static class RootLevel implements WithRootLatched {
       private DatabaseImpl db;
       private int rootLevel;
       RootLevel(    DatabaseImpl db){
@@ -35,4 +33,3 @@ class DbTree {
         return rootLevel;
       }
     }
-}

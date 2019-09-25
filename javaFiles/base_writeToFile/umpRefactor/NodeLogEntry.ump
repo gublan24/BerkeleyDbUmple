@@ -2,11 +2,18 @@ namespace com.sleepycat.je.log.entry;
 
 interface NodeLogEntry
 {
-  isA LogEntry;
-  depend de.ovgu.cide.jakutil.*;
-    /** 
-     * Returns the node ID.  This value is redundant with the main item (Node) of a log entry.  It is returned separately so that it can be obtained when the entry's main item (Node) is not loaded.  Partial loading is an optimization for recovery.
-     */
+
+
+//  depend de.ovgu.cide.jakutil.*;
+
+ isA LogEntry;
+
+ 
+ //   /** 
+  //   * Returns the node ID.  This value is redundant with the main item (Node) of a log entry.  It is returned separately so that it can be obtained when the entry's main // 
+//item (Node) is not loaded.  Partial loading is an optimization for recovery.
+ //    */
+
     long getNodeId();
 
 }

@@ -524,7 +524,7 @@ public class RecoveryManager {
     }
   }
 // START_OF_STATIC_CLASS 
-// private static class TxnNodeId {
+// static class TxnNodeId {
 //     long nodeId;
 //     long txnId;
 //     TxnNodeId(    long nodeId,    long txnId){
@@ -644,7 +644,7 @@ public class RecoveryManager {
     }
   }
 // START_OF_STATIC_CLASS 
-// private static class RootDeleter implements WithRootLatched {
+// static class RootDeleter implements WithRootLatched {
 //     Tree tree;
 //     RootDeleter(    Tree tree){
 //       this.tree=tree;

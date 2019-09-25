@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/CursorImpl.java
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
-    static class SearchMode {
+  static class SearchMode {
       public static final SearchMode SET=new SearchMode(true,false,"SET");
       public static final SearchMode BOTH=new SearchMode(true,true,"BOTH");
       public static final SearchMode SET_RANGE=new SearchMode(false,false,"SET_RANGE");
@@ -32,8 +32,7 @@ class CursorImpl {
         return name;
       }
     }
-}
-    static class KeyChangeStatus {
+  static class KeyChangeStatus {
       /** 
    * Operation status;
    */
@@ -47,7 +46,6 @@ class CursorImpl {
         this.keyChange=keyChange;
       }
     }
-}
   @MethodObject static class CursorImpl_latchBIN {
   CursorImpl_latchBIN(CursorImpl _this){
   this._this=_this;
@@ -70,7 +68,6 @@ class CursorImpl {
   throw new ReturnObject(_this.bin);
   }
   }
-}
   @MethodObject static class CursorImpl_latchDBIN {
   CursorImpl_latchDBIN(CursorImpl _this){
   this._this=_this;
@@ -93,7 +90,6 @@ class CursorImpl {
   throw new ReturnObject(_this.dupBin);
   }
   }
-}
   @MethodObject static class CursorImpl_lockNextKeyForInsert {
   CursorImpl_lockNextKeyForInsert(CursorImpl _this,DatabaseEntry key,DatabaseEntry data){
   this._this=_this;
@@ -142,7 +138,6 @@ class CursorImpl {
   protected void hook249() throws DatabaseException {
   }
   }
-}
   @MethodObject static class CursorImpl_getNextDuplicate {
   CursorImpl_getNextDuplicate(CursorImpl _this,DatabaseEntry foundKey,DatabaseEntry foundData,LockType lockType,boolean forward,boolean alreadyLatched){
   this._this=_this;
@@ -258,7 +253,6 @@ class CursorImpl {
   protected void hook279() throws DatabaseException {
   }
   }
-}
   @MethodObject static class CursorImpl_fetchCurrent {
   CursorImpl_fetchCurrent(CursorImpl _this,DatabaseEntry foundKey,DatabaseEntry foundData,LockType lockType,boolean first){
   this._this=_this;
@@ -369,4 +363,3 @@ class CursorImpl {
   protected void hook280() throws DatabaseException {
   }
   }
-}

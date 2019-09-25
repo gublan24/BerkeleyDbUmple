@@ -4,6 +4,7 @@ Start: ---------------------------------------------------------
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/UtilizationProfile.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/Cleaner.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/TrackedFileSummary.java
+ /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/PackedOffsets.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/tree/DIN.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/tree/Tree.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/tree/IN.java
@@ -22,6 +23,7 @@ Start: ---------------------------------------------------------
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/txn/LockManager.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/txn/Txn.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/utilint/TinyHashSet.java
+ /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/utilint/EventTrace.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/CleanerFileReader.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/StatsFileReader.java
  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/FileReader.java

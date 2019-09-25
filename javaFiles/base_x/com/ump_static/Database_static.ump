@@ -10,7 +10,6 @@ class Database {
         return "DbState." + stateName;
       }
     }
-}
   @MethodObject static class Database_acquireTriggerListReadLock {
       Database_acquireTriggerListReadLock(    Database _this){
         this._this=_this;
@@ -23,7 +22,6 @@ class Database {
       protected Database _this;
       protected EnvironmentImpl env;
     }
-}
   @MethodObject static class Database_acquireTriggerListWriteLock {
       Database_acquireTriggerListWriteLock(    Database _this){
         this._this=_this;
@@ -36,7 +34,6 @@ class Database {
       protected Database _this;
       protected EnvironmentImpl env;
     }
-}
   @MethodObject static class Database_releaseTriggerListWriteLock {
       Database_releaseTriggerListWriteLock(    Database _this){
         this._this=_this;
@@ -49,4 +46,3 @@ class Database {
       protected Database _this;
       protected EnvironmentImpl env;
     }
-}

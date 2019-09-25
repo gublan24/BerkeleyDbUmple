@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/FileProcessor.java
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-  private static class RootDoWork implements WithRootLatched {
+  static class RootDoWork implements WithRootLatched {
       private DatabaseImpl db;
       private IN inClone;
       private long lsn;
@@ -24,7 +24,6 @@ class FileProcessor {
         }
       }
     }
-}
   @MethodObject static class FileProcessor_processFile {
       FileProcessor_processFile(    FileProcessor _this,    Long fileNum){
         this._this=_this;
@@ -190,7 +189,6 @@ class FileProcessor {
       protected void hook162() throws DatabaseException, IOException {
       }
     }
-}
   @MethodObject static class FileProcessor_processLN {
       FileProcessor_processLN(    FileProcessor _this,    Long fileNum,    TreeLocation location,    Long offset,    LNInfo info,    Object lookAheadCachep,    Map dbCache){
         this._this=_this;
@@ -309,4 +307,3 @@ class FileProcessor {
       protected void hook158() throws DatabaseException {
       }
     }
-}

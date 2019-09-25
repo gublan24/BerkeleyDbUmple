@@ -345,7 +345,7 @@ public abstract class FileReader {
  */
   protected abstract boolean processEntry(  ByteBuffer entryBuffer) throws DatabaseException ;
 // START_OF_STATIC_CLASS 
-// private static class EOFException extends Exception {
+// static class EOFException extends Exception {
 //   }
 // END_OF_STATIC_CLASS 
   /** 

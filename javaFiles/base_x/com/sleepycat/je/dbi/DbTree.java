@@ -202,7 +202,7 @@ public class DbTree implements LoggableObject, LogReadable {
     }
   }
 // START_OF_STATIC_CLASS 
-// private static class RewriteMapLN implements WithRootLatched {
+// static class RewriteMapLN implements WithRootLatched {
 //     private CursorImpl cursor;
 //     RewriteMapLN(    CursorImpl cursor){
 //       this.cursor=cursor;
@@ -250,7 +250,7 @@ catch (    DatabaseException e) {
     return result;
   }
 // START_OF_STATIC_CLASS 
-// private static class NameLockResult {
+// static class NameLockResult {
 //     CursorImpl nameCursor;
 //     DatabaseImpl dbImpl;
 //     NameLN nameLN;
@@ -542,7 +542,7 @@ catch (    DatabaseException e) {
     return (nameHighLevel > idHighLevel) ? nameHighLevel : idHighLevel;
   }
 // START_OF_STATIC_CLASS 
-// private static class RootLevel implements WithRootLatched {
+// static class RootLevel implements WithRootLatched {
 //     private DatabaseImpl db;
 //     private int rootLevel;
 //     RootLevel(    DatabaseImpl db){

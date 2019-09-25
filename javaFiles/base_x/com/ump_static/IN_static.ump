@@ -19,7 +19,6 @@ class IN {
       protected void hook639(){
       }
     }
-}
   @MethodObject static class IN_setEntry {
       IN_setEntry(    IN _this,    int idx,    Node target,    byte[] keyVal,    long lsn,    byte state){
         this._this=_this;
@@ -56,7 +55,6 @@ class IN {
       protected void hook641(){
       }
     }
-}
   @MethodObject static class IN_updateEntry {
       IN_updateEntry(    IN _this,    int idx,    Node node){
         this._this=_this;
@@ -72,7 +70,6 @@ class IN {
       protected long oldSize;
       protected long newSize;
     }
-}
   @MethodObject static class IN_updateEntry2 {
       IN_updateEntry2(    IN _this,    int idx,    Node node,    long lsn){
         this._this=_this;
@@ -95,7 +92,6 @@ class IN {
       protected void hook642(){
       }
     }
-}
   @MethodObject static class IN_updateEntry3 {
       IN_updateEntry3(    IN _this,    int idx,    Node node,    long lsn,    byte[] key){
         this._this=_this;
@@ -121,7 +117,6 @@ class IN {
       protected void hook643(){
       }
     }
-}
   @MethodObject static class IN_updateEntryCompareKey {
       IN_updateEntryCompareKey(    IN _this,    int idx,    Node node,    long lsn,    byte[] key){
         this._this=_this;
@@ -153,7 +148,6 @@ class IN {
       protected void hook644(){
       }
     }
-}
   @MethodObject static class IN_insertEntry1 {
       IN_insertEntry1(    IN _this,    ChildReference entry){
         this._this=_this;
@@ -203,7 +197,6 @@ class IN {
       protected void hook647() throws DatabaseException {
       }
     }
-}
   @MethodObject static class IN_deleteEntry {
       IN_deleteEntry(    IN _this,    int index,    boolean maybeValidate){
         this._this=_this;
@@ -243,7 +236,6 @@ class IN {
       protected void hook649() throws DatabaseException {
       }
     }
-}
   @MethodObject static class IN_validateSubtreeBeforeDelete {
       IN_validateSubtreeBeforeDelete(    IN _this,    int index){
         this._this=_this;
@@ -275,7 +267,6 @@ class IN {
       protected void hook629() throws DatabaseException {
       }
     }
-}
   @MethodObject static class IN_splitInternal {
       IN_splitInternal(    IN _this,    IN parent,    int childIndex,    int maxEntries,    int splitIndex){
         this._this=_this;
@@ -402,7 +393,6 @@ class IN {
       protected void hook650() throws DatabaseException {
       }
     }
-}
   @MethodObject static class IN_verify {
       IN_verify(    IN _this,    byte[] maxKey){
         this._this=_this;
@@ -451,7 +441,6 @@ class IN {
       protected void hook633() throws DatabaseException {
       }
     }
-}
   @MethodObject static class IN_isValidForDelete {
       IN_isValidForDelete(    IN _this){
         this._this=_this;
@@ -484,7 +473,6 @@ class IN {
       protected void hook635() throws DatabaseException {
       }
     }
-}
   @MethodObject static class IN_trackProvisionalObsolete {
       IN_trackProvisionalObsolete(    IN _this,    IN child,    long obsoleteLsn1,    long obsoleteLsn2){
         this._this=_this;
@@ -534,7 +522,6 @@ class IN {
       protected void hook654(){
       }
     }
-}
   @MethodObject static class IN_flushProvisionalObsolete {
       IN_flushProvisionalObsolete(    IN _this,    LogManager logManager){
         this._this=_this;
@@ -556,4 +543,3 @@ class IN {
       protected void hook656() throws DatabaseException {
       }
     }
-}

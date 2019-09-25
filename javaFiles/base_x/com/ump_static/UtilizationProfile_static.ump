@@ -13,7 +13,6 @@ class UtilizationProfile {
       protected int memorySize;
       protected MemoryBudget mb;
     }
-}
   @MethodObject static class UtilizationProfile_removeFile {
       UtilizationProfile_removeFile(    UtilizationProfile _this,    Long fileNum){
         this._this=_this;
@@ -34,7 +33,6 @@ class UtilizationProfile {
       protected void hook192() throws DatabaseException {
       }
     }
-}
   @MethodObject static class UtilizationProfile_putFileSummary {
       UtilizationProfile_putFileSummary(    UtilizationProfile _this,    TrackedFileSummary tfs){
         this._this=_this;
@@ -86,7 +84,6 @@ class UtilizationProfile {
       protected void hook193() throws DatabaseException {
       }
     }
-}
   @MethodObject static class UtilizationProfile_populateCache {
       UtilizationProfile_populateCache(    UtilizationProfile _this){
         this._this=_this;
@@ -202,4 +199,3 @@ class UtilizationProfile {
       protected void hook195() throws DatabaseException {
       }
     }
-}

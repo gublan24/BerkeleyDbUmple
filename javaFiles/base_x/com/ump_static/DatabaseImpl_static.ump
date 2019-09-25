@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/DatabaseImpl.java
 namespace com.sleepycat.je.dbi;
 class DatabaseImpl {
-  private static class ObsoleteProcessor implements TreeNodeProcessor {
+  static class ObsoleteProcessor implements TreeNodeProcessor {
       private UtilizationTracker tracker;
       ObsoleteProcessor(    UtilizationTracker tracker){
         this.tracker=tracker;
@@ -11,8 +11,7 @@ class DatabaseImpl {
         tracker.countObsoleteNodeInexact(childLsn,childType);
       }
     }
-}
-  private static class LNCounter implements TreeNodeProcessor {
+  static class LNCounter implements TreeNodeProcessor {
       private long counter;
       public void processLSN(    long childLsn,    LogEntryType childType){
         assert childLsn != DbLsn.NULL_LSN;
@@ -24,8 +23,7 @@ class DatabaseImpl {
         return counter;
       }
     }
-}
-  private static class HaltPreloadException extends RuntimeException {
+  static class HaltPreloadException extends RuntimeException {
       private PreloadStatus status;
       HaltPreloadException(    PreloadStatus status){
         super(status.toString());
@@ -35,7 +33,6 @@ class DatabaseImpl {
         return status;
       }
     }
-}
   @MethodObject static class DatabaseImpl_preload {
       DatabaseImpl_preload(    DatabaseImpl _this,    PreloadConfig config){
         this._this=_this;
@@ -70,4 +67,3 @@ class DatabaseImpl {
       protected void hook290() throws DatabaseException {
       }
     }
-}

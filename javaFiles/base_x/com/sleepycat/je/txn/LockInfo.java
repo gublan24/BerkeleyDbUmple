@@ -15,7 +15,7 @@ public class LockInfo implements Cloneable {
   private static boolean deadlockStackTrace=false;
   private static Map traceExceptionMap=Collections.synchronizedMap(new WeakHashMap());
 // START_OF_STATIC_CLASS 
-// private static class StackTraceAtLockTime extends Exception {
+// static class StackTraceAtLockTime extends Exception {
 //   }
 // END_OF_STATIC_CLASS 
   /** 

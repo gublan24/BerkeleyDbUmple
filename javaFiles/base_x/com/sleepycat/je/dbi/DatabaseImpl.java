@@ -256,7 +256,7 @@ public class DatabaseImpl implements LogWritable, LogReadable, Cloneable {
     return envImpl.getDbMapTree().getDbName(id);
   }
 // START_OF_STATIC_CLASS 
-// private static class ObsoleteProcessor implements TreeNodeProcessor {
+// static class ObsoleteProcessor implements TreeNodeProcessor {
 //     private UtilizationTracker tracker;
 //     ObsoleteProcessor(    UtilizationTracker tracker){
 //       this.tracker=tracker;
@@ -279,7 +279,7 @@ public class DatabaseImpl implements LogWritable, LogReadable, Cloneable {
     return lnCounter.getCount();
   }
 // START_OF_STATIC_CLASS 
-// private static class LNCounter implements TreeNodeProcessor {
+// static class LNCounter implements TreeNodeProcessor {
 //     private long counter;
 //     public void processLSN(    long childLsn,    LogEntryType childType){
 //       assert childLsn != DbLsn.NULL_LSN;
@@ -371,7 +371,7 @@ public class DatabaseImpl implements LogWritable, LogReadable, Cloneable {
  * preload has either filled the user's max byte or time request.
  */
 // START_OF_STATIC_CLASS 
-// private static class HaltPreloadException extends RuntimeException {
+// static class HaltPreloadException extends RuntimeException {
 //     private PreloadStatus status;
 //     HaltPreloadException(    PreloadStatus status){
 //       super(status.toString());

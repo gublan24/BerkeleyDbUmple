@@ -143,4 +143,3 @@ class DbRunAction {
       protected void hook848() throws Exception {
       }
     }
-}

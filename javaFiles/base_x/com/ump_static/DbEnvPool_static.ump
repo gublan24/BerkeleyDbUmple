@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/DbEnvPool.java
 namespace com.sleepycat.je.dbi;
 class DbEnvPool {
-    static class EnvironmentImplInfo {
+  static class EnvironmentImplInfo {
       public EnvironmentImpl envImpl;
       public boolean firstHandle=false;
       EnvironmentImplInfo(    EnvironmentImpl envImpl,    boolean firstHandle){
@@ -9,4 +9,3 @@ class DbEnvPool {
         this.firstHandle=firstHandle;
       }
     }
-}

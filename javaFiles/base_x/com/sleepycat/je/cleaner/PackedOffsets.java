@@ -1,3 +1,4 @@
+// Original file location:  /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/PackedOffsets.java
 package com.sleepycat.je.cleaner;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -79,30 +80,32 @@ public class PackedOffsets implements LogWritable, LogReadable {
   /** 
  * An iterator over all offsets.
  */
-class Iterator {
-    private int index;
-    private long priorVal;
-    private Iterator(){
-    }
-    boolean hasNext(){
-      return data != null && index < data.length;
-    }
-    long next(){
-      long val=priorVal;
-      for (int shift=0; ; shift+=15) {
-        long s=data[index++];
-        if (s < 0) {
-          val+=(-1 - s) << shift;
-        }
- else {
-          val+=s << shift;
-          break;
-        }
-      }
-      priorVal=val;
-      return val;
-    }
-  }
+// START_OF_STATIC_CLASS 
+// inner class Iterator {
+//     private int index;
+//     private long priorVal;
+//     private Iterator(){
+//     }
+//     boolean hasNext(){
+//       return data != null && index < data.length;
+//     }
+//     long next(){
+//       long val=priorVal;
+//       for (int shift=0; ; shift+=15) {
+//         long s=data[index++];
+//         if (s < 0) {
+//           val+=(-1 - s) << shift;
+//         }
+//  else {
+//           val+=s << shift;
+//           break;
+//         }
+//       }
+//       priorVal=val;
+//       return val;
+//     }
+//   }
+// END_OF_STATIC_CLASS 
   /** 
  * @see LogWritable#getLogSize
  */

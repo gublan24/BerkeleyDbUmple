@@ -34,7 +34,7 @@ import de.ovgu.cide.jakutil.*;
  */
 public class FileManager {
 // START_OF_STATIC_CLASS 
-//   static class FileMode {
+// static class FileMode {
 //     public static final FileMode READ_MODE=new FileMode("r");
 //     public static final FileMode READWRITE_MODE=new FileMode("rw");
 //     private String fileModeValue;
@@ -735,66 +735,68 @@ catch (      IOException IOE) {
  * but endOfLogRWFile is null-- no need to fsync in that case, 0x0 got
  * fsynced.
  */
-class LogEndFileDescriptor {
-    private RandomAccessFile endOfLogRWFile=null;
-    private RandomAccessFile endOfLogSyncFile=null;
-    /** 
- * getWritableFile must be called under the log write latch.
- */
-    RandomAccessFile getWritableFile(    long fileNumber) throws RunRecoveryException {
-      try {
-        if (endOfLogRWFile == null) {
-          endOfLogRWFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
-          endOfLogSyncFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
-        }
-        return endOfLogRWFile;
-      }
- catch (      Exception e) {
-        throw new RunRecoveryException(envImpl,e);
-      }
-    }
-    /** 
- * FSync the log file that makes up the end of the log.
- */
-    void force() throws DatabaseException, IOException {
-      RandomAccessFile file=endOfLogSyncFile;
-      if (file != null) {
-        FileChannel channel=file.getChannel();
-        try {
-          channel.force(false);
-        }
- catch (        ClosedChannelException e) {
-          throw new RunRecoveryException(envImpl,"Channel closed, may be due to thread interrupt",e);
-        }
-        assert EnvironmentImpl.maybeForceYield();
-      }
-    }
-    /** 
- * Close the end of the log file descriptor. Use atomic assignment to
- * ensure that we won't force and close on the same descriptor.
- */
-    void close() throws IOException {
-      IOException firstException=null;
-      if (endOfLogRWFile != null) {
-        RandomAccessFile file=endOfLogRWFile;
-        endOfLogRWFile=null;
-        try {
-          file.close();
-        }
- catch (        IOException e) {
-          firstException=e;
-        }
-      }
-      if (endOfLogSyncFile != null) {
-        RandomAccessFile file=endOfLogSyncFile;
-        endOfLogSyncFile=null;
-        file.close();
-      }
-      if (firstException != null) {
-        throw firstException;
-      }
-    }
-  }
+// START_OF_STATIC_CLASS 
+// inner class LogEndFileDescriptor {
+//     private RandomAccessFile endOfLogRWFile=null;
+//     private RandomAccessFile endOfLogSyncFile=null;
+//     /** 
+//  * getWritableFile must be called under the log write latch.
+//  */
+//     RandomAccessFile getWritableFile(    long fileNumber) throws RunRecoveryException {
+//       try {
+//         if (endOfLogRWFile == null) {
+//           endOfLogRWFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+//           endOfLogSyncFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+//         }
+//         return endOfLogRWFile;
+//       }
+//  catch (      Exception e) {
+//         throw new RunRecoveryException(envImpl,e);
+//       }
+//     }
+//     /** 
+//  * FSync the log file that makes up the end of the log.
+//  */
+//     void force() throws DatabaseException, IOException {
+//       RandomAccessFile file=endOfLogSyncFile;
+//       if (file != null) {
+//         FileChannel channel=file.getChannel();
+//         try {
+//           channel.force(false);
+//         }
+//  catch (        ClosedChannelException e) {
+//           throw new RunRecoveryException(envImpl,"Channel closed, may be due to thread interrupt",e);
+//         }
+//         assert EnvironmentImpl.maybeForceYield();
+//       }
+//     }
+//     /** 
+//  * Close the end of the log file descriptor. Use atomic assignment to
+//  * ensure that we won't force and close on the same descriptor.
+//  */
+//     void close() throws IOException {
+//       IOException firstException=null;
+//       if (endOfLogRWFile != null) {
+//         RandomAccessFile file=endOfLogRWFile;
+//         endOfLogRWFile=null;
+//         try {
+//           file.close();
+//         }
+//  catch (        IOException e) {
+//           firstException=e;
+//         }
+//       }
+//       if (endOfLogSyncFile != null) {
+//         RandomAccessFile file=endOfLogSyncFile;
+//         endOfLogSyncFile=null;
+//         file.close();
+//       }
+//       if (firstException != null) {
+//         throw firstException;
+//       }
+//     }
+//   }
+// END_OF_STATIC_CLASS 
   static boolean RUNRECOVERY_EXCEPTION_TESTING=false;
   private static final int RUNRECOVERY_EXCEPTION_MAX=100;
   private int runRecoveryExceptionCounter=0;

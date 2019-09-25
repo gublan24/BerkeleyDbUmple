@@ -86,7 +86,7 @@ public class CursorImpl implements Cloneable {
  * public for Cursor et al
  */
 // START_OF_STATIC_CLASS 
-//   static class SearchMode {
+// static class SearchMode {
 //     public static final SearchMode SET=new SearchMode(true,false,"SET");
 //     public static final SearchMode BOTH=new SearchMode(true,true,"BOTH");
 //     public static final SearchMode SET_RANGE=new SearchMode(false,false,"SET_RANGE");
@@ -123,7 +123,7 @@ public class CursorImpl implements Cloneable {
  * and getNextWithKeyChangeStatus operations.
  */
 // START_OF_STATIC_CLASS 
-//   static class KeyChangeStatus {
+// static class KeyChangeStatus {
 //     /** 
 //  * Operation status;
 //  */

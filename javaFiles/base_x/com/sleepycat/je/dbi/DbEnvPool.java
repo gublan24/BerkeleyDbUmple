@@ -86,7 +86,7 @@ public class DbEnvPool {
     envs.clear();
   }
 // START_OF_STATIC_CLASS 
-//   static class EnvironmentImplInfo {
+// static class EnvironmentImplInfo {
 //     public EnvironmentImpl envImpl;
 //     public boolean firstHandle=false;
 //     EnvironmentImplInfo(    EnvironmentImpl envImpl,    boolean firstHandle){

@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/FileManager.java
 namespace com.sleepycat.je.log;
 class FileManager {
-    static class FileMode {
+  static class FileMode {
       public static final FileMode READ_MODE=new FileMode("r");
       public static final FileMode READWRITE_MODE=new FileMode("rw");
       private String fileModeValue;
@@ -12,7 +12,66 @@ class FileManager {
         return fileModeValue;
       }
     }
-}
+  inner class LogEndFileDescriptor {
+      private RandomAccessFile endOfLogRWFile=null;
+      private RandomAccessFile endOfLogSyncFile=null;
+      /** 
+   * getWritableFile must be called under the log write latch.
+   */
+      RandomAccessFile getWritableFile(    long fileNumber) throws RunRecoveryException {
+        try {
+          if (endOfLogRWFile == null) {
+            endOfLogRWFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+            endOfLogSyncFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+          }
+          return endOfLogRWFile;
+        }
+   catch (      Exception e) {
+          throw new RunRecoveryException(envImpl,e);
+        }
+      }
+      /** 
+   * FSync the log file that makes up the end of the log.
+   */
+      void force() throws DatabaseException, IOException {
+        RandomAccessFile file=endOfLogSyncFile;
+        if (file != null) {
+          FileChannel channel=file.getChannel();
+          try {
+            channel.force(false);
+          }
+   catch (        ClosedChannelException e) {
+            throw new RunRecoveryException(envImpl,"Channel closed, may be due to thread interrupt",e);
+          }
+          assert EnvironmentImpl.maybeForceYield();
+        }
+      }
+      /** 
+   * Close the end of the log file descriptor. Use atomic assignment to
+   * ensure that we won't force and close on the same descriptor.
+   */
+      void close() throws IOException {
+        IOException firstException=null;
+        if (endOfLogRWFile != null) {
+          RandomAccessFile file=endOfLogRWFile;
+          endOfLogRWFile=null;
+          try {
+            file.close();
+          }
+   catch (        IOException e) {
+            firstException=e;
+          }
+        }
+        if (endOfLogSyncFile != null) {
+          RandomAccessFile file=endOfLogSyncFile;
+          endOfLogSyncFile=null;
+          file.close();
+        }
+        if (firstException != null) {
+          throw firstException;
+        }
+      }
+    }
   @MethodObject static class FileManager_writeToFile {
       FileManager_writeToFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer data,    long destOffset){
         this._this=_this;
@@ -42,7 +101,6 @@ class FileManager {
       protected void hook455() throws IOException, DatabaseException {
       }
     }
-}
   @MethodObject static class FileManager_readFromFile {
       FileManager_readFromFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer readBuffer,    long offset){
         this._this=_this;
@@ -67,4 +125,3 @@ class FileManager {
       protected void hook446() throws IOException {
       }
     }
-}

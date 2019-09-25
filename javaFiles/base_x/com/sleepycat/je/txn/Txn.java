@@ -752,7 +752,7 @@ synchronized (this) {
  * essentially  non-transactional
  */
 // START_OF_STATIC_CLASS 
-// private static class DatabaseCleanupInfo {
+// static class DatabaseCleanupInfo {
 //     DatabaseImpl dbImpl;
 //     boolean deleteAtCommit;
 //     DatabaseCleanupInfo(    DatabaseImpl dbImpl,    boolean deleteAtCommit){

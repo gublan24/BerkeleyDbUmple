@@ -71,7 +71,7 @@ public final class Tree implements LogWritable, LogReadable {
  * left/right side to find the first/last node in the tree.
  */
 // START_OF_STATIC_CLASS 
-//   static class SearchType {
+// static class SearchType {
 //     public static final SearchType NORMAL=new SearchType();
 //     public static final SearchType LEFT=new SearchType();
 //     public static final SearchType RIGHT=new SearchType();
@@ -134,41 +134,43 @@ public final class Tree implements LogWritable, LogReadable {
   private ChildReference makeRootChildReference(){
     return new RootChildReference();
   }
-private class RootChildReference extends ChildReference {
-    private RootChildReference(){
-      super();
-    }
-    private RootChildReference(    Node target,    byte[] key,    long lsn){
-      super(target,key,lsn);
-    }
-    private RootChildReference(    Node target,    byte[] key,    long lsn,    byte existingState){
-      super(target,key,lsn,existingState);
-    }
-    public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
-      this.hook666();
-      return super.fetchTarget(database,in);
-    }
-    public void setTarget(    Node target){
-      this.hook667();
-      super.setTarget(target);
-    }
-    public void clearTarget(){
-      this.hook668();
-      super.clearTarget();
-    }
-    public void setLsn(    long lsn){
-      this.hook669();
-      super.setLsn(lsn);
-    }
-    protected void hook666() throws DatabaseException {
-    }
-    protected void hook667(){
-    }
-    protected void hook668(){
-    }
-    protected void hook669(){
-    }
-  }
+// START_OF_STATIC_CLASS 
+// inner class RootChildReference extends ChildReference {
+//     private RootChildReference(){
+//       super();
+//     }
+//     private RootChildReference(    Node target,    byte[] key,    long lsn){
+//       super(target,key,lsn);
+//     }
+//     private RootChildReference(    Node target,    byte[] key,    long lsn,    byte existingState){
+//       super(target,key,lsn,existingState);
+//     }
+//     public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
+//       this.hook666();
+//       return super.fetchTarget(database,in);
+//     }
+//     public void setTarget(    Node target){
+//       this.hook667();
+//       super.setTarget(target);
+//     }
+//     public void clearTarget(){
+//       this.hook668();
+//       super.clearTarget();
+//     }
+//     public void setLsn(    long lsn){
+//       this.hook669();
+//       super.setLsn(lsn);
+//     }
+//     protected void hook666() throws DatabaseException {
+//     }
+//     protected void hook667(){
+//     }
+//     protected void hook668(){
+//     }
+//     protected void hook669(){
+//     }
+//   }
+// END_OF_STATIC_CLASS 
   /** 
  * Get LSN of the rootIN. Obtained without latching, should only be accessed
  * while quiescent.
@@ -1317,16 +1319,18 @@ private class RootChildReference extends ChildReference {
   public void setCkptHook(  TestHook hook){
     ckptHook=hook;
   }
-static private class SplitInfo {
-    IN parent;
-    IN child;
-    int index;
-    SplitInfo(    IN parent,    IN child,    int index){
-      this.parent=parent;
-      this.child=child;
-      this.index=index;
-    }
-  }
+// START_OF_STATIC_CLASS 
+// static  class SplitInfo {
+//     IN parent;
+//     IN child;
+//     int index;
+//     SplitInfo(    IN parent,    IN child,    int index){
+//       this.parent=parent;
+//       this.child=child;
+//       this.index=index;
+//     }
+//   }
+// END_OF_STATIC_CLASS 
 // START_OF_STATIC_CLASS 
 // @MethodObject static class Tree_searchSplitsAllowed {
 //     Tree_searchSplitsAllowed(    Tree _this,    byte[] key,    long nid,    boolean updateGeneration){

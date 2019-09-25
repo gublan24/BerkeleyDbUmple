@@ -288,7 +288,7 @@ public class LogUtils {
     return new XidImpl(formatId,gid,bqual);
   }
 // START_OF_STATIC_CLASS 
-//   static class XidImpl implements Xid {
+// static class XidImpl implements Xid {
 //     private int formatId;
 //     private byte[] gid;
 //     private byte[] bqual;
