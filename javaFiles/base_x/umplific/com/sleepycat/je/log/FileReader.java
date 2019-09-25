@@ -14,6 +14,7 @@ import java.nio.Buffer;
 import java.io.IOException;
 
 // line 3 "../../../../FileReader.ump"
+// line 3 "../../../../FileReader_static.ump"
 public abstract class FileReader
 {
 
@@ -437,7 +438,119 @@ public abstract class FileReader
    protected void hook473(EnvironmentImpl env) throws IOException,DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.log;
+  
+  @MethodObject
+  // line 6 "../../../../FileReader_static.ump"
+  public static class FileReader_readNextEntry
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public FileReader_readNextEntry()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 8 "../../../../FileReader_static.ump"
+    public  FileReader_readNextEntry(FileReader _this){
+      this._this=_this;
+    }
+  
+    // line 11 "../../../../FileReader_static.ump"
+    public boolean execute() throws DatabaseException,IOException{
+      foundEntry=false;
+          try {
+            while ((!_this.eof) && (!foundEntry)) {
+              _this.getLogEntryInReadBuffer();
+              dataBuffer=_this.readData(LogManager.HEADER_BYTES,true);
+              _this.readHeader(dataBuffer);
+              isTargetEntry=_this.isTargetEntry(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
+              this.hook476();
+              collectData=isTargetEntry;
+              this.hook475();
+              dataBuffer=_this.readData(_this.currentEntrySize,collectData);
+              if (_this.forward) {
+                _this.currentEntryOffset=_this.nextEntryOffset;
+                _this.nextEntryOffset+=LogManager.HEADER_BYTES + _this.currentEntrySize;
+              }
+              this.hook474();
+              if (isTargetEntry) {
+                if (_this.processEntry(dataBuffer)) {
+                  foundEntry=true;
+                  _this.nRead++;
+                }
+              }
+     else           if (collectData) {
+                _this.threadSafeBufferPosition(dataBuffer,_this.threadSafeBufferPosition(dataBuffer) + _this.currentEntrySize);
+              }
+            }
+          }
+     catch (      EOFException e) {
+            _this.eof=true;
+          }
+    catch (      DatabaseException e) {
+            this.hook468();
+            throw e;
+          }
+          return foundEntry;
+    }
+  
+    // line 55 "../../../../FileReader_static.ump"
+     protected void hook468() throws DatabaseException,IOException{
+      
+    }
+  
+    // line 57 "../../../../FileReader_static.ump"
+     protected void hook474() throws DatabaseException,IOException,EOFException{
+      
+    }
+  
+    // line 59 "../../../../FileReader_static.ump"
+     protected void hook475() throws DatabaseException,IOException,EOFException{
+      
+    }
+  
+    // line 61 "../../../../FileReader_static.ump"
+     protected void hook476() throws DatabaseException,IOException,EOFException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 47 "../../../../FileReader_static.ump"
+    protected FileReader _this ;
+  // line 48 "../../../../FileReader_static.ump"
+    protected boolean foundEntry ;
+  // line 49 "../../../../FileReader_static.ump"
+    protected ByteBuffer dataBuffer ;
+  // line 50 "../../../../FileReader_static.ump"
+    protected boolean isTargetEntry ;
+  // line 51 "../../../../FileReader_static.ump"
+    protected boolean doValidate ;
+  // line 52 "../../../../FileReader_static.ump"
+    protected boolean collectData ;
+  // line 53 "../../../../FileReader_static.ump"
+    protected LogEntryType problemType ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
@@ -488,6 +601,12 @@ public abstract class FileReader
   private long finishLsn ;
 // line 59 "../../../../FileReader.ump"
   protected boolean anticipateChecksumErrors ;
+
+// line 4 "../../../../FileReader_static.ump"
+  static class EOFException extends Exception 
+  {
+    
+  }
 
   
 }

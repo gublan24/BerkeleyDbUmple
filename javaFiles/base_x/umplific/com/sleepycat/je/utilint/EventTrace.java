@@ -5,6 +5,7 @@ package com.sleepycat.je.utilint;
 import de.ovgu.cide.jakutil.*;
 
 // line 3 "../../../../EventTrace.ump"
+// line 3 "../../../../EventTrace_static.ump"
 public class EventTrace
 {
 
@@ -100,6 +101,18 @@ public class EventTrace
 	    }
 	    j++;
 	}
+  }
+
+// line 4 "../../../../EventTrace_static.ump"
+  static  class ExceptionEventTrace extends EventTrace 
+  {
+    private Exception event;
+      public ExceptionEventTrace(){
+        event=new Exception();
+      }
+      public String toString(){
+        return Tracer.getStackTrace(event);
+      }
   }
 
   

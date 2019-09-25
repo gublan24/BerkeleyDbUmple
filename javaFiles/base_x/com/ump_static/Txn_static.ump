@@ -70,3 +70,4 @@ class Txn {
       protected Logger logger;
       protected StringBuffer sb;
     }
+}

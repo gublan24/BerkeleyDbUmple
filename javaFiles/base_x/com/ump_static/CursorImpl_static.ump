@@ -363,3 +363,4 @@ class CursorImpl {
   protected void hook280() throws DatabaseException {
   }
   }
+}

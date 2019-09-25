@@ -17,6 +17,7 @@ import java.nio.ByteBuffer;
 import java.io.IOException;
 
 // line 3 "../../../../StatsFileReader.ump"
+// line 3 "../../../../StatsFileReader_static.ump"
 public class StatsFileReader extends DumpFileReader
 {
 
@@ -231,7 +232,207 @@ public class StatsFileReader extends DumpFileReader
 	    prevCounter = c;
 	}
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.log;
+  
+  // line 4 "../../../../CleanerFileReader_static.ump"
+  // line 4 "../../../../StatsFileReader_static.ump"
+  public static class EntryInfo
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public EntryInfo()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 8 "../../../../CleanerFileReader_static.ump"
+    public  EntryInfo(LogEntry targetLogEntry, byte targetCategory){
+      this.targetLogEntry=targetLogEntry;
+          this.targetCategory=targetCategory;
+    }
+  
+    // line 11 "../../../../StatsFileReader_static.ump"
+    public  EntryInfo(){
+      count=0;
+          provisionalCount=0;
+          totalBytes=0;
+          minBytes=0;
+          maxBytes=0;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../CleanerFileReader_static.ump"
+    public LogEntry targetLogEntry ;
+  // line 6 "../../../../CleanerFileReader_static.ump"
+    public byte targetCategory ;
+  // line 5 "../../../../StatsFileReader_static.ump"
+    public int count ;
+  // line 6 "../../../../StatsFileReader_static.ump"
+    public int provisionalCount ;
+  // line 7 "../../../../StatsFileReader_static.ump"
+    public long totalBytes ;
+  // line 8 "../../../../StatsFileReader_static.ump"
+    public int minBytes ;
+  // line 9 "../../../../StatsFileReader_static.ump"
+    public int maxBytes ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.log;
+  
+  // line 18 "../../../../StatsFileReader_static.ump"
+  public static class LogEntryTypeComparator
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LogEntryTypeComparator()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 21 "../../../../StatsFileReader_static.ump"
+     public int compare(Object o1, Object o2){
+      if (o1 == null) {
+            return -1;
+          }
+          if (o2 == null) {
+            return 1;
+          }
+          if (o1 instanceof LogEntryType && o2 instanceof LogEntryType) {
+            Byte t1=new Byte(((LogEntryType)o1).getTypeNum());
+            Byte t2=new Byte(((LogEntryType)o2).getTypeNum());
+            return t1.compareTo(t2);
+          }
+     else {
+            throw new IllegalArgumentException("non LogEntryType passed to LogEntryType.compare");
+          }
+    }
+  
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.log;
+  
+  // line 37 "../../../../StatsFileReader_static.ump"
+  public static class CheckpointCounter
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CheckpointCounter()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 49 "../../../../StatsFileReader_static.ump"
+     public void increment(FileReader reader, byte currentEntryTypeNum){
+      if (currentEntryTypeNum == LogEntryType.LOG_CKPT_START.getTypeNum()) {
+            startCkptLsn=reader.getLastLsn();
+          }
+     else       if (currentEntryTypeNum == LogEntryType.LOG_LN_TRANSACTIONAL.getTypeNum()) {
+            if (startCkptLsn == DbLsn.NULL_LSN) {
+              preStartLNTxnCount++;
+            }
+     else {
+              postStartLNTxnCount++;
+            }
+          }
+     else       if (currentEntryTypeNum == LogEntryType.LOG_LN.getTypeNum()) {
+            if (startCkptLsn == DbLsn.NULL_LSN) {
+              preStartLNCount++;
+            }
+     else {
+              postStartLNCount++;
+            }
+          }
+     else       if (currentEntryTypeNum == LogEntryType.LOG_MAPLN.getTypeNum()) {
+            if (startCkptLsn == DbLsn.NULL_LSN) {
+              preStartMapLNCount++;
+            }
+     else {
+              postStartMapLNCount++;
+            }
+          }
+     else       if (currentEntryTypeNum == LogEntryType.LOG_MAPLN_TRANSACTIONAL.getTypeNum()) {
+            if (startCkptLsn == DbLsn.NULL_LSN) {
+              preStartMapLNTxnCount++;
+            }
+     else {
+              postStartMapLNTxnCount++;
+            }
+          }
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 38 "../../../../StatsFileReader_static.ump"
+    public long startCkptLsn=DbLsn.NULL_LSN ;
+  // line 39 "../../../../StatsFileReader_static.ump"
+    public long endCkptLsn=DbLsn.NULL_LSN ;
+  // line 40 "../../../../StatsFileReader_static.ump"
+    public int preStartLNTxnCount ;
+  // line 41 "../../../../StatsFileReader_static.ump"
+    public int preStartLNCount ;
+  // line 42 "../../../../StatsFileReader_static.ump"
+    public int preStartMapLNTxnCount ;
+  // line 43 "../../../../StatsFileReader_static.ump"
+    public int preStartMapLNCount ;
+  // line 44 "../../../../StatsFileReader_static.ump"
+    public int postStartLNTxnCount ;
+  // line 45 "../../../../StatsFileReader_static.ump"
+    public int postStartLNCount ;
+  // line 46 "../../../../StatsFileReader_static.ump"
+    public int postStartMapLNTxnCount ;
+  // line 47 "../../../../StatsFileReader_static.ump"
+    public int postStartMapLNCount ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

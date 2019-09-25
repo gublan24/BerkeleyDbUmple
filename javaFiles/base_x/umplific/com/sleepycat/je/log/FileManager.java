@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.File;
 
 // line 3 "../../../../FileManager.ump"
+// line 3 "../../../../FileManager_static.ump"
 public class FileManager
 {
 
@@ -919,7 +920,317 @@ public class FileManager
    protected void hook467(boolean readOnly) throws DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.log;
+  
+  // line 4 "../../../../FileManager_static.ump"
+  public static class FileMode
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public FileMode()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 9 "../../../../FileManager_static.ump"
+     private  FileMode(String fileModeValue){
+      this.fileModeValue=fileModeValue;
+    }
+  
+    // line 12 "../../../../FileManager_static.ump"
+     public String getModeValue(){
+      return fileModeValue;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../FileManager_static.ump"
+    public static final FileMode READ_MODE=new FileMode("r") ;
+  // line 6 "../../../../FileManager_static.ump"
+    public static final FileMode READWRITE_MODE=new FileMode("rw") ;
+  // line 7 "../../../../FileManager_static.ump"
+    private String fileModeValue ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.log;
+  
+  // line 15 "../../../../FileManager_static.ump"
+  public class LogEndFileDescriptor
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LogEndFileDescriptor()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+  
+    /**
+     * 
+     * getWritableFile must be called under the log write latch.
+     */
+    // line 22 "../../../../FileManager_static.ump"
+    public RandomAccessFile getWritableFile(long fileNumber) throws RunRecoveryException{
+      try {
+            if (endOfLogRWFile == null) {
+              endOfLogRWFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+              endOfLogSyncFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+            }
+            return endOfLogRWFile;
+          }
+     catch (      Exception e) {
+            throw new RunRecoveryException(envImpl,e);
+          }
+    }
+  
+  
+    /**
+     * 
+     * FSync the log file that makes up the end of the log.
+     */
+    // line 37 "../../../../FileManager_static.ump"
+    public void force() throws DatabaseException,IOException{
+      RandomAccessFile file=endOfLogSyncFile;
+          if (file != null) {
+            FileChannel channel=file.getChannel();
+            try {
+              channel.force(false);
+            }
+     catch (        ClosedChannelException e) {
+              throw new RunRecoveryException(envImpl,"Channel closed, may be due to thread interrupt",e);
+            }
+            assert EnvironmentImpl.maybeForceYield();
+          }
+    }
+  
+  
+    /**
+     * 
+     * Close the end of the log file descriptor. Use atomic assignment to
+     * ensure that we won't force and close on the same descriptor.
+     */
+    // line 54 "../../../../FileManager_static.ump"
+    public void close() throws IOException{
+      IOException firstException=null;
+          if (endOfLogRWFile != null) {
+            RandomAccessFile file=endOfLogRWFile;
+            endOfLogRWFile=null;
+            try {
+              file.close();
+            }
+     catch (        IOException e) {
+              firstException=e;
+            }
+          }
+          if (endOfLogSyncFile != null) {
+            RandomAccessFile file=endOfLogSyncFile;
+            endOfLogSyncFile=null;
+            file.close();
+          }
+          if (firstException != null) {
+            throw firstException;
+          }
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 16 "../../../../FileManager_static.ump"
+    private RandomAccessFile endOfLogRWFile=null ;
+  // line 17 "../../../../FileManager_static.ump"
+    private RandomAccessFile endOfLogSyncFile=null ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.log;
+  
+  @MethodObject
+  // line 75 "../../../../FileManager_static.ump"
+  public static class FileManager_writeToFile
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public FileManager_writeToFile()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 77 "../../../../FileManager_static.ump"
+    public  FileManager_writeToFile(FileManager _this, RandomAccessFile file, ByteBuffer data, long destOffset){
+      this._this=_this;
+          this.file=file;
+          this.data=data;
+          this.destOffset=destOffset;
+    }
+  
+    // line 83 "../../../../FileManager_static.ump"
+    public int execute() throws IOException,DatabaseException{
+      totalBytesWritten=0;
+          this.hook455();
+          this.hook445();
+          return totalBytesWritten;
+    }
+  
+    // line 100 "../../../../FileManager_static.ump"
+     protected void hook445() throws IOException,DatabaseException{
+      
+    }
+  
+    // line 102 "../../../../FileManager_static.ump"
+     protected void hook455() throws IOException,DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 88 "../../../../FileManager_static.ump"
+    protected FileManager _this ;
+  // line 89 "../../../../FileManager_static.ump"
+    protected RandomAccessFile file ;
+  // line 90 "../../../../FileManager_static.ump"
+    protected ByteBuffer data ;
+  // line 91 "../../../../FileManager_static.ump"
+    protected long destOffset ;
+  // line 92 "../../../../FileManager_static.ump"
+    protected int totalBytesWritten ;
+  // line 93 "../../../../FileManager_static.ump"
+    protected FileChannel channel ;
+  // line 94 "../../../../FileManager_static.ump"
+    protected ByteBuffer useData ;
+  // line 95 "../../../../FileManager_static.ump"
+    protected int origLimit ;
+  // line 96 "../../../../FileManager_static.ump"
+    protected int bytesWritten ;
+  // line 97 "../../../../FileManager_static.ump"
+    protected int pos ;
+  // line 98 "../../../../FileManager_static.ump"
+    protected int size ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.log;
+  
+  @MethodObject
+  // line 104 "../../../../FileManager_static.ump"
+  public static class FileManager_readFromFile
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public FileManager_readFromFile()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 106 "../../../../FileManager_static.ump"
+    public  FileManager_readFromFile(FileManager _this, RandomAccessFile file, ByteBuffer readBuffer, long offset){
+      this._this=_this;
+          this.file=file;
+          this.readBuffer=readBuffer;
+          this.offset=offset;
+    }
+  
+    // line 112 "../../../../FileManager_static.ump"
+    public void execute() throws IOException{
+      this.hook446();
+    }
+  
+    // line 126 "../../../../FileManager_static.ump"
+     protected void hook446() throws IOException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 114 "../../../../FileManager_static.ump"
+    protected FileManager _this ;
+  // line 115 "../../../../FileManager_static.ump"
+    protected RandomAccessFile file ;
+  // line 116 "../../../../FileManager_static.ump"
+    protected ByteBuffer readBuffer ;
+  // line 117 "../../../../FileManager_static.ump"
+    protected long offset ;
+  // line 118 "../../../../FileManager_static.ump"
+    protected FileChannel channel ;
+  // line 119 "../../../../FileManager_static.ump"
+    protected int readLength ;
+  // line 120 "../../../../FileManager_static.ump"
+    protected long currentPosition ;
+  // line 121 "../../../../FileManager_static.ump"
+    protected int bytesRead1 ;
+  // line 122 "../../../../FileManager_static.ump"
+    protected int pos ;
+  // line 123 "../../../../FileManager_static.ump"
+    protected int size ;
+  // line 124 "../../../../FileManager_static.ump"
+    protected int bytesRead2 ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

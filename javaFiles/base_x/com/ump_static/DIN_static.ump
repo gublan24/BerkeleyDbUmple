@@ -32,3 +32,4 @@ class DIN {
       protected void hook614(){
       }
     }
+}

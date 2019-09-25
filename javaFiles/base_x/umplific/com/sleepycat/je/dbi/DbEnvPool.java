@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.File;
 
 // line 3 "../../../../DbEnvPool.ump"
+// line 3 "../../../../DbEnvPool_static.ump"
 public class DbEnvPool
 {
 
@@ -90,7 +91,50 @@ public class DbEnvPool
 	    throw new DatabaseException(e);
 	}
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  
+  // line 4 "../../../../DbEnvPool_static.ump"
+  public static class EnvironmentImplInfo
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public EnvironmentImplInfo()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 8 "../../../../DbEnvPool_static.ump"
+    public  EnvironmentImplInfo(EnvironmentImpl envImpl, boolean firstHandle){
+      this.envImpl=envImpl;
+          this.firstHandle=firstHandle;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../DbEnvPool_static.ump"
+    public EnvironmentImpl envImpl ;
+  // line 6 "../../../../DbEnvPool_static.ump"
+    public boolean firstHandle=false ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

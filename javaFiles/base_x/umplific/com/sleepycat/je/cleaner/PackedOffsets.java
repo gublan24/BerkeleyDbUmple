@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../PackedOffsets.ump"
+// line 3 "../../../../PackedOffsets_static.ump"
 public class PackedOffsets implements LogWritable,LogReadable
 {
 
@@ -207,7 +208,71 @@ public class PackedOffsets implements LogWritable,LogReadable
 	dumpLog(buf, true);
 	return buf.toString();
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.cleaner;
+  
+  // line 4 "../../../../PackedOffsets_static.ump"
+  public class Iterator
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Iterator()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 8 "../../../../PackedOffsets_static.ump"
+     private  Iterator(){
+      
+    }
+  
+    // line 10 "../../../../PackedOffsets_static.ump"
+    public boolean hasNext(){
+      return data != null && index < data.length;
+    }
+  
+    // line 13 "../../../../PackedOffsets_static.ump"
+    public long next(){
+      long val=priorVal;
+          for (int shift=0; ; shift+=15) {
+            long s=data[index++];
+            if (s < 0) {
+              val+=(-1 - s) << shift;
+            }
+     else {
+              val+=s << shift;
+              break;
+            }
+          }
+          priorVal=val;
+          return val;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../PackedOffsets_static.ump"
+    private int index ;
+  // line 6 "../../../../PackedOffsets_static.ump"
+    private long priorVal ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

@@ -20,6 +20,7 @@ import java.io.PrintStream;
 import java.io.File;
 
 // line 3 "../../../../DbSpace.ump"
+// line 3 "../../../../DbSpace_static.ump"
 public class DbSpace
 {
 
@@ -40,7 +41,84 @@ public class DbSpace
 
   public void delete()
   {}
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.util;
+  
+  // line 4 "../../../../DbSpace_static.ump"
+  public static class Summary
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Summary()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 6 ../../../../DbSpace_static.ump
+    static final String HEADER="  File    Size (KB)  % Used\n" + "--------  ---------  ------";
+        Long fileNum;
+        long totalSize;
+        long obsoleteSize;
+        Summary(){
+        }
+        Summary(    Long fileNum,    FileSummary summary) throws DatabaseException {
+          this.fileNum=fileNum;
+          totalSize=summary.totalSize;
+          obsoleteSize=summary.getObsoleteSize();
+        }
+        public int compareTo(    Object other){
+          Summary o=(Summary)other;
+          return utilization() - o.utilization();
+        }
+        void add(    Summary o){
+          totalSize+=o.totalSize;
+          obsoleteSize+=o.obsoleteSize;
+        }
+        void print(    PrintStream out){
+          if (fileNum != null) {
+            pad(out,Long.toHexString(fileNum.longValue()),8,'0');
+          }
+     else {
+            out.print(" TOTALS ");
+          }
+          int kb=(int)(totalSize / 1024);
+          int util=utilization();
+          out.print("  ");
+          pad(out,Integer.toString(kb),9,' ');
+          out.print("     ");
+          pad(out,Integer.toString(util),3,' ');
+          out.println();
+        }
+        int utilization(){
+          return UtilizationProfile.utilization(obsoleteSize,totalSize);
+        }
+        private void pad(    PrintStream out,    String val,    int digits,    char padChar){
+          int padSize=digits - val.length();
+          for (int i=0; i < padSize; i+=1) {
+            out.print(padChar);
+          }
+          out.print(val);
+        }
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

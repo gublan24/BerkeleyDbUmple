@@ -27,7 +27,8 @@ class RecoveryManager {
         return "txnId=" + txnId + "/nodeId="+ nodeId;
       }
     }
-  static class RootDeleter implements WithRootLatched {
+  static class RootDeleter {
+      isA WithRootLatched;
       Tree tree;
       RootDeleter(    Tree tree){
         this.tree=tree;
@@ -75,3 +76,4 @@ class RecoveryManager {
       protected Level useLevel;
       protected StringBuffer sb;
     }
+}

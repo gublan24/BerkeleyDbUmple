@@ -283,3 +283,4 @@ class Checkpointer {
       protected void hook554() throws DatabaseException {
       }
     }
+}

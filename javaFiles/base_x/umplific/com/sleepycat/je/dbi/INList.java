@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.HashSet;
 
 // line 3 "../../../../INList.ump"
+// line 3 "../../../../INList_static.ump"
 public class INList
 {
 
@@ -173,7 +174,134 @@ public class INList
    protected void hook346(IN in) throws DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 4 "../../../../INList_static.ump"
+  public static class INList_add
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public INList_add()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../INList_static.ump"
+    public  INList_add(INList _this, IN in){
+      this._this=_this;
+          this.in=in;
+    }
+  
+    // line 10 "../../../../INList_static.ump"
+    public void execute() throws DatabaseException{
+      this.hook344();
+          addToMajor=true;
+          this.hook343();
+    }
+  
+    // line 19 "../../../../INList_static.ump"
+     protected void hook343() throws DatabaseException{
+      this.hook345();
+    }
+  
+    // line 22 "../../../../INList_static.ump"
+     protected void hook344() throws DatabaseException{
+      
+    }
+  
+    // line 24 "../../../../INList_static.ump"
+     protected void hook345() throws DatabaseException{
+      _this.addAndSetMemory(_this.ins,in);
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 14 "../../../../INList_static.ump"
+    protected INList _this ;
+  // line 15 "../../../../INList_static.ump"
+    protected IN in ;
+  // line 16 "../../../../INList_static.ump"
+    protected boolean enteredWithLatchHeld ;
+  // line 17 "../../../../INList_static.ump"
+    protected boolean addToMajor ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 27 "../../../../INList_static.ump"
+  public static class INList_addAndSetMemory
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public INList_addAndSetMemory()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 29 "../../../../INList_static.ump"
+    public  INList_addAndSetMemory(INList _this, Set set, IN in){
+      this._this=_this;
+          this.set=set;
+          this.in=in;
+    }
+  
+    // line 34 "../../../../INList_static.ump"
+    public void execute(){
+      addOk=set.add(in);
+          assert addOk : "failed adding in " + in.getNodeId();
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 37 "../../../../INList_static.ump"
+    protected INList _this ;
+  // line 38 "../../../../INList_static.ump"
+    protected Set set ;
+  // line 39 "../../../../INList_static.ump"
+    protected IN in ;
+  // line 40 "../../../../INList_static.ump"
+    protected boolean addOk ;
+  // line 41 "../../../../INList_static.ump"
+    protected MemoryBudget mb ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

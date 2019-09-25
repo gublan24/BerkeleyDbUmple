@@ -1,7 +1,8 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/utilint/TinyHashSet.java
 namespace com.sleepycat.je.utilint;
 class TinyHashSet {
-  static class SingleElementIterator implements Iterator {
+  static class SingleElementIterator  {
+      isA Iterator;
       Object theObject;
       TinyHashSet theSet;
       boolean returnedTheObject=false;
@@ -27,3 +28,4 @@ class TinyHashSet {
         theSet.remove(theObject);
       }
     }
+}

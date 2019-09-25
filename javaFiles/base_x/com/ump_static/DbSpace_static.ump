@@ -1,7 +1,8 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/util/DbSpace.java
 namespace com.sleepycat.je.util;
 class DbSpace {
-  static class Summary implements Comparable {
+  static class Summary  {
+      isA Comparable;
       static final String HEADER="  File    Size (KB)  % Used\n" + "--------  ---------  ------";
       Long fileNum;
       long totalSize;
@@ -47,3 +48,4 @@ class DbSpace {
         out.print(val);
       }
     }
+}

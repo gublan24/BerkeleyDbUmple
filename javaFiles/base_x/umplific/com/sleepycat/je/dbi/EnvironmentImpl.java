@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.File;
 
 // line 3 "../../../../EnvironmentImpl.ump"
+// line 3 "../../../../EnvironmentImpl_static.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -726,7 +727,71 @@ public class EnvironmentImpl implements EnvConfigObserver
    protected void hook337() throws DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 4 "../../../../EnvironmentImpl_static.ump"
+  public static class EnvironmentImpl_createDaemons
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public EnvironmentImpl_createDaemons()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../EnvironmentImpl_static.ump"
+    public  EnvironmentImpl_createDaemons(EnvironmentImpl _this){
+      this._this=_this;
+    }
+  
+    // line 9 "../../../../EnvironmentImpl_static.ump"
+    public void execute() throws DatabaseException{
+      checkpointerWakeupTime=0;
+          this.hook329();
+          _this.checkpointer=new Checkpointer(_this,checkpointerWakeupTime,"Checkpointer");
+          this.hook332();
+          _this.cleaner=new Cleaner(_this,"Cleaner");
+    }
+  
+    // line 19 "../../../../EnvironmentImpl_static.ump"
+     protected void hook329() throws DatabaseException{
+      
+    }
+  
+    // line 21 "../../../../EnvironmentImpl_static.ump"
+     protected void hook332() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 15 "../../../../EnvironmentImpl_static.ump"
+    protected EnvironmentImpl _this ;
+  // line 16 "../../../../EnvironmentImpl_static.ump"
+    protected long checkpointerWakeupTime ;
+  // line 17 "../../../../EnvironmentImpl_static.ump"
+    protected long compressorWakeupInterval ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

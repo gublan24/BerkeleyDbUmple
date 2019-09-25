@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 // line 3 "../../../../PreloadLSNTreeWalker.ump"
+// line 3 "../../../../PreloadLSNTreeWalker_static.ump"
 public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 {
 
@@ -82,7 +83,114 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 	}
 	throw new ReturnObject(in.fetchTarget(index));
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  
+  // line 4 "../../../../PreloadLSNTreeWalker_static.ump"
+  public static class INEntry
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //INEntry Attributes
+    private IN in;
+    private int index;
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public INEntry(IN aIn, int aIndex)
+    {
+      in = aIn;
+      index = aIndex;
+    }
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public boolean setIn(IN aIn)
+    {
+      boolean wasSet = false;
+      in = aIn;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setIndex(int aIndex)
+    {
+      boolean wasSet = false;
+      index = aIndex;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public IN getIn()
+    {
+      return in;
+    }
+  
+    public int getIndex()
+    {
+      return index;
+    }
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../PreloadLSNTreeWalker_static.ump"
+    public  INEntry(IN in, int index){
+      this.in=in;
+          this.index=index;
+    }
+  
+  
+    public String toString()
+    {
+      return super.toString() + "["+
+              "index" + ":" + getIndex()+ "]" + System.getProperties().getProperty("line.separator") +
+              "  " + "in" + "=" + (getIn() != null ? !getIn().equals(this)  ? getIn().toString().replaceAll("  ","    ") : "this" : "null");
+    }
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  import com.sleepycat.je.tree.*;
+  
+  // line 12 "../../../../PreloadLSNTreeWalker_static.ump"
+  public class PreloadWithRootLatched implements WithRootLatched
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public PreloadWithRootLatched()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 15 "../../../../PreloadLSNTreeWalker_static.ump"
+     public IN doWork(ChildReference root) throws DatabaseException{
+      walkInternal();
+          return null;
+    }
+  
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

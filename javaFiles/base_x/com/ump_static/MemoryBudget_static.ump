@@ -76,3 +76,4 @@ class MemoryBudget {
       protected void hook350() throws DatabaseException {
       }
     }
+}

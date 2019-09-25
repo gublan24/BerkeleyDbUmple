@@ -543,3 +543,4 @@ class IN {
       protected void hook656() throws DatabaseException {
       }
     }
+}

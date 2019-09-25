@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 
 // line 3 "../../../../StoredClassCatalog.ump"
+// line 5 "../../../../StoredClassCatalog_static.ump"
 public class StoredClassCatalog implements ClassCatalog
 {
 
@@ -263,7 +264,85 @@ public class StoredClassCatalog implements ClassCatalog
 	oos.writeObject(o);
 	return baos.toByteArray();
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.bind.serial;
+  
+  // line 6 "../../../../StoredClassCatalog_static.ump"
+  public static class ClassInfo implements Serializable
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public ClassInfo()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 12 "../../../../StoredClassCatalog_static.ump"
+    public  ClassInfo(){
+      
+    }
+  
+    // line 14 "../../../../StoredClassCatalog_static.ump"
+    public  ClassInfo(DatabaseEntry dbt){
+      byte[] data=dbt.getData();
+          int len=data[0];
+          classID=new byte[len];
+          System.arraycopy(data,1,classID,0,len);
+    }
+  
+    // line 20 "../../../../StoredClassCatalog_static.ump"
+    public void toDbt(DatabaseEntry dbt){
+      byte[] data=new byte[1 + classID.length];
+          data[0]=(byte)classID.length;
+          System.arraycopy(classID,0,data,1,classID.length);
+          dbt.setData(data);
+    }
+  
+    // line 26 "../../../../StoredClassCatalog_static.ump"
+    public void setClassID(byte [] classID){
+      this.classID=classID;
+    }
+  
+    // line 29 "../../../../StoredClassCatalog_static.ump"
+    public byte[] getClassID(){
+      return classID;
+    }
+  
+    // line 32 "../../../../StoredClassCatalog_static.ump"
+    public ObjectStreamClass getClassFormat(){
+      return classFormat;
+    }
+  
+    // line 35 "../../../../StoredClassCatalog_static.ump"
+    public void setClassFormat(ObjectStreamClass classFormat){
+      this.classFormat=classFormat;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 9 "../../../../StoredClassCatalog_static.ump"
+    private byte[] classID ;
+  // line 10 "../../../../StoredClassCatalog_static.ump"
+    private transient ObjectStreamClass classFormat ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

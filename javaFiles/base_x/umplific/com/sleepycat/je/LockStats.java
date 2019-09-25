@@ -4,9 +4,10 @@
 package com.sleepycat.je;
 import de.ovgu.cide.jakutil.*;
 import java.io.Serializable;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../LockStats.ump"
-public class LockStats
+public class LockStats implements Serializable
 {
 
   //------------------------

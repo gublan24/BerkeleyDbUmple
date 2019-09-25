@@ -38,6 +38,7 @@ import java.io.IOException;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../Cleaner.ump"
+// line 3 "../../../../Cleaner_static.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -920,6 +921,95 @@ public class Cleaner implements EnvConfigObserver
             "trackDetail" + ":" + getTrackDetail()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "mustBeCleanedFiles" + "=" + (getMustBeCleanedFiles() != null ? !getMustBeCleanedFiles().equals(this)  ? getMustBeCleanedFiles().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "lowUtilizationFiles" + "=" + (getLowUtilizationFiles() != null ? !getLowUtilizationFiles().equals(this)  ? getLowUtilizationFiles().toString().replaceAll("  ","    ") : "this" : "null");
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.cleaner;
+  
+  @MethodObject
+  // line 4 "../../../../Cleaner_static.ump"
+  public static class Cleaner_processPending
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cleaner_processPending()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../Cleaner_static.ump"
+    public  Cleaner_processPending(Cleaner _this){
+      this._this=_this;
+    }
+  
+    // line 9 "../../../../Cleaner_static.ump"
+    public void execute() throws DatabaseException{
+      dbMapTree=_this.env.getDbMapTree();
+          pendingLNs=_this.fileSelector.getPendingLNs();
+          if (pendingLNs != null) {
+            location=new TreeLocation();
+            for (int i=0; i < pendingLNs.length; i+=1) {
+              info=pendingLNs[i];
+              dbId1=info.getDbId();
+              db1=dbMapTree.getDb(dbId1,_this.lockTimeout);
+              key=info.getKey();
+              dupKey=info.getDupKey();
+              ln=info.getLN();
+              this.hook114();
+              _this.processPendingLN(ln,db1,key,dupKey,location);
+            }
+          }
+    }
+  
+    // line 39 "../../../../Cleaner_static.ump"
+     protected void hook114() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 25 "../../../../Cleaner_static.ump"
+    protected Cleaner _this ;
+  // line 26 "../../../../Cleaner_static.ump"
+    protected DbTree dbMapTree ;
+  // line 27 "../../../../Cleaner_static.ump"
+    protected LNInfo[] pendingLNs ;
+  // line 28 "../../../../Cleaner_static.ump"
+    protected TreeLocation location ;
+  // line 29 "../../../../Cleaner_static.ump"
+    protected LNInfo info ;
+  // line 30 "../../../../Cleaner_static.ump"
+    protected DatabaseId dbId1 ;
+  // line 31 "../../../../Cleaner_static.ump"
+    protected DatabaseImpl db1 ;
+  // line 32 "../../../../Cleaner_static.ump"
+    protected byte[] key ;
+  // line 33 "../../../../Cleaner_static.ump"
+    protected byte[] dupKey ;
+  // line 34 "../../../../Cleaner_static.ump"
+    protected LN ln ;
+  // line 35 "../../../../Cleaner_static.ump"
+    protected DatabaseId[] pendingDBs ;
+  // line 36 "../../../../Cleaner_static.ump"
+    protected DatabaseId dbId2 ;
+  // line 37 "../../../../Cleaner_static.ump"
+    protected DatabaseImpl db2 ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

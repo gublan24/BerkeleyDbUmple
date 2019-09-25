@@ -9,9 +9,11 @@ class PreloadLSNTreeWalker {
       IN in;
       int index;
     }
-  inner class PreloadWithRootLatched implements WithRootLatched {
+  inner class PreloadWithRootLatched  {
+      isA WithRootLatched;
       public IN doWork(    ChildReference root) throws DatabaseException {
         walkInternal();
         return null;
       }
     }
+}

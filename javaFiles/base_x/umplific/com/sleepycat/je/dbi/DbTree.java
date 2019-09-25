@@ -38,6 +38,7 @@ import java.io.PrintStream;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DbTree.ump"
+// line 3 "../../../../DbTree_static.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -704,7 +705,194 @@ public class DbTree implements LoggableObject,LogReadable
    protected void hook310(boolean allowEviction, CursorImpl idCursor) throws DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  import com.sleepycat.je.tree.*;
+  
+  // line 4 "../../../../DbTree_static.ump"
+  public static class RewriteMapLN implements WithRootLatched
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public RewriteMapLN()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 8 "../../../../DbTree_static.ump"
+    public  RewriteMapLN(CursorImpl cursor){
+      this.cursor=cursor;
+    }
+  
+    // line 11 "../../../../DbTree_static.ump"
+     public IN doWork(ChildReference root) throws DatabaseException{
+      DatabaseEntry dataDbt=new DatabaseEntry(new byte[0]);
+          cursor.putCurrent(dataDbt,null,null);
+          return null;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 6 "../../../../DbTree_static.ump"
+    private CursorImpl cursor ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  // line 16 "../../../../DbTree_static.ump"
+  public static class NameLockResult
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //NameLockResult Attributes
+    private CursorImpl nameCursor;
+    private DatabaseImpl dbImpl;
+    private NameLN nameLN;
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public NameLockResult(CursorImpl aNameCursor, DatabaseImpl aDbImpl, NameLN aNameLN)
+    {
+      nameCursor = aNameCursor;
+      dbImpl = aDbImpl;
+      nameLN = aNameLN;
+    }
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public boolean setNameCursor(CursorImpl aNameCursor)
+    {
+      boolean wasSet = false;
+      nameCursor = aNameCursor;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setDbImpl(DatabaseImpl aDbImpl)
+    {
+      boolean wasSet = false;
+      dbImpl = aDbImpl;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setNameLN(NameLN aNameLN)
+    {
+      boolean wasSet = false;
+      nameLN = aNameLN;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public CursorImpl getNameCursor()
+    {
+      return nameCursor;
+    }
+  
+    public DatabaseImpl getDbImpl()
+    {
+      return dbImpl;
+    }
+  
+    public NameLN getNameLN()
+    {
+      return nameLN;
+    }
+  
+    public void delete()
+    {}
+  
+  
+    public String toString()
+    {
+      return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+              "  " + "nameCursor" + "=" + (getNameCursor() != null ? !getNameCursor().equals(this)  ? getNameCursor().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+              "  " + "dbImpl" + "=" + (getDbImpl() != null ? !getDbImpl().equals(this)  ? getDbImpl().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+              "  " + "nameLN" + "=" + (getNameLN() != null ? !getNameLN().equals(this)  ? getNameLN().toString().replaceAll("  ","    ") : "this" : "null");
+    }
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  import com.sleepycat.je.tree.*;
+  
+  // line 21 "../../../../DbTree_static.ump"
+  public static class RootLevel implements WithRootLatched
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public RootLevel()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 26 "../../../../DbTree_static.ump"
+    public  RootLevel(DatabaseImpl db){
+      this.db=db;
+          rootLevel=0;
+    }
+  
+    // line 30 "../../../../DbTree_static.ump"
+     public IN doWork(ChildReference root) throws DatabaseException{
+      IN rootIN=(IN)root.fetchTarget(db,null);
+          rootLevel=rootIN.getLevel();
+          return null;
+    }
+  
+    // line 35 "../../../../DbTree_static.ump"
+    public int getRootLevel(){
+      return rootLevel;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 23 "../../../../DbTree_static.ump"
+    private DatabaseImpl db ;
+  // line 24 "../../../../DbTree_static.ump"
+    private int rootLevel ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

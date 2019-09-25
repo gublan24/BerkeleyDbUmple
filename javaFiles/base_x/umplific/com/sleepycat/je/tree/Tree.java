@@ -36,6 +36,7 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Tree.ump"
+// line 3 "../../../../Tree_static.ump"
 public class Tree implements LogWritable,LogReadable
 {
 
@@ -2098,7 +2099,558 @@ public class Tree implements LogWritable,LogReadable
    protected void hook754(BIN bin) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.tree;
+  
+  // line 4 "../../../../Tree_static.ump"
+  public static class SearchType
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public SearchType()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 9 "../../../../Tree_static.ump"
+     private  SearchType(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../Tree_static.ump"
+    public static final SearchType NORMAL=new SearchType() ;
+  // line 6 "../../../../Tree_static.ump"
+    public static final SearchType LEFT=new SearchType() ;
+  // line 7 "../../../../Tree_static.ump"
+    public static final SearchType RIGHT=new SearchType() ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  // line 11 "../../../../Tree_static.ump"
+  public class RootChildReference extends ChildReference
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public RootChildReference()
+    {
+      super();
+    }
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {
+      super.delete();
+    }
+  
+    // line 14 "../../../../Tree_static.ump"
+     private  RootChildReference(){
+      super();
+    }
+  
+    // line 17 "../../../../Tree_static.ump"
+     private  RootChildReference(Node target, byte [] key, long lsn){
+      super(target,key,lsn);
+    }
+  
+    // line 20 "../../../../Tree_static.ump"
+     private  RootChildReference(Node target, byte [] key, long lsn, byte existingState){
+      super(target,key,lsn,existingState);
+    }
+  
+    // line 23 "../../../../Tree_static.ump"
+     public Node fetchTarget(DatabaseImpl database, IN in) throws DatabaseException{
+      this.hook666();
+          return super.fetchTarget(database,in);
+    }
+  
+    // line 27 "../../../../Tree_static.ump"
+     public void setTarget(Node target){
+      this.hook667();
+          super.setTarget(target);
+    }
+  
+    // line 31 "../../../../Tree_static.ump"
+     public void clearTarget(){
+      this.hook668();
+          super.clearTarget();
+    }
+  
+    // line 35 "../../../../Tree_static.ump"
+     public void setLsn(long lsn){
+      this.hook669();
+          super.setLsn(lsn);
+    }
+  
+    // line 39 "../../../../Tree_static.ump"
+     protected void hook666() throws DatabaseException{
+      
+    }
+  
+    // line 41 "../../../../Tree_static.ump"
+     protected void hook667(){
+      
+    }
+  
+    // line 43 "../../../../Tree_static.ump"
+     protected void hook668(){
+      
+    }
+  
+    // line 45 "../../../../Tree_static.ump"
+     protected void hook669(){
+      
+    }
+  
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  // line 47 "../../../../Tree_static.ump"
+  public static class SplitInfo
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //SplitInfo Attributes
+    private IN parent;
+    private IN child;
+    private int index;
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public SplitInfo(IN aParent, IN aChild, int aIndex)
+    {
+      parent = aParent;
+      child = aChild;
+      index = aIndex;
+    }
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public boolean setParent(IN aParent)
+    {
+      boolean wasSet = false;
+      parent = aParent;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setChild(IN aChild)
+    {
+      boolean wasSet = false;
+      child = aChild;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setIndex(int aIndex)
+    {
+      boolean wasSet = false;
+      index = aIndex;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public IN getParent()
+    {
+      return parent;
+    }
+  
+    public IN getChild()
+    {
+      return child;
+    }
+  
+    public int getIndex()
+    {
+      return index;
+    }
+  
+    public void delete()
+    {}
+  
+    // line 52 "../../../../Tree_static.ump"
+    public  SplitInfo(IN parent, IN child, int index){
+      this.parent=parent;
+          this.child=child;
+          this.index=index;
+    }
+  
+  
+    public String toString()
+    {
+      return super.toString() + "["+
+              "index" + ":" + getIndex()+ "]" + System.getProperties().getProperty("line.separator") +
+              "  " + "parent" + "=" + (getParent() != null ? !getParent().equals(this)  ? getParent().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+              "  " + "child" + "=" + (getChild() != null ? !getChild().equals(this)  ? getChild().toString().replaceAll("  ","    ") : "this" : "null");
+    }
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 57 "../../../../Tree_static.ump"
+  public static class Tree_searchSplitsAllowed
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Tree_searchSplitsAllowed()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 59 "../../../../Tree_static.ump"
+    public  Tree_searchSplitsAllowed(Tree _this, byte [] key, long nid, boolean updateGeneration){
+      this._this=_this;
+          this.key=key;
+          this.nid=nid;
+          this.updateGeneration=updateGeneration;
+    }
+  
+    // line 65 "../../../../Tree_static.ump"
+    public IN execute() throws DatabaseException{
+      insertTarget=null;
+          while (insertTarget == null) {
+            this.hook717();
+            rootIN=null;
+            this.hook716();
+            if (rootIN == null) {
+              break;
+            }
+            try {
+              insertTarget=_this.searchSubTreeSplitsAllowed(rootIN,key,nid,updateGeneration);
+            }
+     catch (        SplitRequiredException e) {
+              continue;
+            }
+          }
+          return insertTarget;
+    }
+  
+    // line 93 "../../../../Tree_static.ump"
+     protected void hook716() throws DatabaseException{
+      while (true) {
+            if (_this.root != null) {
+              rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+              if (rootIN.needsSplitting()) {
+                b=true;
+                this.hook721();
+                if (b)             continue;
+                this.hook720();
+                env=_this.database.getDbEnvironment();
+                env.getDbMapTree().modifyDbRoot(_this.database);
+                this.hook719();
+                rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+              }
+              this.hook718();
+            }
+            break;
+          }
+    }
+  
+    // line 112 "../../../../Tree_static.ump"
+     protected void hook717() throws DatabaseException{
+      
+    }
+  
+    // line 114 "../../../../Tree_static.ump"
+     protected void hook718() throws DatabaseException{
+      
+    }
+  
+    // line 116 "../../../../Tree_static.ump"
+     protected void hook719() throws DatabaseException{
+      
+    }
+  
+    // line 118 "../../../../Tree_static.ump"
+     protected void hook720() throws DatabaseException{
+      
+    }
+  
+    // line 120 "../../../../Tree_static.ump"
+     protected void hook721() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 82 "../../../../Tree_static.ump"
+    protected Tree _this ;
+  // line 83 "../../../../Tree_static.ump"
+    protected byte[] key ;
+  // line 84 "../../../../Tree_static.ump"
+    protected long nid ;
+  // line 85 "../../../../Tree_static.ump"
+    protected boolean updateGeneration ;
+  // line 86 "../../../../Tree_static.ump"
+    protected IN insertTarget ;
+  // line 87 "../../../../Tree_static.ump"
+    protected boolean rootLatched ;
+  // line 88 "../../../../Tree_static.ump"
+    protected boolean rootLatchedExclusive ;
+  // line 89 "../../../../Tree_static.ump"
+    protected IN rootIN ;
+  // line 90 "../../../../Tree_static.ump"
+    protected boolean b ;
+  // line 91 "../../../../Tree_static.ump"
+    protected EnvironmentImpl env ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 122 "../../../../Tree_static.ump"
+  public static class Tree_forceSplit
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Tree_forceSplit()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 124 "../../../../Tree_static.ump"
+    public  Tree_forceSplit(Tree _this, IN parent, byte [] key){
+      this._this=_this;
+          this.parent=parent;
+          this.key=key;
+    }
+  
+    // line 129 "../../../../Tree_static.ump"
+    public void execute() throws DatabaseException,SplitRequiredException{
+      nodeLadder=new ArrayList();
+          allLeftSideDescent=true;
+          allRightSideDescent=true;
+    {
+          }
+          child=null;
+          origParent=parent;
+          iter=null;
+          this.hook722();
+          success=false;
+          try {
+            this.hook723();
+            if (origParent.needsSplitting() || !origParent.isRoot()) {
+              throw _this.splitRequiredException;
+            }
+            do {
+              if (parent.getNEntries() == 0) {
+                break;
+              }
+     else {
+                index=parent.findEntry(key,false,false);
+                if (index != 0) {
+                  allLeftSideDescent=false;
+                }
+                if (index != (parent.getNEntries() - 1)) {
+                  allRightSideDescent=false;
+                }
+              }
+              assert index >= 0;
+              child=(IN)parent.getTarget(index);
+              if (child == null) {
+                break;
+              }
+     else {
+                this.hook724();
+                nodeLadder.add(new SplitInfo(parent,child,index));
+              }
+              parent=child;
+            }
+     while (!(parent instanceof BIN));
+            startedSplits=false;
+            logManager=_this.database.getDbEnvironment().getLogManager();
+            iter=nodeLadder.listIterator(nodeLadder.size());
+            lastParentForSplit=-1;
+            while (iter.hasPrevious()) {
+              info1=(SplitInfo)iter.previous();
+              child=info1.child;
+              parent=info1.parent;
+              index=info1.index;
+              if (child.needsSplitting()) {
+                maxEntriesPerNode=(child.containsDuplicates() ? _this.maxDupTreeEntriesPerNode : _this.maxMainTreeEntriesPerNode);
+                if (allLeftSideDescent || allRightSideDescent) {
+                  child.splitSpecial(parent,index,maxEntriesPerNode,key,allLeftSideDescent);
+                }
+     else {
+                  child.split(parent,index,maxEntriesPerNode);
+                }
+                lastParentForSplit=parent.getNodeId();
+                startedSplits=true;
+                if (parent.isDbRoot()) {
+                  this.hook726();
+                  _this.root.setLsn(parent.getLastFullVersion());
+                  parent.setDirty(true);
+                }
+              }
+     else {
+                if (startedSplits) {
+                  newLsn=0;
+                  if (lastParentForSplit == child.getNodeId()) {
+                    newLsn=child.getLastFullVersion();
+                  }
+     else {
+                    newLsn=child.log(logManager);
+                  }
+                  parent.updateEntry(index,newLsn);
+                }
+              }
+              this.hook725();
+              child=null;
+              iter.remove();
+            }
+            success=true;
+          }
+      finally {
+            this.hook727();
+          }
+    }
+  
+    // line 236 "../../../../Tree_static.ump"
+     protected void hook722() throws DatabaseException,SplitRequiredException{
+      
+    }
+  
+    // line 238 "../../../../Tree_static.ump"
+     protected void hook723() throws DatabaseException,SplitRequiredException{
+      
+    }
+  
+    // line 240 "../../../../Tree_static.ump"
+     protected void hook724() throws DatabaseException,SplitRequiredException{
+      
+    }
+  
+    // line 242 "../../../../Tree_static.ump"
+     protected void hook725() throws DatabaseException,SplitRequiredException{
+      
+    }
+  
+    // line 244 "../../../../Tree_static.ump"
+     protected void hook726() throws DatabaseException,SplitRequiredException{
+      
+    }
+  
+    // line 246 "../../../../Tree_static.ump"
+     protected void hook727() throws DatabaseException,SplitRequiredException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 216 "../../../../Tree_static.ump"
+    protected Tree _this ;
+  // line 217 "../../../../Tree_static.ump"
+    protected IN parent ;
+  // line 218 "../../../../Tree_static.ump"
+    protected byte[] key ;
+  // line 219 "../../../../Tree_static.ump"
+    protected ArrayList nodeLadder ;
+  // line 220 "../../../../Tree_static.ump"
+    protected boolean allLeftSideDescent ;
+  // line 221 "../../../../Tree_static.ump"
+    protected boolean allRightSideDescent ;
+  // line 222 "../../../../Tree_static.ump"
+    protected int index ;
+  // line 223 "../../../../Tree_static.ump"
+    protected IN child ;
+  // line 224 "../../../../Tree_static.ump"
+    protected IN origParent ;
+  // line 225 "../../../../Tree_static.ump"
+    protected ListIterator iter ;
+  // line 226 "../../../../Tree_static.ump"
+    protected boolean isRootLatched ;
+  // line 227 "../../../../Tree_static.ump"
+    protected boolean success ;
+  // line 228 "../../../../Tree_static.ump"
+    protected boolean startedSplits ;
+  // line 229 "../../../../Tree_static.ump"
+    protected LogManager logManager ;
+  // line 230 "../../../../Tree_static.ump"
+    protected long lastParentForSplit ;
+  // line 231 "../../../../Tree_static.ump"
+    protected SplitInfo info1 ;
+  // line 232 "../../../../Tree_static.ump"
+    protected int maxEntriesPerNode ;
+  // line 233 "../../../../Tree_static.ump"
+    protected long newLsn ;
+  // line 234 "../../../../Tree_static.ump"
+    protected SplitInfo info2 ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

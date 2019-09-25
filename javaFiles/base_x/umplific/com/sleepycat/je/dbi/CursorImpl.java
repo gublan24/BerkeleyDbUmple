@@ -35,6 +35,7 @@ import java.util.Comparator;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../CursorImpl.ump"
+// line 3 "../../../../CursorImpl_static.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -1751,7 +1752,717 @@ public class CursorImpl implements Cloneable
    protected long hook286(LN ln, long oldLNSize) throws DatabaseException{
     return oldLNSize;
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  
+  // line 4 "../../../../CursorImpl_static.ump"
+  public static class SearchMode
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public SearchMode()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 13 "../../../../CursorImpl_static.ump"
+     private  SearchMode(boolean exactSearch, boolean dataSearch, String name){
+      this.exactSearch=exactSearch;
+          this.dataSearch=dataSearch;
+          this.name="SearchMode." + name;
+    }
+  
+    // line 32 "../../../../CursorImpl_static.ump"
+     public String toString(){
+      return name;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../CursorImpl_static.ump"
+    public static final SearchMode SET=new SearchMode(true,false,"SET") ;
+  // line 6 "../../../../CursorImpl_static.ump"
+    public static final SearchMode BOTH=new SearchMode(true,true,"BOTH") ;
+  // line 7 "../../../../CursorImpl_static.ump"
+    public static final SearchMode SET_RANGE=new SearchMode(false,false,"SET_RANGE") ;
+  // line 8 "../../../../CursorImpl_static.ump"
+    public static final SearchMode BOTH_RANGE=new SearchMode(false,true,"BOTH_RANGE") ;
+  // line 9 "../../../../CursorImpl_static.ump"
+    private boolean exactSearch ;
+  // line 10 "../../../../CursorImpl_static.ump"
+    private boolean dataSearch ;
+  // line 11 "../../../../CursorImpl_static.ump"
+    private String name ;
+  
+  // line 21 "../../../../CursorImpl_static.ump"
+    public final boolean isExactSearch () 
+    {
+      return exactSearch;
+    }
+  
+  // line 28 "../../../../CursorImpl_static.ump"
+    public final boolean isDataSearch () 
+    {
+      return dataSearch;
+    }
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  // line 35 "../../../../CursorImpl_static.ump"
+  public static class KeyChangeStatus
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public KeyChangeStatus()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 45 "../../../../CursorImpl_static.ump"
+     public  KeyChangeStatus(OperationStatus status, boolean keyChange){
+      this.status=status;
+          this.keyChange=keyChange;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 39 "../../../../CursorImpl_static.ump"
+    public OperationStatus status ;
+  // line 43 "../../../../CursorImpl_static.ump"
+    public boolean keyChange ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 49 "../../../../CursorImpl_static.ump"
+  public static class CursorImpl_latchBIN
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CursorImpl_latchBIN()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 51 "../../../../CursorImpl_static.ump"
+    public  CursorImpl_latchBIN(CursorImpl _this){
+      this._this=_this;
+    }
+  
+    // line 54 "../../../../CursorImpl_static.ump"
+    public BIN execute() throws DatabaseException{
+      try {
+    this.hook244();
+    throw ReturnHack.returnObject;
+    }
+     catch (ReturnObject r) {
+    return (BIN)r.value;
+    }
+    }
+  
+    // line 65 "../../../../CursorImpl_static.ump"
+     protected void hook244() throws DatabaseException{
+      this.hook245();
+    }
+  
+    // line 68 "../../../../CursorImpl_static.ump"
+     protected void hook245() throws DatabaseException{
+      throw new ReturnObject(_this.bin);
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 62 "../../../../CursorImpl_static.ump"
+    protected CursorImpl _this ;
+  // line 63 "../../../../CursorImpl_static.ump"
+    protected BIN waitingOn ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 71 "../../../../CursorImpl_static.ump"
+  public static class CursorImpl_latchDBIN
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CursorImpl_latchDBIN()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 73 "../../../../CursorImpl_static.ump"
+    public  CursorImpl_latchDBIN(CursorImpl _this){
+      this._this=_this;
+    }
+  
+    // line 76 "../../../../CursorImpl_static.ump"
+    public DBIN execute() throws DatabaseException{
+      try {
+    this.hook246();
+    throw ReturnHack.returnObject;
+    }
+     catch (ReturnObject r) {
+    return (DBIN)r.value;
+    }
+    }
+  
+    // line 87 "../../../../CursorImpl_static.ump"
+     protected void hook246() throws DatabaseException{
+      this.hook247();
+    }
+  
+    // line 90 "../../../../CursorImpl_static.ump"
+     protected void hook247() throws DatabaseException{
+      throw new ReturnObject(_this.dupBin);
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 84 "../../../../CursorImpl_static.ump"
+    protected CursorImpl _this ;
+  // line 85 "../../../../CursorImpl_static.ump"
+    protected BIN waitingOn ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 93 "../../../../CursorImpl_static.ump"
+  public static class CursorImpl_lockNextKeyForInsert
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CursorImpl_lockNextKeyForInsert()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 95 "../../../../CursorImpl_static.ump"
+    public  CursorImpl_lockNextKeyForInsert(CursorImpl _this, DatabaseEntry key, DatabaseEntry data){
+      this._this=_this;
+    this.key=key;
+    this.data=data;
+    }
+  
+    // line 100 "../../../../CursorImpl_static.ump"
+    public void execute() throws DatabaseException{
+      tempKey=new DatabaseEntry(key.getData(),key.getOffset(),key.getSize());
+    tempData=new DatabaseEntry(data.getData(),data.getOffset(),data.getSize());
+    tempKey.setPartial(0,0,true);
+    tempData.setPartial(0,0,true);
+    lockedNextKey=false;
+    searchMode=_this.database.getSortedDuplicates() ? SearchMode.BOTH_RANGE : SearchMode.SET_RANGE;
+    this.hook248();
+    if (!lockedNextKey) {
+    _this.lockEofNode(LockType.RANGE_INSERT);
+    }
+    }
+  
+    // line 122 "../../../../CursorImpl_static.ump"
+     protected void hook248() throws DatabaseException{
+      searchResult=_this.searchAndPosition(tempKey,tempData,searchMode,LockType.RANGE_INSERT);
+    if ((searchResult & _this.FOUND) != 0 && (searchResult & _this.FOUND_LAST) == 0) {
+    {
+    }
+    if ((searchResult & _this.EXACT_KEY) != 0) {
+      status=_this.getNext(tempKey,tempData,LockType.RANGE_INSERT,true,true);
+    }
+     else {
+      status=_this.getNextNoDup(tempKey,tempData,LockType.RANGE_INSERT,true,true);
+    }
+    if (status == OperationStatus.SUCCESS) {
+      lockedNextKey=true;
+    }
+    this.hook249();
+    }
+    }
+  
+    // line 139 "../../../../CursorImpl_static.ump"
+     protected void hook249() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 111 "../../../../CursorImpl_static.ump"
+    protected CursorImpl _this ;
+  // line 112 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry key ;
+  // line 113 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry data ;
+  // line 114 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry tempKey ;
+  // line 115 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry tempData ;
+  // line 116 "../../../../CursorImpl_static.ump"
+    protected boolean lockedNextKey ;
+  // line 117 "../../../../CursorImpl_static.ump"
+    protected SearchMode searchMode ;
+  // line 118 "../../../../CursorImpl_static.ump"
+    protected boolean latched ;
+  // line 119 "../../../../CursorImpl_static.ump"
+    protected int searchResult ;
+  // line 120 "../../../../CursorImpl_static.ump"
+    protected OperationStatus status ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 141 "../../../../CursorImpl_static.ump"
+  public static class CursorImpl_getNextDuplicate
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CursorImpl_getNextDuplicate()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 143 "../../../../CursorImpl_static.ump"
+    public  CursorImpl_getNextDuplicate(CursorImpl _this, DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean forward, boolean alreadyLatched){
+      this._this=_this;
+    this.foundKey=foundKey;
+    this.foundData=foundData;
+    this.lockType=lockType;
+    this.forward=forward;
+    this.alreadyLatched=alreadyLatched;
+    }
+  
+    // line 151 "../../../../CursorImpl_static.ump"
+    public OperationStatus execute() throws DatabaseException{
+      try {
+    assert _this.assertCursorState(true) : _this.dumpToString(true);
+    this.hook250();
+    try {
+      while (_this.dupBin != null) {
+        this.hook251();
+        this.hook279();
+        if ((forward && ++_this.dupIndex < _this.dupBin.getNEntries()) || (!forward && --_this.dupIndex > -1)) {
+          ret=OperationStatus.SUCCESS;
+          if (foundKey != null) {
+            ret=_this.getCurrentAlreadyLatched(foundKey,foundData,lockType,forward);
+          }
+     else {
+            this.hook252();
+          }
+          if (ret == OperationStatus.SUCCESS) {
+            _this.incrementLNCount();
+            return ret;
+          }
+     else {
+            this.hook253();
+            if (_this.dupBinToBeRemoved != null) {
+              _this.flushDBINToBeRemoved();
+            }
+            continue;
+          }
+        }
+     else {
+          if (_this.dupBinToBeRemoved != null) {
+            _this.flushDBINToBeRemoved();
+          }
+          _this.dupBinToBeRemoved=_this.dupBin;
+          _this.dupBin=null;
+          this.hook255();
+          this.hook275();
+          this.hook254();
+    {
+          }
+          if (forward) {
+            newDupBin=(DBIN)_this.database.getTree().getNextBin(_this.dupBinToBeRemoved,true);
+          }
+     else {
+            newDupBin=(DBIN)_this.database.getTree().getPrevBin(_this.dupBinToBeRemoved,true);
+          }
+          if (newDupBin == null) {
+            return OperationStatus.NOTFOUND;
+          }
+     else {
+            if (forward) {
+              _this.dupIndex=-1;
+            }
+     else {
+              _this.dupIndex=newDupBin.getNEntries();
+            }
+            _this.addCursor(newDupBin);
+            _this.dupBin=newDupBin;
+            this.hook256();
+          }
+        }
+      }
+    }
+      finally {
+      this.hook257();
+      if (_this.dupBinToBeRemoved != null) {
+        _this.flushDBINToBeRemoved();
+      }
+    }
+    return OperationStatus.NOTFOUND;
+    }
+     catch (ReturnObject r) {
+    return (OperationStatus)r.value;
+    }
+    }
+  
+    // line 236 "../../../../CursorImpl_static.ump"
+     protected void hook250() throws DatabaseException{
+      
+    }
+  
+    // line 238 "../../../../CursorImpl_static.ump"
+     protected void hook251() throws DatabaseException{
+      
+    }
+  
+    // line 240 "../../../../CursorImpl_static.ump"
+     protected void hook252() throws DatabaseException{
+      
+    }
+  
+    // line 242 "../../../../CursorImpl_static.ump"
+     protected void hook253() throws DatabaseException{
+      
+    }
+  
+    // line 244 "../../../../CursorImpl_static.ump"
+     protected void hook254() throws DatabaseException{
+      
+    }
+  
+    // line 246 "../../../../CursorImpl_static.ump"
+     protected void hook255() throws DatabaseException{
+      
+    }
+  
+    // line 248 "../../../../CursorImpl_static.ump"
+     protected void hook256() throws DatabaseException{
+      
+    }
+  
+    // line 250 "../../../../CursorImpl_static.ump"
+     protected void hook257() throws DatabaseException{
+      
+    }
+  
+    // line 252 "../../../../CursorImpl_static.ump"
+     protected void hook275() throws DatabaseException{
+      
+    }
+  
+    // line 254 "../../../../CursorImpl_static.ump"
+     protected void hook279() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 224 "../../../../CursorImpl_static.ump"
+    protected CursorImpl _this ;
+  // line 225 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry foundKey ;
+  // line 226 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry foundData ;
+  // line 227 "../../../../CursorImpl_static.ump"
+    protected LockType lockType ;
+  // line 228 "../../../../CursorImpl_static.ump"
+    protected boolean forward ;
+  // line 229 "../../../../CursorImpl_static.ump"
+    protected boolean alreadyLatched ;
+  // line 230 "../../../../CursorImpl_static.ump"
+    protected OperationStatus ret ;
+  // line 231 "../../../../CursorImpl_static.ump"
+    protected TreeWalkerStatsAccumulator treeStatsAccumulator ;
+  // line 232 "../../../../CursorImpl_static.ump"
+    protected DIN duplicateRoot ;
+  // line 233 "../../../../CursorImpl_static.ump"
+    protected DupCountLN dcl ;
+  // line 234 "../../../../CursorImpl_static.ump"
+    protected DBIN newDupBin ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 256 "../../../../CursorImpl_static.ump"
+  public static class CursorImpl_fetchCurrent
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CursorImpl_fetchCurrent()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 258 "../../../../CursorImpl_static.ump"
+    public  CursorImpl_fetchCurrent(CursorImpl _this, DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first){
+      this._this=_this;
+    this.foundKey=foundKey;
+    this.foundData=foundData;
+    this.lockType=lockType;
+    this.first=first;
+    }
+  
+    // line 265 "../../../../CursorImpl_static.ump"
+    public OperationStatus execute() throws DatabaseException{
+      try {
+    treeStatsAccumulator=_this.getTreeStatsAccumulator();
+    duplicateFetch=_this.setTargetBin();
+    if (_this.targetBin == null) {
+      return OperationStatus.NOTFOUND;
+    }
+    this.hook259();
+    n=null;
+    if (_this.targetIndex < 0 || _this.targetIndex >= _this.targetBin.getNEntries() || _this.targetBin.isEntryKnownDeleted(_this.targetIndex)) {
+    }
+     else {
+      if (_this.targetBin.isEntryPendingDeleted(_this.targetIndex)) {
+        this.hook280();
+      }
+      this.hook260();
+    }
+    if (n == null) {
+      if (treeStatsAccumulator != null) {
+        treeStatsAccumulator.incrementDeletedLNCount();
+      }
+      this.hook261();
+      return OperationStatus.KEYEMPTY;
+    }
+    _this.addCursor(_this.targetBin);
+    if (n.containsDuplicates()) {
+      assert !duplicateFetch;
+      duplicateRoot=(DIN)n;
+      this.hook262();
+      if (_this.positionFirstOrLast(first,duplicateRoot)) {
+        this.hook263();
+      }
+     else {
+        return OperationStatus.NOTFOUND;
+      }
+    }
+    ln=(LN)n;
+    assert TestHookExecute.doHookIfSet(_this.testHook);
+    lockResult=_this.lockLN(ln,lockType);
+    this.hook258();
+    throw ReturnHack.returnObject;
+    }
+     catch (ReturnObject r) {
+    return (OperationStatus)r.value;
+    }
+    }
+  
+    // line 324 "../../../../CursorImpl_static.ump"
+     protected void hook258() throws DatabaseException{
+      ln=lockResult.getLN();
+    lnData=(ln != null) ? ln.getData() : null;
+    if (ln == null || lnData == null) {
+    if (treeStatsAccumulator != null) {
+      treeStatsAccumulator.incrementDeletedLNCount();
+    }
+    throw new ReturnObject(OperationStatus.KEYEMPTY);
+    }
+    duplicateFetch=_this.setTargetBin();
+    if (duplicateFetch) {
+    if (foundData != null) {
+      _this.setDbt(foundData,_this.targetBin.getKey(_this.targetIndex));
+    }
+    if (foundKey != null) {
+      _this.setDbt(foundKey,_this.targetBin.getDupKey());
+    }
+    }
+     else {
+    if (foundData != null) {
+      _this.setDbt(foundData,lnData);
+    }
+    if (foundKey != null) {
+      _this.setDbt(foundKey,_this.targetBin.getKey(_this.targetIndex));
+    }
+    }
+    throw new ReturnObject(OperationStatus.SUCCESS);
+    }
+  
+    // line 352 "../../../../CursorImpl_static.ump"
+     protected void hook259() throws DatabaseException{
+      
+    }
+  
+    // line 354 "../../../../CursorImpl_static.ump"
+     protected void hook260() throws DatabaseException{
+      n=_this.targetBin.fetchTarget(_this.targetIndex);
+    }
+  
+    // line 357 "../../../../CursorImpl_static.ump"
+     protected void hook261() throws DatabaseException{
+      
+    }
+  
+    // line 359 "../../../../CursorImpl_static.ump"
+     protected void hook262() throws DatabaseException{
+      
+    }
+  
+    // line 361 "../../../../CursorImpl_static.ump"
+     protected void hook263() throws DatabaseException{
+      throw new ReturnObject(_this.fetchCurrent(foundKey,foundData,lockType,first));
+    }
+  
+    // line 364 "../../../../CursorImpl_static.ump"
+     protected void hook280() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 310 "../../../../CursorImpl_static.ump"
+    protected CursorImpl _this ;
+  // line 311 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry foundKey ;
+  // line 312 "../../../../CursorImpl_static.ump"
+    protected DatabaseEntry foundData ;
+  // line 313 "../../../../CursorImpl_static.ump"
+    protected LockType lockType ;
+  // line 314 "../../../../CursorImpl_static.ump"
+    protected boolean first ;
+  // line 315 "../../../../CursorImpl_static.ump"
+    protected TreeWalkerStatsAccumulator treeStatsAccumulator ;
+  // line 316 "../../../../CursorImpl_static.ump"
+    protected boolean duplicateFetch ;
+  // line 317 "../../../../CursorImpl_static.ump"
+    protected Node n ;
+  // line 318 "../../../../CursorImpl_static.ump"
+    protected EnvironmentImpl envImpl ;
+  // line 319 "../../../../CursorImpl_static.ump"
+    protected DIN duplicateRoot ;
+  // line 320 "../../../../CursorImpl_static.ump"
+    protected LN ln ;
+  // line 321 "../../../../CursorImpl_static.ump"
+    protected LockResult lockResult ;
+  // line 322 "../../../../CursorImpl_static.ump"
+    protected byte[] lnData ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

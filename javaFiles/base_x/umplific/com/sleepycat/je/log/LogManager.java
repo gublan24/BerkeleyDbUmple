@@ -24,6 +24,7 @@ import java.io.RandomAccessFile;
 import java.io.IOException;
 
 // line 3 "../../../../LogManager.ump"
+// line 3 "../../../../LogManager_static.ump"
 public class LogManager
 {
 
@@ -461,7 +462,122 @@ public class LogManager
    protected void hook509() throws IOException,DatabaseException,Exception{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.log;
+  
+  @MethodObject
+  // line 4 "../../../../LogManager_static.ump"
+  public static class LogManager_getLogEntryFromLogSource
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LogManager_getLogEntryFromLogSource()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LogManager_static.ump"
+    public  LogManager_getLogEntryFromLogSource(LogManager _this, long lsn, LogSource logSource){
+      this._this=_this;
+          this.lsn=lsn;
+          this.logSource=logSource;
+    }
+  
+    // line 11 "../../../../LogManager_static.ump"
+    public LogEntry execute() throws DatabaseException{
+      try {
+            fileOffset=DbLsn.getFileOffset(lsn);
+            entryBuffer=logSource.getBytes(fileOffset);
+            this.hook507();
+            loggableType=entryBuffer.get();
+            version=entryBuffer.get();
+            entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
+            itemSize=LogUtils.readInt(entryBuffer);
+            if (entryBuffer.remaining() < itemSize) {
+              entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
+              this.hook508();
+            }
+            this.hook506();
+            assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
+            logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
+            logEntry.readEntry(entryBuffer,itemSize,version,true);
+            if (_this.readHook != null) {
+              _this.readHook.doIOHook();
+            }
+            return logEntry;
+          }
+     catch (      DatabaseException e) {
+            throw e;
+          }
+    catch (      ClosedChannelException e) {
+            throw new RunRecoveryException(_this.envImpl,"Channel closed, may be " + "due to thread interrupt",e);
+          }
+    catch (      Exception e) {
+            throw new DatabaseException(e);
+          }
+     finally {
+            if (logSource != null) {
+              logSource.release();
+            }
+          }
+    }
+  
+    // line 58 "../../../../LogManager_static.ump"
+     protected void hook506() throws DatabaseException,ClosedChannelException,Exception{
+      
+    }
+  
+    // line 60 "../../../../LogManager_static.ump"
+     protected void hook507() throws DatabaseException,ClosedChannelException,Exception{
+      
+    }
+  
+    // line 62 "../../../../LogManager_static.ump"
+     protected void hook508() throws DatabaseException,ClosedChannelException,Exception{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 47 "../../../../LogManager_static.ump"
+    protected LogManager _this ;
+  // line 48 "../../../../LogManager_static.ump"
+    protected long lsn ;
+  // line 49 "../../../../LogManager_static.ump"
+    protected LogSource logSource ;
+  // line 50 "../../../../LogManager_static.ump"
+    protected long fileOffset ;
+  // line 51 "../../../../LogManager_static.ump"
+    protected ByteBuffer entryBuffer ;
+  // line 52 "../../../../LogManager_static.ump"
+    protected long storedChecksum ;
+  // line 53 "../../../../LogManager_static.ump"
+    protected byte loggableType ;
+  // line 54 "../../../../LogManager_static.ump"
+    protected byte version ;
+  // line 55 "../../../../LogManager_static.ump"
+    protected int itemSize ;
+  // line 56 "../../../../LogManager_static.ump"
+    protected LogEntry logEntry ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

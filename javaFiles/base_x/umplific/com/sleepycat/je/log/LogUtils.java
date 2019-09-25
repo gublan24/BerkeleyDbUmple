@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.nio.ByteBuffer;
 
 // line 3 "../../../../LogUtils.ump"
+// line 3 "../../../../LogUtils_static.ump"
 public class LogUtils
 {
 
@@ -400,7 +401,137 @@ public class LogUtils
 	}
 	return new XidImpl(formatId, gid, bqual);
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.log;
+  
+  // line 4 "../../../../LogUtils_static.ump"
+  public static class XidImpl
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public XidImpl()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 10 "../../../../LogUtils_static.ump"
+     public  XidImpl(int formatId, byte [] gid, byte [] bqual){
+      this.formatId=formatId;
+          this.gid=gid;
+          this.bqual=bqual;
+    }
+  
+    // line 15 "../../../../LogUtils_static.ump"
+     public int getFormatId(){
+      return formatId;
+    }
+  
+    // line 18 "../../../../LogUtils_static.ump"
+     public byte[] getGlobalTransactionId(){
+      return gid;
+    }
+  
+    // line 21 "../../../../LogUtils_static.ump"
+     public byte[] getBranchQualifier(){
+      return bqual;
+    }
+  
+    // line 24 "../../../../LogUtils_static.ump"
+     public boolean equals(Object o){
+      if (!(o instanceof XidImpl)) {
+            return false;
+          }
+          XidImpl xid=(XidImpl)o;
+          if (xid.getFormatId() != formatId) {
+            return false;
+          }
+          if (compareByteArrays(xid.getGlobalTransactionId(),gid) && compareByteArrays(xid.getBranchQualifier(),bqual)) {
+            return true;
+          }
+          return false;
+    }
+  
+    // line 37 "../../../../LogUtils_static.ump"
+     public int hashCode(){
+      int code=formatId;
+          if (gid != null) {
+            for (int i=0; i < gid.length; i++) {
+              code+=gid[i];
+            }
+          }
+          if (bqual != null) {
+            for (int i=0; i < bqual.length; i++) {
+              code+=bqual[i];
+            }
+          }
+          return code;
+    }
+  
+    // line 51 "../../../../LogUtils_static.ump"
+     private boolean compareByteArrays(byte [] b1, byte [] b2){
+      if (b1 == null || b2 == null) {
+            return b1 == b2;
+          }
+          if (b1.length != b2.length) {
+            return false;
+          }
+          for (int i=0; i < b1.length; i++) {
+            if (b1[i] != b2[i]) {
+              return false;
+            }
+          }
+          return true;
+    }
+  
+    // line 65 "../../../../LogUtils_static.ump"
+     public String toString(){
+      StringBuffer sb=new StringBuffer();
+          sb.append("<Xid formatId=\"").append(formatId);
+          sb.append("\" gTxnId=\"");
+          if (gid == null) {
+            sb.append("null");
+          }
+     else {
+            sb.append(new String(gid));
+          }
+          sb.append("\" bqual=\"");
+          if (bqual == null) {
+            sb.append("null");
+          }
+     else {
+            sb.append(new String(bqual));
+          }
+          sb.append("\"/>");
+          return sb.toString();
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 6 "../../../../LogUtils_static.ump"
+    private int formatId ;
+  // line 7 "../../../../LogUtils_static.ump"
+    private byte[] gid ;
+  // line 8 "../../../../LogUtils_static.ump"
+    private byte[] bqual ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

@@ -199,3 +199,4 @@ class UtilizationProfile {
       protected void hook195() throws DatabaseException {
       }
     }
+}

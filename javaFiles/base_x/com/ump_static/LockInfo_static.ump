@@ -3,3 +3,4 @@ namespace com.sleepycat.je.txn;
 class LockInfo {
   static class StackTraceAtLockTime extends Exception {
     }
+}

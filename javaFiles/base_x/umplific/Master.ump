@@ -247,3 +247,5 @@ use TupleTupleMarshalledBinding.ump;
 use BooleanBinding.ump;
 use TupleBase.ump;
 use TupleTupleBinding.ump;
+
+use ../com/ump_static/Master.ump;

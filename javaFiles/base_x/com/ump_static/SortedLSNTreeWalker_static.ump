@@ -69,3 +69,4 @@ class SortedLSNTreeWalker {
       protected void hook362() throws DatabaseException {
       }
     }
+}

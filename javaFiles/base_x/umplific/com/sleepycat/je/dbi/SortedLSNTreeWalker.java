@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Arrays;
 
 // line 3 "../../../../SortedLSNTreeWalker.ump"
+// line 3 "../../../../SortedLSNTreeWalker_static.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -189,7 +190,136 @@ public class SortedLSNTreeWalker
    protected void hook359() throws DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 7 "../../../../SortedLSNTreeWalker_static.ump"
+  public static class SortedLSNTreeWalker_extractINsForDb
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public SortedLSNTreeWalker_extractINsForDb()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 9 "../../../../SortedLSNTreeWalker_static.ump"
+    public  SortedLSNTreeWalker_extractINsForDb(SortedLSNTreeWalker _this, INList inList){
+      this._this=_this;
+          this.inList=inList;
+    }
+  
+    // line 13 "../../../../SortedLSNTreeWalker_static.ump"
+    public boolean execute() throws DatabaseException{
+      foundSome=false;
+          foundSet=new HashSet();
+          this.hook360();
+          this.hook356();
+          try {
+            this.hook357();
+            iter=inList.iterator();
+            while (iter.hasNext()) {
+              thisIN=(IN)iter.next();
+              if (thisIN.getDatabase() == _this.dbImpl) {
+                foundSome=true;
+                if (_this.removeINsFromINList) {
+                  iter.remove();
+                  this.hook361();
+                }
+                foundSet.add(thisIN);
+              }
+            }
+          }
+     catch (      DatabaseException e) {
+            this.hook362();
+            throw e;
+          }
+     finally {
+            this.hook358();
+          }
+          if (foundSome) {
+            iter1=foundSet.iterator();
+            while (iter1.hasNext()) {
+              thisIN1=(IN)iter1.next();
+              _this.accumulateLSNs(thisIN1);
+            }
+          }
+          foundSet=null;
+          return foundSome;
+    }
+  
+    // line 60 "../../../../SortedLSNTreeWalker_static.ump"
+     protected void hook356() throws DatabaseException{
+      
+    }
+  
+    // line 62 "../../../../SortedLSNTreeWalker_static.ump"
+     protected void hook357() throws DatabaseException{
+      
+    }
+  
+    // line 64 "../../../../SortedLSNTreeWalker_static.ump"
+     protected void hook358() throws DatabaseException{
+      
+    }
+  
+    // line 66 "../../../../SortedLSNTreeWalker_static.ump"
+     protected void hook360() throws DatabaseException{
+      
+    }
+  
+    // line 68 "../../../../SortedLSNTreeWalker_static.ump"
+     protected void hook361() throws DatabaseException{
+      
+    }
+  
+    // line 70 "../../../../SortedLSNTreeWalker_static.ump"
+     protected void hook362() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 49 "../../../../SortedLSNTreeWalker_static.ump"
+    protected SortedLSNTreeWalker _this ;
+  // line 50 "../../../../SortedLSNTreeWalker_static.ump"
+    protected INList inList ;
+  // line 51 "../../../../SortedLSNTreeWalker_static.ump"
+    protected boolean foundSome ;
+  // line 52 "../../../../SortedLSNTreeWalker_static.ump"
+    protected Set foundSet ;
+  // line 53 "../../../../SortedLSNTreeWalker_static.ump"
+    protected long memoryChange ;
+  // line 54 "../../../../SortedLSNTreeWalker_static.ump"
+    protected MemoryBudget mb ;
+  // line 55 "../../../../SortedLSNTreeWalker_static.ump"
+    protected Iterator iter ;
+  // line 56 "../../../../SortedLSNTreeWalker_static.ump"
+    protected IN thisIN ;
+  // line 57 "../../../../SortedLSNTreeWalker_static.ump"
+    protected Iterator iter1 ;
+  // line 58 "../../../../SortedLSNTreeWalker_static.ump"
+    protected IN thisIN1 ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
@@ -218,6 +348,12 @@ public class SortedLSNTreeWalker
   private TreeNodeProcessor callback ;
 // line 41 "../../../../SortedLSNTreeWalker.ump"
   protected boolean accumulateLNs = false ;
+
+// line 4 "../../../../SortedLSNTreeWalker_static.ump"
+  interface TreeNodeProcessor 
+  {
+    void processLSN(    long childLSN,    LogEntryType childType);
+  }
 
   
 }

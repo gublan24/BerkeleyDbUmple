@@ -125,3 +125,4 @@ class FileManager {
       protected void hook446() throws IOException {
       }
     }
+}

@@ -10,6 +10,7 @@ import java.util.Collections;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../LockInfo.ump"
+// line 3 "../../../../LockInfo_static.ump"
 public class LockInfo implements Cloneable
 {
 
@@ -150,6 +151,12 @@ public class LockInfo implements Cloneable
   private static boolean deadlockStackTrace = false ;
 // line 17 "../../../../LockInfo.ump"
   private static Map traceExceptionMap = Collections.synchronizedMap(new WeakHashMap()) ;
+
+// line 4 "../../../../LockInfo_static.ump"
+  static class StackTraceAtLockTime extends Exception 
+  {
+    
+  }
 
   
 }

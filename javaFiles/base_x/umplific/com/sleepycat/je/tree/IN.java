@@ -32,6 +32,7 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../IN.ump"
+// line 3 "../../../../IN_static.ump"
 public class IN extends Node implements LoggableObject,LogReadable
 {
 
@@ -1743,7 +1744,1235 @@ public class IN extends Node implements LoggableObject,LogReadable
    protected void hook638(Node node) throws DatabaseException,LogFileNotFoundException,Exception{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 4 "../../../../IN_static.ump"
+  public static class IN_setLsn
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_setLsn()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../IN_static.ump"
+    public  IN_setLsn(IN _this, int idx, long lsn){
+      this._this=_this;
+          this.idx=idx;
+          this.lsn=lsn;
+    }
+  
+    // line 11 "../../../../IN_static.ump"
+    public void execute(){
+      _this.setLsnElement(idx,lsn);
+          this.hook639();
+          _this.entryStates[idx]|=_this.DIRTY_BIT;
+    }
+  
+    // line 20 "../../../../IN_static.ump"
+     protected void hook639(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 15 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 16 "../../../../IN_static.ump"
+    protected int idx ;
+  // line 17 "../../../../IN_static.ump"
+    protected long lsn ;
+  // line 18 "../../../../IN_static.ump"
+    protected int oldSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 22 "../../../../IN_static.ump"
+  public static class IN_setEntry
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_setEntry()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 24 "../../../../IN_static.ump"
+    public  IN_setEntry(IN _this, int idx, Node target, byte [] keyVal, long lsn, byte state){
+      this._this=_this;
+          this.idx=idx;
+          this.target=target;
+          this.keyVal=keyVal;
+          this.lsn=lsn;
+          this.state=state;
+    }
+  
+    // line 32 "../../../../IN_static.ump"
+    public void execute(){
+      newNEntries=idx + 1;
+          if (newNEntries > _this.nEntries) {
+            _this.nEntries=newNEntries;
+            this.hook641();
+          }
+          _this.entryTargets[idx]=target;
+          _this.entryKeyVals[idx]=keyVal;
+          _this.setLsnElement(idx,lsn);
+          _this.entryStates[idx]=state;
+          this.hook640();
+          _this.setDirty(true);
+    }
+  
+    // line 54 "../../../../IN_static.ump"
+     protected void hook640(){
+      
+    }
+  
+    // line 56 "../../../../IN_static.ump"
+     protected void hook641(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 44 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 45 "../../../../IN_static.ump"
+    protected int idx ;
+  // line 46 "../../../../IN_static.ump"
+    protected Node target ;
+  // line 47 "../../../../IN_static.ump"
+    protected byte[] keyVal ;
+  // line 48 "../../../../IN_static.ump"
+    protected long lsn ;
+  // line 49 "../../../../IN_static.ump"
+    protected byte state ;
+  // line 50 "../../../../IN_static.ump"
+    protected long oldSize ;
+  // line 51 "../../../../IN_static.ump"
+    protected int newNEntries ;
+  // line 52 "../../../../IN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 58 "../../../../IN_static.ump"
+  public static class IN_updateEntry
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_updateEntry()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 60 "../../../../IN_static.ump"
+    public  IN_updateEntry(IN _this, int idx, Node node){
+      this._this=_this;
+          this.idx=idx;
+          this.node=node;
+    }
+  
+    // line 65 "../../../../IN_static.ump"
+    public void execute(){
+      _this.setTarget(idx,node);
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 67 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 68 "../../../../IN_static.ump"
+    protected int idx ;
+  // line 69 "../../../../IN_static.ump"
+    protected Node node ;
+  // line 70 "../../../../IN_static.ump"
+    protected long oldSize ;
+  // line 71 "../../../../IN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 73 "../../../../IN_static.ump"
+  public static class IN_updateEntry2
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_updateEntry2()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 75 "../../../../IN_static.ump"
+    public  IN_updateEntry2(IN _this, int idx, Node node, long lsn){
+      this._this=_this;
+          this.idx=idx;
+          this.node=node;
+          this.lsn=lsn;
+    }
+  
+    // line 81 "../../../../IN_static.ump"
+    public void execute(){
+      _this.setLsn(idx,lsn);
+          _this.setTarget(idx,node);
+          this.hook642();
+          _this.setDirty(true);
+    }
+  
+    // line 93 "../../../../IN_static.ump"
+     protected void hook642(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 86 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 87 "../../../../IN_static.ump"
+    protected int idx ;
+  // line 88 "../../../../IN_static.ump"
+    protected Node node ;
+  // line 89 "../../../../IN_static.ump"
+    protected long lsn ;
+  // line 90 "../../../../IN_static.ump"
+    protected long oldSize ;
+  // line 91 "../../../../IN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 95 "../../../../IN_static.ump"
+  public static class IN_updateEntry3
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_updateEntry3()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 97 "../../../../IN_static.ump"
+    public  IN_updateEntry3(IN _this, int idx, Node node, long lsn, byte [] key){
+      this._this=_this;
+          this.idx=idx;
+          this.node=node;
+          this.lsn=lsn;
+          this.key=key;
+    }
+  
+    // line 104 "../../../../IN_static.ump"
+    public void execute(){
+      _this.setLsn(idx,lsn);
+          _this.setTarget(idx,node);
+          _this.setKey(idx,key);
+          this.hook643();
+          _this.setDirty(true);
+    }
+  
+    // line 118 "../../../../IN_static.ump"
+     protected void hook643(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 110 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 111 "../../../../IN_static.ump"
+    protected int idx ;
+  // line 112 "../../../../IN_static.ump"
+    protected Node node ;
+  // line 113 "../../../../IN_static.ump"
+    protected long lsn ;
+  // line 114 "../../../../IN_static.ump"
+    protected byte[] key ;
+  // line 115 "../../../../IN_static.ump"
+    protected long oldSize ;
+  // line 116 "../../../../IN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 120 "../../../../IN_static.ump"
+  public static class IN_updateEntryCompareKey
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_updateEntryCompareKey()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 122 "../../../../IN_static.ump"
+    public  IN_updateEntryCompareKey(IN _this, int idx, Node node, long lsn, byte [] key){
+      this._this=_this;
+          this.idx=idx;
+          this.node=node;
+          this.lsn=lsn;
+          this.key=key;
+    }
+  
+    // line 129 "../../../../IN_static.ump"
+    public void execute(){
+      _this.setLsn(idx,lsn);
+          _this.setTarget(idx,node);
+          existingKey=_this.getKey(idx);
+          s=Key.compareKeys(key,existingKey,_this.getKeyComparator());
+          if (s < 0) {
+            _this.setKey(idx,key);
+          }
+          this.hook644();
+          _this.setDirty(true);
+    }
+  
+    // line 149 "../../../../IN_static.ump"
+     protected void hook644(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 139 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 140 "../../../../IN_static.ump"
+    protected int idx ;
+  // line 141 "../../../../IN_static.ump"
+    protected Node node ;
+  // line 142 "../../../../IN_static.ump"
+    protected long lsn ;
+  // line 143 "../../../../IN_static.ump"
+    protected byte[] key ;
+  // line 144 "../../../../IN_static.ump"
+    protected long oldSize ;
+  // line 145 "../../../../IN_static.ump"
+    protected byte[] existingKey ;
+  // line 146 "../../../../IN_static.ump"
+    protected int s ;
+  // line 147 "../../../../IN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 151 "../../../../IN_static.ump"
+  public static class IN_insertEntry1
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_insertEntry1()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 153 "../../../../IN_static.ump"
+    public  IN_insertEntry1(IN _this, ChildReference entry){
+      this._this=_this;
+          this.entry=entry;
+    }
+  
+    // line 157 "../../../../IN_static.ump"
+    public int execute() throws DatabaseException{
+      if (_this.nEntries >= _this.entryTargets.length) {
+            _this.compress(null,true);
+          }
+          if (_this.nEntries < _this.entryTargets.length) {
+            key=entry.getKey();
+            index=_this.findEntry(key,true,false);
+            if (index >= 0 && (index & _this.EXACT_MATCH) != 0) {
+              return index;
+            }
+     else {
+              index++;
+            }
+            if (index < _this.nEntries) {
+              this.hook647();
+              _this.shiftEntriesRight(index);
+              this.hook646();
+            }
+            _this.entryTargets[index]=entry.getTarget();
+            _this.entryKeyVals[index]=entry.getKey();
+            _this.setLsnElement(index,entry.getLsn());
+            _this.entryStates[index]=entry.getState();
+            _this.nEntries++;
+            _this.adjustCursorsForInsert(index);
+            this.hook645();
+            _this.setDirty(true);
+            return (index | _this.INSERT_SUCCESS);
+          }
+     else {
+            throw new InconsistentNodeException("Node " + _this.getNodeId() + " should have been split before calling insertEntry");
+          }
+    }
+  
+    // line 194 "../../../../IN_static.ump"
+     protected void hook645() throws DatabaseException{
+      
+    }
+  
+    // line 196 "../../../../IN_static.ump"
+     protected void hook646() throws DatabaseException{
+      
+    }
+  
+    // line 198 "../../../../IN_static.ump"
+     protected void hook647() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 188 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 189 "../../../../IN_static.ump"
+    protected ChildReference entry ;
+  // line 190 "../../../../IN_static.ump"
+    protected byte[] key ;
+  // line 191 "../../../../IN_static.ump"
+    protected int index ;
+  // line 192 "../../../../IN_static.ump"
+    protected int oldSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 200 "../../../../IN_static.ump"
+  public static class IN_deleteEntry
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_deleteEntry()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 202 "../../../../IN_static.ump"
+    public  IN_deleteEntry(IN _this, int index, boolean maybeValidate){
+      this._this=_this;
+          this.index=index;
+          this.maybeValidate=maybeValidate;
+    }
+  
+    // line 207 "../../../../IN_static.ump"
+    public boolean execute() throws DatabaseException{
+      if (_this.nEntries == 0) {
+            return false;
+          }
+          assert maybeValidate ? _this.validateSubtreeBeforeDelete(index) : true;
+          if (index < _this.nEntries) {
+            this.hook649();
+            for (int i=index; i < _this.nEntries - 1; i++) {
+              _this.setEntryInternal(i + 1,i);
+            }
+            _this.clearEntry(_this.nEntries - 1);
+            this.hook648();
+            _this.nEntries--;
+            _this.setDirty(true);
+            _this.setProhibitNextDelta();
+            this.hook616();
+            return true;
+          }
+     else {
+            return false;
+          }
+    }
+  
+    // line 233 "../../../../IN_static.ump"
+     protected void hook616() throws DatabaseException{
+      
+    }
+  
+    // line 235 "../../../../IN_static.ump"
+     protected void hook648() throws DatabaseException{
+      
+    }
+  
+    // line 237 "../../../../IN_static.ump"
+     protected void hook649() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 228 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 229 "../../../../IN_static.ump"
+    protected int index ;
+  // line 230 "../../../../IN_static.ump"
+    protected boolean maybeValidate ;
+  // line 231 "../../../../IN_static.ump"
+    protected int oldLSNArraySize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 239 "../../../../IN_static.ump"
+  public static class IN_validateSubtreeBeforeDelete
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_validateSubtreeBeforeDelete()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 241 "../../../../IN_static.ump"
+    public  IN_validateSubtreeBeforeDelete(IN _this, int index){
+      this._this=_this;
+          this.index=index;
+    }
+  
+    // line 245 "../../../../IN_static.ump"
+    public boolean execute() throws DatabaseException{
+      try {
+            this.hook628();
+            throw ReturnHack.returnBoolean;
+          }
+     catch (      ReturnBoolean r) {
+            return r.value;
+          }
+    }
+  
+    // line 258 "../../../../IN_static.ump"
+     protected void hook628() throws DatabaseException{
+      this.hook629();
+          if (index >= _this.nEntries) {
+            throw new ReturnBoolean(true);
+          }
+     else {
+            child=_this.fetchTarget(index);
+            throw new ReturnBoolean(child != null && child.isValidForDelete());
+          }
+    }
+  
+    // line 268 "../../../../IN_static.ump"
+     protected void hook629() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 253 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 254 "../../../../IN_static.ump"
+    protected int index ;
+  // line 255 "../../../../IN_static.ump"
+    protected boolean needToLatch ;
+  // line 256 "../../../../IN_static.ump"
+    protected Node child ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 270 "../../../../IN_static.ump"
+  public static class IN_splitInternal
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_splitInternal()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 272 "../../../../IN_static.ump"
+    public  IN_splitInternal(IN _this, IN parent, int childIndex, int maxEntries, int splitIndex){
+      this._this=_this;
+          this.parent=parent;
+          this.childIndex=childIndex;
+          this.maxEntries=maxEntries;
+          this.splitIndex=splitIndex;
+    }
+  
+    // line 279 "../../../../IN_static.ump"
+    public void execute() throws DatabaseException{
+      if (_this.identifierKey == null) {
+            throw new InconsistentNodeException("idkey is null");
+          }
+          idKeyIndex=_this.findEntry(_this.identifierKey,false,false);
+          if (splitIndex < 0) {
+            splitIndex=_this.nEntries / 2;
+          }
+    {
+          }
+          newSibling=null;
+          if (idKeyIndex < splitIndex) {
+            low=splitIndex;
+            high=_this.nEntries;
+          }
+     else {
+            low=0;
+            high=splitIndex;
+          }
+          newIdKey=_this.entryKeyVals[low];
+          parentLsn=DbLsn.NULL_LSN;
+          newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
+          this.hook631();
+          oldMemorySize=_this.inMemorySize;
+          this.hook630();
+    }
+  
+    // line 330 "../../../../IN_static.ump"
+     protected void hook617() throws DatabaseException{
+      
+    }
+  
+    // line 332 "../../../../IN_static.ump"
+     protected void hook630() throws DatabaseException{
+      toIdx=0;
+          deletedEntrySeen=false;
+          binRef=null;
+          for (int i=low; i < high; i++) {
+            thisKey=_this.entryKeyVals[i];
+            if (_this.isEntryPendingDeleted(i)) {
+              if (!deletedEntrySeen) {
+                deletedEntrySeen=true;
+                binRef=new BINReference(newSibling.getNodeId(),_this.databaseImpl.getId(),newIdKey);
+              }
+              binRef.addDeletedKey(new Key(thisKey));
+            }
+            newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
+            _this.clearEntry(i);
+          }
+          this.hook636();
+          newSiblingNEntries=(high - low);
+          if (low == 0) {
+            _this.shiftEntriesLeft(newSiblingNEntries);
+          }
+          newSibling.nEntries=toIdx;
+          _this.nEntries-=newSiblingNEntries;
+          _this.setDirty(true);
+          _this.adjustCursors(newSibling,low,high);
+          env=_this.databaseImpl.getDbEnvironment();
+          logManager=env.getLogManager();
+          inMemoryINs=env.getInMemoryINs();
+          newSiblingLsn=newSibling.logProvisional(logManager,parent);
+          myNewLsn=_this.logProvisional(logManager,parent);
+          if (low == 0) {
+            if (childIndex == 0) {
+              parent.updateEntryCompareKey(childIndex,newSibling,newSiblingLsn,newIdKey);
+            }
+     else {
+              parent.updateEntry(childIndex,newSibling,newSiblingLsn);
+            }
+            insertOk1=parent.insertEntry(new ChildReference(_this,_this.entryKeyVals[0],myNewLsn));
+            assert insertOk1;
+          }
+     else {
+            if (childIndex == 0) {
+              parent.updateEntryCompareKey(childIndex,_this,myNewLsn,_this.entryKeyVals[0]);
+            }
+     else {
+              parent.updateEntry(childIndex,_this,myNewLsn);
+            }
+            insertOk2=parent.insertEntry(new ChildReference(newSibling,newIdKey,newSiblingLsn));
+            assert insertOk2;
+          }
+          parentLsn=parent.log(logManager);
+          if (parent.isRoot()) {
+            parent.setDirty(true);
+          }
+          this.hook650();
+          inMemoryINs.add(newSibling);
+          this.hook617();
+    }
+  
+    // line 390 "../../../../IN_static.ump"
+     protected void hook631() throws DatabaseException{
+      
+    }
+  
+    // line 392 "../../../../IN_static.ump"
+     protected void hook636() throws DatabaseException{
+      
+    }
+  
+    // line 394 "../../../../IN_static.ump"
+     protected void hook650() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 304 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 305 "../../../../IN_static.ump"
+    protected IN parent ;
+  // line 306 "../../../../IN_static.ump"
+    protected int childIndex ;
+  // line 307 "../../../../IN_static.ump"
+    protected int maxEntries ;
+  // line 308 "../../../../IN_static.ump"
+    protected int splitIndex ;
+  // line 309 "../../../../IN_static.ump"
+    protected int idKeyIndex ;
+  // line 310 "../../../../IN_static.ump"
+    protected int low ;
+  // line 311 "../../../../IN_static.ump"
+    protected int high ;
+  // line 312 "../../../../IN_static.ump"
+    protected IN newSibling ;
+  // line 313 "../../../../IN_static.ump"
+    protected byte[] newIdKey ;
+  // line 314 "../../../../IN_static.ump"
+    protected long parentLsn ;
+  // line 315 "../../../../IN_static.ump"
+    protected long oldMemorySize ;
+  // line 316 "../../../../IN_static.ump"
+    protected int toIdx ;
+  // line 317 "../../../../IN_static.ump"
+    protected boolean deletedEntrySeen ;
+  // line 318 "../../../../IN_static.ump"
+    protected BINReference binRef ;
+  // line 319 "../../../../IN_static.ump"
+    protected byte[] thisKey ;
+  // line 320 "../../../../IN_static.ump"
+    protected int newSiblingNEntries ;
+  // line 321 "../../../../IN_static.ump"
+    protected EnvironmentImpl env ;
+  // line 322 "../../../../IN_static.ump"
+    protected LogManager logManager ;
+  // line 323 "../../../../IN_static.ump"
+    protected INList inMemoryINs ;
+  // line 324 "../../../../IN_static.ump"
+    protected long newSiblingLsn ;
+  // line 325 "../../../../IN_static.ump"
+    protected long myNewLsn ;
+  // line 326 "../../../../IN_static.ump"
+    protected boolean insertOk1 ;
+  // line 327 "../../../../IN_static.ump"
+    protected boolean insertOk2 ;
+  // line 328 "../../../../IN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 396 "../../../../IN_static.ump"
+  public static class IN_verify
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_verify()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 398 "../../../../IN_static.ump"
+    public  IN_verify(IN _this, byte [] maxKey){
+      this._this=_this;
+          this.maxKey=maxKey;
+    }
+  
+    // line 402 "../../../../IN_static.ump"
+    public void execute() throws DatabaseException{
+      try {
+            this.hook632();
+            userCompareToFcn=(_this.databaseImpl == null ? null : _this.getKeyComparator());
+            key1=null;
+            for (int i=1; i < _this.nEntries; i++) {
+              key1=_this.entryKeyVals[i];
+              key2=_this.entryKeyVals[i - 1];
+              s=Key.compareKeys(key1,key2,userCompareToFcn);
+              if (s <= 0) {
+                throw new InconsistentNodeException("IN " + _this.getNodeId() + " key "+ (i - 1)+ " ("+ Key.dumpString(key2,0)+ ") and "+ i+ " ("+ Key.dumpString(key1,0)+ ") are out of order");
+              }
+            }
+            inconsistent=false;
+            if (maxKey != null && key1 != null) {
+              if (Key.compareKeys(key1,maxKey,userCompareToFcn) >= 0) {
+                inconsistent=true;
+              }
+            }
+            if (inconsistent) {
+              throw new InconsistentNodeException("IN " + _this.getNodeId() + " has entry larger than next entry in parent.");
+            }
+          }
+     catch (      DatabaseException DE) {
+            DE.printStackTrace(System.out);
+          }
+     finally {
+            this.hook633();
+          }
+    }
+  
+    // line 440 "../../../../IN_static.ump"
+     protected void hook632() throws DatabaseException{
+      
+    }
+  
+    // line 442 "../../../../IN_static.ump"
+     protected void hook633() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 431 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 432 "../../../../IN_static.ump"
+    protected byte[] maxKey ;
+  // line 433 "../../../../IN_static.ump"
+    protected boolean unlatchThis ;
+  // line 434 "../../../../IN_static.ump"
+    protected Comparator userCompareToFcn ;
+  // line 435 "../../../../IN_static.ump"
+    protected byte[] key1 ;
+  // line 436 "../../../../IN_static.ump"
+    protected byte[] key2 ;
+  // line 437 "../../../../IN_static.ump"
+    protected int s ;
+  // line 438 "../../../../IN_static.ump"
+    protected boolean inconsistent ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 444 "../../../../IN_static.ump"
+  public static class IN_isValidForDelete
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_isValidForDelete()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 446 "../../../../IN_static.ump"
+    public  IN_isValidForDelete(IN _this){
+      this._this=_this;
+    }
+  
+    // line 449 "../../../../IN_static.ump"
+    public boolean execute() throws DatabaseException{
+      try {
+            this.hook634();
+            throw ReturnHack.returnBoolean;
+          }
+     catch (      ReturnBoolean r) {
+            return r.value;
+          }
+    }
+  
+    // line 461 "../../../../IN_static.ump"
+     protected void hook634() throws DatabaseException{
+      this.hook635();
+          if (_this.nEntries > 1) {
+            throw new ReturnBoolean(false);
+          }
+     else       if (_this.nEntries == 1) {
+            child=_this.fetchTarget(0);
+            throw new ReturnBoolean(child != null && child.isValidForDelete());
+          }
+     else {
+            throw new ReturnBoolean(true);
+          }
+    }
+  
+    // line 474 "../../../../IN_static.ump"
+     protected void hook635() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 457 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 458 "../../../../IN_static.ump"
+    protected boolean needToLatch ;
+  // line 459 "../../../../IN_static.ump"
+    protected Node child ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 476 "../../../../IN_static.ump"
+  public static class IN_trackProvisionalObsolete
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_trackProvisionalObsolete()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 478 "../../../../IN_static.ump"
+    public  IN_trackProvisionalObsolete(IN _this, IN child, long obsoleteLsn1, long obsoleteLsn2){
+      this._this=_this;
+          this.child=child;
+          this.obsoleteLsn1=obsoleteLsn1;
+          this.obsoleteLsn2=obsoleteLsn2;
+    }
+  
+    // line 484 "../../../../IN_static.ump"
+    public void execute(){
+      memDelta=0;
+          if (child.provisionalObsolete != null) {
+            this.hook652();
+            if (_this.provisionalObsolete != null) {
+              _this.provisionalObsolete.addAll(child.provisionalObsolete);
+            }
+     else {
+              _this.provisionalObsolete=child.provisionalObsolete;
+            }
+            child.provisionalObsolete=null;
+            this.hook651();
+          }
+          if (obsoleteLsn1 != DbLsn.NULL_LSN || obsoleteLsn2 != DbLsn.NULL_LSN) {
+            if (_this.provisionalObsolete == null) {
+              _this.provisionalObsolete=new ArrayList();
+            }
+            if (obsoleteLsn1 != DbLsn.NULL_LSN) {
+              _this.provisionalObsolete.add(new Long(obsoleteLsn1));
+              this.hook653();
+            }
+            if (obsoleteLsn2 != DbLsn.NULL_LSN) {
+              _this.provisionalObsolete.add(new Long(obsoleteLsn2));
+              this.hook654();
+            }
+          }
+    }
+  
+    // line 517 "../../../../IN_static.ump"
+     protected void hook651(){
+      
+    }
+  
+    // line 519 "../../../../IN_static.ump"
+     protected void hook652(){
+      
+    }
+  
+    // line 521 "../../../../IN_static.ump"
+     protected void hook653(){
+      
+    }
+  
+    // line 523 "../../../../IN_static.ump"
+     protected void hook654(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 510 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 511 "../../../../IN_static.ump"
+    protected IN child ;
+  // line 512 "../../../../IN_static.ump"
+    protected long obsoleteLsn1 ;
+  // line 513 "../../../../IN_static.ump"
+    protected long obsoleteLsn2 ;
+  // line 514 "../../../../IN_static.ump"
+    protected int memDelta ;
+  // line 515 "../../../../IN_static.ump"
+    protected int childMemDelta ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 525 "../../../../IN_static.ump"
+  public static class IN_flushProvisionalObsolete
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_flushProvisionalObsolete()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 527 "../../../../IN_static.ump"
+    public  IN_flushProvisionalObsolete(IN _this, LogManager logManager){
+      this._this=_this;
+          this.logManager=logManager;
+    }
+  
+    // line 531 "../../../../IN_static.ump"
+    public void execute() throws DatabaseException{
+      if (_this.provisionalObsolete != null) {
+            this.hook656();
+            logManager.countObsoleteINs(_this.provisionalObsolete);
+            _this.provisionalObsolete=null;
+            this.hook655();
+          }
+    }
+  
+    // line 542 "../../../../IN_static.ump"
+     protected void hook655() throws DatabaseException{
+      
+    }
+  
+    // line 544 "../../../../IN_static.ump"
+     protected void hook656() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 538 "../../../../IN_static.ump"
+    protected IN _this ;
+  // line 539 "../../../../IN_static.ump"
+    protected LogManager logManager ;
+  // line 540 "../../../../IN_static.ump"
+    protected int memDelta ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

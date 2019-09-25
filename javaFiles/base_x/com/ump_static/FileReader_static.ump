@@ -60,3 +60,4 @@ class FileReader {
       protected void hook476() throws DatabaseException, IOException, EOFException {
       }
     }
+}

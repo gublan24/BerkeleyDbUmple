@@ -47,6 +47,7 @@ import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../DatabaseImpl.ump"
+// line 3 "../../../../DatabaseImpl_static.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -618,6 +619,230 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "tree" + "=" + (getTree() != null ? !getTree().equals(this)  ? getTree().toString().replaceAll("  ","    ") : "this" : "null");
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  // line 4 "../../../../DatabaseImpl_static.ump"
+  public static class ObsoleteProcessor
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public ObsoleteProcessor()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 8 "../../../../DatabaseImpl_static.ump"
+    public  ObsoleteProcessor(UtilizationTracker tracker){
+      this.tracker=tracker;
+    }
+  
+    // line 11 "../../../../DatabaseImpl_static.ump"
+     public void processLSN(long childLsn, LogEntryType childType){
+      assert childLsn != DbLsn.NULL_LSN;
+          tracker.countObsoleteNodeInexact(childLsn,childType);
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 6 "../../../../DatabaseImpl_static.ump"
+    private UtilizationTracker tracker ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  // line 15 "../../../../DatabaseImpl_static.ump"
+  public static class LNCounter
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LNCounter()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 19 "../../../../DatabaseImpl_static.ump"
+     public void processLSN(long childLsn, LogEntryType childType){
+      assert childLsn != DbLsn.NULL_LSN;
+          if (childType.equals(LogEntryType.LOG_LN_TRANSACTIONAL) || childType.equals(LogEntryType.LOG_LN)) {
+            counter++;
+          }
+    }
+  
+    // line 25 "../../../../DatabaseImpl_static.ump"
+    public long getCount(){
+      return counter;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 17 "../../../../DatabaseImpl_static.ump"
+    private long counter ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  // line 28 "../../../../DatabaseImpl_static.ump"
+  public static class HaltPreloadException
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public HaltPreloadException()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 32 "../../../../DatabaseImpl_static.ump"
+    public  HaltPreloadException(PreloadStatus status){
+      super(status.toString());
+          this.status=status;
+    }
+  
+    // line 36 "../../../../DatabaseImpl_static.ump"
+    public PreloadStatus getStatus(){
+      return status;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 30 "../../../../DatabaseImpl_static.ump"
+    private PreloadStatus status ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.dbi;
+  
+  @MethodObject
+  // line 39 "../../../../DatabaseImpl_static.ump"
+  public static class DatabaseImpl_preload
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public DatabaseImpl_preload()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 41 "../../../../DatabaseImpl_static.ump"
+    public  DatabaseImpl_preload(DatabaseImpl _this, PreloadConfig config){
+      this._this=_this;
+          this.config=config;
+    }
+  
+    // line 45 "../../../../DatabaseImpl_static.ump"
+    public PreloadStats execute() throws DatabaseException{
+      maxBytes=config.getMaxBytes();
+          maxMillisecs=config.getMaxMillisecs();
+          targetTime=Long.MAX_VALUE;
+          if (maxMillisecs > 0) {
+            targetTime=System.currentTimeMillis() + maxMillisecs;
+          }
+          this.hook290();
+          ret=new PreloadStats();
+          callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
+          walker=new PreloadLSNTreeWalker(_this,callback,config);
+          this.hook287();
+          return ret;
+    }
+  
+    // line 68 "../../../../DatabaseImpl_static.ump"
+     protected void hook287() throws DatabaseException{
+      walker.walk();
+    }
+  
+    // line 71 "../../../../DatabaseImpl_static.ump"
+     protected void hook290() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 58 "../../../../DatabaseImpl_static.ump"
+    protected DatabaseImpl _this ;
+  // line 59 "../../../../DatabaseImpl_static.ump"
+    protected PreloadConfig config ;
+  // line 60 "../../../../DatabaseImpl_static.ump"
+    protected long maxBytes ;
+  // line 61 "../../../../DatabaseImpl_static.ump"
+    protected long maxMillisecs ;
+  // line 62 "../../../../DatabaseImpl_static.ump"
+    protected long targetTime ;
+  // line 63 "../../../../DatabaseImpl_static.ump"
+    protected long cacheBudget ;
+  // line 64 "../../../../DatabaseImpl_static.ump"
+    protected PreloadStats ret ;
+  // line 65 "../../../../DatabaseImpl_static.ump"
+    protected PreloadProcessor callback ;
+  // line 66 "../../../../DatabaseImpl_static.ump"
+    protected SortedLSNTreeWalker walker ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

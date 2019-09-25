@@ -1,7 +1,8 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/FileProcessor.java
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-  static class RootDoWork implements WithRootLatched {
+  static class RootDoWork{
+      isA WithRootLatched;
       private DatabaseImpl db;
       private IN inClone;
       private long lsn;
@@ -307,3 +308,4 @@ class FileProcessor {
       protected void hook158() throws DatabaseException {
       }
     }
+}

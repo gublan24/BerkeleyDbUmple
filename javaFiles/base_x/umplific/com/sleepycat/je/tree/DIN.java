@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.nio.ByteBuffer;
 
 // line 3 "../../../../DIN.ump"
+// line 3 "../../../../DIN_static.ump"
 public class DIN extends IN
 {
 
@@ -374,7 +375,121 @@ public class DIN extends IN
    public String shortClassName(){
     return "DIN";
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 4 "../../../../DIN_static.ump"
+  public static class DIN_updateDupCountLN
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public DIN_updateDupCountLN()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../DIN_static.ump"
+    public  DIN_updateDupCountLN(DIN _this, Node target){
+      this._this=_this;
+          this.target=target;
+    }
+  
+    // line 10 "../../../../DIN_static.ump"
+    public void execute(){
+      _this.dupCountLNRef.setTarget(target);
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 12 "../../../../DIN_static.ump"
+    protected DIN _this ;
+  // line 13 "../../../../DIN_static.ump"
+    protected Node target ;
+  // line 14 "../../../../DIN_static.ump"
+    protected long oldSize ;
+  // line 15 "../../../../DIN_static.ump"
+    protected long newSize ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.tree;
+  
+  @MethodObject
+  // line 17 "../../../../DIN_static.ump"
+  public static class DIN_updateDupCountLNRefAndNullTarget
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public DIN_updateDupCountLNRefAndNullTarget()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 19 "../../../../DIN_static.ump"
+    public  DIN_updateDupCountLNRefAndNullTarget(DIN _this, long newLsn){
+      this._this=_this;
+          this.newLsn=newLsn;
+    }
+  
+    // line 23 "../../../../DIN_static.ump"
+    public void execute(){
+      _this.setDirty(true);
+          this.hook614();
+          _this.dupCountLNRef.setTarget(null);
+          _this.dupCountLNRef.setLsn(newLsn);
+    }
+  
+    // line 33 "../../../../DIN_static.ump"
+     protected void hook614(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 28 "../../../../DIN_static.ump"
+    protected DIN _this ;
+  // line 29 "../../../../DIN_static.ump"
+    protected long newLsn ;
+  // line 30 "../../../../DIN_static.ump"
+    protected long oldSize ;
+  // line 31 "../../../../DIN_static.ump"
+    protected long newSize ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

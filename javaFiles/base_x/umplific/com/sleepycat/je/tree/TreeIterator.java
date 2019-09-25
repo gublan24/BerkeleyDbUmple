@@ -6,9 +6,10 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.DatabaseException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import com.sleepycat.je.cleaner.*;
 
 // line 3 "../../../../TreeIterator.ump"
-public class TreeIterator
+public class TreeIterator extends Iterator
 {
 
   //------------------------
@@ -20,14 +21,18 @@ public class TreeIterator
   //------------------------
 
   public TreeIterator()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {}
+  {
+    super.delete();
+  }
 
   // line 17 "../../../../TreeIterator.ump"
    public  TreeIterator(Tree tree) throws DatabaseException{

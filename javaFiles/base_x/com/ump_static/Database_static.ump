@@ -46,3 +46,4 @@ class Database {
       protected Database _this;
       protected EnvironmentImpl env;
     }
+}

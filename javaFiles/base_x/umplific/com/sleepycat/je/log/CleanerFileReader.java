@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.io.IOException;
 
 // line 3 "../../../../CleanerFileReader.ump"
+// line 3 "../../../../CleanerFileReader_static.ump"
 public class CleanerFileReader extends FileReader
 {
 

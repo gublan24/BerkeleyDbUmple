@@ -8,7 +8,8 @@ class Tree {
       private SearchType(){
       }
     }
-  inner class RootChildReference extends ChildReference {
+  inner class RootChildReference{
+      isA ChildReference;
       private RootChildReference(){
         super();
       }
@@ -244,3 +245,4 @@ class Tree {
       protected void hook727() throws DatabaseException, SplitRequiredException {
       }
     }
+}

@@ -44,6 +44,7 @@ import java.io.File;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../UtilizationProfile.ump"
+// line 3 "../../../../UtilizationProfile_static.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -657,6 +658,412 @@ public class UtilizationProfile implements EnvConfigObserver
             "minUtilization" + ":" + getMinUtilization()+ "," +
             "minFileUtilization" + ":" + getMinFileUtilization()+ "," +
             "minAge" + ":" + getMinAge()+ "]";
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.cleaner;
+  
+  @MethodObject
+  // line 4 "../../../../UtilizationProfile_static.ump"
+  public static class UtilizationProfile_clearCache
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public UtilizationProfile_clearCache()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../UtilizationProfile_static.ump"
+    public  UtilizationProfile_clearCache(UtilizationProfile _this){
+      this._this=_this;
+    }
+  
+    // line 9 "../../../../UtilizationProfile_static.ump"
+    public void execute(){
+      _this.fileSummaryMap=new TreeMap();
+          _this.cachePopulated=false;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 12 "../../../../UtilizationProfile_static.ump"
+    protected UtilizationProfile _this ;
+  // line 13 "../../../../UtilizationProfile_static.ump"
+    protected int memorySize ;
+  // line 14 "../../../../UtilizationProfile_static.ump"
+    protected MemoryBudget mb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.cleaner;
+  
+  @MethodObject
+  // line 16 "../../../../UtilizationProfile_static.ump"
+  public static class UtilizationProfile_removeFile
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public UtilizationProfile_removeFile()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 18 "../../../../UtilizationProfile_static.ump"
+    public  UtilizationProfile_removeFile(UtilizationProfile _this, Long fileNum){
+      this._this=_this;
+          this.fileNum=fileNum;
+    }
+  
+    // line 22 "../../../../UtilizationProfile_static.ump"
+    public void execute() throws DatabaseException{
+      synchronized (_this) {
+            assert _this.cachePopulated;
+            if (_this.fileSummaryMap.remove(fileNum) != null) {
+              this.hook192();
+            }
+          }
+          _this.deleteFileSummary(fileNum);
+    }
+  
+    // line 34 "../../../../UtilizationProfile_static.ump"
+     protected void hook192() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 30 "../../../../UtilizationProfile_static.ump"
+    protected UtilizationProfile _this ;
+  // line 31 "../../../../UtilizationProfile_static.ump"
+    protected Long fileNum ;
+  // line 32 "../../../../UtilizationProfile_static.ump"
+    protected MemoryBudget mb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.cleaner;
+  
+  @MethodObject
+  // line 36 "../../../../UtilizationProfile_static.ump"
+  public static class UtilizationProfile_putFileSummary
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public UtilizationProfile_putFileSummary()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 38 "../../../../UtilizationProfile_static.ump"
+    public  UtilizationProfile_putFileSummary(UtilizationProfile _this, TrackedFileSummary tfs){
+      this._this=_this;
+          this.tfs=tfs;
+    }
+  
+    // line 42 "../../../../UtilizationProfile_static.ump"
+    public PackedOffsets execute() throws DatabaseException{
+      if (_this.env.isReadOnly()) {
+            throw new DatabaseException("Cannot write file summary in a read-only environment");
+          }
+          if (tfs.isEmpty()) {
+            return null;
+          }
+          if (!_this.cachePopulated) {
+            return null;
+          }
+          fileNum=tfs.getFileNumber();
+          fileNumLong=new Long(fileNum);
+          summary=(FileSummary)_this.fileSummaryMap.get(fileNumLong);
+          if (summary == null) {
+            file=new File(_this.env.getFileManager().getFullFileName(fileNum,FileManager.JE_SUFFIX));
+            if (!file.exists()) {
+              return null;
+            }
+            summary=new FileSummary();
+          }
+          tmp=new FileSummary();
+          tmp.add(summary);
+          tmp.add(tfs);
+          sequence=tmp.getEntriesCounted();
+          ln=new FileSummaryLN(summary);
+          ln.setTrackedSummary(tfs);
+          _this.insertFileSummary(ln,fileNum,sequence);
+          summary=ln.getBaseSummary();
+          if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
+            this.hook193();
+          }
+          return ln.getObsoleteOffsets();
+    }
+  
+    // line 85 "../../../../UtilizationProfile_static.ump"
+     protected void hook193() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 74 "../../../../UtilizationProfile_static.ump"
+    protected UtilizationProfile _this ;
+  // line 75 "../../../../UtilizationProfile_static.ump"
+    protected TrackedFileSummary tfs ;
+  // line 76 "../../../../UtilizationProfile_static.ump"
+    protected long fileNum ;
+  // line 77 "../../../../UtilizationProfile_static.ump"
+    protected Long fileNumLong ;
+  // line 78 "../../../../UtilizationProfile_static.ump"
+    protected FileSummary summary ;
+  // line 79 "../../../../UtilizationProfile_static.ump"
+    protected File file ;
+  // line 80 "../../../../UtilizationProfile_static.ump"
+    protected FileSummary tmp ;
+  // line 81 "../../../../UtilizationProfile_static.ump"
+    protected int sequence ;
+  // line 82 "../../../../UtilizationProfile_static.ump"
+    protected FileSummaryLN ln ;
+  // line 83 "../../../../UtilizationProfile_static.ump"
+    protected MemoryBudget mb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  package com.sleepycat.je.cleaner;
+  
+  @MethodObject
+  // line 87 "../../../../UtilizationProfile_static.ump"
+  public static class UtilizationProfile_populateCache
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public UtilizationProfile_populateCache()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 89 "../../../../UtilizationProfile_static.ump"
+    public  UtilizationProfile_populateCache(UtilizationProfile _this){
+      this._this=_this;
+    }
+  
+    // line 92 "../../../../UtilizationProfile_static.ump"
+    public boolean execute() throws DatabaseException{
+      assert !_this.cachePopulated;
+          if (!_this.openFileSummaryDatabase()) {
+            return false;
+          }
+          this.hook194();
+          existingFiles=_this.env.getFileManager().getAllFileNumbers();
+          locker=null;
+          cursor=null;
+          try {
+            locker=new BasicLocker(_this.env);
+            cursor=new CursorImpl(_this.fileSummaryDb,locker);
+            keyEntry=new DatabaseEntry();
+            dataEntry=new DatabaseEntry();
+            if (cursor.positionFirstOrLast(true,null)) {
+              status=cursor.getCurrentAlreadyLatched(keyEntry,dataEntry,LockType.NONE,true);
+              if (status != OperationStatus.SUCCESS) {
+                status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
+              }
+              while (status == OperationStatus.SUCCESS) {
+                this.hook176();
+                ln=(FileSummaryLN)cursor.getCurrentLN(LockType.NONE);
+                if (ln == null) {
+                  status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
+                  continue;
+                }
+                keyBytes=keyEntry.getData();
+                isOldVersion=ln.hasStringKey(keyBytes);
+                fileNum=ln.getFileNumber(keyBytes);
+                fileNumLong=new Long(fileNum);
+                if (Arrays.binarySearch(existingFiles,fileNumLong) >= 0) {
+                  _this.fileSummaryMap.put(fileNumLong,ln.getBaseSummary());
+                  if (isOldVersion) {
+                    _this.insertFileSummary(ln,fileNum,0);
+                    this.hook182();
+                    cursor.delete();
+                    this.hook181();
+                  }
+     else {
+                    this.hook191();
+                  }
+                }
+     else {
+                  _this.fileSummaryMap.remove(fileNumLong);
+                  if (isOldVersion) {
+                    this.hook184();
+                    cursor.delete();
+                    this.hook183();
+                  }
+     else {
+                    _this.deleteFileSummary(fileNumLong);
+                  }
+                }
+                if (isOldVersion) {
+                  status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
+                }
+     else {
+                  if (!_this.getFirstFSLN(cursor,fileNum + 1,keyEntry,dataEntry,LockType.NONE)) {
+                    status=OperationStatus.NOTFOUND;
+                  }
+                }
+              }
+            }
+          }
+      finally {
+            if (cursor != null) {
+              this.hook185();
+              cursor.close();
+            }
+            if (locker != null) {
+              locker.operationEnd();
+            }
+            this.hook195();
+          }
+          _this.cachePopulated=true;
+          return true;
+    }
+  
+    // line 184 "../../../../UtilizationProfile_static.ump"
+     protected void hook176() throws DatabaseException{
+      
+    }
+  
+    // line 186 "../../../../UtilizationProfile_static.ump"
+     protected void hook181() throws DatabaseException{
+      
+    }
+  
+    // line 188 "../../../../UtilizationProfile_static.ump"
+     protected void hook182() throws DatabaseException{
+      
+    }
+  
+    // line 190 "../../../../UtilizationProfile_static.ump"
+     protected void hook183() throws DatabaseException{
+      
+    }
+  
+    // line 192 "../../../../UtilizationProfile_static.ump"
+     protected void hook184() throws DatabaseException{
+      
+    }
+  
+    // line 194 "../../../../UtilizationProfile_static.ump"
+     protected void hook185() throws DatabaseException{
+      
+    }
+  
+    // line 196 "../../../../UtilizationProfile_static.ump"
+     protected void hook191() throws DatabaseException{
+      
+    }
+  
+    // line 198 "../../../../UtilizationProfile_static.ump"
+     protected void hook194() throws DatabaseException{
+      
+    }
+  
+    // line 200 "../../../../UtilizationProfile_static.ump"
+     protected void hook195() throws DatabaseException{
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 168 "../../../../UtilizationProfile_static.ump"
+    protected UtilizationProfile _this ;
+  // line 169 "../../../../UtilizationProfile_static.ump"
+    protected int oldMemorySize ;
+  // line 170 "../../../../UtilizationProfile_static.ump"
+    protected Long[] existingFiles ;
+  // line 171 "../../../../UtilizationProfile_static.ump"
+    protected Locker locker ;
+  // line 172 "../../../../UtilizationProfile_static.ump"
+    protected CursorImpl cursor ;
+  // line 173 "../../../../UtilizationProfile_static.ump"
+    protected DatabaseEntry keyEntry ;
+  // line 174 "../../../../UtilizationProfile_static.ump"
+    protected DatabaseEntry dataEntry ;
+  // line 175 "../../../../UtilizationProfile_static.ump"
+    protected OperationStatus status ;
+  // line 176 "../../../../UtilizationProfile_static.ump"
+    protected FileSummaryLN ln ;
+  // line 177 "../../../../UtilizationProfile_static.ump"
+    protected byte[] keyBytes ;
+  // line 178 "../../../../UtilizationProfile_static.ump"
+    protected boolean isOldVersion ;
+  // line 179 "../../../../UtilizationProfile_static.ump"
+    protected long fileNum ;
+  // line 180 "../../../../UtilizationProfile_static.ump"
+    protected Long fileNumLong ;
+  // line 181 "../../../../UtilizationProfile_static.ump"
+    protected int newMemorySize ;
+  // line 182 "../../../../UtilizationProfile_static.ump"
+    protected MemoryBudget mb ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

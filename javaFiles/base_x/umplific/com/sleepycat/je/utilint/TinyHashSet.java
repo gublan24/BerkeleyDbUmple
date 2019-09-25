@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.HashSet;
 
 // line 3 "../../../../TinyHashSet.ump"
+// line 3 "../../../../TinyHashSet_static.ump"
 public class TinyHashSet
 {
 
@@ -97,7 +98,123 @@ public class TinyHashSet
 	    return new SingleElementIterator(single, this);
 	}
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.utilint;
+  import com.sleepycat.je.cleaner.*;
+  
+  // line 4 "../../../../TinyHashSet_static.ump"
+  public static class SingleElementIterator extends Iterator
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //SingleElementIterator Attributes
+    private Object theObject;
+    private TinyHashSet theSet;
+    private boolean returnedTheObject;
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public SingleElementIterator(Object aTheObject, TinyHashSet aTheSet)
+    {
+      super();
+      theObject = aTheObject;
+      theSet = aTheSet;
+      returnedTheObject = false;
+    }
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public boolean setTheObject(Object aTheObject)
+    {
+      boolean wasSet = false;
+      theObject = aTheObject;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setTheSet(TinyHashSet aTheSet)
+    {
+      boolean wasSet = false;
+      theSet = aTheSet;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setReturnedTheObject(boolean aReturnedTheObject)
+    {
+      boolean wasSet = false;
+      returnedTheObject = aReturnedTheObject;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public Object getTheObject()
+    {
+      return theObject;
+    }
+  
+    public TinyHashSet getTheSet()
+    {
+      return theSet;
+    }
+  
+    public boolean getReturnedTheObject()
+    {
+      return returnedTheObject;
+    }
+  
+    public void delete()
+    {
+      super.delete();
+    }
+  
+    // line 10 "../../../../TinyHashSet_static.ump"
+    public  SingleElementIterator(Object o, TinyHashSet theSet){
+      theObject=o;
+          this.theSet=theSet;
+          returnedTheObject=(o == null);
+    }
+  
+    // line 15 "../../../../TinyHashSet_static.ump"
+     public boolean hasNext(){
+      return !returnedTheObject;
+    }
+  
+    // line 18 "../../../../TinyHashSet_static.ump"
+     public Object next(){
+      if (returnedTheObject) {
+            throw new NoSuchElementException();
+          }
+          returnedTheObject=true;
+          return theObject;
+    }
+  
+    // line 25 "../../../../TinyHashSet_static.ump"
+     public void remove(){
+      if (theObject == null || !returnedTheObject) {
+            throw new IllegalStateException();
+          }
+          theSet.remove(theObject);
+    }
+  
+  
+    public String toString()
+    {
+      return super.toString() + "["+
+              "returnedTheObject" + ":" + getReturnedTheObject()+ "]" + System.getProperties().getProperty("line.separator") +
+              "  " + "theObject" + "=" + (getTheObject() != null ? !getTheObject().equals(this)  ? getTheObject().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+              "  " + "theSet" + "=" + (getTheSet() != null ? !getTheSet().equals(this)  ? getTheSet().toString().replaceAll("  ","    ") : "this" : "null");
+    }
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

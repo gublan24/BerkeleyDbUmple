@@ -11,3 +11,4 @@ class LockManager {
         this.success=success;
       }
     }
+}

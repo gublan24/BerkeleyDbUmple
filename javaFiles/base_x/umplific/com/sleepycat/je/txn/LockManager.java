@@ -22,6 +22,7 @@ import java.util.HashMap;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../LockManager.ump"
+// line 3 "../../../../LockManager_static.ump"
 public abstract class LockManager implements EnvConfigObserver
 {
 
@@ -716,7 +717,97 @@ public abstract class LockManager implements EnvConfigObserver
    protected void hook781(int lockTableIndex) throws DatabaseException{
     
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.txn;
+  
+  // line 4 "../../../../LockManager_static.ump"
+  public static class LockAttemptResult
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //LockAttemptResult Attributes
+    private boolean success;
+    private Lock useLock;
+    private LockGrantType lockGrant;
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LockAttemptResult(boolean aSuccess, Lock aUseLock, LockGrantType aLockGrant)
+    {
+      success = aSuccess;
+      useLock = aUseLock;
+      lockGrant = aLockGrant;
+    }
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public boolean setSuccess(boolean aSuccess)
+    {
+      boolean wasSet = false;
+      success = aSuccess;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setUseLock(Lock aUseLock)
+    {
+      boolean wasSet = false;
+      useLock = aUseLock;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setLockGrant(LockGrantType aLockGrant)
+    {
+      boolean wasSet = false;
+      lockGrant = aLockGrant;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean getSuccess()
+    {
+      return success;
+    }
+  
+    public Lock getUseLock()
+    {
+      return useLock;
+    }
+  
+    public LockGrantType getLockGrant()
+    {
+      return lockGrant;
+    }
+  
+    public void delete()
+    {}
+  
+    // line 9 "../../../../LockManager_static.ump"
+    public  LockAttemptResult(Lock useLock, LockGrantType lockGrant, boolean success){
+      this.useLock=useLock;
+          this.lockGrant=lockGrant;
+          this.success=success;
+    }
+  
+  
+    public String toString()
+    {
+      return super.toString() + "["+
+              "success" + ":" + getSuccess()+ "]" + System.getProperties().getProperty("line.separator") +
+              "  " + "useLock" + "=" + (getUseLock() != null ? !getUseLock().equals(this)  ? getUseLock().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+              "  " + "lockGrant" + "=" + (getLockGrant() != null ? !getLockGrant().equals(this)  ? getLockGrant().toString().replaceAll("  ","    ") : "this" : "null");
+    }
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

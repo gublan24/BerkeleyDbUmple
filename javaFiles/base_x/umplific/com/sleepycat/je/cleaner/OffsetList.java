@@ -6,6 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.utilint.Tracer;
 
 // line 3 "../../../../OffsetList.ump"
+// line 3 "../../../../OffsetList_static.ump"
 public class OffsetList
 {
 
@@ -119,7 +120,113 @@ public class OffsetList
 	}
 	return false;
   }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  package com.sleepycat.je.cleaner;
+  
+  // line 4 "../../../../OffsetList_static.ump"
+  public static class Segment
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Segment()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 9 "../../../../OffsetList_static.ump"
+     public  Segment(){
+      values=new int[SEGMENT_CAPACITY];
+    }
+  
+  
+    /**
+     * 
+     * Call this method on the tail.  The new tail is returned, if
+     * allocating a new tail is necessary.
+     */
+    // line 16 "../../../../OffsetList_static.ump"
+    public Segment add(long value){
+      if (index < values.length) {
+            values[index]=(int)value;
+            index+=1;
+            return this;
+          }
+     else {
+            Segment seg=new Segment();
+            seg.values[0]=(int)value;
+            seg.index=1;
+            next=seg;
+            return seg;
+          }
+    }
+  
+  
+    /**
+     * 
+     * Returns the value at the given index from this segment only.
+     */
+    // line 33 "../../../../OffsetList_static.ump"
+    public long get(int i){
+      return ((long)values[i]) & 0xFFFFFFFF;
+    }
+  
+  
+    /**
+     * 
+     * Returns the next segment or null if this is the tail segment.
+     */
+    // line 39 "../../../../OffsetList_static.ump"
+    public Segment next(){
+      return next;
+    }
+  
+  
+    /**
+     * 
+     * Sets the next pointer during a merge.
+     */
+    // line 45 "../../../../OffsetList_static.ump"
+    public void setNext(Segment next){
+      this.next=next;
+    }
+  
+  
+    /**
+     * 
+     * Returns the number of values in this segment.
+     */
+    // line 51 "../../../../OffsetList_static.ump"
+    public int size(){
+      return index;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 5 "../../../../OffsetList_static.ump"
+    private int index ;
+  // line 6 "../../../../OffsetList_static.ump"
+    private Segment next ;
+  // line 7 "../../../../OffsetList_static.ump"
+    private int[] values ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

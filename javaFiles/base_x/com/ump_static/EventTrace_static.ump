@@ -10,3 +10,4 @@ class EventTrace {
         return Tracer.getStackTrace(event);
       }
     }
+}
