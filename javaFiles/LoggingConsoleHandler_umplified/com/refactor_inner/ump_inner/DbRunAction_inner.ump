@@ -1,0 +1,10 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/LoggingConsoleHandler_x/com/sleepycat/je/util/DbRunAction.java
+namespace com.sleepycat.je.util;
+class DbRunAction {
+  @MethodObject static class DbRunAction_main {
+      protected void hook848() throws Exception {
+        envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
+        original(); //@Abdulaziz aaa
+      }
+    }
+}
