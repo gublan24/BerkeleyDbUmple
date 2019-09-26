@@ -1,0 +1,27 @@
+namespace com.sleepycat.je.tree;
+
+class DBINReference
+{
+  isA BINReference;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.dbi.DatabaseId;
+    private byte[] dupKey;
+
+    DBINReference(long nodeId, DatabaseId databaseId, byte[] idKey, byte[] dupKey) {
+	super(nodeId, databaseId, idKey);
+	this.dupKey = dupKey;
+    }
+
+    public byte[] getKey() {
+	return dupKey;
+    }
+
+    public byte[] getData() {
+	return idKey;
+    }
+
+    public String toString() {
+	return super.toString() + " dupKey=" + Key.dumpString(dupKey, 0);
+    }
+
+}

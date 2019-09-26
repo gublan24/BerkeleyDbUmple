@@ -1,0 +1,66 @@
+namespace com.sleepycat.je.recovery;
+
+class RootUpdater
+{
+  isA WithRootLatched;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.DbLsn;
+  depend com.sleepycat.je.tree.WithRootLatched;
+  depend com.sleepycat.je.tree.Tree;
+  depend com.sleepycat.je.tree.IN;
+  depend com.sleepycat.je.tree.ChildReference;
+  depend com.sleepycat.je.DatabaseException;
+    private Tree tree;
+
+    private IN inFromLog;
+
+    private long lsn = DbLsn.NULL_LSN;
+
+    private boolean inserted = false;
+
+    private boolean replaced = false;
+
+    private long origLsn = DbLsn.NULL_LSN;
+
+    RootUpdater(Tree tree, IN inFromLog, long lsn) {
+	this.tree = tree;
+	this.inFromLog = inFromLog;
+	this.lsn = lsn;
+    }
+
+    public IN doWork(ChildReference root) throws DatabaseException {
+	ChildReference newRoot = tree.makeRootChildReference(inFromLog, new byte[0], lsn);
+	this.hook600();
+	if (root == null) {
+	    tree.setRoot(newRoot, false);
+	    inserted = true;
+	} else {
+	    origLsn = root.getLsn();
+	    if (DbLsn.compareTo(origLsn, lsn) < 0) {
+		tree.setRoot(newRoot, false);
+		replaced = true;
+	    }
+	}
+	return null;
+    }
+
+    boolean updateDone() {
+	return inserted || replaced;
+    }
+
+    boolean getInserted() {
+	return inserted;
+    }
+
+    boolean getReplaced() {
+	return replaced;
+    }
+
+    long getOriginalLsn() {
+	return origLsn;
+    }
+
+    protected void hook600() throws DatabaseException {
+    }
+
+}

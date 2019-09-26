@@ -1,0 +1,29 @@
+namespace com.sleepycat.bind;
+
+interface EntityBinding
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseEntry;
+    /** 
+     * Converts key and data entry buffers into an entity Object.
+     * @param keyis the source key entry.
+     * @param datais the source data entry.
+     * @return the resulting Object.
+     */
+    Object entryToObject(DatabaseEntry key, DatabaseEntry data);
+
+    /** 
+     * Extracts the key entry from an entity Object.
+     * @param objectis the source Object.
+     * @param keyis the destination entry buffer.
+     */
+    void objectToKey(Object object, DatabaseEntry key);
+
+    /** 
+     * Extracts the data entry from an entity Object.
+     * @param objectis the source Object.
+     * @param datais the destination entry buffer.
+     */
+    void objectToData(Object object, DatabaseEntry data);
+
+}

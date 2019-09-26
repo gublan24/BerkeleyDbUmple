@@ -1,0 +1,35 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/tree/DIN.java
+namespace com.sleepycat.je.tree;
+class DIN {
+  @MethodObject static class DIN_updateDupCountLN {
+      DIN_updateDupCountLN(    DIN _this,    Node target){
+        this._this=_this;
+        this.target=target;
+      }
+      void execute(){
+        _this.dupCountLNRef.setTarget(target);
+      }
+      protected DIN _this;
+      protected Node target;
+      protected long oldSize;
+      protected long newSize;
+    }
+  @MethodObject static class DIN_updateDupCountLNRefAndNullTarget {
+      DIN_updateDupCountLNRefAndNullTarget(    DIN _this,    long newLsn){
+        this._this=_this;
+        this.newLsn=newLsn;
+      }
+      void execute(){
+        _this.setDirty(true);
+        this.hook614();
+        _this.dupCountLNRef.setTarget(null);
+        _this.dupCountLNRef.setLsn(newLsn);
+      }
+      protected DIN _this;
+      protected long newLsn;
+      protected long oldSize;
+      protected long newSize;
+      protected void hook614(){
+      }
+    }
+}

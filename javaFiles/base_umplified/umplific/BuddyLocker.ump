@@ -1,0 +1,59 @@
+namespace com.sleepycat.je.txn;
+
+class BuddyLocker
+{
+  isA BasicLocker;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.DatabaseException;
+    private Locker buddy;
+
+    /** 
+     * Creates a BuddyLocker.
+     */
+    public BuddyLocker(EnvironmentImpl env, Locker buddy) throws DatabaseException {
+	super(env);
+	this.buddy = buddy;
+    }
+
+    /** 
+     * Returns the buddy locker.
+     */
+    Locker getBuddy() {
+	return buddy;
+    }
+
+    /** 
+     * Forwards this call to the buddy locker.
+     */
+    public Txn getTxnLocker() {
+	return buddy.getTxnLocker();
+    }
+
+    /** 
+     * Creates a new instance of this txn for the same environment.  No transactional locks are held by this object, so no locks are retained. newNonTxnLocker is also called for the BuddyLocker.
+     */
+    public Locker newNonTxnLocker() throws DatabaseException {
+	return new BuddyLocker(envImpl, buddy.newNonTxnLocker());
+    }
+
+    /** 
+     * Forwards this call to the base class and to the buddy locker.
+     */
+    public void releaseNonTxnLocks() throws DatabaseException {
+	super.releaseNonTxnLocks();
+	buddy.releaseNonTxnLocks();
+    }
+
+    /** 
+     * Returns whether this locker can share locks with the given locker.
+     */
+    public boolean sharesLocksWith(Locker other) {
+	if (super.sharesLocksWith(other)) {
+	    return true;
+	} else {
+	    return buddy == other;
+	}
+    }
+
+}

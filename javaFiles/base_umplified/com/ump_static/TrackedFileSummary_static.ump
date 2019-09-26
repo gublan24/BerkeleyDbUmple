@@ -1,0 +1,33 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/TrackedFileSummary.java
+namespace com.sleepycat.je.cleaner;
+class TrackedFileSummary {
+  @MethodObject static class TrackedFileSummary_trackObsolete {
+      TrackedFileSummary_trackObsolete(    TrackedFileSummary _this,    long offset){
+        this._this=_this;
+        this.offset=offset;
+      }
+      void execute(){
+        if (!_this.trackDetail) {
+          return;
+        }
+        this.hook170();
+        if (_this.obsoleteOffsets == null) {
+          _this.obsoleteOffsets=new OffsetList();
+          this.hook171();
+        }
+        if (_this.obsoleteOffsets.add(offset,_this.tracker.getEnvironment().isOpen())) {
+          this.hook172();
+        }
+      }
+      protected TrackedFileSummary _this;
+      protected long offset;
+      protected int adjustMem;
+      protected void hook170(){
+      }
+      protected void hook171(){
+      }
+      protected void hook172(){
+      }
+    }
+
+}

@@ -1,0 +1,23 @@
+namespace com.sleepycat.je;
+
+class DeadlockException
+{
+  isA DatabaseException;
+  depend de.ovgu.cide.jakutil.*;
+    public DeadlockException() {
+	super();
+    }
+
+    public DeadlockException(Throwable t) {
+	super(t);
+    }
+
+    public DeadlockException(String message) {
+	super(message);
+    }
+
+    public DeadlockException(String message, Throwable t) {
+	super(message, t);
+    }
+
+}

@@ -1,0 +1,47 @@
+namespace com.sleepycat.bind.tuple;
+
+class ShortBinding
+{
+  isA TupleBinding;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseEntry;
+    private static final int SHORT_SIZE = 2;
+
+    public Object entryToObject(TupleInput input) {
+	return new Short(input.readShort());
+    }
+
+    public void objectToEntry(Object object, TupleOutput output) {
+	output.writeShort(((Number) object).shortValue());
+    }
+
+    protected TupleOutput getTupleOutput(Object object) {
+	return sizedOutput();
+    }
+
+    /** 
+     * Converts an entry buffer into a simple <code>short</code> value.
+     * @param entryis the source entry buffer.
+     * @return the resulting value.
+     */
+    public static short entryToShort(DatabaseEntry entry) {
+	return entryToInput(entry).readShort();
+    }
+
+    /** 
+     * Converts a simple <code>short</code> value into an entry buffer.
+     * @param valis the source value.
+     * @param entryis the destination entry buffer.
+     */
+    public static void shortToEntry(short val, DatabaseEntry entry) {
+	outputToEntry(sizedOutput().writeShort(val), entry);
+    }
+
+    /** 
+     * Returns a tuple output object of the exact size needed, to avoid wasting space when a single primitive is output.
+     */
+    private static TupleOutput sizedOutput() {
+	return new TupleOutput(new byte[SHORT_SIZE]);
+    }
+
+}

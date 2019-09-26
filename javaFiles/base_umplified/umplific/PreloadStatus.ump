@@ -1,0 +1,24 @@
+namespace com.sleepycat.je;
+
+class PreloadStatus
+{
+  isA Serializable;
+  depend de.ovgu.cide.jakutil.*;
+  depend java.io.Serializable;
+    private String statusName;
+
+    public static final PreloadStatus SUCCESS = new PreloadStatus("SUCCESS");
+
+    public static final PreloadStatus FILLED_CACHE = new PreloadStatus("FILLED_CACHE");
+
+    public static final PreloadStatus EXCEEDED_TIME = new PreloadStatus("EXCEEDED_TIME");
+
+    private PreloadStatus(String statusName) {
+	this.statusName = statusName;
+    }
+
+    public String toString() {
+	return "PreloadStatus." + statusName;
+    }
+
+}

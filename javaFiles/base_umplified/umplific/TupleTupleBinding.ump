@@ -1,0 +1,54 @@
+namespace com.sleepycat.bind.tuple;
+
+class TupleTupleBinding
+{
+  isA EntityBinding;
+  isA TupleBase;
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.DatabaseEntry;
+  depend com.sleepycat.bind.EntityBinding;
+    /** 
+     * Creates a tuple-tuple entity binding.
+     */
+    public TupleTupleBinding() {
+    }
+
+    public Object entryToObject(DatabaseEntry key, DatabaseEntry data) {
+	return entryToObject(TupleBinding.entryToInput(key), TupleBinding.entryToInput(data));
+    }
+
+    public void objectToKey(Object object, DatabaseEntry key) {
+	TupleOutput output = getTupleOutput(object);
+	objectToKey(object, output);
+	outputToEntry(output, key);
+    }
+
+    public void objectToData(Object object, DatabaseEntry data) {
+	TupleOutput output = getTupleOutput(object);
+	objectToData(object, output);
+	outputToEntry(output, data);
+    }
+
+    /** 
+     * Constructs an entity object from  {@link TupleInput} key and data entries.
+     * @param keyInputis the {@link TupleInput} key entry object.
+     * @param dataInputis the {@link TupleInput} data entry object.
+     * @return the entity object constructed from the key and data.
+     */
+    public abstract Object entryToObject(TupleInput keyInput, TupleInput dataInput);
+
+    /** 
+     * Extracts a key tuple from an entity object.
+     * @param objectis the entity object.
+     * @param outputis the {@link TupleOutput} to which the key should be written.
+     */
+    public abstract void objectToKey(Object object, TupleOutput output);
+
+    /** 
+     * Extracts a key tuple from an entity object.
+     * @param objectis the entity object.
+     * @param outputis the {@link TupleOutput} to which the data should bewritten.
+     */
+    public abstract void objectToData(Object object, TupleOutput output);
+
+}

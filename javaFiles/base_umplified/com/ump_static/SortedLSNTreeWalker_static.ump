@@ -1,0 +1,72 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+namespace com.sleepycat.je.dbi;
+class SortedLSNTreeWalker {
+  interface TreeNodeProcessor {
+      void processLSN(    long childLSN,    LogEntryType childType);
+    }
+  @MethodObject static class SortedLSNTreeWalker_extractINsForDb {
+      SortedLSNTreeWalker_extractINsForDb(    SortedLSNTreeWalker _this,    INList inList){
+        this._this=_this;
+        this.inList=inList;
+      }
+      boolean execute() throws DatabaseException {
+        foundSome=false;
+        foundSet=new HashSet();
+        this.hook360();
+        this.hook356();
+        try {
+          this.hook357();
+          iter=inList.iterator();
+          while (iter.hasNext()) {
+            thisIN=(IN)iter.next();
+            if (thisIN.getDatabase() == _this.dbImpl) {
+              foundSome=true;
+              if (_this.removeINsFromINList) {
+                iter.remove();
+                this.hook361();
+              }
+              foundSet.add(thisIN);
+            }
+          }
+        }
+   catch (      DatabaseException e) {
+          this.hook362();
+          throw e;
+        }
+   finally {
+          this.hook358();
+        }
+        if (foundSome) {
+          iter1=foundSet.iterator();
+          while (iter1.hasNext()) {
+            thisIN1=(IN)iter1.next();
+            _this.accumulateLSNs(thisIN1);
+          }
+        }
+        foundSet=null;
+        return foundSome;
+      }
+      protected SortedLSNTreeWalker _this;
+      protected INList inList;
+      protected boolean foundSome;
+      protected Set foundSet;
+      protected long memoryChange;
+      protected MemoryBudget mb;
+      protected Iterator iter;
+      protected IN thisIN;
+      protected Iterator iter1;
+      protected IN thisIN1;
+      protected void hook356() throws DatabaseException {
+      }
+      protected void hook357() throws DatabaseException {
+      }
+      protected void hook358() throws DatabaseException {
+      }
+      protected void hook360() throws DatabaseException {
+      }
+      protected void hook361() throws DatabaseException {
+      }
+      protected void hook362() throws DatabaseException {
+      }
+    }
+}
