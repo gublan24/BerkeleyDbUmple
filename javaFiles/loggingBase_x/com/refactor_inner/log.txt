@@ -1,5 +1,0 @@
-Start: ---------------------------------------------------------
-/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/loggingBase_x/com/sleepycat/je/dbi/EnvironmentImpl.java
- /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/loggingBase_x/com/sleepycat/je/txn/Txn.java
- /home/abdulaziz/Desktop/BerkeleyDb/javaFiles/loggingBase_x/com/sleepycat/je/recovery/RecoveryManager.java
- End: ---------------------------------------------------------
