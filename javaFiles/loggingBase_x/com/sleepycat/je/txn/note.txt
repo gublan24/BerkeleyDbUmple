@@ -1,0 +1,4 @@
+the static class Txn_traceCommit has not been changed since Umple does not support inner classes.
+idea1: change it to a normal class 
+idea2: leave static class inside the holding class and do work arround for required changes.
+
