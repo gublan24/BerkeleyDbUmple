@@ -7,7 +7,7 @@ class DbRunAction {
           envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
           envConfig.setReadOnly(true);
         }
-        original();
+        original();  //@Abdulaziz //toUpdate
       }
     }
 }
