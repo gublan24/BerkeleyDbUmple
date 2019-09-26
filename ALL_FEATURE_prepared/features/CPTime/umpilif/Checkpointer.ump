@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    private long timeInterval;
+
+    protected void hook545(long waitTime) throws DatabaseException {
+	timeInterval = waitTime;
+	original(waitTime);
+    }
+
+}

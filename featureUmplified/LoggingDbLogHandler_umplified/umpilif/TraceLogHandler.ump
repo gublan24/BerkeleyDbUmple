@@ -1,0 +1,40 @@
+namespace com.sleepycat.je.log;
+
+class TraceLogHandler
+{
+  isA Handler;
+
+
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.Tracer;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.DatabaseException;
+  depend java.util.logging.LogRecord;
+  depend java.util.logging.Handler;
+
+
+    private EnvironmentImpl env;
+
+    public TraceLogHandler(EnvironmentImpl env) {
+	this.env = env;
+    }
+
+    public void close() {
+    }
+
+    public void flush() {
+    }
+
+    public void publish(LogRecord l) {
+	if (!env.isReadOnly() && !env.mayNotWrite()) {
+	    try {
+		Tracer newRec = new Tracer(l.getMessage());
+		env.getLogManager().log(newRec);
+	    } catch (DatabaseException e) {
+		System.err.println("Problem seen while tracing into " + "the database log:");
+		e.printStackTrace();
+	    }
+	}
+    }
+
+}

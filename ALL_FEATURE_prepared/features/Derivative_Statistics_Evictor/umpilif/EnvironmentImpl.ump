@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    protected void hook315(StatsConfig config, EnvironmentStats stats) throws DatabaseException {
+	evictor.loadStats(config, stats);
+	original(config, stats);
+    }
+
+}

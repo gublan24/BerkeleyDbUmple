@@ -1,0 +1,9 @@
+namespace com.sleepycat.je.dbi;
+
+class MemoryBudget
+{
+    void loadStats(StatsConfig config, EnvironmentStats stats) {
+	stats.setCacheDataBytes(getCacheMemoryUsage());
+    }
+
+}

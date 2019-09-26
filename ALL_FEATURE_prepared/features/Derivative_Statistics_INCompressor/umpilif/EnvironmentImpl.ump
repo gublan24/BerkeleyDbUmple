@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    protected void hook314(StatsConfig config, EnvironmentStats stats) throws DatabaseException {
+	inCompressor.loadStats(config, stats);
+	original(config, stats);
+    }
+
+}

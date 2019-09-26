@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.dbi;
+
+class CursorImpl
+{
+    protected void hook281(byte[] lnKey) throws DatabaseException {
+	locker.addDeleteInfo(dupBin, new Key(lnKey));
+	original(lnKey);
+    }
+
+    protected void hook282(byte[] lnKey) throws DatabaseException {
+	locker.addDeleteInfo(bin, new Key(lnKey));
+	original(lnKey);
+    }
+
+}

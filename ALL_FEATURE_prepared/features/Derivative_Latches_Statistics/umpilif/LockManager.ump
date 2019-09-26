@@ -1,0 +1,7 @@
+namespace com.sleepycat.je.txn;
+
+class LockManager
+{
+  depend com.sleepycat.je.latch.LatchStats;
+
+}

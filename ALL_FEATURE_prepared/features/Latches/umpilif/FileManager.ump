@@ -1,0 +1,17 @@
+namespace com.sleepycat.je.log;
+
+class FileManager
+{
+  depend com.sleepycat.je.latch.LatchSupport;
+  depend com.sleepycat.je.latch.Latch;
+    protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
+	fileHandle.latch();
+	original(fileHandle);
+    }
+
+    protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {
+	fileHandle.release();
+	original(fileHandle);
+    }
+
+}

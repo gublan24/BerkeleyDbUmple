@@ -1,0 +1,10 @@
+namespace com.sleepycat.je;
+
+class Database
+{
+    protected void hook38() throws DatabaseException {
+	databaseImpl.checkIsDeleted("stat");
+	original();
+    }
+
+}

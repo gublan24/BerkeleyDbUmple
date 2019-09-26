@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    protected void hook335() throws DatabaseException {
+	memoryBudget.initCacheMemoryUsage();
+	original();
+    }
+
+}

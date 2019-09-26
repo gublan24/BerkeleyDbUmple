@@ -1,0 +1,8 @@
+namespace com.sleepycat.je.log;
+
+class FileManager
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.EnvironmentStats;
+
+}

@@ -1,0 +1,98 @@
+namespace com.sleepycat.je.log;
+
+class FSyncManager
+{
+  depend de.ovgu.cide.jakutil.*;
+  depend com.sleepycat.je.utilint.PropUtil;
+  depend com.sleepycat.je.dbi.EnvironmentImpl;
+  depend com.sleepycat.je.config.EnvironmentParams;
+  depend com.sleepycat.je.RunRecoveryException;
+  depend com.sleepycat.je.DatabaseException;
+    private EnvironmentImpl envImpl;
+
+    private long timeout;
+
+    private volatile boolean fsyncInProgress;
+
+    private FSyncGroup nextFSyncWaiters;
+
+    FSyncManager(EnvironmentImpl envImpl) throws DatabaseException {
+	timeout = PropUtil.microsToMillis(envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FSYNC_TIMEOUT));
+	this.envImpl = envImpl;
+	this.hook434(envImpl);
+	fsyncInProgress = false;
+	nextFSyncWaiters = new FSyncGroup(timeout, envImpl);
+    }
+
+    /** 
+     * Request that this file be fsynced to disk. This thread may or may not actually execute the fsync, but will not return until a fsync has been issued and executed on behalf of its write. There is a timeout period specified by EnvironmentParam.LOG_FSYNC_TIMEOUT that ensures that no thread gets stuck here indefinitely. When a thread comes in, it will find one of two things.  1. There is no fsync going on right now. This thread should go ahead and fsync. 2. There is an active fsync, wait until it's over before starting a new fsync. When a fsync is going on, all those threads that come along are grouped together as the nextFsyncWaiters. When the current fsync is finished, one of those nextFsyncWaiters will be selected as a leader to issue the next fsync. The other members of the group will merely wait until the fsync done on their behalf is finished. When a thread finishes a fsync, it has to: 1. wake up all the threads that were waiting for its fsync call. 2. wake up one member of the next group of waiting threads (the  nextFsyncWaiters) so that thread can become the new leader and issue the next fysnc call. If a non-leader member of the nextFsyncWaiters times out, it will issue its own fsync anyway, in case something happened to the leader.
+     */
+    void fsync() throws DatabaseException {
+	boolean doFsync = false;
+	boolean isLeader = false;
+	boolean needToWait = false;
+	FSyncGroup inProgressGroup = null;
+	FSyncGroup myGroup = null;
+	synchronized (this) {
+	    this.hook435();
+	    if (fsyncInProgress) {
+		needToWait = true;
+		myGroup = nextFSyncWaiters;
+	    } else {
+		isLeader = true;
+		doFsync = true;
+		fsyncInProgress = true;
+		inProgressGroup = nextFSyncWaiters;
+		nextFSyncWaiters = new FSyncGroup(timeout, envImpl);
+	    }
+	}
+	if (needToWait) {
+	    int waitStatus = myGroup.waitForFsync();
+	    if (waitStatus == FSyncGroup.DO_LEADER_FSYNC) {
+		synchronized (this) {
+		    if (!fsyncInProgress) {
+			isLeader = true;
+			doFsync = true;
+			fsyncInProgress = true;
+			inProgressGroup = myGroup;
+			nextFSyncWaiters = new FSyncGroup(timeout, envImpl);
+		    }
+		}
+	    } else if (waitStatus == FSyncGroup.DO_TIMEOUT_FSYNC) {
+		doFsync = true;
+		this.hook436();
+	    }
+	}
+	if (doFsync) {
+	    executeFSync();
+	    synchronized (this) {
+		this.hook437();
+		if (isLeader) {
+		    inProgressGroup.wakeupAll();
+		    nextFSyncWaiters.wakeupOne();
+		    fsyncInProgress = false;
+		}
+	    }
+	}
+    }
+
+    /** 
+     * Put the fsync execution into this method so it can be overridden for testing purposes.
+     */
+    protected void executeFSync() throws DatabaseException {
+	envImpl.getFileManager().syncLogEnd();
+    }
+
+    protected void hook434(EnvironmentImpl envImpl) throws DatabaseException {
+    }
+
+    protected void hook435() throws DatabaseException {
+    }
+
+    protected void hook436() throws DatabaseException {
+    }
+
+    protected void hook437() throws DatabaseException {
+    }
+
+}

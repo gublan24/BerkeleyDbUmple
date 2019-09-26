@@ -1,0 +1,8 @@
+namespace com.sleepycat.je.dbi;
+
+class MemoryBudget
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.EnvironmentStats;
+
+}

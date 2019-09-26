@@ -1,0 +1,7 @@
+namespace com.sleepycat.je.util;
+
+class DbRunAction
+{
+    private static final int COMPRESS = 2;
+
+}

@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryManager
+{
+    protected static void hook555(Level traceLevel, DatabaseImpl db, TreeLocation location, LN lnFromLog, long logLsn,
+	    long abortLsn, boolean found, boolean replaced, boolean success) throws DatabaseException {
+	trace(traceLevel, db, TRACE_LN_UNDO, success, lnFromLog, logLsn, location.bin, found, replaced, false,
+		location.childLsn, abortLsn, location.index);
+	original(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+    }
+
+}

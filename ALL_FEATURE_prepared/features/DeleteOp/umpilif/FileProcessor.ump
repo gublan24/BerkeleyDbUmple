@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.cleaner;
+
+class FileProcessor
+{
+    protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException {
+	b |= db.isDeleted();
+	return original(db, b);
+    }
+
+    protected void hook160(DatabaseImpl db) throws DatabaseException {
+	cleaner.addPendingDB(db);
+	original(db);
+    }
+
+}

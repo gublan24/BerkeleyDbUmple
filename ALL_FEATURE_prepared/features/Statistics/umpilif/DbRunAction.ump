@@ -1,0 +1,8 @@
+namespace com.sleepycat.je.util;
+
+class DbRunAction
+{
+  depend com.sleepycat.je.StatsConfig;
+    private static final int DBSTATS = 6;
+
+}

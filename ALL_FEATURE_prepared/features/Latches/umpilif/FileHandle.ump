@@ -1,0 +1,26 @@
+namespace com.sleepycat.je.log;
+
+class FileHandle
+{
+  depend com.sleepycat.je.latch.LatchSupport;
+  depend com.sleepycat.je.latch.Latch;
+    private Latch fileLatch;
+
+    void latch() throws DatabaseException {
+	fileLatch.acquire();
+    }
+
+    boolean latchNoWait() throws DatabaseException {
+	return fileLatch.acquireNoWait();
+    }
+
+    void release() throws DatabaseException {
+	fileLatch.release();
+    }
+
+    protected void hook444(String fileName, EnvironmentImpl env) {
+	fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
+	original(fileName, env);
+    }
+
+}
