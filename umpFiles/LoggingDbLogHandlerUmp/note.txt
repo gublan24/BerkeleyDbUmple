@@ -1,3 +1,0 @@
-1- The class 'DbRunAction' has the static class 'DbRunAction_main'. 
-2- mixset hook853 does not properly because of the bellow line:
-    private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"+ "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
