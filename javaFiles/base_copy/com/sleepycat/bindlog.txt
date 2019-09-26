@@ -1,5 +1,0 @@
-Start: ---------------------------------------------------------
-/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/bind/serial/StoredClassCatalog.java
- 			>>
- 			/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_copy/com/sleepycat/bind/StoredClassCatalog.java
-End: ---------------------------------------------------------
