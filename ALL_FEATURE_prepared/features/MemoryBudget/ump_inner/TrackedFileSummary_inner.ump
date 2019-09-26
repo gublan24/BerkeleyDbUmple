@@ -1,0 +1,24 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/cleaner/TrackedFileSummary.java
+namespace com.sleepycat.je.cleaner;
+class TrackedFileSummary {
+  @MethodObject static class TrackedFileSummary_trackObsolete {
+      void execute(){
+        original();
+        if (adjustMem != 0) {
+          _this.updateMemoryBudget(adjustMem);
+        }
+      }
+      protected void hook170(){
+        adjustMem=0;
+        original();
+      }
+      protected void hook171(){
+        adjustMem+=MemoryBudget.TFS_LIST_INITIAL_OVERHEAD;
+        original();
+      }
+      protected void hook172(){
+        adjustMem+=MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD;
+        original();
+      }
+    }
+}

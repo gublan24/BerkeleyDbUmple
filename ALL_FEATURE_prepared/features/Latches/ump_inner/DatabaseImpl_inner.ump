@@ -1,0 +1,11 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/DatabaseImpl.java
+namespace com.sleepycat.je.dbi;
+class DatabaseImpl {
+  @MethodObject static class DatabaseImpl_preload {
+      PreloadStats execute() throws DatabaseException {
+        PreloadStats result=original();
+        assert LatchSupport.countLatchesHeld() == 0;
+        return result;
+      }
+    }
+}

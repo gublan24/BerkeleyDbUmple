@@ -1,0 +1,15 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/latch/LatchImpl.java
+namespace com.sleepycat.je.latch;
+class LatchImpl {
+  static  class LatchWaiter {
+      boolean active;
+      Thread thread;
+      LatchWaiter(    Thread thread){
+        this.thread=thread;
+        active=false;
+      }
+      public String toString(){
+        return "<LatchWaiter: " + thread + ">";
+      }
+    }
+}

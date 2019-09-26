@@ -1,0 +1,10 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_CriticalEviction/com/sleepycat/je/cleaner/Cleaner.java
+namespace com.sleepycat.je.cleaner;
+class Cleaner {
+  @MethodObject static class Cleaner_processPending {
+      protected void hook86() throws DatabaseException {
+        _this.env.getEvictor().doCriticalEviction();
+        original();
+      }
+    }
+}

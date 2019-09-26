@@ -1,0 +1,38 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFinest/com/sleepycat/je/Cursor.java
+namespace com.sleepycat.je;
+class Cursor {
+  @MethodObject static class Cursor_trace2 {
+      Cursor_trace2(    Cursor _this,    Level level,    String methodName,    LockMode lockMode){
+        this._this=_this;
+        this.level=level;
+        this.methodName=methodName;
+        this.lockMode=lockMode;
+      }
+      void execute(){
+      }
+      protected Cursor _this;
+      protected Level level;
+      protected String methodName;
+      protected LockMode lockMode;
+      protected StringBuffer sb;
+    }
+  @MethodObject static class Cursor_trace {
+      Cursor_trace(    Cursor _this,    Level level,    String methodName,    DatabaseEntry key,    DatabaseEntry data,    LockMode lockMode){
+        this._this=_this;
+        this.level=level;
+        this.methodName=methodName;
+        this.key=key;
+        this.data=data;
+        this.lockMode=lockMode;
+      }
+      void execute(){
+      }
+      protected Cursor _this;
+      protected Level level;
+      protected String methodName;
+      protected DatabaseEntry key;
+      protected DatabaseEntry data;
+      protected LockMode lockMode;
+      protected StringBuffer sb;
+    }
+}

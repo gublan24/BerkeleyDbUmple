@@ -1,0 +1,30 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/txn/LockManager.java
+namespace com.sleepycat.je.txn;
+class LockManager {
+  @MethodObject static class LockManager_lockStat {
+      LockManager_lockStat(    LockManager _this,    StatsConfig config){
+        this._this=_this;
+        this.config=config;
+      }
+      LockStats execute() throws DatabaseException {
+        stats=new LockStats();
+        stats.setNRequests(_this.nRequests);
+        stats.setNWaits(_this.nWaits);
+        if (config.getClear()) {
+          _this.nWaits=0;
+          _this.nRequests=0;
+        }
+        this.hook769();
+        if (!config.getFast()) {
+          _this.dumpLockTable(stats);
+        }
+        return stats;
+      }
+      protected LockManager _this;
+      protected StatsConfig config;
+      protected LockStats stats;
+      protected LatchStats latchStats;
+      protected void hook769() throws DatabaseException {
+      }
+    }
+}

@@ -1,0 +1,13 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingDbLogHandler/com/sleepycat/je/util/DbRunAction.java
+namespace com.sleepycat.je.util;
+class DbRunAction {
+  @MethodObject static class DbRunAction_main {
+      protected void hook847() throws Exception {
+        if (readOnly) {
+          envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
+          envConfig.setReadOnly(true);
+        }
+        original();
+      }
+    }
+}

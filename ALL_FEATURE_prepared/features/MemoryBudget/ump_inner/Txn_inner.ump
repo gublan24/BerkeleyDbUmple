@@ -1,0 +1,26 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/txn/Txn.java
+namespace com.sleepycat.je.txn;
+class Txn {
+  @MethodObject static class Txn_addLock {
+      protected void hook815() throws DatabaseException {
+        delta=0;
+        original();
+      }
+      protected void hook816() throws DatabaseException {
+        _this.updateMemoryUsage(delta);
+        original();
+      }
+      protected void hook817() throws DatabaseException {
+        delta+=_this.WRITE_LOCK_OVERHEAD;
+        original();
+      }
+      protected void hook818() throws DatabaseException {
+        delta+=MemoryBudget.TWOHASHMAPS_OVERHEAD;
+        original();
+      }
+      protected void hook819() throws DatabaseException {
+        delta-=_this.READ_LOCK_OVERHEAD;
+        original();
+      }
+    }
+}

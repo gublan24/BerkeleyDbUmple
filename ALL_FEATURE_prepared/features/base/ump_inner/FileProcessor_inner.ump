@@ -1,0 +1,310 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/base/com/sleepycat/je/cleaner/FileProcessor.java
+namespace com.sleepycat.je.cleaner;
+class FileProcessor {
+  static class RootDoWork implements WithRootLatched {
+      private DatabaseImpl db;
+      private IN inClone;
+      private long lsn;
+      RootDoWork(    DatabaseImpl db,    IN inClone,    long lsn){
+        this.db=db;
+        this.inClone=inClone;
+        this.lsn=lsn;
+      }
+      public IN doWork(    ChildReference root) throws DatabaseException {
+        if (root == null || root.fetchTarget(db,null).getNodeId() != inClone.getNodeId()) {
+          return null;
+        }
+        if (DbLsn.compareTo(root.getLsn(),lsn) <= 0) {
+          IN rootIN=(IN)root.fetchTarget(db,null);
+          rootIN.latch(Cleaner.UPDATE_GENERATION);
+          return rootIN;
+        }
+   else {
+          return null;
+        }
+      }
+    }
+  @MethodObject static class FileProcessor_processFile {
+      FileProcessor_processFile(    FileProcessor _this,    Long fileNum){
+        this._this=_this;
+        this.fileNum=fileNum;
+      }
+      boolean execute() throws DatabaseException, IOException {
+        obsoleteOffsets=new PackedOffsets();
+        tfs=_this.profile.getObsoleteDetail(fileNum,obsoleteOffsets,true);
+        obsoleteIter=obsoleteOffsets.iterator();
+        nextObsolete=-1;
+        readBufferSize=_this.cleaner.readBufferSize;
+        this.hook128();
+        this.hook161();
+        this.hook119();
+        this.hook127();
+        this.hook154();
+        dbCache=new HashMap();
+        try {
+          reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
+          this.hook137();
+          dbMapTree=_this.env.getDbMapTree();
+          location=new TreeLocation();
+          nProcessedLNs=0;
+          while (reader.readNextEntry()) {
+            this.hook146();
+            lsn=reader.getLastLsn();
+            fileOffset=DbLsn.getFileOffset(lsn);
+            isLN=reader.isLN();
+            isIN=reader.isIN();
+            isRoot=reader.isRoot();
+            isObsolete=false;
+            if (_this.env.isClosing()) {
+              return false;
+            }
+            while (nextObsolete < fileOffset && obsoleteIter.hasNext()) {
+              nextObsolete=obsoleteIter.next();
+            }
+            if (nextObsolete == fileOffset) {
+              isObsolete=true;
+            }
+            if (!isObsolete && !isLN && !isIN&& !isRoot) {
+              isObsolete=true;
+            }
+            if (!isObsolete && isLN && reader.getLN().isDeleted()) {
+              isObsolete=true;
+            }
+            if (!isObsolete && tfs != null && tfs.containsObsoleteOffset(fileOffset)) {
+              isObsolete=true;
+            }
+            if (isObsolete) {
+              this.hook147();
+              this.hook156();
+              continue;
+            }
+            this.hook120();
+            if (isLN) {
+              targetLN=reader.getLN();
+              dbId2=reader.getDatabaseId();
+              key=reader.getKey();
+              dupKey=reader.getDupTreeKey();
+              aLsn=new Long(DbLsn.getFileOffset(lsn));
+              aLninfo=new LNInfo(targetLN,dbId2,key,dupKey);
+              this.hook130();
+              nProcessedLNs+=1;
+              if (nProcessedLNs % _this.PROCESS_PENDING_EVERY_N_LNS == 0) {
+                _this.cleaner.processPending();
+              }
+            }
+   else           if (isIN) {
+              targetIN=reader.getIN();
+              dbId3=reader.getDatabaseId();
+              db3=dbMapTree.getDb(dbId3,_this.cleaner.lockTimeout,dbCache);
+              targetIN.setDatabase(db3);
+              _this.processIN(targetIN,db3,lsn);
+            }
+   else           if (isRoot) {
+              _this.env.rewriteMapTreeRoot(lsn);
+            }
+   else {
+              assert false;
+            }
+          }
+          this.hook129();
+          this.hook155();
+          this.hook145();
+        }
+    finally {
+          this.hook162();
+          if (tfs != null) {
+            tfs.setAllowFlush(true);
+          }
+        }
+        return true;
+      }
+      protected FileProcessor _this;
+      protected Long fileNum;
+      protected PackedOffsets obsoleteOffsets;
+      protected TrackedFileSummary tfs;
+      protected PackedOffsets.Iterator obsoleteIter;
+      protected long nextObsolete;
+      protected int readBufferSize;
+      protected int lookAheadCacheSize;
+      protected int adjustMem;
+      protected MemoryBudget budget;
+      protected Set checkPendingDbSet;
+      protected Map dbCache;
+      protected CleanerFileReader reader;
+      protected DbTree dbMapTree;
+      protected TreeLocation location;
+      protected int nProcessedLNs;
+      protected long lsn;
+      protected long fileOffset;
+      protected boolean isLN;
+      protected boolean isIN;
+      protected boolean isRoot;
+      protected boolean isObsolete;
+      protected DatabaseId dbId1;
+      protected LN targetLN;
+      protected DatabaseId dbId2;
+      protected byte[] key;
+      protected byte[] dupKey;
+      protected Long aLsn;
+      protected LNInfo aLninfo;
+      protected Object p;
+      protected IN targetIN;
+      protected DatabaseId dbId3;
+      protected DatabaseImpl db3;
+      protected DatabaseId dbId;
+      protected DatabaseImpl db;
+      protected void hook119() throws DatabaseException, IOException {
+      }
+      protected void hook120() throws DatabaseException, IOException {
+      }
+      protected void hook127() throws DatabaseException, IOException {
+      }
+      protected void hook128() throws DatabaseException, IOException {
+      }
+      protected void hook129() throws DatabaseException, IOException {
+      }
+      protected void hook130() throws DatabaseException, IOException {
+        p=null;
+        this.hook131();
+        _this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
+      }
+      protected void hook131() throws DatabaseException, IOException {
+      }
+      protected void hook137() throws DatabaseException, IOException {
+      }
+      protected void hook145() throws DatabaseException, IOException {
+      }
+      protected void hook146() throws DatabaseException, IOException {
+      }
+      protected void hook147() throws DatabaseException, IOException {
+      }
+      protected void hook154() throws DatabaseException, IOException {
+      }
+      protected void hook155() throws DatabaseException, IOException {
+      }
+      protected void hook156() throws DatabaseException, IOException {
+      }
+      protected void hook161() throws DatabaseException, IOException {
+      }
+      protected void hook162() throws DatabaseException, IOException {
+      }
+    }
+  @MethodObject static class FileProcessor_processLN {
+      FileProcessor_processLN(    FileProcessor _this,    Long fileNum,    TreeLocation location,    Long offset,    LNInfo info,    Object lookAheadCachep,    Map dbCache){
+        this._this=_this;
+        this.fileNum=fileNum;
+        this.location=location;
+        this.offset=offset;
+        this.info=info;
+        this.lookAheadCachep=lookAheadCachep;
+        this.dbCache=dbCache;
+      }
+      void execute() throws DatabaseException {
+        this.hook132();
+        ln=info.getLN();
+        key=info.getKey();
+        dupKey=info.getDupKey();
+        logLsn=DbLsn.makeLsn(fileNum.longValue(),offset.longValue());
+        db=_this.env.getDbMapTree().getDb(info.getDbId(),_this.cleaner.lockTimeout,dbCache);
+        processedHere=true;
+        obsolete=false;
+        completed=false;
+        bin=null;
+        parentDIN=null;
+        try {
+          b=db == null;
+          this.hook157();
+          if (b) {
+            this.hook158();
+            this.hook148();
+            obsolete=true;
+            completed=true;
+            return;
+          }
+          tree=db.getTree();
+          assert tree != null;
+          parentFound=tree.getParentBINForChildLN(location,key,dupKey,ln,false,true,false,Cleaner.UPDATE_GENERATION);
+          bin=location.bin;
+          index=location.index;
+          if (!parentFound) {
+            this.hook149();
+            obsolete=true;
+            completed=true;
+            return;
+          }
+          if (bin.isEntryKnownDeleted(index)) {
+            this.hook150();
+            obsolete=true;
+            completed=true;
+            return;
+          }
+          isDupCountLN=ln.containsDuplicates();
+  {
+          }
+          if (isDupCountLN) {
+            parentDIN=(DIN)bin.fetchTarget(index);
+            parentDIN.latch(Cleaner.UPDATE_GENERATION);
+            dclRef=parentDIN.getDupCountLNRef();
+            treeLsn=dclRef.getLsn();
+          }
+   else {
+            treeLsn=bin.getLsn(index);
+          }
+          processedHere=false;
+          _this.processFoundLN(info,logLsn,treeLsn,bin,index,parentDIN);
+          completed=true;
+          this.hook133();
+          return;
+        }
+    finally {
+          this.hook135();
+          this.hook126();
+        }
+      }
+      protected FileProcessor _this;
+      protected Long fileNum;
+      protected TreeLocation location;
+      protected Long offset;
+      protected LNInfo info;
+      protected Object lookAheadCachep;
+      protected Map dbCache;
+      protected LN ln;
+      protected byte[] key;
+      protected byte[] dupKey;
+      protected long logLsn;
+      protected DatabaseImpl db;
+      protected boolean processedHere;
+      protected boolean obsolete;
+      protected boolean completed;
+      protected BIN bin;
+      protected DIN parentDIN;
+      protected boolean b;
+      protected Tree tree;
+      protected boolean parentFound;
+      protected int index;
+      protected boolean isDupCountLN;
+      protected long treeLsn;
+      protected ChildReference dclRef;
+      protected long lsn;
+      protected Long myOffset;
+      protected LNInfo myInfo;
+      protected void hook126() throws DatabaseException {
+      }
+      protected void hook132() throws DatabaseException {
+      }
+      protected void hook133() throws DatabaseException {
+      }
+      protected void hook135() throws DatabaseException {
+      }
+      protected void hook148() throws DatabaseException {
+      }
+      protected void hook149() throws DatabaseException {
+      }
+      protected void hook150() throws DatabaseException {
+      }
+      protected void hook157() throws DatabaseException {
+      }
+      protected void hook158() throws DatabaseException {
+      }
+    }
+}

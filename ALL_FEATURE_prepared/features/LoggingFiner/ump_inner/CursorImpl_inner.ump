@@ -1,0 +1,28 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFiner/com/sleepycat/je/dbi/CursorImpl.java
+namespace com.sleepycat.je.dbi;
+class CursorImpl {
+  @MethodObject static class CursorImpl_trace {
+      CursorImpl_trace(    CursorImpl _this,    Level level,    String changeType,    BIN theBin,    LN ln,    int lnIndex,    long oldLsn,    long newLsn){
+        this._this=_this;
+        this.level=level;
+        this.changeType=changeType;
+        this.theBin=theBin;
+        this.ln=ln;
+        this.lnIndex=lnIndex;
+        this.oldLsn=oldLsn;
+        this.newLsn=newLsn;
+      }
+      void execute(){
+      }
+      protected CursorImpl _this;
+      protected Level level;
+      protected String changeType;
+      protected BIN theBin;
+      protected LN ln;
+      protected int lnIndex;
+      protected long oldLsn;
+      protected long newLsn;
+      protected Logger logger;
+      protected StringBuffer sb;
+    }
+}

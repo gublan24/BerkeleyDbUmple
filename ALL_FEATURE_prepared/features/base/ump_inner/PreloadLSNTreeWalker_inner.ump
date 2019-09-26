@@ -1,0 +1,18 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/base/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+namespace com.sleepycat.je.dbi;
+class PreloadLSNTreeWalker {
+  static class INEntry {
+      INEntry(    IN in,    int index){
+        this.in=in;
+        this.index=index;
+      }
+      IN in;
+      int index;
+    }
+  inner class PreloadWithRootLatched implements WithRootLatched {
+      public IN doWork(    ChildReference root) throws DatabaseException {
+        walkInternal();
+        return null;
+      }
+    }
+}

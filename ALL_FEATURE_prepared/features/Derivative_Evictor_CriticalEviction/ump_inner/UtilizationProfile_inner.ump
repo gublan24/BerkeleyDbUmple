@@ -1,0 +1,10 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_CriticalEviction/com/sleepycat/je/cleaner/UtilizationProfile.java
+namespace com.sleepycat.je.cleaner;
+class UtilizationProfile {
+  @MethodObject static class UtilizationProfile_populateCache {
+      protected void hook176() throws DatabaseException {
+        _this.env.getEvictor().doCriticalEviction();
+        original();
+      }
+    }
+}

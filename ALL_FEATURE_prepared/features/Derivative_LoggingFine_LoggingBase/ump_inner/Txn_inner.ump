@@ -1,0 +1,16 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFine_LoggingBase/com/sleepycat/je/txn/Txn.java
+namespace com.sleepycat.je.txn;
+class Txn {
+  @MethodObject static class Txn_traceCommit {
+      void execute(){
+        original();
+        if (logger.isLoggable(Level.FINE)) {
+          sb=new StringBuffer();
+          sb.append(" Commit:id = ").append(id);
+          sb.append(" numWriteLocks=").append(numWriteLocks);
+          sb.append(" numReadLocks = ").append(numReadLocks);
+          Tracer.trace(Level.FINE,envImpl,sb.toString());
+        }
+      }
+    }
+}

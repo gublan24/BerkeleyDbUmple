@@ -1,0 +1,23 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Checksum/com/sleepycat/je/log/FileReader.java
+namespace com.sleepycat.je.log;
+class FileReader {
+  @MethodObject static class FileReader_readNextEntry {
+      protected void hook474() throws DatabaseException, IOException, EOFException {
+        if (doValidate) {
+          _this.validateChecksum(dataBuffer);
+        }
+        original();
+      }
+      protected void hook475() throws DatabaseException, IOException, EOFException {
+        collectData|=doValidate;
+        if (doValidate) {
+          _this.startChecksum(dataBuffer);
+        }
+        original();
+      }
+      protected void hook476() throws DatabaseException, IOException, EOFException {
+        doValidate=_this.doValidateChecksum && (isTargetEntry || _this.alwaysValidateChecksum);
+        original();
+      }
+    }
+}

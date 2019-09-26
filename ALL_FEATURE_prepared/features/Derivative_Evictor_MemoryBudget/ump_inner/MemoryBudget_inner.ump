@@ -1,0 +1,10 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_MemoryBudget/com/sleepycat/je/dbi/MemoryBudget.java
+namespace com.sleepycat.je.dbi;
+class MemoryBudget {
+  @MethodObject static class MemoryBudget_reset {
+      protected void hook349() throws DatabaseException {
+        _this.criticalThreshold=newCriticalThreshold;
+        original();
+      }
+    }
+}

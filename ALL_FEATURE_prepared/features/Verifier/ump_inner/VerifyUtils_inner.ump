@@ -1,0 +1,13 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Verifier/com/sleepycat/je/cleaner/VerifyUtils.java
+namespace com.sleepycat.je.cleaner;
+class VerifyUtils {
+  static class GatherLSNs implements TreeNodeProcessor {
+      private Set lsns=new HashSet();
+      public void processLSN(    long childLSN,    LogEntryType childType){
+        lsns.add(new Long(childLSN));
+      }
+      public Set getLsns(){
+        return lsns;
+      }
+    }
+}

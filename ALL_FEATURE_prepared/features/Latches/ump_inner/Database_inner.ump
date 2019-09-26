@@ -1,0 +1,25 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/Database.java
+namespace com.sleepycat.je;
+class Database {
+  @MethodObject static class Database_acquireTriggerListReadLock {
+      void execute() throws DatabaseException {
+        env=_this.envHandle.getEnvironmentImpl();
+        env.getTriggerLatch().acquireShared();
+        original();
+      }
+    }
+  @MethodObject static class Database_releaseTriggerListWriteLock {
+      void execute() throws DatabaseException {
+        original();
+        env=_this.envHandle.getEnvironmentImpl();
+        env.getTriggerLatch().release();
+      }
+    }
+  @MethodObject static class Database_acquireTriggerListWriteLock {
+      void execute() throws DatabaseException {
+        env=_this.envHandle.getEnvironmentImpl();
+        env.getTriggerLatch().acquireExclusive();
+        original();
+      }
+    }
+}

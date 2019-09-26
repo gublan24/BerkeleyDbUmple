@@ -1,0 +1,21 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingConfig/com/sleepycat/je/recovery/Checkpointer.java
+namespace com.sleepycat.je.recovery;
+class Checkpointer {
+  @MethodObject static class Checkpointer_doCheckpoint {
+      protected void hook522() throws DatabaseException {
+        traced=false;
+        original();
+      }
+      protected void hook523() throws DatabaseException {
+        _this.trace(_this.envImpl,invokingSource,true);
+        traced=true;
+        original();
+      }
+      protected void hook524() throws DatabaseException {
+        if (!traced) {
+          _this.trace(_this.envImpl,invokingSource,success);
+        }
+        original();
+      }
+    }
+}

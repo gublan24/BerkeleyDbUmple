@@ -1,0 +1,18 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFinest/com/sleepycat/je/SecondaryDatabase.java
+namespace com.sleepycat.je;
+class SecondaryDatabase {
+  @MethodObject static class SecondaryDatabase_trace {
+      SecondaryDatabase_trace(    SecondaryDatabase _this,    Level level,    String methodName){
+        this._this=_this;
+        this.level=level;
+        this.methodName=methodName;
+      }
+      void execute() throws DatabaseException {
+      }
+      protected SecondaryDatabase _this;
+      protected Level level;
+      protected String methodName;
+      protected Logger logger;
+      protected StringBuffer sb;
+    }
+}
