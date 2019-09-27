@@ -1,0 +1,20 @@
+namespace com.sleepycat.je.cleaner;
+
+class UtilizationProfile
+{
+    protected void hook173() throws DatabaseException {
+	env.getEvictor().doCriticalEviction();
+	original();
+    }
+
+    protected void hook174() throws DatabaseException {
+	env.getEvictor().doCriticalEviction();
+	original();
+    }
+
+    protected void hook175() throws DatabaseException {
+	env.getEvictor().doCriticalEviction();
+	original();
+    }
+
+}

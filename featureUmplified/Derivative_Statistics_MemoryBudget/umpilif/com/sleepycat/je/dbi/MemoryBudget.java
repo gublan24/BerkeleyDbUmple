@@ -1,0 +1,33 @@
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+
+package com.sleepycat.je.dbi;
+
+// line 3 "../../../../MemoryBudget.ump"
+public class MemoryBudget
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public MemoryBudget()
+  {}
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public void delete()
+  {}
+
+  // line 6 "../../../../MemoryBudget.ump"
+  public void loadStats(StatsConfig config, EnvironmentStats stats){
+    stats.setCacheDataBytes(getCacheMemoryUsage());
+  }
+
+}

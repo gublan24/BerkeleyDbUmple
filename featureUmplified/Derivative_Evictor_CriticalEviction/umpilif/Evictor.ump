@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.evictor;
+
+class Evictor
+{
+    /** 
+     * Do a check on whether synchronous eviction is needed.
+     */
+    public void doCriticalEviction() throws DatabaseException {
+	new Evictor_doCriticalEviction(this).execute();
+    }
+
+}

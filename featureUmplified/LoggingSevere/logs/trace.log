@@ -1,0 +1,509 @@
+2019-09-27 15:16:59.600 [main] DEBUG cruise.umplificator.UmplificatorMain - Configure Logger from log4j.properties
+2019-09-27 15:16:59.606 [main] DEBUG cruise.umplificator.UmplificatorMain - Umplification process started!
+2019-09-27 15:16:59.609 [main] DEBUG cruise.umplificator.core.Umplificator - start time : 1569611819609
+2019-09-27 15:16:59.609 [main] INFO  cruise.umplificator.FileHelper - 
+Files to be umplified: 
+FileProcessor.java
+Cleaner.java
+Txn.java
+Tracer.java
+FileReader.java
+Checkpointer.java
+RecoveryManager.java
+
+-----------------------
+2019-09-27 15:16:59.616 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611819616,1,Umplificator_traces.ump,24,RuleRunner,1894369629,me_e,RuleRunner,Instantiate RuleRunner- Resources, FileSystem and Repository created
+2019-09-27 15:16:59.616 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611819616,1,Umplificator_traces.ump,24,RuleRunner,1894369629,me_e,RuleRunner,Instantiate RuleRunner- Resources, FileSystem and Repository created
+2019-09-27 15:16:59.626 [main] DEBUG cruise.umplificator.rules.RuleService - 1569611819626,1,Umplificator_traces.ump,20,RuleService,20224131,me_e,startRuleEngine,RuleService.startRuleEngine
+2019-09-27 15:16:59.627 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611819627,1,Umplificator_traces.ump,25,RuleRunner,1894369629,me_e,addRuleFile,RuleRunner.addRuleFile - Add Rule Files to Session
+2019-09-27 15:17:00.983 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611820983,1,Umplificator_traces.ump,28,RuleRunner,1894369629,me_e,insertUmpleModel,RuleRunner.insertUmpleModel - Insert Umple Model into working memory
+2019-09-27 15:17:00.985 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:00.985 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of FileProcessor.java
+2019-09-27 15:17:00.988 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:00.989 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je.cleaner;
+class FileProcessor {
+  protected void hook122(  IOException IOE) throws DatabaseException {
+    Tracer.trace(env,"Cleaner","doClean","",IOE);
+    original(IOE);
+  }
+  protected void hook123(  String traceMsg) throws DatabaseException {
+    Tracer.trace(Level.SEVERE,env,traceMsg);
+    original(traceMsg);
+  }
+}
+
+2019-09-27 15:17:00.989 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611820989,1,Umplificator_traces.ump,13,JavaParser,2081501023,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.094 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.094 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.094 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.094 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.095 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821095,1,Umplificator_traces.ump,14,JavaParser,2081501023,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.095 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821095,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.096 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821096,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.096 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.097 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.097 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.097 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.142 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821142,1,Umplificator_traces.ump,13,JavaParser,866474968,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.145 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.145 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.145 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.145 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.145 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821145,1,Umplificator_traces.ump,14,JavaParser,866474968,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.150 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for FileProcessor.java!
+2019-09-27 15:17:01.151 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:01.151 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of Cleaner.java
+2019-09-27 15:17:01.151 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:01.151 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je.cleaner;
+public class Cleaner {
+  protected void hook88(  long fileNumValue) throws DatabaseException {
+    Tracer.trace(Level.SEVERE,env,"Cleaner deleted file 0x" + Long.toHexString(fileNumValue));
+    original(fileNumValue);
+  }
+  private void traceFileNotDeleted(  Exception e,  long fileNum){
+    Tracer.trace(env,"Cleaner","deleteSafeToDeleteFiles","Log file 0x" + Long.toHexString(fileNum) + " could not be "+ (expunge ? "deleted" : "renamed")+ ".  This operation will be retried at the next checkpoint.",e);
+    original(e,fileNum);
+  }
+  protected void hook89(  DatabaseException DBE) throws DatabaseException {
+    Tracer.trace(env,"com.sleepycat.je.cleaner.Cleaner","processLN","Exception thrown: ",DBE);
+    original(DBE);
+  }
+}
+
+2019-09-27 15:17:01.151 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821151,1,Umplificator_traces.ump,13,JavaParser,176376157,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.157 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.157 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.157 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.157 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821158,1,Umplificator_traces.ump,14,JavaParser,176376157,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821158,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821158,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.158 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.160 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821160,1,Umplificator_traces.ump,13,JavaParser,1292784864,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.163 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.163 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.163 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.163 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.163 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.163 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821163,1,Umplificator_traces.ump,14,JavaParser,1292784864,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.164 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821164,1,Umplificator_traces.ump,13,JavaParser,855206842,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.166 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.166 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.167 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.167 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.167 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.167 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821167,1,Umplificator_traces.ump,14,JavaParser,855206842,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.167 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821167,1,Umplificator_traces.ump,13,JavaParser,1628848368,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.170 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.170 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.170 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.170 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.170 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821170,1,Umplificator_traces.ump,14,JavaParser,1628848368,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.171 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for Cleaner.java!
+2019-09-27 15:17:01.171 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:01.171 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of Txn.java
+2019-09-27 15:17:01.172 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:01.172 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je.txn;
+public class Txn {
+  protected void hook800(  Throwable t) throws DatabaseException, Throwable {
+    Tracer.trace(envImpl,"Txn","commit","Commit of transaction " + id + " failed",t);
+    original(t);
+  }
+  protected void hook801(  Long nodeId,  long undoLsn,  DatabaseException e) throws DatabaseException {
+    Tracer.trace(envImpl,"Txn","undo","for node=" + nodeId + " LSN="+ DbLsn.getNoFormatString(undoLsn),e);
+    original(nodeId,undoLsn,e);
+  }
+}
+
+2019-09-27 15:17:01.172 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821172,1,Umplificator_traces.ump,13,JavaParser,1742885458,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821175,1,Umplificator_traces.ump,14,JavaParser,1742885458,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821175,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821175,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.175 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.177 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821177,1,Umplificator_traces.ump,13,JavaParser,377667724,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.179 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.179 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.180 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.180 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.180 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821180,1,Umplificator_traces.ump,14,JavaParser,377667724,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.180 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821180,1,Umplificator_traces.ump,13,JavaParser,1070619454,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.183 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.183 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.183 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.183 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.183 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821183,1,Umplificator_traces.ump,14,JavaParser,1070619454,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.183 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821183,1,Umplificator_traces.ump,13,JavaParser,1320809135,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.186 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.186 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.186 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.186 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.186 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821186,1,Umplificator_traces.ump,14,JavaParser,1320809135,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.186 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821186,1,Umplificator_traces.ump,13,JavaParser,1246238504,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.189 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.189 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.189 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.189 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.189 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.190 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821190,1,Umplificator_traces.ump,14,JavaParser,1246238504,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.190 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821190,1,Umplificator_traces.ump,13,JavaParser,1255024717,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.192 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.192 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.192 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.192 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.192 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821192,1,Umplificator_traces.ump,14,JavaParser,1255024717,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.193 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for Txn.java!
+2019-09-27 15:17:01.193 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:01.193 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of Tracer.java
+2019-09-27 15:17:01.194 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:01.194 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je.utilint;
+public class Tracer {
+  /** 
+ * Logger method for recording an exception and stacktrace.
+ */
+  public static void trace(  EnvironmentImpl envImpl,  String sourceClass,  String sourceMethod,  String msg,  Throwable t){
+  }
+}
+
+2019-09-27 15:17:01.194 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821194,1,Umplificator_traces.ump,13,JavaParser,2012910465,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.201 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.201 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.201 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.201 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821201,1,Umplificator_traces.ump,14,JavaParser,2012910465,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.201 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821201,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.201 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821201,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.202 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.202 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.202 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.202 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.203 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821203,1,Umplificator_traces.ump,13,JavaParser,201245433,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.205 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.205 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.205 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.205 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821205,1,Umplificator_traces.ump,14,JavaParser,201245433,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.205 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821205,1,Umplificator_traces.ump,13,JavaParser,1888400144,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.207 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.207 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.207 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.207 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821207,1,Umplificator_traces.ump,14,JavaParser,1888400144,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.208 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821208,1,Umplificator_traces.ump,13,JavaParser,1857852787,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.209 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.210 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.210 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.210 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821210,1,Umplificator_traces.ump,14,JavaParser,1857852787,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.210 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821210,1,Umplificator_traces.ump,13,JavaParser,513241240,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.212 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.212 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.212 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.212 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821212,1,Umplificator_traces.ump,14,JavaParser,513241240,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.212 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821212,1,Umplificator_traces.ump,13,JavaParser,1661178041,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.214 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.214 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.214 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.215 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.215 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821215,1,Umplificator_traces.ump,14,JavaParser,1661178041,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.215 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821215,1,Umplificator_traces.ump,13,JavaParser,1720760826,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.217 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.217 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.217 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.217 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.217 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.217 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821217,1,Umplificator_traces.ump,14,JavaParser,1720760826,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.218 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821218,1,Umplificator_traces.ump,13,JavaParser,1821228886,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.220 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.220 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.220 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.220 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.220 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821220,1,Umplificator_traces.ump,14,JavaParser,1821228886,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.221 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for Tracer.java!
+2019-09-27 15:17:01.221 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:01.221 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of FileReader.java
+2019-09-27 15:17:01.222 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:01.222 [main] DEBUG cruise.umplificator.core.Umplificator - // Original file location:  /home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingSevere/com/sleepycat/je/log/FileReader.java
+package com.sleepycat.je.log;
+public abstract class FileReader {
+// START_OF_INNER_ELEMENT 
+// @MethodObject static class FileReader_readNextEntry {
+//     protected void hook468() throws DatabaseException, IOException {
+//       _this.eof=true;
+//       problemType=LogEntryType.findType(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
+//       Tracer.trace(_this.env,"FileReader","readNextEntry","Halted log file reading at file 0x" + Long.toHexString(_this.readBufferFileNum) + " offset 0x"+ Long.toHexString(_this.nextEntryOffset)+ " offset(decimal)="+ _this.nextEntryOffset+ ":\nentry="+ problemType+ "(typeNum="+ _this.currentEntryTypeNum+ ",version="+ _this.currentEntryTypeVersion+ ")\nprev=0x"+ Long.toHexString(_this.currentEntryPrevOffset)+ "\nsize="+ _this.currentEntrySize+ "\nNext entry should be at 0x"+ Long.toHexString((_this.nextEntryOffset + LogManager.HEADER_BYTES + _this.currentEntrySize))+ "\n:",e);
+//       original();
+//     }
+//   }
+// END_OF_INNER_ELEMENT 
+}
+
+2019-09-27 15:17:01.222 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821222,1,Umplificator_traces.ump,13,JavaParser,1228603887,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.223 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821224,1,Umplificator_traces.ump,14,JavaParser,1228603887,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821224,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821224,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.224 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.225 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821225,1,Umplificator_traces.ump,13,JavaParser,1711154833,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.226 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.226 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.226 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821226,1,Umplificator_traces.ump,14,JavaParser,1711154833,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.226 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821226,1,Umplificator_traces.ump,13,JavaParser,1200689594,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.227 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.227 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.227 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821227,1,Umplificator_traces.ump,14,JavaParser,1200689594,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.227 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821227,1,Umplificator_traces.ump,13,JavaParser,1470959992,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.228 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.228 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.228 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821228,1,Umplificator_traces.ump,14,JavaParser,1470959992,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.228 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821228,1,Umplificator_traces.ump,13,JavaParser,2084041029,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.230 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.230 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.230 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821230,1,Umplificator_traces.ump,14,JavaParser,2084041029,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.230 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821230,1,Umplificator_traces.ump,13,JavaParser,1751751420,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.231 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.232 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.232 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821232,1,Umplificator_traces.ump,14,JavaParser,1751751420,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.232 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821232,1,Umplificator_traces.ump,13,JavaParser,658135690,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.233 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.233 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.233 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.233 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821233,1,Umplificator_traces.ump,14,JavaParser,658135690,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.234 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821234,1,Umplificator_traces.ump,13,JavaParser,404994500,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.235 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.235 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.235 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.236 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.236 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821236,1,Umplificator_traces.ump,14,JavaParser,404994500,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.236 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821236,1,Umplificator_traces.ump,13,JavaParser,1532874332,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.238 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.239 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.239 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.239 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.239 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.239 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821239,1,Umplificator_traces.ump,14,JavaParser,1532874332,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.239 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821239,1,Umplificator_traces.ump,13,JavaParser,2135359921,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.241 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.241 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.241 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.241 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.241 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821241,1,Umplificator_traces.ump,14,JavaParser,2135359921,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.242 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for FileReader.java!
+2019-09-27 15:17:01.242 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:01.242 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of Checkpointer.java
+2019-09-27 15:17:01.242 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:01.242 [main] DEBUG cruise.umplificator.core.Umplificator - // Original file location:  /home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingSevere/com/sleepycat/je/recovery/Checkpointer.java
+package com.sleepycat.je.recovery;
+public class Checkpointer {
+// START_OF_INNER_ELEMENT 
+// @MethodObject static class Checkpointer_doCheckpoint {
+//     protected void hook525() throws DatabaseException {
+//       try {
+//         original();
+//       }
+//  catch (      DatabaseException e) {
+//         Tracer.trace(_this.envImpl,"Checkpointer","doCheckpoint","checkpointId=" + _this.checkpointId,e);
+//         throw e;
+//       }
+//     }
+//   }
+// END_OF_INNER_ELEMENT 
+}
+
+2019-09-27 15:17:01.242 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821242,1,Umplificator_traces.ump,13,JavaParser,182254297,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821244,1,Umplificator_traces.ump,14,JavaParser,182254297,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821244,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821244,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.244 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.245 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821245,1,Umplificator_traces.ump,13,JavaParser,281312377,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.247 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.247 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.247 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821247,1,Umplificator_traces.ump,14,JavaParser,281312377,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.247 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821247,1,Umplificator_traces.ump,13,JavaParser,992302041,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.248 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.248 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.248 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821248,1,Umplificator_traces.ump,14,JavaParser,992302041,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.249 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821249,1,Umplificator_traces.ump,13,JavaParser,1967118241,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.250 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.250 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.250 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821250,1,Umplificator_traces.ump,14,JavaParser,1967118241,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.250 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821250,1,Umplificator_traces.ump,13,JavaParser,312629339,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.251 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.251 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.251 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821251,1,Umplificator_traces.ump,14,JavaParser,312629339,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.252 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821252,1,Umplificator_traces.ump,13,JavaParser,565627330,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.252 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.252 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.253 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821253,1,Umplificator_traces.ump,14,JavaParser,565627330,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.253 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821253,1,Umplificator_traces.ump,13,JavaParser,815590838,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.254 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.254 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.254 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821254,1,Umplificator_traces.ump,14,JavaParser,815590838,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.254 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821254,1,Umplificator_traces.ump,13,JavaParser,999663323,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.255 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.255 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.255 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821255,1,Umplificator_traces.ump,14,JavaParser,999663323,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.255 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821255,1,Umplificator_traces.ump,13,JavaParser,1005928818,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.257 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.257 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.257 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.257 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821257,1,Umplificator_traces.ump,14,JavaParser,1005928818,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.257 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821257,1,Umplificator_traces.ump,13,JavaParser,748316439,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.259 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.259 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.259 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.259 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.259 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821259,1,Umplificator_traces.ump,14,JavaParser,748316439,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.260 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821260,1,Umplificator_traces.ump,13,JavaParser,2067586671,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821262,1,Umplificator_traces.ump,14,JavaParser,2067586671,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.262 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821262,1,Umplificator_traces.ump,13,JavaParser,1829313709,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.263 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.263 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.263 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.263 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.264 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821264,1,Umplificator_traces.ump,14,JavaParser,1829313709,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.264 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for Checkpointer.java!
+2019-09-27 15:17:01.264 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 15:17:01.264 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of RecoveryManager.java
+2019-09-27 15:17:01.265 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 15:17:01.265 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je.recovery;
+public class RecoveryManager {
+  protected void hook575(  IOException e) throws DatabaseException {
+    Tracer.trace(env,"RecoveryManager","recover","Couldn't recover",e);
+    original(e);
+  }
+  protected void hook576(  DatabaseImpl db,  long logLsn,  Exception e,  String trace) throws DatabaseException {
+    Tracer.trace(db.getDbEnvironment(),"RecoveryManager","replaceOrInsert"," lsnFromLog:" + DbLsn.getNoFormatString(logLsn) + " "+ trace,e);
+    original(db,logLsn,e,trace);
+  }
+  protected void hook577(  String method,  Exception origException,  String badLsnString) throws DatabaseException {
+    Tracer.trace(env,"RecoveryManager",method,"last LSN = " + badLsnString,origException);
+    original(method,origException,badLsnString);
+  }
+}
+
+2019-09-27 15:17:01.265 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821265,1,Umplificator_traces.ump,13,JavaParser,2087075503,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.266 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.266 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821267,1,Umplificator_traces.ump,14,JavaParser,2087075503,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821267,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569611821267,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 15:17:01.267 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 15:17:01.268 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821268,1,Umplificator_traces.ump,13,JavaParser,1174641185,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.270 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.271 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.271 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.271 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.271 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.271 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821271,1,Umplificator_traces.ump,14,JavaParser,1174641185,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.271 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821271,1,Umplificator_traces.ump,13,JavaParser,1126074033,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.273 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.273 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.273 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.273 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.273 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.273 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821273,1,Umplificator_traces.ump,14,JavaParser,1126074033,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.274 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821273,1,Umplificator_traces.ump,13,JavaParser,902096996,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.275 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.276 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.276 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.276 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.276 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.276 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821276,1,Umplificator_traces.ump,14,JavaParser,902096996,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.276 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821276,1,Umplificator_traces.ump,13,JavaParser,849520318,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821278,1,Umplificator_traces.ump,14,JavaParser,849520318,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.278 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821278,1,Umplificator_traces.ump,13,JavaParser,1747644505,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.280 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.281 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.281 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.281 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.281 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.281 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821281,1,Umplificator_traces.ump,14,JavaParser,1747644505,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.281 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821281,1,Umplificator_traces.ump,13,JavaParser,1597425891,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821283,1,Umplificator_traces.ump,14,JavaParser,1597425891,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.283 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821283,1,Umplificator_traces.ump,13,JavaParser,1302568105,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.285 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.285 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-RecoveryManager
+2019-09-27 15:17:01.286 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook575
+2019-09-27 15:17:01.286 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook576
+2019-09-27 15:17:01.286 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook577
+2019-09-27 15:17:01.286 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821286,1,Umplificator_traces.ump,14,JavaParser,1302568105,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.286 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821286,1,Umplificator_traces.ump,13,JavaParser,1788036341,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.287 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 15:17:01.287 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 15:17:01.287 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821287,1,Umplificator_traces.ump,14,JavaParser,1788036341,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.287 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821287,1,Umplificator_traces.ump,13,JavaParser,1434769862,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.288 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.log
+2019-09-27 15:17:01.288 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileReader
+2019-09-27 15:17:01.288 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821288,1,Umplificator_traces.ump,14,JavaParser,1434769862,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.289 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821289,1,Umplificator_traces.ump,13,JavaParser,1016881733,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.290 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.utilint
+2019-09-27 15:17:01.290 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Tracer
+2019-09-27 15:17:01.290 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-trace
+2019-09-27 15:17:01.291 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821290,1,Umplificator_traces.ump,14,JavaParser,1016881733,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.291 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821291,1,Umplificator_traces.ump,13,JavaParser,1829496747,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.292 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.txn
+2019-09-27 15:17:01.293 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Txn
+2019-09-27 15:17:01.293 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook800
+2019-09-27 15:17:01.293 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook801
+2019-09-27 15:17:01.293 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821293,1,Umplificator_traces.ump,14,JavaParser,1829496747,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.293 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821293,1,Umplificator_traces.ump,13,JavaParser,491762195,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.295 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.295 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Cleaner
+2019-09-27 15:17:01.295 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook88
+2019-09-27 15:17:01.295 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-traceFileNotDeleted
+2019-09-27 15:17:01.295 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook89
+2019-09-27 15:17:01.295 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821295,1,Umplificator_traces.ump,14,JavaParser,491762195,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.296 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821296,1,Umplificator_traces.ump,13,JavaParser,1861616277,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 15:17:01.297 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.cleaner
+2019-09-27 15:17:01.297 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-FileProcessor
+2019-09-27 15:17:01.297 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook122
+2019-09-27 15:17:01.297 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook123
+2019-09-27 15:17:01.297 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569611821297,1,Umplificator_traces.ump,14,JavaParser,1861616277,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 15:17:01.298 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for RecoveryManager.java!
+2019-09-27 15:17:01.348 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/FileProcessor.ump--
+2019-09-27 15:17:01.357 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/Cleaner.ump--
+2019-09-27 15:17:01.362 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/Txn.ump--
+2019-09-27 15:17:01.365 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/Tracer.ump--
+2019-09-27 15:17:01.366 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/FileReader.ump--
+2019-09-27 15:17:01.367 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/Checkpointer.ump--
+2019-09-27 15:17:01.372 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/RecoveryManager.ump--
+2019-09-27 15:17:01.373 [main] DEBUG cruise.umplificator.core.Umplificator - Elapsed Time : 1763
+2019-09-27 15:17:01.373 [main] DEBUG cruise.umplificator.core.Umplificator - Stop Time : start[1569611819609] time[1763] tag[model]
+2019-09-27 15:17:01.373 [main] INFO  cruise.umplificator.UmplificatorMain - Success!

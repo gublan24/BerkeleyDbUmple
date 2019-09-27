@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.tree;
+
+class IN
+{
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    private void traceDelete(Level level, int index) {
+	new IN_traceDelete(this, level, index).execute();
+    }
+
+}

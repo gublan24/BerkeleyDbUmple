@@ -1,0 +1,6 @@
+namespace com.sleepycat.je.log;
+
+class FileReader
+{
+
+}

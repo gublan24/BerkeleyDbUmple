@@ -1,0 +1,14 @@
+namespace com.sleepycat.je.tree;
+
+class IN
+{
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    private void traceSplit(Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn,
+	    int splitIndex, int idKeyIndex, int childIndex) {
+	new IN_traceSplit(this, level, parent, newSibling, parentLsn, myNewLsn, newSiblingLsn, splitIndex, idKeyIndex,
+		childIndex).execute();
+    }
+
+}

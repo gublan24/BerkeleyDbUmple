@@ -1,0 +1,9 @@
+use FileProcessor.ump;
+use Cleaner.ump;
+use Txn.ump;
+use Tracer.ump;
+use FileReader.ump;
+use Checkpointer.ump;
+use RecoveryManager.ump;
+
+use ../ump_inner/Master.ump;

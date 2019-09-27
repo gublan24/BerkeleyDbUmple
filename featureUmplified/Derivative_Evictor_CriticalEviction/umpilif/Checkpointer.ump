@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    protected void hook520() throws DatabaseException {
+	envImpl.getEvictor().doCriticalEviction();
+	original();
+    }
+
+}

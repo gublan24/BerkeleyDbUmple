@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    /** 
+     * Flip the log to a new file, forcing an fsync. Return the LSN of the trace record in the new file.
+     */
+    public long forceLogFileFlip() throws DatabaseException {
+	Tracer newRec = new Tracer("File Flip");
+	return logManager.logForceFlip(newRec);
+    }
+
+}
