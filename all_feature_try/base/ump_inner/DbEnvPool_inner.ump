@@ -1,0 +1,11 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/base/com/sleepycat/je/dbi/DbEnvPool.java
+class DbEnvPool {
+  static class EnvironmentImplInfo {
+      public EnvironmentImpl envImpl;
+      public boolean firstHandle=false;
+      EnvironmentImplInfo(    EnvironmentImpl envImpl,    boolean firstHandle){
+        this.envImpl=envImpl;
+        this.firstHandle=firstHandle;
+      }
+    }
+}

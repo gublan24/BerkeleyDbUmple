@@ -1,0 +1,216 @@
+2019-09-27 11:17:00.146 [main] DEBUG cruise.umplificator.UmplificatorMain - Configure Logger from log4j.properties
+2019-09-27 11:17:00.153 [main] DEBUG cruise.umplificator.UmplificatorMain - Umplification process started!
+2019-09-27 11:17:00.155 [main] DEBUG cruise.umplificator.core.Umplificator - start time : 1569597420155
+2019-09-27 11:17:00.155 [main] INFO  cruise.umplificator.FileHelper - 
+Files to be umplified: 
+EnvironmentParams.java
+CheckpointConfig.java
+Checkpointer.java
+
+-----------------------
+2019-09-27 11:17:00.163 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597420163,1,Umplificator_traces.ump,24,RuleRunner,1894369629,me_e,RuleRunner,Instantiate RuleRunner- Resources, FileSystem and Repository created
+2019-09-27 11:17:00.163 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597420163,1,Umplificator_traces.ump,24,RuleRunner,1894369629,me_e,RuleRunner,Instantiate RuleRunner- Resources, FileSystem and Repository created
+2019-09-27 11:17:00.173 [main] DEBUG cruise.umplificator.rules.RuleService - 1569597420173,1,Umplificator_traces.ump,20,RuleService,20224131,me_e,startRuleEngine,RuleService.startRuleEngine
+2019-09-27 11:17:00.173 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597420173,1,Umplificator_traces.ump,25,RuleRunner,1894369629,me_e,addRuleFile,RuleRunner.addRuleFile - Add Rule Files to Session
+2019-09-27 11:17:01.515 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421515,1,Umplificator_traces.ump,28,RuleRunner,1894369629,me_e,insertUmpleModel,RuleRunner.insertUmpleModel - Insert Umple Model into working memory
+2019-09-27 11:17:01.517 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 11:17:01.517 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of EnvironmentParams.java
+2019-09-27 11:17:01.520 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 11:17:01.520 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je.config;
+public class EnvironmentParams {
+  public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL=new LongConfigParam("je.checkpointer.bytesInterval",new Long(0),new Long(Long.MAX_VALUE),new Long(20000000),false,"# Ask the checkpointer to run every time we write this many bytes\n" + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n" + "# use time based checkpointing, set this to 0.");
+}
+
+2019-09-27 11:17:01.520 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421520,1,Umplificator_traces.ump,13,JavaParser,2081501023,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.632 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.config
+2019-09-27 11:17:01.632 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-EnvironmentParams
+2019-09-27 11:17:01.633 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL=new LongConfigParam("je.checkpointer.bytesInterval",new Long(0),new Long(Long.MAX_VALUE),new Long(20000000),false,"# Ask the checkpointer to run every time we write this many bytes\n" + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n" + "# use time based checkpointing, set this to 0.");
+
+2019-09-27 11:17:01.633 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421633,1,Umplificator_traces.ump,14,JavaParser,2081501023,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.633 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421633,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 11:17:01.634 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421634,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 11:17:01.634 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 11:17:01.634 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 11:17:01.635 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 11:17:01.635 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 11:17:01.688 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421688,1,Umplificator_traces.ump,13,JavaParser,269853881,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.691 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.config
+2019-09-27 11:17:01.691 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-EnvironmentParams
+2019-09-27 11:17:01.691 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL=new LongConfigParam("je.checkpointer.bytesInterval",new Long(0),new Long(Long.MAX_VALUE),new Long(20000000),false,"# Ask the checkpointer to run every time we write this many bytes\n" + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n" + "# use time based checkpointing, set this to 0.");
+
+2019-09-27 11:17:01.691 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421691,1,Umplificator_traces.ump,14,JavaParser,269853881,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.696 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for EnvironmentParams.java!
+2019-09-27 11:17:01.696 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 11:17:01.696 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of CheckpointConfig.java
+2019-09-27 11:17:01.697 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 11:17:01.697 [main] DEBUG cruise.umplificator.core.Umplificator - package com.sleepycat.je;
+public class CheckpointConfig {
+  private int kbytes=0;
+  /** 
+ * Javadoc for this public method is generated via
+ * the doc templates in the doc_src directory.
+ */
+  public void setKBytes(  int kbytes){
+    this.kbytes=kbytes;
+  }
+  /** 
+ * Javadoc for this public method is generated via
+ * the doc templates in the doc_src directory.
+ */
+  public int getKBytes(){
+    return kbytes;
+  }
+}
+
+2019-09-27 11:17:01.697 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421697,1,Umplificator_traces.ump,13,JavaParser,752148842,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-CheckpointConfig
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private int kbytes=0;
+
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-setKBytes
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-getKBytes
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421711,1,Umplificator_traces.ump,14,JavaParser,752148842,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.711 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421711,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 11:17:01.712 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421712,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 11:17:01.712 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 11:17:01.712 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 11:17:01.712 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 11:17:01.712 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 11:17:01.714 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421714,1,Umplificator_traces.ump,13,JavaParser,380556447,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.716 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je
+2019-09-27 11:17:01.717 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-CheckpointConfig
+2019-09-27 11:17:01.717 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private int kbytes=0;
+
+2019-09-27 11:17:01.717 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-setKBytes
+2019-09-27 11:17:01.717 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-getKBytes
+2019-09-27 11:17:01.717 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421717,1,Umplificator_traces.ump,14,JavaParser,380556447,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.717 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421717,1,Umplificator_traces.ump,13,JavaParser,1725825266,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-CheckpointConfig
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private int kbytes=0;
+
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-setKBytes
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-getKBytes
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421720,1,Umplificator_traces.ump,14,JavaParser,1725825266,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.720 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421720,1,Umplificator_traces.ump,13,JavaParser,1816633311,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.722 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.config
+2019-09-27 11:17:01.723 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-EnvironmentParams
+2019-09-27 11:17:01.723 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL=new LongConfigParam("je.checkpointer.bytesInterval",new Long(0),new Long(Long.MAX_VALUE),new Long(20000000),false,"# Ask the checkpointer to run every time we write this many bytes\n" + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n" + "# use time based checkpointing, set this to 0.");
+
+2019-09-27 11:17:01.723 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421723,1,Umplificator_traces.ump,14,JavaParser,1816633311,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.726 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for CheckpointConfig.java!
+2019-09-27 11:17:01.727 [main] DEBUG cruise.umplificator.core.Umplificator - Input language is: .java
+2019-09-27 11:17:01.727 [main] INFO  cruise.umplificator.core.Umplificator - Attempting Umplification of Checkpointer.java
+2019-09-27 11:17:01.728 [main] DEBUG cruise.umplificator.core.Umplificator - ---Input---
+2019-09-27 11:17:01.728 [main] DEBUG cruise.umplificator.core.Umplificator - // Original file location:  /home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/CPBytes/com/sleepycat/je/recovery/Checkpointer.java
+package com.sleepycat.je.recovery;
+public class Checkpointer {
+  private long logSizeBytesInterval;
+  protected void hook539(  EnvironmentImpl envImpl) throws DatabaseException {
+    logSizeBytesInterval=envImpl.getConfigManager().getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
+    original(envImpl);
+  }
+// START_OF_INNER_ELEMENT 
+// @MethodObject static class Checkpointer_getWakeupPeriod {
+//     protected void hook540() throws IllegalArgumentException, DatabaseException {
+//       if (bytePeriod == 0) {
+//         original();
+//       }
+//     }
+//     protected void hook541() throws IllegalArgumentException, DatabaseException {
+//       bytePeriod=configManager.getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
+//       original();
+//     }
+//   }
+// END_OF_INNER_ELEMENT 
+// START_OF_INNER_ELEMENT 
+// @MethodObject static class Checkpointer_isRunnable {
+//     protected void hook542() throws DatabaseException {
+//       if (useBytesInterval != 0) {
+//         nextLsn=_this.envImpl.getFileManager().getNextLsn();
+//         if (DbLsn.getNoCleaningDistance(nextLsn,_this.lastCheckpointEnd,_this.logFileMax) >= useBytesInterval) {
+//           throw new ReturnBoolean(true);
+//         }
+//  else {
+//           throw new ReturnBoolean(false);
+//         }
+//       }
+//  else {
+//         original();
+//       }
+//     }
+//     protected void hook543() throws DatabaseException {
+//       if (config.getKBytes() != 0) {
+//         useBytesInterval=config.getKBytes() << 10;
+//       }
+//  else {
+//         original();
+//       }
+//     }
+//     protected void hook544() throws DatabaseException {
+//       if (_this.logSizeBytesInterval != 0) {
+//         useBytesInterval=_this.logSizeBytesInterval;
+//       }
+//  else {
+//         original();
+//       }
+//     }
+//   }
+// END_OF_INNER_ELEMENT 
+}
+
+2019-09-27 11:17:01.728 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421728,1,Umplificator_traces.ump,13,JavaParser,1729045606,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.731 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private long logSizeBytesInterval;
+
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook539
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421732,1,Umplificator_traces.ump,14,JavaParser,1729045606,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421732,1,Umplificator_traces.ump,26,RuleRunner,1894369629,me_e,insertJavaElements,RuleRunner.insertJavaElements - Insert Java elements into working memory
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.rules.RuleRunner - 1569597421732,1,Umplificator_traces.ump,30,RuleRunner,1894369629,me_e,fireAllRules,RuleRunner.fireAllRules - Fire rules
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL3
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL2.1
+2019-09-27 11:17:01.732 [main] DEBUG cruise.umplificator.rules.RuleRunner - RuleRunner.fireAllRules - Fire rules LEVEL1
+2019-09-27 11:17:01.734 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421733,1,Umplificator_traces.ump,13,JavaParser,1821228886,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.736 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 11:17:01.736 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 11:17:01.736 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private long logSizeBytesInterval;
+
+2019-09-27 11:17:01.736 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook539
+2019-09-27 11:17:01.737 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421736,1,Umplificator_traces.ump,14,JavaParser,1821228886,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.737 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421737,1,Umplificator_traces.ump,13,JavaParser,1228603887,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.739 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 11:17:01.740 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 11:17:01.740 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private long logSizeBytesInterval;
+
+2019-09-27 11:17:01.740 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook539
+2019-09-27 11:17:01.740 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421740,1,Umplificator_traces.ump,14,JavaParser,1228603887,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.740 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421740,1,Umplificator_traces.ump,13,JavaParser,918738473,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.743 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.recovery
+2019-09-27 11:17:01.743 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-Checkpointer
+2019-09-27 11:17:01.743 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private long logSizeBytesInterval;
+
+2019-09-27 11:17:01.743 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-hook539
+2019-09-27 11:17:01.743 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421743,1,Umplificator_traces.ump,14,JavaParser,918738473,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.743 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421743,1,Umplificator_traces.ump,13,JavaParser,1442768482,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.746 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je
+2019-09-27 11:17:01.746 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-CheckpointConfig
+2019-09-27 11:17:01.746 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-private int kbytes=0;
+
+2019-09-27 11:17:01.746 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-setKBytes
+2019-09-27 11:17:01.746 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting MethodDeclarations-getKBytes
+2019-09-27 11:17:01.747 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421747,1,Umplificator_traces.ump,14,JavaParser,1442768482,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.747 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421747,1,Umplificator_traces.ump,13,JavaParser,1409848452,me_e,parseUnit,Parsing Compilation Unit
+2019-09-27 11:17:01.749 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - -Visiting PackageDeclaration-com.sleepycat.je.config
+2019-09-27 11:17:01.749 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting TypeDeclarations-EnvironmentParams
+2019-09-27 11:17:01.749 [main] DEBUG cruise.umplificator.visitor.JavaClassVisitor - Visiting FieldDeclarations-public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL=new LongConfigParam("je.checkpointer.bytesInterval",new Long(0),new Long(Long.MAX_VALUE),new Long(20000000),false,"# Ask the checkpointer to run every time we write this many bytes\n" + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n" + "# use time based checkpointing, set this to 0.");
+
+2019-09-27 11:17:01.750 [main] DEBUG cruise.umplificator.parser.JavaParser - 1569597421750,1,Umplificator_traces.ump,14,JavaParser,1409848452,me_x,parseUnit,Initializing Java Visitor for Compilation Unit
+2019-09-27 11:17:01.750 [main] INFO  cruise.umplificator.core.Umplificator - Umplification process completed for Checkpointer.java!
+2019-09-27 11:17:01.795 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/EnvironmentParams.ump--
+2019-09-27 11:17:01.800 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/CheckpointConfig.ump--
+2019-09-27 11:17:01.804 [main] DEBUG cruise.umplificator.FileHelper - --UmpleClass has been created fornull/Checkpointer.ump--
+2019-09-27 11:17:01.805 [main] DEBUG cruise.umplificator.core.Umplificator - Elapsed Time : 1649
+2019-09-27 11:17:01.805 [main] DEBUG cruise.umplificator.core.Umplificator - Stop Time : start[1569597420155] time[1649] tag[model]
+2019-09-27 11:17:01.805 [main] INFO  cruise.umplificator.UmplificatorMain - Success!

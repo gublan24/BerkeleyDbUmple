@@ -1,0 +1,127 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/base/com/sleepycat/je/log/FileManager.java
+class FileManager {
+  static class FileMode {
+      public static final FileMode READ_MODE=new FileMode("r");
+      public static final FileMode READWRITE_MODE=new FileMode("rw");
+      private String fileModeValue;
+      private FileMode(    String fileModeValue){
+        this.fileModeValue=fileModeValue;
+      }
+      public String getModeValue(){
+        return fileModeValue;
+      }
+    }
+  inner class LogEndFileDescriptor {
+      private RandomAccessFile endOfLogRWFile=null;
+      private RandomAccessFile endOfLogSyncFile=null;
+      /** 
+   * getWritableFile must be called under the log write latch.
+   */
+      RandomAccessFile getWritableFile(    long fileNumber) throws RunRecoveryException {
+        try {
+          if (endOfLogRWFile == null) {
+            endOfLogRWFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+            endOfLogSyncFile=makeFileHandle(fileNumber,FileMode.READWRITE_MODE).getFile();
+          }
+          return endOfLogRWFile;
+        }
+   catch (      Exception e) {
+          throw new RunRecoveryException(envImpl,e);
+        }
+      }
+      /** 
+   * FSync the log file that makes up the end of the log.
+   */
+      void force() throws DatabaseException, IOException {
+        RandomAccessFile file=endOfLogSyncFile;
+        if (file != null) {
+          FileChannel channel=file.getChannel();
+          try {
+            channel.force(false);
+          }
+   catch (        ClosedChannelException e) {
+            throw new RunRecoveryException(envImpl,"Channel closed, may be due to thread interrupt",e);
+          }
+          assert EnvironmentImpl.maybeForceYield();
+        }
+      }
+      /** 
+   * Close the end of the log file descriptor. Use atomic assignment to
+   * ensure that we won't force and close on the same descriptor.
+   */
+      void close() throws IOException {
+        IOException firstException=null;
+        if (endOfLogRWFile != null) {
+          RandomAccessFile file=endOfLogRWFile;
+          endOfLogRWFile=null;
+          try {
+            file.close();
+          }
+   catch (        IOException e) {
+            firstException=e;
+          }
+        }
+        if (endOfLogSyncFile != null) {
+          RandomAccessFile file=endOfLogSyncFile;
+          endOfLogSyncFile=null;
+          file.close();
+        }
+        if (firstException != null) {
+          throw firstException;
+        }
+      }
+    }
+  @MethodObject static class FileManager_writeToFile {
+      FileManager_writeToFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer data,    long destOffset){
+        this._this=_this;
+        this.file=file;
+        this.data=data;
+        this.destOffset=destOffset;
+      }
+      int execute() throws IOException, DatabaseException {
+        totalBytesWritten=0;
+        this.hook455();
+        this.hook445();
+        return totalBytesWritten;
+      }
+      protected FileManager _this;
+      protected RandomAccessFile file;
+      protected ByteBuffer data;
+      protected long destOffset;
+      protected int totalBytesWritten;
+      protected FileChannel channel;
+      protected ByteBuffer useData;
+      protected int origLimit;
+      protected int bytesWritten;
+      protected int pos;
+      protected int size;
+      protected void hook445() throws IOException, DatabaseException {
+      }
+      protected void hook455() throws IOException, DatabaseException {
+      }
+    }
+  @MethodObject static class FileManager_readFromFile {
+      FileManager_readFromFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer readBuffer,    long offset){
+        this._this=_this;
+        this.file=file;
+        this.readBuffer=readBuffer;
+        this.offset=offset;
+      }
+      void execute() throws IOException {
+        this.hook446();
+      }
+      protected FileManager _this;
+      protected RandomAccessFile file;
+      protected ByteBuffer readBuffer;
+      protected long offset;
+      protected FileChannel channel;
+      protected int readLength;
+      protected long currentPosition;
+      protected int bytesRead1;
+      protected int pos;
+      protected int size;
+      protected int bytesRead2;
+      protected void hook446() throws IOException {
+      }
+    }
+}

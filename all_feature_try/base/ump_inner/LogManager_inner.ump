@@ -1,0 +1,63 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/base/com/sleepycat/je/log/LogManager.java
+class LogManager {
+  @MethodObject static class LogManager_getLogEntryFromLogSource {
+      LogManager_getLogEntryFromLogSource(    LogManager _this,    long lsn,    LogSource logSource){
+        this._this=_this;
+        this.lsn=lsn;
+        this.logSource=logSource;
+      }
+      LogEntry execute() throws DatabaseException {
+        try {
+          fileOffset=DbLsn.getFileOffset(lsn);
+          entryBuffer=logSource.getBytes(fileOffset);
+          this.hook507();
+          loggableType=entryBuffer.get();
+          version=entryBuffer.get();
+          entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
+          itemSize=LogUtils.readInt(entryBuffer);
+          if (entryBuffer.remaining() < itemSize) {
+            entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
+            this.hook508();
+          }
+          this.hook506();
+          assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
+          logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
+          logEntry.readEntry(entryBuffer,itemSize,version,true);
+          if (_this.readHook != null) {
+            _this.readHook.doIOHook();
+          }
+          return logEntry;
+        }
+   catch (      DatabaseException e) {
+          throw e;
+        }
+  catch (      ClosedChannelException e) {
+          throw new RunRecoveryException(_this.envImpl,"Channel closed, may be " + "due to thread interrupt",e);
+        }
+  catch (      Exception e) {
+          throw new DatabaseException(e);
+        }
+   finally {
+          if (logSource != null) {
+            logSource.release();
+          }
+        }
+      }
+      protected LogManager _this;
+      protected long lsn;
+      protected LogSource logSource;
+      protected long fileOffset;
+      protected ByteBuffer entryBuffer;
+      protected long storedChecksum;
+      protected byte loggableType;
+      protected byte version;
+      protected int itemSize;
+      protected LogEntry logEntry;
+      protected void hook506() throws DatabaseException, ClosedChannelException, Exception {
+      }
+      protected void hook507() throws DatabaseException, ClosedChannelException, Exception {
+      }
+      protected void hook508() throws DatabaseException, ClosedChannelException, Exception {
+      }
+    }
+}

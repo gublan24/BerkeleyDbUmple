@@ -1,0 +1,19 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/INCompressor/com/sleepycat/je/util/DbRunAction.java
+class DbRunAction {
+  @MethodObject static class DbRunAction_main {
+      protected void hook840() throws Exception {
+        if (doAction == COMPRESS) {
+          env.compress();
+        }
+        original();
+      }
+      protected void hook841() throws Exception {
+        if (action.equalsIgnoreCase("compress")) {
+          doAction=COMPRESS;
+        }
+   else {
+          original();
+        }
+      }
+    }
+}

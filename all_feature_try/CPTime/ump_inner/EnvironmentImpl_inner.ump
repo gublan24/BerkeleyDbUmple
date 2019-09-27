@@ -1,0 +1,9 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/CPTime/com/sleepycat/je/dbi/EnvironmentImpl.java
+class EnvironmentImpl {
+  @MethodObject static class EnvironmentImpl_createDaemons {
+      protected void hook329() throws DatabaseException {
+        checkpointerWakeupTime=Checkpointer.getWakeupPeriod(_this.configManager);
+        original();
+      }
+    }
+}

@@ -1,0 +1,7 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/INCompressor/com/sleepycat/je/incomp/INCompressor.java
+class INCompressor {
+  static class BINSearch {
+      public DatabaseImpl db;
+      public BIN bin;
+    }
+}

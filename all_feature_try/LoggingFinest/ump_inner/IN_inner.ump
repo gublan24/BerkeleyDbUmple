@@ -1,0 +1,23 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/LoggingFinest/com/sleepycat/je/tree/IN.java
+class IN {
+  @MethodObject static class IN_traceDelete {
+      IN_traceDelete(    IN _this,    Level level,    int index){
+        this._this=_this;
+        this.level=level;
+        this.index=index;
+      }
+      void execute(){
+      }
+      protected IN _this;
+      protected Level level;
+      protected int index;
+      protected Logger logger;
+      protected StringBuffer sb;
+    }
+  @MethodObject static class IN_deleteEntry {
+      protected void hook616() throws DatabaseException {
+        _this.traceDelete(Level.FINEST,index);
+        original();
+      }
+    }
+}

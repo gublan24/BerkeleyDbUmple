@@ -1,0 +1,136 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/MemoryBudget/com/sleepycat/je/tree/IN.java
+class IN {
+  @MethodObject static class IN_splitInternal {
+      protected void hook650() throws DatabaseException {
+        newSize=_this.computeMemorySize();
+        _this.updateMemorySize(oldMemorySize,newSize);
+        original();
+      }
+    }
+  @MethodObject static class IN_deleteEntry {
+      protected void hook648() throws DatabaseException {
+        _this.updateMemorySize(oldLSNArraySize,_this.computeLsnOverhead());
+        original();
+      }
+      protected void hook649() throws DatabaseException {
+        _this.updateMemorySize(_this.getEntryInMemorySize(index),0);
+        oldLSNArraySize=_this.computeLsnOverhead();
+        original();
+      }
+    }
+  @MethodObject static class IN_trackProvisionalObsolete {
+      void execute(){
+        original();
+        if (memDelta != 0) {
+          _this.changeMemorySize(memDelta);
+        }
+      }
+      protected void hook651(){
+        child.changeMemorySize(0 - childMemDelta);
+        memDelta+=childMemDelta;
+        original();
+      }
+      protected void hook652(){
+        childMemDelta=child.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+        original();
+      }
+      protected void hook653(){
+        memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+        original();
+      }
+      protected void hook654(){
+        memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+        original();
+      }
+    }
+  @MethodObject static class IN_insertEntry1 {
+      protected void hook645() throws DatabaseException {
+        _this.updateMemorySize(0,_this.getEntryInMemorySize(index));
+        original();
+      }
+      protected void hook646() throws DatabaseException {
+        _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
+        original();
+      }
+      protected void hook647() throws DatabaseException {
+        oldSize=_this.computeLsnOverhead();
+        original();
+      }
+    }
+  @MethodObject static class IN_updateEntryCompareKey {
+      void execute(){
+        oldSize=_this.getEntryInMemorySize(idx);
+        original();
+      }
+      protected void hook644(){
+        newSize=_this.getEntryInMemorySize(idx);
+        _this.updateMemorySize(oldSize,newSize);
+        original();
+      }
+    }
+  @MethodObject static class IN_updateEntry {
+      void execute(){
+        oldSize=_this.getEntryInMemorySize(idx);
+        original();
+        newSize=_this.getEntryInMemorySize(idx);
+        _this.updateMemorySize(oldSize,newSize);
+      }
+    }
+  @MethodObject static class IN_setLsn {
+      void execute(){
+        oldSize=_this.computeLsnOverhead();
+        original();
+      }
+      protected void hook639(){
+        _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
+        original();
+      }
+    }
+  @MethodObject static class IN_updateEntry2 {
+      void execute(){
+        oldSize=_this.getEntryInMemorySize(idx);
+        original();
+      }
+      protected void hook642(){
+        newSize=_this.getEntryInMemorySize(idx);
+        _this.updateMemorySize(oldSize,newSize);
+        original();
+      }
+    }
+  @MethodObject static class IN_flushProvisionalObsolete {
+      protected void hook655() throws DatabaseException {
+        _this.changeMemorySize(0 - memDelta);
+        original();
+      }
+      protected void hook656() throws DatabaseException {
+        memDelta=_this.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+        original();
+      }
+    }
+  @MethodObject static class IN_updateEntry3 {
+      void execute(){
+        oldSize=_this.getEntryInMemorySize(idx);
+        original();
+      }
+      protected void hook643(){
+        newSize=_this.getEntryInMemorySize(idx);
+        _this.updateMemorySize(oldSize,newSize);
+        original();
+      }
+    }
+  @MethodObject static class IN_setEntry {
+      void execute(){
+        oldSize=_this.getEntryInMemorySize(idx);
+        original();
+      }
+      protected void hook640(){
+        newSize=_this.getEntryInMemorySize(idx);
+        _this.updateMemorySize(oldSize,newSize);
+        original();
+      }
+      protected void hook641(){
+        oldSize=0;
+        original();
+      }
+    }
+}

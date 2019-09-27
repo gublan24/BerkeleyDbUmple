@@ -1,0 +1,25 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Latches/com/sleepycat/je/cleaner/UtilizationProfile.java
+class UtilizationProfile {
+  @MethodObject static class UtilizationProfile_populateCache {
+      protected void hook181() throws DatabaseException {
+        cursor.releaseBIN();
+        original();
+      }
+      protected void hook182() throws DatabaseException {
+        cursor.latchBIN();
+        original();
+      }
+      protected void hook183() throws DatabaseException {
+        cursor.releaseBIN();
+        original();
+      }
+      protected void hook184() throws DatabaseException {
+        cursor.latchBIN();
+        original();
+      }
+      protected void hook185() throws DatabaseException {
+        cursor.releaseBINs();
+        original();
+      }
+    }
+}

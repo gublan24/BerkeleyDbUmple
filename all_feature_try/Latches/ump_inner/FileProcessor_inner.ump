@@ -1,0 +1,14 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Latches/com/sleepycat/je/cleaner/FileProcessor.java
+class FileProcessor {
+  @MethodObject static class FileProcessor_processLN {
+      protected void hook135() throws DatabaseException {
+        if (parentDIN != null) {
+          parentDIN.releaseLatchIfOwner();
+        }
+        if (bin != null) {
+          bin.releaseLatchIfOwner();
+        }
+        original();
+      }
+    }
+}

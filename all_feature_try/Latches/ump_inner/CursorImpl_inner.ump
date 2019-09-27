@@ -1,0 +1,133 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Latches/com/sleepycat/je/dbi/CursorImpl.java
+class CursorImpl {
+  @MethodObject static class CursorImpl_latchBIN {
+      protected void hook244() throws DatabaseException {
+        while (_this.bin != null) {
+          original();
+        }
+        throw new ReturnObject(null);
+      }
+      protected void hook245() throws DatabaseException {
+        waitingOn=_this.bin;
+        waitingOn.latch();
+        if (_this.bin == waitingOn) {
+          original();
+        }
+        waitingOn.releaseLatch();
+      }
+    }
+  @MethodObject static class CursorImpl_getNextDuplicate {
+      protected void hook250() throws DatabaseException {
+        assert _this.checkAlreadyLatched(alreadyLatched) : _this.dumpToString(true);
+        original();
+      }
+      protected void hook251() throws DatabaseException {
+        if (!alreadyLatched) {
+          _this.latchDBIN();
+        }
+   else {
+          alreadyLatched=false;
+        }
+        original();
+      }
+      protected void hook252() throws DatabaseException {
+        _this.releaseDBIN();
+        original();
+      }
+      protected void hook253() throws DatabaseException {
+        assert LatchSupport.countLatchesHeld() == 0;
+        original();
+      }
+      protected void hook254() throws DatabaseException {
+        assert (LatchSupport.countLatchesHeld() == 0);
+        _this.dupBinToBeRemoved.latch();
+        original();
+      }
+      protected void hook255() throws DatabaseException {
+        _this.dupBinToBeRemoved.releaseLatch();
+        original();
+      }
+      protected void hook256() throws DatabaseException {
+        alreadyLatched=true;
+        original();
+      }
+      protected void hook257() throws DatabaseException {
+        assert LatchSupport.countLatchesHeld() == 0;
+        original();
+      }
+    }
+  @MethodObject static class CursorImpl_lockNextKeyForInsert {
+      protected void hook248() throws DatabaseException {
+        latched=true;
+        try {
+          original();
+        }
+    finally {
+          if (latched) {
+            _this.releaseBINs();
+          }
+        }
+      }
+      protected void hook249() throws DatabaseException {
+        latched=false;
+        original();
+      }
+    }
+  @MethodObject static class CursorImpl_latchDBIN {
+      protected void hook246() throws DatabaseException {
+        while (_this.dupBin != null) {
+          original();
+        }
+        throw new ReturnObject(null);
+      }
+      protected void hook247() throws DatabaseException {
+        waitingOn=_this.dupBin;
+        waitingOn.latch();
+        if (_this.dupBin == waitingOn) {
+          original();
+        }
+        waitingOn.releaseLatch();
+      }
+    }
+  @MethodObject static class CursorImpl_fetchCurrent {
+      protected void hook258() throws DatabaseException {
+        try {
+          original();
+        }
+    finally {
+          _this.releaseBINs();
+        }
+      }
+      protected void hook259() throws DatabaseException {
+        assert _this.targetBin.isLatchOwner();
+        original();
+      }
+      protected void hook260() throws DatabaseException {
+        try {
+          original();
+        }
+   catch (      DatabaseException DE) {
+          _this.targetBin.releaseLatchIfOwner();
+          throw DE;
+        }
+      }
+      protected void hook261() throws DatabaseException {
+        _this.targetBin.releaseLatchIfOwner();
+        original();
+      }
+      protected void hook262() throws DatabaseException {
+        duplicateRoot.latch();
+        _this.targetBin.releaseLatch();
+        original();
+      }
+      protected void hook263() throws DatabaseException {
+        try {
+          original();
+        }
+   catch (      DatabaseException DE) {
+          _this.releaseBINs();
+          throw DE;
+        }
+      }
+    }
+}

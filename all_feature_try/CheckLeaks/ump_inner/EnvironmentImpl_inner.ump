@@ -1,0 +1,27 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/CheckLeaks/com/sleepycat/je/dbi/EnvironmentImpl.java
+class EnvironmentImpl {
+  @MethodObject static class EnvironmentImpl_checkLeaks {
+      EnvironmentImpl_checkLeaks(    EnvironmentImpl _this){
+        this._this=_this;
+      }
+      void execute() throws DatabaseException {
+        if (!_this.configManager.getBoolean(EnvironmentParams.ENV_CHECK_LEAKS)) {
+          return;
+        }
+        clean=true;
+        this.hook313();
+        this.hook312();
+        assert clean : "Lock, transaction, or latch left behind at environment close";
+      }
+      protected EnvironmentImpl _this;
+      protected boolean clean;
+      protected StatsConfig statsConfig;
+      protected LockStats lockStat;
+      protected TransactionStats txnStat;
+      protected TransactionStats.Active[] active;
+      protected void hook312() throws DatabaseException {
+      }
+      protected void hook313() throws DatabaseException {
+      }
+    }
+}

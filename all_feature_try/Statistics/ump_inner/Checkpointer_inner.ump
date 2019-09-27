@@ -1,0 +1,17 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Statistics/com/sleepycat/je/recovery/Checkpointer.java
+class Checkpointer {
+  @MethodObject static class Checkpointer_doCheckpoint {
+      protected void hook534() throws DatabaseException {
+        _this.nCheckpoints++;
+        original();
+      }
+      protected void hook535() throws DatabaseException {
+        _this.resetPerRunCounters();
+        original();
+      }
+      protected void hook536() throws DatabaseException {
+        _this.lastCheckpointStart=checkpointStart;
+        original();
+      }
+    }
+}

@@ -1,0 +1,25 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/LoggingBase/com/sleepycat/je/dbi/EnvironmentImpl.java
+class EnvironmentImpl {
+  @MethodObject static class EnvironmentImpl_initLogger {
+      EnvironmentImpl_initLogger(    EnvironmentImpl _this,    File envHome){
+        this._this=_this;
+        this.envHome=envHome;
+      }
+      Logger execute() throws DatabaseException {
+        logger=Logger.getAnonymousLogger();
+        logger.setUseParentHandlers(false);
+        level=Tracer.parseLevel(_this,EnvironmentParams.JE_LOGGING_LEVEL);
+        logger.setLevel(level);
+        return logger;
+      }
+      protected EnvironmentImpl _this;
+      protected File envHome;
+      protected Logger logger;
+      protected Level level;
+      protected Handler consoleHandler;
+      protected Handler fileHandler;
+      protected int limit;
+      protected int count;
+      protected String logFilePattern;
+    }
+}

@@ -1,0 +1,152 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Evictor/com/sleepycat/je/evictor/Evictor.java
+class Evictor {
+  static  class EvictProfile {
+      private List candidates=new ArrayList();
+      public boolean count(    IN target){
+        candidates.add(new Long(target.getNodeId()));
+        return true;
+      }
+      public List getCandidates(){
+        return candidates;
+      }
+      public boolean clear(){
+        candidates.clear();
+        return true;
+      }
+    }
+  static class ScanIterator {
+      private INList inList;
+      private Iterator iter;
+      private IN nextMark;
+      ScanIterator(    IN startingIN,    INList inList) throws DatabaseException {
+        this.inList=inList;
+        reset(startingIN);
+      }
+      void reset(    IN startingIN) throws DatabaseException {
+        iter=inList.tailSet(startingIN).iterator();
+      }
+      IN mark() throws DatabaseException {
+        if (iter.hasNext()) {
+          nextMark=(IN)iter.next();
+        }
+   else {
+          nextMark=(IN)inList.first();
+        }
+        return (IN)nextMark;
+      }
+      void resetToMark() throws DatabaseException {
+        reset(nextMark);
+      }
+      boolean hasNext(){
+        return iter.hasNext();
+      }
+      IN next(){
+        return (IN)iter.next();
+      }
+      void remove(){
+        iter.remove();
+      }
+    }
+  @MethodObject static class Evictor_evictBatch {
+      Evictor_evictBatch(    Evictor _this,    String source,    long requiredEvictBytes){
+        this._this=_this;
+        this.source=source;
+        this.requiredEvictBytes=requiredEvictBytes;
+      }
+      long execute() throws DatabaseException {
+        _this.nNodesScannedThisRun=0;
+        this.hook381();
+        assert _this.evictProfile.clear();
+        nBatchSets=0;
+        finished=false;
+        evictBytes=0;
+        evictBytes+=_this.envImpl.getUtilizationTracker().evictMemory();
+        inList=_this.envImpl.getInMemoryINs();
+        this.hook376();
+        inListStartSize=inList.getSize();
+        try {
+          if (inListStartSize == 0) {
+            _this.nextNode=null;
+            return 0;
+          }
+   else {
+            if (_this.nextNode == null) {
+              _this.nextNode=inList.first();
+            }
+          }
+          scanIter=new ScanIterator(_this.nextNode,inList);
+          while ((evictBytes < requiredEvictBytes) && (_this.nNodesScannedThisRun <= inListStartSize)) {
+            target=_this.selectIN(inList,scanIter);
+            if (target == null) {
+              break;
+            }
+   else {
+              assert _this.evictProfile.count(target);
+              evictBytes+=_this.evict(inList,target,scanIter);
+            }
+            nBatchSets++;
+          }
+          _this.nextNode=scanIter.mark();
+          finished=true;
+        }
+    finally {
+          this.hook382();
+          this.hook377();
+          this.hook371();
+        }
+        return evictBytes;
+      }
+      protected Evictor _this;
+      protected String source;
+      protected long requiredEvictBytes;
+      protected int nBatchSets;
+      protected boolean finished;
+      protected long evictBytes;
+      protected INList inList;
+      protected int inListStartSize;
+      protected ScanIterator scanIter;
+      protected IN target;
+      protected Logger logger;
+      protected String msg;
+      protected void hook371() throws DatabaseException {
+      }
+      protected void hook376() throws DatabaseException {
+      }
+      protected void hook377() throws DatabaseException {
+      }
+      protected void hook381() throws DatabaseException {
+      }
+      protected void hook382() throws DatabaseException {
+      }
+    }
+  @MethodObject static class Evictor_isRunnable {
+      Evictor_isRunnable(    Evictor _this,    String source){
+        this._this=_this;
+        this.source=source;
+      }
+      boolean execute() throws DatabaseException {
+        mb=_this.envImpl.getMemoryBudget();
+        this.hook388();
+        this.hook372();
+        result=false;
+        return result;
+      }
+      protected Evictor _this;
+      protected String source;
+      protected MemoryBudget mb;
+      protected long currentUsage;
+      protected long maxMem;
+      protected boolean doRun;
+      protected Logger logger;
+      protected Runtime r;
+      protected long totalBytes;
+      protected long freeBytes;
+      protected long usedBytes;
+      protected StringBuffer sb;
+      protected boolean result;
+      protected void hook372() throws DatabaseException {
+      }
+      protected void hook388() throws DatabaseException {
+      }
+    }
+}

@@ -1,0 +1,246 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/base/com/sleepycat/je/tree/Tree.java
+class Tree {
+  static class SearchType {
+      public static final SearchType NORMAL=new SearchType();
+      public static final SearchType LEFT=new SearchType();
+      public static final SearchType RIGHT=new SearchType();
+      private SearchType(){
+      }
+    }
+  inner class RootChildReference extends ChildReference {
+      private RootChildReference(){
+        super();
+      }
+      private RootChildReference(    Node target,    byte[] key,    long lsn){
+        super(target,key,lsn);
+      }
+      private RootChildReference(    Node target,    byte[] key,    long lsn,    byte existingState){
+        super(target,key,lsn,existingState);
+      }
+      public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
+        this.hook666();
+        return super.fetchTarget(database,in);
+      }
+      public void setTarget(    Node target){
+        this.hook667();
+        super.setTarget(target);
+      }
+      public void clearTarget(){
+        this.hook668();
+        super.clearTarget();
+      }
+      public void setLsn(    long lsn){
+        this.hook669();
+        super.setLsn(lsn);
+      }
+      protected void hook666() throws DatabaseException {
+      }
+      protected void hook667(){
+      }
+      protected void hook668(){
+      }
+      protected void hook669(){
+      }
+    }
+  static  class SplitInfo {
+      IN parent;
+      IN child;
+      int index;
+      SplitInfo(    IN parent,    IN child,    int index){
+        this.parent=parent;
+        this.child=child;
+        this.index=index;
+      }
+    }
+  @MethodObject static class Tree_searchSplitsAllowed {
+      Tree_searchSplitsAllowed(    Tree _this,    byte[] key,    long nid,    boolean updateGeneration){
+        this._this=_this;
+        this.key=key;
+        this.nid=nid;
+        this.updateGeneration=updateGeneration;
+      }
+      IN execute() throws DatabaseException {
+        insertTarget=null;
+        while (insertTarget == null) {
+          this.hook717();
+          rootIN=null;
+          this.hook716();
+          if (rootIN == null) {
+            break;
+          }
+          try {
+            insertTarget=_this.searchSubTreeSplitsAllowed(rootIN,key,nid,updateGeneration);
+          }
+   catch (        SplitRequiredException e) {
+            continue;
+          }
+        }
+        return insertTarget;
+      }
+      protected Tree _this;
+      protected byte[] key;
+      protected long nid;
+      protected boolean updateGeneration;
+      protected IN insertTarget;
+      protected boolean rootLatched;
+      protected boolean rootLatchedExclusive;
+      protected IN rootIN;
+      protected boolean b;
+      protected EnvironmentImpl env;
+      protected void hook716() throws DatabaseException {
+        while (true) {
+          if (_this.root != null) {
+            rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+            if (rootIN.needsSplitting()) {
+              b=true;
+              this.hook721();
+              if (b)             continue;
+              this.hook720();
+              env=_this.database.getDbEnvironment();
+              env.getDbMapTree().modifyDbRoot(_this.database);
+              this.hook719();
+              rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+            }
+            this.hook718();
+          }
+          break;
+        }
+      }
+      protected void hook717() throws DatabaseException {
+      }
+      protected void hook718() throws DatabaseException {
+      }
+      protected void hook719() throws DatabaseException {
+      }
+      protected void hook720() throws DatabaseException {
+      }
+      protected void hook721() throws DatabaseException {
+      }
+    }
+  @MethodObject static class Tree_forceSplit {
+      Tree_forceSplit(    Tree _this,    IN parent,    byte[] key){
+        this._this=_this;
+        this.parent=parent;
+        this.key=key;
+      }
+      void execute() throws DatabaseException, SplitRequiredException {
+        nodeLadder=new ArrayList();
+        allLeftSideDescent=true;
+        allRightSideDescent=true;
+  {
+        }
+        child=null;
+        origParent=parent;
+        iter=null;
+        this.hook722();
+        success=false;
+        try {
+          this.hook723();
+          if (origParent.needsSplitting() || !origParent.isRoot()) {
+            throw _this.splitRequiredException;
+          }
+          do {
+            if (parent.getNEntries() == 0) {
+              break;
+            }
+   else {
+              index=parent.findEntry(key,false,false);
+              if (index != 0) {
+                allLeftSideDescent=false;
+              }
+              if (index != (parent.getNEntries() - 1)) {
+                allRightSideDescent=false;
+              }
+            }
+            assert index >= 0;
+            child=(IN)parent.getTarget(index);
+            if (child == null) {
+              break;
+            }
+   else {
+              this.hook724();
+              nodeLadder.add(new SplitInfo(parent,child,index));
+            }
+            parent=child;
+          }
+   while (!(parent instanceof BIN));
+          startedSplits=false;
+          logManager=_this.database.getDbEnvironment().getLogManager();
+          iter=nodeLadder.listIterator(nodeLadder.size());
+          lastParentForSplit=-1;
+          while (iter.hasPrevious()) {
+            info1=(SplitInfo)iter.previous();
+            child=info1.child;
+            parent=info1.parent;
+            index=info1.index;
+            if (child.needsSplitting()) {
+              maxEntriesPerNode=(child.containsDuplicates() ? _this.maxDupTreeEntriesPerNode : _this.maxMainTreeEntriesPerNode);
+              if (allLeftSideDescent || allRightSideDescent) {
+                child.splitSpecial(parent,index,maxEntriesPerNode,key,allLeftSideDescent);
+              }
+   else {
+                child.split(parent,index,maxEntriesPerNode);
+              }
+              lastParentForSplit=parent.getNodeId();
+              startedSplits=true;
+              if (parent.isDbRoot()) {
+                this.hook726();
+                _this.root.setLsn(parent.getLastFullVersion());
+                parent.setDirty(true);
+              }
+            }
+   else {
+              if (startedSplits) {
+                newLsn=0;
+                if (lastParentForSplit == child.getNodeId()) {
+                  newLsn=child.getLastFullVersion();
+                }
+   else {
+                  newLsn=child.log(logManager);
+                }
+                parent.updateEntry(index,newLsn);
+              }
+            }
+            this.hook725();
+            child=null;
+            iter.remove();
+          }
+          success=true;
+        }
+    finally {
+          this.hook727();
+        }
+      }
+      protected Tree _this;
+      protected IN parent;
+      protected byte[] key;
+      protected ArrayList nodeLadder;
+      protected boolean allLeftSideDescent;
+      protected boolean allRightSideDescent;
+      protected int index;
+      protected IN child;
+      protected IN origParent;
+      protected ListIterator iter;
+      protected boolean isRootLatched;
+      protected boolean success;
+      protected boolean startedSplits;
+      protected LogManager logManager;
+      protected long lastParentForSplit;
+      protected SplitInfo info1;
+      protected int maxEntriesPerNode;
+      protected long newLsn;
+      protected SplitInfo info2;
+      protected void hook722() throws DatabaseException, SplitRequiredException {
+      }
+      protected void hook723() throws DatabaseException, SplitRequiredException {
+      }
+      protected void hook724() throws DatabaseException, SplitRequiredException {
+      }
+      protected void hook725() throws DatabaseException, SplitRequiredException {
+      }
+      protected void hook726() throws DatabaseException, SplitRequiredException {
+      }
+      protected void hook727() throws DatabaseException, SplitRequiredException {
+      }
+    }
+}

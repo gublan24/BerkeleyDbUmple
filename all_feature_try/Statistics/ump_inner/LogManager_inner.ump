@@ -1,0 +1,9 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Statistics/com/sleepycat/je/log/LogManager.java
+class LogManager {
+  @MethodObject static class LogManager_getLogEntryFromLogSource {
+      protected void hook508() throws DatabaseException, ClosedChannelException, Exception {
+        _this.nRepeatFaultReads++;
+        original();
+      }
+    }
+}

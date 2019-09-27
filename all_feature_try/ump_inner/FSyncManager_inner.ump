@@ -1,0 +1,79 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/FSync/com/sleepycat/je/log/FSyncManager.java
+class FSyncManager {
+  // static class FSyncGroup {
+  //     static int DO_TIMEOUT_FSYNC=0;
+  //     static int DO_LEADER_FSYNC=1;
+  //     static int NO_FSYNC_NEEDED=2;
+  //     private volatile boolean fsyncDone;
+  //     private long fsyncTimeout;
+  //     private boolean leaderExists;
+  //     private EnvironmentImpl envImpl;
+  //     FSyncGroup(    long fsyncTimeout,    EnvironmentImpl envImpl){
+  //       this.fsyncTimeout=fsyncTimeout;
+  //       fsyncDone=false;
+  //       leaderExists=false;
+  //       this.envImpl=envImpl;
+  //     }
+  //     synchronized boolean getLeader(){
+  //       if (fsyncDone) {
+  //         return false;
+  //       }
+  //  else {
+  //         if (leaderExists) {
+  //           return false;
+  //         }
+  //  else {
+  //           leaderExists=true;
+  //           return true;
+  //         }
+  //       }
+  //     }
+  //     /** 
+  //  * Wait for either a turn to execute a fsync, or to find out that a
+  //  * fsync was done on your behalf.
+  //  * @return true if the fsync wasn't done, and this thread needs to
+  //  * execute a fsync when it wakes up. This may be true because it's the
+  //  * leader of its group, or because the wait timed out.
+  //  */
+  //     synchronized int waitForFsync() throws RunRecoveryException {
+  //       int status=0;
+  //       if (!fsyncDone) {
+  //         long startTime=System.currentTimeMillis();
+  //         while (true) {
+  //           try {
+  //             wait(fsyncTimeout);
+  //           }
+  //  catch (          InterruptedException e) {
+  //             throw new RunRecoveryException(envImpl,"Unexpected interrupt while waiting for fsync",e);
+  //           }
+  //           if (fsyncDone) {
+  //             status=NO_FSYNC_NEEDED;
+  //             break;
+  //           }
+  //  else {
+  //             if (!leaderExists) {
+  //               leaderExists=true;
+  //               status=DO_LEADER_FSYNC;
+  //               break;
+  //             }
+  //  else {
+  //               long now=System.currentTimeMillis();
+  //               if ((now - startTime) > fsyncTimeout) {
+  //                 status=DO_TIMEOUT_FSYNC;
+  //                 break;
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //       return status;
+  //     }
+  //     synchronized void wakeupAll(){
+  //       fsyncDone=true;
+  //       notifyAll();
+  //     }
+  //     synchronized void wakeupOne(){
+  //       notify();
+  //     }
+  //   }
+}

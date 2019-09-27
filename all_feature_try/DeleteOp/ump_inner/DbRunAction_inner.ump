@@ -1,0 +1,19 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/DeleteOp/com/sleepycat/je/util/DbRunAction.java
+class DbRunAction {
+  @MethodObject static class DbRunAction_main {
+      protected void hook842() throws Exception {
+        if (doAction == REMOVEDB) {
+          removeAndClean(env,dbName);
+        }
+        original();
+      }
+      protected void hook843() throws Exception {
+        if (action.equalsIgnoreCase("removedb")) {
+          doAction=REMOVEDB;
+        }
+   else {
+          original();
+        }
+      }
+    }
+}

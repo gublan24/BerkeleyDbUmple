@@ -4,3 +4,18 @@ use EnvironmentImpl.ump;
 use CmdUtil.ump;
 use Tracer.ump;
 use TraceLogHandler.ump;
+
+use ../ump_inner/Master.ump;
+
+/*
+Warning 33 on line 5 of file 'TraceLogHandler.ump':
+The indicated superclass Handler of class TraceLogHandler does not exist and has been ignored. Declare Handler to be external if it is defined outside this Umple system
+Warning 33 on line 5 of file 'Tracer.ump':
+The indicated superclass LoggableObject of class Tracer does not exist and has been ignored. Declare LoggableObject to be external if it is defined outside this Umple system
+Warning 33 on line 5 of file 'TraceLogHandler.ump':
+The indicated superclass Handler of class TraceLogHandler does not exist and has been ignored. Declare Handler to be external if it is defined outside this Umple system
+Warning 33 on line 5 of file 'Tracer.ump':
+The indicated superclass LogReadable of class Tracer does not exist and has been ignored. Declare LogReadable to be external if it is defined outside this Umple system
+Warning 33 on line 5 of file 'TraceLogHandler.ump':
+The indicated superclass Handler of class TraceLogHandler does not exist and has been ignored. Declare Handler to be external if it is defined outside this Umple system
+*/

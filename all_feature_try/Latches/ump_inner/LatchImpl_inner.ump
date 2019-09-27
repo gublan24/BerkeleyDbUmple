@@ -1,0 +1,14 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Latches/com/sleepycat/je/latch/LatchImpl.java
+class LatchImpl {
+  static  class LatchWaiter {
+      boolean active;
+      Thread thread;
+      LatchWaiter(    Thread thread){
+        this.thread=thread;
+        active=false;
+      }
+      public String toString(){
+        return "<LatchWaiter: " + thread + ">";
+      }
+    }
+}

@@ -1,0 +1,51 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Latches/com/sleepycat/je/dbi/INList.java
+class INList {
+  @MethodObject static class INList_add {
+      protected void hook343() throws DatabaseException {
+        try {
+          original();
+        }
+    finally {
+          if (addToMajor) {
+            _this.releaseMajorLatchIfHeld();
+          }
+        }
+      }
+      protected void hook344() throws DatabaseException {
+        enteredWithLatchHeld=_this.majorLatch.isOwner();
+        original();
+      }
+      protected void hook345() throws DatabaseException {
+        if (enteredWithLatchHeld) {
+          addToMajor=false;
+        }
+   else {
+          if (!(_this.majorLatch.acquireNoWait())) {
+            addToMajor=false;
+          }
+        }
+        if (addToMajor) {
+          original();
+        }
+   else {
+          _this.minorLatch.acquire();
+          try {
+            _this.addAndSetMemory(_this.addedINs,in);
+          }
+    finally {
+            _this.minorLatch.release();
+          }
+          if (!enteredWithLatchHeld) {
+            if (_this.majorLatch.acquireNoWait()) {
+              try {
+                _this.latchMinorAndDumpAddedINs();
+              }
+    finally {
+                _this.releaseMajorLatch();
+              }
+            }
+          }
+        }
+      }
+    }
+}

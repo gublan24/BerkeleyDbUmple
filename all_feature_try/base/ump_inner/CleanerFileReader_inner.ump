@@ -1,0 +1,11 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/base/com/sleepycat/je/log/CleanerFileReader.java
+class CleanerFileReader {
+  static class EntryInfo {
+      public LogEntry targetLogEntry;
+      public byte targetCategory;
+      EntryInfo(    LogEntry targetLogEntry,    byte targetCategory){
+        this.targetLogEntry=targetLogEntry;
+        this.targetCategory=targetCategory;
+      }
+    }
+}

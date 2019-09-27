@@ -1,0 +1,53 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/base/com/sleepycat/je/cleaner/OffsetList.java
+class OffsetList {
+  static class Segment {
+      private int index;
+      private Segment next;
+      private int[] values;
+      public Segment(){
+        values=new int[SEGMENT_CAPACITY];
+      }
+      /** 
+   * Call this method on the tail.  The new tail is returned, if
+   * allocating a new tail is necessary.
+   */
+      Segment add(    long value){
+        if (index < values.length) {
+          values[index]=(int)value;
+          index+=1;
+          return this;
+        }
+   else {
+          Segment seg=new Segment();
+          seg.values[0]=(int)value;
+          seg.index=1;
+          next=seg;
+          return seg;
+        }
+      }
+      /** 
+   * Returns the value at the given index from this segment only.
+   */
+      long get(    int i){
+        return ((long)values[i]) & 0xFFFFFFFF;
+      }
+      /** 
+   * Returns the next segment or null if this is the tail segment.
+   */
+      Segment next(){
+        return next;
+      }
+      /** 
+   * Sets the next pointer during a merge.
+   */
+      void setNext(    Segment next){
+        this.next=next;
+      }
+      /** 
+   * Returns the number of values in this segment.
+   */
+      int size(){
+        return index;
+      }
+    }
+}

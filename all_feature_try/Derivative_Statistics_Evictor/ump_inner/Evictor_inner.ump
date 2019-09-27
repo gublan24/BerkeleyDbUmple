@@ -1,0 +1,19 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Derivative_Statistics_Evictor/com/sleepycat/je/evictor/Evictor.java
+class Evictor {
+  @MethodObject static class Evictor_evictBatch {
+      long execute() throws DatabaseException {
+        _this.nNodesSelectedThisRun=0;
+        _this.nNodesEvictedThisRun=0;
+        return original();
+      }
+      protected void hook381() throws DatabaseException {
+        _this.nBINsStrippedThisRun=0;
+        _this.nEvictPasses++;
+        original();
+      }
+      protected void hook382() throws DatabaseException {
+        _this.nNodesScanned+=_this.nNodesScannedThisRun;
+        original();
+      }
+    }
+}

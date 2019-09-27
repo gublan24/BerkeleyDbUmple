@@ -1,0 +1,13 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Derivative_Evictor_MemoryBudget/com/sleepycat/je/util/DbRunAction.java
+class DbRunAction {
+  // @MethodObject static class DbRunAction_doEvict {
+  //     protected void hook836() throws DatabaseException {
+  //       c.setCacheSize(cacheUsage / 2);
+  //       original();
+  //     }
+  //     protected void hook837() throws DatabaseException {
+  //       cacheUsage=envImpl.getMemoryBudget().getCacheMemoryUsage();
+  //       original();
+  //     }
+  //   }
+}

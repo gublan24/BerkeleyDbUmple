@@ -1,0 +1,9 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Checksum/com/sleepycat/je/cleaner/FileProcessor.java
+class FileProcessor {
+  @MethodObject static class FileProcessor_processFile {
+      protected void hook137() throws DatabaseException, IOException {
+        reader.setAlwaysValidateChecksum(true);
+        original();
+      }
+    }
+}

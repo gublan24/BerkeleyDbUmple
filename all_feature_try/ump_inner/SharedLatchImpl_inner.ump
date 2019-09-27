@@ -1,0 +1,14 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Latches/com/sleepycat/je/latch/SharedLatchImpl.java
+class SharedLatchImpl {
+  // static class Owner {
+  //     static final int SHARED=0;
+  //     static final int EXCLUSIVE=1;
+  //     Thread thread;
+  //     int type;
+  //     int nAcquires;
+  //     Owner(    Thread thread,    int type){
+  //       this.thread=thread;
+  //       this.type=type;
+  //     }
+  //   }
+}

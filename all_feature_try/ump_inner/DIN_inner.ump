@@ -1,0 +1,22 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/MemoryBudget/com/sleepycat/je/tree/DIN.java
+class DIN {
+  // @MethodObject static class DIN_updateDupCountLNRefAndNullTarget {
+  //     void execute(){
+  //       original();
+  //       newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+  //       _this.updateMemorySize(oldSize,newSize);
+  //     }
+  //     protected void hook614(){
+  //       oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+  //       original();
+  //     }
+  //   }
+  // @MethodObject static class DIN_updateDupCountLN {
+  //     void execute(){
+  //       oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+  //       original();
+  //       newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+  //       _this.updateMemorySize(oldSize,newSize);
+  //     }
+  //   }
+}

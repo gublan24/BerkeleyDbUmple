@@ -1,0 +1,11 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/LoggingCleaner/com/sleepycat/je/cleaner/FileProcessor.java
+class FileProcessor {
+  @MethodObject static class FileProcessor_processLN {
+      protected void hook126() throws DatabaseException {
+        if (processedHere) {
+          _this.cleaner.trace(_this.cleaner.detailedTraceLevel,Cleaner.CLEAN_LN,ln,logLsn,completed,obsolete,false);
+        }
+        original();
+      }
+    }
+}
