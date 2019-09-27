@@ -1,0 +1,6 @@
+Issues encountered while doing the umplification of BerkeleyDB:
+
+1 - inner elements has package names
+
+2 - umple issues: 2 errors ( ";" and >> ).
+
