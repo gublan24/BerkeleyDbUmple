@@ -1,9 +1,0 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/all_feature_try/Evictor/com/sleepycat/je/cleaner/UtilizationProfile.java
-class UtilizationProfile {
-  @MethodObject static class UtilizationProfile_populateCache {
-      protected void hook191() throws DatabaseException {
-        cursor.evict();
-        original();
-      }
-    }
-}

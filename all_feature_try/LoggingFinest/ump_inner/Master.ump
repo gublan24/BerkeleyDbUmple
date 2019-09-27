@@ -1,8 +1,0 @@
-use IN_inner.ump; 
-use Cursor_inner.ump; 
-use SecondaryDatabase_inner.ump; 
-use Checkpointer_inner.ump; 
-use Database_inner.ump; 
-
- // adding inner elements ; 
-use ../ump_inner/Master.ump ; 

@@ -1,5 +1,0 @@
-use Tree_inner.ump; 
-use CursorImpl_inner.ump; 
-
- // adding inner elements ; 
-use ../ump_inner/Master.ump ; 
