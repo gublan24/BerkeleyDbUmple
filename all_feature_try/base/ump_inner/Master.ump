@@ -33,3 +33,6 @@ use Checkpointer_inner.ump;
 use RecoveryManager_inner.ump; 
 use Database_inner.ump; 
 use StoredClassCatalog_inner.ump; 
+
+ // adding inner elements ; 
+use ../ump_inner/Master.ump ; 

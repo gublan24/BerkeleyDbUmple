@@ -3,3 +3,6 @@ use DbRunAction_inner.ump;
 use EnvironmentImpl_inner.ump; 
 use CursorImpl_inner.ump; 
 use INCompressor_inner.ump; 
+
+ // adding inner elements ; 
+use ../ump_inner/Master.ump ; 

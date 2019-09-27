@@ -10,3 +10,6 @@ use INList_inner.ump;
 use DatabaseImpl_inner.ump; 
 use Txn_inner.ump; 
 use Checkpointer_inner.ump; 
+
+ // adding inner elements ; 
+use ../ump_inner/Master.ump ; 

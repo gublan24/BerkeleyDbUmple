@@ -1,1 +1,4 @@
 use Evictor_inner.ump; 
+
+ // adding inner elements ; 
+use ../ump_inner/Master.ump ; 

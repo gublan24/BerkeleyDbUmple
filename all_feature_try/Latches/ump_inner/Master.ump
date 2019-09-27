@@ -11,3 +11,6 @@ use Java5LatchImpl_inner.ump;
 use SharedLatchImpl_inner.ump; 
 use Checkpointer_inner.ump; 
 use Database_inner.ump; 
+
+ // adding inner elements ; 
+use ../ump_inner/Master.ump ; 

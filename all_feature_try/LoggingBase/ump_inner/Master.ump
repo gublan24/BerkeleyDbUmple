@@ -1,3 +1,6 @@
 use EnvironmentImpl_inner.ump; 
 use Txn_inner.ump; 
 use RecoveryManager_inner.ump; 
+
+ // adding inner elements ; 
+use ../ump_inner/Master.ump ; 

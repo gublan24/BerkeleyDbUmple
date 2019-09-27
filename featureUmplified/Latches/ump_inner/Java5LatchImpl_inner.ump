@@ -1,0 +1,15 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/latch/Java5LatchImpl.java
+namespace com.sleepycat.je.latch;
+class Java5LatchImpl {
+  static  class JEReentrantLock {
+
+      isA ReentrantLock; 
+
+      JEReentrantLock(    boolean fair){
+        super(fair);
+      }
+      protected Thread getOwner(){
+        return super.getOwner();
+      }
+    }
+}
