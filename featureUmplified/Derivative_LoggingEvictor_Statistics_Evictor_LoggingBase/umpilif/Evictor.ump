@@ -1,0 +1,6 @@
+namespace com.sleepycat.je.evictor;
+
+class Evictor
+{
+
+}

@@ -1,5 +1,0 @@
-use EnvironmentImpl.ump;
-use INCompressor.ump;
-
- // adding inner elements ; 
-use ../ump_inner/Master.ump ; 

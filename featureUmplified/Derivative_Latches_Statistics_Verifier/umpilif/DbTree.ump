@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class DbTree
+{
+    protected void hook291(CursorImpl cursor) throws DatabaseException {
+	cursor.releaseBINs();
+	original(cursor);
+    }
+
+}
