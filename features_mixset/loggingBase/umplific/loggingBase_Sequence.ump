@@ -1,0 +1,13 @@
+namespace com.sleepycat.je;
+
+class Sequence
+{
+    private Logger logger;
+
+  after Label_84:Sequence(Database, Transaction, DatabaseEntry, SequenceConfig)
+  {
+	  logger = db.getEnvironment().getEnvironmentImpl().getLogger();
+  }
+
+
+}

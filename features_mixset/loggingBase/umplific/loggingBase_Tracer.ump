@@ -1,0 +1,25 @@
+namespace com.sleepycat.je.utilint;
+
+class Tracer
+{
+    /** 
+     * Create trace record that will be filled in from the log.
+     */
+    Tracer() {
+    }
+
+    public String getMessage() {
+	return msg;
+    }
+
+    /** 
+     * Logger method for recording a general message.
+     */
+
+  before trace(Level, EnvironmentImpl, String ){
+    	envImpl.getLogger().log(logLevel, msg);
+   
+  }
+
+
+}
