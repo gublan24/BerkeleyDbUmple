@@ -1,10 +1,10 @@
 
 use EnvironmentParams.ump;
 use loggingBase_Sequence.ump;
-use Cursor.ump;
+use loggingBase_Cursor.ump;
 use loggingBase_EnvironmentImpl.ump;
 use Txn.ump;
-use CmdUtil.ump;
+use loggingBase_CmdUtil.ump;
 use loggingBase_Tracer.ump;
 use RecoveryManager.ump;
 use Database.ump;

@@ -8,8 +8,9 @@ class CmdUtil
   depend com.sleepycat.je.EnvironmentConfig;
   depend com.sleepycat.je.DatabaseException;
   depend java.io.File;
-    private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	    + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+ 
+//   private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//	    + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     public static String getArg(String[] argv, int whichArg) throws IllegalArgumentException {
 	if (whichArg < argv.length) {
@@ -69,7 +70,7 @@ class CmdUtil
 	config.setReadOnly(readOnly);
 	hook853(config);
 	hook854(config);
-	hook855(config);
+	Label855:
 	config.setConfigParam(EnvironmentParams.ENV_RECOVERY.getName(), "false");
 	EnvironmentImpl envImpl = new EnvironmentImpl(envHome, config);
 	return envImpl;

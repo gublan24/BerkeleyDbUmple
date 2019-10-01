@@ -99,7 +99,8 @@ class Cursor
 	    dbHandle.addCursor(this);
 	}
 	this.config = cursorConfig;
-	this.hook36(dbImpl);
+	//this.hook36(dbImpl);
+  Label36:
     }
 
     /** 

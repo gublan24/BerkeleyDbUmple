@@ -22,9 +22,9 @@ public class SecondaryCursor extends Cursor
   // CONSTRUCTOR
   //------------------------
 
-  public SecondaryCursor()
+  public SecondaryCursor(CursorImpl aCursorImpl, CursorConfig aConfig)
   {
-    super();
+    super(aCursorImpl, aConfig);
   }
 
   //------------------------

@@ -4,9 +4,9 @@ class Cursor
 {
     private Logger logger;
 
-    protected void hook36(DatabaseImpl dbImpl) throws DatabaseException {
+    after Label36:init(Database, DatabaseImpl, Locker, boolean ,CursorConfig){
 	this.logger = dbImpl.getDbEnvironment().getLogger();
-	original(dbImpl);
+	//original(dbImpl);
     }
 
     /** 
