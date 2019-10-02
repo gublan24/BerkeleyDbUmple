@@ -2,7 +2,7 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="LoggingDbLogHandler"/>
+        <feature name=""/>
         <feature name="LoggingFileHandler"/>
         <feature name="EnvironmentLocking"/>
         <feature name="DiskFullErro"/>

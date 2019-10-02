@@ -6,6 +6,7 @@ package com.sleepycat.je.config;
 // line 3 "../../../../EnvironmentParams.ump"
 // line 3 "../../../../loggingConsoleHandler_EnvironmentParams.ump"
 // line 3 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
+// line 3 "../../../../LoggingFileHandler_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -40,6 +41,16 @@ public class EnvironmentParams
 // line 5 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
   public static final BooleanConfigParam JE_LOGGING_DBLOG = new BooleanConfigParam(
 	    "java.util.logging.DbLogHandler.on", true, false, "# Use DbLogHandler in logging system.") ;
+// line 5 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+  public static final BooleanConfigParam JE_LOGGING_FILE = new BooleanConfigParam("java.util.logging.FileHandler.on",
+	    true, false, "# Use FileHandler in logging system.") ;
+// line 8 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+  public static final IntConfigParam JE_LOGGING_FILE_LIMIT = new IntConfigParam("java.util.logging.FileHandler.limit",
+	    new Integer(1000), new Integer(1000000000), new Integer(10000000), false,
+	    "# Log file limit for FileHandler.") ;
+// line 12 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+  public static final IntConfigParam JE_LOGGING_FILE_COUNT = new IntConfigParam("java.util.logging.FileHandler.count",
+	    new Integer(1), null, new Integer(10), false, "# Log file count for FileHandler.") ;
 
   
 }
