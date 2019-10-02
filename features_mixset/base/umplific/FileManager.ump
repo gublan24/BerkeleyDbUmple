@@ -115,7 +115,7 @@ class FileManager
 	DbConfigManager configManager = envImpl.getConfigManager();
 	maxFileSize = configManager.getLong(EnvironmentParams.LOG_FILE_MAX);
 	this.hook456(configManager);
-	this.hook467(readOnly);
+	Label467: 
 	this.hook457(configManager);
 	this.hook449(envImpl);
 	if (!dbEnvHome.exists()) {

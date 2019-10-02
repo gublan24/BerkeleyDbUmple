@@ -64,15 +64,16 @@ class FileManager
 	}
     }
 
-    protected void hook467(boolean readOnly) throws DatabaseException {
+    after Label467:FileManager(EnvironmentImpl , File , boolean)  {
 	lockEnvironment(readOnly, false);
-	original(readOnly);
+//	original(readOnly);
+//
     }
 
     /** 
      * Clear the file lock.
      */
-    public void close() throws IOException, DatabaseException {
+  before close() { 
 	if (envLock != null) {
 	    envLock.release();
 	}
@@ -85,7 +86,6 @@ class FileManager
 	if (lockFile != null) {
 	    lockFile.close();
 	}
-	original();
     }
 
 }

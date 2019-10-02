@@ -1,0 +1,30 @@
+namespace com.sleepycat.je.cleaner;
+
+class Cleaner
+{
+    //protected void hook87(Set safeFiles) throws DatabaseException {
+    //}
+
+    after Label115:deleteSafeToDeleteFiles(){
+	    if (!env.getFileManager().lockEnvironment(false, true)) {
+	    //bellow label introduced in EnvironmentLocking_Cleaner.ump
+      Label87:
+	    throw new ReturnVoid();
+	    }
+    }
+
+  after Label_115_1:deleteSafeToDeleteFiles()
+  {
+    env.getFileManager().releaseExclusiveLock();
+  }
+  
+//	try {
+//	    original(safeFiles);
+//	} finally {
+	//    env.getFileManager().releaseExclusiveLock();
+	//}
+   // }
+
+    
+
+}

@@ -3,8 +3,8 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="LoggingFileHandler"/>
-        <feature name="EnvironmentLocking"/>
+        <feature name=""/>
+        <feature name="EnvironmentLocking"/> >> cleaner is complex.
         <feature name="DiskFullErro"/>
         <feature name="FileHandleCache"/>
         <feature name="CriticalEviction"/>

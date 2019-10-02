@@ -10,3 +10,5 @@ use LoggingDbLogHandler/umplific/Master.ump;
 
 use LoggingFileHandler/umpilif/Master.ump;
 
+use EnvironmentLocking/umpilif/Master.ump;
+

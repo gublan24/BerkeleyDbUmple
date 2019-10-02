@@ -39,6 +39,7 @@ import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../Cleaner.ump"
 // line 3 "../../../../Cleaner_static.ump"
+// line 3 "../../../../EnvironmentLocking_Cleaner.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -374,14 +375,51 @@ public class Cleaner implements EnvConfigObserver
 		if (env.mayNotWrite()) {
 		    return;
 		}
-		this.hook115(safeFiles);
+		//this.hook115(safeFiles);
+Label115:
+if (!env.getFileManager().lockEnvironment(false, true)) {
+	    //bellow label introduced in EnvironmentLocking_Cleaner.ump
+      Label87:
+	    throw new ReturnVoid();
+	    }
+
+for (Iterator i = safeFiles.iterator(); i.hasNext();) {
+	    Long fileNum = (Long) i.next();
+	    long fileNumValue = fileNum.longValue();
+	    boolean deleted = false;
+	    try {
+		if (expunge) {
+		    env.getFileManager().deleteFile(fileNumValue);
+		} else {
+		    env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
+		}
+		deleted = true;
+	    } catch (DatabaseException e) {
+		traceFileNotDeleted(e, fileNumValue);
+	    } catch (IOException e) {
+		traceFileNotDeleted(e, fileNumValue);
+	    }
+	    if (deleted) {
+		this.hook88(fileNumValue);
+		try {
+		    profile.removeFile(fileNum);
+		} finally {
+		    fileSelector.removeDeletedFile(fileNum);
+		}
+	    }
+	    Label96:
+	}
+//
+Label_115_1:
+env.getFileManager().releaseExclusiveLock();
+
 	    }
 	} catch (ReturnVoid r) {
 	    return;
 	}
   }
 
-  // line 218 "../../../../Cleaner.ump"
+  // line 247 "../../../../Cleaner.ump"
    private void traceFileNotDeleted(Exception e, long fileNum){
     
   }
@@ -391,7 +429,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Returns a copy of the cleaned and processed files at the time a checkpoint starts. <p> If non-null is returned, the checkpoint should flush an extra level, and addCheckpointedFiles() should be called when the checkpoint is complete. </p>
    */
-  // line 224 "../../../../Cleaner.ump"
+  // line 253 "../../../../Cleaner.ump"
    public Set[] getFilesAtCheckpointStart() throws DatabaseException{
     processPending();
 	return fileSelector.getFilesAtCheckpointStart();
@@ -402,7 +440,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * When a checkpoint is complete, update the files that were returned at the beginning of the checkpoint.
    */
-  // line 232 "../../../../Cleaner.ump"
+  // line 261 "../../../../Cleaner.ump"
    public void updateFilesAtCheckpointEnd(Set [] files) throws DatabaseException{
     fileSelector.updateFilesAtCheckpointEnd(files);
 	deleteSafeToDeleteFiles();
@@ -413,7 +451,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Update the lowUtilizationFiles and mustBeCleanedFiles fields with new read-only collections, and update the backlog file count.
    */
-  // line 240 "../../../../Cleaner.ump"
+  // line 269 "../../../../Cleaner.ump"
    public void updateReadOnlyFileCollections(){
     mustBeCleanedFiles = fileSelector.getMustBeCleanedFiles();
 	lowUtilizationFiles = fileSelector.getLowUtilizationFiles();
@@ -424,7 +462,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * If any LNs are pending, process them. This method should be called often enough to prevent the pending LN set from growing too large.
    */
-  // line 248 "../../../../Cleaner.ump"
+  // line 277 "../../../../Cleaner.ump"
   public void processPending() throws DatabaseException{
     new Cleaner_processPending(this).execute();
   }
@@ -434,7 +472,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Processes a pending LN, getting the lock first to ensure that the overhead of retries is mimimal.
    */
-  // line 256 "../../../../Cleaner.ump"
+  // line 285 "../../../../Cleaner.ump"
    private void processPendingLN(LN ln, DatabaseImpl db, byte [] key, byte [] dupKey, TreeLocation location) throws DatabaseException{
     boolean parentFound = false;
 	boolean processedHere = true;
@@ -511,7 +549,7 @@ public class Cleaner implements EnvConfigObserver
    * @param dclRefis the reference to the DupCountLN.
    * @param proactiveMigrationperform proactive migration if needed; this is false during asplit, to reduce the delay in the user operation.
    */
-  // line 374 "../../../../Cleaner.ump"
+  // line 403 "../../../../Cleaner.ump"
    public void lazyMigrateDupCountLN(DIN din, ChildReference dclRef, boolean proactiveMigration) throws DatabaseException{
     DatabaseImpl db = din.getDatabase();
 	boolean migrateFlag = dclRef.getMigrate();
@@ -534,7 +572,7 @@ public class Cleaner implements EnvConfigObserver
    * @param childLsnis the LSN of the LN.
    * @return whether to migrate the LN.
    */
-  // line 395 "../../../../Cleaner.ump"
+  // line 424 "../../../../Cleaner.ump"
    private boolean shouldMigrateLN(boolean migrateFlag, boolean isResident, boolean proactiveMigration, boolean isBinInDupDb, long childLsn){
     boolean doMigration = false;
 	if (migrateFlag) {
@@ -559,7 +597,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Migrate an LN in the given BIN entry, if it is not obsolete. The BIN is latched on entry to this method and is left latched when it returns.
    */
-  // line 418 "../../../../Cleaner.ump"
+  // line 447 "../../../../Cleaner.ump"
    private void migrateLN(DatabaseImpl db, long lsn, BIN bin, int index, boolean wasCleaned, boolean isPending, long lockedPendingNodeId, String cleanAction) throws DatabaseException{
     boolean obsolete = false;
 	boolean migrated = false;
@@ -647,7 +685,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Migrate the DupCountLN for the given DIN. The DIN is latched on entry to this method and is left latched when it returns.
    */
-  // line 504 "../../../../Cleaner.ump"
+  // line 533 "../../../../Cleaner.ump"
    private void migrateDupCountLN(DatabaseImpl db, long lsn, DIN parentDIN, ChildReference dclRef, boolean wasCleaned, boolean isPending, long lockedPendingNodeId, String cleanAction) throws DatabaseException{
     boolean obsolete = false;
 	boolean migrated = false;
@@ -719,7 +757,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Returns the main key for a given BIN entry.
    */
-  // line 573 "../../../../Cleaner.ump"
+  // line 602 "../../../../Cleaner.ump"
    private byte[] getLNMainKey(BIN bin, int index) throws DatabaseException{
     if (bin.containsDuplicates()) {
 	    return bin.getDupKey();
@@ -733,7 +771,7 @@ public class Cleaner implements EnvConfigObserver
    * 
    * Returns the duplicate key for a given BIN entry.
    */
-  // line 584 "../../../../Cleaner.ump"
+  // line 613 "../../../../Cleaner.ump"
    private byte[] getLNDupKey(BIN bin, int index, LN ln) throws DatabaseException{
     DatabaseImpl db = bin.getDatabase();
 	if (!db.getSortedDuplicates() || ln.containsDuplicates()) {
@@ -745,137 +783,137 @@ public class Cleaner implements EnvConfigObserver
 	}
   }
 
-  // line 595 "../../../../Cleaner.ump"
+  // line 624 "../../../../Cleaner.ump"
    protected void hook88(long fileNumValue) throws DatabaseException{
     
   }
 
-  // line 598 "../../../../Cleaner.ump"
+  // line 627 "../../../../Cleaner.ump"
    protected void hook89(DatabaseException DBE) throws DatabaseException{
     
   }
 
-  // line 601 "../../../../Cleaner.ump"
+  // line 630 "../../../../Cleaner.ump"
    protected void hook90() throws DatabaseException{
     
   }
 
-  // line 604 "../../../../Cleaner.ump"
+  // line 633 "../../../../Cleaner.ump"
    protected void hook91(LN ln, boolean obsolete, boolean completed) throws DatabaseException{
     
   }
 
-  // line 608 "../../../../Cleaner.ump"
+  // line 637 "../../../../Cleaner.ump"
    protected void hook92(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln) throws DatabaseException{
     
   }
 
-  // line 612 "../../../../Cleaner.ump"
+  // line 641 "../../../../Cleaner.ump"
    protected void hook93(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln) throws DatabaseException{
     
   }
 
-  // line 615 "../../../../Cleaner.ump"
+  // line 644 "../../../../Cleaner.ump"
    protected void hook94(DbConfigManager cm) throws DatabaseException{
     
   }
 
-  // line 618 "../../../../Cleaner.ump"
+  // line 647 "../../../../Cleaner.ump"
    protected void hook95(BIN bin, DIN parentDIN) throws DatabaseException{
     
   }
 
-  // line 621 "../../../../Cleaner.ump"
+  // line 650 "../../../../Cleaner.ump"
    protected void hook96() throws DatabaseException{
     
   }
 
-  // line 624 "../../../../Cleaner.ump"
+  // line 653 "../../../../Cleaner.ump"
    protected void hook97() throws DatabaseException{
     
   }
 
-  // line 627 "../../../../Cleaner.ump"
+  // line 656 "../../../../Cleaner.ump"
    protected void hook98() throws DatabaseException{
     
   }
 
-  // line 630 "../../../../Cleaner.ump"
+  // line 659 "../../../../Cleaner.ump"
    protected void hook99() throws DatabaseException{
     
   }
 
-  // line 633 "../../../../Cleaner.ump"
+  // line 662 "../../../../Cleaner.ump"
    protected void hook100() throws DatabaseException{
     
   }
 
-  // line 636 "../../../../Cleaner.ump"
+  // line 665 "../../../../Cleaner.ump"
    protected void hook101(){
     
   }
 
-  // line 639 "../../../../Cleaner.ump"
+  // line 668 "../../../../Cleaner.ump"
    protected void hook102(){
     
   }
 
-  // line 642 "../../../../Cleaner.ump"
+  // line 671 "../../../../Cleaner.ump"
    protected void hook103(){
     
   }
 
-  // line 645 "../../../../Cleaner.ump"
+  // line 674 "../../../../Cleaner.ump"
    protected void hook104() throws DatabaseException{
     
   }
 
-  // line 648 "../../../../Cleaner.ump"
+  // line 677 "../../../../Cleaner.ump"
    protected void hook105(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 651 "../../../../Cleaner.ump"
+  // line 680 "../../../../Cleaner.ump"
    protected void hook106(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 654 "../../../../Cleaner.ump"
+  // line 683 "../../../../Cleaner.ump"
    protected void hook107(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 657 "../../../../Cleaner.ump"
+  // line 686 "../../../../Cleaner.ump"
    protected void hook108(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 660 "../../../../Cleaner.ump"
+  // line 689 "../../../../Cleaner.ump"
    protected void hook109() throws DatabaseException{
     
   }
 
-  // line 663 "../../../../Cleaner.ump"
+  // line 692 "../../../../Cleaner.ump"
    protected void hook110(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 666 "../../../../Cleaner.ump"
+  // line 695 "../../../../Cleaner.ump"
    protected void hook111(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 669 "../../../../Cleaner.ump"
+  // line 698 "../../../../Cleaner.ump"
    protected boolean hook112(DatabaseImpl db, boolean c) throws DatabaseException{
     return c;
   }
 
-  // line 673 "../../../../Cleaner.ump"
+  // line 702 "../../../../Cleaner.ump"
    protected void hook113(DatabaseImpl db) throws DatabaseException{
     
   }
 
-  // line 676 "../../../../Cleaner.ump"
+  // line 706 "../../../../Cleaner.ump"
    protected void hook115(Set safeFiles) throws DatabaseException{
     for (Iterator i = safeFiles.iterator(); i.hasNext();) {
 	    Long fileNum = (Long) i.next();
@@ -1042,7 +1080,7 @@ public class Cleaner implements EnvConfigObserver
 // line 99 "../../../../Cleaner.ump"
   private Object deleteFileLock ;
 
-// line 328 "../../../../Cleaner.ump"
+// line 357 "../../../../Cleaner.ump"
   public void lazyMigrateLNs (final BIN bin, boolean proactiveMigration) throws DatabaseException 
   {
     DatabaseImpl db = bin.getDatabase();
