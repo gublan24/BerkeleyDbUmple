@@ -53,24 +53,24 @@ class Tracer
 	msg = LogUtils.readString(itemBuffer);
     }
 
-    /** 
+    /**      
      * @see LogReadable#dumpLog
      */
     public void dumpLog(StringBuffer sb, boolean verbose) {
-	sb.append("<Dbg time=\"");
-	sb.append(time);
-	sb.append("\">");
-	sb.append("<msg val=\"");
-	sb.append(msg);
-	sb.append("\"/>");
-	sb.append("</Dbg>");
+      sb.append("<Dbg time=\"");
+      sb.append(time);
+      sb.append("\">");
+      sb.append("<msg val=\"");
+	    sb.append(msg);
+	    sb.append("\"/>");
+	    sb.append("</Dbg>");
     }
 
     /** 
      * @see LogReadable#logEntryIsTransactional
      */
     public boolean logEntryIsTransactional() {
-	return false;
+      return false;
     }
 
     /** 

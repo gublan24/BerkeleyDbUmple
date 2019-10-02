@@ -12,6 +12,7 @@ import java.io.File;
 // line 3 "../../../../CmdUtil.ump"
 // line 2 "../../../../loggingBase_CmdUtil.ump"
 // line 3 "../../../../loggingConsoleHandler_CmdUtil.ump"
+// line 3 "../../../../LoggingDbLogHandler_CmdUtil.ump"
 public class CmdUtil
 {
 
@@ -103,7 +104,10 @@ public class CmdUtil
    public static  EnvironmentImpl makeUtilityEnvironment(File envHome, boolean readOnly) throws DatabaseException{
     EnvironmentConfig config = new EnvironmentConfig();
 	config.setReadOnly(readOnly);
-	hook853(config);
+	Label853:
+config.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(), "false");
+	//original(config);
+
 	Label854:
 config.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(), "true");
 //	original(config);

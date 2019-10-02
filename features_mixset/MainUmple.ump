@@ -6,4 +6,4 @@ use loggingBase/umplific/Master.ump;
 
 use loggingConsoleHandler/umplific/Master.ump;
 
-
+use LoggingDbLogHandler/umplific/Master.ump;

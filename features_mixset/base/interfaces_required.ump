@@ -19,3 +19,6 @@ external interface 	  ObjectOutputStream	{	}
 external interface 	  XAResource	{	}
 external interface 	  Xid	{	}
 external interface InputStream {  }
+
+
+external Handler { }  // class TraceLogHandler extends Handler

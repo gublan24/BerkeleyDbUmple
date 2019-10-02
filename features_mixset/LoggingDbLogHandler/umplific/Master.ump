@@ -1,9 +1,10 @@
-use EnvironmentParams.ump;
-use DbRunAction.ump;
-use EnvironmentImpl.ump;
-use CmdUtil.ump;
-use Tracer.ump;
-use TraceLogHandler.ump;
+
+use LoggingDbLogHandler_EnvironmentParams.ump;
+use LoggingDbLogHandler_DbRunAction.ump;
+use LoggingDbLogHandler_EnvironmentImpl.ump;
+use LoggingDbLogHandler_CmdUtil.ump;
+use LoggingDbLogHandler_Tracer.ump;
+use LoggingDbLogHandler_TraceLogHandler.ump;
 
 use ../ump_inner/Master.ump;
 

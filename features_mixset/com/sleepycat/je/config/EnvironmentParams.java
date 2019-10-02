@@ -5,6 +5,7 @@ package com.sleepycat.je.config;
 
 // line 3 "../../../../EnvironmentParams.ump"
 // line 3 "../../../../loggingConsoleHandler_EnvironmentParams.ump"
+// line 3 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -36,6 +37,9 @@ public class EnvironmentParams
 		    + "# Value should be one of the predefined java.util.logging.Level values");// line 5 "../../../../loggingConsoleHandler_EnvironmentParams.ump"
   public static final BooleanConfigParam JE_LOGGING_CONSOLE = new BooleanConfigParam(
 	    "java.util.logging.ConsoleHandler.on", false, false, "# Use ConsoleHandler in logging system.") ;
+// line 5 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
+  public static final BooleanConfigParam JE_LOGGING_DBLOG = new BooleanConfigParam(
+	    "java.util.logging.DbLogHandler.on", true, false, "# Use DbLogHandler in logging system.") ;
 
   
 }

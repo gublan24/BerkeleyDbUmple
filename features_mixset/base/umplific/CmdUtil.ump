@@ -68,7 +68,7 @@ class CmdUtil
     public static EnvironmentImpl makeUtilityEnvironment(File envHome, boolean readOnly) throws DatabaseException {
 	EnvironmentConfig config = new EnvironmentConfig();
 	config.setReadOnly(readOnly);
-	hook853(config);
+	Label853:
 	Label854:
 	Label855:
 	config.setConfigParam(EnvironmentParams.ENV_RECOVERY.getName(), "false");

@@ -1,7 +1,7 @@
 <featureOrder>        
         <feature name=""/>
         <feature name=""/>
-        <feature name="LoggingConsoleHandler"/>
+        <feature name=""/>
         <feature name="LoggingDbLogHandler"/>
         <feature name="LoggingFileHandler"/>
         <feature name="EnvironmentLocking"/>

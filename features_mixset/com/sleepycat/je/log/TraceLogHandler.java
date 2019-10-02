@@ -8,9 +8,10 @@ import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.DatabaseException;
 import java.util.logging.LogRecord;
 import java.util.logging.Handler;
+import com.sleepycat.bind.serial.*;
 
-// line 3 "../../../../TraceLogHandler.ump"
-public class TraceLogHandler
+// line 3 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
+public class TraceLogHandler extends Handler
 {
 
   //------------------------
@@ -22,7 +23,9 @@ public class TraceLogHandler
   //------------------------
 
   public TraceLogHandler()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
@@ -31,22 +34,22 @@ public class TraceLogHandler
   public void delete()
   {}
 
-  // line 19 "../../../../TraceLogHandler.ump"
+  // line 19 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
    public  TraceLogHandler(EnvironmentImpl env){
     this.env = env;
   }
 
-  // line 23 "../../../../TraceLogHandler.ump"
+  // line 23 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
    public void close(){
     
   }
 
-  // line 26 "../../../../TraceLogHandler.ump"
+  // line 26 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
    public void flush(){
     
   }
 
-  // line 29 "../../../../TraceLogHandler.ump"
+  // line 29 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
    public void publish(LogRecord l){
     if (!env.isReadOnly() && !env.mayNotWrite()) {
 	    try {
@@ -63,7 +66,7 @@ public class TraceLogHandler
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 16 "../../../../TraceLogHandler.ump"
+  // line 16 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
   private EnvironmentImpl env ;
 
   

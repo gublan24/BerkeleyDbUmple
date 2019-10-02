@@ -46,11 +46,13 @@ import java.util.ArrayList;
 import java.io.PrintStream;
 import java.io.IOException;
 import java.io.File;
+import com.sleepycat.je.log.TraceLogHandler;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
 // line 3 "../../../../loggingBase_EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_inner.ump"
+// line 3 "../../../../LoggingDbLogHandler_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 

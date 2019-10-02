@@ -2,9 +2,9 @@ namespace com.sleepycat.je.utilint;
 
 class CmdUtil
 {
-    protected static void hook853(EnvironmentConfig config) throws DatabaseException {
+    after Label853: makeUtilityEnvironment(File, boolean){
 	config.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(), "false");
-	original(config);
+	//original(config);
     }
 
 }
