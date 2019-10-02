@@ -2,9 +2,9 @@
 namespace com.sleepycat.je.util;
 class DbRunAction {
   @MethodObject static class DbRunAction_main {
-      protected void hook848() throws Exception {
+      after Label848:execute(){
         envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
-        original(); //@Abdulaziz aaa
+        //original(); //@Abdulaziz aaa
       }
     }
 }

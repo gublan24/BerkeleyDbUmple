@@ -1,5 +1,0 @@
-use EnvironmentParams.ump;
-use DbRunAction.ump;
-use CmdUtil.ump;
-
-use ../com/refactor_inner/ump_inner/Master.ump ;

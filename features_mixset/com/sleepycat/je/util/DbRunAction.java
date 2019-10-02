@@ -24,6 +24,8 @@ import java.io.File;
 
 // line 3 "../../../../DbRunAction.ump"
 // line 3 "../../../../DbRunAction_static.ump"
+// line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
+// line 3 "../../../../DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -93,7 +95,9 @@ public class DbRunAction
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
+  // line 4 "../../../../DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -163,7 +167,10 @@ public class DbRunAction
               whichArg++;
             }
             envConfig=new EnvironmentConfig();
-            this.hook848();
+            Label848:
+  envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
+          //original(); //@Abdulaziz aaa
+  
             this.hook847();
             this.hook845();
             recoveryStart=System.currentTimeMillis();

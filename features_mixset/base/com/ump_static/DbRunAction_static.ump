@@ -47,7 +47,7 @@ class DbRunAction {
             whichArg++;
           }
           envConfig=new EnvironmentConfig();
-          this.hook848();
+          Label848:
           this.hook847();
           this.hook845();
           recoveryStart=System.currentTimeMillis();

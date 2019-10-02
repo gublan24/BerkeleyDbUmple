@@ -1,6 +1,6 @@
 <featureOrder>        
-        <feature name="base"/>
-        <feature name="LoggingBase"/>
+        <feature name=""/>
+        <feature name=""/>
         <feature name="LoggingConsoleHandler"/>
         <feature name="LoggingDbLogHandler"/>
         <feature name="LoggingFileHandler"/>

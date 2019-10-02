@@ -69,7 +69,7 @@ class CmdUtil
 	EnvironmentConfig config = new EnvironmentConfig();
 	config.setReadOnly(readOnly);
 	hook853(config);
-	hook854(config);
+	Label854:
 	Label855:
 	config.setConfigParam(EnvironmentParams.ENV_RECOVERY.getName(), "false");
 	EnvironmentImpl envImpl = new EnvironmentImpl(envHome, config);
