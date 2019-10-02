@@ -34,6 +34,7 @@ import java.io.File;
 // line 3 "../../../../FileManager.ump"
 // line 3 "../../../../FileManager_static.ump"
 // line 3 "../../../../EnvironmentLocking_FileManager.ump"
+// line 3 "../../../../DiskFullErro_FileManager.ump"
 public class FileManager
 {
 
@@ -607,7 +608,15 @@ lockEnvironment(readOnly, false);
 		Runtime.getRuntime().halt(0xff);
 	    }
 	    try {
-		this.hook465(fullBuffer, firstLsn, file);
+	//	this.hook465(fullBuffer, firstLsn, file);
+Label465:
+assert fullBuffer.getRewriteAllowed() || (DbLsn.getFileOffset(firstLsn) >= file.length()
+		|| file.length() == firstLogEntryOffset()) : "FileManager would overwrite non-empty file 0x"
+			+ Long.toHexString(DbLsn.getFileNumber(firstLsn)) + " lsnOffset=0x"
+			+ Long.toHexString(DbLsn.getFileOffset(firstLsn)) + " fileLength=0x"
+			+ Long.toHexString(file.length());
+//	original(fullBuffer, firstLsn, file);
+
 		if (IO_EXCEPTION_TESTING) {
 		    throw new IOException("generated for testing");
 		}
@@ -619,7 +628,22 @@ lockEnvironment(readOnly, false);
 		throw new RunRecoveryException(envImpl, "File closed, may be due to thread interrupt", e);
 	    } catch (IOException IOE) {
 		abortCommittedTxns(data);
-		this.hook466(fullBuffer, firstLsn, file, data, IOE);
+    Label466:
+try {
+	      if (IO_EXCEPTION_TESTING) {
+          throw new IOException("generated for testing");
+	      }
+	    writeToFile(file, data, DbLsn.getFileOffset(firstLsn));
+	    } 
+catch (IOException IOE2) {
+	    fullBuffer.setRewriteAllowed();
+	    throw new DatabaseException(IOE2);
+	}
+	if (false) //THIS IS DEAD CODE
+//	    original(fullBuffer, firstLsn, file, data, IOE);
+	throw new DatabaseException(IOE);
+
+	//	this.hook466(fullBuffer, firstLsn, file, data, IOE); 
 	    }
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -630,7 +654,7 @@ lockEnvironment(readOnly, false);
    * 
    * Write a buffer to a file at a given offset, using NIO if so configured.
    */
-  // line 595 "../../../../FileManager.ump"
+  // line 597 "../../../../FileManager.ump"
    private int writeToFile(RandomAccessFile file, ByteBuffer data, long destOffset) throws IOException,DatabaseException{
     return new FileManager_writeToFile(this, file, data, destOffset).execute();
   }
@@ -640,12 +664,12 @@ lockEnvironment(readOnly, false);
    * 
    * Read a buffer from a file at a given offset, using NIO if so configured.
    */
-  // line 602 "../../../../FileManager.ump"
+  // line 604 "../../../../FileManager.ump"
   public void readFromFile(RandomAccessFile file, ByteBuffer readBuffer, long offset) throws IOException{
     new FileManager_readFromFile(this, file, readBuffer, offset).execute();
   }
 
-  // line 606 "../../../../FileManager.ump"
+  // line 608 "../../../../FileManager.ump"
    private void abortCommittedTxns(ByteBuffer data){
     final byte commitType = LogEntryType.LOG_TXN_COMMIT.getTypeNum();
 	final byte abortType = LogEntryType.LOG_TXN_ABORT.getTypeNum();
@@ -685,7 +709,7 @@ lockEnvironment(readOnly, false);
    * 
    * FSync the end of the log.
    */
-  // line 643 "../../../../FileManager.ump"
+  // line 645 "../../../../FileManager.ump"
   public void syncLogEnd() throws DatabaseException{
     try {
 	    endOfLog.force();
@@ -699,7 +723,7 @@ lockEnvironment(readOnly, false);
    * 
    * Sync the end of the log, close off this log file. Should only be called under the log write latch.
    */
-  // line 654 "../../../../FileManager.ump"
+  // line 656 "../../../../FileManager.ump"
   public void syncLogEndAndFinishFile() throws DatabaseException,IOException{
     if (syncAtFileEnd) {
 	    syncLogEnd();
@@ -712,7 +736,7 @@ lockEnvironment(readOnly, false);
    * 
    * Close all file handles and empty the cache.
    */
-  // line 664 "../../../../FileManager.ump"
+  // line 666 "../../../../FileManager.ump"
    public void clear() throws IOException,DatabaseException{
     endOfLog.close();
   }
@@ -722,7 +746,7 @@ lockEnvironment(readOnly, false);
    * 
    * Clear the file lock.
    */
-  // line 671 "../../../../FileManager.ump"
+  // line 673 "../../../../FileManager.ump"
    public void close() throws IOException,DatabaseException{
     // line 77 "../../../../EnvironmentLocking_FileManager.ump"
     if (envLock != null) {
@@ -747,7 +771,7 @@ lockEnvironment(readOnly, false);
    * Ensure that if the environment home dir is on readonly media or in a readonly directory that the environment has been opened for readonly access.
    * @return true if the environment home dir is readonly.
    */
-  // line 678 "../../../../FileManager.ump"
+  // line 680 "../../../../FileManager.ump"
    private boolean checkEnvHomePermissions(boolean readOnly) throws DatabaseException{
     boolean envDirIsReadOnly = !dbEnvHome.canWrite();
 	if (envDirIsReadOnly && !readOnly) {
@@ -762,7 +786,7 @@ lockEnvironment(readOnly, false);
    * 
    * Truncate a log at this position. Used by recovery to a timestamp utilities and by recovery to set the end-of-log position. <p> This method forces a new log file to be written next, if the last file (the file truncated to) has an old version in its header. This ensures that when the log is opened by an old version of JE, a version incompatibility will be detected. [#11243] </p>
    */
-  // line 690 "../../../../FileManager.ump"
+  // line 692 "../../../../FileManager.ump"
    public void truncateLog(long fileNum, long offset) throws IOException,DatabaseException{
     FileHandle handle = makeFileHandle(fileNum, FileMode.READWRITE_MODE);
 	RandomAccessFile file = handle.getFile();
@@ -781,7 +805,7 @@ lockEnvironment(readOnly, false);
    * 
    * Set the flag that causes a new file to be written before the next write.
    */
-  // line 706 "../../../../FileManager.ump"
+  // line 708 "../../../../FileManager.ump"
   public void forceNewLogFile(){
     forceNewFile = true;
   }
@@ -791,7 +815,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the size in bytes of the file header log entry.
    */
-  // line 713 "../../../../FileManager.ump"
+  // line 715 "../../../../FileManager.ump"
    public static  int firstLogEntryOffset(){
     return FileHeader.entrySize() + LogManager.HEADER_BYTES;
   }
@@ -801,7 +825,7 @@ lockEnvironment(readOnly, false);
    * 
    * Return the next available LSN in the log. Note that this is unsynchronized, so is only valid as an approximation of log size.
    */
-  // line 720 "../../../../FileManager.ump"
+  // line 722 "../../../../FileManager.ump"
    public long getNextLsn(){
     return nextAvailableLsn;
   }
@@ -811,12 +835,12 @@ lockEnvironment(readOnly, false);
    * 
    * Return the last allocated LSN in the log. Note that this is unsynchronized, so if it is called outside the log write latch it is only valid as an approximation of log size.
    */
-  // line 727 "../../../../FileManager.ump"
+  // line 729 "../../../../FileManager.ump"
    public long getLastUsedLsn(){
     return lastUsedLsn;
   }
 
-  // line 732 "../../../../FileManager.ump"
+  // line 734 "../../../../FileManager.ump"
    private void generateRunRecoveryException(RandomAccessFile file, ByteBuffer data, long destOffset) throws DatabaseException,IOException{
     if (runRecoveryExceptionThrown) {
 	    try {
@@ -845,53 +869,53 @@ lockEnvironment(readOnly, false);
 	}
   }
 
-  // line 760 "../../../../FileManager.ump"
+  // line 762 "../../../../FileManager.ump"
    protected void hook449(EnvironmentImpl envImpl) throws DatabaseException{
     
   }
 
-  // line 764 "../../../../FileManager.ump"
+  // line 766 "../../../../FileManager.ump"
    protected FileHandle hook450(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
     fileHandle = this.hook462(fileNum, fileId, fileHandle);
 	return fileHandle;
   }
 
-  // line 769 "../../../../FileManager.ump"
+  // line 771 "../../../../FileManager.ump"
    protected void hook452(EnvironmentImpl envImpl) throws DatabaseException{
     
   }
 
-  // line 772 "../../../../FileManager.ump"
+  // line 774 "../../../../FileManager.ump"
    protected void hook453(FileHandle fileHandle) throws LogException,DatabaseException{
     
   }
 
-  // line 775 "../../../../FileManager.ump"
+  // line 777 "../../../../FileManager.ump"
    protected void hook454(FileHandle fileHandle) throws LogException,DatabaseException{
     
   }
 
-  // line 778 "../../../../FileManager.ump"
+  // line 780 "../../../../FileManager.ump"
    protected void hook456(DbConfigManager configManager) throws DatabaseException{
     
   }
 
-  // line 781 "../../../../FileManager.ump"
+  // line 783 "../../../../FileManager.ump"
    protected void hook457(DbConfigManager configManager) throws DatabaseException{
     
   }
 
-  // line 784 "../../../../FileManager.ump"
+  // line 786 "../../../../FileManager.ump"
    protected void hook458(long fileNum) throws DatabaseException,IOException{
     
   }
 
-  // line 787 "../../../../FileManager.ump"
+  // line 789 "../../../../FileManager.ump"
    protected void hook459(long fileNum) throws DatabaseException,IOException{
     
   }
 
-  // line 790 "../../../../FileManager.ump"
+  // line 792 "../../../../FileManager.ump"
    protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
     fileHandle = this.hook463(fileNum, fileId, fileHandle);
 	this.hook453(fileHandle);
@@ -902,40 +926,42 @@ lockEnvironment(readOnly, false);
 	}
   }
 
-  // line 800 "../../../../FileManager.ump"
+  // line 802 "../../../../FileManager.ump"
    protected void hook461(ByteBuffer data){
     
   }
 
-  // line 804 "../../../../FileManager.ump"
+  // line 806 "../../../../FileManager.ump"
    protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
     fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
 	this.hook464(fileId, fileHandle);
 	return fileHandle;
   }
 
-  // line 811 "../../../../FileManager.ump"
+  // line 813 "../../../../FileManager.ump"
    protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
     fileHandle = this.hook450(fileNum, fileId, fileHandle);
 	return fileHandle;
   }
 
-  // line 816 "../../../../FileManager.ump"
+  // line 818 "../../../../FileManager.ump"
    protected void hook464(Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
     
   }
 
-  // line 820 "../../../../FileManager.ump"
+  // line 822 "../../../../FileManager.ump"
    protected void hook465(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file) throws DatabaseException,ClosedChannelException,IOException{
     
   }
 
-  // line 824 "../../../../FileManager.ump"
-   protected void hook466(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file, ByteBuffer data, IOException IOE) throws DatabaseException{
-    throw new DatabaseException(IOE);
-  }
 
-  // line 828 "../../../../FileManager.ump"
+  /**
+   * protected void hook466(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file, ByteBuffer data, IOException IOE)
+   * throws DatabaseException {
+   * throw new DatabaseException(IOE);
+   * }
+   */
+  // line 830 "../../../../FileManager.ump"
    protected void hook467(boolean readOnly) throws DatabaseException{
     
   }

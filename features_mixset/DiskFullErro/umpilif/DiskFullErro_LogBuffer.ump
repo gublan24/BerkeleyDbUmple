@@ -5,19 +5,19 @@ class LogBuffer
     private boolean rewriteAllowed;
 
     boolean getRewriteAllowed() {
-	return rewriteAllowed;
+	    return rewriteAllowed;
     }
 
     void setRewriteAllowed() {
-	rewriteAllowed = true;
+	    rewriteAllowed = true;
     }
 
     LogBuffer(ByteBuffer buffer, long firstLsn) throws DatabaseException {
-	rewriteAllowed = false;
+	    rewriteAllowed = false;
     }
 
-    void reinit() throws DatabaseException {
-	original();
+  after reinit(){
+	//original();
 	rewriteAllowed = false;
     }
 

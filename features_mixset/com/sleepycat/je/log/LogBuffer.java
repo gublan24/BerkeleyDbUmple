@@ -9,6 +9,7 @@ import com.sleepycat.je.DatabaseException;
 import java.nio.ByteBuffer;
 
 // line 3 "../../../../LogBuffer.ump"
+// line 3 "../../../../DiskFullErro_LogBuffer.ump"
 public class LogBuffer implements LogSource
 {
 
@@ -50,6 +51,10 @@ public class LogBuffer implements LogSource
     buffer.clear();
 	firstLsn = DbLsn.NULL_LSN;
 	lastLsn = DbLsn.NULL_LSN;
+    // line 20 "../../../../DiskFullErro_LogBuffer.ump"
+    //original();
+    	rewriteAllowed = false;
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -186,6 +191,16 @@ public class LogBuffer implements LogSource
    public void release() throws DatabaseException{
     
   }
+
+  // line 8 "../../../../DiskFullErro_LogBuffer.ump"
+  public boolean getRewriteAllowed(){
+    return rewriteAllowed;
+  }
+
+  // line 12 "../../../../DiskFullErro_LogBuffer.ump"
+  public void setRewriteAllowed(){
+    rewriteAllowed = true;
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -199,6 +214,8 @@ public class LogBuffer implements LogSource
   private long firstLsn ;
 // line 17 "../../../../LogBuffer.ump"
   private long lastLsn ;
+// line 5 "../../../../DiskFullErro_LogBuffer.ump"
+  private boolean rewriteAllowed ;
 
   
 }

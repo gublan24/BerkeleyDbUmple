@@ -569,7 +569,8 @@ class FileManager
 		Runtime.getRuntime().halt(0xff);
 	    }
 	    try {
-		this.hook465(fullBuffer, firstLsn, file);
+	//	this.hook465(fullBuffer, firstLsn, file);
+Label465:
 		if (IO_EXCEPTION_TESTING) {
 		    throw new IOException("generated for testing");
 		}
@@ -581,7 +582,8 @@ class FileManager
 		throw new RunRecoveryException(envImpl, "File closed, may be due to thread interrupt", e);
 	    } catch (IOException IOE) {
 		abortCommittedTxns(data);
-		this.hook466(fullBuffer, firstLsn, file, data, IOE);
+    Label466:
+	//	this.hook466(fullBuffer, firstLsn, file, data, IOE); 
 	    }
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -819,10 +821,10 @@ class FileManager
 	    throws DatabaseException, ClosedChannelException, IOException {
     }
 
-    protected void hook466(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file, ByteBuffer data, IOException IOE)
-	    throws DatabaseException {
-	throw new DatabaseException(IOE);
-    }
+ //   protected void hook466(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file, ByteBuffer data, IOException IOE)
+	//    throws DatabaseException {
+	//throw new DatabaseException(IOE);
+   // }
 
     protected void hook467(boolean readOnly) throws DatabaseException {
     }
