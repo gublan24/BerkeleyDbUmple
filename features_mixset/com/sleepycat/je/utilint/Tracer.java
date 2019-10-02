@@ -205,12 +205,12 @@ public class Tracer implements LoggableObject,LogReadable
   // line 60 "../../../../LoggingDbLogHandler_Tracer.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<Dbg time=\"");
-	sb.append(time);
-	sb.append("\">");
-	sb.append("<msg val=\"");
-	sb.append(msg);
-	sb.append("\"/>");
-	sb.append("</Dbg>");
+      sb.append(time);
+      sb.append("\">");
+      sb.append("<msg val=\"");
+	    sb.append(msg);
+	    sb.append("\"/>");
+	    sb.append("</Dbg>");
   }
 
 
