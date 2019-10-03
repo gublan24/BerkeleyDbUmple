@@ -5,7 +5,7 @@
         <feature name=""/>
         <feature name=""/>
         <feature name="EnvironmentLocking"/> >> cleaner is complex.
-        <feature name="DiskFullErro"/>
+        <feature name=""/>
         <feature name="FileHandleCache"/>
         <feature name="CriticalEviction"/>
         <feature name="MemoryBudget"/>

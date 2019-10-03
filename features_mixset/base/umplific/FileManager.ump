@@ -115,8 +115,9 @@ class FileManager
 	DbConfigManager configManager = envImpl.getConfigManager();
 	maxFileSize = configManager.getLong(EnvironmentParams.LOG_FILE_MAX);
 	this.hook456(configManager);
-	Label467: 
-	this.hook457(configManager);
+	Label467:
+  Label457: 
+	//this.hook457(configManager);
 	this.hook449(envImpl);
 	if (!dbEnvHome.exists()) {
 	    throw new LogException("Environment home " + dbEnvHome + " doesn't exist");
@@ -363,7 +364,8 @@ class FileManager
 		repeatNum++;
 	    } else {
 		String oldFileName = getFullFileNames(fileNum)[0];
-		this.hook458(fileNum);
+    Label458:		
+//this.hook458(fileNum);
 		File oldFile = new File(oldFileName);
 		if (oldFile.renameTo(targetFile)) {
 		    renamed = true;
@@ -380,7 +382,8 @@ class FileManager
      */
     public void deleteFile(long fileNum) throws DatabaseException, IOException {
 	String fileName = getFullFileNames(fileNum)[0];
-	this.hook459(fileNum);
+  Label459:
+	//this.hook459(fileNum);
 	File file = new File(fileName);
 	boolean done = file.delete();
 	if (!done) {
@@ -393,16 +396,28 @@ class FileManager
      * @param fileNumwhich file
      * @return the file handle for the existing or newly created file
      */
-    FileHandle getFileHandle(long fileNum) throws LogException, DatabaseException {
-	try {
+ FileHandle getFileHandle(long fileNum) throws LogException,DatabaseException{
+    try {
 	    Long fileId = new Long(fileNum);
 	    FileHandle fileHandle = null;
-	    this.hook460(fileNum, fileId, fileHandle);
-	    throw ReturnHack.returnObject;
-	} catch (ReturnObject r) {
-	    return (FileHandle) r.value;
-	}
-    }
+      Label460:
+		  Label463:
+      Label450:
+      Label462:
+      fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
+		  Label464:
+      Label453:
+			if (fileHandle.getFile() == null) {
+					Label454:
+			} 
+			else {
+					throw new ReturnObject(fileHandle);
+			}
+					throw ReturnHack.returnObject;
+			} catch (ReturnObject r) {
+					return (FileHandle) r.value;
+			}
+  }
 
     private FileHandle makeFileHandle(long fileNum, FileMode mode) throws DatabaseException {
 	String[] fileNames = getFullFileNames(fileNum);
@@ -607,7 +622,8 @@ Label465:
     private void abortCommittedTxns(ByteBuffer data) {
 	final byte commitType = LogEntryType.LOG_TXN_COMMIT.getTypeNum();
 	final byte abortType = LogEntryType.LOG_TXN_ABORT.getTypeNum();
-	this.hook461(data);
+//	this.hook461(data);
+  Label461:
 	while (data.remaining() > 0) {
 	    int recStartPos = data.position();
 	    data.position(recStartPos + LogManager.HEADER_ENTRY_TYPE_OFFSET);
@@ -770,8 +786,8 @@ Label465:
     protected void hook452(EnvironmentImpl envImpl) throws DatabaseException {
     }
 
-    protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
-    }
+    //protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
+    //}
 
     protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {
     }
@@ -788,34 +804,34 @@ Label465:
     protected void hook459(long fileNum) throws DatabaseException, IOException {
     }
 
-    protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
-	fileHandle = this.hook463(fileNum, fileId, fileHandle);
-	this.hook453(fileHandle);
-	if (fileHandle.getFile() == null) {
-	    this.hook454(fileHandle);
-	} else {
-	    throw new ReturnObject(fileHandle);
-	}
-    }
+    //protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+	//fileHandle = this.hook463(fileNum, fileId, fileHandle);
+	//this.hook453(fileHandle);
+	//if (fileHandle.getFile() == null) {
+	 //   this.hook454(fileHandle);
+	//} else {
+	 //   throw new ReturnObject(fileHandle);
+//	}
+  //  }
 
-    protected void hook461(ByteBuffer data) {
-    }
+  //  protected void hook461(ByteBuffer data) {
+ //   }
 
-    protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle)
-	    throws LogException, DatabaseException {
-	fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
-	this.hook464(fileId, fileHandle);
-	return fileHandle;
-    }
+ //   protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle)
+	//    throws LogException, DatabaseException {
+	//fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
+	//this.hook464(fileId, fileHandle);
+	//return fileHandle;
+   // }
 
-    protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle)
-	    throws LogException, DatabaseException {
-	fileHandle = this.hook450(fileNum, fileId, fileHandle);
-	return fileHandle;
-    }
+   // protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle)
+	  //  throws LogException, DatabaseException {
+	//fileHandle = this.hook450(fileNum, fileId, fileHandle);
+	//return fileHandle;
+   // }
 
-    protected void hook464(Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
-    }
+    //protected void hook464(Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+    //}
 
     protected void hook465(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file)
 	    throws DatabaseException, ClosedChannelException, IOException {

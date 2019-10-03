@@ -35,6 +35,7 @@ import java.io.File;
 // line 3 "../../../../FileManager_static.ump"
 // line 3 "../../../../EnvironmentLocking_FileManager.ump"
 // line 3 "../../../../DiskFullErro_FileManager.ump"
+// line 3 "../../../../FileHandleCache_FileManager.ump"
 public class FileManager
 {
 
@@ -75,8 +76,11 @@ public class FileManager
 lockEnvironment(readOnly, false);
 //	original(readOnly);
 //
+
+  Label457:
+fileCache = new FileCache(configManager);
  
-	this.hook457(configManager);
+	//this.hook457(configManager);
 	this.hook449(envImpl);
 	if (!dbEnvHome.exists()) {
 	    throw new LogException("Environment home " + dbEnvHome + " doesn't exist");
@@ -104,7 +108,7 @@ lockEnvironment(readOnly, false);
    * @param lastUsedLsnlast LSN to have a valid entry, may be null
    * @param prevOffsetvalue to use for the prevOffset of the next entry. If thebeginning of the file, this is 0.
    */
-  // line 146 "../../../../FileManager.ump"
+  // line 147 "../../../../FileManager.ump"
    public void setLastPosition(long nextAvailableLsn, long lastUsedLsn, long prevOffset){
     this.lastUsedLsn = lastUsedLsn;
 	perFileLastUsedLsn.put(new Long(DbLsn.getFileNumber(lastUsedLsn)), new Long(lastUsedLsn));
@@ -114,7 +118,7 @@ lockEnvironment(readOnly, false);
 	saveLastPosition();
   }
 
-  // line 155 "../../../../FileManager.ump"
+  // line 156 "../../../../FileManager.ump"
   public void saveLastPosition(){
     savedNextAvailableLsn = nextAvailableLsn;
 	savedLastUsedLsn = lastUsedLsn;
@@ -123,7 +127,7 @@ lockEnvironment(readOnly, false);
 	savedCurrentFileNum = currentFileNum;
   }
 
-  // line 163 "../../../../FileManager.ump"
+  // line 164 "../../../../FileManager.ump"
   public void restoreLastPosition(){
     nextAvailableLsn = savedNextAvailableLsn;
 	lastUsedLsn = savedLastUsedLsn;
@@ -137,7 +141,7 @@ lockEnvironment(readOnly, false);
    * 
    * May be used to disable sync at file end to speed unit tests. Must only be used for unit testing, since log corruption may result.
    */
-  // line 174 "../../../../FileManager.ump"
+  // line 175 "../../../../FileManager.ump"
    public void setSyncAtFileEnd(boolean sync){
     syncAtFileEnd = sync;
   }
@@ -148,12 +152,12 @@ lockEnvironment(readOnly, false);
    * public for cleaner.
    * @return the number of the first file in this environment.
    */
-  // line 182 "../../../../FileManager.ump"
+  // line 183 "../../../../FileManager.ump"
    public Long getFirstFileNum(){
     return getFileNum(true);
   }
 
-  // line 186 "../../../../FileManager.ump"
+  // line 187 "../../../../FileManager.ump"
    public boolean getReadOnly(){
     return readOnly;
   }
@@ -163,17 +167,17 @@ lockEnvironment(readOnly, false);
    * 
    * @return the number of the last file in this environment.
    */
-  // line 193 "../../../../FileManager.ump"
+  // line 194 "../../../../FileManager.ump"
    public Long getLastFileNum(){
     return getFileNum(false);
   }
 
-  // line 197 "../../../../FileManager.ump"
+  // line 198 "../../../../FileManager.ump"
    public long getCurrentFileNum(){
     return currentFileNum;
   }
 
-  // line 201 "../../../../FileManager.ump"
+  // line 202 "../../../../FileManager.ump"
    public void setIncludeDeletedFiles(boolean includeDeletedFiles){
     this.includeDeletedFiles = includeDeletedFiles;
   }
@@ -184,7 +188,7 @@ lockEnvironment(readOnly, false);
    * Get all JE file numbers.
    * @return an array of all JE file numbers.
    */
-  // line 209 "../../../../FileManager.ump"
+  // line 210 "../../../../FileManager.ump"
    public Long[] getAllFileNumbers(){
     String[] names = listFiles(JE_SUFFIXES);
 	Long[] nums = new Long[names.length];
@@ -202,7 +206,7 @@ lockEnvironment(readOnly, false);
    * @param forwardif true, we want the next larger file, if false we want theprevious file
    * @return null if there is no following file, or if filenum doesn't exist
    */
-  // line 224 "../../../../FileManager.ump"
+  // line 225 "../../../../FileManager.ump"
    public Long getFollowingFileNum(long currentFileNum, boolean forward){
     String[] names = listFiles(JE_SUFFIXES);
 	String searchName = getFileName(currentFileNum, JE_SUFFIX);
@@ -237,7 +241,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return true if there are any files at all.
    */
-  // line 256 "../../../../FileManager.ump"
+  // line 257 "../../../../FileManager.ump"
    public boolean filesExist(){
     String[] names = listFiles(JE_SUFFIXES);
 	return (names.length != 0);
@@ -250,7 +254,7 @@ lockEnvironment(readOnly, false);
    * @param firstif true, get the first file, else get the last file
    * @return the file number or null if no files exist
    */
-  // line 266 "../../../../FileManager.ump"
+  // line 267 "../../../../FileManager.ump"
    private Long getFileNum(boolean first){
     String[] names = listFiles(JE_SUFFIXES);
 	if (names.length == 0) {
@@ -271,7 +275,7 @@ lockEnvironment(readOnly, false);
    * @param thefile name
    * @return the file number
    */
-  // line 284 "../../../../FileManager.ump"
+  // line 285 "../../../../FileManager.ump"
    private Long getNumFromName(String fileName){
     String fileNumber = fileName.substring(0, fileName.indexOf("."));
 	return new Long(Long.parseLong(fileNumber, 16));
@@ -284,7 +288,7 @@ lockEnvironment(readOnly, false);
    * @param suffixwhich type of file we're looking for
    * @return array of file names
    */
-  // line 294 "../../../../FileManager.ump"
+  // line 295 "../../../../FileManager.ump"
   public String[] listFiles(String [] suffixes){
     String[] fileNames = dbEnvHome.list(new JEFileFilter(suffixes));
 	Arrays.sort(fileNames);
@@ -298,7 +302,7 @@ lockEnvironment(readOnly, false);
    * @param suffixwhich type of file we're looking for
    * @return array of file names
    */
-  // line 305 "../../../../FileManager.ump"
+  // line 306 "../../../../FileManager.ump"
    public static  String[] listFiles(File envDirFile, String [] suffixes){
     String[] fileNames = envDirFile.list(new JEFileFilter(suffixes));
 	Arrays.sort(fileNames);
@@ -310,7 +314,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the full file name and path for the nth je file.
    */
-  // line 314 "../../../../FileManager.ump"
+  // line 315 "../../../../FileManager.ump"
   public String[] getFullFileNames(long fileNum){
     if (includeDeletedFiles) {
 	    int nSuffixes = JE_AND_DEL_SUFFIXES.length;
@@ -329,7 +333,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the full file name and path for the given file number and suffix.
    */
-  // line 330 "../../../../FileManager.ump"
+  // line 331 "../../../../FileManager.ump"
    public String getFullFileName(long fileNum, String suffix){
     return getFullFileName(getFileName(fileNum, suffix));
   }
@@ -339,7 +343,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the full file name and path for this file name.
    */
-  // line 337 "../../../../FileManager.ump"
+  // line 338 "../../../../FileManager.ump"
    private String getFullFileName(String fileName){
     return dbEnvHome + File.separator + fileName;
   }
@@ -349,7 +353,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the file name for the nth file.
    */
-  // line 344 "../../../../FileManager.ump"
+  // line 345 "../../../../FileManager.ump"
    public static  String getFileName(long fileNum, String suffix){
     return (HexFormatter.formatLong(fileNum).substring(10) + suffix);
   }
@@ -361,7 +365,7 @@ lockEnvironment(readOnly, false);
    * @param fileNumthe file we want to move
    * @param newSuffixthe new file suffix
    */
-  // line 353 "../../../../FileManager.ump"
+  // line 354 "../../../../FileManager.ump"
    public void renameFile(long fileNum, String newSuffix) throws DatabaseException,IOException{
     int repeatNum = 0;
 	boolean renamed = false;
@@ -376,7 +380,10 @@ lockEnvironment(readOnly, false);
 		repeatNum++;
 	    } else {
 		String oldFileName = getFullFileNames(fileNum)[0];
-		this.hook458(fileNum);
+    Label458:
+clearFileCache(fileNum);
+		
+//this.hook458(fileNum);
 		File oldFile = new File(oldFileName);
 		if (oldFile.renameTo(targetFile)) {
 		    renamed = true;
@@ -393,10 +400,13 @@ lockEnvironment(readOnly, false);
    * Delete log file NNNNNNNN.
    * @param fileNumthe file we want to move
    */
-  // line 382 "../../../../FileManager.ump"
+  // line 384 "../../../../FileManager.ump"
    public void deleteFile(long fileNum) throws DatabaseException,IOException{
     String fileName = getFullFileNames(fileNum)[0];
-	this.hook459(fileNum);
+  Label459:
+clearFileCache(fileNum);
+
+	//this.hook459(fileNum);
 	File file = new File(fileName);
 	boolean done = file.delete();
 	if (!done) {
@@ -411,19 +421,36 @@ lockEnvironment(readOnly, false);
    * @param fileNumwhich file
    * @return the file handle for the existing or newly created file
    */
-  // line 397 "../../../../FileManager.ump"
+  // line 400 "../../../../FileManager.ump"
   public FileHandle getFileHandle(long fileNum) throws LogException,DatabaseException{
     try {
 	    Long fileId = new Long(fileNum);
 	    FileHandle fileHandle = null;
-	    this.hook460(fileNum, fileId, fileHandle);
-	    throw ReturnHack.returnObject;
-	} catch (ReturnObject r) {
-	    return (FileHandle) r.value;
-	}
+      Label460:
+		  Label463:
+      Label450:
+      Label462:
+fileHandle = fileCache.get(fileId);
+	  if (fileHandle == null) // continue
+
+      fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
+		  Label464:
+fileCache.add(fileId, fileHandle);
+
+      Label453:
+			if (fileHandle.getFile() == null) {
+					Label454:
+			} 
+			else {
+					throw new ReturnObject(fileHandle);
+			}
+					throw ReturnHack.returnObject;
+			} catch (ReturnObject r) {
+					return (FileHandle) r.value;
+			}
   }
 
-  // line 408 "../../../../FileManager.ump"
+  // line 423 "../../../../FileManager.ump"
    private FileHandle makeFileHandle(long fileNum, FileMode mode) throws DatabaseException{
     String[] fileNames = getFullFileNames(fileNum);
 	RandomAccessFile newFile = null;
@@ -475,7 +502,7 @@ lockEnvironment(readOnly, false);
    * 
    * Close this file and eat any exceptions. Used in catch clauses.
    */
-  // line 457 "../../../../FileManager.ump"
+  // line 472 "../../../../FileManager.ump"
    private void closeFileInErrorCase(RandomAccessFile file){
     try {
 	    if (file != null) {
@@ -492,7 +519,7 @@ lockEnvironment(readOnly, false);
    * @throws DatabaseExceptionif the file header isn't valid
    * @return whether the file header has an old version number.
    */
-  // line 472 "../../../../FileManager.ump"
+  // line 487 "../../../../FileManager.ump"
    private boolean readAndValidateFileHeader(RandomAccessFile file, String fileName, long fileNum) throws DatabaseException,IOException{
     LogManager logManager = envImpl.getLogManager();
 	LogEntry headerEntry = logManager.getLogEntry(DbLsn.makeLsn(fileNum, 0), file);
@@ -505,7 +532,7 @@ lockEnvironment(readOnly, false);
    * 
    * Write a proper file header to the given file.
    */
-  // line 483 "../../../../FileManager.ump"
+  // line 498 "../../../../FileManager.ump"
    private void writeFileHeader(RandomAccessFile file, String fileName, FileHeader header) throws DatabaseException,IOException{
     envImpl.checkIfInvalid();
 	if (envImpl.mayNotWrite()) {
@@ -539,7 +566,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the prevOffset field stored in the file header.
    */
-  // line 514 "../../../../FileManager.ump"
+  // line 529 "../../../../FileManager.ump"
   public long getFileHeaderPrevOffset(long fileNum) throws IOException,DatabaseException{
     LogEntry headerEntry = envImpl.getLogManager().getLogEntry(DbLsn.makeLsn(fileNum, 0));
 	FileHeader header = (FileHeader) headerEntry.getMainItem();
@@ -551,7 +578,7 @@ lockEnvironment(readOnly, false);
    * 
    * @return the file offset of the last LSN that was used. For constructingthe headers of log entries. If the last LSN that was used was in a previous file, or this is the very first LSN of the whole system, return 0.
    */
-  // line 523 "../../../../FileManager.ump"
+  // line 538 "../../../../FileManager.ump"
   public long getPrevEntryOffset(){
     return prevOffset;
   }
@@ -563,7 +590,7 @@ lockEnvironment(readOnly, false);
    * @param sizeis an unsigned int
    * @return true if we flipped to the next log file.
    */
-  // line 532 "../../../../FileManager.ump"
+  // line 547 "../../../../FileManager.ump"
   public boolean bumpLsn(long size){
     saveLastPosition();
 	boolean flippedFiles = false;
@@ -594,7 +621,7 @@ lockEnvironment(readOnly, false);
    * Write out a log buffer to the file.
    * @param fullBufferbuffer to write
    */
-  // line 560 "../../../../FileManager.ump"
+  // line 575 "../../../../FileManager.ump"
   public void writeLogBuffer(LogBuffer fullBuffer) throws DatabaseException{
     envImpl.checkIfInvalid();
 	if (envImpl.mayNotWrite()) {
@@ -654,7 +681,7 @@ catch (IOException IOE2) {
    * 
    * Write a buffer to a file at a given offset, using NIO if so configured.
    */
-  // line 597 "../../../../FileManager.ump"
+  // line 612 "../../../../FileManager.ump"
    private int writeToFile(RandomAccessFile file, ByteBuffer data, long destOffset) throws IOException,DatabaseException{
     return new FileManager_writeToFile(this, file, data, destOffset).execute();
   }
@@ -664,16 +691,19 @@ catch (IOException IOE2) {
    * 
    * Read a buffer from a file at a given offset, using NIO if so configured.
    */
-  // line 604 "../../../../FileManager.ump"
+  // line 619 "../../../../FileManager.ump"
   public void readFromFile(RandomAccessFile file, ByteBuffer readBuffer, long offset) throws IOException{
     new FileManager_readFromFile(this, file, readBuffer, offset).execute();
   }
 
-  // line 608 "../../../../FileManager.ump"
+  // line 623 "../../../../FileManager.ump"
    private void abortCommittedTxns(ByteBuffer data){
     final byte commitType = LogEntryType.LOG_TXN_COMMIT.getTypeNum();
 	final byte abortType = LogEntryType.LOG_TXN_ABORT.getTypeNum();
-	this.hook461(data);
+//	this.hook461(data);
+  Label461:
+data.position(0);
+
 	while (data.remaining() > 0) {
 	    int recStartPos = data.position();
 	    data.position(recStartPos + LogManager.HEADER_ENTRY_TYPE_OFFSET);
@@ -709,7 +739,7 @@ catch (IOException IOE2) {
    * 
    * FSync the end of the log.
    */
-  // line 645 "../../../../FileManager.ump"
+  // line 661 "../../../../FileManager.ump"
   public void syncLogEnd() throws DatabaseException{
     try {
 	    endOfLog.force();
@@ -723,7 +753,7 @@ catch (IOException IOE2) {
    * 
    * Sync the end of the log, close off this log file. Should only be called under the log write latch.
    */
-  // line 656 "../../../../FileManager.ump"
+  // line 672 "../../../../FileManager.ump"
   public void syncLogEndAndFinishFile() throws DatabaseException,IOException{
     if (syncAtFileEnd) {
 	    syncLogEnd();
@@ -736,8 +766,11 @@ catch (IOException IOE2) {
    * 
    * Close all file handles and empty the cache.
    */
-  // line 666 "../../../../FileManager.ump"
+  // line 682 "../../../../FileManager.ump"
    public void clear() throws IOException,DatabaseException{
+    // line 76 "../../../../FileHandleCache_FileManager.ump"
+    fileCache.clear();
+    // END OF UMPLE BEFORE INJECTION
     endOfLog.close();
   }
 
@@ -746,7 +779,7 @@ catch (IOException IOE2) {
    * 
    * Clear the file lock.
    */
-  // line 673 "../../../../FileManager.ump"
+  // line 689 "../../../../FileManager.ump"
    public void close() throws IOException,DatabaseException{
     // line 77 "../../../../EnvironmentLocking_FileManager.ump"
     if (envLock != null) {
@@ -771,7 +804,7 @@ catch (IOException IOE2) {
    * Ensure that if the environment home dir is on readonly media or in a readonly directory that the environment has been opened for readonly access.
    * @return true if the environment home dir is readonly.
    */
-  // line 680 "../../../../FileManager.ump"
+  // line 696 "../../../../FileManager.ump"
    private boolean checkEnvHomePermissions(boolean readOnly) throws DatabaseException{
     boolean envDirIsReadOnly = !dbEnvHome.canWrite();
 	if (envDirIsReadOnly && !readOnly) {
@@ -786,7 +819,7 @@ catch (IOException IOE2) {
    * 
    * Truncate a log at this position. Used by recovery to a timestamp utilities and by recovery to set the end-of-log position. <p> This method forces a new log file to be written next, if the last file (the file truncated to) has an old version in its header. This ensures that when the log is opened by an old version of JE, a version incompatibility will be detected. [#11243] </p>
    */
-  // line 692 "../../../../FileManager.ump"
+  // line 708 "../../../../FileManager.ump"
    public void truncateLog(long fileNum, long offset) throws IOException,DatabaseException{
     FileHandle handle = makeFileHandle(fileNum, FileMode.READWRITE_MODE);
 	RandomAccessFile file = handle.getFile();
@@ -805,7 +838,7 @@ catch (IOException IOE2) {
    * 
    * Set the flag that causes a new file to be written before the next write.
    */
-  // line 708 "../../../../FileManager.ump"
+  // line 724 "../../../../FileManager.ump"
   public void forceNewLogFile(){
     forceNewFile = true;
   }
@@ -815,7 +848,7 @@ catch (IOException IOE2) {
    * 
    * @return the size in bytes of the file header log entry.
    */
-  // line 715 "../../../../FileManager.ump"
+  // line 731 "../../../../FileManager.ump"
    public static  int firstLogEntryOffset(){
     return FileHeader.entrySize() + LogManager.HEADER_BYTES;
   }
@@ -825,7 +858,7 @@ catch (IOException IOE2) {
    * 
    * Return the next available LSN in the log. Note that this is unsynchronized, so is only valid as an approximation of log size.
    */
-  // line 722 "../../../../FileManager.ump"
+  // line 738 "../../../../FileManager.ump"
    public long getNextLsn(){
     return nextAvailableLsn;
   }
@@ -835,12 +868,12 @@ catch (IOException IOE2) {
    * 
    * Return the last allocated LSN in the log. Note that this is unsynchronized, so if it is called outside the log write latch it is only valid as an approximation of log size.
    */
-  // line 729 "../../../../FileManager.ump"
+  // line 745 "../../../../FileManager.ump"
    public long getLastUsedLsn(){
     return lastUsedLsn;
   }
 
-  // line 734 "../../../../FileManager.ump"
+  // line 750 "../../../../FileManager.ump"
    private void generateRunRecoveryException(RandomAccessFile file, ByteBuffer data, long destOffset) throws DatabaseException,IOException{
     if (runRecoveryExceptionThrown) {
 	    try {
@@ -869,87 +902,80 @@ catch (IOException IOE2) {
 	}
   }
 
-  // line 762 "../../../../FileManager.ump"
+  // line 778 "../../../../FileManager.ump"
    protected void hook449(EnvironmentImpl envImpl) throws DatabaseException{
     
   }
 
-  // line 766 "../../../../FileManager.ump"
+  // line 782 "../../../../FileManager.ump"
    protected FileHandle hook450(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
     fileHandle = this.hook462(fileNum, fileId, fileHandle);
 	return fileHandle;
   }
 
-  // line 771 "../../../../FileManager.ump"
+  // line 787 "../../../../FileManager.ump"
    protected void hook452(EnvironmentImpl envImpl) throws DatabaseException{
     
   }
 
-  // line 774 "../../../../FileManager.ump"
-   protected void hook453(FileHandle fileHandle) throws LogException,DatabaseException{
-    
-  }
 
-  // line 777 "../../../../FileManager.ump"
+  /**
+   * protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
+   * }
+   */
+  // line 793 "../../../../FileManager.ump"
    protected void hook454(FileHandle fileHandle) throws LogException,DatabaseException{
     
   }
 
-  // line 780 "../../../../FileManager.ump"
+  // line 796 "../../../../FileManager.ump"
    protected void hook456(DbConfigManager configManager) throws DatabaseException{
     
   }
 
-  // line 783 "../../../../FileManager.ump"
+  // line 799 "../../../../FileManager.ump"
    protected void hook457(DbConfigManager configManager) throws DatabaseException{
     
   }
 
-  // line 786 "../../../../FileManager.ump"
+  // line 802 "../../../../FileManager.ump"
    protected void hook458(long fileNum) throws DatabaseException,IOException{
     
   }
 
-  // line 789 "../../../../FileManager.ump"
+  // line 805 "../../../../FileManager.ump"
    protected void hook459(long fileNum) throws DatabaseException,IOException{
     
   }
 
-  // line 792 "../../../../FileManager.ump"
-   protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
-    fileHandle = this.hook463(fileNum, fileId, fileHandle);
-	this.hook453(fileHandle);
-	if (fileHandle.getFile() == null) {
-	    this.hook454(fileHandle);
-	} else {
-	    throw new ReturnObject(fileHandle);
-	}
-  }
 
-  // line 802 "../../../../FileManager.ump"
-   protected void hook461(ByteBuffer data){
-    
-  }
-
-  // line 806 "../../../../FileManager.ump"
-   protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
-    fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
-	this.hook464(fileId, fileHandle);
-	return fileHandle;
-  }
-
-  // line 813 "../../../../FileManager.ump"
-   protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
-    fileHandle = this.hook450(fileNum, fileId, fileHandle);
-	return fileHandle;
-  }
-
-  // line 818 "../../../../FileManager.ump"
-   protected void hook464(Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
-    
-  }
-
-  // line 822 "../../../../FileManager.ump"
+  /**
+   * protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+   * fileHandle = this.hook463(fileNum, fileId, fileHandle);
+   * this.hook453(fileHandle);
+   * if (fileHandle.getFile() == null) {
+   * this.hook454(fileHandle);
+   * } else {
+   * throw new ReturnObject(fileHandle);
+   * }
+   * }
+   * protected void hook461(ByteBuffer data) {
+   * }
+   * protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle)
+   * throws LogException, DatabaseException {
+   * fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
+   * this.hook464(fileId, fileHandle);
+   * return fileHandle;
+   * }
+   * protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle)
+   * throws LogException, DatabaseException {
+   * fileHandle = this.hook450(fileNum, fileId, fileHandle);
+   * return fileHandle;
+   * }
+   * protected void hook464(Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+   * }
+   */
+  // line 838 "../../../../FileManager.ump"
    protected void hook465(LogBuffer fullBuffer, long firstLsn, RandomAccessFile file) throws DatabaseException,ClosedChannelException,IOException{
     
   }
@@ -961,7 +987,7 @@ catch (IOException IOE2) {
    * throw new DatabaseException(IOE);
    * }
    */
-  // line 830 "../../../../FileManager.ump"
+  // line 846 "../../../../FileManager.ump"
    protected void hook467(boolean readOnly) throws DatabaseException{
     
   }
@@ -1022,6 +1048,28 @@ catch (IOException IOE2) {
 	} catch (IOException IOE) {
 	    throw new DatabaseException(IOE);
 	}
+  }
+
+  // line 8 "../../../../FileHandleCache_FileManager.ump"
+  public Set getCacheKeys(){
+    return fileCache.getCacheKeys();
+  }
+
+
+  /**
+   * 
+   * Clear a file out of the file cache regardless of mode type.
+   */
+  // line 15 "../../../../FileHandleCache_FileManager.ump"
+   private void clearFileCache(long fileNum) throws IOException,DatabaseException{
+    fileCache.remove(fileNum);
+  }
+
+  // line 50 "../../../../FileHandleCache_FileManager.ump"
+   protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException,DatabaseException{
+    while (true) {
+			  original(fileNum, fileId, fileHandle);
+			}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1416,6 +1464,8 @@ catch (IOException IOE2) {
   private FileLock envLock ;
 // line 11 "../../../../EnvironmentLocking_FileManager.ump"
   private FileLock exclLock ;
+// line 5 "../../../../FileHandleCache_FileManager.ump"
+  private FileCache fileCache ;
 
   
 }
