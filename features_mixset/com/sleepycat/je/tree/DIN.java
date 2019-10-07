@@ -20,6 +20,7 @@ import java.nio.ByteBuffer;
 
 // line 3 "../../../../DIN.ump"
 // line 3 "../../../../DIN_static.ump"
+// line 3 "../../../../MemoryBudget_DIN.ump"
 public class DIN extends IN
 {
 
@@ -374,6 +375,30 @@ public class DIN extends IN
   // line 302 "../../../../DIN.ump"
    public String shortClassName(){
     return "DIN";
+  }
+
+
+  /**
+   * 
+   * Count up the memory usage attributable to this node alone. LNs children are counted by their BIN/DIN parents, but INs are not counted by  their parents because they are resident on the IN list.
+   */
+  // line 9 "../../../../MemoryBudget_DIN.ump"
+   protected long computeMemorySize(){
+    long size = super.computeMemorySize();
+	if (dupCountLNRef != null) {
+	    size += getEntryInMemorySize(dupCountLNRef.getKey(), dupCountLNRef.getTarget());
+	}
+	return size;
+  }
+
+  // line 17 "../../../../MemoryBudget_DIN.ump"
+   public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
+    return MemoryBudget.DIN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
+  }
+
+  // line 21 "../../../../MemoryBudget_DIN.ump"
+   protected long getMemoryOverhead(MemoryBudget mb){
+    return mb.getDINOverhead();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

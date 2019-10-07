@@ -449,7 +449,40 @@ class CursorImpl
 	}
 	LockResult dclLockResult = null;
 	DIN dupRoot = null;
-	this.hook213(isDup, ln, lockResult, dclLockResult, dupRoot);
+	//this.hook213(isDup, ln, lockResult, dclLockResult, dupRoot);
+  Label213:
+	isDup = (dupBin != null);
+	if (isDup) {
+	    dupRoot = getLatchedDupRoot(true);
+	    dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
+	    dupRoot = (DIN) bin.getTarget(index);
+	    this.hook267();
+	}
+	setTargetBin();
+	long oldLsn = targetBin.getLsn(targetIndex);
+	byte[] lnKey = targetBin.getKey(targetIndex);
+	lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
+	long oldLNSize = 0;
+  //	oldLNSize = this.hook284(ln, oldLNSize);
+  Label284:
+	long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
+	long newLNSize = 0;
+  //	newLNSize = this.hook283(ln, newLNSize);
+  Label283:
+	targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
+	targetBin.setPendingDeleted(targetIndex);
+	this.hook266();
+	if (isDup) {
+	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
+	    this.hook268(dupRoot);
+	    dupRoot = null;
+	    this.hook281(lnKey);
+	} else {
+	    this.hook282(lnKey);
+	}
+	this.hook204(ln, oldLsn, newLsn);
+
+//end of hook213
 	return OperationStatus.SUCCESS;
     }
 
@@ -1135,34 +1168,37 @@ class CursorImpl
 
     protected void hook213(boolean isDup, LN ln, LockResult lockResult, LockResult dclLockResult, DIN dupRoot)
 	    throws DatabaseException {
-	isDup = (dupBin != null);
-	if (isDup) {
-	    dupRoot = getLatchedDupRoot(true);
-	    dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
-	    dupRoot = (DIN) bin.getTarget(index);
-	    this.hook267();
-	}
-	setTargetBin();
-	long oldLsn = targetBin.getLsn(targetIndex);
-	byte[] lnKey = targetBin.getKey(targetIndex);
-	lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
-	long oldLNSize = 0;
-	oldLNSize = this.hook284(ln, oldLNSize);
-	long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
-	long newLNSize = 0;
-	newLNSize = this.hook283(ln, newLNSize);
-	targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-	targetBin.setPendingDeleted(targetIndex);
-	this.hook266();
-	if (isDup) {
-	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
-	    this.hook268(dupRoot);
-	    dupRoot = null;
-	    this.hook281(lnKey);
-	} else {
-	    this.hook282(lnKey);
-	}
-	this.hook204(ln, oldLsn, newLsn);
+//
+//	isDup = (dupBin != null);
+//	if (isDup) {
+//	    dupRoot = getLatchedDupRoot(true);
+//	    dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
+//	    dupRoot = (DIN) bin.getTarget(index);
+//	    this.hook267();
+//	}
+//	setTargetBin();
+//	long oldLsn = targetBin.getLsn(targetIndex);
+//	byte[] lnKey = targetBin.getKey(targetIndex);
+//	lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
+//	long oldLNSize = 0;
+// //	oldLNSize = this.hook284(ln, oldLNSize);
+//  Label284____:
+//	long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
+//	long newLNSize = 0;
+//  //	newLNSize = this.hook283(ln, newLNSize);
+//  Label283____:
+//	targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
+//	targetBin.setPendingDeleted(targetIndex);
+//	this.hook266();
+//	if (isDup) {
+//	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
+//	    this.hook268(dupRoot);
+//	    dupRoot = null;
+//	    this.hook281(lnKey);
+//	} else {
+//	    this.hook282(lnKey);
+//	}
+//	this.hook204(ln, oldLsn, newLsn);
     }
 
     protected void hook214() throws DatabaseException {
@@ -1253,11 +1289,13 @@ class CursorImpl
 	long oldLsn = targetBin.getLsn(targetIndex);
 	lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
 	long oldLNSize = 0;
-	oldLNSize = this.hook286(ln, oldLNSize);
+  //	oldLNSize = this.hook286(ln, oldLNSize);
+  Lable286:
 	byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
 	long newLsn = ln.modify(newData, database, newKey, oldLsn, locker);
 	long newLNSize = 0;
-	newLNSize = this.hook285(ln, newLNSize);
+	//newLNSize = this.hook285(ln, newLNSize);
+  Label285:
 	targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
 	this.hook269();
 	this.hook205(ln, oldLsn, newLsn);

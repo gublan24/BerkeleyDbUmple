@@ -164,7 +164,8 @@ class BIN
      */
     public void setKnownDeleted(int index) {
 	super.setKnownDeleted(index);
-	this.hook610(index);
+	//this.hook610(index);
+Label610:
 	setMigrate(index, false);
 	super.setTarget(index, null);
 	setDirty(true);

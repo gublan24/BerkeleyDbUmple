@@ -18,8 +18,7 @@ import java.math.BigInteger;
 import java.io.PrintStream;
 import java.io.File;
 
-// line 3 "../../../../DbCacheSize.ump"
-// line 3 "../../../../DbCacheSize_inner.ump"
+// line 3 "../../../../MemoryBudget_DbCacheSize.ump"
 public class DbCacheSize
 {
 
@@ -40,146 +39,15 @@ public class DbCacheSize
 
   public void delete()
   {}
-  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
-  package com.sleepycat.je.util;
-  
-  @MethodObject
-  // line 4 "../../../../DbCacheSize_inner.ump"
-  public static class DbCacheSize_insertRecords
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public DbCacheSize_insertRecords()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../DbCacheSize_inner.ump"
-    public  DbCacheSize_insertRecords(PrintStream out, Environment env, Database db, long records, int keySize, int dataSize, boolean randomKeys){
-      this.out=out;
-          this.env=env;
-          this.db=db;
-          this.records=records;
-          this.keySize=keySize;
-          this.dataSize=dataSize;
-          this.randomKeys=randomKeys;
-    }
-  
-    // line 15 "../../../../DbCacheSize_inner.ump"
-    public void execute() throws DatabaseException{
-      try {
-            key=new DatabaseEntry();
-            data=new DatabaseEntry(new byte[dataSize]);
-            bigInt=BigInteger.ZERO;
-            rnd=new Random(123);
-            for (int i=0; i < records; i+=1) {
-              if (randomKeys) {
-                a=new byte[keySize];
-                rnd.nextBytes(a);
-                key.setData(a);
-              }
-     else {
-                bigInt=bigInt.add(BigInteger.ONE);
-                a2=bigInt.toByteArray();
-                if (a2.length < keySize) {
-                  a3=new byte[keySize];
-                  System.arraycopy(a2,0,a3,a3.length - a2.length,a2.length);
-                  a2=a3;
-                }
-     else             if (a2.length > keySize) {
-                  out.println("*** Key doesn't fit value=" + bigInt + " byte length="+ a2.length);
-                  return;
-                }
-                key.setData(a2);
-              }
-              status=db.putNoOverwrite(null,key,data);
-              if (status == OperationStatus.KEYEXIST && randomKeys) {
-                i-=1;
-                out.println("Random key already exists -- retrying");
-                continue;
-              }
-              if (status != OperationStatus.SUCCESS) {
-                out.println("*** " + status);
-                return;
-              }
-              if (i % 10000 == 0) {
-                this.hook833();
-                out.print(".");
-                out.flush();
-              }
-            }
-          }
-     catch (      ReturnVoid r) {
-            return;
-          }
-    }
-  
-    // line 78 "../../../../DbCacheSize_inner.ump"
-     protected void hook833() throws DatabaseException{
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 61 "../../../../DbCacheSize_inner.ump"
-    protected PrintStream out ;
-  // line 62 "../../../../DbCacheSize_inner.ump"
-    protected Environment env ;
-  // line 63 "../../../../DbCacheSize_inner.ump"
-    protected Database db ;
-  // line 64 "../../../../DbCacheSize_inner.ump"
-    protected long records ;
-  // line 65 "../../../../DbCacheSize_inner.ump"
-    protected int keySize ;
-  // line 66 "../../../../DbCacheSize_inner.ump"
-    protected int dataSize ;
-  // line 67 "../../../../DbCacheSize_inner.ump"
-    protected boolean randomKeys ;
-  // line 68 "../../../../DbCacheSize_inner.ump"
-    protected DatabaseEntry key ;
-  // line 69 "../../../../DbCacheSize_inner.ump"
-    protected DatabaseEntry data ;
-  // line 70 "../../../../DbCacheSize_inner.ump"
-    protected BigInteger bigInt ;
-  // line 71 "../../../../DbCacheSize_inner.ump"
-    protected Random rnd ;
-  // line 72 "../../../../DbCacheSize_inner.ump"
-    protected byte[] a ;
-  // line 73 "../../../../DbCacheSize_inner.ump"
-    protected byte[] a2 ;
-  // line 74 "../../../../DbCacheSize_inner.ump"
-    protected byte[] a3 ;
-  // line 75 "../../../../DbCacheSize_inner.ump"
-    protected OperationStatus status ;
-  // line 76 "../../../../DbCacheSize_inner.ump"
-    protected EnvironmentStats stats ;
-  
-    
-  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 20 "../../../../DbCacheSize.ump"
+  // line 20 "../../../../MemoryBudget_DbCacheSize.ump"
   private static final NumberFormat INT_FORMAT = NumberFormat.getIntegerInstance() ;
 
-// line 22 ../../../../DbCacheSize.ump
+// line 22 ../../../../MemoryBudget_DbCacheSize.ump
   private static final String HEADER = "    Cache Size      Btree Size  Description\n"
 	    + "--------------  --------------  -----------";
 

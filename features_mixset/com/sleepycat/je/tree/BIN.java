@@ -24,6 +24,7 @@ import java.util.Comparator;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../BIN.ump"
+// line 3 "../../../../MemoryBudget_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -211,7 +212,11 @@ public class BIN extends IN implements LoggableObject
   // line 166 "../../../../BIN.ump"
    public void setKnownDeleted(int index){
     super.setKnownDeleted(index);
-	this.hook610(index);
+	//this.hook610(index);
+Label610:
+updateMemorySize(getTarget(index), null);
+	//original(index);
+
 	setMigrate(index, false);
 	super.setTarget(index, null);
 	setDirty(true);
@@ -223,7 +228,7 @@ public class BIN extends IN implements LoggableObject
    * Mark this entry as deleted, using the delete flag. Only BINS may do this. Don't null the target field. This is used so that an LN can still be locked by the compressor even if the entry is knownDeleted. See BIN.compress.
    * @param indexindicates target entry
    */
-  // line 178 "../../../../BIN.ump"
+  // line 179 "../../../../BIN.ump"
    public void setKnownDeletedLeaveTarget(int index){
     setMigrate(index, false);
 	super.setKnownDeleted(index);
@@ -236,13 +241,13 @@ public class BIN extends IN implements LoggableObject
    * Clear the known deleted flag. Only BINS may do this.
    * @param indexindicates target entry
    */
-  // line 188 "../../../../BIN.ump"
+  // line 189 "../../../../BIN.ump"
    public void clearKnownDeleted(int index){
     super.clearKnownDeleted(index);
 	setDirty(true);
   }
 
-  // line 193 "../../../../BIN.ump"
+  // line 194 "../../../../BIN.ump"
    public Set getCursorSet(){
     return cursorSet.copy();
   }
@@ -253,7 +258,7 @@ public class BIN extends IN implements LoggableObject
    * Register a cursor with this bin. Caller has this bin already latched.
    * @param cursorCursor to register.
    */
-  // line 201 "../../../../BIN.ump"
+  // line 202 "../../../../BIN.ump"
    public void addCursor(CursorImpl cursor){
     cursorSet.add(cursor);
   }
@@ -264,7 +269,7 @@ public class BIN extends IN implements LoggableObject
    * Unregister a cursor with this bin. Caller has this bin already latched.
    * @param cursorCursor to unregister.
    */
-  // line 209 "../../../../BIN.ump"
+  // line 210 "../../../../BIN.ump"
    public void removeCursor(CursorImpl cursor){
     cursorSet.remove(cursor);
   }
@@ -274,7 +279,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * @return the number of cursors currently referring to this BIN.
    */
-  // line 216 "../../../../BIN.ump"
+  // line 217 "../../../../BIN.ump"
    public int nCursors(){
     return cursorSet.size();
   }
@@ -284,27 +289,27 @@ public class BIN extends IN implements LoggableObject
    * 
    * The following four methods access the correct fields in a cursor depending on whether "this" is a BIN or DBIN. For BIN's, the CursorImpl.index and CursorImpl.bin fields should be used. For DBIN's, the CursorImpl.dupIndex and CursorImpl.dupBin fields should be used.
    */
-  // line 223 "../../../../BIN.ump"
+  // line 224 "../../../../BIN.ump"
   public BIN getCursorBIN(CursorImpl cursor){
     return cursor.getBIN();
   }
 
-  // line 227 "../../../../BIN.ump"
+  // line 228 "../../../../BIN.ump"
   public BIN getCursorBINToBeRemoved(CursorImpl cursor){
     return cursor.getBINToBeRemoved();
   }
 
-  // line 231 "../../../../BIN.ump"
+  // line 232 "../../../../BIN.ump"
   public int getCursorIndex(CursorImpl cursor){
     return cursor.getIndex();
   }
 
-  // line 235 "../../../../BIN.ump"
+  // line 236 "../../../../BIN.ump"
   public void setCursorBIN(CursorImpl cursor, BIN bin){
     cursor.setBIN(bin);
   }
 
-  // line 239 "../../../../BIN.ump"
+  // line 240 "../../../../BIN.ump"
   public void setCursorIndex(CursorImpl cursor, int index){
     cursor.setIndex(index);
   }
@@ -314,7 +319,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * Called when we know we are about to split on behalf of a key that is the minimum (leftSide) or maximum (!leftSide) of this node. This is achieved by just forcing the split to occur either one element in from the left or the right (i.e. splitIndex is 1 or nEntries - 1).
    */
-  // line 247 "../../../../BIN.ump"
+  // line 248 "../../../../BIN.ump"
   public void splitSpecial(IN parent, int parentIndex, int maxEntriesPerNode, byte [] key, boolean leftSide) throws DatabaseException{
     int index = findEntry(key, true, false);
 	int nEntries = getNEntries();
@@ -336,7 +341,7 @@ public class BIN extends IN implements LoggableObject
    * @param newSibling -the newSibling into which "this" has been split.
    * @param newSiblingLow,newSiblingHigh - the low and high entry of "this" that were moved into newSibling.
    */
-  // line 266 "../../../../BIN.ump"
+  // line 267 "../../../../BIN.ump"
   public void adjustCursors(IN newSibling, int newSiblingLow, int newSiblingHigh){
     int adjustmentDelta = (newSiblingHigh - newSiblingLow);
 	Iterator iter = cursorSet.iterator();
@@ -375,7 +380,7 @@ public class BIN extends IN implements LoggableObject
    * Adjust cursors referring to this BIN following an insert.
    * @param insertIndex -The index of the new entry.
    */
-  // line 302 "../../../../BIN.ump"
+  // line 303 "../../../../BIN.ump"
   public void adjustCursorsForInsert(int insertIndex){
     if (cursorSet != null) {
 	    Iterator iter = cursorSet.iterator();
@@ -400,7 +405,7 @@ public class BIN extends IN implements LoggableObject
    * @param dupBinIndex -The index of the moved LN entry in the DBIN.
    * @param excludeCursor -The cursor being used for insertion and that should not be updated.
    */
-  // line 324 "../../../../BIN.ump"
+  // line 325 "../../../../BIN.ump"
   public void adjustCursorsForMutation(int binIndex, DBIN dupBin, int dupBinIndex, CursorImpl excludeCursor){
     if (cursorSet != null) {
 	    Iterator iter = cursorSet.iterator();
@@ -424,7 +429,7 @@ public class BIN extends IN implements LoggableObject
    * @param canFetchif false, don't fetch any non-resident children. We don't wantsome callers of compress, such as the evictor, to fault in other nodes.
    * @return true if we had to requeue the entry because we were unable to getlocks, false if all entries were processed and therefore any remaining deleted keys in the BINReference must now be in some other BIN because of a split.
    */
-  // line 345 "../../../../BIN.ump"
+  // line 346 "../../../../BIN.ump"
    public boolean compress(BINReference binRef, boolean canFetch) throws DatabaseException{
     boolean ret = false;
 	boolean setNewIdKey = false;
@@ -500,12 +505,12 @@ public class BIN extends IN implements LoggableObject
 	return ret;
   }
 
-  // line 420 "../../../../BIN.ump"
+  // line 421 "../../../../BIN.ump"
    public boolean isCompressible(){
     return true;
   }
 
-  // line 424 "../../../../BIN.ump"
+  // line 425 "../../../../BIN.ump"
   public boolean validateSubtreeBeforeDelete(int index) throws DatabaseException{
     return true;
   }
@@ -515,7 +520,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * Check if this node fits the qualifications for being part of a deletable subtree. It can only have one IN child and no LN children.
    */
-  // line 431 "../../../../BIN.ump"
+  // line 432 "../../../../BIN.ump"
   public boolean isValidForDelete() throws DatabaseException{
     try {
 	    int validIndex = 0;
@@ -528,7 +533,7 @@ public class BIN extends IN implements LoggableObject
 	}
   }
 
-  // line 443 "../../../../BIN.ump"
+  // line 444 "../../../../BIN.ump"
   public void accumulateStats(TreeWalkerStatsAccumulator acc){
     acc.processBIN(this, new Long(getNodeId()), getLevel());
   }
@@ -538,17 +543,17 @@ public class BIN extends IN implements LoggableObject
    * 
    * Return the relevant user defined comparison function for this type of node. For IN's and BIN's, this is the BTree Comparison function. Overriden by DBIN.
    */
-  // line 450 "../../../../BIN.ump"
+  // line 451 "../../../../BIN.ump"
    public Comparator getKeyComparator(){
     return getDatabase().getBtreeComparator();
   }
 
-  // line 454 "../../../../BIN.ump"
+  // line 455 "../../../../BIN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 458 "../../../../BIN.ump"
+  // line 459 "../../../../BIN.ump"
    public String endTag(){
     return END_TAG;
   }
@@ -558,12 +563,12 @@ public class BIN extends IN implements LoggableObject
    * 
    * @see LoggableObject#getLogType
    */
-  // line 465 "../../../../BIN.ump"
+  // line 466 "../../../../BIN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_BIN;
   }
 
-  // line 469 "../../../../BIN.ump"
+  // line 470 "../../../../BIN.ump"
    public String shortClassName(){
     return "BIN";
   }
@@ -573,7 +578,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * Decide how to log this node. BINs may be logged provisionally. If logging a delta, return an null for the LSN.
    */
-  // line 477 "../../../../BIN.ump"
+  // line 478 "../../../../BIN.ump"
    protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional, boolean proactiveMigration, IN parent) throws DatabaseException{
     boolean doDeltaLog = false;
 	long lastFullVersion = getLastFullVersion();
@@ -604,7 +609,7 @@ public class BIN extends IN implements LoggableObject
    * Decide whether to log a full or partial BIN, depending on the ratio of the delta size to full BIN size, and the number of deltas that have been logged since the last full.
    * @return true if we should log the deltas of this BIN
    */
-  // line 505 "../../../../BIN.ump"
+  // line 506 "../../../../BIN.ump"
    private boolean doDeltaLog(BINDelta deltaInfo) throws DatabaseException{
     int maxDiffs = (getNEntries() * getDatabase().getBinDeltaPercent()) / 100;
 	if ((deltaInfo.getNumDeltas() <= maxDiffs) && (numDeltasSinceLastFull < getDatabase().getBinMaxDeltas())) {
@@ -614,27 +619,27 @@ public class BIN extends IN implements LoggableObject
 	}
   }
 
-  // line 514 "../../../../BIN.ump"
+  // line 515 "../../../../BIN.ump"
    protected void hook603(Node child) throws DatabaseException{
     
   }
 
-  // line 517 "../../../../BIN.ump"
+  // line 518 "../../../../BIN.ump"
    protected void hook604() throws DatabaseException{
     
   }
 
-  // line 520 "../../../../BIN.ump"
+  // line 521 "../../../../BIN.ump"
    protected void hook605() throws DatabaseException{
     
   }
 
-  // line 523 "../../../../BIN.ump"
+  // line 524 "../../../../BIN.ump"
    protected void hook606() throws DatabaseException{
     
   }
 
-  // line 526 "../../../../BIN.ump"
+  // line 527 "../../../../BIN.ump"
    protected void hook607(int validIndex, int numValidEntries, boolean needToLatch) throws DatabaseException{
     this.hook608(needToLatch);
 	for (int i = 0; i < getNEntries(); i++) {
@@ -658,19 +663,29 @@ public class BIN extends IN implements LoggableObject
 	}
   }
 
-  // line 549 "../../../../BIN.ump"
+  // line 550 "../../../../BIN.ump"
    protected void hook608(boolean needToLatch) throws DatabaseException{
     
   }
 
-  // line 552 "../../../../BIN.ump"
+  // line 553 "../../../../BIN.ump"
    protected void hook609(BINReference binRef, DatabaseImpl db) throws DatabaseException{
     
   }
 
-  // line 555 "../../../../BIN.ump"
+  // line 556 "../../../../BIN.ump"
    protected void hook610(int index){
     
+  }
+
+  // line 6 "../../../../MemoryBudget_BIN.ump"
+   public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
+    return MemoryBudget.BIN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
+  }
+
+  // line 10 "../../../../MemoryBudget_BIN.ump"
+   protected long getMemoryOverhead(MemoryBudget mb){
+    return mb.getBINOverhead();
   }
   
   //------------------------

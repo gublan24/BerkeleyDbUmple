@@ -1,0 +1,1 @@
+updateMemorySize in BIN.java is not implemented any where ?

@@ -34,6 +34,7 @@ import com.sleepycat.je.log.*;
 
 // line 3 "../../../../IN.ump"
 // line 3 "../../../../IN_static.ump"
+// line 3 "../../../../MemoryBudget_IN.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -1738,11 +1739,166 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
 
   // line 1578 "../../../../IN.ump"
    protected void hook637() throws DatabaseException{
-    
+    initMemorySize();
+	original();
   }
 
   // line 1581 "../../../../IN.ump"
    protected void hook638(Node node) throws DatabaseException,LogFileNotFoundException,Exception{
+    updateMemorySize(null, node);
+	original(node);
+  }
+
+
+  /**
+   * 
+   * Initialize the per-node memory count by computing its memory usage.
+   */
+  // line 13 "../../../../MemoryBudget_IN.ump"
+   protected void initMemorySize(){
+    inMemorySize = computeMemorySize();
+  }
+
+  // line 17 "../../../../MemoryBudget_IN.ump"
+   public boolean verifyMemorySize(){
+    long calcMemorySize = computeMemorySize();
+	if (calcMemorySize != inMemorySize) {
+	    String msg = "-Warning: Out of sync. " + "Should be " + calcMemorySize + " / actual: " + inMemorySize
+		    + " node: " + getNodeId();
+	    this.hook615(msg);
+	    System.out.println(msg);
+	    return false;
+	} else {
+	    return true;
+	}
+  }
+
+
+  /**
+   * 
+   * Return the number of bytes used by this IN.  Latching is up to the caller.
+   */
+  // line 33 "../../../../MemoryBudget_IN.ump"
+   public long getInMemorySize(){
+    return inMemorySize;
+  }
+
+  // line 37 "../../../../MemoryBudget_IN.ump"
+   private long getEntryInMemorySize(int idx){
+    return getEntryInMemorySize(entryKeyVals[idx], entryTargets[idx]);
+  }
+
+  // line 41 "../../../../MemoryBudget_IN.ump"
+   protected long getEntryInMemorySize(byte [] key, Node target){
+    long ret = 0;
+	if (key != null) {
+	    ret += MemoryBudget.byteArraySize(key.length);
+	}
+	if (target != null) {
+	    ret += target.getMemorySizeIncludedByParent();
+	}
+	return ret;
+  }
+
+
+  /**
+   * 
+   * Count up the memory usage attributable to this node alone. LNs children are counted by their BIN/DIN parents, but INs are not counted by their parents because they are resident on the IN list.
+   */
+  // line 55 "../../../../MemoryBudget_IN.ump"
+   protected long computeMemorySize(){
+    MemoryBudget mb = databaseImpl.getDbEnvironment().getMemoryBudget();
+	long calcMemorySize = getMemoryOverhead(mb);
+	calcMemorySize += computeLsnOverhead();
+	for (int i = 0; i < nEntries; i++) {
+	    calcMemorySize += getEntryInMemorySize(i);
+	}
+	if (provisionalObsolete != null) {
+	    calcMemorySize += provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+	}
+	return calcMemorySize;
+  }
+
+  // line 68 "../../../../MemoryBudget_IN.ump"
+   public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
+    return MemoryBudget.IN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
+  }
+
+  // line 72 "../../../../MemoryBudget_IN.ump"
+   private int computeLsnOverhead(){
+    if (entryLsnLongArray == null) {
+	    return MemoryBudget.byteArraySize(entryLsnByteArray.length);
+	} else {
+	    return MemoryBudget.BYTE_ARRAY_OVERHEAD + entryLsnLongArray.length * MemoryBudget.LONG_OVERHEAD;
+	}
+  }
+
+  // line 80 "../../../../MemoryBudget_IN.ump"
+   protected static  long computeArraysOverhead(DbConfigManager configManager) throws DatabaseException{
+    int capacity = configManager.getInt(EnvironmentParams.NODE_MAX);
+	return MemoryBudget.byteArraySize(capacity) + (capacity * (2 * MemoryBudget.ARRAY_ITEM_OVERHEAD));
+  }
+
+  // line 85 "../../../../MemoryBudget_IN.ump"
+   protected long getMemoryOverhead(MemoryBudget mb){
+    return mb.getINOverhead();
+  }
+
+  // line 89 "../../../../MemoryBudget_IN.ump"
+   protected void updateMemorySize(ChildReference oldRef, ChildReference newRef){
+    long delta = 0;
+	if (newRef != null) {
+	    delta = getEntryInMemorySize(newRef.getKey(), newRef.getTarget());
+	}
+	if (oldRef != null) {
+	    delta -= getEntryInMemorySize(oldRef.getKey(), oldRef.getTarget());
+	}
+	changeMemorySize(delta);
+  }
+
+  // line 100 "../../../../MemoryBudget_IN.ump"
+   protected void updateMemorySize(long oldSize, long newSize){
+    long delta = newSize - oldSize;
+	changeMemorySize(delta);
+  }
+
+  // line 105 "../../../../MemoryBudget_IN.ump"
+  public void updateMemorySize(Node oldNode, Node newNode){
+    long delta = 0;
+	if (newNode != null) {
+	    delta = newNode.getMemorySizeIncludedByParent();
+	}
+	if (oldNode != null) {
+	    delta -= oldNode.getMemorySizeIncludedByParent();
+	}
+	changeMemorySize(delta);
+  }
+
+  // line 116 "../../../../MemoryBudget_IN.ump"
+   private void changeMemorySize(long delta){
+    inMemorySize += delta;
+	if (inListResident) {
+	    MemoryBudget mb = databaseImpl.getDbEnvironment().getMemoryBudget();
+	    accumulatedDelta += delta;
+	    if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
+		mb.updateTreeMemoryUsage(accumulatedDelta);
+		accumulatedDelta = 0;
+	    }
+	}
+  }
+
+  // line 128 "../../../../MemoryBudget_IN.ump"
+   public int getAccumulatedDelta(){
+    return accumulatedDelta;
+  }
+
+  // line 132 "../../../../MemoryBudget_IN.ump"
+   public void setInListResident(boolean resident){
+    inListResident = resident;
+  }
+
+  // line 136 "../../../../MemoryBudget_IN.ump"
+   protected void hook615(String msg){
     
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
@@ -3161,6 +3317,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
 	    }
 	}
   }
+// line 5 "../../../../MemoryBudget_IN.ump"
+  private boolean inListResident ;
+// line 7 "../../../../MemoryBudget_IN.ump"
+  private int accumulatedDelta = 0 ;
 
   
 }

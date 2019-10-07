@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Collections;
 
 // line 3 "../../../../TxnManager.ump"
+// line 3 "../../../../MemoryBudget_TxnManager.ump"
 public class TxnManager
 {
 
@@ -259,17 +260,20 @@ public class TxnManager
 
   // line 227 "../../../../TxnManager.ump"
    protected void hook828(Txn txn) throws DatabaseException{
-    
+    env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
+	original(txn);
   }
 
   // line 230 "../../../../TxnManager.ump"
    protected void hook829() throws DatabaseException{
-    
+    env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
+	original();
   }
 
   // line 233 "../../../../TxnManager.ump"
    protected void hook830() throws DatabaseException{
-    
+    env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
+	original();
   }
   
   //------------------------

@@ -10,9 +10,9 @@ class BIN
 	return mb.getBINOverhead();
     }
 
-    protected void hook610(int index) {
+    after Label610: setKnownDeleted(int ){
 	updateMemorySize(getTarget(index), null);
-	original(index);
+	//original(index);
     }
 
 }

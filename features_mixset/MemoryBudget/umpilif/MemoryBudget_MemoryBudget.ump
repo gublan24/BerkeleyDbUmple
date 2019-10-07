@@ -217,7 +217,16 @@ class MemoryBudget
     public long calcTreeCacheUsage() throws DatabaseException {
 	long totalSize = 0;
 	INList inList = envImpl.getInMemoryINs();
-	totalSize = this.hook347(totalSize, inList);
+//	totalSize = this.hook347(totalSize, inList);
+//hook347
+  Iterator iter = inList.iterator();
+	while (iter.hasNext()) {
+	    IN in = (IN) iter.next();
+	    long size = in.getInMemorySize();
+	    totalSize += size;
+	}
+//End of hook347
+
 	return totalSize;
     }
 

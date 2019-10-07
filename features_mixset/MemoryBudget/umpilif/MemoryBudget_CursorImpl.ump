@@ -1,0 +1,21 @@
+namespace com.sleepycat.je.dbi;
+
+class CursorImpl
+{
+    after Label283:delete(){
+      newLNSize = ln.getMemorySizeIncludedByParent();
+    }
+
+    after Label284:delete(){
+      oldLNSize = ln.getMemorySizeIncludedByParent();
+    }
+
+    after Label285:delete(){
+	    newLNSize = ln.getMemorySizeIncludedByParent();
+    }
+
+    after Label286:delete(){
+    	oldLNSize = ln.getMemorySizeIncludedByParent();
+    }
+
+}

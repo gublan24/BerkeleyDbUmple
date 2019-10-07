@@ -10,6 +10,7 @@ import com.sleepycat.je.PreloadStats;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../PreloadProcessor.ump"
+// line 3 "../../../../MemoryBudget_PreloadProcessor.ump"
 public class PreloadProcessor implements TreeNodeProcessor
 {
 
@@ -66,7 +67,10 @@ public class PreloadProcessor implements TreeNodeProcessor
 
   // line 43 "../../../../PreloadProcessor.ump"
    protected void hook355(){
-    
+    if (envImpl.getMemoryBudget().getCacheMemoryUsage() > maxBytes) {
+	    throw DatabaseImpl.memoryExceededPreloadException;
+	}
+	original();
   }
   
   //------------------------

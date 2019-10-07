@@ -23,6 +23,7 @@ import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../LockManager.ump"
 // line 3 "../../../../LockManager_static.ump"
+// line 3 "../../../../MemoryBudget_LockManager.ump"
 public abstract class LockManager implements EnvConfigObserver
 {
 
@@ -705,17 +706,20 @@ public abstract class LockManager implements EnvConfigObserver
 
   // line 610 "../../../../LockManager.ump"
    protected void hook779(DbConfigManager configMgr) throws DatabaseException{
-    
+    nLockTables = configMgr.getInt(EnvironmentParams.N_LOCK_TABLES);
+	original(configMgr);
   }
 
   // line 613 "../../../../LockManager.ump"
    protected void hook780(int lockTableIndex) throws DatabaseException{
-    
+    memoryBudget.updateLockMemoryUsage(TOTAL_LOCK_OVERHEAD, lockTableIndex);
+	original(lockTableIndex);
   }
 
   // line 616 "../../../../LockManager.ump"
    protected void hook781(int lockTableIndex) throws DatabaseException{
-    
+    memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
+	original(lockTableIndex);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -832,6 +836,11 @@ public abstract class LockManager implements EnvConfigObserver
 	    MemoryBudget mb) throws DatabaseException ;
 // line 483 "../../../../LockManager.ump"
   abstract protected void dumpLockTable(LockStats stats) throws DatabaseException ;
+// line 5 "../../../../MemoryBudget_LockManager.ump"
+  static final long TOTAL_LOCK_OVERHEAD = MemoryBudget.LOCK_OVERHEAD + MemoryBudget.HASHMAP_ENTRY_OVERHEAD
+	    + MemoryBudget.LONG_OVERHEAD ;
+// line 8 "../../../../MemoryBudget_LockManager.ump"
+  private static final long REMOVE_TOTAL_LOCK_OVERHEAD = 0 - TOTAL_LOCK_OVERHEAD ;
 
   
 }

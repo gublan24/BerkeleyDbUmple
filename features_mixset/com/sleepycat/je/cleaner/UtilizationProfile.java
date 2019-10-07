@@ -45,6 +45,7 @@ import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../UtilizationProfile.ump"
 // line 3 "../../../../UtilizationProfile_static.ump"
+// line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 

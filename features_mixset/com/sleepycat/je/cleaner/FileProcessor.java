@@ -39,6 +39,7 @@ import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../FileProcessor.ump"
 // line 3 "../../../../FileProcessor_static.ump"
+// line 3 "../../../../MemoryBudget_FileProcessor.ump"
 public class FileProcessor extends DaemonThread
 {
 

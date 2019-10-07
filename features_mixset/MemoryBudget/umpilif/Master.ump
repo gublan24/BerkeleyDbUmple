@@ -1,0 +1,30 @@
+use  MemoryBudget_MemoryBudget.ump;
+use  MemoryBudget_BIN.ump;
+use  MemoryBudget_Checkpointer.ump;
+use  MemoryBudget_ChildReference.ump;
+use  MemoryBudget_CursorImpl.ump;
+use  MemoryBudget_DatabaseImpl.ump;
+use  MemoryBudget_DbCacheSize.ump;
+use  MemoryBudget_DBIN.ump;
+use  MemoryBudget_DIN.ump;
+use  MemoryBudget_DupCountLN.ump;
+use  MemoryBudget_Environment.ump;
+use  MemoryBudget_EnvironmentImpl.ump;
+use  MemoryBudget_FileProcessor.ump;
+use  MemoryBudget_IN.ump;
+use  MemoryBudget_INList.ump;
+use  MemoryBudget_LN.ump;
+use  MemoryBudget_LNInfo.ump;
+use  MemoryBudget_Lock.ump;
+use  MemoryBudget_LockManager.ump;
+use  MemoryBudget_PreloadProcessor.ump;
+use  MemoryBudget_SortedLSNTreeWalker.ump;
+use  MemoryBudget_TrackedFileSummary.ump;
+use  MemoryBudget_Txn.ump;
+use  MemoryBudget_TxnManager.ump;
+use  MemoryBudget_UtilizationProfile.ump;
+
+
+
+use ../ump_inner/Master.ump;
+

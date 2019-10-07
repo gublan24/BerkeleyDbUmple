@@ -7,6 +7,7 @@ import com.sleepycat.je.dbi.MemoryBudget;
 
 // line 3 "../../../../TrackedFileSummary.ump"
 // line 3 "../../../../TrackedFileSummary_static.ump"
+// line 3 "../../../../MemoryBudget_TrackedFileSummary.ump"
 public class TrackedFileSummary extends FileSummary
 {
 
@@ -146,12 +147,32 @@ public class TrackedFileSummary extends FileSummary
 
   // line 104 "../../../../TrackedFileSummary.ump"
    protected void hook168(){
-    
+    if (memSize > 0) {
+	    updateMemoryBudget(0 - memSize);
+	}
+	original();
   }
 
   // line 107 "../../../../TrackedFileSummary.ump"
    protected void hook169(){
-    
+    updateMemoryBudget(-MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD);
+	original();
+  }
+
+
+  /**
+   * 
+   * Return the total memory size for this object.  We only bother to budget obsolete detail, not the overhead for this object, for two reasons: 1) The number of these objects is very small, and 2) unit tests disable detail tracking as a way to prevent budget adjustments here.
+   */
+  // line 11 "../../../../MemoryBudget_TrackedFileSummary.ump"
+  public int getMemorySize(){
+    return memSize;
+  }
+
+  // line 15 "../../../../MemoryBudget_TrackedFileSummary.ump"
+   private void updateMemoryBudget(int delta){
+    memSize += delta;
+	tracker.getEnvironment().getMemoryBudget().updateMiscMemoryUsage(delta);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -244,6 +265,8 @@ public class TrackedFileSummary extends FileSummary
   private boolean trackDetail ;
 // line 16 "../../../../TrackedFileSummary.ump"
   private boolean allowFlush = true ;
+// line 5 "../../../../MemoryBudget_TrackedFileSummary.ump"
+  private int memSize ;
 
   
 }

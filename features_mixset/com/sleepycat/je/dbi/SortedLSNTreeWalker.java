@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 // line 3 "../../../../SortedLSNTreeWalker.ump"
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
+// line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
 public class SortedLSNTreeWalker
 {
 

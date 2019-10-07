@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.tree;
+
+class ChildReference
+{
+    
+  after Label613: fetchTarget(DatabaseImpl , IN){
+	if (in != null) fetchTarget(DatabaseImpl, IN){
+	    in.updateMemorySize(null, target);
+	}
+//	original(in);
+    }
+
+}

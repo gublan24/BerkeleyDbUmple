@@ -13,6 +13,7 @@ import java.util.HashSet;
 
 // line 3 "../../../../INList.ump"
 // line 3 "../../../../INList_static.ump"
+// line 3 "../../../../MemoryBudget_INList.ump"
 public class INList
 {
 
@@ -172,7 +173,11 @@ public class INList
 
   // line 122 "../../../../INList.ump"
    protected void hook346(IN in) throws DatabaseException{
-    
+    if (updateMemoryUsage) {
+	    envImpl.getMemoryBudget().updateTreeMemoryUsage(in.getAccumulatedDelta() - in.getInMemorySize());
+	    in.setInListResident(false);
+	}
+	original(in);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -312,6 +317,8 @@ public class INList
   private SortedSet ins = null ;
 // line 17 "../../../../INList.ump"
   private EnvironmentImpl envImpl ;
+// line 5 "../../../../MemoryBudget_INList.ump"
+  private boolean updateMemoryUsage ;
 
   
 }

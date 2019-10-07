@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 // line 3 "../../../../Lock.ump"
+// line 3 "../../../../MemoryBudget_Lock.ump"
 public class Lock
 {
 
@@ -799,47 +800,60 @@ public class Lock
 
   // line 719 "../../../../Lock.ump"
    protected void hook760(MemoryBudget mb, int lockTableIndex){
-    
+    mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
+	original(mb, lockTableIndex);
   }
 
   // line 722 "../../../../Lock.ump"
    protected void hook761(MemoryBudget mb, int lockTableIndex){
-    
+    mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
+	original(mb, lockTableIndex);
   }
 
   // line 725 "../../../../Lock.ump"
    protected void hook762(MemoryBudget mb, int lockTableIndex){
-    
+    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+	original(mb, lockTableIndex);
   }
 
   // line 728 "../../../../Lock.ump"
    protected void hook763(MemoryBudget mb, int lockTableIndex){
-    
+    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+	original(mb, lockTableIndex);
   }
 
   // line 731 "../../../../Lock.ump"
    protected void hook764(MemoryBudget mb, int lockTableIndex){
-    
+    mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
+	original(mb, lockTableIndex);
   }
 
   // line 734 "../../../../Lock.ump"
    protected void hook765(MemoryBudget mb, int lockTableIndex, boolean removed){
-    
+    if (removed) {
+	    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+	}
+	original(mb, lockTableIndex, removed);
   }
 
   // line 737 "../../../../Lock.ump"
    protected void hook766(MemoryBudget mb, int lockTableIndex, LockInfo flushedInfo){
-    
+    if (flushedInfo != null) {
+	    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+	}
+	original(mb, lockTableIndex, flushedInfo);
   }
 
   // line 740 "../../../../Lock.ump"
    protected void hook767(MemoryBudget mb, int lockTableIndex){
-    
+    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+	original(mb, lockTableIndex);
   }
 
   // line 743 "../../../../Lock.ump"
    protected void hook768(MemoryBudget mb, int lockTableIndex, int numRemovedLockInfos) throws DatabaseException{
-    
+    mb.updateLockMemoryUsage(0 - (numRemovedLockInfos * MemoryBudget.LOCKINFO_OVERHEAD), lockTableIndex);
+	original(mb, lockTableIndex, numRemovedLockInfos);
   }
   
   //------------------------
@@ -856,6 +870,8 @@ public class Lock
   private List waiterList ;
 // line 25 "../../../../Lock.ump"
   private Long nodeId ;
+// line 5 "../../../../MemoryBudget_Lock.ump"
+  private static final int REMOVE_LOCKINFO_OVERHEAD = 0 - MemoryBudget.LOCKINFO_OVERHEAD ;
 
   
 }

@@ -53,6 +53,7 @@ import com.sleepycat.je.log.TraceLogHandler;
 // line 3 "../../../../loggingBase_EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_inner.ump"
 // line 3 "../../../../LoggingDbLogHandler_EnvironmentImpl.ump"
+// line 3 "../../../../MemoryBudget_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -727,7 +728,8 @@ closeLogger();
 
   // line 694 "../../../../EnvironmentImpl.ump"
    protected void hook335() throws DatabaseException{
-    
+    memoryBudget.initCacheMemoryUsage();
+	original();
   }
 
   // line 697 "../../../../EnvironmentImpl.ump"

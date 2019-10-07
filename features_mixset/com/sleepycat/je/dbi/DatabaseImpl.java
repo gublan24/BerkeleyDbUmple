@@ -48,6 +48,7 @@ import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../DatabaseImpl.ump"
 // line 3 "../../../../DatabaseImpl_static.ump"
+// line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 

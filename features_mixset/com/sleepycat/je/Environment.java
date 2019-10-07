@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.File;
 
 // line 3 "../../../Environment.ump"
+// line 3 "../../../MemoryBudget_Environment.ump"
 public class Environment
 {
 
@@ -486,6 +487,18 @@ public class Environment
   // line 525 "../../../Environment.ump"
    protected boolean hook59(DatabaseImpl database, boolean databaseExists) throws DatabaseException{
     return databaseExists;
+  }
+
+
+  /**
+   * 
+   * Returns the current memory usage in bytes for all btrees in the environmentImpl.
+   */
+  // line 9 "../../../MemoryBudget_Environment.ump"
+  public long getMemoryUsage() throws DatabaseException{
+    checkHandleIsValid();
+	checkEnv();
+	return environmentImpl.getMemoryBudget().getCacheMemoryUsage();
   }
   
   //------------------------

@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../ChildReference.ump"
+// line 3 "../../../../MemoryBudget_ChildReference.ump"
 public class ChildReference implements LogWritable,LogReadable
 {
 
@@ -116,7 +117,13 @@ public class ChildReference implements LogWritable,LogReadable
 		    Node node = (Node) env.getLogManager().get(lsn);
 		    node.postFetchInit(database, lsn);
 		    target = node;
-		    this.hook613(in);
+//	    this.hook613(in);
+        Label613:
+if (in != null) fetchTarget(DatabaseImpl, IN){
+	    in.updateMemorySize(null, target);
+	}
+//	original(in);
+
 		} catch (LogFileNotFoundException LNFE) {
 		    if (!isKnownDeleted() && !isPendingDeleted()) {
 			throw new DatabaseException(IN.makeFetchErrorMsg(LNFE.toString(), in, lsn, state), LNFE);
@@ -129,7 +136,7 @@ public class ChildReference implements LogWritable,LogReadable
 	return target;
   }
 
-  // line 111 "../../../../ChildReference.ump"
+  // line 112 "../../../../ChildReference.ump"
   public byte getState(){
     return state;
   }
@@ -139,7 +146,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * Return the target for this ChildReference.
    */
-  // line 118 "../../../../ChildReference.ump"
+  // line 119 "../../../../ChildReference.ump"
    public Node getTarget(){
     return target;
   }
@@ -149,7 +156,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * Sets the target for this ChildReference. No need to make dirty, that state only applies to key and LSN.
    */
-  // line 125 "../../../../ChildReference.ump"
+  // line 126 "../../../../ChildReference.ump"
    public void setTarget(Node target){
     this.target = target;
   }
@@ -159,7 +166,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * Clear the target for this ChildReference. No need to make dirty, that state only applies to key and LSN. This method is public because it's safe and used by RecoveryManager. This can't corrupt the tree.
    */
-  // line 132 "../../../../ChildReference.ump"
+  // line 133 "../../../../ChildReference.ump"
    public void clearTarget(){
     this.target = null;
   }
@@ -170,7 +177,7 @@ public class ChildReference implements LogWritable,LogReadable
    * Return the LSN for this ChildReference.
    * @return the LSN for this ChildReference.
    */
-  // line 140 "../../../../ChildReference.ump"
+  // line 141 "../../../../ChildReference.ump"
    public long getLsn(){
     return lsn;
   }
@@ -181,7 +188,7 @@ public class ChildReference implements LogWritable,LogReadable
    * Sets the target LSN for this ChildReference.
    * @param the target LSN.
    */
-  // line 148 "../../../../ChildReference.ump"
+  // line 149 "../../../../ChildReference.ump"
    public void setLsn(long lsn){
     this.lsn = lsn;
 	state |= DIRTY_BIT;
@@ -192,7 +199,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @return true if the entry has been deleted, although the transaction theperformed the deletion may not be committed.
    */
-  // line 156 "../../../../ChildReference.ump"
+  // line 157 "../../../../ChildReference.ump"
    private boolean isPendingDeleted(){
     return ((state & PENDING_DELETED_BIT) != 0);
   }
@@ -202,7 +209,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @return true if entry is deleted for sure.
    */
-  // line 163 "../../../../ChildReference.ump"
+  // line 164 "../../../../ChildReference.ump"
    public boolean isKnownDeleted(){
     return ((state & KNOWN_DELETED_BIT) != 0);
   }
@@ -212,7 +219,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @return true if the object is dirty.
    */
-  // line 170 "../../../../ChildReference.ump"
+  // line 171 "../../../../ChildReference.ump"
    private boolean isDirty(){
     return ((state & DIRTY_BIT) != 0);
   }
@@ -222,7 +229,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * Get the entry migrate status.
    */
-  // line 177 "../../../../ChildReference.ump"
+  // line 178 "../../../../ChildReference.ump"
    public boolean getMigrate(){
     return (state & MIGRATE_BIT) != 0;
   }
@@ -232,7 +239,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * Set the entry migrate status.
    */
-  // line 184 "../../../../ChildReference.ump"
+  // line 185 "../../../../ChildReference.ump"
    public void setMigrate(boolean migrate){
     if (migrate) {
 	    state |= MIGRATE_BIT;
@@ -246,7 +253,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @see LogWritable#getLogSize
    */
-  // line 195 "../../../../ChildReference.ump"
+  // line 196 "../../../../ChildReference.ump"
    public int getLogSize(){
     return LogUtils.getByteArrayLogSize(key) + LogUtils.getLongLogSize() + 1;
   }
@@ -256,7 +263,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @see LogWritable#writeToLog
    */
-  // line 202 "../../../../ChildReference.ump"
+  // line 203 "../../../../ChildReference.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeByteArray(logBuffer, key);
 	assert lsn != DbLsn.NULL_LSN;
@@ -270,7 +277,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 213 "../../../../ChildReference.ump"
+  // line 214 "../../../../ChildReference.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion){
     key = LogUtils.readByteArray(itemBuffer);
 	lsn = LogUtils.readLong(itemBuffer);
@@ -283,7 +290,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 223 "../../../../ChildReference.ump"
+  // line 224 "../../../../ChildReference.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<ref knownDeleted=\"").append(isKnownDeleted());
 	sb.append("\" pendingDeleted=\"").append(isPendingDeleted());
@@ -298,7 +305,7 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 235 "../../../../ChildReference.ump"
+  // line 236 "../../../../ChildReference.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -308,12 +315,12 @@ public class ChildReference implements LogWritable,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 242 "../../../../ChildReference.ump"
+  // line 243 "../../../../ChildReference.ump"
    public long getTransactionId(){
     return 0;
   }
 
-  // line 246 "../../../../ChildReference.ump"
+  // line 247 "../../../../ChildReference.ump"
   public String dumpString(int nspaces, boolean dumpTags){
     StringBuffer sb = new StringBuffer();
 	if (lsn == DbLsn.NULL_LSN) {
@@ -346,12 +353,12 @@ public class ChildReference implements LogWritable,LogReadable
 	return sb.toString();
   }
 
-  // line 278 "../../../../ChildReference.ump"
+  // line 279 "../../../../ChildReference.ump"
    public String toString(){
     return dumpString(0, false);
   }
 
-  // line 282 "../../../../ChildReference.ump"
+  // line 283 "../../../../ChildReference.ump"
    protected void hook613(IN in) throws DatabaseException,LogFileNotFoundException,Exception{
     
   }
