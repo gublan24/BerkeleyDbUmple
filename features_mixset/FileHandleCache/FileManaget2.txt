@@ -1,0 +1,65 @@
+  public FileHandle getFileHandle(long fileNum) throws LogException,DatabaseException{
+    try {
+	    Long fileId = new Long(fileNum);
+	    FileHandle fileHandle = null;
+      this.hook460(fileNum, fileId, fileHandle);
+	    throw ReturnHack.returnObject;
+	} catch (ReturnObject r) {
+	    return (FileHandle) r.value;
+	}
+  }
+
+
+  protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+	  }
+
+
+    protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle)
+	    throws LogException, DatabaseException {
+	fileHandle = this.hook450(fileNum, fileId, fileHandle);
+	return fileHandle;
+    }
+
+    protected FileHandle hook450(long fileNum, Long fileId, FileHandle fileHandle)
+	    throws LogException, DatabaseException {
+	fileHandle = this.hook462(fileNum, fileId, fileHandle);
+	return fileHandle;
+    }
+
+    protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle)
+	    throws LogException, DatabaseException {
+
+	return fileHandle;
+    }
+
+
+    protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
+    }
+
+    protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {
+    }
+
+   protected void hook464(Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+    }
+
+
+===
+    
+
+
+
+protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+			while (true) {
+				fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
+				Label464: 
+
+				Label453:
+									if (fileHandle.getFile() == null) {
+									this.hook454(fileHandle);} 
+									else {
+									throw new ReturnObject(fileHandle);}
+  
+			}
+		 }
+
+

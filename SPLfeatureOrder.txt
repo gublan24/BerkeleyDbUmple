@@ -6,8 +6,9 @@
         <feature name=""/>
         <feature name="EnvironmentLocking"/> >> cleaner is complex.
         <feature name=""/>
-        <feature name="FileHandleCache"/>
-        <feature name="CriticalEviction"/>
+        <feature name="FileHandleCache"/> issue with while(true) { original(); } 
+
+        <feature name=""/>
         <feature name="MemoryBudget"/>
         <feature name="Evictor"/>
         <feature name="RenameOp"/>

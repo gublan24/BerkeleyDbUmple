@@ -400,6 +400,7 @@ class FileManager
     try {
 	    Long fileId = new Long(fileNum);
 	    FileHandle fileHandle = null;
+// Start of hook460
       Label460:
 		  Label463:
       Label450:
@@ -413,6 +414,7 @@ class FileManager
 			else {
 					throw new ReturnObject(fileHandle);
 			}
+// End of hook460
 					throw ReturnHack.returnObject;
 			} catch (ReturnObject r) {
 					return (FileHandle) r.value;

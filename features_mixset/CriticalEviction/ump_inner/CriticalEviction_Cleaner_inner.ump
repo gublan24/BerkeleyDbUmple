@@ -3,12 +3,14 @@ namespace com.sleepycat.je.cleaner;
 class Cleaner {
   @MethodObject static class Cleaner_processPending {
       protected void hook86() throws DatabaseException {
-      }
-      protected void hook114() throws DatabaseException {
+// Label86 is introduced by CriticalEviction_Cleaner_inner.ump      
+}
+      after Label114:execute() {
         if (_this.DO_CRITICAL_EVICTION) {
-          this.hook86();
+          Label86:        
+          //this.hook86();
         }
-        original();
+       
       }
     }
 }

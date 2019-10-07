@@ -40,6 +40,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Cleaner.ump"
 // line 3 "../../../../Cleaner_static.ump"
 // line 3 "../../../../EnvironmentLocking_Cleaner.ump"
+// line 3 "../../../../CriticalEviction_Cleaner.ump"
+// line 3 "../../../../CriticalEviction_Cleaner_inner.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -965,7 +967,9 @@ env.getFileManager().releaseExclusiveLock();
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
+  // line 4 "../../../../CriticalEviction_Cleaner_inner.ump"
   public static class Cleaner_processPending
   {
   
@@ -1005,46 +1009,57 @@ env.getFileManager().releaseExclusiveLock();
               key=info.getKey();
               dupKey=info.getDupKey();
               ln=info.getLN();
-              this.hook114();
+              Label114:
+  if (_this.DO_CRITICAL_EVICTION) {
+          Label86:        
+  //this.hook86();
+          }
+  
+  //            this.hook114();
               _this.processPendingLN(ln,db1,key,dupKey,location);
             }
           }
     }
   
-    // line 39 "../../../../Cleaner_static.ump"
+    // line 40 "../../../../Cleaner_static.ump"
      protected void hook114() throws DatabaseException{
       
+    }
+  
+    // line 6 "../../../../CriticalEviction_Cleaner_inner.ump"
+     protected void hook86() throws DatabaseException{
+      // Label86 is introduced by CriticalEviction_Cleaner_inner.ump
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 25 "../../../../Cleaner_static.ump"
+    // line 26 "../../../../Cleaner_static.ump"
     protected Cleaner _this ;
-  // line 26 "../../../../Cleaner_static.ump"
-    protected DbTree dbMapTree ;
   // line 27 "../../../../Cleaner_static.ump"
-    protected LNInfo[] pendingLNs ;
+    protected DbTree dbMapTree ;
   // line 28 "../../../../Cleaner_static.ump"
-    protected TreeLocation location ;
+    protected LNInfo[] pendingLNs ;
   // line 29 "../../../../Cleaner_static.ump"
-    protected LNInfo info ;
+    protected TreeLocation location ;
   // line 30 "../../../../Cleaner_static.ump"
-    protected DatabaseId dbId1 ;
+    protected LNInfo info ;
   // line 31 "../../../../Cleaner_static.ump"
-    protected DatabaseImpl db1 ;
+    protected DatabaseId dbId1 ;
   // line 32 "../../../../Cleaner_static.ump"
-    protected byte[] key ;
+    protected DatabaseImpl db1 ;
   // line 33 "../../../../Cleaner_static.ump"
-    protected byte[] dupKey ;
+    protected byte[] key ;
   // line 34 "../../../../Cleaner_static.ump"
-    protected LN ln ;
+    protected byte[] dupKey ;
   // line 35 "../../../../Cleaner_static.ump"
-    protected DatabaseId[] pendingDBs ;
+    protected LN ln ;
   // line 36 "../../../../Cleaner_static.ump"
-    protected DatabaseId dbId2 ;
+    protected DatabaseId[] pendingDBs ;
   // line 37 "../../../../Cleaner_static.ump"
+    protected DatabaseId dbId2 ;
+  // line 38 "../../../../Cleaner_static.ump"
     protected DatabaseImpl db2 ;
   
     
@@ -1119,6 +1134,8 @@ env.getFileManager().releaseExclusiveLock();
 	    }
 	}
   }
+// line 8 "../../../../CriticalEviction_Cleaner.ump"
+  static final boolean DO_CRITICAL_EVICTION = true ;
 
   
 }
