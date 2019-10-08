@@ -201,7 +201,8 @@ class IN
 	setDatabase(db);
 	setLastFullLsn(sourceLsn);
 	EnvironmentImpl env = db.getDbEnvironment();
-	this.hook637();
+	//this.hook637();
+  Label637:
 	env.getInMemoryINs().add(this);
     }
 
@@ -678,7 +679,9 @@ class IN
 		    Node node = (Node) env.getLogManager().get(lsn);
 		    node.postFetchInit(databaseImpl, lsn);
 		    entryTargets[idx] = node;
-		    this.hook638(node);
+		   // this.hook638(node);
+        Label638:
+
 		} catch (LogFileNotFoundException LNFE) {
 		    if (!isEntryKnownDeleted(idx) && !isEntryPendingDeleted(idx)) {
 			throw new DatabaseException(makeFetchErrorMsg(LNFE.toString(), this, lsn, entryStates[idx]));
@@ -1574,10 +1577,10 @@ class IN
     protected void hook627() throws DatabaseException {
     }
 
-    protected void hook637() throws DatabaseException {
-    }
+  //  protected void hook637() throws DatabaseException {
+   // }
 
-    protected void hook638(Node node) throws DatabaseException, LogFileNotFoundException, Exception {
-    }
+ //   protected void hook638(Node node) throws DatabaseException, LogFileNotFoundException, Exception {
+//    }
 
 }

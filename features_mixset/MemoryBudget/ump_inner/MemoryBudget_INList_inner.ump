@@ -2,8 +2,8 @@
 namespace com.sleepycat.je.dbi;
 class INList {
   @MethodObject static class INList_addAndSetMemory {
-      void execute(){
-        original();
+      after execute(){
+        //original();
         if (_this.updateMemoryUsage) {
           mb=_this.envImpl.getMemoryBudget();
           mb.updateTreeMemoryUsage(in.getInMemorySize());

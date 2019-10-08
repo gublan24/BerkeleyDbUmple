@@ -1,0 +1,13 @@
+use MemoryBudget_Checkpointer_inner.ump;
+use MemoryBudget_DatabaseImpl_inner.ump;
+use MemoryBudget_DbCacheSize_inner.ump;
+use MemoryBudget_DIN_inner.ump;
+use MemoryBudget_FileProcessor_inner.ump;
+use MemoryBudget_IN_inner.ump;
+use MemoryBudget_INList_inner.ump;
+use MemoryBudget_inner_inner.ump;
+use MemoryBudget_Master.ump;
+use MemoryBudget_SortedLSNTreeWalker_inner.ump;
+use MemoryBudget_TrackedFileSummary_inner.ump;
+use MemoryBudget_Txn_inner.ump;
+use MemoryBudget_UtilizationProfile_inner.ump;

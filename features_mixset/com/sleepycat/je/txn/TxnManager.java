@@ -100,7 +100,11 @@ public class TxnManager
   // line 104 "../../../../TxnManager.ump"
   public void unRegisterTxn(Txn txn, boolean isCommit) throws DatabaseException{
     allTxns.remove(txn);
-	this.hook828(txn);
+//	this.hook828(txn);
+   Label828:
+env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
+//      original(txn);
+
 	this.hook825(isCommit);
 	if (txn.isSerializableIsolation()) {
 	    nActiveSerializable--;
@@ -112,11 +116,15 @@ public class TxnManager
    * 
    * Called when txn is created.
    */
-  // line 116 "../../../../TxnManager.ump"
+  // line 117 "../../../../TxnManager.ump"
    public void registerXATxn(Xid xid, Txn txn, boolean isPrepare) throws DatabaseException{
     if (!allXATxns.containsKey(xid)) {
 	    allXATxns.put(xid, txn);
-	    this.hook829();
+      //	    this.hook829();
+      Label829:
+env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
+      //original();
+
 	}
 	this.hook826(isPrepare);
   }
@@ -126,13 +134,17 @@ public class TxnManager
    * 
    * Called when txn ends.
    */
-  // line 127 "../../../../TxnManager.ump"
+  // line 129 "../../../../TxnManager.ump"
   public void unRegisterXATxn(Xid xid, boolean isCommit) throws DatabaseException{
     if (allXATxns.remove(xid) == null) {
-	    throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
-	}
-	this.hook830();
-	this.hook827(isCommit);
+					throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
+			}
+		//	this.hook830();
+			Label830:
+env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
+      //original();
+
+			this.hook827(isCommit);
   }
 
 
@@ -140,7 +152,7 @@ public class TxnManager
    * 
    * Retrieve a Txn object from an Xid.
    */
-  // line 138 "../../../../TxnManager.ump"
+  // line 141 "../../../../TxnManager.ump"
    public Txn getTxnFromXid(Xid xid) throws DatabaseException{
     return (Txn) allXATxns.get(xid);
   }
@@ -150,7 +162,7 @@ public class TxnManager
    * 
    * Called when txn is assoc'd with this thread.
    */
-  // line 145 "../../../../TxnManager.ump"
+  // line 148 "../../../../TxnManager.ump"
    public void setTxnForThread(Transaction txn){
     Thread curThread = Thread.currentThread();
 	thread2Txn.put(curThread, txn);
@@ -161,7 +173,7 @@ public class TxnManager
    * 
    * Called when txn is assoc'd with this thread.
    */
-  // line 153 "../../../../TxnManager.ump"
+  // line 156 "../../../../TxnManager.ump"
    public Transaction unsetTxnForThread() throws DatabaseException{
     Thread curThread = Thread.currentThread();
 	return (Transaction) thread2Txn.remove(curThread);
@@ -172,12 +184,12 @@ public class TxnManager
    * 
    * Retrieve a Txn object for this Thread.
    */
-  // line 161 "../../../../TxnManager.ump"
+  // line 164 "../../../../TxnManager.ump"
    public Transaction getTxnForThread() throws DatabaseException{
     return (Transaction) thread2Txn.get(Thread.currentThread());
   }
 
-  // line 165 "../../../../TxnManager.ump"
+  // line 168 "../../../../TxnManager.ump"
    public Xid[] XARecover() throws DatabaseException{
     Set xidSet = allXATxns.keySet();
 	Xid[] ret = new Xid[xidSet.size()];
@@ -190,7 +202,7 @@ public class TxnManager
    * 
    * Returns whether there are any active serializable transactions, excluding the transaction given (if non-null). This is intentionally returned without latching, since latching would not make the act of reading an integer more atomic than it already is.
    */
-  // line 175 "../../../../TxnManager.ump"
+  // line 178 "../../../../TxnManager.ump"
    public boolean areOtherSerializableTransactionsActive(Locker excludeLocker){
     int exclude = (excludeLocker != null && excludeLocker.isSerializableIsolation()) ? 1 : 0;
 	return (nActiveSerializable - exclude > 0);
@@ -201,19 +213,19 @@ public class TxnManager
    * 
    * Get the earliest LSN of all the active transactions, for checkpoint.
    */
-  // line 183 "../../../../TxnManager.ump"
+  // line 186 "../../../../TxnManager.ump"
    public long getFirstActiveLsn() throws DatabaseException{
     long firstActive = DbLsn.NULL_LSN;
 	firstActive = this.hook823(firstActive);
 	return firstActive;
   }
 
-  // line 189 "../../../../TxnManager.ump"
+  // line 192 "../../../../TxnManager.ump"
    protected void hook821(EnvironmentImpl env) throws DatabaseException{
     
   }
 
-  // line 192 "../../../../TxnManager.ump"
+  // line 195 "../../../../TxnManager.ump"
    protected void hook822(EnvironmentImpl env) throws DatabaseException{
     if (env.isNoLocking()) {
 	    lockManager = new DummyLockManager(env);
@@ -222,7 +234,7 @@ public class TxnManager
 	}
   }
 
-  // line 200 "../../../../TxnManager.ump"
+  // line 203 "../../../../TxnManager.ump"
    protected long hook823(long firstActive) throws DatabaseException{
     Iterator iter = allTxns.iterator();
 	while (iter.hasNext()) {
@@ -238,42 +250,39 @@ public class TxnManager
 	return firstActive;
   }
 
-  // line 215 "../../../../TxnManager.ump"
+  // line 218 "../../../../TxnManager.ump"
    protected void hook824() throws DatabaseException{
     
   }
 
-  // line 218 "../../../../TxnManager.ump"
+  // line 221 "../../../../TxnManager.ump"
    protected void hook825(boolean isCommit) throws DatabaseException{
     
   }
 
-  // line 221 "../../../../TxnManager.ump"
+  // line 224 "../../../../TxnManager.ump"
    protected void hook826(boolean isPrepare) throws DatabaseException{
     
   }
 
-  // line 224 "../../../../TxnManager.ump"
+  // line 227 "../../../../TxnManager.ump"
    protected void hook827(boolean isCommit) throws DatabaseException{
     
   }
 
-  // line 227 "../../../../TxnManager.ump"
-   protected void hook828(Txn txn) throws DatabaseException{
-    env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
-	original(txn);
-  }
 
-  // line 230 "../../../../TxnManager.ump"
-   protected void hook829() throws DatabaseException{
-    env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
-	original();
-  }
-
+  /**
+   * protected void hook828(Txn txn) throws DatabaseException {
+   * }
+   */
   // line 233 "../../../../TxnManager.ump"
+   protected void hook829() throws DatabaseException{
+    
+  }
+
+  // line 236 "../../../../TxnManager.ump"
    protected void hook830() throws DatabaseException{
-    env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
-	original();
+    
   }
   
   //------------------------

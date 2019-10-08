@@ -206,28 +206,20 @@ class MemoryBudget
      * Initialize the starting environment memory state
      */
     void initCacheMemoryUsage() throws DatabaseException {
-	synchronized (memoryUsageSynchronizer) {
-	    treeMemoryUsage = calcTreeCacheUsage();
-	}
+			synchronized (memoryUsageSynchronizer) {
+					treeMemoryUsage = calcTreeCacheUsage();
+			}
     }
 
     /** 
      * Public for testing.
      */
     public long calcTreeCacheUsage() throws DatabaseException {
-	long totalSize = 0;
-	INList inList = envImpl.getInMemoryINs();
-//	totalSize = this.hook347(totalSize, inList);
-//hook347
-  Iterator iter = inList.iterator();
-	while (iter.hasNext()) {
-	    IN in = (IN) iter.next();
-	    long size = in.getInMemorySize();
-	    totalSize += size;
-	}
-//End of hook347
-
-	return totalSize;
+			long totalSize = 0;
+			INList inList = envImpl.getInMemoryINs();
+			//	totalSize = this.hook347(totalSize, inList);
+			Label347:
+		return totalSize;
     }
 
     /** 
@@ -235,9 +227,9 @@ class MemoryBudget
      * @param incrementnote that increment may be negative.
      */
     public void updateTreeMemoryUsage(long increment) {
-	synchronized (memoryUsageSynchronizer) {
-	    treeMemoryUsage += increment;
-	}
+			synchronized (memoryUsageSynchronizer) {
+					treeMemoryUsage += increment;
+			}
     }
 
     /** 
@@ -245,36 +237,36 @@ class MemoryBudget
      * @param incrementnote that increment may be negative.
      */
     public void updateMiscMemoryUsage(long increment) {
-	synchronized (memoryUsageSynchronizer) {
-	    miscMemoryUsage += increment;
-	}
+			synchronized (memoryUsageSynchronizer) {
+					miscMemoryUsage += increment;
+			}
     }
 
     public void updateLockMemoryUsage(long increment, int lockTableIndex) {
-	lockMemoryUsage[lockTableIndex] += increment;
+			lockMemoryUsage[lockTableIndex] += increment;
     }
 
     public long accumulateNewUsage(IN in, long newSize) {
-	return in.getInMemorySize() + newSize;
+			return in.getInMemorySize() + newSize;
     }
 
     public void refreshTreeMemoryUsage(long newSize) {
-	synchronized (memoryUsageSynchronizer) {
-	    treeMemoryUsage = newSize;
-	}
+			synchronized (memoryUsageSynchronizer) {
+					treeMemoryUsage = newSize;
+			}
     }
 
     public long getCacheMemoryUsage() {
-	long accLockMemoryUsage = 0;
-	if (nLockTables == 1) {
-	    accLockMemoryUsage = lockMemoryUsage[0];
-	} else {
-	    for (int i = 0; i < nLockTables; i++) {
-		accLockMemoryUsage += lockMemoryUsage[i];
-	    }
-	}
-	return treeMemoryUsage + miscMemoryUsage + accLockMemoryUsage;
-    }
+			long accLockMemoryUsage = 0;
+			if (nLockTables == 1) {
+					accLockMemoryUsage = lockMemoryUsage[0];
+			} else {
+					for (int i = 0; i < nLockTables; i++) {
+				accLockMemoryUsage += lockMemoryUsage[i];
+					}
+			}
+			return treeMemoryUsage + miscMemoryUsage + accLockMemoryUsage;
+		}
 
     /** 
      * Used for unit testing.
@@ -311,29 +303,40 @@ class MemoryBudget
      * Returns the memory size occupied by a byte array of a given length.
      */
     public static int byteArraySize(int arrayLen) {
-	int size = BYTE_ARRAY_OVERHEAD;
-	if (arrayLen > 4) {
-	    size += ((arrayLen - 4 + 7) / 8) * 8;
-	}
-	return size;
-    }
+		int size = BYTE_ARRAY_OVERHEAD;
+		if (arrayLen > 4) {
+			  size += ((arrayLen - 4 + 7) / 8) * 8;
+		}
+		return size;
+		}
 
-    protected long hook347(long totalSize, INList inList) throws DatabaseException {
-	Iterator iter = inList.iterator();
-	while (iter.hasNext()) {
-	    IN in = (IN) iter.next();
-	    long size = in.getInMemorySize();
-	    totalSize += size;
-	}
-	return totalSize;
-    }
+ //   protected long hook347(long totalSize, INList inList) throws DatabaseException {
+//		Iterator iter = inList.iterator();
+//		while (iter.hasNext()) {
+//			  IN in = (IN) iter.next();
+//			  long size = in.getInMemorySize();
+//			  totalSize += size;
+//		}
+//		return totalSize;
+ //   }
 
-    protected void hook351(DbConfigManager configManager) throws DatabaseException {
-	inOverhead = IN.computeOverhead(configManager);
-	binOverhead = BIN.computeOverhead(configManager);
-	dinOverhead = DIN.computeOverhead(configManager);
-	dbinOverhead = DBIN.computeOverhead(configManager);
-	original(configManager);
-    }
+	after Label347:calcTreeCacheUsage(){
+
+		Iterator iter = inList.iterator();
+		while (iter.hasNext()) {
+			  IN in = (IN) iter.next();
+			  long size = in.getInMemorySize();
+			  totalSize += size;
+		}
+
+	}
+
+    after Label351: MemoryBudget(EnvironmentImpl , DbConfigManager ) {
+			inOverhead = IN.computeOverhead(configManager);
+			binOverhead = BIN.computeOverhead(configManager);
+			dinOverhead = DIN.computeOverhead(configManager);
+			dbinOverhead = DBIN.computeOverhead(configManager);
+			//original(configManager);
+		}
 
 }

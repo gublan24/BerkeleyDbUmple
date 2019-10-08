@@ -2,42 +2,47 @@
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
   @MethodObject static class Checkpointer_selectDirtyINs {
-      protected void hook553() throws DatabaseException {
+      after Label553:execute(){
         totalSize=0;
         mb=_this.envImpl.getMemoryBudget();
-        original();
+        //original();
       }
-      protected void hook554() throws DatabaseException {
+      
+      after Label554: execute(){
         mb.refreshTreeMemoryUsage(totalSize);
-        original();
+        //   original();
       }
-      protected void hook530() throws DatabaseException {
+
+      after Label530:execute(){
         totalSize=mb.accumulateNewUsage(in,totalSize);
-        original();
+        //original();
       }
     }
   @MethodObject static class Checkpointer_doCheckpoint {
-      protected void hook548() throws DatabaseException {
+
+      after Label548:execute(){
         dirtyMapMemSize=0;
-        original();
+        //original();
       }
-      protected void hook549() throws DatabaseException {
+
+      after Label549:execute(){
         mb.updateMiscMemoryUsage(0 - dirtyMapMemSize);
-        original();
+        //original();
       }
-      protected void hook550() throws DatabaseException {
+
+      after Label550:execute(){
         mb.updateMiscMemoryUsage(totalSize);
-        original();
+        //original();
       }
-      protected void hook551() throws DatabaseException {
+      after Label551:execute(){
         totalSize=0;
-        original();
+        //original();
       }
-      protected void hook552() throws DatabaseException {
+      after Label552:execute(){
         size=nodeSet.size() * MemoryBudget.CHECKPOINT_REFERENCE_SIZE;
         totalSize+=size;
         dirtyMapMemSize+=size;
-        original();
+        //original();
       }
     }
 }

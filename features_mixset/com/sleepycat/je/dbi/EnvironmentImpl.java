@@ -142,7 +142,11 @@ envLogger = initLogger(envHome);
 	    runOrPauseDaemons(configManager);
 	    lockTimeout = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.LOCK_TIMEOUT));
 	    txnTimeout = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.TXN_TIMEOUT));
-	    this.hook335();
+	  //  this.hook335();
+      Label335:
+memoryBudget.initCacheMemoryUsage();
+   //	original();
+
 	    open();
 	} catch (DatabaseException e) {
 	    if (fileManager != null) {
@@ -160,7 +164,7 @@ envLogger = initLogger(envHome);
    * 
    * Respond to config updates.
    */
-  // line 187 "../../../../EnvironmentImpl.ump"
+  // line 188 "../../../../EnvironmentImpl.ump"
    public void envConfigUpdate(DbConfigManager mgr) throws DatabaseException{
     runOrPauseDaemons(mgr);
   }
@@ -170,7 +174,7 @@ envLogger = initLogger(envHome);
    * 
    * Read configurations for daemons, instantiate.
    */
-  // line 194 "../../../../EnvironmentImpl.ump"
+  // line 195 "../../../../EnvironmentImpl.ump"
    private void createDaemons() throws DatabaseException{
     new EnvironmentImpl_createDaemons(this).execute();
   }
@@ -180,7 +184,7 @@ envLogger = initLogger(envHome);
    * 
    * Run or pause daemons, depending on config properties.
    */
-  // line 201 "../../../../EnvironmentImpl.ump"
+  // line 202 "../../../../EnvironmentImpl.ump"
    private void runOrPauseDaemons(DbConfigManager mgr) throws DatabaseException{
     if (!isReadOnly) {
 	    this.hook330(mgr);
@@ -195,7 +199,7 @@ envLogger = initLogger(envHome);
    * 
    * Returns the UtilizationTracker.
    */
-  // line 213 "../../../../EnvironmentImpl.ump"
+  // line 214 "../../../../EnvironmentImpl.ump"
    public UtilizationTracker getUtilizationTracker(){
     return cleaner.getUtilizationTracker();
   }
@@ -205,7 +209,7 @@ envLogger = initLogger(envHome);
    * 
    * Returns the UtilizationProfile.
    */
-  // line 220 "../../../../EnvironmentImpl.ump"
+  // line 221 "../../../../EnvironmentImpl.ump"
    public UtilizationProfile getUtilizationProfile(){
     return cleaner.getUtilizationProfile();
   }
@@ -215,7 +219,7 @@ envLogger = initLogger(envHome);
    * 
    * Log the map tree root and save the LSN.
    */
-  // line 227 "../../../../EnvironmentImpl.ump"
+  // line 228 "../../../../EnvironmentImpl.ump"
    public void logMapTreeRoot() throws DatabaseException{
     mapTreeRootLsn = logManager.log(dbMapTree);
   }
@@ -225,7 +229,7 @@ envLogger = initLogger(envHome);
    * 
    * Force a rewrite of the map tree root if required.
    */
-  // line 234 "../../../../EnvironmentImpl.ump"
+  // line 235 "../../../../EnvironmentImpl.ump"
    public void rewriteMapTreeRoot(long cleanerTargetLsn) throws DatabaseException{
     if (DbLsn.compareTo(cleanerTargetLsn, mapTreeRootLsn) == 0) {
 	    mapTreeRootLsn = logManager.log(dbMapTree);
@@ -237,7 +241,7 @@ envLogger = initLogger(envHome);
    * 
    * @return the mapping tree root LSN.
    */
-  // line 243 "../../../../EnvironmentImpl.ump"
+  // line 244 "../../../../EnvironmentImpl.ump"
    public long getRootLsn(){
     return mapTreeRootLsn;
   }
@@ -247,7 +251,7 @@ envLogger = initLogger(envHome);
    * 
    * Set the mapping tree from the log. Called during recovery.
    */
-  // line 250 "../../../../EnvironmentImpl.ump"
+  // line 251 "../../../../EnvironmentImpl.ump"
    public void readMapTreeFromLog(long rootLsn) throws DatabaseException{
     dbMapTree = (DbTree) logManager.get(rootLsn);
 	dbMapTree.setEnvironmentImpl(this);
@@ -259,7 +263,7 @@ envLogger = initLogger(envHome);
    * 
    * Not much to do, mark state.
    */
-  // line 259 "../../../../EnvironmentImpl.ump"
+  // line 260 "../../../../EnvironmentImpl.ump"
    public void open(){
     envState = DbEnvState.OPEN;
   }
@@ -269,7 +273,7 @@ envLogger = initLogger(envHome);
    * 
    * Invalidate the environment. Done when a fatal exception (RunRecoveryException) is thrown.
    */
-  // line 266 "../../../../EnvironmentImpl.ump"
+  // line 267 "../../../../EnvironmentImpl.ump"
    public void invalidate(RunRecoveryException e){
     savedInvalidatingException = e;
 	envState = DbEnvState.INVALID;
@@ -281,7 +285,7 @@ envLogger = initLogger(envHome);
    * 
    * @return true if environment is open.
    */
-  // line 275 "../../../../EnvironmentImpl.ump"
+  // line 276 "../../../../EnvironmentImpl.ump"
    public boolean isOpen(){
     return (envState == DbEnvState.OPEN);
   }
@@ -291,12 +295,12 @@ envLogger = initLogger(envHome);
    * 
    * @return true if close has begun, although the state may still be open.
    */
-  // line 282 "../../../../EnvironmentImpl.ump"
+  // line 283 "../../../../EnvironmentImpl.ump"
    public boolean isClosing(){
     return closing;
   }
 
-  // line 286 "../../../../EnvironmentImpl.ump"
+  // line 287 "../../../../EnvironmentImpl.ump"
    public boolean isClosed(){
     return (envState == DbEnvState.CLOSED);
   }
@@ -306,12 +310,12 @@ envLogger = initLogger(envHome);
    * 
    * When a RunRecoveryException occurs or the environment is closed, further writing can cause log corruption.
    */
-  // line 293 "../../../../EnvironmentImpl.ump"
+  // line 294 "../../../../EnvironmentImpl.ump"
    public boolean mayNotWrite(){
     return (envState == DbEnvState.INVALID) || (envState == DbEnvState.CLOSED);
   }
 
-  // line 297 "../../../../EnvironmentImpl.ump"
+  // line 298 "../../../../EnvironmentImpl.ump"
    public void checkIfInvalid() throws RunRecoveryException{
     if (envState == DbEnvState.INVALID) {
 	    savedInvalidatingException.setAlreadyThrown();
@@ -319,14 +323,14 @@ envLogger = initLogger(envHome);
 	}
   }
 
-  // line 304 "../../../../EnvironmentImpl.ump"
+  // line 305 "../../../../EnvironmentImpl.ump"
    public void checkNotClosed() throws DatabaseException{
     if (envState == DbEnvState.CLOSED) {
 	    throw new DatabaseException("Attempt to use a Environment that has been closed.");
 	}
   }
 
-  // line 322 "../../../../EnvironmentImpl.ump"
+  // line 323 "../../../../EnvironmentImpl.ump"
    private void doClose(boolean doCheckpoint) throws DatabaseException{
     StringBuffer errors = new StringBuffer();
 	try {
@@ -401,12 +405,12 @@ closeLogger();
 	}
   }
 
-  // line 418 "../../../../EnvironmentImpl.ump"
+  // line 419 "../../../../EnvironmentImpl.ump"
    public static  int getThreadLocalReferenceCount(){
     return threadLocalReferenceCount;
   }
 
-  // line 430 "../../../../EnvironmentImpl.ump"
+  // line 431 "../../../../EnvironmentImpl.ump"
    public static  boolean getNoComparators(){
     return noComparators;
   }
@@ -416,7 +420,7 @@ closeLogger();
    * 
    * Invoke a checkpoint programatically. Note that only one checkpoint may run at a time.
    */
-  // line 438 "../../../../EnvironmentImpl.ump"
+  // line 439 "../../../../EnvironmentImpl.ump"
    public boolean invokeCheckpoint(CheckpointConfig config, boolean flushAll, String invokingSource) throws DatabaseException{
     if (checkpointer != null) {
 	    checkpointer.doCheckpoint(config, flushAll, invokingSource);
@@ -426,7 +430,7 @@ closeLogger();
 	}
   }
 
-  // line 447 "../../../../EnvironmentImpl.ump"
+  // line 448 "../../../../EnvironmentImpl.ump"
    public int invokeCleaner() throws DatabaseException{
     if (cleaner != null) {
 	    return cleaner.doClean(true, false);
@@ -435,7 +439,7 @@ closeLogger();
 	}
   }
 
-  // line 455 "../../../../EnvironmentImpl.ump"
+  // line 456 "../../../../EnvironmentImpl.ump"
    private void requestShutdownDaemons(){
     closing = true;
 	this.hook331();
@@ -448,12 +452,12 @@ closeLogger();
    * 
    * Ask all daemon threads to shut down.
    */
-  // line 465 "../../../../EnvironmentImpl.ump"
+  // line 466 "../../../../EnvironmentImpl.ump"
    private void shutdownDaemons() throws InterruptedException{
     shutdownCheckpointer();
   }
 
-  // line 469 "../../../../EnvironmentImpl.ump"
+  // line 470 "../../../../EnvironmentImpl.ump"
   public void shutdownCheckpointer() throws InterruptedException{
     if (checkpointer != null) {
 	    this.hook328();
@@ -462,22 +466,22 @@ closeLogger();
 	return;
   }
 
-  // line 477 "../../../../EnvironmentImpl.ump"
+  // line 478 "../../../../EnvironmentImpl.ump"
    public boolean isNoLocking(){
     return isNoLocking;
   }
 
-  // line 481 "../../../../EnvironmentImpl.ump"
+  // line 482 "../../../../EnvironmentImpl.ump"
    public boolean isTransactional(){
     return isTransactional;
   }
 
-  // line 485 "../../../../EnvironmentImpl.ump"
+  // line 486 "../../../../EnvironmentImpl.ump"
    public boolean isReadOnly(){
     return isReadOnly;
   }
 
-  // line 490 "../../../../EnvironmentImpl.ump"
+  // line 491 "../../../../EnvironmentImpl.ump"
    public DatabaseImpl createDb(Locker locker, String databaseName, DatabaseConfig dbConfig, Database databaseHandle) throws DatabaseException{
     return dbMapTree.createDb(locker, databaseName, dbConfig, databaseHandle);
   }
@@ -489,12 +493,12 @@ closeLogger();
    * @param databaseNametarget database.
    * @return null if database doesn't exist.
    */
-  // line 499 "../../../../EnvironmentImpl.ump"
+  // line 500 "../../../../EnvironmentImpl.ump"
    public DatabaseImpl getDb(Locker locker, String databaseName, Database databaseHandle) throws DatabaseException{
     return dbMapTree.getDb(locker, databaseName, databaseHandle);
   }
 
-  // line 503 "../../../../EnvironmentImpl.ump"
+  // line 504 "../../../../EnvironmentImpl.ump"
    public List getDbNames() throws DatabaseException{
     return dbMapTree.getDbNames();
   }
@@ -504,7 +508,7 @@ closeLogger();
    * 
    * For debugging.
    */
-  // line 510 "../../../../EnvironmentImpl.ump"
+  // line 511 "../../../../EnvironmentImpl.ump"
    public void dumpMapTree() throws DatabaseException{
     dbMapTree.dump();
   }
@@ -514,7 +518,7 @@ closeLogger();
    * 
    * Transactional services.
    */
-  // line 517 "../../../../EnvironmentImpl.ump"
+  // line 518 "../../../../EnvironmentImpl.ump"
    public Txn txnBegin(Transaction parent, TransactionConfig txnConfig) throws DatabaseException{
     if (!isTransactional) {
 	    throw new DatabaseException("beginTransaction called, " + " but Environment was not opened "
@@ -523,17 +527,17 @@ closeLogger();
 	return txnManager.txnBegin(parent, txnConfig);
   }
 
-  // line 525 "../../../../EnvironmentImpl.ump"
+  // line 526 "../../../../EnvironmentImpl.ump"
    public LogManager getLogManager(){
     return logManager;
   }
 
-  // line 529 "../../../../EnvironmentImpl.ump"
+  // line 530 "../../../../EnvironmentImpl.ump"
    public FileManager getFileManager(){
     return fileManager;
   }
 
-  // line 533 "../../../../EnvironmentImpl.ump"
+  // line 534 "../../../../EnvironmentImpl.ump"
    public DbTree getDbMapTree(){
     return dbMapTree;
   }
@@ -543,7 +547,7 @@ closeLogger();
    * 
    * Returns the config manager for the current base configuration. <p> The configuration can change, but changes are made by replacing the config manager object with a enw one. To use a consistent set of properties, call this method once and query the returned manager repeatedly for each property, rather than getting the config manager via this method for each property individually. </p>
    */
-  // line 540 "../../../../EnvironmentImpl.ump"
+  // line 541 "../../../../EnvironmentImpl.ump"
    public DbConfigManager getConfigManager(){
     return configManager;
   }
@@ -553,7 +557,7 @@ closeLogger();
    * 
    * Clones the current configuration.
    */
-  // line 547 "../../../../EnvironmentImpl.ump"
+  // line 548 "../../../../EnvironmentImpl.ump"
    public EnvironmentConfig cloneConfig(){
     return DbInternal.cloneConfig(configManager.getEnvironmentConfig());
   }
@@ -563,7 +567,7 @@ closeLogger();
    * 
    * Clones the current mutable configuration.
    */
-  // line 554 "../../../../EnvironmentImpl.ump"
+  // line 555 "../../../../EnvironmentImpl.ump"
    public EnvironmentMutableConfig cloneMutableConfig(){
     return DbInternal.cloneMutableConfig(configManager.getEnvironmentConfig());
   }
@@ -573,32 +577,32 @@ closeLogger();
    * 
    * Throws an exception if an immutable property is changed.
    */
-  // line 561 "../../../../EnvironmentImpl.ump"
+  // line 562 "../../../../EnvironmentImpl.ump"
    public void checkImmutablePropsForEquality(EnvironmentConfig config) throws IllegalArgumentException{
     DbInternal.checkImmutablePropsForEquality(configManager.getEnvironmentConfig(), config);
   }
 
-  // line 592 "../../../../EnvironmentImpl.ump"
+  // line 593 "../../../../EnvironmentImpl.ump"
    public INList getInMemoryINs(){
     return inMemoryINs;
   }
 
-  // line 596 "../../../../EnvironmentImpl.ump"
+  // line 597 "../../../../EnvironmentImpl.ump"
    public TxnManager getTxnManager(){
     return txnManager;
   }
 
-  // line 600 "../../../../EnvironmentImpl.ump"
+  // line 601 "../../../../EnvironmentImpl.ump"
    public Checkpointer getCheckpointer(){
     return checkpointer;
   }
 
-  // line 604 "../../../../EnvironmentImpl.ump"
+  // line 605 "../../../../EnvironmentImpl.ump"
    public Cleaner getCleaner(){
     return cleaner;
   }
 
-  // line 608 "../../../../EnvironmentImpl.ump"
+  // line 609 "../../../../EnvironmentImpl.ump"
    public MemoryBudget getMemoryBudget(){
     return memoryBudget;
   }
@@ -608,7 +612,7 @@ closeLogger();
    * 
    * Info about the last recovery
    */
-  // line 615 "../../../../EnvironmentImpl.ump"
+  // line 616 "../../../../EnvironmentImpl.ump"
    public RecoveryInfo getLastRecoveryInfo(){
     return lastRecoveryInfo;
   }
@@ -618,17 +622,17 @@ closeLogger();
    * 
    * Get the environment home directory.
    */
-  // line 622 "../../../../EnvironmentImpl.ump"
+  // line 623 "../../../../EnvironmentImpl.ump"
    public File getEnvironmentHome(){
     return envHome;
   }
 
-  // line 626 "../../../../EnvironmentImpl.ump"
+  // line 627 "../../../../EnvironmentImpl.ump"
    public long getTxnTimeout(){
     return txnTimeout;
   }
 
-  // line 630 "../../../../EnvironmentImpl.ump"
+  // line 631 "../../../../EnvironmentImpl.ump"
    public long getLockTimeout(){
     return lockTimeout;
   }
@@ -638,7 +642,7 @@ closeLogger();
    * 
    * For stress testing. Should only ever be called from an assert.
    */
-  // line 637 "../../../../EnvironmentImpl.ump"
+  // line 638 "../../../../EnvironmentImpl.ump"
    public static  boolean maybeForceYield(){
     if (forcedYield) {
 	    Thread.yield();
@@ -646,98 +650,97 @@ closeLogger();
 	return true;
   }
 
-  // line 644 "../../../../EnvironmentImpl.ump"
+  // line 645 "../../../../EnvironmentImpl.ump"
    protected void hook317(DbConfigManager mgr) throws DatabaseException{
     
   }
 
-  // line 647 "../../../../EnvironmentImpl.ump"
+  // line 648 "../../../../EnvironmentImpl.ump"
    protected void hook318() throws DatabaseException{
     
   }
 
-  // line 650 "../../../../EnvironmentImpl.ump"
+  // line 651 "../../../../EnvironmentImpl.ump"
    protected void hook319() throws DatabaseException{
     
   }
 
-  // line 653 "../../../../EnvironmentImpl.ump"
+  // line 654 "../../../../EnvironmentImpl.ump"
    protected void hook320() throws DatabaseException{
     
   }
 
-  // line 656 "../../../../EnvironmentImpl.ump"
+  // line 657 "../../../../EnvironmentImpl.ump"
    protected void hook321() throws DatabaseException{
     logManager = new SyncedLogManager(this, isReadOnly);
   }
 
-  // line 660 "../../../../EnvironmentImpl.ump"
+  // line 661 "../../../../EnvironmentImpl.ump"
    protected void hook322() throws DatabaseException{
     
   }
 
-  // line 663 "../../../../EnvironmentImpl.ump"
+  // line 664 "../../../../EnvironmentImpl.ump"
    protected void hook323() throws DatabaseException{
     
   }
 
-  // line 666 "../../../../EnvironmentImpl.ump"
+  // line 667 "../../../../EnvironmentImpl.ump"
    protected void hook324(long rootLsn) throws DatabaseException{
     mapTreeRootLsn = rootLsn;
   }
 
-  // line 670 "../../../../EnvironmentImpl.ump"
+  // line 671 "../../../../EnvironmentImpl.ump"
    protected void hook325(StringBuffer errors) throws DatabaseException{
     
   }
 
-  // line 673 "../../../../EnvironmentImpl.ump"
+  // line 674 "../../../../EnvironmentImpl.ump"
    protected void hook326(DbConfigManager mgr) throws DatabaseException{
     
   }
 
-  // line 676 "../../../../EnvironmentImpl.ump"
+  // line 677 "../../../../EnvironmentImpl.ump"
    protected void hook327(){
     
   }
 
-  // line 679 "../../../../EnvironmentImpl.ump"
+  // line 680 "../../../../EnvironmentImpl.ump"
    protected void hook328() throws InterruptedException{
     
   }
 
-  // line 682 "../../../../EnvironmentImpl.ump"
+  // line 683 "../../../../EnvironmentImpl.ump"
    protected void hook330(DbConfigManager mgr) throws DatabaseException{
     
   }
 
-  // line 685 "../../../../EnvironmentImpl.ump"
+  // line 686 "../../../../EnvironmentImpl.ump"
    protected void hook331(){
     
   }
 
-  // line 688 "../../../../EnvironmentImpl.ump"
+  // line 689 "../../../../EnvironmentImpl.ump"
    protected void hook333(DbConfigManager mgr) throws DatabaseException{
     
   }
 
-  // line 691 "../../../../EnvironmentImpl.ump"
+  // line 692 "../../../../EnvironmentImpl.ump"
    protected void hook334(){
     
   }
 
-  // line 694 "../../../../EnvironmentImpl.ump"
+  // line 695 "../../../../EnvironmentImpl.ump"
    protected void hook335() throws DatabaseException{
-    memoryBudget.initCacheMemoryUsage();
-	original();
+    
   }
 
-  // line 697 "../../../../EnvironmentImpl.ump"
+  // line 698 "../../../../EnvironmentImpl.ump"
    protected void hook336(File envHome) throws DatabaseException{
     
   }
 
-  // line 700 "../../../../EnvironmentImpl.ump"
+  // line 701 "../../../../EnvironmentImpl.ump"
    protected void hook337() throws DatabaseException{
     
   }
@@ -967,7 +970,7 @@ closeLogger();
 // line 107 "../../../../EnvironmentImpl.ump"
   private static final String DISABLE_JAVA_ADLER32 = "je.disable.java.adler32" ;
 
-// line 309 "../../../../EnvironmentImpl.ump"
+// line 310 "../../../../EnvironmentImpl.ump"
   public synchronized void close () throws DatabaseException 
   {
     if (--referenceCount <= 0) {
@@ -975,7 +978,7 @@ closeLogger();
 	}
   }
 
-// line 315 "../../../../EnvironmentImpl.ump"
+// line 316 "../../../../EnvironmentImpl.ump"
   public synchronized void close (boolean doCheckpoint) throws DatabaseException 
   {
     if (--referenceCount <= 0) {
@@ -983,7 +986,7 @@ closeLogger();
 	}
   }
 
-// line 392 "../../../../EnvironmentImpl.ump"
+// line 393 "../../../../EnvironmentImpl.ump"
   public synchronized void closeAfterRunRecovery () throws DatabaseException 
   {
     try {
@@ -1001,32 +1004,32 @@ closeLogger();
 	DbEnvPool.getInstance().remove(envHome);
   }
 
-// line 408 "../../../../EnvironmentImpl.ump"
+// line 409 "../../../../EnvironmentImpl.ump"
   public synchronized void forceClose () throws DatabaseException 
   {
     referenceCount = 1;
 	close();
   }
 
-// line 413 "../../../../EnvironmentImpl.ump"
+// line 414 "../../../../EnvironmentImpl.ump"
   public synchronized void incReferenceCount () 
   {
     referenceCount++;
   }
 
-// line 421 "../../../../EnvironmentImpl.ump"
+// line 422 "../../../../EnvironmentImpl.ump"
   public static synchronized void incThreadLocalReferenceCount () 
   {
     threadLocalReferenceCount++;
   }
 
-// line 425 "../../../../EnvironmentImpl.ump"
+// line 426 "../../../../EnvironmentImpl.ump"
   public static synchronized void decThreadLocalReferenceCount () 
   {
     threadLocalReferenceCount--;
   }
 
-// line 567 "../../../../EnvironmentImpl.ump"
+// line 568 "../../../../EnvironmentImpl.ump"
   public synchronized void setMutableConfig (EnvironmentMutableConfig config) throws DatabaseException 
   {
     EnvironmentConfig newConfig = DbInternal.cloneConfig(configManager.getEnvironmentConfig());
@@ -1038,13 +1041,13 @@ closeLogger();
 	}
   }
 
-// line 580 "../../../../EnvironmentImpl.ump"
+// line 581 "../../../../EnvironmentImpl.ump"
   public synchronized void addConfigObserver (EnvConfigObserver o) 
   {
     configObservers.add(o);
   }
 
-// line 587 "../../../../EnvironmentImpl.ump"
+// line 588 "../../../../EnvironmentImpl.ump"
   public synchronized void removeConfigObserver (EnvConfigObserver o) 
   {
     configObservers.remove(o);

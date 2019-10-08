@@ -8,24 +8,24 @@ class TrackedFileSummary
      * Return the total memory size for this object.  We only bother to budget obsolete detail, not the overhead for this object, for two reasons: 1) The number of these objects is very small, and 2) unit tests disable detail tracking as a way to prevent budget adjustments here.
      */
     int getMemorySize() {
-	return memSize;
+	    return memSize;
     }
 
     private void updateMemoryBudget(int delta) {
-	memSize += delta;
-	tracker.getEnvironment().getMemoryBudget().updateMiscMemoryUsage(delta);
+			memSize += delta;
+			tracker.getEnvironment().getMemoryBudget().updateMiscMemoryUsage(delta);
     }
 
-    protected void hook168() {
-	if (memSize > 0) {
-	    updateMemoryBudget(0 - memSize);
-	}
-	original();
-    }
+    after Label168:reset() {
+			if (memSize > 0) {
+					updateMemoryBudget(0 - memSize);
+			}
+			//original();
+				}
 
-    protected void hook169() {
-	updateMemoryBudget(-MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD);
-	original();
+    after Label169: addTrackedSummary(TrackedFileSummary ){
+		updateMemoryBudget(-MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD);
+	//	original();
     }
 
 }

@@ -21,7 +21,8 @@ class DIN {
       }
       void execute(){
         _this.setDirty(true);
-        this.hook614();
+        //this.hook614();
+        Label614:
         _this.dupCountLNRef.setTarget(null);
         _this.dupCountLNRef.setLsn(newLsn);
       }
@@ -29,7 +30,7 @@ class DIN {
       protected long newLsn;
       protected long oldSize;
       protected long newSize;
-      protected void hook614(){
-      }
+     // protected void hook614(){
+     // }
     }
 }

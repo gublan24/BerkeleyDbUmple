@@ -2,10 +2,14 @@
 namespace com.sleepycat.je.dbi;
 class MemoryBudget {
   @MethodObject static class MemoryBudget_sinit {
-      void execute(){
+    
+    before execute(){
         is64=false;
-        isJVM14=true;
-        original();
+        isJVM14=true;  
+    }
+
+    after execute(){
+      //  original();
         overrideArch=System.getProperty(FORCE_JVM_ARCH);
         try {
           if (overrideArch == null) {
@@ -97,8 +101,8 @@ class MemoryBudget {
       }
     }
   @MethodObject static class MemoryBudget_reset {
-      void execute() throws DatabaseException {
-        original();
+      after execute() {
+        //original();
         _this.trackerBudget=true ? newTrackerBudget : newMaxMemory;
         _this.cacheBudget=newMaxMemory - newLogBufferBudget;
         _this.nLockTables=configManager.getInt(EnvironmentParams.N_LOCK_TABLES);

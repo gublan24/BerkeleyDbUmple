@@ -2,19 +2,21 @@ namespace com.sleepycat.je.txn;
 
 class TxnManager
 {
-    protected void hook828(Txn txn) throws DatabaseException {
-	env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
-	original(txn);
+    after Label828:unRegisterTxn(Txn , boolean ) {
+      env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
+//      original(txn);
     }
 
-    protected void hook829() throws DatabaseException {
-	env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
-	original();
+
+   after Label829: registerXATxn(Xid , Txn , boolean ) {
+      env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
+      //original();
     }
 
-    protected void hook830() throws DatabaseException {
-	env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
-	original();
-    }
+  after Label830:unRegisterXATxn(Xid , boolean )
+  {
+      env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
+      //original();
+  }
 
 }

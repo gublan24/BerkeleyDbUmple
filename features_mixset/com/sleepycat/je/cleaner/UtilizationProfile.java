@@ -46,6 +46,7 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../UtilizationProfile.ump"
 // line 3 "../../../../UtilizationProfile_static.ump"
 // line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
+// line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -665,7 +666,9 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../UtilizationProfile_static.ump"
+  // line 30 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_clearCache
   {
   
@@ -694,6 +697,12 @@ public class UtilizationProfile implements EnvConfigObserver
   
     // line 9 "../../../../UtilizationProfile_static.ump"
     public void execute(){
+      // line 32 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+      memorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+              mb=_this.env.getMemoryBudget();
+              mb.updateMiscMemoryUsage(0 - memorySize);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.fileSummaryMap=new TreeMap();
           _this.cachePopulated=false;
     }
@@ -716,7 +725,9 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   @MethodObject
+    @MethodObject
   // line 16 "../../../../UtilizationProfile_static.ump"
+  // line 16 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_removeFile
   {
   
@@ -749,26 +760,26 @@ public class UtilizationProfile implements EnvConfigObserver
       synchronized (_this) {
             assert _this.cachePopulated;
             if (_this.fileSummaryMap.remove(fileNum) != null) {
-              this.hook192();
+              //this.hook192();
+              Label192:
+  mb=_this.env.getMemoryBudget();
+          mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+          //original();
+  
             }
           }
           _this.deleteFileSummary(fileNum);
-    }
-  
-    // line 34 "../../../../UtilizationProfile_static.ump"
-     protected void hook192() throws DatabaseException{
-      
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 30 "../../../../UtilizationProfile_static.ump"
+    // line 31 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 31 "../../../../UtilizationProfile_static.ump"
-    protected Long fileNum ;
   // line 32 "../../../../UtilizationProfile_static.ump"
+    protected Long fileNum ;
+  // line 33 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     
@@ -778,7 +789,9 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   @MethodObject
-  // line 36 "../../../../UtilizationProfile_static.ump"
+    @MethodObject
+  // line 37 "../../../../UtilizationProfile_static.ump"
+  // line 23 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_putFileSummary
   {
   
@@ -800,13 +813,13 @@ public class UtilizationProfile implements EnvConfigObserver
     public void delete()
     {}
   
-    // line 38 "../../../../UtilizationProfile_static.ump"
+    // line 39 "../../../../UtilizationProfile_static.ump"
     public  UtilizationProfile_putFileSummary(UtilizationProfile _this, TrackedFileSummary tfs){
       this._this=_this;
           this.tfs=tfs;
     }
   
-    // line 42 "../../../../UtilizationProfile_static.ump"
+    // line 43 "../../../../UtilizationProfile_static.ump"
     public PackedOffsets execute() throws DatabaseException{
       if (_this.env.isReadOnly()) {
             throw new DatabaseException("Cannot write file summary in a read-only environment");
@@ -836,39 +849,39 @@ public class UtilizationProfile implements EnvConfigObserver
           _this.insertFileSummary(ln,fileNum,sequence);
           summary=ln.getBaseSummary();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
-            this.hook193();
+            //this.hook193();
+            Label193:
+  mb=_this.env.getMemoryBudget();
+          mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+          //original();
+  
           }
           return ln.getObsoleteOffsets();
-    }
-  
-    // line 85 "../../../../UtilizationProfile_static.ump"
-     protected void hook193() throws DatabaseException{
-      
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 74 "../../../../UtilizationProfile_static.ump"
+    // line 76 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 75 "../../../../UtilizationProfile_static.ump"
-    protected TrackedFileSummary tfs ;
-  // line 76 "../../../../UtilizationProfile_static.ump"
-    protected long fileNum ;
   // line 77 "../../../../UtilizationProfile_static.ump"
-    protected Long fileNumLong ;
+    protected TrackedFileSummary tfs ;
   // line 78 "../../../../UtilizationProfile_static.ump"
-    protected FileSummary summary ;
+    protected long fileNum ;
   // line 79 "../../../../UtilizationProfile_static.ump"
-    protected File file ;
+    protected Long fileNumLong ;
   // line 80 "../../../../UtilizationProfile_static.ump"
-    protected FileSummary tmp ;
+    protected FileSummary summary ;
   // line 81 "../../../../UtilizationProfile_static.ump"
-    protected int sequence ;
+    protected File file ;
   // line 82 "../../../../UtilizationProfile_static.ump"
-    protected FileSummaryLN ln ;
+    protected FileSummary tmp ;
   // line 83 "../../../../UtilizationProfile_static.ump"
+    protected int sequence ;
+  // line 84 "../../../../UtilizationProfile_static.ump"
+    protected FileSummaryLN ln ;
+  // line 85 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     
@@ -878,7 +891,9 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   @MethodObject
-  // line 87 "../../../../UtilizationProfile_static.ump"
+    @MethodObject
+  // line 89 "../../../../UtilizationProfile_static.ump"
+  // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -900,18 +915,22 @@ public class UtilizationProfile implements EnvConfigObserver
     public void delete()
     {}
   
-    // line 89 "../../../../UtilizationProfile_static.ump"
+    // line 91 "../../../../UtilizationProfile_static.ump"
     public  UtilizationProfile_populateCache(UtilizationProfile _this){
       this._this=_this;
     }
   
-    // line 92 "../../../../UtilizationProfile_static.ump"
+    // line 94 "../../../../UtilizationProfile_static.ump"
     public boolean execute() throws DatabaseException{
       assert !_this.cachePopulated;
           if (!_this.openFileSummaryDatabase()) {
             return false;
           }
-          this.hook194();
+          //this.hook194();
+          Label194:
+  oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+          //original();
+  
           existingFiles=_this.env.getFileManager().getAllFileNumbers();
           locker=null;
           cursor=null;
@@ -978,54 +997,50 @@ public class UtilizationProfile implements EnvConfigObserver
             if (locker != null) {
               locker.operationEnd();
             }
-            this.hook195();
+            //this.hook195();
+            Label195:
+  newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+          mb=_this.env.getMemoryBudget();
+          mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
+          //original();
+   ;
           }
           _this.cachePopulated=true;
           return true;
     }
   
-    // line 184 "../../../../UtilizationProfile_static.ump"
+    // line 188 "../../../../UtilizationProfile_static.ump"
      protected void hook176() throws DatabaseException{
       
     }
   
-    // line 186 "../../../../UtilizationProfile_static.ump"
+    // line 190 "../../../../UtilizationProfile_static.ump"
      protected void hook181() throws DatabaseException{
       
     }
   
-    // line 188 "../../../../UtilizationProfile_static.ump"
+    // line 192 "../../../../UtilizationProfile_static.ump"
      protected void hook182() throws DatabaseException{
       
     }
   
-    // line 190 "../../../../UtilizationProfile_static.ump"
+    // line 194 "../../../../UtilizationProfile_static.ump"
      protected void hook183() throws DatabaseException{
       
     }
   
-    // line 192 "../../../../UtilizationProfile_static.ump"
+    // line 196 "../../../../UtilizationProfile_static.ump"
      protected void hook184() throws DatabaseException{
       
     }
   
-    // line 194 "../../../../UtilizationProfile_static.ump"
+    // line 198 "../../../../UtilizationProfile_static.ump"
      protected void hook185() throws DatabaseException{
       
     }
   
-    // line 196 "../../../../UtilizationProfile_static.ump"
-     protected void hook191() throws DatabaseException{
-      
-    }
-  
-    // line 198 "../../../../UtilizationProfile_static.ump"
-     protected void hook194() throws DatabaseException{
-      
-    }
-  
     // line 200 "../../../../UtilizationProfile_static.ump"
-     protected void hook195() throws DatabaseException{
+     protected void hook191() throws DatabaseException{
       
     }
     
@@ -1033,35 +1048,35 @@ public class UtilizationProfile implements EnvConfigObserver
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 168 "../../../../UtilizationProfile_static.ump"
+    // line 172 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 169 "../../../../UtilizationProfile_static.ump"
-    protected int oldMemorySize ;
-  // line 170 "../../../../UtilizationProfile_static.ump"
-    protected Long[] existingFiles ;
-  // line 171 "../../../../UtilizationProfile_static.ump"
-    protected Locker locker ;
-  // line 172 "../../../../UtilizationProfile_static.ump"
-    protected CursorImpl cursor ;
   // line 173 "../../../../UtilizationProfile_static.ump"
-    protected DatabaseEntry keyEntry ;
+    protected int oldMemorySize ;
   // line 174 "../../../../UtilizationProfile_static.ump"
-    protected DatabaseEntry dataEntry ;
+    protected Long[] existingFiles ;
   // line 175 "../../../../UtilizationProfile_static.ump"
-    protected OperationStatus status ;
+    protected Locker locker ;
   // line 176 "../../../../UtilizationProfile_static.ump"
-    protected FileSummaryLN ln ;
+    protected CursorImpl cursor ;
   // line 177 "../../../../UtilizationProfile_static.ump"
-    protected byte[] keyBytes ;
+    protected DatabaseEntry keyEntry ;
   // line 178 "../../../../UtilizationProfile_static.ump"
-    protected boolean isOldVersion ;
+    protected DatabaseEntry dataEntry ;
   // line 179 "../../../../UtilizationProfile_static.ump"
-    protected long fileNum ;
+    protected OperationStatus status ;
   // line 180 "../../../../UtilizationProfile_static.ump"
-    protected Long fileNumLong ;
+    protected FileSummaryLN ln ;
   // line 181 "../../../../UtilizationProfile_static.ump"
-    protected int newMemorySize ;
+    protected byte[] keyBytes ;
   // line 182 "../../../../UtilizationProfile_static.ump"
+    protected boolean isOldVersion ;
+  // line 183 "../../../../UtilizationProfile_static.ump"
+    protected long fileNum ;
+  // line 184 "../../../../UtilizationProfile_static.ump"
+    protected Long fileNumLong ;
+  // line 185 "../../../../UtilizationProfile_static.ump"
+    protected int newMemorySize ;
+  // line 186 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     

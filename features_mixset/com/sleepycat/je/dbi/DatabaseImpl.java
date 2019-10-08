@@ -49,6 +49,7 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../DatabaseImpl.ump"
 // line 3 "../../../../DatabaseImpl_static.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
+// line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -769,7 +770,9 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   
   
   @MethodObject
+    @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
+  // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
   public static class DatabaseImpl_preload
   {
   
@@ -805,7 +808,19 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
           if (maxMillisecs > 0) {
             targetTime=System.currentTimeMillis() + maxMillisecs;
           }
-          this.hook290();
+          //this.hook290();
+          Label290:
+  cacheBudget=_this.envImpl.getMemoryBudget().getCacheBudget();
+          if (maxBytes == 0) {
+            maxBytes=cacheBudget;
+          }
+     			else 
+        			if (maxBytes > cacheBudget) {
+  						throw new IllegalArgumentException("maxBytes parameter to Database.preload() was specified as " + maxBytes + " bytes \nbut the cache is only "+ cacheBudget+ " bytes.");
+  						}
+  
+          //original();
+  
           ret=new PreloadStats();
           callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
           walker=new PreloadLSNTreeWalker(_this,callback,config);
@@ -813,37 +828,32 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
           return ret;
     }
   
-    // line 68 "../../../../DatabaseImpl_static.ump"
+    // line 69 "../../../../DatabaseImpl_static.ump"
      protected void hook287() throws DatabaseException{
       walker.walk();
-    }
-  
-    // line 71 "../../../../DatabaseImpl_static.ump"
-     protected void hook290() throws DatabaseException{
-      
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 58 "../../../../DatabaseImpl_static.ump"
+    // line 59 "../../../../DatabaseImpl_static.ump"
     protected DatabaseImpl _this ;
-  // line 59 "../../../../DatabaseImpl_static.ump"
-    protected PreloadConfig config ;
   // line 60 "../../../../DatabaseImpl_static.ump"
-    protected long maxBytes ;
+    protected PreloadConfig config ;
   // line 61 "../../../../DatabaseImpl_static.ump"
-    protected long maxMillisecs ;
+    protected long maxBytes ;
   // line 62 "../../../../DatabaseImpl_static.ump"
-    protected long targetTime ;
+    protected long maxMillisecs ;
   // line 63 "../../../../DatabaseImpl_static.ump"
-    protected long cacheBudget ;
+    protected long targetTime ;
   // line 64 "../../../../DatabaseImpl_static.ump"
-    protected PreloadStats ret ;
+    protected long cacheBudget ;
   // line 65 "../../../../DatabaseImpl_static.ump"
-    protected PreloadProcessor callback ;
+    protected PreloadStats ret ;
   // line 66 "../../../../DatabaseImpl_static.ump"
+    protected PreloadProcessor callback ;
+  // line 67 "../../../../DatabaseImpl_static.ump"
     protected SortedLSNTreeWalker walker ;
   
     

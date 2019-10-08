@@ -2,20 +2,22 @@
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
   @MethodObject static class FileProcessor_processFile {
-      protected void hook118() throws DatabaseException, IOException {
-      }
-      protected void hook161() throws DatabaseException, IOException {
+     // protected void hook118() throws DatabaseException, IOException {
+     // }
+      after Label161:execute(){
         adjustMem=(2 * readBufferSize) + obsoleteOffsets.getLogSize();
         budget=_this.env.getMemoryBudget();
-  {
-          this.hook118();
+        {
+          //this.hook118();
+          Label118:
           budget.updateMiscMemoryUsage(adjustMem);
         }
-        original();
+        //original();
       }
-      protected void hook162() throws DatabaseException, IOException {
+
+      after Label162:execute() {
         budget.updateMiscMemoryUsage(0 - adjustMem);
-        original();
+        //original();
       }
     }
 }

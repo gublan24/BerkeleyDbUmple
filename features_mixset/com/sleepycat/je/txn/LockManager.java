@@ -48,18 +48,22 @@ public abstract class LockManager implements EnvConfigObserver
   // line 36 "../../../../LockManager.ump"
    public  LockManager(EnvironmentImpl envImpl) throws DatabaseException{
     DbConfigManager configMgr = envImpl.getConfigManager();
-	this.hook779(configMgr);
-	lockTables = new Map[nLockTables];
-	this.hook770();
-	for (int i = 0; i < nLockTables; i++) {
-	    lockTables[i] = new HashMap();
-	    this.hook771(envImpl, i);
-	}
-	this.envImpl = envImpl;
-	memoryBudget = envImpl.getMemoryBudget();
-	this.hook774();
-	envConfigUpdate(configMgr);
-	envImpl.addConfigObserver(this);
+			//this.hook779(configMgr);
+			Label779:
+nLockTables = configMgr.getInt(EnvironmentParams.N_LOCK_TABLES);
+			//original(configMgr);
+
+			lockTables = new Map[nLockTables];
+			this.hook770();
+			for (int i = 0; i < nLockTables; i++) {
+					lockTables[i] = new HashMap();
+					this.hook771(envImpl, i);
+			}
+			this.envImpl = envImpl;
+			memoryBudget = envImpl.getMemoryBudget();
+			this.hook774();
+			envConfigUpdate(configMgr);
+			envImpl.addConfigObserver(this);
   }
 
 
@@ -67,7 +71,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Process notifications of mutable property changes.
    */
-  // line 55 "../../../../LockManager.ump"
+  // line 56 "../../../../LockManager.ump"
    public void envConfigUpdate(DbConfigManager configMgr) throws DatabaseException{
     LockInfo.setDeadlockStackTrace(configMgr.getBoolean(EnvironmentParams.TXN_DEADLOCK_STACK_TRACE));
 	setLockTableDump(configMgr.getBoolean(EnvironmentParams.TXN_DUMPLOCKS));
@@ -78,17 +82,17 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Called when the je.txn.dumpLocks property is changed.
    */
-  // line 63 "../../../../LockManager.ump"
+  // line 64 "../../../../LockManager.ump"
    static  void setLockTableDump(boolean enable){
     lockTableDump = enable;
   }
 
-  // line 67 "../../../../LockManager.ump"
+  // line 68 "../../../../LockManager.ump"
    protected int getLockTableIndex(Long nodeId){
     return ((int) nodeId.longValue()) % nLockTables;
   }
 
-  // line 71 "../../../../LockManager.ump"
+  // line 72 "../../../../LockManager.ump"
    protected int getLockTableIndex(long nodeId){
     return ((int) nodeId) % nLockTables;
   }
@@ -105,7 +109,7 @@ public abstract class LockManager implements EnvConfigObserver
    * @return a LockGrantType indicating whether the request was fulfilled ornot. LockGrantType.NEW means the lock grant was fulfilled and the caller did not previously hold the lock. PROMOTION means the lock was granted and it was a promotion from READ to WRITE. EXISTING means the lock was already granted (not a promotion). DENIED means the lock was not granted either because the timeout passed without acquiring the lock or timeout was -1 and the lock was not immediately available.
    * @throws DeadlockExceptionif acquiring the lock would result in a deadlock.
    */
-  // line 86 "../../../../LockManager.ump"
+  // line 87 "../../../../LockManager.ump"
    public LockGrantType lock(long nodeId, Locker locker, LockType type, long timeout, boolean nonBlockingRequest, DatabaseImpl database) throws DeadlockException,DatabaseException{
     assert timeout >= 0;
 	synchronized (locker) {
@@ -171,27 +175,31 @@ public abstract class LockManager implements EnvConfigObserver
 	}
   }
 
-  // line 155 "../../../../LockManager.ump"
+  // line 156 "../../../../LockManager.ump"
    protected LockAttemptResult attemptLockInternal(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex) throws DatabaseException{
     Map lockTable = lockTables[lockTableIndex];
-	Lock useLock = (Lock) lockTable.get(nodeId);
-	if (useLock == null) {
-	    useLock = new Lock(nodeId);
-	    lockTable.put(nodeId, useLock);
-	    this.hook780(lockTableIndex);
-	}
-	LockGrantType lockGrant = useLock.lock(type, locker, nonBlockingRequest, memoryBudget, lockTableIndex);
-	boolean success = false;
-	if ((lockGrant == LockGrantType.NEW) || (lockGrant == LockGrantType.PROMOTION)) {
-	    locker.addLock(nodeId, useLock, type, lockGrant);
-	    success = true;
-	} else if (lockGrant == LockGrantType.EXISTING) {
-	    success = true;
-	} else if (lockGrant == LockGrantType.DENIED) {
-	} else {
-	    this.hook775();
-	}
-	return new LockAttemptResult(useLock, lockGrant, success);
+			Lock useLock = (Lock) lockTable.get(nodeId);
+			if (useLock == null) {
+					useLock = new Lock(nodeId);
+					lockTable.put(nodeId, useLock);
+					//this.hook780(lockTableIndex);
+				  Label780:
+memoryBudget.updateLockMemoryUsage(TOTAL_LOCK_OVERHEAD, lockTableIndex);
+			//original(lockTableIndex);
+
+			}
+			LockGrantType lockGrant = useLock.lock(type, locker, nonBlockingRequest, memoryBudget, lockTableIndex);
+			boolean success = false;
+			if ((lockGrant == LockGrantType.NEW) || (lockGrant == LockGrantType.PROMOTION)) {
+					locker.addLock(nodeId, useLock, type, lockGrant);
+					success = true;
+			} else if (lockGrant == LockGrantType.EXISTING) {
+					success = true;
+			} else if (lockGrant == LockGrantType.DENIED) {
+			} else {
+					this.hook775();
+			}
+			return new LockAttemptResult(useLock, lockGrant, success);
   }
 
 
@@ -206,7 +214,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of creating an lock or txn timeout message.
    */
-  // line 188 "../../../../LockManager.ump"
+  // line 190 "../../../../LockManager.ump"
    protected String makeTimeoutMsgInternal(String lockOrTxn, Locker locker, long nodeId, LockType type, LockGrantType grantType, Lock useLock, long timeout, long start, long now, DatabaseImpl database){
     if (lockTableDump) {
 	    System.out.println("++++++++++ begin lock table dump ++++++++++");
@@ -246,7 +254,7 @@ public abstract class LockManager implements EnvConfigObserver
    * @param nodeIdThe node ID of the lock to release.
    * @return true if the lock is released successfully, false if the lock isnot currently being held.
    */
-  // line 225 "../../../../LockManager.ump"
+  // line 227 "../../../../LockManager.ump"
   public boolean release(long nodeId, Locker locker) throws DatabaseException{
     return release(nodeId, null, locker, true);
   }
@@ -258,7 +266,7 @@ public abstract class LockManager implements EnvConfigObserver
    * @param lockThe lock to release
    * @return true if the lock is released successfully, false if the lock isnot currently being held.
    */
-  // line 234 "../../../../LockManager.ump"
+  // line 236 "../../../../LockManager.ump"
   public boolean release(Lock lock, Locker locker) throws DatabaseException{
     return release(-1, lock, locker, false);
   }
@@ -273,7 +281,7 @@ public abstract class LockManager implements EnvConfigObserver
    * @param removeFromLockertrue if we're responsible for
    * @return true if the lock is released successfully, false if the lock isnot currently being held.
    */
-  // line 246 "../../../../LockManager.ump"
+  // line 248 "../../../../LockManager.ump"
    private boolean release(long nodeId, Lock lock, Locker locker, boolean removeFromLocker) throws DatabaseException{
     synchronized (locker) {
 	    Set newOwners = releaseAndFindNotifyTargets(nodeId, lock, locker, removeFromLocker);
@@ -307,7 +315,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of releaseAndFindNotifyTargets
    */
-  // line 277 "../../../../LockManager.ump"
+  // line 279 "../../../../LockManager.ump"
    protected Set releaseAndFindNotifyTargetsInternal(long nodeId, Lock lock, Locker locker, boolean removeFromLocker, int lockTableIndex) throws DatabaseException{
     Lock useLock = lock;
 	Map lockTable = lockTables[lockTableIndex];
@@ -327,7 +335,11 @@ public abstract class LockManager implements EnvConfigObserver
 	}
 	if ((useLock.nWaiters() == 0) && (useLock.nOwners() == 0)) {
 	    lockTables[lockTableIndex].remove(useLock.getNodeId());
-	    this.hook781(lockTableIndex);
+	    //this.hook781(lockTableIndex);
+      Label781:
+memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
+			//original(lockTableIndex);
+
 	}
 	return lockersToNotify;
   }
@@ -344,7 +356,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of transfer
    */
-  // line 311 "../../../../LockManager.ump"
+  // line 314 "../../../../LockManager.ump"
    protected void transferInternal(long nodeId, Locker owningLocker, Locker destLocker, boolean demoteToRead, int lockTableIndex) throws DatabaseException{
     Map lockTable = lockTables[lockTableIndex];
 	Lock useLock = (Lock) lockTable.get(new Long(nodeId));
@@ -368,7 +380,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of transferMultiple
    */
-  // line 331 "../../../../LockManager.ump"
+  // line 334 "../../../../LockManager.ump"
    protected void transferMultipleInternal(long nodeId, Locker owningLocker, Locker [] destLockers, int lockTableIndex) throws DatabaseException{
     Map lockTable = lockTables[lockTableIndex];
 	Lock useLock = (Lock) lockTable.get(new Long(nodeId));
@@ -392,7 +404,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of demote.
    */
-  // line 350 "../../../../LockManager.ump"
+  // line 353 "../../../../LockManager.ump"
    protected void demoteInternal(long nodeId, Locker locker, int lockTableIndex) throws DatabaseException{
     Map lockTable = lockTables[lockTableIndex];
 	Lock useLock = (Lock) lockTable.get(new Long(nodeId));
@@ -414,7 +426,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of isLocked.
    */
-  // line 367 "../../../../LockManager.ump"
+  // line 370 "../../../../LockManager.ump"
    protected boolean isLockedInternal(Long nodeId, int lockTableIndex){
     Map lockTable = lockTables[lockTableIndex];
 	Lock entry = (Lock) lockTable.get(nodeId);
@@ -436,7 +448,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of isOwner.
    */
-  // line 384 "../../../../LockManager.ump"
+  // line 387 "../../../../LockManager.ump"
    protected boolean isOwnerInternal(Long nodeId, Locker locker, LockType type, int lockTableIndex){
     Map lockTable = lockTables[lockTableIndex];
 	Lock entry = (Lock) lockTable.get(nodeId);
@@ -458,7 +470,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of isWaiter.
    */
-  // line 401 "../../../../LockManager.ump"
+  // line 404 "../../../../LockManager.ump"
    protected boolean isWaiterInternal(Long nodeId, Locker locker, int lockTableIndex){
     Map lockTable = lockTables[lockTableIndex];
 	Lock entry = (Lock) lockTable.get(nodeId);
@@ -480,7 +492,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of nWaiters.
    */
-  // line 418 "../../../../LockManager.ump"
+  // line 421 "../../../../LockManager.ump"
    protected int nWaitersInternal(Long nodeId, int lockTableIndex){
     Map lockTable = lockTables[lockTableIndex];
 	Lock entry = (Lock) lockTable.get(nodeId);
@@ -502,7 +514,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of nWaiters.
    */
-  // line 435 "../../../../LockManager.ump"
+  // line 438 "../../../../LockManager.ump"
    protected int nOwnersInternal(Long nodeId, int lockTableIndex){
     Map lockTable = lockTables[lockTableIndex];
 	Lock entry = (Lock) lockTable.get(nodeId);
@@ -524,7 +536,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of getWriteOwnerLocker.
    */
-  // line 452 "../../../../LockManager.ump"
+  // line 455 "../../../../LockManager.ump"
    protected Locker getWriteOwnerLockerInternal(Long nodeId, int lockTableIndex) throws DatabaseException{
     Map lockTable = lockTables[lockTableIndex];
 	Lock lock = (Lock) lockTable.get(nodeId);
@@ -537,7 +549,7 @@ public abstract class LockManager implements EnvConfigObserver
 	}
   }
 
-  // line 468 "../../../../LockManager.ump"
+  // line 471 "../../../../LockManager.ump"
    protected boolean validateOwnershipInternal(Long nodeId, Locker locker, LockType type, boolean flushFromWaiters, MemoryBudget mb, int lockTableIndex) throws DatabaseException{
     if (isOwnerInternal(nodeId, locker, type, lockTableIndex)) {
 	    return true;
@@ -556,7 +568,7 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Do the real work of dumpLockTableInternal.
    */
-  // line 489 "../../../../LockManager.ump"
+  // line 492 "../../../../LockManager.ump"
    protected void dumpLockTableInternal(LockStats stats, int i){
     Map lockTable = lockTables[i];
 	this.hook776(stats, lockTable);
@@ -577,12 +589,12 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * Debugging
    */
-  // line 507 "../../../../LockManager.ump"
+  // line 510 "../../../../LockManager.ump"
    public void dump() throws DatabaseException{
     System.out.println(dumpToString());
   }
 
-  // line 511 "../../../../LockManager.ump"
+  // line 514 "../../../../LockManager.ump"
    public String dumpToString() throws DatabaseException{
     StringBuffer sb = new StringBuffer();
 	for (int i = 0; i < nLockTables; i++) {
@@ -591,7 +603,7 @@ public abstract class LockManager implements EnvConfigObserver
 	return sb.toString();
   }
 
-  // line 519 "../../../../LockManager.ump"
+  // line 522 "../../../../LockManager.ump"
    private void dumpToStringNoLatch(StringBuffer sb, int whichTable){
     Map lockTable = lockTables[whichTable];
 	Iterator entries = lockTable.entrySet().iterator();
@@ -605,7 +617,7 @@ public abstract class LockManager implements EnvConfigObserver
 	}
   }
 
-  // line 532 "../../../../LockManager.ump"
+  // line 535 "../../../../LockManager.ump"
    private StringBuffer findDeadlock(Lock lock, Locker rootLocker){
     Set ownerSet = new HashSet();
 	ownerSet.add(rootLocker);
@@ -617,7 +629,7 @@ public abstract class LockManager implements EnvConfigObserver
 	}
   }
 
-  // line 543 "../../../../LockManager.ump"
+  // line 546 "../../../../LockManager.ump"
    private StringBuffer findDeadlock1(Set ownerSet, Lock lock, Locker rootLocker){
     Iterator ownerIter = lock.getOwnersClone().iterator();
 	while (ownerIter.hasNext()) {
@@ -659,67 +671,59 @@ public abstract class LockManager implements EnvConfigObserver
    * 
    * This is just a struct to hold a multi-value return.
    */
-  // line 582 "../../../../LockManager.ump"
+  // line 585 "../../../../LockManager.ump"
    protected void hook770() throws DatabaseException{
     
   }
 
-  // line 585 "../../../../LockManager.ump"
+  // line 588 "../../../../LockManager.ump"
    protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException{
     
   }
 
-  // line 588 "../../../../LockManager.ump"
+  // line 591 "../../../../LockManager.ump"
    protected void hook772(boolean nonBlockingRequest) throws DeadlockException,DatabaseException{
     
   }
 
-  // line 591 "../../../../LockManager.ump"
+  // line 594 "../../../../LockManager.ump"
    protected void hook773(StringBuffer sb, int i) throws DatabaseException{
     dumpToStringNoLatch(sb, i);
   }
 
-  // line 595 "../../../../LockManager.ump"
+  // line 598 "../../../../LockManager.ump"
    protected void hook774() throws DatabaseException{
     
   }
 
-  // line 598 "../../../../LockManager.ump"
+  // line 601 "../../../../LockManager.ump"
    protected void hook775() throws DatabaseException{
     
   }
 
-  // line 601 "../../../../LockManager.ump"
+  // line 604 "../../../../LockManager.ump"
    protected void hook776(LockStats stats, Map lockTable){
     
   }
 
-  // line 604 "../../../../LockManager.ump"
+  // line 607 "../../../../LockManager.ump"
    protected void hook777(LockStats stats, Lock lock){
     
   }
 
-  // line 607 "../../../../LockManager.ump"
+  // line 610 "../../../../LockManager.ump"
    protected void hook778(LockStats stats, LockInfo info){
     
   }
 
-  // line 610 "../../../../LockManager.ump"
-   protected void hook779(DbConfigManager configMgr) throws DatabaseException{
-    nLockTables = configMgr.getInt(EnvironmentParams.N_LOCK_TABLES);
-	original(configMgr);
-  }
 
-  // line 613 "../../../../LockManager.ump"
-   protected void hook780(int lockTableIndex) throws DatabaseException{
-    memoryBudget.updateLockMemoryUsage(TOTAL_LOCK_OVERHEAD, lockTableIndex);
-	original(lockTableIndex);
-  }
-
+  /**
+   * protected void hook779(DbConfigManager configMgr) throws DatabaseException {
+   * }
+   */
   // line 616 "../../../../LockManager.ump"
-   protected void hook781(int lockTableIndex) throws DatabaseException{
-    memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
-	original(lockTableIndex);
+   protected void hook780(int lockTableIndex) throws DatabaseException{
+    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -828,13 +832,13 @@ public abstract class LockManager implements EnvConfigObserver
   private static RangeRestartException rangeRestartException = new RangeRestartException() ;
 // line 33 "../../../../LockManager.ump"
   private static boolean lockTableDump = false ;
-// line 150 "../../../../LockManager.ump"
+// line 151 "../../../../LockManager.ump"
   abstract protected LockAttemptResult attemptLock(Long nodeId, Locker locker, LockType type,
 	    boolean nonBlockingRequest) throws DatabaseException ;
-// line 463 "../../../../LockManager.ump"
+// line 466 "../../../../LockManager.ump"
   abstract protected boolean validateOwnership(Long nodeId, Locker locker, LockType type, boolean flushFromWaiters,
 	    MemoryBudget mb) throws DatabaseException ;
-// line 483 "../../../../LockManager.ump"
+// line 486 "../../../../LockManager.ump"
   abstract protected void dumpLockTable(LockStats stats) throws DatabaseException ;
 // line 5 "../../../../MemoryBudget_LockManager.ump"
   static final long TOTAL_LOCK_OVERHEAD = MemoryBudget.LOCK_OVERHEAD + MemoryBudget.HASHMAP_ENTRY_OVERHEAD

@@ -51,26 +51,24 @@ public class PreloadProcessor implements TreeNodeProcessor
 	if (System.currentTimeMillis() > targetTime) {
 	    throw DatabaseImpl.timeExceededPreloadException;
 	}
-	this.hook355();
+	//this.hook355();
+  Label355:
+if (envImpl.getMemoryBudget().getCacheMemoryUsage() > maxBytes) {
+	    throw DatabaseImpl.memoryExceededPreloadException;
+	}
+//	original();
+
 	this.hook354(childType);
   }
 
-  // line 37 "../../../../PreloadProcessor.ump"
+  // line 38 "../../../../PreloadProcessor.ump"
    protected void hook353(PreloadStats stats){
     
   }
 
-  // line 40 "../../../../PreloadProcessor.ump"
+  // line 41 "../../../../PreloadProcessor.ump"
    protected void hook354(LogEntryType childType){
     
-  }
-
-  // line 43 "../../../../PreloadProcessor.ump"
-   protected void hook355(){
-    if (envImpl.getMemoryBudget().getCacheMemoryUsage() > maxBytes) {
-	    throw DatabaseImpl.memoryExceededPreloadException;
-	}
-	original();
   }
   
   //------------------------

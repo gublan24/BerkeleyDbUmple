@@ -20,6 +20,7 @@ import java.util.Arrays;
 // line 3 "../../../../SortedLSNTreeWalker.ump"
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
+// line 3 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -197,7 +198,9 @@ public class SortedLSNTreeWalker
   
   
   @MethodObject
+    @MethodObject
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
   public static class SortedLSNTreeWalker_extractINsForDb
   {
   
@@ -229,7 +232,12 @@ public class SortedLSNTreeWalker
     public boolean execute() throws DatabaseException{
       foundSome=false;
           foundSet=new HashSet();
-          this.hook360();
+          //this.hook360();
+          Label360:
+  memoryChange=0;
+          mb=_this.envImpl.getMemoryBudget();
+          //original();
+  
           this.hook356();
           try {
             this.hook357();
@@ -240,14 +248,23 @@ public class SortedLSNTreeWalker
                 foundSome=true;
                 if (_this.removeINsFromINList) {
                   iter.remove();
-                  this.hook361();
+                  //this.hook361();
+                  Label361:
+  memoryChange+=(thisIN.getAccumulatedDelta() - thisIN.getInMemorySize());
+          thisIN.setInListResident(false);
+          //original();
+  
                 }
                 foundSet.add(thisIN);
               }
             }
           }
      catch (      DatabaseException e) {
-            this.hook362();
+            //this.hook362();
+            Label362:
+  mb.updateTreeMemoryUsage(memoryChange);
+         // original();
+  
             throw e;
           }
      finally {
@@ -260,37 +277,28 @@ public class SortedLSNTreeWalker
               _this.accumulateLSNs(thisIN1);
             }
           }
-          foundSet=null;
+          foundSet=null;        
+          // line 6 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
+          //boolean result=original();
+                  mb.updateTreeMemoryUsage(memoryChange);
+                 // return result;
+          // END OF UMPLE AFTER INJECTION
           return foundSome;
+  
     }
   
-    // line 60 "../../../../SortedLSNTreeWalker_static.ump"
+    // line 63 "../../../../SortedLSNTreeWalker_static.ump"
      protected void hook356() throws DatabaseException{
       
     }
   
-    // line 62 "../../../../SortedLSNTreeWalker_static.ump"
+    // line 65 "../../../../SortedLSNTreeWalker_static.ump"
      protected void hook357() throws DatabaseException{
       
     }
   
-    // line 64 "../../../../SortedLSNTreeWalker_static.ump"
+    // line 67 "../../../../SortedLSNTreeWalker_static.ump"
      protected void hook358() throws DatabaseException{
-      
-    }
-  
-    // line 66 "../../../../SortedLSNTreeWalker_static.ump"
-     protected void hook360() throws DatabaseException{
-      
-    }
-  
-    // line 68 "../../../../SortedLSNTreeWalker_static.ump"
-     protected void hook361() throws DatabaseException{
-      
-    }
-  
-    // line 70 "../../../../SortedLSNTreeWalker_static.ump"
-     protected void hook362() throws DatabaseException{
       
     }
     
@@ -298,25 +306,25 @@ public class SortedLSNTreeWalker
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 49 "../../../../SortedLSNTreeWalker_static.ump"
+    // line 52 "../../../../SortedLSNTreeWalker_static.ump"
     protected SortedLSNTreeWalker _this ;
-  // line 50 "../../../../SortedLSNTreeWalker_static.ump"
-    protected INList inList ;
-  // line 51 "../../../../SortedLSNTreeWalker_static.ump"
-    protected boolean foundSome ;
-  // line 52 "../../../../SortedLSNTreeWalker_static.ump"
-    protected Set foundSet ;
   // line 53 "../../../../SortedLSNTreeWalker_static.ump"
-    protected long memoryChange ;
+    protected INList inList ;
   // line 54 "../../../../SortedLSNTreeWalker_static.ump"
-    protected MemoryBudget mb ;
+    protected boolean foundSome ;
   // line 55 "../../../../SortedLSNTreeWalker_static.ump"
-    protected Iterator iter ;
+    protected Set foundSet ;
   // line 56 "../../../../SortedLSNTreeWalker_static.ump"
-    protected IN thisIN ;
+    protected long memoryChange ;
   // line 57 "../../../../SortedLSNTreeWalker_static.ump"
-    protected Iterator iter1 ;
+    protected MemoryBudget mb ;
   // line 58 "../../../../SortedLSNTreeWalker_static.ump"
+    protected Iterator iter ;
+  // line 59 "../../../../SortedLSNTreeWalker_static.ump"
+    protected IN thisIN ;
+  // line 60 "../../../../SortedLSNTreeWalker_static.ump"
+    protected Iterator iter1 ;
+  // line 61 "../../../../SortedLSNTreeWalker_static.ump"
     protected IN thisIN1 ;
   
     

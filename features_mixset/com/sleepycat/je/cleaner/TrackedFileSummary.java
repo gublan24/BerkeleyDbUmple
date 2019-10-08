@@ -8,6 +8,7 @@ import com.sleepycat.je.dbi.MemoryBudget;
 // line 3 "../../../../TrackedFileSummary.ump"
 // line 3 "../../../../TrackedFileSummary_static.ump"
 // line 3 "../../../../MemoryBudget_TrackedFileSummary.ump"
+// line 3 "../../../../MemoryBudget_TrackedFileSummary_inner.ump"
 public class TrackedFileSummary extends FileSummary
 {
 
@@ -83,9 +84,15 @@ public class TrackedFileSummary extends FileSummary
   // line 52 "../../../../TrackedFileSummary.ump"
    public void reset(){
     obsoleteOffsets = null;
-	tracker.resetFile(this);
-	this.hook168();
-	super.reset();
+			tracker.resetFile(this);
+			//this.hook168();
+			Label168:
+if (memSize > 0) {
+					updateMemoryBudget(0 - memSize);
+			}
+			//original();
+
+      super.reset();
   }
 
 
@@ -93,7 +100,7 @@ public class TrackedFileSummary extends FileSummary
    * 
    * Tracks the given offset as obsolete or non-obsolete. <p>Must be called under the log write latch.</p>
    */
-  // line 62 "../../../../TrackedFileSummary.ump"
+  // line 63 "../../../../TrackedFileSummary.ump"
   public void trackObsolete(long offset){
     new TrackedFileSummary_trackObsolete(this, offset).execute();
   }
@@ -103,13 +110,17 @@ public class TrackedFileSummary extends FileSummary
    * 
    * Adds the obsolete offsets as well as the totals of the given object.
    */
-  // line 69 "../../../../TrackedFileSummary.ump"
+  // line 70 "../../../../TrackedFileSummary.ump"
   public void addTrackedSummary(TrackedFileSummary other){
     add(other);
 	if (other.obsoleteOffsets != null) {
 	    if (obsoleteOffsets != null) {
 		if (obsoleteOffsets.merge(other.obsoleteOffsets)) {
-		    this.hook169();
+		    //this.hook169();
+        Label169:
+updateMemoryBudget(-MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD);
+	//	original();
+
 		}
 	    } else {
 		obsoleteOffsets = other.obsoleteOffsets;
@@ -122,7 +133,7 @@ public class TrackedFileSummary extends FileSummary
    * 
    * Returns obsolete offsets as an array of longs, or null if none.
    */
-  // line 85 "../../../../TrackedFileSummary.ump"
+  // line 87 "../../../../TrackedFileSummary.ump"
    public long[] getObsoleteOffsets(){
     if (obsoleteOffsets != null) {
 	    return obsoleteOffsets.toArray();
@@ -136,27 +147,13 @@ public class TrackedFileSummary extends FileSummary
    * 
    * Returns whether the given offset is present in the tracked offsets. This does not indicate whether the offset is obsolete in general, but only if it is known to be obsolete in this version of the tracked information.
    */
-  // line 96 "../../../../TrackedFileSummary.ump"
+  // line 98 "../../../../TrackedFileSummary.ump"
   public boolean containsObsoleteOffset(long offset){
     if (obsoleteOffsets != null) {
 	    return obsoleteOffsets.contains(offset);
 	} else {
 	    return false;
 	}
-  }
-
-  // line 104 "../../../../TrackedFileSummary.ump"
-   protected void hook168(){
-    if (memSize > 0) {
-	    updateMemoryBudget(0 - memSize);
-	}
-	original();
-  }
-
-  // line 107 "../../../../TrackedFileSummary.ump"
-   protected void hook169(){
-    updateMemoryBudget(-MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD);
-	original();
   }
 
 
@@ -172,7 +169,7 @@ public class TrackedFileSummary extends FileSummary
   // line 15 "../../../../MemoryBudget_TrackedFileSummary.ump"
    private void updateMemoryBudget(int delta){
     memSize += delta;
-	tracker.getEnvironment().getMemoryBudget().updateMiscMemoryUsage(delta);
+			tracker.getEnvironment().getMemoryBudget().updateMiscMemoryUsage(delta);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -180,7 +177,9 @@ public class TrackedFileSummary extends FileSummary
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../TrackedFileSummary_static.ump"
+  // line 4 "../../../../MemoryBudget_TrackedFileSummary_inner.ump"
   public static class TrackedFileSummary_trackObsolete
   {
   
@@ -210,43 +209,53 @@ public class TrackedFileSummary extends FileSummary
   
     // line 10 "../../../../TrackedFileSummary_static.ump"
     public void execute(){
-      if (!_this.trackDetail) {
+      if (!_this.trackDetail) {          
+            // line 6 "../../../../MemoryBudget_TrackedFileSummary_inner.ump"
+            //original();
+                    if (adjustMem != 0) {
+                      _this.updateMemoryBudget(adjustMem);
+                    }
+            // END OF UMPLE AFTER INJECTION
             return;
           }
-          this.hook170();
+          //this.hook170();
+          Label170:
+  adjustMem=0;
+          //original();
+  
           if (_this.obsoleteOffsets == null) {
             _this.obsoleteOffsets=new OffsetList();
-            this.hook171();
+            //this.hook171();
+            Label171:
+  adjustMem+=MemoryBudget.TFS_LIST_INITIAL_OVERHEAD;
+          //original();
+  
           }
           if (_this.obsoleteOffsets.add(offset,_this.tracker.getEnvironment().isOpen())) {
-            this.hook172();
+            //this.hook172();
+            Label172:
+  adjustMem+=MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD;
+          //original();
+  
           }
-    }
-  
-    // line 26 "../../../../TrackedFileSummary_static.ump"
-     protected void hook170(){
       
-    }
-  
-    // line 28 "../../../../TrackedFileSummary_static.ump"
-     protected void hook171(){
-      
-    }
-  
-    // line 30 "../../../../TrackedFileSummary_static.ump"
-     protected void hook172(){
-      
+      // line 6 "../../../../MemoryBudget_TrackedFileSummary_inner.ump"
+      //original();
+              if (adjustMem != 0) {
+                _this.updateMemoryBudget(adjustMem);
+              }
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 22 "../../../../TrackedFileSummary_static.ump"
+    // line 25 "../../../../TrackedFileSummary_static.ump"
     protected TrackedFileSummary _this ;
-  // line 23 "../../../../TrackedFileSummary_static.ump"
+  // line 26 "../../../../TrackedFileSummary_static.ump"
     protected long offset ;
-  // line 24 "../../../../TrackedFileSummary_static.ump"
+  // line 27 "../../../../TrackedFileSummary_static.ump"
     protected int adjustMem ;
   
     

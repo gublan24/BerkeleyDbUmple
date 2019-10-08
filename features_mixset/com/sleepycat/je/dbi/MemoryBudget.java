@@ -14,6 +14,7 @@ import java.util.Iterator;
 // line 3 "../../../../MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_static.ump"
 // line 3 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 3 "../../../../MemoryBudget_inner_inner.ump"
 public class MemoryBudget implements EnvConfigObserver
 {
 
@@ -43,9 +44,16 @@ public class MemoryBudget implements EnvConfigObserver
   // line 31 "../../../../MemoryBudget.ump"
   public  MemoryBudget(EnvironmentImpl envImpl, DbConfigManager configManager) throws DatabaseException{
     this.envImpl = envImpl;
-	envImpl.addConfigObserver(this);
-	reset(configManager);
-	this.hook351(configManager);
+			envImpl.addConfigObserver(this);
+			reset(configManager);
+			//this.hook351(configManager);
+      Label351:
+inOverhead = IN.computeOverhead(configManager);
+			binOverhead = BIN.computeOverhead(configManager);
+			dinOverhead = DIN.computeOverhead(configManager);
+			dbinOverhead = DBIN.computeOverhead(configManager);
+			//original(configManager);
+
   }
 
 
@@ -53,7 +61,7 @@ public class MemoryBudget implements EnvConfigObserver
    * 
    * Respond to config updates.
    */
-  // line 41 "../../../../MemoryBudget.ump"
+  // line 42 "../../../../MemoryBudget.ump"
    public void envConfigUpdate(DbConfigManager configManager) throws DatabaseException{
     long oldLogBufferBudget = logBufferBudget;
 	reset(configManager);
@@ -67,7 +75,7 @@ public class MemoryBudget implements EnvConfigObserver
    * 
    * Initialize at construction time and when the cache is resized.
    */
-  // line 52 "../../../../MemoryBudget.ump"
+  // line 53 "../../../../MemoryBudget.ump"
    private void reset(DbConfigManager configManager) throws DatabaseException{
     new MemoryBudget_reset(this, configManager).execute();
   }
@@ -77,7 +85,7 @@ public class MemoryBudget implements EnvConfigObserver
    * 
    * Returns Runtime.maxMemory(), accounting for a MacOS bug. May return Long.MAX_VALUE if there is no inherent limit. Used by unit tests as well as by this class.
    */
-  // line 59 "../../../../MemoryBudget.ump"
+  // line 60 "../../../../MemoryBudget.ump"
    public static  long getRuntimeMaxMemory(){
     if ("Mac OS X".equals(System.getProperty("os.name"))) {
 	    String jvmVersion = System.getProperty("java.version");
@@ -88,23 +96,14 @@ public class MemoryBudget implements EnvConfigObserver
 	return Runtime.getRuntime().maxMemory();
   }
 
-  // line 69 "../../../../MemoryBudget.ump"
+  // line 70 "../../../../MemoryBudget.ump"
    public long getLogBufferBudget(){
     return logBufferBudget;
   }
 
-  // line 73 "../../../../MemoryBudget.ump"
+  // line 74 "../../../../MemoryBudget.ump"
    public long getMaxMemory(){
     return maxMemory;
-  }
-
-  // line 77 "../../../../MemoryBudget.ump"
-   protected void hook351(DbConfigManager configManager) throws DatabaseException{
-    inOverhead = IN.computeOverhead(configManager);
-	binOverhead = BIN.computeOverhead(configManager);
-	dinOverhead = DIN.computeOverhead(configManager);
-	dbinOverhead = DBIN.computeOverhead(configManager);
-	original(configManager);
   }
 
 
@@ -115,8 +114,8 @@ public class MemoryBudget implements EnvConfigObserver
   // line 209 "../../../../MemoryBudget_MemoryBudget.ump"
   public void initCacheMemoryUsage() throws DatabaseException{
     synchronized (memoryUsageSynchronizer) {
-	    treeMemoryUsage = calcTreeCacheUsage();
-	}
+					treeMemoryUsage = calcTreeCacheUsage();
+			}
   }
 
 
@@ -127,18 +126,17 @@ public class MemoryBudget implements EnvConfigObserver
   // line 218 "../../../../MemoryBudget_MemoryBudget.ump"
    public long calcTreeCacheUsage() throws DatabaseException{
     long totalSize = 0;
-	INList inList = envImpl.getInMemoryINs();
-//	totalSize = this.hook347(totalSize, inList);
-//hook347
-  Iterator iter = inList.iterator();
-	while (iter.hasNext()) {
-	    IN in = (IN) iter.next();
-	    long size = in.getInMemorySize();
-	    totalSize += size;
-	}
-//End of hook347
+			INList inList = envImpl.getInMemoryINs();
+			//	totalSize = this.hook347(totalSize, inList);
+			Label347:
+Iterator iter = inList.iterator();
+		while (iter.hasNext()) {
+			  IN in = (IN) iter.next();
+			  long size = in.getInMemorySize();
+			  totalSize += size;
+		}
 
-	return totalSize;
+		return totalSize;
   }
 
 
@@ -147,11 +145,11 @@ public class MemoryBudget implements EnvConfigObserver
    * Update the environment wide tree memory count, wake up the evictor if necessary.
    * @param incrementnote that increment may be negative.
    */
-  // line 238 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 230 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateTreeMemoryUsage(long increment){
     synchronized (memoryUsageSynchronizer) {
-	    treeMemoryUsage += increment;
-	}
+					treeMemoryUsage += increment;
+			}
   }
 
 
@@ -160,41 +158,41 @@ public class MemoryBudget implements EnvConfigObserver
    * Update the environment wide misc memory count, wake up the evictor if necessary.
    * @param incrementnote that increment may be negative.
    */
-  // line 248 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 240 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateMiscMemoryUsage(long increment){
     synchronized (memoryUsageSynchronizer) {
-	    miscMemoryUsage += increment;
-	}
+					miscMemoryUsage += increment;
+			}
   }
 
-  // line 254 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 246 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateLockMemoryUsage(long increment, int lockTableIndex){
     lockMemoryUsage[lockTableIndex] += increment;
   }
 
-  // line 258 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 250 "../../../../MemoryBudget_MemoryBudget.ump"
    public long accumulateNewUsage(IN in, long newSize){
     return in.getInMemorySize() + newSize;
   }
 
-  // line 262 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 254 "../../../../MemoryBudget_MemoryBudget.ump"
    public void refreshTreeMemoryUsage(long newSize){
     synchronized (memoryUsageSynchronizer) {
-	    treeMemoryUsage = newSize;
-	}
+					treeMemoryUsage = newSize;
+			}
   }
 
-  // line 268 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 260 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getCacheMemoryUsage(){
     long accLockMemoryUsage = 0;
-	if (nLockTables == 1) {
-	    accLockMemoryUsage = lockMemoryUsage[0];
-	} else {
-	    for (int i = 0; i < nLockTables; i++) {
-		accLockMemoryUsage += lockMemoryUsage[i];
-	    }
-	}
-	return treeMemoryUsage + miscMemoryUsage + accLockMemoryUsage;
+			if (nLockTables == 1) {
+					accLockMemoryUsage = lockMemoryUsage[0];
+			} else {
+					for (int i = 0; i < nLockTables; i++) {
+				accLockMemoryUsage += lockMemoryUsage[i];
+					}
+			}
+			return treeMemoryUsage + miscMemoryUsage + accLockMemoryUsage;
   }
 
 
@@ -202,37 +200,37 @@ public class MemoryBudget implements EnvConfigObserver
    * 
    * Used for unit testing.
    */
-  // line 283 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 275 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getTreeMemoryUsage(){
     return treeMemoryUsage;
   }
 
-  // line 287 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 279 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getTrackerBudget(){
     return trackerBudget;
   }
 
-  // line 291 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 283 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getCacheBudget(){
     return cacheBudget;
   }
 
-  // line 295 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 287 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getINOverhead(){
     return inOverhead;
   }
 
-  // line 299 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 291 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getBINOverhead(){
     return binOverhead;
   }
 
-  // line 303 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 295 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getDINOverhead(){
     return dinOverhead;
   }
 
-  // line 307 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 299 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getDBINOverhead(){
     return dbinOverhead;
   }
@@ -242,24 +240,13 @@ public class MemoryBudget implements EnvConfigObserver
    * 
    * Returns the memory size occupied by a byte array of a given length.
    */
-  // line 314 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 306 "../../../../MemoryBudget_MemoryBudget.ump"
    public static  int byteArraySize(int arrayLen){
     int size = BYTE_ARRAY_OVERHEAD;
-	if (arrayLen > 4) {
-	    size += ((arrayLen - 4 + 7) / 8) * 8;
-	}
-	return size;
-  }
-
-  // line 322 "../../../../MemoryBudget_MemoryBudget.ump"
-   protected long hook347(long totalSize, INList inList) throws DatabaseException{
-    Iterator iter = inList.iterator();
-	while (iter.hasNext()) {
-	    IN in = (IN) iter.next();
-	    long size = in.getInMemorySize();
-	    totalSize += size;
-	}
-	return totalSize;
+		if (arrayLen > 4) {
+			  size += ((arrayLen - 4 + 7) / 8) * 8;
+		}
+		return size;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -267,7 +254,9 @@ public class MemoryBudget implements EnvConfigObserver
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../MemoryBudget_static.ump"
+  // line 4 "../../../../MemoryBudget_inner_inner.ump"
   public static class MemoryBudget_sinit
   {
   
@@ -291,7 +280,102 @@ public class MemoryBudget implements EnvConfigObserver
   
     // line 6 "../../../../MemoryBudget_static.ump"
     public void execute(){
+      // line 7 "../../../../MemoryBudget_inner_inner.ump"
+      is64=false;
+              isJVM14=true;
+      // END OF UMPLE BEFORE INJECTION
       this.hook348();
+      // line 12 "../../../../MemoryBudget_inner_inner.ump"
+      //  original();
+              overrideArch=System.getProperty(FORCE_JVM_ARCH);
+              try {
+                if (overrideArch == null) {
+                  arch=System.getProperty(JVM_ARCH_PROPERTY);
+                  if (arch != null) {
+                    is64=Integer.parseInt(arch) == 64;
+                  }
+                }
+         else {
+                  is64=Integer.parseInt(overrideArch) == 64;
+                }
+              }
+         catch (      NumberFormatException NFE) {
+                NFE.printStackTrace(System.err);
+              }
+              if (is64) {
+                if (isJVM14) {
+                  RE=new RuntimeException("1.4 based 64 bit JVM not supported");
+                  RE.printStackTrace(System.err);
+                  throw RE;
+                }
+                LONG_OVERHEAD=LONG_OVERHEAD_64;
+                BYTE_ARRAY_OVERHEAD=BYTE_ARRAY_OVERHEAD_64;
+                OBJECT_OVERHEAD=OBJECT_OVERHEAD_64;
+                ARRAY_ITEM_OVERHEAD=ARRAY_ITEM_OVERHEAD_64;
+                HASHMAP_OVERHEAD=HASHMAP_OVERHEAD_64;
+                HASHMAP_ENTRY_OVERHEAD=HASHMAP_ENTRY_OVERHEAD_64;
+                HASHSET_OVERHEAD=HASHSET_OVERHEAD_64;
+                HASHSET_ENTRY_OVERHEAD=HASHSET_ENTRY_OVERHEAD_64;
+                TWOHASHMAPS_OVERHEAD=TWOHASHMAPS_OVERHEAD_64;
+                TREEMAP_OVERHEAD=TREEMAP_OVERHEAD_64;
+                TREEMAP_ENTRY_OVERHEAD=TREEMAP_ENTRY_OVERHEAD_64;
+                LN_OVERHEAD=LN_OVERHEAD_64;
+                DUPCOUNTLN_OVERHEAD=DUPCOUNTLN_OVERHEAD_64;
+                BIN_FIXED_OVERHEAD=BIN_FIXED_OVERHEAD_64_15;
+                DIN_FIXED_OVERHEAD=DIN_FIXED_OVERHEAD_64_15;
+                DBIN_FIXED_OVERHEAD=DBIN_FIXED_OVERHEAD_64_15;
+                IN_FIXED_OVERHEAD=IN_FIXED_OVERHEAD_64_15;
+                TXN_OVERHEAD=TXN_OVERHEAD_64_15;
+                CHECKPOINT_REFERENCE_SIZE=CHECKPOINT_REFERENCE_SIZE_64_15;
+                KEY_OVERHEAD=KEY_OVERHEAD_64;
+                LOCK_OVERHEAD=LOCK_OVERHEAD_64;
+                LOCKINFO_OVERHEAD=LOCKINFO_OVERHEAD_64;
+                UTILIZATION_PROFILE_ENTRY=UTILIZATION_PROFILE_ENTRY_64;
+                TFS_LIST_INITIAL_OVERHEAD=TFS_LIST_INITIAL_OVERHEAD_64;
+                TFS_LIST_SEGMENT_OVERHEAD=TFS_LIST_SEGMENT_OVERHEAD_64;
+                LN_INFO_OVERHEAD=LN_INFO_OVERHEAD_64;
+                LONG_LIST_PER_ITEM_OVERHEAD=LONG_LIST_PER_ITEM_OVERHEAD_64;
+              }
+         else {
+                LONG_OVERHEAD=LONG_OVERHEAD_32;
+                BYTE_ARRAY_OVERHEAD=BYTE_ARRAY_OVERHEAD_32;
+                OBJECT_OVERHEAD=OBJECT_OVERHEAD_32;
+                ARRAY_ITEM_OVERHEAD=ARRAY_ITEM_OVERHEAD_32;
+                HASHMAP_OVERHEAD=HASHMAP_OVERHEAD_32;
+                HASHMAP_ENTRY_OVERHEAD=HASHMAP_ENTRY_OVERHEAD_32;
+                HASHSET_OVERHEAD=HASHSET_OVERHEAD_32;
+                HASHSET_ENTRY_OVERHEAD=HASHSET_ENTRY_OVERHEAD_32;
+                TWOHASHMAPS_OVERHEAD=TWOHASHMAPS_OVERHEAD_32;
+                TREEMAP_OVERHEAD=TREEMAP_OVERHEAD_32;
+                TREEMAP_ENTRY_OVERHEAD=TREEMAP_ENTRY_OVERHEAD_32;
+                LN_OVERHEAD=LN_OVERHEAD_32;
+                DUPCOUNTLN_OVERHEAD=DUPCOUNTLN_OVERHEAD_32;
+                if (isJVM14) {
+                  BIN_FIXED_OVERHEAD=BIN_FIXED_OVERHEAD_32_14;
+                  DIN_FIXED_OVERHEAD=DIN_FIXED_OVERHEAD_32_14;
+                  DBIN_FIXED_OVERHEAD=DBIN_FIXED_OVERHEAD_32_14;
+                  IN_FIXED_OVERHEAD=IN_FIXED_OVERHEAD_32_14;
+                  TXN_OVERHEAD=TXN_OVERHEAD_32_14;
+                  CHECKPOINT_REFERENCE_SIZE=CHECKPOINT_REFERENCE_SIZE_32_14;
+                }
+         else {
+                  BIN_FIXED_OVERHEAD=BIN_FIXED_OVERHEAD_32_15;
+                  DIN_FIXED_OVERHEAD=DIN_FIXED_OVERHEAD_32_15;
+                  DBIN_FIXED_OVERHEAD=DBIN_FIXED_OVERHEAD_32_15;
+                  IN_FIXED_OVERHEAD=IN_FIXED_OVERHEAD_32_15;
+                  TXN_OVERHEAD=TXN_OVERHEAD_32_15;
+                  CHECKPOINT_REFERENCE_SIZE=CHECKPOINT_REFERENCE_SIZE_32_15;
+                }
+                KEY_OVERHEAD=KEY_OVERHEAD_32;
+                LOCK_OVERHEAD=LOCK_OVERHEAD_32;
+                LOCKINFO_OVERHEAD=LOCKINFO_OVERHEAD_32;
+                UTILIZATION_PROFILE_ENTRY=UTILIZATION_PROFILE_ENTRY_32;
+                TFS_LIST_INITIAL_OVERHEAD=TFS_LIST_INITIAL_OVERHEAD_32;
+                TFS_LIST_SEGMENT_OVERHEAD=TFS_LIST_SEGMENT_OVERHEAD_32;
+                LN_INFO_OVERHEAD=LN_INFO_OVERHEAD_32;
+                LONG_LIST_PER_ITEM_OVERHEAD=LONG_LIST_PER_ITEM_OVERHEAD_32;
+              }
+      // END OF UMPLE AFTER INJECTION
     }
   
     // line 14 "../../../../MemoryBudget_static.ump"
@@ -321,7 +405,9 @@ public class MemoryBudget implements EnvConfigObserver
   
   
   @MethodObject
+    @MethodObject
   // line 16 "../../../../MemoryBudget_static.ump"
+  // line 103 "../../../../MemoryBudget_inner_inner.ump"
   public static class MemoryBudget_reset
   {
   
@@ -391,6 +477,13 @@ public class MemoryBudget implements EnvConfigObserver
           _this.maxMemory=newMaxMemory;
           this.hook349();
           _this.logBufferBudget=newLogBufferBudget;
+      // line 105 "../../../../MemoryBudget_inner_inner.ump"
+      //original();
+              _this.trackerBudget=true ? newTrackerBudget : newMaxMemory;
+              _this.cacheBudget=newMaxMemory - newLogBufferBudget;
+              _this.nLockTables=configManager.getInt(EnvironmentParams.N_LOCK_TABLES);
+              _this.lockMemoryUsage=new long[_this.nLockTables];
+      // END OF UMPLE AFTER INJECTION
     }
   
     // line 75 "../../../../MemoryBudget_static.ump"

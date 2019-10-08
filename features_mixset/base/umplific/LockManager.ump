@@ -33,19 +33,20 @@ class LockManager
     private static boolean lockTableDump = false;
 
     public LockManager(EnvironmentImpl envImpl) throws DatabaseException {
-	DbConfigManager configMgr = envImpl.getConfigManager();
-	this.hook779(configMgr);
-	lockTables = new Map[nLockTables];
-	this.hook770();
-	for (int i = 0; i < nLockTables; i++) {
-	    lockTables[i] = new HashMap();
-	    this.hook771(envImpl, i);
-	}
-	this.envImpl = envImpl;
-	memoryBudget = envImpl.getMemoryBudget();
-	this.hook774();
-	envConfigUpdate(configMgr);
-	envImpl.addConfigObserver(this);
+			DbConfigManager configMgr = envImpl.getConfigManager();
+			//this.hook779(configMgr);
+			Label779:
+			lockTables = new Map[nLockTables];
+			this.hook770();
+			for (int i = 0; i < nLockTables; i++) {
+					lockTables[i] = new HashMap();
+					this.hook771(envImpl, i);
+			}
+			this.envImpl = envImpl;
+			memoryBudget = envImpl.getMemoryBudget();
+			this.hook774();
+			envConfigUpdate(configMgr);
+			envImpl.addConfigObserver(this);
     }
 
     /** 
@@ -152,25 +153,26 @@ class LockManager
 
     protected LockAttemptResult attemptLockInternal(Long nodeId, Locker locker, LockType type,
 	    boolean nonBlockingRequest, int lockTableIndex) throws DatabaseException {
-	Map lockTable = lockTables[lockTableIndex];
-	Lock useLock = (Lock) lockTable.get(nodeId);
-	if (useLock == null) {
-	    useLock = new Lock(nodeId);
-	    lockTable.put(nodeId, useLock);
-	    this.hook780(lockTableIndex);
-	}
-	LockGrantType lockGrant = useLock.lock(type, locker, nonBlockingRequest, memoryBudget, lockTableIndex);
-	boolean success = false;
-	if ((lockGrant == LockGrantType.NEW) || (lockGrant == LockGrantType.PROMOTION)) {
-	    locker.addLock(nodeId, useLock, type, lockGrant);
-	    success = true;
-	} else if (lockGrant == LockGrantType.EXISTING) {
-	    success = true;
-	} else if (lockGrant == LockGrantType.DENIED) {
-	} else {
-	    this.hook775();
-	}
-	return new LockAttemptResult(useLock, lockGrant, success);
+			Map lockTable = lockTables[lockTableIndex];
+			Lock useLock = (Lock) lockTable.get(nodeId);
+			if (useLock == null) {
+					useLock = new Lock(nodeId);
+					lockTable.put(nodeId, useLock);
+					//this.hook780(lockTableIndex);
+				  Label780:
+			}
+			LockGrantType lockGrant = useLock.lock(type, locker, nonBlockingRequest, memoryBudget, lockTableIndex);
+			boolean success = false;
+			if ((lockGrant == LockGrantType.NEW) || (lockGrant == LockGrantType.PROMOTION)) {
+					locker.addLock(nodeId, useLock, type, lockGrant);
+					success = true;
+			} else if (lockGrant == LockGrantType.EXISTING) {
+					success = true;
+			} else if (lockGrant == LockGrantType.DENIED) {
+			} else {
+					this.hook775();
+			}
+			return new LockAttemptResult(useLock, lockGrant, success);
     }
 
     /** 
@@ -292,7 +294,8 @@ class LockManager
 	}
 	if ((useLock.nWaiters() == 0) && (useLock.nOwners() == 0)) {
 	    lockTables[lockTableIndex].remove(useLock.getNodeId());
-	    this.hook781(lockTableIndex);
+	    //this.hook781(lockTableIndex);
+      Label781:
 	}
 	return lockersToNotify;
     }
@@ -606,13 +609,13 @@ class LockManager
     protected void hook778(LockStats stats, LockInfo info) {
     }
 
-    protected void hook779(DbConfigManager configMgr) throws DatabaseException {
-    }
+    //protected void hook779(DbConfigManager configMgr) throws DatabaseException {
+    //}
 
     protected void hook780(int lockTableIndex) throws DatabaseException {
     }
 
-    protected void hook781(int lockTableIndex) throws DatabaseException {
-    }
+  //  protected void hook781(int lockTableIndex) throws DatabaseException {
+  //  }
 
 }

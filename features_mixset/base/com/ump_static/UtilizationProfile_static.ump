@@ -22,7 +22,8 @@ class UtilizationProfile {
   synchronized (_this) {
           assert _this.cachePopulated;
           if (_this.fileSummaryMap.remove(fileNum) != null) {
-            this.hook192();
+            //this.hook192();
+            Label192:
           }
         }
         _this.deleteFileSummary(fileNum);
@@ -30,8 +31,8 @@ class UtilizationProfile {
       protected UtilizationProfile _this;
       protected Long fileNum;
       protected MemoryBudget mb;
-      protected void hook192() throws DatabaseException {
-      }
+     // protected void hook192() throws DatabaseException {
+     // }
     }
   @MethodObject static class UtilizationProfile_putFileSummary {
       UtilizationProfile_putFileSummary(    UtilizationProfile _this,    TrackedFileSummary tfs){
@@ -67,7 +68,8 @@ class UtilizationProfile {
         _this.insertFileSummary(ln,fileNum,sequence);
         summary=ln.getBaseSummary();
         if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
-          this.hook193();
+          //this.hook193();
+          Label193:
         }
         return ln.getObsoleteOffsets();
       }
@@ -81,8 +83,8 @@ class UtilizationProfile {
       protected int sequence;
       protected FileSummaryLN ln;
       protected MemoryBudget mb;
-      protected void hook193() throws DatabaseException {
-      }
+    //  protected void hook193() throws DatabaseException {
+     // }
     }
   @MethodObject static class UtilizationProfile_populateCache {
       UtilizationProfile_populateCache(    UtilizationProfile _this){
@@ -93,7 +95,8 @@ class UtilizationProfile {
         if (!_this.openFileSummaryDatabase()) {
           return false;
         }
-        this.hook194();
+        //this.hook194();
+        Label194:
         existingFiles=_this.env.getFileManager().getAllFileNumbers();
         locker=null;
         cursor=null;
@@ -160,7 +163,8 @@ class UtilizationProfile {
           if (locker != null) {
             locker.operationEnd();
           }
-          this.hook195();
+          //this.hook195();
+          Label195: ;
         }
         _this.cachePopulated=true;
         return true;
@@ -194,9 +198,9 @@ class UtilizationProfile {
       }
       protected void hook191() throws DatabaseException {
       }
-      protected void hook194() throws DatabaseException {
-      }
-      protected void hook195() throws DatabaseException {
-      }
+      //protected void hook194() throws DatabaseException {
+      //}
+      //protected void hook195() throws DatabaseException {
+      //}
     }
 }

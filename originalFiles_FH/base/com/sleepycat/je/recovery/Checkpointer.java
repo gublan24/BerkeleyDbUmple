@@ -514,8 +514,7 @@ public static class CheckpointReference {
     protected void hook530() throws DatabaseException {
       if (in.getDirty()) {
         level=new Integer(in.getLevel());
-{
-        }
+
         if (newDirtyMap.containsKey(level)) {
           dirtySet=(Set)newDirtyMap.get(level);
         }

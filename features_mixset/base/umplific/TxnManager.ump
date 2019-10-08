@@ -102,7 +102,8 @@ class TxnManager
      */
     void unRegisterTxn(Txn txn, boolean isCommit) throws DatabaseException {
 	allTxns.remove(txn);
-	this.hook828(txn);
+//	this.hook828(txn);
+   Label828:
 	this.hook825(isCommit);
 	if (txn.isSerializableIsolation()) {
 	    nActiveSerializable--;
@@ -115,7 +116,8 @@ class TxnManager
     public void registerXATxn(Xid xid, Txn txn, boolean isPrepare) throws DatabaseException {
 	if (!allXATxns.containsKey(xid)) {
 	    allXATxns.put(xid, txn);
-	    this.hook829();
+      //	    this.hook829();
+      Label829:
 	}
 	this.hook826(isPrepare);
     }
@@ -124,11 +126,12 @@ class TxnManager
      * Called when txn ends.
      */
     void unRegisterXATxn(Xid xid, boolean isCommit) throws DatabaseException {
-	if (allXATxns.remove(xid) == null) {
-	    throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
-	}
-	this.hook830();
-	this.hook827(isCommit);
+			if (allXATxns.remove(xid) == null) {
+					throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
+			}
+		//	this.hook830();
+			Label830:
+			this.hook827(isCommit);
     }
 
     /** 
@@ -223,8 +226,8 @@ class TxnManager
     protected void hook827(boolean isCommit) throws DatabaseException {
     }
 
-    protected void hook828(Txn txn) throws DatabaseException {
-    }
+//    protected void hook828(Txn txn) throws DatabaseException {
+//    }
 
     protected void hook829() throws DatabaseException {
     }

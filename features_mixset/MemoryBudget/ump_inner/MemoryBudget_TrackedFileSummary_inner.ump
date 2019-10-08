@@ -2,23 +2,23 @@
 namespace com.sleepycat.je.cleaner;
 class TrackedFileSummary {
   @MethodObject static class TrackedFileSummary_trackObsolete {
-      void execute(){
-        original();
+      after execute(){
+        //original();
         if (adjustMem != 0) {
           _this.updateMemoryBudget(adjustMem);
         }
       }
-      protected void hook170(){
+      after Label170: execute() {
         adjustMem=0;
-        original();
+        //original();
       }
-      protected void hook171(){
+      after Label171: execute() {
         adjustMem+=MemoryBudget.TFS_LIST_INITIAL_OVERHEAD;
-        original();
+        //original();
       }
-      protected void hook172(){
+      after Label172: execute() {
         adjustMem+=MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD;
-        original();
+        //original();
       }
     }
 }

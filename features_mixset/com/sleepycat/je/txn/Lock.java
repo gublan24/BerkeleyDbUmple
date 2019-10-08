@@ -63,16 +63,20 @@ public class Lock
   // line 45 "../../../../Lock.ump"
    private void addWaiterToEndOfList(LockInfo waiter, MemoryBudget mb, int lockTableIndex){
     if (waiterList == null) {
-	    if (firstWaiter == null) {
-		firstWaiter = waiter;
-	    } else {
-		waiterList = new ArrayList();
-		waiterList.add(waiter);
-	    }
-	} else {
-	    waiterList.add(waiter);
-	}
-	this.hook760(mb, lockTableIndex);
+			  if (firstWaiter == null) {
+			firstWaiter = waiter;
+			  } else {
+			waiterList = new ArrayList();
+			waiterList.add(waiter);
+			  }
+		} else {
+			  waiterList.add(waiter);
+		}
+		//this.hook760(mb, lockTableIndex);
+    Label760:
+mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
+      //	original(mb, lockTableIndex);
+
   }
 
 
@@ -80,7 +84,7 @@ public class Lock
    * 
    * Add this waiter to the front of the list.
    */
-  // line 62 "../../../../Lock.ump"
+  // line 63 "../../../../Lock.ump"
    private void addWaiterToHeadOfList(LockInfo waiter, MemoryBudget mb, int lockTableIndex){
     if (firstWaiter != null) {
 	    if (waiterList == null) {
@@ -89,7 +93,11 @@ public class Lock
 	    waiterList.add(0, firstWaiter);
 	}
 	firstWaiter = waiter;
-	this.hook761(mb, lockTableIndex);
+	Label761:
+mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
+			//original(mb, lockTableIndex);
+
+//this.hook761(mb, lockTableIndex);
   }
 
 
@@ -97,7 +105,7 @@ public class Lock
    * 
    * Get a list of waiters for debugging and error messages.
    */
-  // line 76 "../../../../Lock.ump"
+  // line 78 "../../../../Lock.ump"
   public List getWaitersListClone(){
     List dumpWaiters = new ArrayList();
 	if (firstWaiter != null) {
@@ -114,25 +122,34 @@ public class Lock
    * 
    * Remove this locker from the waiter list.
    */
-  // line 90 "../../../../Lock.ump"
+  // line 92 "../../../../Lock.ump"
   public void flushWaiter(Locker locker, MemoryBudget mb, int lockTableIndex){
     if ((firstWaiter != null) && (firstWaiter.getLocker() == locker)) {
 	    firstWaiter = null;
-	    this.hook762(mb, lockTableIndex);
+	   // this.hook762(mb, lockTableIndex);
+Label762:
+mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+			//original(mb, lockTableIndex);
+
+
 	} else if (waiterList != null) {
 	    Iterator iter = waiterList.iterator();
 	    while (iter.hasNext()) {
 		LockInfo info = (LockInfo) iter.next();
 		if (info.getLocker() == locker) {
 		    iter.remove();
-		    this.hook763(mb, lockTableIndex);
+		    //this.hook763(mb, lockTableIndex);
+        Label763:
+mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+			//original(mb, lockTableIndex);
+
 		    return;
 		}
 	    }
 	}
   }
 
-  // line 107 "../../../../Lock.ump"
+  // line 112 "../../../../Lock.ump"
    private void addOwner(LockInfo newLock, MemoryBudget mb, int lockTableIndex){
     if (firstOwner == null) {
 	    firstOwner = newLock;
@@ -142,7 +159,11 @@ public class Lock
 	    }
 	    ownerSet.add(newLock);
 	}
-	this.hook764(mb, lockTableIndex);
+	//this.hook764(mb, lockTableIndex);
+  Label764:
+mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
+      //			original(mb, lockTableIndex);
+
   }
 
 
@@ -150,7 +171,7 @@ public class Lock
    * 
    * Get a new Set of the owners.
    */
-  // line 122 "../../../../Lock.ump"
+  // line 128 "../../../../Lock.ump"
   public Set getOwnersClone(){
     Set owners;
 	if (ownerSet != null) {
@@ -169,7 +190,7 @@ public class Lock
    * 
    * Remove this LockInfo from the owner set.
    */
-  // line 138 "../../../../Lock.ump"
+  // line 144 "../../../../Lock.ump"
    private boolean flushOwner(LockInfo oldOwner, MemoryBudget mb, int lockTableIndex){
     boolean removed = false;
 	if (oldOwner != null) {
@@ -181,7 +202,13 @@ public class Lock
 		removed = ownerSet.remove(oldOwner);
 	    }
 	}
-	this.hook765(mb, lockTableIndex, removed);
+  //	this.hook765(mb, lockTableIndex, removed);
+  Label765:
+if (removed) {
+					mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+			}
+      //			original(mb, lockTableIndex, removed);
+
 	return removed;
   }
 
@@ -190,7 +217,7 @@ public class Lock
    * 
    * Remove this locker from the owner set.
    */
-  // line 156 "../../../../Lock.ump"
+  // line 163 "../../../../Lock.ump"
    private LockInfo flushOwner(Locker locker, MemoryBudget mb, int lockTableIndex){
     LockInfo flushedInfo = null;
 	if ((firstOwner != null) && (firstOwner.getLocker() == locker)) {
@@ -206,7 +233,13 @@ public class Lock
 		}
 	    }
 	}
-	this.hook766(mb, lockTableIndex, flushedInfo);
+//	this.hook766(mb, lockTableIndex, flushedInfo);
+  Label766:
+if (flushedInfo != null) {
+			  mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+			}
+     //		original(mb, lockTableIndex, flushedInfo);
+
 	return flushedInfo;
   }
 
@@ -215,7 +248,7 @@ public class Lock
    * 
    * Returns the owner LockInfo for a locker, or null if locker is not an owner.
    */
-  // line 178 "../../../../Lock.ump"
+  // line 186 "../../../../Lock.ump"
    private LockInfo getOwnerLockInfo(Locker locker){
     if ((firstOwner != null) && (firstOwner.getLocker() == locker)) {
 	    return firstOwner;
@@ -237,7 +270,7 @@ public class Lock
    * 
    * Return true if locker is an owner of this Lock for lockType, false otherwise. This method is only used by unit tests.
    */
-  // line 197 "../../../../Lock.ump"
+  // line 205 "../../../../Lock.ump"
   public boolean isOwner(Locker locker, LockType lockType){
     LockInfo o = getOwnerLockInfo(locker);
 	if (o != null) {
@@ -258,7 +291,7 @@ public class Lock
    * 
    * Return true if locker is an owner of this Lock and this is a write lock.
    */
-  // line 215 "../../../../Lock.ump"
+  // line 223 "../../../../Lock.ump"
   public boolean isOwnedWriteLock(Locker locker){
     LockInfo o = getOwnerLockInfo(locker);
 	return o != null && o.getLockType().isWriteLock();
@@ -269,7 +302,7 @@ public class Lock
    * 
    * Return true if locker is a waiter on this Lock. This method is only used by unit tests.
    */
-  // line 223 "../../../../Lock.ump"
+  // line 231 "../../../../Lock.ump"
   public boolean isWaiter(Locker locker){
     if (firstWaiter != null) {
 	    if (firstWaiter.getLocker() == locker) {
@@ -288,7 +321,7 @@ public class Lock
 	return false;
   }
 
-  // line 241 "../../../../Lock.ump"
+  // line 249 "../../../../Lock.ump"
   public int nWaiters(){
     int count = 0;
 	if (firstWaiter != null) {
@@ -300,7 +333,7 @@ public class Lock
 	return count;
   }
 
-  // line 252 "../../../../Lock.ump"
+  // line 260 "../../../../Lock.ump"
   public int nOwners(){
     int count = 0;
 	if (firstOwner != null) {
@@ -317,7 +350,7 @@ public class Lock
    * 
    * Attempts to acquire the lock and returns the LockGrantType. Assumes we hold the lockTableLatch when entering this method.
    */
-  // line 267 "../../../../Lock.ump"
+  // line 275 "../../../../Lock.ump"
   public LockGrantType lock(LockType requestType, Locker locker, boolean nonBlockingRequest, MemoryBudget mb, int lockTableIndex){
     assert validateRequest(locker);
 	LockInfo newLock = new LockInfo(locker, requestType);
@@ -376,7 +409,7 @@ public class Lock
    * Releases a lock and moves the next waiter(s) to the owners.
    * @returnnull if we were not the owner,a non-empty set if owners should be notified after releasing, an empty set if no notification is required.
    */
-  // line 323 "../../../../Lock.ump"
+  // line 331 "../../../../Lock.ump"
   public Set release(Locker locker, MemoryBudget mb, int lockTableIndex){
     LockInfo removedLock = flushOwner(locker, mb, lockTableIndex);
 	if (removedLock == null) {
@@ -417,7 +450,11 @@ public class Lock
 		    lockersToNotify = new HashSet();
 		}
 		lockersToNotify.add(waiterLocker);
-		this.hook767(mb, lockTableIndex);
+		//this.hook767(mb, lockTableIndex);
+    Label767:
+mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
+		//			original(mb, lockTableIndex);
+
 	    } else {
 		assert grant == LockGrantType.WAIT_NEW || grant == LockGrantType.WAIT_PROMOTION
 			|| grant == LockGrantType.WAIT_RESTART;
@@ -442,7 +479,7 @@ public class Lock
    * @param mb is the current memory budget.
    * @return LockGrantType.EXISTING, NEW, PROMOTION, WAIT_RESTART, WAIT_NEWor WAIT_PROMOTION.
    */
-  // line 386 "../../../../Lock.ump"
+  // line 395 "../../../../Lock.ump"
    private LockGrantType tryLock(LockInfo newLock, boolean firstWaiterInLine, MemoryBudget mb, int lockTableIndex){
     if (nOwners() == 0) {
 	    addOwner(newLock, mb, lockTableIndex);
@@ -518,7 +555,7 @@ public class Lock
    * 
    * Called from release() when a RESTART request is waiting to determine if any RANGE_INSERT owners exist.  We can't call tryLock for a RESTART lock because it must never be granted.
    */
-  // line 459 "../../../../Lock.ump"
+  // line 468 "../../../../Lock.ump"
    private boolean rangeInsertConflict(Locker waiterLocker){
     LockInfo owner = null;
 	Iterator iter = null;
@@ -550,7 +587,7 @@ public class Lock
    * 
    * Downgrade a write lock to a read lock.
    */
-  // line 488 "../../../../Lock.ump"
+  // line 497 "../../../../Lock.ump"
   public void demote(Locker locker){
     LockInfo owner = getOwnerLockInfo(locker);
 	if (owner != null) {
@@ -566,7 +603,7 @@ public class Lock
    * 
    * Transfer a lock from one transaction to another. Make sure that this destination locker is only present as a single reader or writer.
    */
-  // line 502 "../../../../Lock.ump"
+  // line 511 "../../../../Lock.ump"
   public LockType transfer(Locker currentLocker, Locker destLocker, MemoryBudget mb, int lockTableIndex) throws DatabaseException{
     LockType lockType = null;
 	int numRemovedLockInfos = 0;
@@ -604,11 +641,15 @@ public class Lock
 		}
 	    }
 	}
-	this.hook768(mb, lockTableIndex, numRemovedLockInfos);
+	//this.hook768(mb, lockTableIndex, numRemovedLockInfos);
+  Label768:
+mb.updateLockMemoryUsage(0 - (numRemovedLockInfos * MemoryBudget.LOCKINFO_OVERHEAD), lockTableIndex);
+		//			original(mb, lockTableIndex, numRemovedLockInfos);
+
 	return lockType;
   }
 
-  // line 543 "../../../../Lock.ump"
+  // line 553 "../../../../Lock.ump"
    private LockType setNewLocker(LockInfo owner, Locker destLocker) throws DatabaseException{
     owner.setLocker(destLocker);
 	destLocker.addLock(nodeId, this, owner.getLockType(), LockGrantType.NEW);
@@ -620,7 +661,7 @@ public class Lock
    * 
    * Transfer a lock from one transaction to many others. Only really needed for case where a write handle lock is being transferred to multiple read handles.
    */
-  // line 553 "../../../../Lock.ump"
+  // line 563 "../../../../Lock.ump"
   public LockType transferMultiple(Locker currentLocker, Locker [] destLockers, MemoryBudget mb, int lockTableIndex) throws DatabaseException{
     LockType lockType = null;
 	LockInfo oldOwner = null;
@@ -691,7 +732,7 @@ public class Lock
    * 
    * If oldOwner is the current owner, clone it and transform it into a dest locker.
    */
-  // line 622 "../../../../Lock.ump"
+  // line 632 "../../../../Lock.ump"
    private LockInfo cloneLockInfo(LockInfo oldOwner, Locker currentLocker, Locker [] destLockers, MemoryBudget mb, int lockTableIndex) throws DatabaseException{
     if (oldOwner.getLocker() == currentLocker) {
 	    try {
@@ -716,7 +757,7 @@ public class Lock
    * 
    * Return the locker that has a write ownership on this lock. If no write owner exists, return null.
    */
-  // line 644 "../../../../Lock.ump"
+  // line 654 "../../../../Lock.ump"
   public Locker getWriteOwnerLocker(){
     LockInfo owner = null;
 	Iterator iter = null;
@@ -746,7 +787,7 @@ public class Lock
    * 
    * Debugging aid, validation before a lock request.
    */
-  // line 671 "../../../../Lock.ump"
+  // line 681 "../../../../Lock.ump"
    private boolean validateRequest(Locker locker){
     if (firstWaiter != null) {
 	    if (firstWaiter.getLocker() == locker) {
@@ -770,7 +811,7 @@ public class Lock
    * 
    * Debug dumper.
    */
-  // line 692 "../../../../Lock.ump"
+  // line 702 "../../../../Lock.ump"
    public String toString(){
     StringBuffer sb = new StringBuffer();
 	sb.append(" NodeId:").append(nodeId);
@@ -798,62 +839,49 @@ public class Lock
 	return sb.toString();
   }
 
-  // line 719 "../../../../Lock.ump"
+  // line 729 "../../../../Lock.ump"
    protected void hook760(MemoryBudget mb, int lockTableIndex){
-    mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
-	original(mb, lockTableIndex);
+    
   }
 
-  // line 722 "../../../../Lock.ump"
+  // line 732 "../../../../Lock.ump"
    protected void hook761(MemoryBudget mb, int lockTableIndex){
-    mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
-	original(mb, lockTableIndex);
+    
   }
 
-  // line 725 "../../../../Lock.ump"
+  // line 735 "../../../../Lock.ump"
    protected void hook762(MemoryBudget mb, int lockTableIndex){
-    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-	original(mb, lockTableIndex);
+    
   }
 
-  // line 728 "../../../../Lock.ump"
+  // line 738 "../../../../Lock.ump"
    protected void hook763(MemoryBudget mb, int lockTableIndex){
-    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-	original(mb, lockTableIndex);
+    
   }
 
-  // line 731 "../../../../Lock.ump"
+  // line 741 "../../../../Lock.ump"
    protected void hook764(MemoryBudget mb, int lockTableIndex){
-    mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
-	original(mb, lockTableIndex);
+    
   }
 
-  // line 734 "../../../../Lock.ump"
+  // line 744 "../../../../Lock.ump"
    protected void hook765(MemoryBudget mb, int lockTableIndex, boolean removed){
-    if (removed) {
-	    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-	}
-	original(mb, lockTableIndex, removed);
+    
   }
 
-  // line 737 "../../../../Lock.ump"
+  // line 747 "../../../../Lock.ump"
    protected void hook766(MemoryBudget mb, int lockTableIndex, LockInfo flushedInfo){
-    if (flushedInfo != null) {
-	    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-	}
-	original(mb, lockTableIndex, flushedInfo);
+    
   }
 
-  // line 740 "../../../../Lock.ump"
+  // line 750 "../../../../Lock.ump"
    protected void hook767(MemoryBudget mb, int lockTableIndex){
-    mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-	original(mb, lockTableIndex);
+    
   }
 
-  // line 743 "../../../../Lock.ump"
+  // line 753 "../../../../Lock.ump"
    protected void hook768(MemoryBudget mb, int lockTableIndex, int numRemovedLockInfos) throws DatabaseException{
-    mb.updateLockMemoryUsage(0 - (numRemovedLockInfos * MemoryBudget.LOCKINFO_OVERHEAD), lockTableIndex);
-	original(mb, lockTableIndex, numRemovedLockInfos);
+    
   }
   
   //------------------------

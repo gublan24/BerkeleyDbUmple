@@ -42,17 +42,18 @@ class Lock
      * The first waiter goes into the firstWaiter member variable.  Once the waiterList is made, all appended waiters go into waiterList, even after the firstWaiter goes away and leaves that field null, so as to leave the list ordered.
      */
     private void addWaiterToEndOfList(LockInfo waiter, MemoryBudget mb, int lockTableIndex) {
-	if (waiterList == null) {
-	    if (firstWaiter == null) {
-		firstWaiter = waiter;
-	    } else {
-		waiterList = new ArrayList();
-		waiterList.add(waiter);
-	    }
-	} else {
-	    waiterList.add(waiter);
-	}
-	this.hook760(mb, lockTableIndex);
+		if (waiterList == null) {
+			  if (firstWaiter == null) {
+			firstWaiter = waiter;
+			  } else {
+			waiterList = new ArrayList();
+			waiterList.add(waiter);
+			  }
+		} else {
+			  waiterList.add(waiter);
+		}
+		//this.hook760(mb, lockTableIndex);
+    Label760:
     }
 
     /** 
@@ -66,7 +67,8 @@ class Lock
 	    waiterList.add(0, firstWaiter);
 	}
 	firstWaiter = waiter;
-	this.hook761(mb, lockTableIndex);
+	Label761:
+//this.hook761(mb, lockTableIndex);
     }
 
     /** 
@@ -89,14 +91,17 @@ class Lock
     void flushWaiter(Locker locker, MemoryBudget mb, int lockTableIndex) {
 	if ((firstWaiter != null) && (firstWaiter.getLocker() == locker)) {
 	    firstWaiter = null;
-	    this.hook762(mb, lockTableIndex);
+	   // this.hook762(mb, lockTableIndex);
+Label762:
+
 	} else if (waiterList != null) {
 	    Iterator iter = waiterList.iterator();
 	    while (iter.hasNext()) {
 		LockInfo info = (LockInfo) iter.next();
 		if (info.getLocker() == locker) {
 		    iter.remove();
-		    this.hook763(mb, lockTableIndex);
+		    //this.hook763(mb, lockTableIndex);
+        Label763:
 		    return;
 		}
 	    }
@@ -112,7 +117,8 @@ class Lock
 	    }
 	    ownerSet.add(newLock);
 	}
-	this.hook764(mb, lockTableIndex);
+	//this.hook764(mb, lockTableIndex);
+  Label764:
     }
 
     /** 
@@ -145,7 +151,8 @@ class Lock
 		removed = ownerSet.remove(oldOwner);
 	    }
 	}
-	this.hook765(mb, lockTableIndex, removed);
+  //	this.hook765(mb, lockTableIndex, removed);
+  Label765:
 	return removed;
     }
 
@@ -167,7 +174,8 @@ class Lock
 		}
 	    }
 	}
-	this.hook766(mb, lockTableIndex, flushedInfo);
+//	this.hook766(mb, lockTableIndex, flushedInfo);
+  Label766:
 	return flushedInfo;
     }
 
@@ -359,7 +367,8 @@ class Lock
 		    lockersToNotify = new HashSet();
 		}
 		lockersToNotify.add(waiterLocker);
-		this.hook767(mb, lockTableIndex);
+		//this.hook767(mb, lockTableIndex);
+    Label767:
 	    } else {
 		assert grant == LockGrantType.WAIT_NEW || grant == LockGrantType.WAIT_PROMOTION
 			|| grant == LockGrantType.WAIT_RESTART;
@@ -535,7 +544,8 @@ class Lock
 		}
 	    }
 	}
-	this.hook768(mb, lockTableIndex, numRemovedLockInfos);
+	//this.hook768(mb, lockTableIndex, numRemovedLockInfos);
+  Label768:
 	return lockType;
     }
 

@@ -9,7 +9,8 @@ class IN {
       }
       void execute(){
         _this.setLsnElement(idx,lsn);
-        this.hook639();
+        //this.hook639();
+        Label639:
         _this.entryStates[idx]|=_this.DIRTY_BIT;
       }
       protected IN _this;
@@ -32,13 +33,15 @@ class IN {
         newNEntries=idx + 1;
         if (newNEntries > _this.nEntries) {
           _this.nEntries=newNEntries;
-          this.hook641();
+          //this.hook641();
+          Label641:
         }
         _this.entryTargets[idx]=target;
         _this.entryKeyVals[idx]=keyVal;
         _this.setLsnElement(idx,lsn);
         _this.entryStates[idx]=state;
-        this.hook640();
+        //this.hook640();
+        Label640:
         _this.setDirty(true);
       }
       protected IN _this;
@@ -52,8 +55,8 @@ class IN {
       protected long newSize;
       protected void hook640(){
       }
-      protected void hook641(){
-      }
+      //protected void hook641(){
+      //}
     }
   @MethodObject static class IN_updateEntry {
       IN_updateEntry(    IN _this,    int idx,    Node node){
@@ -80,7 +83,8 @@ class IN {
       void execute(){
         _this.setLsn(idx,lsn);
         _this.setTarget(idx,node);
-        this.hook642();
+        //this.hook642();
+        Label642:
         _this.setDirty(true);
       }
       protected IN _this;
@@ -104,7 +108,8 @@ class IN {
         _this.setLsn(idx,lsn);
         _this.setTarget(idx,node);
         _this.setKey(idx,key);
-        this.hook643();
+        //this.hook643();
+        Label643:
         _this.setDirty(true);
       }
       protected IN _this;
@@ -133,7 +138,8 @@ class IN {
         if (s < 0) {
           _this.setKey(idx,key);
         }
-        this.hook644();
+        //this.hook644();
+       Label644:
         _this.setDirty(true);
       }
       protected IN _this;
@@ -145,8 +151,8 @@ class IN {
       protected byte[] existingKey;
       protected int s;
       protected long newSize;
-      protected void hook644(){
-      }
+     // protected void hook644(){
+     // }
     }
   @MethodObject static class IN_insertEntry1 {
       IN_insertEntry1(    IN _this,    ChildReference entry){
@@ -167,9 +173,11 @@ class IN {
             index++;
           }
           if (index < _this.nEntries) {
-            this.hook647();
+            //this.hook647();
+            Label647:
             _this.shiftEntriesRight(index);
-            this.hook646();
+            //this.hook646();
+            Label646:
           }
           _this.entryTargets[index]=entry.getTarget();
           _this.entryKeyVals[index]=entry.getKey();
@@ -177,7 +185,8 @@ class IN {
           _this.entryStates[index]=entry.getState();
           _this.nEntries++;
           _this.adjustCursorsForInsert(index);
-          this.hook645();
+         // this.hook645();
+         Label645:
           _this.setDirty(true);
           return (index | _this.INSERT_SUCCESS);
         }
@@ -190,8 +199,8 @@ class IN {
       protected byte[] key;
       protected int index;
       protected int oldSize;
-      protected void hook645() throws DatabaseException {
-      }
+     // protected void hook645() throws DatabaseException {
+     // }
       protected void hook646() throws DatabaseException {
       }
       protected void hook647() throws DatabaseException {
@@ -209,12 +218,14 @@ class IN {
         }
         assert maybeValidate ? _this.validateSubtreeBeforeDelete(index) : true;
         if (index < _this.nEntries) {
-          this.hook649();
+          //this.hook649();
+          Label649:
           for (int i=index; i < _this.nEntries - 1; i++) {
             _this.setEntryInternal(i + 1,i);
           }
           _this.clearEntry(_this.nEntries - 1);
-          this.hook648();
+          //this.hook648();
+          Label648:
           _this.nEntries--;
           _this.setDirty(true);
           _this.setProhibitNextDelta();
@@ -231,10 +242,10 @@ class IN {
       protected int oldLSNArraySize;
       protected void hook616() throws DatabaseException {
       }
-      protected void hook648() throws DatabaseException {
-      }
-      protected void hook649() throws DatabaseException {
-      }
+      //protected void hook648() throws DatabaseException {
+      //}
+     // protected void hook649() throws DatabaseException {
+      //}
     }
   @MethodObject static class IN_validateSubtreeBeforeDelete {
       IN_validateSubtreeBeforeDelete(    IN _this,    int index){
@@ -299,36 +310,8 @@ class IN {
         newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
         this.hook631();
         oldMemorySize=_this.inMemorySize;
-        this.hook630();
-      }
-      protected IN _this;
-      protected IN parent;
-      protected int childIndex;
-      protected int maxEntries;
-      protected int splitIndex;
-      protected int idKeyIndex;
-      protected int low;
-      protected int high;
-      protected IN newSibling;
-      protected byte[] newIdKey;
-      protected long parentLsn;
-      protected long oldMemorySize;
-      protected int toIdx;
-      protected boolean deletedEntrySeen;
-      protected BINReference binRef;
-      protected byte[] thisKey;
-      protected int newSiblingNEntries;
-      protected EnvironmentImpl env;
-      protected LogManager logManager;
-      protected INList inMemoryINs;
-      protected long newSiblingLsn;
-      protected long myNewLsn;
-      protected boolean insertOk1;
-      protected boolean insertOk2;
-      protected long newSize;
-      protected void hook617() throws DatabaseException {
-      }
-      protected void hook630() throws DatabaseException {
+        //this.hook630();
+        Label630:
         toIdx=0;
         deletedEntrySeen=false;
         binRef=null;
@@ -382,16 +365,49 @@ class IN {
         if (parent.isRoot()) {
           parent.setDirty(true);
         }
-        this.hook650();
+        //this.hook650();
+        Label650:
         inMemoryINs.add(newSibling);
         this.hook617();
+
+
+
       }
+      protected IN _this;
+      protected IN parent;
+      protected int childIndex;
+      protected int maxEntries;
+      protected int splitIndex;
+      protected int idKeyIndex;
+      protected int low;
+      protected int high;
+      protected IN newSibling;
+      protected byte[] newIdKey;
+      protected long parentLsn;
+      protected long oldMemorySize;
+      protected int toIdx;
+      protected boolean deletedEntrySeen;
+      protected BINReference binRef;
+      protected byte[] thisKey;
+      protected int newSiblingNEntries;
+      protected EnvironmentImpl env;
+      protected LogManager logManager;
+      protected INList inMemoryINs;
+      protected long newSiblingLsn;
+      protected long myNewLsn;
+      protected boolean insertOk1;
+      protected boolean insertOk2;
+      protected long newSize;
+      protected void hook617() throws DatabaseException {
+      }
+      protected void hook630() throws DatabaseException {
+              }
       protected void hook631() throws DatabaseException {
       }
       protected void hook636() throws DatabaseException {
       }
-      protected void hook650() throws DatabaseException {
-      }
+     // protected void hook650() throws DatabaseException {
+     // }
     }
   @MethodObject static class IN_verify {
       IN_verify(    IN _this,    byte[] maxKey){
@@ -483,7 +499,8 @@ class IN {
       void execute(){
         memDelta=0;
         if (child.provisionalObsolete != null) {
-          this.hook652();
+          //this.hook652();
+          Label652:
           if (_this.provisionalObsolete != null) {
             _this.provisionalObsolete.addAll(child.provisionalObsolete);
           }
@@ -491,7 +508,8 @@ class IN {
             _this.provisionalObsolete=child.provisionalObsolete;
           }
           child.provisionalObsolete=null;
-          this.hook651();
+          //this.hook651();
+          Label651:
         }
         if (obsoleteLsn1 != DbLsn.NULL_LSN || obsoleteLsn2 != DbLsn.NULL_LSN) {
           if (_this.provisionalObsolete == null) {
@@ -499,11 +517,13 @@ class IN {
           }
           if (obsoleteLsn1 != DbLsn.NULL_LSN) {
             _this.provisionalObsolete.add(new Long(obsoleteLsn1));
-            this.hook653();
+            //this.hook653();
+            Label653:
           }
           if (obsoleteLsn2 != DbLsn.NULL_LSN) {
             _this.provisionalObsolete.add(new Long(obsoleteLsn2));
-            this.hook654();
+            //this.hook654();
+            Label654:
           }
         }
       }
@@ -515,12 +535,12 @@ class IN {
       protected int childMemDelta;
       protected void hook651(){
       }
-      protected void hook652(){
-      }
+      //protected void hook652(){
+      //}
       protected void hook653(){
       }
-      protected void hook654(){
-      }
+     // protected void hook654(){
+     // }
     }
   @MethodObject static class IN_flushProvisionalObsolete {
       IN_flushProvisionalObsolete(    IN _this,    LogManager logManager){
@@ -529,10 +549,12 @@ class IN {
       }
       void execute() throws DatabaseException {
         if (_this.provisionalObsolete != null) {
-          this.hook656();
+          //this.hook656();
+          Label656:
           logManager.countObsoleteINs(_this.provisionalObsolete);
           _this.provisionalObsolete=null;
-          this.hook655();
+          //this.hook655();
+          Label655:
         }
       }
       protected IN _this;

@@ -2,136 +2,139 @@
 namespace com.sleepycat.je.tree;
 class IN {
   @MethodObject static class IN_splitInternal {
-      protected void hook650() throws DatabaseException {
+      after Label650: execute() {
         newSize=_this.computeMemorySize();
         _this.updateMemorySize(oldMemorySize,newSize);
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_deleteEntry {
-      protected void hook648() throws DatabaseException {
+      after Label648:execute(){
         _this.updateMemorySize(oldLSNArraySize,_this.computeLsnOverhead());
-        original();
+        //original();
       }
-      protected void hook649() throws DatabaseException {
+      after Label649: execute(){
         _this.updateMemorySize(_this.getEntryInMemorySize(index),0);
         oldLSNArraySize=_this.computeLsnOverhead();
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_trackProvisionalObsolete {
-      void execute(){
-        original();
+      after execute(){
+        //original();
         if (memDelta != 0) {
           _this.changeMemorySize(memDelta);
         }
       }
-      protected void hook651(){
+      after Label651:execute() {
         child.changeMemorySize(0 - childMemDelta);
         memDelta+=childMemDelta;
-        original();
+        //original();
       }
-      protected void hook652(){
+      after Label652: execute() {
         childMemDelta=child.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        original();
+        //original();
       }
-      protected void hook653(){
+       after Label653: execute() {
         memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        original();
+        //original();
       }
-      protected void hook654(){
+      after Label654: execute(){
         memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        original();
+       // original();
       }
     }
   @MethodObject static class IN_insertEntry1 {
-      protected void hook645() throws DatabaseException {
+      after Label645:execute() {
         _this.updateMemorySize(0,_this.getEntryInMemorySize(index));
-        original();
+        //original();
       }
-      protected void hook646() throws DatabaseException {
+      after Label646:execute() {
         _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
-        original();
+        //original();
       }
-      protected void hook647() throws DatabaseException {
+      after Label647:execute() {
         oldSize=_this.computeLsnOverhead();
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_updateEntryCompareKey {
-      void execute(){
+      before execute(){
         oldSize=_this.getEntryInMemorySize(idx);
-        original();
+        //original();
       }
-      protected void hook644(){
+      after Label644: execute() {
         newSize=_this.getEntryInMemorySize(idx);
         _this.updateMemorySize(oldSize,newSize);
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_updateEntry {
-      void execute(){
+      before execute(){
         oldSize=_this.getEntryInMemorySize(idx);
-        original();
+        //original();
+      }
+
+   after execute(){
         newSize=_this.getEntryInMemorySize(idx);
         _this.updateMemorySize(oldSize,newSize);
       }
     }
   @MethodObject static class IN_setLsn {
-      void execute(){
+      before execute(){
         oldSize=_this.computeLsnOverhead();
-        original();
+        //original();
       }
-      protected void hook639(){
+      after Label639: execute(){
         _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_updateEntry2 {
-      void execute(){
+      before execute(){
         oldSize=_this.getEntryInMemorySize(idx);
-        original();
+        //original();
       }
-      protected void hook642(){
+      after Label642: execute() {
         newSize=_this.getEntryInMemorySize(idx);
         _this.updateMemorySize(oldSize,newSize);
-        original();
+       // original();
       }
     }
   @MethodObject static class IN_flushProvisionalObsolete {
-      protected void hook655() throws DatabaseException {
+      after Label655: execute() {
         _this.changeMemorySize(0 - memDelta);
-        original();
+        //original();
       }
-      protected void hook656() throws DatabaseException {
+      after Label656: execute() {
         memDelta=_this.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_updateEntry3 {
-      void execute(){
+      before execute(){
         oldSize=_this.getEntryInMemorySize(idx);
-        original();
+        //original();
       }
-      protected void hook643(){
+      after Label643: execute() {
         newSize=_this.getEntryInMemorySize(idx);
         _this.updateMemorySize(oldSize,newSize);
-        original();
+        //original();
       }
     }
   @MethodObject static class IN_setEntry {
-      void execute(){
+      before execute(){
         oldSize=_this.getEntryInMemorySize(idx);
-        original();
+        //original();
       }
-      protected void hook640(){
+      after Label640: execute() {
         newSize=_this.getEntryInMemorySize(idx);
         _this.updateMemorySize(oldSize,newSize);
-        original();
+        //original();
       }
-      protected void hook641(){
+      after Label641: execute() {
         oldSize=0;
-        original();
+        //original();
       }
     }
 }

@@ -10,24 +10,28 @@ class TrackedFileSummary {
         if (!_this.trackDetail) {
           return;
         }
-        this.hook170();
+        //this.hook170();
+        Label170:
         if (_this.obsoleteOffsets == null) {
           _this.obsoleteOffsets=new OffsetList();
-          this.hook171();
+          //this.hook171();
+          Label171:
         }
         if (_this.obsoleteOffsets.add(offset,_this.tracker.getEnvironment().isOpen())) {
-          this.hook172();
+          //this.hook172();
+          Label172:
         }
       }
       protected TrackedFileSummary _this;
       protected long offset;
       protected int adjustMem;
-      protected void hook170(){
-      }
-      protected void hook171(){
-      }
-      protected void hook172(){
-      }
-    }
+    //  protected void hook170(){
+    //  }
+   //   protected void hook171(){
+   //   }
+   //   protected void hook172(){
+    //  }
+    
+}
 
 }

@@ -9,47 +9,47 @@ class Txn
     private int accumulatedDelta = 0;
 
     private void updateMemoryUsage(int delta) {
-	inMemorySize += delta;
-	accumulatedDelta += delta;
-	if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
-	    envImpl.getMemoryBudget().updateMiscMemoryUsage(accumulatedDelta);
-	    accumulatedDelta = 0;
-	}
+			inMemorySize += delta;
+			accumulatedDelta += delta;
+			if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
+					envImpl.getMemoryBudget().updateMiscMemoryUsage(accumulatedDelta);
+					accumulatedDelta = 0;
+			}
     }
 
     int getAccumulatedDelta() {
-	return accumulatedDelta;
+	   return accumulatedDelta;
     }
 
-    protected void hook809() throws DatabaseException {
-	updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
-	original();
+    after Label809:init(EnvironmentImpl , TransactionConfig ){
+	    updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
+	    //original();
     }
 
-    protected void hook810(int delta) {
-	delta += READ_LOCK_OVERHEAD;
-	updateMemoryUsage(delta);
-	original(delta);
+    after Label810:addReadLock(Lock){
+			delta += READ_LOCK_OVERHEAD;
+			updateMemoryUsage(delta);
+			//original(delta);
     }
 
-    protected int hook811(int delta) {
-	delta = MemoryBudget.HASHSET_OVERHEAD;
-	return original(delta);
+  after Label811:addReadLock(Lock){
+			delta = MemoryBudget.HASHSET_OVERHEAD;
+			//return original(delta);
     }
 
-    protected void hook812() throws DatabaseException {
-	updateMemoryUsage(0 - READ_LOCK_OVERHEAD);
-	original();
+    after Label812:removeLock(long, Lock ){
+			updateMemoryUsage(0 - READ_LOCK_OVERHEAD);
+//			original();
     }
 
-    protected void hook813() throws DatabaseException {
-	updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
-	original();
+  after Label813:removeLock(long, Lock ){
+			updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
+//			original();
     }
 
-    protected void hook814() {
-	updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
-	original();
+    after Label814:moveWriteToReadLock(long , Lock )  {
+	    updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
+	    //original();
     }
 
 }

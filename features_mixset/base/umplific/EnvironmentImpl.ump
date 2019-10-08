@@ -167,7 +167,8 @@ class EnvironmentImpl
 	    runOrPauseDaemons(configManager);
 	    lockTimeout = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.LOCK_TIMEOUT));
 	    txnTimeout = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.TXN_TIMEOUT));
-	    this.hook335();
+	  //  this.hook335();
+      Label335:
 	    open();
 	} catch (DatabaseException e) {
 	    if (fileManager != null) {

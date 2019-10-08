@@ -49,10 +49,11 @@ class TrackedFileSummary
      * Overrides reset for a tracked file, and is called when a FileSummaryLN is written to the log. <p>Must be called under the log write latch.</p>
      */
     public void reset() {
-	obsoleteOffsets = null;
-	tracker.resetFile(this);
-	this.hook168();
-	super.reset();
+			obsoleteOffsets = null;
+			tracker.resetFile(this);
+			//this.hook168();
+			Label168:
+      super.reset();
     }
 
     /** 
@@ -70,7 +71,8 @@ class TrackedFileSummary
 	if (other.obsoleteOffsets != null) {
 	    if (obsoleteOffsets != null) {
 		if (obsoleteOffsets.merge(other.obsoleteOffsets)) {
-		    this.hook169();
+		    //this.hook169();
+        Label169:
 		}
 	    } else {
 		obsoleteOffsets = other.obsoleteOffsets;
@@ -100,10 +102,10 @@ class TrackedFileSummary
 	}
     }
 
-    protected void hook168() {
-    }
+//    protected void hook168() {
+//    }
 
-    protected void hook169() {
-    }
+//    protected void hook169() {
+//    }
 
 }

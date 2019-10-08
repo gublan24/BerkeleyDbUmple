@@ -61,15 +61,15 @@ public class LNInfo
   // line 6 "../../../../MemoryBudget_LNInfo.ump"
   public int getMemorySize(){
     int size = MemoryBudget.LN_INFO_OVERHEAD;
-	if (ln != null) {
-	    size += ln.getMemorySizeIncludedByParent();
-	}
-	if (key != null) {
-	    size += MemoryBudget.byteArraySize(key.length);
-	}
-	if (dupKey != null) {
-	    size += MemoryBudget.byteArraySize(dupKey.length);
-	}
+		if (ln != null) {
+			  size += ln.getMemorySizeIncludedByParent();
+		}
+		if (key != null) {
+			  size += MemoryBudget.byteArraySize(key.length);
+		}
+		if (dupKey != null) {
+			  size += MemoryBudget.byteArraySize(dupKey.length);
+		}
 	return size;
   }
   

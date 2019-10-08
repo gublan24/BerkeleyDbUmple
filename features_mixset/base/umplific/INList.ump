@@ -55,10 +55,11 @@ class INList
      * An IN is getting evicted or is displaced by recovery.  Caller is responsible for acquiring the major latch before calling this and releasing it when they're done.
      */
     public void removeLatchAlreadyHeld(IN in) throws DatabaseException {
-	boolean removeDone = ins.remove(in);
-	removeDone = this.hook341(in, removeDone);
-	assert removeDone;
-	this.hook346(in);
+		boolean removeDone = ins.remove(in);
+		removeDone = this.hook341(in, removeDone);
+		assert removeDone;
+		//this.hook346(in);
+    Label346:
     }
 
     /** 

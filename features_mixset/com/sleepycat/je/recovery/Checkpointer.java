@@ -37,6 +37,7 @@ import java.util.HashSet;
 // line 3 "../../../../Checkpointer.ump"
 // line 3 "../../../../Checkpointer_static.ump"
 // line 3 "../../../../MemoryBudget_Checkpointer.ump"
+// line 3 "../../../../MemoryBudget_Checkpointer_inner.ump"
 public class Checkpointer
 {
 
@@ -747,7 +748,9 @@ public class Checkpointer
   
   
   @MethodObject
+    @MethodObject
   // line 98 "../../../../Checkpointer_static.ump"
+  // line 21 "../../../../MemoryBudget_Checkpointer_inner.ump"
   public static class Checkpointer_doCheckpoint
   {
   
@@ -797,75 +800,100 @@ public class Checkpointer
           this.hook534();
           success=false;
           this.hook522();
-          this.hook548();
+          //this.hook548();
+          Label548:
+  dirtyMapMemSize=0;
+          //original();
+  
           mb=_this.envImpl.getMemoryBudget();
           try {
-            this.hook525();
+            //this.hook525();
+  		      Label525:
+  		      checkpointStart=DbLsn.NULL_LSN;
+  		      firstActiveLsn=DbLsn.NULL_LSN;
+  		      dirtyMap=null;
+  		      this.hook547();
+  		      //this.hook551();
+  		      Label551:
+  totalSize=0;
+          //original();
+  
+  		      for (Iterator i=dirtyMap.values().iterator(); i.hasNext(); ) {
+  		        nodeSet=(Set)i.next();
+  		        //this.hook552();
+  		        Label552:
+  size=nodeSet.size() * MemoryBudget.CHECKPOINT_REFERENCE_SIZE;
+          totalSize+=size;
+          dirtyMapMemSize+=size;
+          //original();
+  
+  		      }
+  		      //this.hook550();
+  		      Label550:
+  mb.updateMiscMemoryUsage(totalSize);
+          //original();
+  
+  		      allowDeltas=!config.getMinimizeRecoveryTime();
+  		      _this.flushDirtyNodes(dirtyMap,flushAll,allowDeltas,flushExtraLevel,checkpointStart);
+  		      _this.flushUtilizationInfo();
+  		      endEntry=new CheckpointEnd(invokingSource,checkpointStart,_this.envImpl.getRootLsn(),firstActiveLsn,Node.getLastId(),_this.envImpl.getDbMapTree().getLastDbId(),_this.envImpl.getTxnManager().getLastTxnId(),_this.checkpointId);
+  		      this.hook523();
+  		      _this.lastCheckpointEnd=_this.logManager.logForceFlush(endEntry,true);
+  		      _this.lastFirstActiveLsn=firstActiveLsn;
+  		      this.hook536();
+  		      _this.highestFlushLevel=IN.MIN_LEVEL;
+  		      success=true;
+  		      if (cleanerFiles != null) {
+  		        cleaner.updateFilesAtCheckpointEnd(cleanerFiles);
+  		      }
+  
           }
       finally {
-            this.hook549();
+            //this.hook549();
+              Label549:
+  mb.updateMiscMemoryUsage(0 - dirtyMapMemSize);
+          //original();
+  
             this.hook524();
           }
     }
   
-    // line 155 "../../../../Checkpointer_static.ump"
+    // line 185 "../../../../Checkpointer_static.ump"
      protected void hook522() throws DatabaseException{
       
     }
   
-    // line 157 "../../../../Checkpointer_static.ump"
+    // line 187 "../../../../Checkpointer_static.ump"
      protected void hook523() throws DatabaseException{
       
     }
   
-    // line 159 "../../../../Checkpointer_static.ump"
+    // line 189 "../../../../Checkpointer_static.ump"
      protected void hook524() throws DatabaseException{
       
     }
   
-    // line 161 "../../../../Checkpointer_static.ump"
-     protected void hook525() throws DatabaseException{
-      checkpointStart=DbLsn.NULL_LSN;
-          firstActiveLsn=DbLsn.NULL_LSN;
-          dirtyMap=null;
-          this.hook547();
-          this.hook551();
-          for (Iterator i=dirtyMap.values().iterator(); i.hasNext(); ) {
-            nodeSet=(Set)i.next();
-            this.hook552();
-          }
-          this.hook550();
-          allowDeltas=!config.getMinimizeRecoveryTime();
-          _this.flushDirtyNodes(dirtyMap,flushAll,allowDeltas,flushExtraLevel,checkpointStart);
-          _this.flushUtilizationInfo();
-          endEntry=new CheckpointEnd(invokingSource,checkpointStart,_this.envImpl.getRootLsn(),firstActiveLsn,Node.getLastId(),_this.envImpl.getDbMapTree().getLastDbId(),_this.envImpl.getTxnManager().getLastTxnId(),_this.checkpointId);
-          this.hook523();
-          _this.lastCheckpointEnd=_this.logManager.logForceFlush(endEntry,true);
-          _this.lastFirstActiveLsn=firstActiveLsn;
-          this.hook536();
-          _this.highestFlushLevel=IN.MIN_LEVEL;
-          success=true;
-          if (cleanerFiles != null) {
-            cleaner.updateFilesAtCheckpointEnd(cleanerFiles);
-          }
-    }
   
-    // line 186 "../../../../Checkpointer_static.ump"
+    /**
+     * protected void hook525() throws DatabaseException {
+     * }
+     */
+    // line 194 "../../../../Checkpointer_static.ump"
      protected void hook534() throws DatabaseException{
       
     }
   
-    // line 188 "../../../../Checkpointer_static.ump"
+    // line 196 "../../../../Checkpointer_static.ump"
      protected void hook535() throws DatabaseException{
       
     }
   
-    // line 190 "../../../../Checkpointer_static.ump"
+    // line 198 "../../../../Checkpointer_static.ump"
      protected void hook536() throws DatabaseException{
       
     }
   
-    // line 192 "../../../../Checkpointer_static.ump"
+    // line 200 "../../../../Checkpointer_static.ump"
      protected void hook547() throws DatabaseException{
       startEntry=new CheckpointStart(_this.checkpointId,invokingSource);
           checkpointStart=_this.logManager.log(startEntry);
@@ -880,75 +908,50 @@ public class Checkpointer
           }
           dirtyMap=_this.selectDirtyINs(flushAll,flushExtraLevel);
     }
-  
-    // line 206 "../../../../Checkpointer_static.ump"
-     protected void hook548() throws DatabaseException{
-      
-    }
-  
-    // line 208 "../../../../Checkpointer_static.ump"
-     protected void hook549() throws DatabaseException{
-      
-    }
-  
-    // line 210 "../../../../Checkpointer_static.ump"
-     protected void hook550() throws DatabaseException{
-      
-    }
-  
-    // line 212 "../../../../Checkpointer_static.ump"
-     protected void hook551() throws DatabaseException{
-      
-    }
-  
-    // line 214 "../../../../Checkpointer_static.ump"
-     protected void hook552() throws DatabaseException{
-      
-    }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 134 "../../../../Checkpointer_static.ump"
+    // line 164 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 135 "../../../../Checkpointer_static.ump"
+  // line 165 "../../../../Checkpointer_static.ump"
     protected CheckpointConfig config ;
-  // line 136 "../../../../Checkpointer_static.ump"
+  // line 166 "../../../../Checkpointer_static.ump"
     protected boolean flushAll ;
-  // line 137 "../../../../Checkpointer_static.ump"
+  // line 167 "../../../../Checkpointer_static.ump"
     protected String invokingSource ;
-  // line 138 "../../../../Checkpointer_static.ump"
+  // line 168 "../../../../Checkpointer_static.ump"
     protected boolean flushExtraLevel ;
-  // line 139 "../../../../Checkpointer_static.ump"
+  // line 169 "../../../../Checkpointer_static.ump"
     protected Cleaner cleaner ;
-  // line 140 "../../../../Checkpointer_static.ump"
+  // line 170 "../../../../Checkpointer_static.ump"
     protected Set[] cleanerFiles ;
-  // line 141 "../../../../Checkpointer_static.ump"
+  // line 171 "../../../../Checkpointer_static.ump"
     protected boolean success ;
-  // line 142 "../../../../Checkpointer_static.ump"
+  // line 172 "../../../../Checkpointer_static.ump"
     protected boolean traced ;
-  // line 143 "../../../../Checkpointer_static.ump"
+  // line 173 "../../../../Checkpointer_static.ump"
     protected int dirtyMapMemSize ;
-  // line 144 "../../../../Checkpointer_static.ump"
+  // line 174 "../../../../Checkpointer_static.ump"
     protected MemoryBudget mb ;
-  // line 145 "../../../../Checkpointer_static.ump"
+  // line 175 "../../../../Checkpointer_static.ump"
     protected long checkpointStart ;
-  // line 146 "../../../../Checkpointer_static.ump"
+  // line 176 "../../../../Checkpointer_static.ump"
     protected long firstActiveLsn ;
-  // line 147 "../../../../Checkpointer_static.ump"
+  // line 177 "../../../../Checkpointer_static.ump"
     protected SortedMap dirtyMap ;
-  // line 148 "../../../../Checkpointer_static.ump"
+  // line 178 "../../../../Checkpointer_static.ump"
     protected CheckpointStart startEntry ;
-  // line 149 "../../../../Checkpointer_static.ump"
+  // line 179 "../../../../Checkpointer_static.ump"
     protected int totalSize ;
-  // line 150 "../../../../Checkpointer_static.ump"
+  // line 180 "../../../../Checkpointer_static.ump"
     protected Set nodeSet ;
-  // line 151 "../../../../Checkpointer_static.ump"
+  // line 181 "../../../../Checkpointer_static.ump"
     protected int size ;
-  // line 152 "../../../../Checkpointer_static.ump"
+  // line 182 "../../../../Checkpointer_static.ump"
     protected boolean allowDeltas ;
-  // line 153 "../../../../Checkpointer_static.ump"
+  // line 183 "../../../../Checkpointer_static.ump"
     protected CheckpointEnd endEntry ;
   
     
@@ -958,7 +961,9 @@ public class Checkpointer
   
   
   @MethodObject
-  // line 216 "../../../../Checkpointer_static.ump"
+    @MethodObject
+  // line 224 "../../../../Checkpointer_static.ump"
+  // line 4 "../../../../MemoryBudget_Checkpointer_inner.ump"
   public static class Checkpointer_selectDirtyINs
   {
   
@@ -980,77 +985,83 @@ public class Checkpointer
     public void delete()
     {}
   
-    // line 218 "../../../../Checkpointer_static.ump"
+    // line 226 "../../../../Checkpointer_static.ump"
     public  Checkpointer_selectDirtyINs(Checkpointer _this, boolean flushAll, boolean flushExtraLevel){
       this._this=_this;
           this.flushAll=flushAll;
           this.flushExtraLevel=flushExtraLevel;
     }
   
-    // line 223 "../../../../Checkpointer_static.ump"
+    // line 231 "../../../../Checkpointer_static.ump"
     public SortedMap execute() throws DatabaseException{
       newDirtyMap=new TreeMap();
           inMemINs=_this.envImpl.getInMemoryINs();
           this.hook529();
-          this.hook553();
-          this.hook528();
-          return newDirtyMap;
-    }
+          //this.hook553();
+          Label553:
+  totalSize=0;
+          mb=_this.envImpl.getMemoryBudget();
+          //original();
   
-    // line 242 "../../../../Checkpointer_static.ump"
-     protected void hook528() throws DatabaseException{
-      iter=inMemINs.iterator();
+          //this.hook528();
+          Label528:
+          iter=inMemINs.iterator();
           while (iter.hasNext()) {
             in=(IN)iter.next();
             in.latch(false);
-            this.hook530();
-          }
-          this.hook554();
-          if (newDirtyMap.size() > 0) {
-            if (flushAll) {
-              _this.highestFlushLevel=_this.envImpl.getDbMapTree().getHighestLevel();
-            }
-     else {
-              _this.highestFlushLevel=((Integer)newDirtyMap.lastKey()).intValue();
-              if (flushExtraLevel) {
-                _this.highestFlushLevel+=1;
-              }
-            }
-          }
-     else {
-            _this.highestFlushLevel=IN.MAX_LEVEL;
-          }
-    }
+            //this.hook530();
+            Label530:
+  totalSize=mb.accumulateNewUsage(in,totalSize);
+          //original();
   
-    // line 265 "../../../../Checkpointer_static.ump"
-     protected void hook529() throws DatabaseException{
-      
-    }
-  
-    // line 267 "../../../../Checkpointer_static.ump"
-     protected void hook530() throws DatabaseException{
-      if (in.getDirty()) {
+  if (in.getDirty()) {
             level=new Integer(in.getLevel());
-    {
-            }
             if (newDirtyMap.containsKey(level)) {
               dirtySet=(Set)newDirtyMap.get(level);
             }
-     else {
+            else {
               dirtySet=new HashSet();
               newDirtyMap.put(level,dirtySet);
             }
             dirtySet.add(new CheckpointReference(in.getDatabase(),in.getNodeId(),in.containsDuplicates(),in.isDbRoot(),in.getMainTreeKey(),in.getDupTreeKey()));
           }
+  
+  				  if (in.getDirty()) {
+  				      level=new Integer(in.getLevel());
+  				      if (newDirtyMap.containsKey(level)) {
+  				        dirtySet=(Set)newDirtyMap.get(level);
+  				      }
+  				      else {
+  				        dirtySet=new HashSet();
+  				        newDirtyMap.put(level,dirtySet);
+  				      }
+  				      dirtySet.add(new CheckpointReference(in.getDatabase(),in.getNodeId(),in.containsDuplicates(),in.isDbRoot(),in.getMainTreeKey(),in.getDupTreeKey()));
+  				    }
+  				}
+          //this.hook554(); //excute()
+          Label554:
+  mb.refreshTreeMemoryUsage(totalSize);
+          //   original();
+  
+          if (newDirtyMap.size() > 0) {
+            if (flushAll) {
+              _this.highestFlushLevel=_this.envImpl.getDbMapTree().getHighestLevel();
+            }
+  				 else {
+  						      _this.highestFlushLevel=((Integer)newDirtyMap.lastKey()).intValue();
+  						      if (flushExtraLevel) {
+  						        _this.highestFlushLevel+=1;
+  						      }
+  						    }
+  						  }
+  				 else {
+  						    _this.highestFlushLevel=IN.MAX_LEVEL;
+  			   }
+          return newDirtyMap;
     }
   
-    // line 282 "../../../../Checkpointer_static.ump"
-     protected void hook553() throws DatabaseException{
-      
-    }
-  
-    // line 284 "../../../../Checkpointer_static.ump"
-     protected void hook554() throws DatabaseException{
+    // line 289 "../../../../Checkpointer_static.ump"
+     protected void hook529() throws DatabaseException{
       
     }
     
@@ -1058,27 +1069,27 @@ public class Checkpointer
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 230 "../../../../Checkpointer_static.ump"
+    // line 274 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 231 "../../../../Checkpointer_static.ump"
+  // line 275 "../../../../Checkpointer_static.ump"
     protected boolean flushAll ;
-  // line 232 "../../../../Checkpointer_static.ump"
+  // line 276 "../../../../Checkpointer_static.ump"
     protected boolean flushExtraLevel ;
-  // line 233 "../../../../Checkpointer_static.ump"
+  // line 277 "../../../../Checkpointer_static.ump"
     protected SortedMap newDirtyMap ;
-  // line 234 "../../../../Checkpointer_static.ump"
+  // line 278 "../../../../Checkpointer_static.ump"
     protected INList inMemINs ;
-  // line 235 "../../../../Checkpointer_static.ump"
+  // line 279 "../../../../Checkpointer_static.ump"
     protected long totalSize ;
-  // line 236 "../../../../Checkpointer_static.ump"
+  // line 280 "../../../../Checkpointer_static.ump"
     protected MemoryBudget mb ;
-  // line 237 "../../../../Checkpointer_static.ump"
+  // line 281 "../../../../Checkpointer_static.ump"
     protected Iterator iter ;
-  // line 238 "../../../../Checkpointer_static.ump"
+  // line 282 "../../../../Checkpointer_static.ump"
     protected IN in ;
-  // line 239 "../../../../Checkpointer_static.ump"
+  // line 283 "../../../../Checkpointer_static.ump"
     protected Integer level ;
-  // line 240 "../../../../Checkpointer_static.ump"
+  // line 284 "../../../../Checkpointer_static.ump"
     protected Set dirtySet ;
   
     

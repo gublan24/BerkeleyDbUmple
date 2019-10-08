@@ -48,7 +48,8 @@ class DbCacheSize {
               return;
             }
             if (i % 10000 == 0) {
-              this.hook833();
+              //this.hook833();
+              Label833:
               out.print(".");
               out.flush();
             }
@@ -74,7 +75,7 @@ class DbCacheSize {
       protected byte[] a3;
       protected OperationStatus status;
       protected EnvironmentStats stats;
-      protected void hook833() throws DatabaseException {
-      }
+      //protected void hook833() throws DatabaseException {
+      //}
     }
 }

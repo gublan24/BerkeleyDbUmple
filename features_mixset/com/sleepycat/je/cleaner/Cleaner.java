@@ -41,6 +41,7 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Cleaner_static.ump"
 // line 3 "../../../../EnvironmentLocking_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner.ump"
+// line 3 "../../../../CriticalEviction_Cleaner_inner.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -966,7 +967,9 @@ env.getFileManager().releaseExclusiveLock();
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
+  // line 4 "../../../../CriticalEviction_Cleaner_inner.ump"
   public static class Cleaner_processPending
   {
   
@@ -1007,6 +1010,11 @@ env.getFileManager().releaseExclusiveLock();
               dupKey=info.getDupKey();
               ln=info.getLN();
               Label114:
+  if (_this.DO_CRITICAL_EVICTION) {
+            Label86:        
+            //this.hook86();
+          }
+  
   //            this.hook114();
               _this.processPendingLN(ln,db1,key,dupKey,location);
             }
@@ -1016,6 +1024,11 @@ env.getFileManager().releaseExclusiveLock();
     // line 40 "../../../../Cleaner_static.ump"
      protected void hook114() throws DatabaseException{
       
+    }
+  
+    // line 6 "../../../../CriticalEviction_Cleaner_inner.ump"
+     protected void hook86() throws DatabaseException{
+      // Label86 is introduced by CriticalEviction_Cleaner_inner.ump
     }
     
     //------------------------

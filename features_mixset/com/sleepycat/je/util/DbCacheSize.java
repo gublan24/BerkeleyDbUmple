@@ -19,6 +19,7 @@ import java.io.PrintStream;
 import java.io.File;
 
 // line 3 "../../../../MemoryBudget_DbCacheSize.ump"
+// line 3 "../../../../MemoryBudget_DbCacheSize_inner.ump"
 public class DbCacheSize
 {
 
@@ -39,7 +40,134 @@ public class DbCacheSize
 
   public void delete()
   {}
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  
+  
+  @MethodObject
+  // line 4 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  public static class DbCacheSize_insertRecords
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public DbCacheSize_insertRecords()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    public  DbCacheSize_insertRecords(PrintStream out, Environment env, Database db, long records, int keySize, int dataSize, boolean randomKeys){
+      this.out=out;
+          this.env=env;
+          this.db=db;
+          this.records=records;
+          this.keySize=keySize;
+          this.dataSize=dataSize;
+          this.randomKeys=randomKeys;
+    }
+  
+    // line 15 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    public void execute() throws DatabaseException{
+      try {
+            key=new DatabaseEntry();
+            data=new DatabaseEntry(new byte[dataSize]);
+            bigInt=BigInteger.ZERO;
+            rnd=new Random(123);
+            for (int i=0; i < records; i+=1) {
+              if (randomKeys) {
+                a=new byte[keySize];
+                rnd.nextBytes(a);
+                key.setData(a);
+              }
+     else {
+                bigInt=bigInt.add(BigInteger.ONE);
+                a2=bigInt.toByteArray();
+                if (a2.length < keySize) {
+                  a3=new byte[keySize];
+                  System.arraycopy(a2,0,a3,a3.length - a2.length,a2.length);
+                  a2=a3;
+                }
+     else             if (a2.length > keySize) {
+                  out.println("*** Key doesn't fit value=" + bigInt + " byte length="+ a2.length);
+                  return;
+                }
+                key.setData(a2);
+              }
+              status=db.putNoOverwrite(null,key,data);
+              if (status == OperationStatus.KEYEXIST && randomKeys) {
+                i-=1;
+                out.println("Random key already exists -- retrying");
+                continue;
+              }
+              if (status != OperationStatus.SUCCESS) {
+                out.println("*** " + status);
+                return;
+              }
+              if (i % 10000 == 0) {
+                //this.hook833();
+                Label833:
+                out.print(".");
+                out.flush();
+              }
+            }
+          }
+     catch (      ReturnVoid r) {
+            return;
+          }
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 62 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected PrintStream out ;
+  // line 63 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected Environment env ;
+  // line 64 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected Database db ;
+  // line 65 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected long records ;
+  // line 66 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected int keySize ;
+  // line 67 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected int dataSize ;
+  // line 68 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected boolean randomKeys ;
+  // line 69 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected DatabaseEntry key ;
+  // line 70 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected DatabaseEntry data ;
+  // line 71 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected BigInteger bigInt ;
+  // line 72 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected Random rnd ;
+  // line 73 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected byte[] a ;
+  // line 74 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected byte[] a2 ;
+  // line 75 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected byte[] a3 ;
+  // line 76 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected OperationStatus status ;
+  // line 77 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    protected EnvironmentStats stats ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
@@ -265,31 +393,33 @@ public class DbCacheSize
 
     private static void measure(PrintStream out, File dir, long records, int keySize, int dataSize, int nodeMax,
 	    boolean randomKeys) throws DatabaseException {
-	String[] fileNames = dir.list();
-	if (fileNames != null && fileNames.length > 0) {
-	    usage("Directory is not empty: " + dir);
-	}
-	Environment env = openEnvironment(dir, true);
-	Database db = openDatabase(env, nodeMax, true);
-	try {
-	    out.println("\nMeasuring with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
-	    insertRecords(out, env, db, records, keySize, dataSize, randomKeys);
-	    hook832(out, env);
-	    db.close();
-	    env.close();
-	    env = openEnvironment(dir, false);
-	    db = openDatabase(env, nodeMax, false);
-	    out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
-	    preloadRecords(out, db);
-	    hook831(out, env);
-	} finally {
-	    try {
-		db.close();
-		env.close();
-	    } catch (Exception e) {
-		out.println("During close: " + e);
-	    }
-	}
+			String[] fileNames = dir.list();
+			if (fileNames != null && fileNames.length > 0) {
+					usage("Directory is not empty: " + dir);
+			}
+			Environment env = openEnvironment(dir, true);
+			Database db = openDatabase(env, nodeMax, true);
+			try {
+					out.println("\nMeasuring with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
+					insertRecords(out, env, db, records, keySize, dataSize, randomKeys);
+				 // hook832(out, env);
+				  Label832:
+					db.close();
+					env.close();
+					env = openEnvironment(dir, false);
+					db = openDatabase(env, nodeMax, false);
+					out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
+					preloadRecords(out, db);
+					//hook831(out, env);
+				  Label831:
+			} finally {
+					try {
+				db.close();
+				env.close();
+					} catch (Exception e) {
+				out.println("During close: " + e);
+					}
+			}
     }
 
     private static Environment openEnvironment(File dir, boolean allowCreate) throws DatabaseException {
@@ -335,10 +465,10 @@ public class DbCacheSize
 	}
     }
 
-    protected static void hook831(PrintStream out, Environment env) throws DatabaseException {
-    }
+  //  protected static void hook831(PrintStream out, Environment env) throws DatabaseException {
+  //  }
 
-    protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
-    }
+  //  protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
+  //  }
   
 }

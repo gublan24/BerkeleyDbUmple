@@ -2,20 +2,22 @@
 namespace com.sleepycat.je.tree;
 class DIN {
   @MethodObject static class DIN_updateDupCountLNRefAndNullTarget {
-      void execute(){
-        original();
+      after execute(){
+        //original();
         newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
         _this.updateMemorySize(oldSize,newSize);
       }
-      protected void hook614(){
+      after Label614:execute(){
         oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
-        original();
+        //original();
       }
     }
   @MethodObject static class DIN_updateDupCountLN {
-      void execute(){
+      before execute(){
         oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
-        original();
+      }
+
+      after execute(){
         newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
         _this.updateMemorySize(oldSize,newSize);
       }

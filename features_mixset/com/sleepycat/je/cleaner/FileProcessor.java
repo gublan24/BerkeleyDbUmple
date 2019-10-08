@@ -40,6 +40,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../FileProcessor.ump"
 // line 3 "../../../../FileProcessor_static.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor.ump"
+// line 3 "../../../../MemoryBudget_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -479,7 +480,9 @@ public class FileProcessor extends DaemonThread
   
   
   @MethodObject
+    @MethodObject
   // line 28 "../../../../FileProcessor_static.ump"
+  // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -515,7 +518,17 @@ public class FileProcessor extends DaemonThread
           nextObsolete=-1;
           readBufferSize=_this.cleaner.readBufferSize;
           this.hook128();
-          this.hook161();
+          //this.hook161();
+          Label161:
+  adjustMem=(2 * readBufferSize) + obsoleteOffsets.getLogSize();
+          budget=_this.env.getMemoryBudget();
+          {
+            //this.hook118();
+            Label118:
+            budget.updateMiscMemoryUsage(adjustMem);
+          }
+          //original();
+  
           this.hook119();
           this.hook127();
           this.hook154();
@@ -590,7 +603,11 @@ public class FileProcessor extends DaemonThread
             this.hook145();
           }
       finally {
-            this.hook162();
+            //this.hook162();
+            Label162:
+  budget.updateMiscMemoryUsage(0 - adjustMem);
+          //original();
+  
             if (tfs != null) {
               tfs.setAllowFlush(true);
             }
@@ -598,84 +615,84 @@ public class FileProcessor extends DaemonThread
           return true;
     }
   
-    // line 158 "../../../../FileProcessor_static.ump"
+    // line 160 "../../../../FileProcessor_static.ump"
      protected void hook119() throws DatabaseException,IOException{
       
     }
   
-    // line 160 "../../../../FileProcessor_static.ump"
+    // line 162 "../../../../FileProcessor_static.ump"
      protected void hook120() throws DatabaseException,IOException{
       
     }
   
-    // line 162 "../../../../FileProcessor_static.ump"
+    // line 164 "../../../../FileProcessor_static.ump"
      protected void hook127() throws DatabaseException,IOException{
       
     }
   
-    // line 164 "../../../../FileProcessor_static.ump"
+    // line 166 "../../../../FileProcessor_static.ump"
      protected void hook128() throws DatabaseException,IOException{
       
     }
   
-    // line 166 "../../../../FileProcessor_static.ump"
+    // line 168 "../../../../FileProcessor_static.ump"
      protected void hook129() throws DatabaseException,IOException{
       
     }
   
-    // line 168 "../../../../FileProcessor_static.ump"
+    // line 170 "../../../../FileProcessor_static.ump"
      protected void hook130() throws DatabaseException,IOException{
       p=null;
           this.hook131();
           _this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
     }
   
-    // line 173 "../../../../FileProcessor_static.ump"
+    // line 175 "../../../../FileProcessor_static.ump"
      protected void hook131() throws DatabaseException,IOException{
       
     }
   
-    // line 175 "../../../../FileProcessor_static.ump"
+    // line 177 "../../../../FileProcessor_static.ump"
      protected void hook137() throws DatabaseException,IOException{
       
     }
   
-    // line 177 "../../../../FileProcessor_static.ump"
+    // line 179 "../../../../FileProcessor_static.ump"
      protected void hook145() throws DatabaseException,IOException{
       
     }
   
-    // line 179 "../../../../FileProcessor_static.ump"
+    // line 181 "../../../../FileProcessor_static.ump"
      protected void hook146() throws DatabaseException,IOException{
       
     }
   
-    // line 181 "../../../../FileProcessor_static.ump"
+    // line 183 "../../../../FileProcessor_static.ump"
      protected void hook147() throws DatabaseException,IOException{
       
     }
   
-    // line 183 "../../../../FileProcessor_static.ump"
+    // line 185 "../../../../FileProcessor_static.ump"
      protected void hook154() throws DatabaseException,IOException{
       
     }
   
-    // line 185 "../../../../FileProcessor_static.ump"
+    // line 187 "../../../../FileProcessor_static.ump"
      protected void hook155() throws DatabaseException,IOException{
       
     }
   
-    // line 187 "../../../../FileProcessor_static.ump"
+    // line 189 "../../../../FileProcessor_static.ump"
      protected void hook156() throws DatabaseException,IOException{
       
     }
   
-    // line 189 "../../../../FileProcessor_static.ump"
+    // line 191 "../../../../FileProcessor_static.ump"
      protected void hook161() throws DatabaseException,IOException{
       
     }
   
-    // line 191 "../../../../FileProcessor_static.ump"
+    // line 193 "../../../../FileProcessor_static.ump"
      protected void hook162() throws DatabaseException,IOException{
       
     }
@@ -684,75 +701,75 @@ public class FileProcessor extends DaemonThread
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 122 "../../../../FileProcessor_static.ump"
+    // line 124 "../../../../FileProcessor_static.ump"
     protected FileProcessor _this ;
-  // line 123 "../../../../FileProcessor_static.ump"
-    protected Long fileNum ;
-  // line 124 "../../../../FileProcessor_static.ump"
-    protected PackedOffsets obsoleteOffsets ;
   // line 125 "../../../../FileProcessor_static.ump"
-    protected TrackedFileSummary tfs ;
+    protected Long fileNum ;
   // line 126 "../../../../FileProcessor_static.ump"
-    protected PackedOffsets.Iterator obsoleteIter ;
+    protected PackedOffsets obsoleteOffsets ;
   // line 127 "../../../../FileProcessor_static.ump"
-    protected long nextObsolete ;
+    protected TrackedFileSummary tfs ;
   // line 128 "../../../../FileProcessor_static.ump"
-    protected int readBufferSize ;
+    protected PackedOffsets.Iterator obsoleteIter ;
   // line 129 "../../../../FileProcessor_static.ump"
-    protected int lookAheadCacheSize ;
+    protected long nextObsolete ;
   // line 130 "../../../../FileProcessor_static.ump"
-    protected int adjustMem ;
+    protected int readBufferSize ;
   // line 131 "../../../../FileProcessor_static.ump"
-    protected MemoryBudget budget ;
+    protected int lookAheadCacheSize ;
   // line 132 "../../../../FileProcessor_static.ump"
-    protected Set checkPendingDbSet ;
+    protected int adjustMem ;
   // line 133 "../../../../FileProcessor_static.ump"
-    protected Map dbCache ;
+    protected MemoryBudget budget ;
   // line 134 "../../../../FileProcessor_static.ump"
-    protected CleanerFileReader reader ;
+    protected Set checkPendingDbSet ;
   // line 135 "../../../../FileProcessor_static.ump"
-    protected DbTree dbMapTree ;
+    protected Map dbCache ;
   // line 136 "../../../../FileProcessor_static.ump"
-    protected TreeLocation location ;
+    protected CleanerFileReader reader ;
   // line 137 "../../../../FileProcessor_static.ump"
-    protected int nProcessedLNs ;
+    protected DbTree dbMapTree ;
   // line 138 "../../../../FileProcessor_static.ump"
-    protected long lsn ;
+    protected TreeLocation location ;
   // line 139 "../../../../FileProcessor_static.ump"
-    protected long fileOffset ;
+    protected int nProcessedLNs ;
   // line 140 "../../../../FileProcessor_static.ump"
-    protected boolean isLN ;
+    protected long lsn ;
   // line 141 "../../../../FileProcessor_static.ump"
-    protected boolean isIN ;
+    protected long fileOffset ;
   // line 142 "../../../../FileProcessor_static.ump"
-    protected boolean isRoot ;
+    protected boolean isLN ;
   // line 143 "../../../../FileProcessor_static.ump"
-    protected boolean isObsolete ;
+    protected boolean isIN ;
   // line 144 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId1 ;
+    protected boolean isRoot ;
   // line 145 "../../../../FileProcessor_static.ump"
-    protected LN targetLN ;
+    protected boolean isObsolete ;
   // line 146 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId2 ;
+    protected DatabaseId dbId1 ;
   // line 147 "../../../../FileProcessor_static.ump"
-    protected byte[] key ;
+    protected LN targetLN ;
   // line 148 "../../../../FileProcessor_static.ump"
-    protected byte[] dupKey ;
+    protected DatabaseId dbId2 ;
   // line 149 "../../../../FileProcessor_static.ump"
-    protected Long aLsn ;
+    protected byte[] key ;
   // line 150 "../../../../FileProcessor_static.ump"
-    protected LNInfo aLninfo ;
+    protected byte[] dupKey ;
   // line 151 "../../../../FileProcessor_static.ump"
-    protected Object p ;
+    protected Long aLsn ;
   // line 152 "../../../../FileProcessor_static.ump"
-    protected IN targetIN ;
+    protected LNInfo aLninfo ;
   // line 153 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId3 ;
+    protected Object p ;
   // line 154 "../../../../FileProcessor_static.ump"
-    protected DatabaseImpl db3 ;
+    protected IN targetIN ;
   // line 155 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId ;
+    protected DatabaseId dbId3 ;
   // line 156 "../../../../FileProcessor_static.ump"
+    protected DatabaseImpl db3 ;
+  // line 157 "../../../../FileProcessor_static.ump"
+    protected DatabaseId dbId ;
+  // line 158 "../../../../FileProcessor_static.ump"
     protected DatabaseImpl db ;
   
     
@@ -762,7 +779,7 @@ public class FileProcessor extends DaemonThread
   
   
   @MethodObject
-  // line 193 "../../../../FileProcessor_static.ump"
+  // line 195 "../../../../FileProcessor_static.ump"
   public static class FileProcessor_processLN
   {
   
@@ -784,7 +801,7 @@ public class FileProcessor extends DaemonThread
     public void delete()
     {}
   
-    // line 195 "../../../../FileProcessor_static.ump"
+    // line 197 "../../../../FileProcessor_static.ump"
     public  FileProcessor_processLN(FileProcessor _this, Long fileNum, TreeLocation location, Long offset, LNInfo info, Object lookAheadCachep, Map dbCache){
       this._this=_this;
           this.fileNum=fileNum;
@@ -795,7 +812,7 @@ public class FileProcessor extends DaemonThread
           this.dbCache=dbCache;
     }
   
-    // line 204 "../../../../FileProcessor_static.ump"
+    // line 206 "../../../../FileProcessor_static.ump"
     public void execute() throws DatabaseException{
       this.hook132();
           ln=info.getLN();
@@ -859,47 +876,47 @@ public class FileProcessor extends DaemonThread
           }
     }
   
-    // line 293 "../../../../FileProcessor_static.ump"
+    // line 295 "../../../../FileProcessor_static.ump"
      protected void hook126() throws DatabaseException{
       
     }
   
-    // line 295 "../../../../FileProcessor_static.ump"
+    // line 297 "../../../../FileProcessor_static.ump"
      protected void hook132() throws DatabaseException{
       
     }
   
-    // line 297 "../../../../FileProcessor_static.ump"
+    // line 299 "../../../../FileProcessor_static.ump"
      protected void hook133() throws DatabaseException{
       
     }
   
-    // line 299 "../../../../FileProcessor_static.ump"
+    // line 301 "../../../../FileProcessor_static.ump"
      protected void hook135() throws DatabaseException{
       
     }
   
-    // line 301 "../../../../FileProcessor_static.ump"
+    // line 303 "../../../../FileProcessor_static.ump"
      protected void hook148() throws DatabaseException{
       
     }
   
-    // line 303 "../../../../FileProcessor_static.ump"
+    // line 305 "../../../../FileProcessor_static.ump"
      protected void hook149() throws DatabaseException{
       
     }
   
-    // line 305 "../../../../FileProcessor_static.ump"
+    // line 307 "../../../../FileProcessor_static.ump"
      protected void hook150() throws DatabaseException{
       
     }
   
-    // line 307 "../../../../FileProcessor_static.ump"
+    // line 309 "../../../../FileProcessor_static.ump"
      protected void hook157() throws DatabaseException{
       
     }
   
-    // line 309 "../../../../FileProcessor_static.ump"
+    // line 311 "../../../../FileProcessor_static.ump"
      protected void hook158() throws DatabaseException{
       
     }
@@ -908,59 +925,59 @@ public class FileProcessor extends DaemonThread
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 265 "../../../../FileProcessor_static.ump"
+    // line 267 "../../../../FileProcessor_static.ump"
     protected FileProcessor _this ;
-  // line 266 "../../../../FileProcessor_static.ump"
-    protected Long fileNum ;
-  // line 267 "../../../../FileProcessor_static.ump"
-    protected TreeLocation location ;
   // line 268 "../../../../FileProcessor_static.ump"
-    protected Long offset ;
+    protected Long fileNum ;
   // line 269 "../../../../FileProcessor_static.ump"
-    protected LNInfo info ;
+    protected TreeLocation location ;
   // line 270 "../../../../FileProcessor_static.ump"
-    protected Object lookAheadCachep ;
+    protected Long offset ;
   // line 271 "../../../../FileProcessor_static.ump"
-    protected Map dbCache ;
+    protected LNInfo info ;
   // line 272 "../../../../FileProcessor_static.ump"
-    protected LN ln ;
+    protected Object lookAheadCachep ;
   // line 273 "../../../../FileProcessor_static.ump"
-    protected byte[] key ;
+    protected Map dbCache ;
   // line 274 "../../../../FileProcessor_static.ump"
-    protected byte[] dupKey ;
+    protected LN ln ;
   // line 275 "../../../../FileProcessor_static.ump"
-    protected long logLsn ;
+    protected byte[] key ;
   // line 276 "../../../../FileProcessor_static.ump"
-    protected DatabaseImpl db ;
+    protected byte[] dupKey ;
   // line 277 "../../../../FileProcessor_static.ump"
-    protected boolean processedHere ;
+    protected long logLsn ;
   // line 278 "../../../../FileProcessor_static.ump"
-    protected boolean obsolete ;
+    protected DatabaseImpl db ;
   // line 279 "../../../../FileProcessor_static.ump"
-    protected boolean completed ;
+    protected boolean processedHere ;
   // line 280 "../../../../FileProcessor_static.ump"
-    protected BIN bin ;
+    protected boolean obsolete ;
   // line 281 "../../../../FileProcessor_static.ump"
-    protected DIN parentDIN ;
+    protected boolean completed ;
   // line 282 "../../../../FileProcessor_static.ump"
-    protected boolean b ;
+    protected BIN bin ;
   // line 283 "../../../../FileProcessor_static.ump"
-    protected Tree tree ;
+    protected DIN parentDIN ;
   // line 284 "../../../../FileProcessor_static.ump"
-    protected boolean parentFound ;
+    protected boolean b ;
   // line 285 "../../../../FileProcessor_static.ump"
-    protected int index ;
+    protected Tree tree ;
   // line 286 "../../../../FileProcessor_static.ump"
-    protected boolean isDupCountLN ;
+    protected boolean parentFound ;
   // line 287 "../../../../FileProcessor_static.ump"
-    protected long treeLsn ;
+    protected int index ;
   // line 288 "../../../../FileProcessor_static.ump"
-    protected ChildReference dclRef ;
+    protected boolean isDupCountLN ;
   // line 289 "../../../../FileProcessor_static.ump"
-    protected long lsn ;
+    protected long treeLsn ;
   // line 290 "../../../../FileProcessor_static.ump"
-    protected Long myOffset ;
+    protected ChildReference dclRef ;
   // line 291 "../../../../FileProcessor_static.ump"
+    protected long lsn ;
+  // line 292 "../../../../FileProcessor_static.ump"
+    protected Long myOffset ;
+  // line 293 "../../../../FileProcessor_static.ump"
     protected LNInfo myInfo ;
   
     

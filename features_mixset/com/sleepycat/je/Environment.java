@@ -497,8 +497,8 @@ public class Environment
   // line 9 "../../../MemoryBudget_Environment.ump"
   public long getMemoryUsage() throws DatabaseException{
     checkHandleIsValid();
-	checkEnv();
-	return environmentImpl.getMemoryBudget().getCacheMemoryUsage();
+	    checkEnv();
+	    return environmentImpl.getMemoryBudget().getCacheMemoryUsage();
   }
   
   //------------------------

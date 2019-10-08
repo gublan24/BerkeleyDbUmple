@@ -120,9 +120,9 @@ public class ChildReference implements LogWritable,LogReadable
 //	    this.hook613(in);
         Label613:
 if (in != null) fetchTarget(DatabaseImpl, IN){
-	    in.updateMemorySize(null, target);
-	}
-//	original(in);
+      in.updateMemorySize(null, target);
+	  }
+      //	original(in);
 
 		} catch (LogFileNotFoundException LNFE) {
 		    if (!isKnownDeleted() && !isPendingDeleted()) {

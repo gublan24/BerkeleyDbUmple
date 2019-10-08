@@ -14,6 +14,7 @@ import java.util.HashSet;
 // line 3 "../../../../INList.ump"
 // line 3 "../../../../INList_static.ump"
 // line 3 "../../../../MemoryBudget_INList.ump"
+// line 3 "../../../../MemoryBudget_INList_inner.ump"
 public class INList
 {
 
@@ -88,9 +89,16 @@ public class INList
   // line 58 "../../../../INList.ump"
    public void removeLatchAlreadyHeld(IN in) throws DatabaseException{
     boolean removeDone = ins.remove(in);
-	removeDone = this.hook341(in, removeDone);
-	assert removeDone;
-	this.hook346(in);
+		removeDone = this.hook341(in, removeDone);
+		assert removeDone;
+		//this.hook346(in);
+    Label346:
+if (updateMemoryUsage) {
+			  envImpl.getMemoryBudget().updateTreeMemoryUsage(in.getAccumulatedDelta() - in.getInMemorySize());
+			  in.setInListResident(false);
+		}
+//		original(in);
+
   }
 
 
@@ -98,17 +106,17 @@ public class INList
    * 
    * An IN is getting swept or is displaced by recovery.
    */
-  // line 68 "../../../../INList.ump"
+  // line 69 "../../../../INList.ump"
    public void remove(IN in) throws DatabaseException{
     removeLatchAlreadyHeld(in);
   }
 
-  // line 72 "../../../../INList.ump"
+  // line 73 "../../../../INList.ump"
    public SortedSet tailSet(IN in) throws DatabaseException{
     return ins.tailSet(in);
   }
 
-  // line 76 "../../../../INList.ump"
+  // line 77 "../../../../INList.ump"
    public IN first() throws DatabaseException{
     return (IN) ins.first();
   }
@@ -119,7 +127,7 @@ public class INList
    * Return an iterator over the main 'ins' set.  Returned iterator will not show the elements in addedINs. The major latch should be held before entering.  The caller is responsible for releasing the major latch when they're finished with the iterator.
    * @return an iterator over the main 'ins' set.
    */
-  // line 84 "../../../../INList.ump"
+  // line 85 "../../../../INList.ump"
    public Iterator iterator(){
     return ins.iterator();
   }
@@ -129,13 +137,19 @@ public class INList
    * 
    * Clear the entire list during recovery and at shutdown.
    */
-  // line 91 "../../../../INList.ump"
+  // line 92 "../../../../INList.ump"
    public void clear() throws DatabaseException{
     ins.clear();
 	this.hook342();
+    // line 30 "../../../../MemoryBudget_INList.ump"
+    //		original();
+    		if (updateMemoryUsage) {
+    			  envImpl.getMemoryBudget().refreshTreeMemoryUsage(0);
+    			}
+    // END OF UMPLE AFTER INJECTION
   }
 
-  // line 96 "../../../../INList.ump"
+  // line 97 "../../../../INList.ump"
    public void dump(){
     System.out.println("size=" + getSize());
 	Iterator iter = ins.iterator();
@@ -146,38 +160,34 @@ public class INList
 	}
   }
 
-  // line 106 "../../../../INList.ump"
+  // line 107 "../../../../INList.ump"
    protected void hook338(EnvironmentImpl envImpl){
     
   }
 
-  // line 109 "../../../../INList.ump"
+  // line 110 "../../../../INList.ump"
    protected void hook339(EnvironmentImpl envImpl) throws DatabaseException{
     
   }
 
-  // line 112 "../../../../INList.ump"
+  // line 113 "../../../../INList.ump"
    protected void hook340() throws DatabaseException{
     
   }
 
-  // line 115 "../../../../INList.ump"
+  // line 116 "../../../../INList.ump"
    protected boolean hook341(IN in, boolean removeDone) throws DatabaseException{
     return removeDone;
   }
 
-  // line 119 "../../../../INList.ump"
+  // line 120 "../../../../INList.ump"
    protected void hook342() throws DatabaseException{
     
   }
 
-  // line 122 "../../../../INList.ump"
+  // line 123 "../../../../INList.ump"
    protected void hook346(IN in) throws DatabaseException{
-    if (updateMemoryUsage) {
-	    envImpl.getMemoryBudget().updateTreeMemoryUsage(in.getAccumulatedDelta() - in.getInMemorySize());
-	    in.setInListResident(false);
-	}
-	original(in);
+    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -255,7 +265,9 @@ public class INList
   
   
   @MethodObject
+    @MethodObject
   // line 27 "../../../../INList_static.ump"
+  // line 4 "../../../../MemoryBudget_INList_inner.ump"
   public static class INList_addAndSetMemory
   {
   
@@ -288,6 +300,14 @@ public class INList
     public void execute(){
       addOk=set.add(in);
           assert addOk : "failed adding in " + in.getNodeId();
+      // line 6 "../../../../MemoryBudget_INList_inner.ump"
+      //original();
+              if (_this.updateMemoryUsage) {
+                mb=_this.envImpl.getMemoryBudget();
+                mb.updateTreeMemoryUsage(in.getInMemorySize());
+                in.setInListResident(true);
+              }
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------

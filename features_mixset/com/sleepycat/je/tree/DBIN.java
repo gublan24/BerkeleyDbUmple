@@ -308,7 +308,7 @@ public class DBIN extends BIN implements LoggableObject
   // line 9 "../../../../MemoryBudget_DBIN.ump"
    protected long computeMemorySize(){
     long size = super.computeMemorySize();
-	return size;
+	    return size;
   }
 
   // line 14 "../../../../MemoryBudget_DBIN.ump"

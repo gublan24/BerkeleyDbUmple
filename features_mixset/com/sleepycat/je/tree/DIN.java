@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 // line 3 "../../../../DIN.ump"
 // line 3 "../../../../DIN_static.ump"
 // line 3 "../../../../MemoryBudget_DIN.ump"
+// line 3 "../../../../MemoryBudget_DIN_inner.ump"
 public class DIN extends IN
 {
 
@@ -147,6 +148,10 @@ public class DIN extends IN
    */
   // line 109 "../../../../DIN.ump"
   public void setDupCountLN(ChildReference dupCountLNRef){
+    // line 35 "../../../../MemoryBudget_DIN.ump"
+    updateMemorySize(this.dupCountLNRef, dupCountLNRef);
+    	    //original(dupCountLNRef);
+    // END OF UMPLE BEFORE INJECTION
     this.dupCountLNRef = dupCountLNRef;
   }
 
@@ -385,10 +390,10 @@ public class DIN extends IN
   // line 9 "../../../../MemoryBudget_DIN.ump"
    protected long computeMemorySize(){
     long size = super.computeMemorySize();
-	if (dupCountLNRef != null) {
-	    size += getEntryInMemorySize(dupCountLNRef.getKey(), dupCountLNRef.getTarget());
-	}
-	return size;
+    	if (dupCountLNRef != null) {
+	      size += getEntryInMemorySize(dupCountLNRef.getKey(), dupCountLNRef.getTarget());
+	    }
+	    return size;
   }
 
   // line 17 "../../../../MemoryBudget_DIN.ump"
@@ -406,7 +411,9 @@ public class DIN extends IN
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../DIN_static.ump"
+  // line 15 "../../../../MemoryBudget_DIN_inner.ump"
   public static class DIN_updateDupCountLN
   {
   
@@ -436,7 +443,14 @@ public class DIN extends IN
   
     // line 10 "../../../../DIN_static.ump"
     public void execute(){
+      // line 17 "../../../../MemoryBudget_DIN_inner.ump"
+      oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+      // END OF UMPLE BEFORE INJECTION
       _this.dupCountLNRef.setTarget(target);
+      // line 21 "../../../../MemoryBudget_DIN_inner.ump"
+      newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+              _this.updateMemorySize(oldSize,newSize);
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -459,7 +473,9 @@ public class DIN extends IN
   
   
   @MethodObject
+    @MethodObject
   // line 17 "../../../../DIN_static.ump"
+  // line 4 "../../../../MemoryBudget_DIN_inner.ump"
   public static class DIN_updateDupCountLNRefAndNullTarget
   {
   
@@ -490,27 +506,31 @@ public class DIN extends IN
     // line 23 "../../../../DIN_static.ump"
     public void execute(){
       _this.setDirty(true);
-          this.hook614();
+          //this.hook614();
+          Label614:
+  oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+          //original();
+  
           _this.dupCountLNRef.setTarget(null);
           _this.dupCountLNRef.setLsn(newLsn);
-    }
-  
-    // line 33 "../../../../DIN_static.ump"
-     protected void hook614(){
-      
+      // line 6 "../../../../MemoryBudget_DIN_inner.ump"
+      //original();
+              newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+              _this.updateMemorySize(oldSize,newSize);
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 28 "../../../../DIN_static.ump"
+    // line 29 "../../../../DIN_static.ump"
     protected DIN _this ;
-  // line 29 "../../../../DIN_static.ump"
-    protected long newLsn ;
   // line 30 "../../../../DIN_static.ump"
-    protected long oldSize ;
+    protected long newLsn ;
   // line 31 "../../../../DIN_static.ump"
+    protected long oldSize ;
+  // line 32 "../../../../DIN_static.ump"
     protected long newSize ;
   
     

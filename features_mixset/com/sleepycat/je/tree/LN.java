@@ -471,10 +471,10 @@ public class LN extends Node implements LoggableObject,LogReadable
   // line 9 "../../../../MemoryBudget_LN.ump"
    public long getMemorySizeIncludedByParent(){
     int size = MemoryBudget.LN_OVERHEAD;
-	if (data != null) {
-	    size += MemoryBudget.byteArraySize(data.length);
-	}
-	return size;
+		if (data != null) {
+			  size += MemoryBudget.byteArraySize(data.length);
+		}
+		return size;
   }
   
   //------------------------

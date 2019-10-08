@@ -2,25 +2,25 @@
 namespace com.sleepycat.je.txn;
 class Txn {
   @MethodObject static class Txn_addLock {
-      protected void hook815() throws DatabaseException {
+      after Label815:execute() {
         delta=0;
-        original();
+        //original();
       }
-      protected void hook816() throws DatabaseException {
+      after Label816:execute() {
         _this.updateMemoryUsage(delta);
-        original();
+        //original();
       }
-      protected void hook817() throws DatabaseException {
+      after Label817:execute() {
         delta+=_this.WRITE_LOCK_OVERHEAD;
-        original();
+        //original();
       }
-      protected void hook818() throws DatabaseException {
+      after Label818:execute() {
         delta+=MemoryBudget.TWOHASHMAPS_OVERHEAD;
-        original();
+        //original();
       }
-      protected void hook819() throws DatabaseException {
+      after Label819:execute() {
         delta-=_this.READ_LOCK_OVERHEAD;
-        original();
+       // original();
       }
     }
 }

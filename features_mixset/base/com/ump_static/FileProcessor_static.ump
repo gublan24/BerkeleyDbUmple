@@ -37,7 +37,8 @@ class FileProcessor {
         nextObsolete=-1;
         readBufferSize=_this.cleaner.readBufferSize;
         this.hook128();
-        this.hook161();
+        //this.hook161();
+        Label161:
         this.hook119();
         this.hook127();
         this.hook154();
@@ -112,7 +113,8 @@ class FileProcessor {
           this.hook145();
         }
     finally {
-          this.hook162();
+          //this.hook162();
+          Label162:
           if (tfs != null) {
             tfs.setAllowFlush(true);
           }

@@ -7,6 +7,7 @@ package com.sleepycat.je.txn;
 // line 3 "../../../../Txn.ump"
 // line 3 "../../../../Txn_inner.ump"
 // line 3 "../../../../MemoryBudget_Txn.ump"
+// line 3 "../../../../MemoryBudget_Txn_inner.ump"
 public class Txn
 {
 
@@ -31,53 +32,16 @@ public class Txn
   // line 12 "../../../../MemoryBudget_Txn.ump"
    private void updateMemoryUsage(int delta){
     inMemorySize += delta;
-	accumulatedDelta += delta;
-	if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
-	    envImpl.getMemoryBudget().updateMiscMemoryUsage(accumulatedDelta);
-	    accumulatedDelta = 0;
-	}
+			accumulatedDelta += delta;
+			if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
+					envImpl.getMemoryBudget().updateMiscMemoryUsage(accumulatedDelta);
+					accumulatedDelta = 0;
+			}
   }
 
   // line 21 "../../../../MemoryBudget_Txn.ump"
   public int getAccumulatedDelta(){
     return accumulatedDelta;
-  }
-
-  // line 25 "../../../../MemoryBudget_Txn.ump"
-   protected void hook809() throws DatabaseException{
-    updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
-	original();
-  }
-
-  // line 30 "../../../../MemoryBudget_Txn.ump"
-   protected void hook810(int delta){
-    delta += READ_LOCK_OVERHEAD;
-	updateMemoryUsage(delta);
-	original(delta);
-  }
-
-  // line 36 "../../../../MemoryBudget_Txn.ump"
-   protected int hook811(int delta){
-    delta = MemoryBudget.HASHSET_OVERHEAD;
-	return original(delta);
-  }
-
-  // line 41 "../../../../MemoryBudget_Txn.ump"
-   protected void hook812() throws DatabaseException{
-    updateMemoryUsage(0 - READ_LOCK_OVERHEAD);
-	original();
-  }
-
-  // line 46 "../../../../MemoryBudget_Txn.ump"
-   protected void hook813() throws DatabaseException{
-    updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
-	original();
-  }
-
-  // line 51 "../../../../MemoryBudget_Txn.ump"
-   protected void hook814(){
-    updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
-	original();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -158,7 +122,9 @@ public class Txn
   
   
   @MethodObject
+    @MethodObject
   // line 12 "../../../../Txn_static.ump"
+  // line 4 "../../../../MemoryBudget_Txn_inner.ump"
   public static class Txn_addLock
   {
   
@@ -192,67 +158,62 @@ public class Txn
     // line 21 "../../../../Txn_static.ump"
     public void execute() throws DatabaseException{
       synchronized (_this) {
-            this.hook815();
+            //this.hook815();
+            Label815:
+  delta=0;
+          //original();
+  
             if (type.isWriteLock()) {
               if (_this.writeInfo == null) {
                 _this.writeInfo=new HashMap();
                 _this.undoDatabases=new HashMap();
-                this.hook818();
+               // this.hook818();
+                Label818:
+  delta+=MemoryBudget.TWOHASHMAPS_OVERHEAD;
+          //original();
+  
               }
               _this.writeInfo.put(nodeId,new WriteLockInfo(lock));
-              this.hook817();
+              //this.hook817();
+              Label817:
+  delta+=_this.WRITE_LOCK_OVERHEAD;
+          //original();
+  
               if ((grantStatus == LockGrantType.PROMOTION) || (grantStatus == LockGrantType.WAIT_PROMOTION)) {
                 _this.readLocks.remove(lock);
-                this.hook819();
+                //this.hook819();
+                Label819:
+  delta-=_this.READ_LOCK_OVERHEAD;
+         // original();
+  
               }
-              this.hook816();
+              //this.hook816();
+              Label816:
+  _this.updateMemoryUsage(delta);
+          //original();
+  
             }
      else {
               _this.addReadLock(lock);
             }
           }
     }
-  
-    // line 49 "../../../../Txn_static.ump"
-     protected void hook815() throws DatabaseException{
-      
-    }
-  
-    // line 51 "../../../../Txn_static.ump"
-     protected void hook816() throws DatabaseException{
-      
-    }
-  
-    // line 53 "../../../../Txn_static.ump"
-     protected void hook817() throws DatabaseException{
-      
-    }
-  
-    // line 55 "../../../../Txn_static.ump"
-     protected void hook818() throws DatabaseException{
-      
-    }
-  
-    // line 57 "../../../../Txn_static.ump"
-     protected void hook819() throws DatabaseException{
-      
-    }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 42 "../../../../Txn_static.ump"
+    // line 47 "../../../../Txn_static.ump"
     protected Txn _this ;
-  // line 43 "../../../../Txn_static.ump"
+  // line 48 "../../../../Txn_static.ump"
     protected Long nodeId ;
-  // line 44 "../../../../Txn_static.ump"
+  // line 49 "../../../../Txn_static.ump"
     protected Lock lock ;
-  // line 45 "../../../../Txn_static.ump"
+  // line 50 "../../../../Txn_static.ump"
     protected LockType type ;
-  // line 46 "../../../../Txn_static.ump"
+  // line 51 "../../../../Txn_static.ump"
     protected LockGrantType grantStatus ;
-  // line 47 "../../../../Txn_static.ump"
+  // line 52 "../../../../Txn_static.ump"
     protected int delta ;
   
     
@@ -263,7 +224,7 @@ public class Txn
   
   @MethodObject
     @MethodObject
-  // line 59 "../../../../Txn_static.ump"
+  // line 66 "../../../../Txn_static.ump"
   // line 4 "../../../../Txn_inner.ump"
   public static class Txn_traceCommit
   {
@@ -286,14 +247,14 @@ public class Txn
     public void delete()
     {}
   
-    // line 61 "../../../../Txn_static.ump"
+    // line 68 "../../../../Txn_static.ump"
     public  Txn_traceCommit(Txn _this, int numWriteLocks, int numReadLocks){
       this._this=_this;
           this.numWriteLocks=numWriteLocks;
           this.numReadLocks=numReadLocks;
     }
   
-    // line 66 "../../../../Txn_static.ump"
+    // line 73 "../../../../Txn_static.ump"
     public void execute(){
       // line 6 "../../../../Txn_inner.ump"
       logger=envImpl.getLogger();
@@ -305,15 +266,15 @@ public class Txn
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 67 "../../../../Txn_static.ump"
+    // line 74 "../../../../Txn_static.ump"
     protected Txn _this ;
-  // line 68 "../../../../Txn_static.ump"
+  // line 75 "../../../../Txn_static.ump"
     protected int numWriteLocks ;
-  // line 69 "../../../../Txn_static.ump"
+  // line 76 "../../../../Txn_static.ump"
     protected int numReadLocks ;
-  // line 70 "../../../../Txn_static.ump"
+  // line 77 "../../../../Txn_static.ump"
     protected Logger logger ;
-  // line 71 "../../../../Txn_static.ump"
+  // line 78 "../../../../Txn_static.ump"
     protected StringBuffer sb ;
   
     

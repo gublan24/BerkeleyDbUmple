@@ -29,7 +29,8 @@ class PreloadProcessor
 	if (System.currentTimeMillis() > targetTime) {
 	    throw DatabaseImpl.timeExceededPreloadException;
 	}
-	this.hook355();
+	//this.hook355();
+  Label355:
 	this.hook354(childType);
     }
 
@@ -39,7 +40,7 @@ class PreloadProcessor
     protected void hook354(LogEntryType childType) {
     }
 
-    protected void hook355() {
-    }
+    // protected void hook355() {
+    // }
 
 }

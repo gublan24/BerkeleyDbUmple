@@ -19,20 +19,25 @@ class Txn {
       }
       void execute() throws DatabaseException {
   synchronized (_this) {
-          this.hook815();
+          //this.hook815();
+          Label815:
           if (type.isWriteLock()) {
             if (_this.writeInfo == null) {
               _this.writeInfo=new HashMap();
               _this.undoDatabases=new HashMap();
-              this.hook818();
+             // this.hook818();
+              Label818:
             }
             _this.writeInfo.put(nodeId,new WriteLockInfo(lock));
-            this.hook817();
+            //this.hook817();
+            Label817:
             if ((grantStatus == LockGrantType.PROMOTION) || (grantStatus == LockGrantType.WAIT_PROMOTION)) {
               _this.readLocks.remove(lock);
-              this.hook819();
+              //this.hook819();
+              Label819:
             }
-            this.hook816();
+            //this.hook816();
+            Label816:
           }
    else {
             _this.addReadLock(lock);
@@ -45,6 +50,7 @@ class Txn {
       protected LockType type;
       protected LockGrantType grantStatus;
       protected int delta;
+/*
       protected void hook815() throws DatabaseException {
       }
       protected void hook816() throws DatabaseException {
@@ -55,6 +61,7 @@ class Txn {
       }
       protected void hook819() throws DatabaseException {
       }
+*/
     }
   @MethodObject static class Txn_traceCommit {
       Txn_traceCommit(    Txn _this,    int numWriteLocks,    int numReadLocks){

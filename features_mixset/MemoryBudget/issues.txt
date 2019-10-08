@@ -1,1 +1,3 @@
 updateMemorySize in BIN.java is not implemented any where ?
+
+Delete function should not be generated for the MemoryBudget_CursorImp.ump

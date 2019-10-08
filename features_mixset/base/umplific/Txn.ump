@@ -109,7 +109,8 @@ class Txn
 	lastLoggedLsn = DbLsn.NULL_LSN;
 	firstLoggedLsn = DbLsn.NULL_LSN;
 	txnState = USABLE;
-	this.hook809();
+	//this.hook809();
+  Label809:
 	this.envImpl.getTxnManager().registerTxn(this);
     }
 
@@ -431,26 +432,30 @@ class Txn
     }
 
     private void addReadLock(Lock lock) {
-	int delta = 0;
-	if (readLocks == null) {
-	    readLocks = new HashSet();
-	    delta = this.hook811(delta);
-	}
-	readLocks.add(lock);
-	this.hook810(delta);
+			int delta = 0;
+			if (readLocks == null) {
+					readLocks = new HashSet();
+			//		delta = this.hook811(delta);
+          Label811:
+			}
+			readLocks.add(lock);
+			//this.hook810(delta);
+      Label810:
     }
 
     /** 
      * Remove the lock from the set owned by this transaction. If specified to LockManager.release, the lock manager will call this when its releasing a lock. Usually done because the transaction doesn't need to really keep the lock, i.e for a deleted record.
      */
     void removeLock(long nodeId, Lock lock) throws DatabaseException {
-	synchronized (this) {
-	    if ((readLocks != null) && readLocks.remove(lock)) {
-		this.hook812();
-	    } else if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
-		this.hook813();
-	    }
-	}
+			synchronized (this) {
+					if ((readLocks != null) && readLocks.remove(lock)) {
+				//this.hook812();
+          Label812:
+					} else if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
+				//this.hook813();
+         label813: 
+					}
+			}
     }
 
     /** 
@@ -461,7 +466,8 @@ class Txn
 	synchronized (this) {
 	    if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
 		found = true;
-		this.hook814();
+		//this.hook814();
+    Label814:
 	    }
 	    assert found : "Couldn't find lock for Node " + nodeId + " in writeInfo Map.";
 	    addReadLock(lock);

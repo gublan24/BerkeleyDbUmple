@@ -236,31 +236,33 @@ class DbCacheSize
 
     private static void measure(PrintStream out, File dir, long records, int keySize, int dataSize, int nodeMax,
 	    boolean randomKeys) throws DatabaseException {
-	String[] fileNames = dir.list();
-	if (fileNames != null && fileNames.length > 0) {
-	    usage("Directory is not empty: " + dir);
-	}
-	Environment env = openEnvironment(dir, true);
-	Database db = openDatabase(env, nodeMax, true);
-	try {
-	    out.println("\nMeasuring with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
-	    insertRecords(out, env, db, records, keySize, dataSize, randomKeys);
-	    hook832(out, env);
-	    db.close();
-	    env.close();
-	    env = openEnvironment(dir, false);
-	    db = openDatabase(env, nodeMax, false);
-	    out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
-	    preloadRecords(out, db);
-	    hook831(out, env);
-	} finally {
-	    try {
-		db.close();
-		env.close();
-	    } catch (Exception e) {
-		out.println("During close: " + e);
-	    }
-	}
+			String[] fileNames = dir.list();
+			if (fileNames != null && fileNames.length > 0) {
+					usage("Directory is not empty: " + dir);
+			}
+			Environment env = openEnvironment(dir, true);
+			Database db = openDatabase(env, nodeMax, true);
+			try {
+					out.println("\nMeasuring with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
+					insertRecords(out, env, db, records, keySize, dataSize, randomKeys);
+				 // hook832(out, env);
+				  Label832:
+					db.close();
+					env.close();
+					env = openEnvironment(dir, false);
+					db = openDatabase(env, nodeMax, false);
+					out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
+					preloadRecords(out, db);
+					//hook831(out, env);
+				  Label831:
+			} finally {
+					try {
+				db.close();
+				env.close();
+					} catch (Exception e) {
+				out.println("During close: " + e);
+					}
+			}
     }
 
     private static Environment openEnvironment(File dir, boolean allowCreate) throws DatabaseException {
@@ -306,10 +308,10 @@ class DbCacheSize
 	}
     }
 
-    protected static void hook831(PrintStream out, Environment env) throws DatabaseException {
-    }
+  //  protected static void hook831(PrintStream out, Environment env) throws DatabaseException {
+  //  }
 
-    protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
-    }
+  //  protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
+  //  }
 
 }

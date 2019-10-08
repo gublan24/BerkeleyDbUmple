@@ -11,11 +11,11 @@ class CursorImpl
     }
 
     after Label285:delete(){
-	    newLNSize = ln.getMemorySizeIncludedByParent();
+      newLNSize = ln.getMemorySizeIncludedByParent();
     }
 
     after Label286:delete(){
-    	oldLNSize = ln.getMemorySizeIncludedByParent();
+      oldLNSize = ln.getMemorySizeIncludedByParent();
     }
 
 }
