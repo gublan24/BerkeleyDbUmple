@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    after Label546: flushDirtyNodes(SortedMap , boolean , boolean , boolean ,	 long) {
+
+			if (!(targetRef.db.isDeleted())) {
+					flushIN(targetRef, dirtyMap, currentLevel.intValue(), logProvisionally, allowDeltas, checkpointStart);
+			}
+			//original(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
+    }
+
+}

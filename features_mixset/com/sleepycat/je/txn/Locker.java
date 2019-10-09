@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 
 // line 3 "../../../../Locker.ump"
+// line 3 "../../../../DeleteOp_Locker.ump"
 public abstract class Locker
 {
 
@@ -482,6 +483,13 @@ public abstract class Locker
    public void dumpLockTable() throws DatabaseException{
     lockManager.dump();
   }
+
+
+  /**
+   * 
+   * Database operations like remove and truncate leave behind residual DatabaseImpls that must be purged at transaction commit or abort.
+   */
+   public abstract void markDeleteAtTxnEnd(DatabaseImpl db, boolean deleteAtCommit) throws DatabaseException;
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

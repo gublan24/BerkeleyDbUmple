@@ -383,18 +383,20 @@ class Database
     }
 
     public void preload(long maxBytes) throws DatabaseException {
-	checkEnv();
-	checkRequiredDbState(OPEN, "Can't call Database.preload");
-	this.hook55();
-	PreloadConfig config = new PreloadConfig();
-	config.setMaxBytes(maxBytes);
-	databaseImpl.preload(config);
+			checkEnv();
+			checkRequiredDbState(OPEN, "Can't call Database.preload");
+			//this.hook55();
+			Label55:
+			PreloadConfig config = new PreloadConfig();
+			config.setMaxBytes(maxBytes);
+			databaseImpl.preload(config);
     }
 
     public void preload(long maxBytes, long maxMillisecs) throws DatabaseException {
 	checkEnv();
 	checkRequiredDbState(OPEN, "Can't call Database.preload");
-	this.hook56();
+	//this.hook56();
+  Label56:
 	PreloadConfig config = new PreloadConfig();
 	config.setMaxBytes(maxBytes);
 	config.setMaxMillisecs(maxMillisecs);
@@ -402,10 +404,11 @@ class Database
     }
 
     public PreloadStats preload(PreloadConfig config) throws DatabaseException {
-	checkEnv();
-	checkRequiredDbState(OPEN, "Can't call Database.preload");
-	this.hook57();
-	return databaseImpl.preload(config);
+			checkEnv();
+			checkRequiredDbState(OPEN, "Can't call Database.preload");
+			//this.hook57();
+      Label57:
+			return databaseImpl.preload(config);
     }
 
     public String getDatabaseName() throws DatabaseException {
@@ -665,13 +668,13 @@ class Database
 	}
     }
 
-    protected void hook55() throws DatabaseException {
-    }
+//    protected void hook55() throws DatabaseException {
+//    }
 
-    protected void hook56() throws DatabaseException {
-    }
+//    protected void hook56() throws DatabaseException {
+//    }
 
-    protected void hook57() throws DatabaseException {
-    }
+ //   protected void hook57() throws DatabaseException {
+  //  }
 
 }

@@ -26,6 +26,9 @@ import java.io.File;
 // line 3 "../../../Environment.ump"
 // line 3 "../../../MemoryBudget_Environment.ump"
 // line 3 "../../../Evictor_Environment.ump"
+// line 3 "../../../RenameOp_Environment.ump"
+// line 3 "../../../Truncate_Environment.ump"
+// line 3 "../../../DeleteOp_Environment.ump"
 public class Environment
 {
 
@@ -136,50 +139,54 @@ public class Environment
   // line 236 "../../../Environment.ump"
    private void openDb(Transaction txn, Database newDb, String databaseName, DatabaseConfig dbConfig, boolean needWritableLockerForInit) throws DatabaseException{
     checkEnv();
-	DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-	this.hook58(databaseName, dbConfig);
-	validateDbConfigAgainstEnv(dbConfig, databaseName);
-	Locker locker = null;
-	boolean operationOk = false;
-	boolean dbIsClosing = false;
-	try {
-	    boolean isWritableLocker = true;
-	    if (needWritableLockerForInit) {
-		locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
-		isWritableLocker = true;
-	    } else {
-		locker = LockerFactory.getReadableLocker(this, txn, dbConfig.getTransactional(), true, false);
-		isWritableLocker = !dbConfig.getTransactional() || locker.isTransactional();
-	    }
-	    DatabaseImpl database = environmentImpl.getDb(locker, databaseName, newDb);
-	    boolean databaseExists = false;
-	    databaseExists = this.hook59(database, databaseExists);
-	    if (databaseExists) {
-		if (dbConfig.getAllowCreate() && dbConfig.getExclusiveCreate()) {
-		    dbIsClosing = true;
-		    throw new DatabaseException("Database " + databaseName + " already exists");
-		}
-		newDb.initExisting(this, locker, database, dbConfig);
-	    } else {
-		if (dbConfig.getAllowCreate()) {
-		    if (!isWritableLocker) {
-			locker.operationEnd(OperationStatus.SUCCESS);
-			locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
-			isWritableLocker = true;
-		    }
-		    newDb.initNew(this, locker, databaseName, dbConfig);
-		} else {
-		    throw new DatabaseNotFoundException("Database " + databaseName + " not found.");
-		}
-	    }
-	    operationOk = true;
-	    addReferringHandle(newDb);
-	} finally {
-	    if (locker != null) {
-		locker.setHandleLockOwner(operationOk, newDb, dbIsClosing);
-		locker.operationEnd(operationOk);
-	    }
-	}
+			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
+			this.hook58(databaseName, dbConfig);
+			validateDbConfigAgainstEnv(dbConfig, databaseName);
+			Locker locker = null;
+			boolean operationOk = false;
+			boolean dbIsClosing = false;
+			try {
+					boolean isWritableLocker = true;
+					if (needWritableLockerForInit) {
+				locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
+				isWritableLocker = true;
+					} else {
+				locker = LockerFactory.getReadableLocker(this, txn, dbConfig.getTransactional(), true, false);
+				isWritableLocker = !dbConfig.getTransactional() || locker.isTransactional();
+					}
+					DatabaseImpl database = environmentImpl.getDb(locker, databaseName, newDb);
+					boolean databaseExists = false;
+					Label59:
+if (database != null && !database.isDeleted())
+						databaseExists = true;
+//			return original(database, databaseExists);
+ //databaseExists = this.hook59(database, databaseExists);
+					if (databaseExists) {
+				if (dbConfig.getAllowCreate() && dbConfig.getExclusiveCreate()) {
+						dbIsClosing = true;
+						throw new DatabaseException("Database " + databaseName + " already exists");
+				}
+				newDb.initExisting(this, locker, database, dbConfig);
+					} else {
+				if (dbConfig.getAllowCreate()) {
+						if (!isWritableLocker) {
+					locker.operationEnd(OperationStatus.SUCCESS);
+					locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
+					isWritableLocker = true;
+						}
+						newDb.initNew(this, locker, databaseName, dbConfig);
+				} else {
+						throw new DatabaseNotFoundException("Database " + databaseName + " not found.");
+				}
+					}
+					operationOk = true;
+					addReferringHandle(newDb);
+			} finally {
+					if (locker != null) {
+				locker.setHandleLockOwner(operationOk, newDb, dbIsClosing);
+				locker.operationEnd(operationOk);
+					}
+			}
   }
 
   // line 284 "../../../Environment.ump"
@@ -512,6 +519,78 @@ public class Environment
     checkHandleIsValid();
 			checkEnv();
 			environmentImpl.invokeEvictor();
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 9 "../../../RenameOp_Environment.ump"
+   public void renameDatabase(Transaction txn, String databaseName, String newName) throws DatabaseException{
+    DatabaseUtil.checkForNullParam(databaseName, "databaseName");
+			DatabaseUtil.checkForNullParam(newName, "newName");
+			checkHandleIsValid();
+			checkEnv();
+			Locker locker = null;
+			boolean operationOk = false;
+			try {
+					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
+					environmentImpl.dbRename(locker, databaseName, newName);
+					operationOk = true;
+			} finally {
+					if (locker != null) {
+				locker.operationEnd(operationOk);
+					}
+			}
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 9 "../../../Truncate_Environment.ump"
+   public long truncateDatabase(Transaction txn, String databaseName, boolean returnCount) throws DatabaseException{
+    checkHandleIsValid();
+			checkEnv();
+			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
+			Locker locker = null;
+			boolean operationOk = false;
+			long count = 0;
+			try {
+					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
+					count = environmentImpl.truncate(locker, databaseName, returnCount);
+					operationOk = true;
+			} finally {
+					if (locker != null) {
+				locker.operationEnd(operationOk);
+					}
+			}
+			return count;
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 9 "../../../DeleteOp_Environment.ump"
+   public void removeDatabase(Transaction txn, String databaseName) throws DatabaseException{
+    checkHandleIsValid();
+			checkEnv();
+			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
+			Locker locker = null;
+			boolean operationOk = false;
+			try {
+					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
+					environmentImpl.dbRemove(locker, databaseName);
+					operationOk = true;
+			} finally {
+					if (locker != null) {
+				locker.operationEnd(operationOk);
+					}
+			}
   }
   
   //------------------------

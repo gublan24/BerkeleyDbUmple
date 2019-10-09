@@ -1,0 +1,40 @@
+namespace com.sleepycat.je;
+
+class Database
+{
+  depend com.sleepycat.je.dbi.TruncateResult;
+    /** 
+     * @deprecated It has not been possible to implement this method withcorrect transactional semantics without incurring a performance penalty on all Database operations. Truncate functionality has been moved to Environment.truncateDatabase(), which requires that all Database handles on the database are closed before the truncate operation can execute.
+     */
+    public int truncate(Transaction txn, boolean countRecords) throws DatabaseException {
+	return new Database_truncate(this, txn, countRecords).execute();
+    }
+
+    /** 
+     * Internal unchecked truncate that optionally counts records.
+     * @deprecated
+     */
+    int truncateInternal(Locker locker, boolean countRecords) throws DatabaseException {
+			if (databaseImpl == null) {
+					throw new DatabaseException("couldn't find database - truncate");
+			}
+			//this.hook43();
+			Label43:
+			if (handleLocker.isHandleLockTransferrable()) {
+					handleLocker.transferHandleLock(this, locker, false);
+			}
+			boolean operationOk = false;
+			try {
+					TruncateResult result = envHandle.getEnvironmentImpl().truncate(locker, databaseImpl);
+					databaseImpl = result.getDatabase();
+					operationOk = true;
+					return countRecords ? result.getRecordCount() : -1;
+			} finally {
+					locker.setHandleLockOwner(operationOk, this, false);
+			}
+    }
+
+//    protected void hook43() throws DatabaseException {
+//    }
+
+}

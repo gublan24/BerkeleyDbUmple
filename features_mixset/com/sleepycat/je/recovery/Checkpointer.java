@@ -40,6 +40,7 @@ import java.util.HashSet;
 // line 3 "../../../../MemoryBudget_Checkpointer_inner.ump"
 // line 3 "../../../../Evictor_Checkpointer.ump"
 // line 3 "../../../../Evictor_Checkpointer_inner.ump"
+// line 3 "../../../../DeleteOp_Checkpointer.ump"
 public class Checkpointer
 {
 
@@ -151,8 +152,14 @@ public class Checkpointer
 	    while (iter.hasNext()) {
 		CheckpointReference targetRef = (CheckpointReference) iter.next();
 		this.hook520();
-		this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
-		iter.remove();
+		//this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
+		Label546:
+if (!(targetRef.db.isDeleted())) {
+					flushIN(targetRef, dirtyMap, currentLevel.intValue(), logProvisionally, allowDeltas, checkpointStart);
+			}
+			//original(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
+
+    iter.remove();
 	    }
 	    dirtyMap.remove(currentLevel);
 	    if (currentLevel.intValue() == highestFlushLevel) {
@@ -166,7 +173,7 @@ public class Checkpointer
    * 
    * Scan the INList for all dirty INs. Arrange them in level sorted map for level ordered flushing.
    */
-  // line 156 "../../../../Checkpointer.ump"
+  // line 157 "../../../../Checkpointer.ump"
    private SortedMap selectDirtyINs(boolean flushAll, boolean flushExtraLevel) throws DatabaseException{
     return new Checkpointer_selectDirtyINs(this, flushAll, flushExtraLevel).execute();
   }
@@ -176,7 +183,7 @@ public class Checkpointer
    * 
    * Flush the target IN.
    */
-  // line 164 "../../../../Checkpointer.ump"
+  // line 165 "../../../../Checkpointer.ump"
    private void flushIN(CheckpointReference targetRef, Map dirtyMap, int currentLevel, boolean logProvisionally, boolean allowDeltas, long checkpointStart) throws DatabaseException{
     Tree tree = targetRef.db.getTree();
 	boolean targetWasRoot = false;
@@ -207,7 +214,7 @@ public class Checkpointer
    * 
    * @return true if this parent is appropriately 1 level above the child.
    */
-  // line 192 "../../../../Checkpointer.ump"
+  // line 193 "../../../../Checkpointer.ump"
    private boolean checkParentChildRelationship(SearchResult result, int childLevel){
     if (result.childNotResident && !result.exactParentFound) {
 	    return true;
@@ -234,7 +241,7 @@ public class Checkpointer
 	return checkOk;
   }
 
-  // line 219 "../../../../Checkpointer.ump"
+  // line 220 "../../../../Checkpointer.ump"
    private String dumpParentChildInfo(SearchResult result, IN parent, long childNodeId, int currentLevel, Tree tree) throws DatabaseException{
     StringBuffer sb = new StringBuffer();
 	sb.append("ckptId=").append(checkpointId);
@@ -246,7 +253,7 @@ public class Checkpointer
 	return sb.toString();
   }
 
-  // line 231 "../../../../Checkpointer.ump"
+  // line 232 "../../../../Checkpointer.ump"
    private boolean logTargetAndUpdateParent(IN target, IN parent, int index, boolean allowDeltas, long checkpointStart, boolean logProvisionally) throws DatabaseException{
     target.latch(false);
 	long newLsn = DbLsn.NULL_LSN;
@@ -264,7 +271,7 @@ public class Checkpointer
    * 
    * Add a node to the dirty map. The dirty map is keyed by level (Integers) and holds sets of IN references.
    */
-  // line 246 "../../../../Checkpointer.ump"
+  // line 247 "../../../../Checkpointer.ump"
    private void addToDirtyMap(Map dirtyMap, IN in){
     Integer inLevel = new Integer(in.getLevel());
 	Set inSet = (Set) dirtyMap.get(inLevel);
@@ -276,12 +283,12 @@ public class Checkpointer
 		in.getMainTreeKey(), in.getDupTreeKey()));
   }
 
-  // line 257 "../../../../Checkpointer.ump"
+  // line 258 "../../../../Checkpointer.ump"
    protected void hook520() throws DatabaseException{
     
   }
 
-  // line 262 "../../../../Checkpointer.ump"
+  // line 263 "../../../../Checkpointer.ump"
    protected void hook526(CheckpointReference targetRef, Map dirtyMap, int currentLevel, boolean logProvisionally, boolean allowDeltas, long checkpointStart, Tree tree, SearchResult result, boolean mustLogParent) throws DatabaseException{
     if (result.exactParentFound) {
 	    IN renewedTarget = (IN) result.parent.getTarget(result.index);
@@ -305,7 +312,7 @@ public class Checkpointer
 	}
   }
 
-  // line 286 "../../../../Checkpointer.ump"
+  // line 287 "../../../../Checkpointer.ump"
    protected void hook527(IN target, IN parent, boolean allowDeltas, long checkpointStart, boolean logProvisionally, long newLsn, boolean mustLogParent) throws DatabaseException{
     if (target.getDirty()) {
 	    newLsn = target.log(logManager, allowDeltas, logProvisionally, true, parent);
@@ -319,43 +326,38 @@ public class Checkpointer
 	}
   }
 
-  // line 299 "../../../../Checkpointer.ump"
+  // line 300 "../../../../Checkpointer.ump"
    protected void hook531() throws DatabaseException{
     
   }
 
-  // line 302 "../../../../Checkpointer.ump"
+  // line 303 "../../../../Checkpointer.ump"
    protected void hook532() throws DatabaseException{
     
   }
 
-  // line 305 "../../../../Checkpointer.ump"
+  // line 306 "../../../../Checkpointer.ump"
    protected void hook533(IN target) throws DatabaseException{
     
   }
 
-  // line 308 "../../../../Checkpointer.ump"
+  // line 309 "../../../../Checkpointer.ump"
    protected void hook537() throws DatabaseException{
     
   }
 
-  // line 311 "../../../../Checkpointer.ump"
+  // line 312 "../../../../Checkpointer.ump"
    protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException{
     
   }
 
-  // line 314 "../../../../Checkpointer.ump"
+  // line 315 "../../../../Checkpointer.ump"
    protected void hook539(EnvironmentImpl envImpl) throws DatabaseException{
     
   }
 
-  // line 317 "../../../../Checkpointer.ump"
+  // line 318 "../../../../Checkpointer.ump"
    protected void hook545(long waitTime) throws DatabaseException{
-    
-  }
-
-  // line 321 "../../../../Checkpointer.ump"
-   protected void hook546(SortedMap dirtyMap, boolean allowDeltas, long checkpointStart, Integer currentLevel, boolean logProvisionally, CheckpointReference targetRef) throws DatabaseException{
     
   }
   /*PLEASE DO NOT EDIT THIS CODE*/

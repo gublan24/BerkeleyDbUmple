@@ -646,7 +646,7 @@ class UtilizationProfile
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    b = this.hook186(db, b);
+	    Label186: //b = this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
@@ -696,9 +696,9 @@ class UtilizationProfile
 	throw new ReturnBoolean(false);
     }
 
-    protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
-	return b;
-    }
+//    protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
+//	return b;
+//    }
 
   //  protected void hook187(CursorImpl cursor) throws DatabaseException {
   //  }

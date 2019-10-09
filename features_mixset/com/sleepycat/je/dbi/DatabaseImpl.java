@@ -50,6 +50,7 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../DatabaseImpl_static.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
+// line 3 "../../../../DeleteOp_DatabaseImpl.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -97,19 +98,23 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   // line 95 "../../../../DatabaseImpl.ump"
    public  DatabaseImpl(String dbName, DatabaseId id, EnvironmentImpl envImpl, DatabaseConfig dbConfig) throws DatabaseException{
     this.id = id;
-	this.envImpl = envImpl;
-	this.btreeComparator = dbConfig.getBtreeComparator();
-	this.duplicateComparator = dbConfig.getDuplicateComparator();
-	duplicatesAllowed = dbConfig.getSortedDuplicates();
-	transactional = dbConfig.getTransactional();
-	maxMainTreeEntriesPerNode = dbConfig.getNodeMaxEntries();
-	maxDupTreeEntriesPerNode = dbConfig.getNodeMaxDupTreeEntries();
-	initDefaultSettings();
-	this.hook288();
-	tree = new Tree(this);
-	referringHandles = Collections.synchronizedSet(new HashSet());
-	eofNodeId = Node.getNextNodeId();
-	debugDatabaseName = dbName;
+			this.envImpl = envImpl;
+			this.btreeComparator = dbConfig.getBtreeComparator();
+			this.duplicateComparator = dbConfig.getDuplicateComparator();
+			duplicatesAllowed = dbConfig.getSortedDuplicates();
+			transactional = dbConfig.getTransactional();
+			maxMainTreeEntriesPerNode = dbConfig.getNodeMaxEntries();
+			maxDupTreeEntriesPerNode = dbConfig.getNodeMaxDupTreeEntries();
+			initDefaultSettings();
+			//this.hook288();
+			Label288:
+deleteState = NOT_DELETED;
+			//original();
+
+			tree = new Tree(this);
+			referringHandles = Collections.synchronizedSet(new HashSet());
+			eofNodeId = Node.getNextNodeId();
+			debugDatabaseName = dbName;
   }
 
 
@@ -117,27 +122,31 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Create an empty database object for initialization from the log. Note that the rest of the initialization comes from readFromLog(), except for the debugDatabaseName, which is set by the caller.
    */
-  // line 115 "../../../../DatabaseImpl.ump"
+  // line 116 "../../../../DatabaseImpl.ump"
    public  DatabaseImpl() throws DatabaseException{
     id = new DatabaseId();
-	envImpl = null;
-	this.hook289();
-	tree = new Tree();
-	referringHandles = Collections.synchronizedSet(new HashSet());
-	eofNodeId = Node.getNextNodeId();
+			envImpl = null;
+			//this.hook289();
+			Label289:
+deleteState = NOT_DELETED;
+			//original();
+
+			tree = new Tree();
+			referringHandles = Collections.synchronizedSet(new HashSet());
+			eofNodeId = Node.getNextNodeId();
   }
 
-  // line 124 "../../../../DatabaseImpl.ump"
+  // line 126 "../../../../DatabaseImpl.ump"
    public void setDebugDatabaseName(String debugName){
     debugDatabaseName = debugName;
   }
 
-  // line 128 "../../../../DatabaseImpl.ump"
+  // line 130 "../../../../DatabaseImpl.ump"
    public String getDebugName(){
     return debugDatabaseName;
   }
 
-  // line 132 "../../../../DatabaseImpl.ump"
+  // line 134 "../../../../DatabaseImpl.ump"
    public void setPendingDeletedHook(TestHook hook){
     pendingDeletedHook = hook;
   }
@@ -147,7 +156,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Initialize configuration settings when creating a new instance or after reading an instance from the log. The envImpl field must be set before calling this method.
    */
-  // line 139 "../../../../DatabaseImpl.ump"
+  // line 141 "../../../../DatabaseImpl.ump"
    private void initDefaultSettings() throws DatabaseException{
     DbConfigManager configMgr = envImpl.getConfigManager();
 	binDeltaPercent = configMgr.getInt(EnvironmentParams.BIN_DELTA_PERCENT);
@@ -165,7 +174,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Clone. For now just pass off to the super class for a field-by-field copy.
    */
-  // line 154 "../../../../DatabaseImpl.ump"
+  // line 156 "../../../../DatabaseImpl.ump"
    public Object clone() throws CloneNotSupportedException{
     return super.clone();
   }
@@ -175,17 +184,17 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @return the database id.
    */
-  // line 172 "../../../../DatabaseImpl.ump"
+  // line 174 "../../../../DatabaseImpl.ump"
    public DatabaseId getId(){
     return id;
   }
 
-  // line 176 "../../../../DatabaseImpl.ump"
+  // line 178 "../../../../DatabaseImpl.ump"
   public void setId(DatabaseId id){
     this.id = id;
   }
 
-  // line 180 "../../../../DatabaseImpl.ump"
+  // line 182 "../../../../DatabaseImpl.ump"
    public long getEofNodeId(){
     return eofNodeId;
   }
@@ -195,7 +204,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @return true if this database is transactional.
    */
-  // line 187 "../../../../DatabaseImpl.ump"
+  // line 189 "../../../../DatabaseImpl.ump"
    public boolean isTransactional(){
     return transactional;
   }
@@ -205,7 +214,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Sets the transactional property for the first opened handle.
    */
-  // line 194 "../../../../DatabaseImpl.ump"
+  // line 196 "../../../../DatabaseImpl.ump"
    public void setTransactional(boolean transactional){
     this.transactional = transactional;
   }
@@ -215,17 +224,17 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @return true if duplicates are allowed in this database.
    */
-  // line 201 "../../../../DatabaseImpl.ump"
+  // line 203 "../../../../DatabaseImpl.ump"
    public boolean getSortedDuplicates(){
     return duplicatesAllowed;
   }
 
-  // line 205 "../../../../DatabaseImpl.ump"
+  // line 207 "../../../../DatabaseImpl.ump"
    public int getNodeMaxEntries(){
     return maxMainTreeEntriesPerNode;
   }
 
-  // line 209 "../../../../DatabaseImpl.ump"
+  // line 211 "../../../../DatabaseImpl.ump"
    public int getNodeMaxDupTreeEntries(){
     return maxDupTreeEntriesPerNode;
   }
@@ -236,7 +245,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * Set the duplicate comparison function for this database.
    * @param duplicateComparator -The Duplicate Comparison function.
    */
-  // line 217 "../../../../DatabaseImpl.ump"
+  // line 219 "../../../../DatabaseImpl.ump"
    public void setDuplicateComparator(Comparator duplicateComparator){
     this.duplicateComparator = duplicateComparator;
   }
@@ -247,7 +256,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * Set the btree comparison function for this database.
    * @param btreeComparator -The btree Comparison function.
    */
-  // line 225 "../../../../DatabaseImpl.ump"
+  // line 227 "../../../../DatabaseImpl.ump"
    public void setBtreeComparator(Comparator btreeComparator){
     this.btreeComparator = btreeComparator;
   }
@@ -257,7 +266,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @return the btree Comparator object.
    */
-  // line 232 "../../../../DatabaseImpl.ump"
+  // line 234 "../../../../DatabaseImpl.ump"
    public Comparator getBtreeComparator(){
     return btreeComparator;
   }
@@ -267,7 +276,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @return the duplicate Comparator object.
    */
-  // line 239 "../../../../DatabaseImpl.ump"
+  // line 241 "../../../../DatabaseImpl.ump"
    public Comparator getDuplicateComparator(){
     return duplicateComparator;
   }
@@ -277,7 +286,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Set the db environment during recovery, after instantiating the database from the log
    */
-  // line 246 "../../../../DatabaseImpl.ump"
+  // line 248 "../../../../DatabaseImpl.ump"
    public void setEnvironmentImpl(EnvironmentImpl envImpl) throws DatabaseException{
     this.envImpl = envImpl;
 	initDefaultSettings();
@@ -289,7 +298,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @return the database environment.
    */
-  // line 255 "../../../../DatabaseImpl.ump"
+  // line 257 "../../../../DatabaseImpl.ump"
    public EnvironmentImpl getDbEnvironment(){
     return envImpl;
   }
@@ -299,7 +308,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Returns whether one or more handles are open.
    */
-  // line 262 "../../../../DatabaseImpl.ump"
+  // line 264 "../../../../DatabaseImpl.ump"
    public boolean hasOpenHandles(){
     return referringHandles.size() > 0;
   }
@@ -309,7 +318,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Add a referring handle
    */
-  // line 269 "../../../../DatabaseImpl.ump"
+  // line 271 "../../../../DatabaseImpl.ump"
    public void addReferringHandle(Database db){
     referringHandles.add(db);
   }
@@ -319,7 +328,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Decrement the reference count.
    */
-  // line 276 "../../../../DatabaseImpl.ump"
+  // line 278 "../../../../DatabaseImpl.ump"
    public void removeReferringHandle(Database db){
     referringHandles.remove(db);
   }
@@ -329,7 +338,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * For this secondary database return the primary that it is associated with, or null if not associated with any primary. Note that not all handles need be associated with a primary.
    */
-  // line 290 "../../../../DatabaseImpl.ump"
+  // line 292 "../../../../DatabaseImpl.ump"
    public Database findPrimaryDatabase() throws DatabaseException{
     for (Iterator i = referringHandles.iterator(); i.hasNext();) {
 	    Object obj = i.next();
@@ -340,7 +349,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 	return null;
   }
 
-  // line 300 "../../../../DatabaseImpl.ump"
+  // line 302 "../../../../DatabaseImpl.ump"
    public String getName() throws DatabaseException{
     return envImpl.getDbMapTree().getDbName(id);
   }
@@ -350,7 +359,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Return the count of nodes in the database. Used for truncate, perhaps should be made available through other means? Database should be quiescent.
    */
-  // line 307 "../../../../DatabaseImpl.ump"
+  // line 309 "../../../../DatabaseImpl.ump"
   public long countRecords() throws DatabaseException{
     LNCounter lnCounter = new LNCounter();
 	SortedLSNTreeWalker walker = new SortedLSNTreeWalker(this, false, false, tree.getRootLsn(), lnCounter);
@@ -358,7 +367,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 	return lnCounter.getCount();
   }
 
-  // line 315 "../../../../DatabaseImpl.ump"
+  // line 317 "../../../../DatabaseImpl.ump"
    private boolean walkDatabaseTree(TreeWalkerStatsAccumulator statsAcc, PrintStream out, boolean verbose) throws DatabaseException{
     boolean ok = true;
 	Locker locker = new ThreadLocker(envImpl);
@@ -407,7 +416,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Prints the key and data, if available, for a BIN entry that could not be read/verified. Uses the same format as DbDump and prints both the hex and printable versions of the entries.
    */
-  // line 361 "../../../../DatabaseImpl.ump"
+  // line 363 "../../../../DatabaseImpl.ump"
    private void printErrorRecord(PrintStream out, DatabaseEntry key, DatabaseEntry data){
     byte[] bytes = key.getData();
 	StringBuffer sb = new StringBuffer("Error Key ");
@@ -436,12 +445,12 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Preload the cache, using up to maxBytes bytes or maxMillsecs msec.
    */
-  // line 387 "../../../../DatabaseImpl.ump"
+  // line 389 "../../../../DatabaseImpl.ump"
    public PreloadStats preload(PreloadConfig config) throws DatabaseException{
     return new DatabaseImpl_preload(this, config).execute();
   }
 
-  // line 391 "../../../../DatabaseImpl.ump"
+  // line 393 "../../../../DatabaseImpl.ump"
    public String dumpString(int nSpaces){
     StringBuffer sb = new StringBuffer();
 	sb.append(TreeUtils.indent(nSpaces));
@@ -467,7 +476,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @see LogWritable#getLogSize
    */
-  // line 414 "../../../../DatabaseImpl.ump"
+  // line 416 "../../../../DatabaseImpl.ump"
    public int getLogSize(){
     return id.getLogSize() + tree.getLogSize() + LogUtils.getBooleanLogSize()
 		+ LogUtils.getStringLogSize(serializeComparator(btreeComparator))
@@ -479,7 +488,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @see LogWritable#writeToLog
    */
-  // line 423 "../../../../DatabaseImpl.ump"
+  // line 425 "../../../../DatabaseImpl.ump"
    public void writeToLog(ByteBuffer logBuffer){
     id.writeToLog(logBuffer);
 	tree.writeToLog(logBuffer);
@@ -495,7 +504,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 436 "../../../../DatabaseImpl.ump"
+  // line 438 "../../../../DatabaseImpl.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     id.readFromLog(itemBuffer, entryTypeVersion);
 	tree.readFromLog(itemBuffer, entryTypeVersion);
@@ -527,7 +536,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 465 "../../../../DatabaseImpl.ump"
+  // line 467 "../../../../DatabaseImpl.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<database>");
 	id.dumpLog(sb, verbose);
@@ -548,7 +557,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 483 "../../../../DatabaseImpl.ump"
+  // line 485 "../../../../DatabaseImpl.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -558,7 +567,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 490 "../../../../DatabaseImpl.ump"
+  // line 492 "../../../../DatabaseImpl.ump"
    public long getTransactionId(){
     return 0;
   }
@@ -568,7 +577,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Used both to write to the log and to validate a comparator when set in DatabaseConfig.
    */
-  // line 497 "../../../../DatabaseImpl.ump"
+  // line 499 "../../../../DatabaseImpl.ump"
    public static  String serializeComparator(Comparator comparator){
     if (comparator != null) {
 	    return comparator.getClass().getName();
@@ -582,7 +591,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    * 
    * Used both to read from the log and to validate a comparator when set in DatabaseConfig.
    */
-  // line 508 "../../../../DatabaseImpl.ump"
+  // line 510 "../../../../DatabaseImpl.ump"
    public static  Comparator instantiateComparator(Class comparator, String comparatorType) throws LogException{
     if (comparator == null) {
 	    return null;
@@ -596,24 +605,77 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 	}
   }
 
-  // line 521 "../../../../DatabaseImpl.ump"
+  // line 523 "../../../../DatabaseImpl.ump"
    public int getBinDeltaPercent(){
     return binDeltaPercent;
   }
 
-  // line 525 "../../../../DatabaseImpl.ump"
+  // line 527 "../../../../DatabaseImpl.ump"
    public int getBinMaxDeltas(){
     return binMaxDeltas;
   }
 
-  // line 529 "../../../../DatabaseImpl.ump"
-   protected void hook288() throws DatabaseException{
-    
+  // line 16 "../../../../DeleteOp_DatabaseImpl.ump"
+   public boolean isDeleted(){
+    return !(deleteState == NOT_DELETED);
   }
 
-  // line 532 "../../../../DatabaseImpl.ump"
-   protected void hook289() throws DatabaseException{
-    
+  // line 20 "../../../../DeleteOp_DatabaseImpl.ump"
+   public boolean isDeleteFinished(){
+    return (deleteState == DELETED);
+  }
+
+  // line 24 "../../../../DeleteOp_DatabaseImpl.ump"
+   public void startDeleteProcessing(){
+    assert (deleteState == NOT_DELETED);
+		deleteState = DELETED_CLEANUP_INLIST_HARVEST;
+  }
+
+  // line 29 "../../../../DeleteOp_DatabaseImpl.ump"
+  public void finishedINListHarvest(){
+    assert (deleteState == DELETED_CLEANUP_INLIST_HARVEST);
+		deleteState = DELETED_CLEANUP_LOG_HARVEST;
+  }
+
+
+  /**
+   * 
+   * Purge a DatabaseImpl and corresponding MapLN in the db mapping tree. Purging consists of removing all related INs from the db mapping tree and deleting the related MapLN. Used at the a transaction end in these cases: - purge the deleted database after a commit of Environment.removeDatabase - purge the deleted database after a commit of Environment.truncateDatabase - purge the newly created database after an abort of Environment.truncateDatabase
+   */
+  // line 37 "../../../../DeleteOp_DatabaseImpl.ump"
+   public void deleteAndReleaseINs() throws DatabaseException{
+    startDeleteProcessing();
+			releaseDeletedINs();
+  }
+
+  // line 42 "../../../../DeleteOp_DatabaseImpl.ump"
+   public void releaseDeletedINs() throws DatabaseException{
+    if (pendingDeletedHook != null) {
+					pendingDeletedHook.doHook();
+			}
+			try {
+					long rootLsn = tree.getRootLsn();
+					if (rootLsn == DbLsn.NULL_LSN) {
+				envImpl.getDbMapTree().deleteMapLN(id);
+					} else {
+				UtilizationTracker snapshot = new UtilizationTracker(envImpl);
+				snapshot.countObsoleteNodeInexact(rootLsn, LogEntryType.LOG_IN);
+				ObsoleteProcessor obsoleteProcessor = new ObsoleteProcessor(snapshot);
+				SortedLSNTreeWalker walker = new SortedLSNTreeWalker(this, true, true, rootLsn, obsoleteProcessor);
+				envImpl.getDbMapTree().deleteMapLN(id);
+				walker.walk();
+				envImpl.getUtilizationProfile().countAndLogSummaries(snapshot.getTrackedFiles());
+					}
+			} finally {
+					deleteState = DELETED;
+			}
+  }
+
+  // line 64 "../../../../DeleteOp_DatabaseImpl.ump"
+   public void checkIsDeleted(String operation) throws DatabaseException{
+    if (isDeleted()) {
+	    throw new DatabaseException("Attempt to " + operation + " a deleted database");
+	}
   }
 
 
@@ -901,11 +963,21 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   static final HaltPreloadException memoryExceededPreloadException = new HaltPreloadException(
 	    PreloadStatus.FILLED_CACHE) ;
 
-// line 282 "../../../../DatabaseImpl.ump"
+// line 284 "../../../../DatabaseImpl.ump"
   synchronized int getReferringHandleCount () 
   {
     return referringHandles.size();
   }
+// line 5 "../../../../DeleteOp_DatabaseImpl.ump"
+  private static final short NOT_DELETED = 1 ;
+// line 7 "../../../../DeleteOp_DatabaseImpl.ump"
+  private static final short DELETED_CLEANUP_INLIST_HARVEST = 2 ;
+// line 9 "../../../../DeleteOp_DatabaseImpl.ump"
+  private static final short DELETED_CLEANUP_LOG_HARVEST = 3 ;
+// line 11 "../../../../DeleteOp_DatabaseImpl.ump"
+  private static final short DELETED = 4 ;
+// line 13 "../../../../DeleteOp_DatabaseImpl.ump"
+  private short deleteState ;
 
   
 }

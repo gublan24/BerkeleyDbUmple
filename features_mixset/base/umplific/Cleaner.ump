@@ -293,9 +293,11 @@ Label_115_1:
 	try {
 	    this.hook97();
 	    boolean c = db == null;
-	    c = this.hook112(db, c);
+	    //c = this.hook112(db, c);
+      Label112:
 	    if (c) {
-		this.hook113(db);
+		//this.hook113(db);
+    Label113:
 		this.hook98();
 		obsolete = true;
 		completed = true;
@@ -694,12 +696,12 @@ Label_115_1:
     protected void hook111(boolean wasCleaned) throws DatabaseException {
     }
 
-    protected boolean hook112(DatabaseImpl db, boolean c) throws DatabaseException {
-	return c;
-    }
+  //  protected boolean hook112(DatabaseImpl db, boolean c) throws DatabaseException {
+	//return c;
+  //  }
 
-    protected void hook113(DatabaseImpl db) throws DatabaseException {
-    }
+ //   protected void hook113(DatabaseImpl db) throws DatabaseException {
+ //   }
 
     protected void hook115(Set safeFiles) throws DatabaseException {
 

@@ -32,7 +32,19 @@ class DbRunAction {
                 doAction=CLEAN;
               }
    else {
-                this.hook841();
+               Label841:// this.hook841();
+							if (action.equalsIgnoreCase("checkpoint")) {
+											doAction=CHECKPOINT;
+										}
+											Label846: //this.hook846();
+											Label843: //this.hook843();
+							 else {
+
+											Label839:
+											 usage();
+											 System.exit(1);
+										}
+							//End of hook841
               }
             }
    else           if (nextArg.equals("-ro")) {
@@ -72,7 +84,7 @@ class DbRunAction {
           if (doAction == CHECKPOINT) {
             env.checkpoint(forceConfig);
           }
-          this.hook842();
+          Label842: //this.hook842();
           this.hook838();
           actionEnd=System.currentTimeMillis();
           env.close();
@@ -114,32 +126,27 @@ class DbRunAction {
       protected long actionDuration;
       protected void hook838() throws Exception {
       }
-      protected void hook839() throws Exception {
-        usage();
-        System.exit(1);
-      }
+   //   protected void hook839() throws Exception {
+   //     usage();
+   //     System.exit(1);
+    //  }
       protected void hook840() throws Exception {
       }
       protected void hook841() throws Exception {
-        if (action.equalsIgnoreCase("checkpoint")) {
-          doAction=CHECKPOINT;
-        }
-   else {
-          this.hook846();
-        }
+      
       }
-      protected void hook842() throws Exception {
-      }
-      protected void hook843() throws Exception {
-        this.hook839();
-      }
+    //  protected void hook842() throws Exception {
+    //  }
+   //   protected void hook843() throws Exception {
+  //      this.hook839();
+   //   }
     //  protected void hook844() throws Exception {
     //  }
      // protected void hook845() throws Exception {
      // }
-      protected void hook846() throws Exception {
-        this.hook843();
-      }
+  //    protected void hook846() throws Exception {
+    //    this.hook843();
+     // }
       protected void hook847() throws Exception {
       }
       protected void hook848() throws Exception {

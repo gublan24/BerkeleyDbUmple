@@ -41,7 +41,7 @@ class FileProcessor {
         Label161:
         this.hook119();
         this.hook127();
-        this.hook154();
+        Label154: //this.hook154();
         dbCache=new HashMap();
         try {
           reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
@@ -77,7 +77,7 @@ class FileProcessor {
             }
             if (isObsolete) {
               this.hook147();
-              this.hook156();
+              Label156: //this.hook156();
               continue;
             }
             this.hook120();
@@ -109,7 +109,7 @@ class FileProcessor {
             }
           }
           this.hook129();
-          this.hook155();
+          Label155: //this.hook155();
           this.hook145();
         }
     finally {
@@ -216,9 +216,9 @@ class FileProcessor {
         parentDIN=null;
         try {
           b=db == null;
-          this.hook157();
+          Label157: //this.hook157();
           if (b) {
-            this.hook158();
+            Label158: //this.hook158();
             this.hook148();
             obsolete=true;
             completed=true;

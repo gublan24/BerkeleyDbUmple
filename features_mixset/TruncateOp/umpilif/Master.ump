@@ -1,0 +1,7 @@
+use Truncate_Environment.ump;
+use Truncate_EnvironmentImpl.ump;
+use Truncate_TruncateResult.ump;
+use Truncate_DbTree.ump;
+use Truncate_Database.ump;
+
+use ../ump_inner/Truncate_Master.ump;

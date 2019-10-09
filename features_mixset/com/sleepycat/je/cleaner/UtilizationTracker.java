@@ -309,68 +309,52 @@ public class UtilizationTracker
           a=_this.snapshot;
           for (int i=0; i < a.length; i+=1) {
             tfs=a[i];
-            this.hook198();
+            //this.hook198();
+            Label198:
             b1=tfs.getAllowFlush();
-            this.hook197();
+            //this.hook197();
+            Label197:
             if (b1) {
-              this.hook199();
+             // this.hook199();
+               Label199:
               bestFile=tfs;
             }
           }
           b2=bestFile != null;
-          this.hook196();
+          //this.hook196();
+            Label196:
           if (b2) {
             _this.env.getUtilizationProfile().flushFileSummary(bestFile);
             totalEvicted+=largestBytes;
           }
           return totalEvicted;
     }
-  
-    // line 51 "../../../../Evictor_UtilizationTracker_inner.ump"
-     protected void hook196() throws DatabaseException{
-      
-    }
-  
-    // line 53 "../../../../Evictor_UtilizationTracker_inner.ump"
-     protected void hook197() throws DatabaseException{
-      
-    }
-  
-    // line 55 "../../../../Evictor_UtilizationTracker_inner.ump"
-     protected void hook198() throws DatabaseException{
-      
-    }
-  
-    // line 57 "../../../../Evictor_UtilizationTracker_inner.ump"
-     protected void hook199() throws DatabaseException{
-      
-    }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 39 "../../../../Evictor_UtilizationTracker_inner.ump"
+    // line 43 "../../../../Evictor_UtilizationTracker_inner.ump"
     protected UtilizationTracker _this ;
-  // line 40 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected MemoryBudget mb ;
-  // line 41 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected long totalEvicted ;
-  // line 42 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected long totalBytes ;
-  // line 43 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected int largestBytes ;
   // line 44 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected TrackedFileSummary bestFile ;
+    protected MemoryBudget mb ;
   // line 45 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected TrackedFileSummary[] a ;
+    protected long totalEvicted ;
   // line 46 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected TrackedFileSummary tfs ;
+    protected long totalBytes ;
   // line 47 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected int mem ;
+    protected int largestBytes ;
   // line 48 "../../../../Evictor_UtilizationTracker_inner.ump"
-    protected boolean b1 ;
+    protected TrackedFileSummary bestFile ;
   // line 49 "../../../../Evictor_UtilizationTracker_inner.ump"
+    protected TrackedFileSummary[] a ;
+  // line 50 "../../../../Evictor_UtilizationTracker_inner.ump"
+    protected TrackedFileSummary tfs ;
+  // line 51 "../../../../Evictor_UtilizationTracker_inner.ump"
+    protected int mem ;
+  // line 52 "../../../../Evictor_UtilizationTracker_inner.ump"
+    protected boolean b1 ;
+  // line 53 "../../../../Evictor_UtilizationTracker_inner.ump"
     protected boolean b2 ;
   
     

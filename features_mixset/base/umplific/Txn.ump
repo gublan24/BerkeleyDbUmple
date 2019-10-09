@@ -223,71 +223,71 @@ class Txn
      * Commit this transaction 1. Releases read locks 2. Writes a txn commit record into the log 3. Flushes the log to disk. 4. Add deleted LN info to IN compressor queue 5. Release all write locks  If any step of this fails, we must convert this transaction to an abort.
      */
     public long commit(byte flushSyncBehavior) throws DatabaseException {
-	try {
-	    long commitLsn = DbLsn.NULL_LSN;
-	    synchronized (this) {
-		checkState(false);
-		if (checkCursorsForClose()) {
-		    throw new DatabaseException(
-			    "Transaction " + id + " commit failed because there were open cursors.");
-		}
-		if (handleLockToHandleMap != null) {
-		    Iterator handleLockIter = handleLockToHandleMap.entrySet().iterator();
-		    while (handleLockIter.hasNext()) {
-			Map.Entry entry = (Map.Entry) handleLockIter.next();
-			transferHandleLockToHandleSet((Long) entry.getKey(), (Set) entry.getValue());
-		    }
-		}
-		LogManager logManager = envImpl.getLogManager();
-		int numReadLocks = clearReadLocks();
-		int numWriteLocks = 0;
-		if (writeInfo != null) {
-		    numWriteLocks = writeInfo.size();
-		    TxnCommit commitRecord = new TxnCommit(id, lastLoggedLsn);
-		    if (flushSyncBehavior == TXN_SYNC) {
-			commitLsn = logManager.logForceFlush(commitRecord, true);
-		    } else if (flushSyncBehavior == TXN_WRITE_NOSYNC) {
-			commitLsn = logManager.logForceFlush(commitRecord, false);
-		    } else {
-			commitLsn = logManager.log(commitRecord);
-		    }
-		    this.hook806();
-		    Set alreadyCountedLsnSet = new HashSet();
-		    Iterator iter = writeInfo.values().iterator();
-		    while (iter.hasNext()) {
-			WriteLockInfo info = (WriteLockInfo) iter.next();
-			lockManager.release(info.lock, this);
-			if (info.abortLsn != DbLsn.NULL_LSN && !info.abortKnownDeleted) {
-			    Long longLsn = new Long(info.abortLsn);
-			    if (!alreadyCountedLsnSet.contains(longLsn)) {
-				logManager.countObsoleteNode(info.abortLsn, null);
-				alreadyCountedLsnSet.add(longLsn);
-			    }
+			try {
+					long commitLsn = DbLsn.NULL_LSN;
+					synchronized (this) {
+				checkState(false);
+				if (checkCursorsForClose()) {
+						throw new DatabaseException(
+							"Transaction " + id + " commit failed because there were open cursors.");
+				}
+				if (handleLockToHandleMap != null) {
+						Iterator handleLockIter = handleLockToHandleMap.entrySet().iterator();
+						while (handleLockIter.hasNext()) {
+					Map.Entry entry = (Map.Entry) handleLockIter.next();
+					transferHandleLockToHandleSet((Long) entry.getKey(), (Set) entry.getValue());
+						}
+				}
+				LogManager logManager = envImpl.getLogManager();
+				int numReadLocks = clearReadLocks();
+				int numWriteLocks = 0;
+				if (writeInfo != null) {
+						numWriteLocks = writeInfo.size();
+						TxnCommit commitRecord = new TxnCommit(id, lastLoggedLsn);
+						if (flushSyncBehavior == TXN_SYNC) {
+					commitLsn = logManager.logForceFlush(commitRecord, true);
+						} else if (flushSyncBehavior == TXN_WRITE_NOSYNC) {
+					commitLsn = logManager.logForceFlush(commitRecord, false);
+						} else {
+					commitLsn = logManager.log(commitRecord);
+						}
+						Label806: //this.hook806();
+						Set alreadyCountedLsnSet = new HashSet();
+						Iterator iter = writeInfo.values().iterator();
+						while (iter.hasNext()) {
+					WriteLockInfo info = (WriteLockInfo) iter.next();
+					lockManager.release(info.lock, this);
+					if (info.abortLsn != DbLsn.NULL_LSN && !info.abortKnownDeleted) {
+							Long longLsn = new Long(info.abortLsn);
+							if (!alreadyCountedLsnSet.contains(longLsn)) {
+						logManager.countObsoleteNode(info.abortLsn, null);
+						alreadyCountedLsnSet.add(longLsn);
+							}
+					}
+						}
+						writeInfo = null;
+						this.hook803();
+				}
+				traceCommit(numWriteLocks, numReadLocks);
+					}
+					Label805: //this.hook805();
+					close(true);
+					return commitLsn;
+			} catch (RunRecoveryException e) {
+					throw e;
+			} catch (Throwable t) {
+					try {
+				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
+				this.hook800(t);
+					} catch (Throwable abortT2) {
+				throw new DatabaseException("Failed while attempting to commit transaction " + id
+					+ ". The attempt to abort and clean up also failed. "
+					+ "The original exception seen from commit = " + t.getMessage()
+					+ " The exception from the cleanup = " + abortT2.getMessage(), t);
+					}
+					throw new DatabaseException("Failed while attempting to commit transaction " + id
+						+ ", aborted instead. Original exception = " + t.getMessage(), t);
 			}
-		    }
-		    writeInfo = null;
-		    this.hook803();
-		}
-		traceCommit(numWriteLocks, numReadLocks);
-	    }
-	    this.hook805();
-	    close(true);
-	    return commitLsn;
-	} catch (RunRecoveryException e) {
-	    throw e;
-	} catch (Throwable t) {
-	    try {
-		abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-		this.hook800(t);
-	    } catch (Throwable abortT2) {
-		throw new DatabaseException("Failed while attempting to commit transaction " + id
-			+ ". The attempt to abort and clean up also failed. "
-			+ "The original exception seen from commit = " + t.getMessage()
-			+ " The exception from the cleanup = " + abortT2.getMessage(), t);
-	    }
-	    throw new DatabaseException("Failed while attempting to commit transaction " + id
-		    + ", aborted instead. Original exception = " + t.getMessage(), t);
-	}
     }
 
     /** 
@@ -317,11 +317,11 @@ class Txn
 		}
 		undo();
 		numReadLocks = (readLocks == null) ? 0 : clearReadLocks();
-		this.hook808();
+		Label808: //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
 		this.hook804();
 	    }
-	    this.hook807();
+	    Label807: //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
 		this.hook799(numReadLocks, numWriteLocks, openCursors);
@@ -796,17 +796,17 @@ class Txn
     protected void hook804() throws DatabaseException {
     }
 
-    protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
-    }
+  //  protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
+  //  }
 
-    protected void hook806() throws DatabaseException, RunRecoveryException, Throwable {
-    }
+   // protected void hook806() throws DatabaseException, RunRecoveryException, Throwable {
+   // }
 
-    protected void hook807() throws DatabaseException {
-    }
+   // protected void hook807() throws DatabaseException {
+   // }
 
-    protected void hook808() throws DatabaseException {
-    }
+    //protected void hook808() throws DatabaseException {
+    //}
 
     protected void hook809() throws DatabaseException {
     }

@@ -42,6 +42,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../loggingBase_Txn_inner.ump"
 // line 3 "../../../../MemoryBudget_Txn.ump"
 // line 3 "../../../../MemoryBudget_Txn_inner.ump"
+// line 3 "../../../../DeleteOp_Txn.ump"
+// line 3 "../../../../DeleteOp_Txn_inner.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -242,70 +244,76 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
   // line 226 "../../../../Txn.ump"
    public long commit(byte flushSyncBehavior) throws DatabaseException{
     try {
-	    long commitLsn = DbLsn.NULL_LSN;
-	    synchronized (this) {
-		checkState(false);
-		if (checkCursorsForClose()) {
-		    throw new DatabaseException(
-			    "Transaction " + id + " commit failed because there were open cursors.");
-		}
-		if (handleLockToHandleMap != null) {
-		    Iterator handleLockIter = handleLockToHandleMap.entrySet().iterator();
-		    while (handleLockIter.hasNext()) {
-			Map.Entry entry = (Map.Entry) handleLockIter.next();
-			transferHandleLockToHandleSet((Long) entry.getKey(), (Set) entry.getValue());
-		    }
-		}
-		LogManager logManager = envImpl.getLogManager();
-		int numReadLocks = clearReadLocks();
-		int numWriteLocks = 0;
-		if (writeInfo != null) {
-		    numWriteLocks = writeInfo.size();
-		    TxnCommit commitRecord = new TxnCommit(id, lastLoggedLsn);
-		    if (flushSyncBehavior == TXN_SYNC) {
-			commitLsn = logManager.logForceFlush(commitRecord, true);
-		    } else if (flushSyncBehavior == TXN_WRITE_NOSYNC) {
-			commitLsn = logManager.logForceFlush(commitRecord, false);
-		    } else {
-			commitLsn = logManager.log(commitRecord);
-		    }
-		    this.hook806();
-		    Set alreadyCountedLsnSet = new HashSet();
-		    Iterator iter = writeInfo.values().iterator();
-		    while (iter.hasNext()) {
-			WriteLockInfo info = (WriteLockInfo) iter.next();
-			lockManager.release(info.lock, this);
-			if (info.abortLsn != DbLsn.NULL_LSN && !info.abortKnownDeleted) {
-			    Long longLsn = new Long(info.abortLsn);
-			    if (!alreadyCountedLsnSet.contains(longLsn)) {
-				logManager.countObsoleteNode(info.abortLsn, null);
-				alreadyCountedLsnSet.add(longLsn);
-			    }
+					long commitLsn = DbLsn.NULL_LSN;
+					synchronized (this) {
+				checkState(false);
+				if (checkCursorsForClose()) {
+						throw new DatabaseException(
+							"Transaction " + id + " commit failed because there were open cursors.");
+				}
+				if (handleLockToHandleMap != null) {
+						Iterator handleLockIter = handleLockToHandleMap.entrySet().iterator();
+						while (handleLockIter.hasNext()) {
+					Map.Entry entry = (Map.Entry) handleLockIter.next();
+					transferHandleLockToHandleSet((Long) entry.getKey(), (Set) entry.getValue());
+						}
+				}
+				LogManager logManager = envImpl.getLogManager();
+				int numReadLocks = clearReadLocks();
+				int numWriteLocks = 0;
+				if (writeInfo != null) {
+						numWriteLocks = writeInfo.size();
+						TxnCommit commitRecord = new TxnCommit(id, lastLoggedLsn);
+						if (flushSyncBehavior == TXN_SYNC) {
+					commitLsn = logManager.logForceFlush(commitRecord, true);
+						} else if (flushSyncBehavior == TXN_WRITE_NOSYNC) {
+					commitLsn = logManager.logForceFlush(commitRecord, false);
+						} else {
+					commitLsn = logManager.log(commitRecord);
+						}
+						Label806:
+setDeletedDatabaseState(true);
+			//original();
+ //this.hook806();
+						Set alreadyCountedLsnSet = new HashSet();
+						Iterator iter = writeInfo.values().iterator();
+						while (iter.hasNext()) {
+					WriteLockInfo info = (WriteLockInfo) iter.next();
+					lockManager.release(info.lock, this);
+					if (info.abortLsn != DbLsn.NULL_LSN && !info.abortKnownDeleted) {
+							Long longLsn = new Long(info.abortLsn);
+							if (!alreadyCountedLsnSet.contains(longLsn)) {
+						logManager.countObsoleteNode(info.abortLsn, null);
+						alreadyCountedLsnSet.add(longLsn);
+							}
+					}
+						}
+						writeInfo = null;
+						this.hook803();
+				}
+				traceCommit(numWriteLocks, numReadLocks);
+					}
+					Label805:
+cleanupDatabaseImpls(true);
+		//	original();
+ //this.hook805();
+					close(true);
+					return commitLsn;
+			} catch (RunRecoveryException e) {
+					throw e;
+			} catch (Throwable t) {
+					try {
+				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
+				this.hook800(t);
+					} catch (Throwable abortT2) {
+				throw new DatabaseException("Failed while attempting to commit transaction " + id
+					+ ". The attempt to abort and clean up also failed. "
+					+ "The original exception seen from commit = " + t.getMessage()
+					+ " The exception from the cleanup = " + abortT2.getMessage(), t);
+					}
+					throw new DatabaseException("Failed while attempting to commit transaction " + id
+						+ ", aborted instead. Original exception = " + t.getMessage(), t);
 			}
-		    }
-		    writeInfo = null;
-		    this.hook803();
-		}
-		traceCommit(numWriteLocks, numReadLocks);
-	    }
-	    this.hook805();
-	    close(true);
-	    return commitLsn;
-	} catch (RunRecoveryException e) {
-	    throw e;
-	} catch (Throwable t) {
-	    try {
-		abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-		this.hook800(t);
-	    } catch (Throwable abortT2) {
-		throw new DatabaseException("Failed while attempting to commit transaction " + id
-			+ ". The attempt to abort and clean up also failed. "
-			+ "The original exception seen from commit = " + t.getMessage()
-			+ " The exception from the cleanup = " + abortT2.getMessage(), t);
-	    }
-	    throw new DatabaseException("Failed while attempting to commit transaction " + id
-		    + ", aborted instead. Original exception = " + t.getMessage(), t);
-	}
   }
 
 
@@ -339,11 +347,17 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
 		}
 		undo();
 		numReadLocks = (readLocks == null) ? 0 : clearReadLocks();
-		this.hook808();
+		Label808:
+setDeletedDatabaseState(false);
+			//original();
+ //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
 		this.hook804();
 	    }
-	    this.hook807();
+	    Label807:
+cleanupDatabaseImpls(false);
+			//original();
+ //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
 		this.hook799(numReadLocks, numWriteLocks, openCursors);
@@ -952,26 +966,17 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     
   }
 
-  // line 800 "../../../../Txn.ump"
-   protected void hook805() throws DatabaseException,RunRecoveryException,Throwable{
-    
-  }
 
-  // line 803 "../../../../Txn.ump"
-   protected void hook806() throws DatabaseException,RunRecoveryException,Throwable{
-    
-  }
-
-  // line 806 "../../../../Txn.ump"
-   protected void hook807() throws DatabaseException{
-    
-  }
-
-  // line 809 "../../../../Txn.ump"
-   protected void hook808() throws DatabaseException{
-    
-  }
-
+  /**
+   * protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
+   * }
+   * protected void hook806() throws DatabaseException, RunRecoveryException, Throwable {
+   * }
+   * protected void hook807() throws DatabaseException {
+   * }
+   * protected void hook808() throws DatabaseException {
+   * }
+   */
   // line 812 "../../../../Txn.ump"
    protected void hook809() throws DatabaseException{
     
@@ -1015,6 +1020,54 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   // line 21 "../../../../MemoryBudget_Txn.ump"
   public int getAccumulatedDelta(){
     return accumulatedDelta;
+  }
+
+
+  /**
+   * 
+   * @param dbImpl databaseImpl to remove
+   * @param deleteAtCommit true if this databaseImpl should be cleaned on commit, false if it should be cleaned on abort.
+   * @param mb environment memory budget.
+   */
+  // line 13 "../../../../DeleteOp_Txn.ump"
+   public void markDeleteAtTxnEnd(DatabaseImpl dbImpl, boolean deleteAtCommit) throws DatabaseException{
+    new Txn_markDeleteAtTxnEnd(this, dbImpl, deleteAtCommit).execute();
+  }
+
+  // line 17 "../../../../DeleteOp_Txn.ump"
+   private void setDeletedDatabaseState(boolean isCommit) throws DatabaseException{
+    if (deletedDatabases != null) {
+					Iterator iter = deletedDatabases.iterator();
+					while (iter.hasNext()) {
+				DatabaseCleanupInfo info = (DatabaseCleanupInfo) iter.next();
+				if (info.deleteAtCommit == isCommit) {
+						info.dbImpl.startDeleteProcessing();
+				}
+					}
+			}
+  }
+
+
+  /**
+   * 
+   * Cleanup leftover databaseImpls that are a by-product of database operations like removeDatabase(), truncateDatabase(). This method must be called outside the synchronization on this txn, because it calls deleteAndReleaseINs, which gets the TxnManager's allTxns latch. The checkpointer also gets the allTxns latch, and within that latch, needs to synchronize on individual txns, so we must avoid a latching hiearchy conflict.
+   */
+  // line 32 "../../../../DeleteOp_Txn.ump"
+   private void cleanupDatabaseImpls(boolean isCommit) throws DatabaseException{
+    if (deletedDatabases != null) {
+					DatabaseCleanupInfo[] infoArray;
+					synchronized (this) {
+				infoArray = new DatabaseCleanupInfo[deletedDatabases.size()];
+				deletedDatabases.toArray(infoArray);
+					}
+					for (int i = 0; i < infoArray.length; i += 1) {
+				DatabaseCleanupInfo info = infoArray[i];
+				if (info.deleteAtCommit == isCommit) {
+						info.dbImpl.releaseDeletedINs();
+				}
+					}
+					deletedDatabases = null;
+			}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1251,6 +1304,68 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     protected StringBuffer sb ;
   
     
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  @MethodObject
+  // line 4 "../../../../DeleteOp_Txn_inner.ump"
+  public static class Txn_markDeleteAtTxnEnd
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Txn_markDeleteAtTxnEnd()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../DeleteOp_Txn_inner.ump"
+    public  Txn_markDeleteAtTxnEnd(Txn _this, DatabaseImpl dbImpl, boolean deleteAtCommit){
+      this._this=_this;
+          this.dbImpl=dbImpl;
+          this.deleteAtCommit=deleteAtCommit;
+    }
+  
+    // line 11 "../../../../DeleteOp_Txn_inner.ump"
+    public void execute() throws DatabaseException{
+      synchronized (_this) {
+  						    Label797: //this.hook797();
+  						    if (_this.deletedDatabases == null) {
+  						      _this.deletedDatabases=new HashSet();
+  						      Label789: //this.hook798();
+  						    }
+  						    _this.deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,deleteAtCommit));
+  						    Label796: //this.hook796();
+  						  }
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 21 "../../../../DeleteOp_Txn_inner.ump"
+    protected Txn _this ;
+  // line 22 "../../../../DeleteOp_Txn_inner.ump"
+    protected DatabaseImpl dbImpl ;
+  // line 23 "../../../../DeleteOp_Txn_inner.ump"
+    protected boolean deleteAtCommit ;
+  // line 24 "../../../../DeleteOp_Txn_inner.ump"
+    protected int delta ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -1306,6 +1421,8 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   private final int WRITE_LOCK_OVERHEAD = MemoryBudget.HASHMAP_ENTRY_OVERHEAD + MemoryBudget.LONG_OVERHEAD ;
 // line 9 "../../../../MemoryBudget_Txn.ump"
   private int accumulatedDelta = 0 ;
+// line 5 "../../../../DeleteOp_Txn.ump"
+  private Set deletedDatabases ;
 
   
 }

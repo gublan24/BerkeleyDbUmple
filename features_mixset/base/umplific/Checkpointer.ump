@@ -139,8 +139,9 @@ class Checkpointer
 	    while (iter.hasNext()) {
 		CheckpointReference targetRef = (CheckpointReference) iter.next();
 		this.hook520();
-		this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
-		iter.remove();
+		//this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
+		Label546:
+    iter.remove();
 	    }
 	    dirtyMap.remove(currentLevel);
 	    if (currentLevel.intValue() == highestFlushLevel) {
@@ -316,8 +317,8 @@ class Checkpointer
     protected void hook545(long waitTime) throws DatabaseException {
     }
 
-    protected void hook546(SortedMap dirtyMap, boolean allowDeltas, long checkpointStart, Integer currentLevel,
-	    boolean logProvisionally, CheckpointReference targetRef) throws DatabaseException {
-    }
+ //   protected void hook546(SortedMap dirtyMap, boolean allowDeltas, long checkpointStart, Integer currentLevel,
+//	    boolean logProvisionally, CheckpointReference targetRef) throws DatabaseException {
+ //   }
 
 }

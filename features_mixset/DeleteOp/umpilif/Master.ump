@@ -1,0 +1,18 @@
+use DeleteOp_Environment.ump;
+use DeleteOp_FileSelector.ump;
+use DeleteOp_FileProcessor.ump;
+use DeleteOp_UtilizationProfile.ump;
+use DeleteOp_Cleaner.ump;
+use DeleteOp_DbRunAction.ump;
+use DeleteOp_EnvironmentImpl.ump;
+use DeleteOp_SortedLSNTreeWalker.ump;
+use DeleteOp_DatabaseImpl.ump;
+use DeleteOp_DbTree.ump;
+use DeleteOp_Locker.ump;
+use DeleteOp_BasicLocker.ump;
+use DeleteOp_Txn.ump;
+use DeleteOp_Checkpointer.ump;
+use DeleteOp_Database.ump;
+
+
+use ../ump_inner/DeleteOp_Master.ump;

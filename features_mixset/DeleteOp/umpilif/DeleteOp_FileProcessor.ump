@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.cleaner;
+
+class FileProcessor
+{
+    after Label159:processIN(IN , DatabaseImpl, long ){
+			b |= db.isDeleted();
+//	return original(db, b);
+    }
+
+    after Label160:processIN(IN , DatabaseImpl, long ){
+			cleaner.addPendingDB(db);
+			//original(db);
+    }
+
+}

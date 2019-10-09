@@ -1,0 +1,33 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/txn/Txn.java
+namespace com.sleepycat.je.txn;
+class Txn {
+  @MethodObject static class Txn_markDeleteAtTxnEnd {
+      Txn_markDeleteAtTxnEnd(    Txn _this,    DatabaseImpl dbImpl,    boolean deleteAtCommit){
+        this._this=_this;
+        this.dbImpl=dbImpl;
+        this.deleteAtCommit=deleteAtCommit;
+      }
+      void execute() throws DatabaseException {
+				synchronized (_this) {
+						    Label797: //this.hook797();
+						    if (_this.deletedDatabases == null) {
+						      _this.deletedDatabases=new HashSet();
+						      Label789: //this.hook798();
+						    }
+						    _this.deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,deleteAtCommit));
+						    Label796: //this.hook796();
+						  }
+      }
+      protected Txn _this;
+      protected DatabaseImpl dbImpl;
+      protected boolean deleteAtCommit;
+      protected int delta;
+
+     // protected void hook796() throws DatabaseException {
+     // }
+     // protected void hook797() throws DatabaseException {
+     // }
+     // protected void hook798() throws DatabaseException {
+     // }
+    }
+}

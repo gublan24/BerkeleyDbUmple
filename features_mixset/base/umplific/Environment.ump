@@ -233,51 +233,51 @@ class Environment
 
     private void openDb(Transaction txn, Database newDb, String databaseName, DatabaseConfig dbConfig,
 	    boolean needWritableLockerForInit) throws DatabaseException {
-	checkEnv();
-	DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-	this.hook58(databaseName, dbConfig);
-	validateDbConfigAgainstEnv(dbConfig, databaseName);
-	Locker locker = null;
-	boolean operationOk = false;
-	boolean dbIsClosing = false;
-	try {
-	    boolean isWritableLocker = true;
-	    if (needWritableLockerForInit) {
-		locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
-		isWritableLocker = true;
-	    } else {
-		locker = LockerFactory.getReadableLocker(this, txn, dbConfig.getTransactional(), true, false);
-		isWritableLocker = !dbConfig.getTransactional() || locker.isTransactional();
-	    }
-	    DatabaseImpl database = environmentImpl.getDb(locker, databaseName, newDb);
-	    boolean databaseExists = false;
-	    databaseExists = this.hook59(database, databaseExists);
-	    if (databaseExists) {
-		if (dbConfig.getAllowCreate() && dbConfig.getExclusiveCreate()) {
-		    dbIsClosing = true;
-		    throw new DatabaseException("Database " + databaseName + " already exists");
-		}
-		newDb.initExisting(this, locker, database, dbConfig);
-	    } else {
-		if (dbConfig.getAllowCreate()) {
-		    if (!isWritableLocker) {
-			locker.operationEnd(OperationStatus.SUCCESS);
-			locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
-			isWritableLocker = true;
-		    }
-		    newDb.initNew(this, locker, databaseName, dbConfig);
-		} else {
-		    throw new DatabaseNotFoundException("Database " + databaseName + " not found.");
-		}
-	    }
-	    operationOk = true;
-	    addReferringHandle(newDb);
-	} finally {
-	    if (locker != null) {
-		locker.setHandleLockOwner(operationOk, newDb, dbIsClosing);
-		locker.operationEnd(operationOk);
-	    }
-	}
+			checkEnv();
+			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
+			this.hook58(databaseName, dbConfig);
+			validateDbConfigAgainstEnv(dbConfig, databaseName);
+			Locker locker = null;
+			boolean operationOk = false;
+			boolean dbIsClosing = false;
+			try {
+					boolean isWritableLocker = true;
+					if (needWritableLockerForInit) {
+				locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
+				isWritableLocker = true;
+					} else {
+				locker = LockerFactory.getReadableLocker(this, txn, dbConfig.getTransactional(), true, false);
+				isWritableLocker = !dbConfig.getTransactional() || locker.isTransactional();
+					}
+					DatabaseImpl database = environmentImpl.getDb(locker, databaseName, newDb);
+					boolean databaseExists = false;
+					Label59: //databaseExists = this.hook59(database, databaseExists);
+					if (databaseExists) {
+				if (dbConfig.getAllowCreate() && dbConfig.getExclusiveCreate()) {
+						dbIsClosing = true;
+						throw new DatabaseException("Database " + databaseName + " already exists");
+				}
+				newDb.initExisting(this, locker, database, dbConfig);
+					} else {
+				if (dbConfig.getAllowCreate()) {
+						if (!isWritableLocker) {
+					locker.operationEnd(OperationStatus.SUCCESS);
+					locker = LockerFactory.getWritableLocker(this, txn, dbConfig.getTransactional(), true, null);
+					isWritableLocker = true;
+						}
+						newDb.initNew(this, locker, databaseName, dbConfig);
+				} else {
+						throw new DatabaseNotFoundException("Database " + databaseName + " not found.");
+				}
+					}
+					operationOk = true;
+					addReferringHandle(newDb);
+			} finally {
+					if (locker != null) {
+				locker.setHandleLockOwner(operationOk, newDb, dbIsClosing);
+				locker.operationEnd(operationOk);
+					}
+			}
     }
 
     private void validateDbConfigAgainstEnv(DatabaseConfig dbConfig, String databaseName) throws DatabaseException {

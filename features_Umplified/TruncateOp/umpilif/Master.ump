@@ -1,7 +1,0 @@
-use Environment.ump;
-use EnvironmentImpl.ump;
-use TruncateResult.ump;
-use DbTree.ump;
-use Database.ump;
-
-use ../ump_inner/Master.ump;

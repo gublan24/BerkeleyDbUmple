@@ -49,6 +49,7 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
 // line 3 "../../../../Evictor_UtilizationProfile.ump"
 // line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
+// line 3 "../../../../DeleteOp_UtilizationProfile.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -575,7 +576,10 @@ cursor.evict();
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    b = this.hook186(db, b);
+	    Label186:
+b |= db.isDeleted();
+			//return original(db, b);
+ //b = this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
@@ -638,13 +642,11 @@ cursor.evict();
 	throw new ReturnBoolean(false);
   }
 
-  // line 700 "../../../../UtilizationProfile.ump"
-   protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException{
-    return b;
-  }
-
 
   /**
+   * protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
+   * return b;
+   * }
    * protected void hook187(CursorImpl cursor) throws DatabaseException {
    * }
    * protected void hook188(CursorImpl cursor) throws DatabaseException {

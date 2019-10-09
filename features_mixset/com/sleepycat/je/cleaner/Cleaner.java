@@ -37,12 +37,18 @@ import java.util.Arrays;
 import java.io.IOException;
 import com.sleepycat.je.dbi.*;
 
+/**
+ * Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/cleaner/Cleaner.java
+ * namespace com.sleepycat.je.cleaner;
+ */
 // line 3 "../../../../Cleaner.ump"
 // line 3 "../../../../Cleaner_static.ump"
 // line 3 "../../../../EnvironmentLocking_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner_inner.ump"
 // line 3 "../../../../Evictor_Cleaner.ump"
+// line 3 "../../../../DeleteOp_Cleaner.ump"
+// line 3 "../../../../DeleteOp_Cleaner_inner.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -488,9 +494,17 @@ env.getFileManager().releaseExclusiveLock();
 	try {
 	    this.hook97();
 	    boolean c = db == null;
-	    c = this.hook112(db, c);
+	    //c = this.hook112(db, c);
+      Label112:
+c = c || db.isDeleted();
+			//return original(db, c);
+
 	    if (c) {
-		this.hook113(db);
+		//this.hook113(db);
+    Label113:
+addPendingDB(db);
+			//original(db);
+
 		this.hook98();
 		obsolete = true;
 		completed = true;
@@ -552,7 +566,7 @@ env.getFileManager().releaseExclusiveLock();
    * @param dclRefis the reference to the DupCountLN.
    * @param proactiveMigrationperform proactive migration if needed; this is false during asplit, to reduce the delay in the user operation.
    */
-  // line 403 "../../../../Cleaner.ump"
+  // line 405 "../../../../Cleaner.ump"
    public void lazyMigrateDupCountLN(DIN din, ChildReference dclRef, boolean proactiveMigration) throws DatabaseException{
     DatabaseImpl db = din.getDatabase();
 	boolean migrateFlag = dclRef.getMigrate();
@@ -575,7 +589,7 @@ env.getFileManager().releaseExclusiveLock();
    * @param childLsnis the LSN of the LN.
    * @return whether to migrate the LN.
    */
-  // line 424 "../../../../Cleaner.ump"
+  // line 426 "../../../../Cleaner.ump"
    private boolean shouldMigrateLN(boolean migrateFlag, boolean isResident, boolean proactiveMigration, boolean isBinInDupDb, long childLsn){
     boolean doMigration = false;
 	if (migrateFlag) {
@@ -600,7 +614,7 @@ env.getFileManager().releaseExclusiveLock();
    * 
    * Migrate an LN in the given BIN entry, if it is not obsolete. The BIN is latched on entry to this method and is left latched when it returns.
    */
-  // line 447 "../../../../Cleaner.ump"
+  // line 449 "../../../../Cleaner.ump"
    private void migrateLN(DatabaseImpl db, long lsn, BIN bin, int index, boolean wasCleaned, boolean isPending, long lockedPendingNodeId, String cleanAction) throws DatabaseException{
     boolean obsolete = false;
 	boolean migrated = false;
@@ -688,7 +702,7 @@ env.getFileManager().releaseExclusiveLock();
    * 
    * Migrate the DupCountLN for the given DIN. The DIN is latched on entry to this method and is left latched when it returns.
    */
-  // line 533 "../../../../Cleaner.ump"
+  // line 535 "../../../../Cleaner.ump"
    private void migrateDupCountLN(DatabaseImpl db, long lsn, DIN parentDIN, ChildReference dclRef, boolean wasCleaned, boolean isPending, long lockedPendingNodeId, String cleanAction) throws DatabaseException{
     boolean obsolete = false;
 	boolean migrated = false;
@@ -760,7 +774,7 @@ env.getFileManager().releaseExclusiveLock();
    * 
    * Returns the main key for a given BIN entry.
    */
-  // line 602 "../../../../Cleaner.ump"
+  // line 604 "../../../../Cleaner.ump"
    private byte[] getLNMainKey(BIN bin, int index) throws DatabaseException{
     if (bin.containsDuplicates()) {
 	    return bin.getDupKey();
@@ -774,7 +788,7 @@ env.getFileManager().releaseExclusiveLock();
    * 
    * Returns the duplicate key for a given BIN entry.
    */
-  // line 613 "../../../../Cleaner.ump"
+  // line 615 "../../../../Cleaner.ump"
    private byte[] getLNDupKey(BIN bin, int index, LN ln) throws DatabaseException{
     DatabaseImpl db = bin.getDatabase();
 	if (!db.getSortedDuplicates() || ln.containsDuplicates()) {
@@ -786,137 +800,135 @@ env.getFileManager().releaseExclusiveLock();
 	}
   }
 
-  // line 624 "../../../../Cleaner.ump"
+  // line 626 "../../../../Cleaner.ump"
    protected void hook88(long fileNumValue) throws DatabaseException{
     
   }
 
-  // line 627 "../../../../Cleaner.ump"
+  // line 629 "../../../../Cleaner.ump"
    protected void hook89(DatabaseException DBE) throws DatabaseException{
     
   }
 
-  // line 630 "../../../../Cleaner.ump"
+  // line 632 "../../../../Cleaner.ump"
    protected void hook90() throws DatabaseException{
     
   }
 
-  // line 633 "../../../../Cleaner.ump"
+  // line 635 "../../../../Cleaner.ump"
    protected void hook91(LN ln, boolean obsolete, boolean completed) throws DatabaseException{
     
   }
 
-  // line 637 "../../../../Cleaner.ump"
+  // line 639 "../../../../Cleaner.ump"
    protected void hook92(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln) throws DatabaseException{
     
   }
 
-  // line 641 "../../../../Cleaner.ump"
+  // line 643 "../../../../Cleaner.ump"
    protected void hook93(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln) throws DatabaseException{
     
   }
 
-  // line 644 "../../../../Cleaner.ump"
+  // line 646 "../../../../Cleaner.ump"
    protected void hook94(DbConfigManager cm) throws DatabaseException{
     
   }
 
-  // line 647 "../../../../Cleaner.ump"
+  // line 649 "../../../../Cleaner.ump"
    protected void hook95(BIN bin, DIN parentDIN) throws DatabaseException{
     
   }
 
-  // line 650 "../../../../Cleaner.ump"
+  // line 652 "../../../../Cleaner.ump"
    protected void hook96() throws DatabaseException{
     
   }
 
-  // line 653 "../../../../Cleaner.ump"
+  // line 655 "../../../../Cleaner.ump"
    protected void hook97() throws DatabaseException{
     
   }
 
-  // line 656 "../../../../Cleaner.ump"
+  // line 658 "../../../../Cleaner.ump"
    protected void hook98() throws DatabaseException{
     
   }
 
-  // line 659 "../../../../Cleaner.ump"
+  // line 661 "../../../../Cleaner.ump"
    protected void hook99() throws DatabaseException{
     
   }
 
-  // line 662 "../../../../Cleaner.ump"
+  // line 664 "../../../../Cleaner.ump"
    protected void hook100() throws DatabaseException{
     
   }
 
-  // line 665 "../../../../Cleaner.ump"
+  // line 667 "../../../../Cleaner.ump"
    protected void hook101(){
     
   }
 
-  // line 668 "../../../../Cleaner.ump"
+  // line 670 "../../../../Cleaner.ump"
    protected void hook102(){
     
   }
 
-  // line 671 "../../../../Cleaner.ump"
+  // line 673 "../../../../Cleaner.ump"
    protected void hook103(){
     
   }
 
-  // line 674 "../../../../Cleaner.ump"
+  // line 676 "../../../../Cleaner.ump"
    protected void hook104() throws DatabaseException{
     
   }
 
-  // line 677 "../../../../Cleaner.ump"
+  // line 679 "../../../../Cleaner.ump"
    protected void hook105(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 680 "../../../../Cleaner.ump"
+  // line 682 "../../../../Cleaner.ump"
    protected void hook106(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 683 "../../../../Cleaner.ump"
+  // line 685 "../../../../Cleaner.ump"
    protected void hook107(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 686 "../../../../Cleaner.ump"
+  // line 688 "../../../../Cleaner.ump"
    protected void hook108(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 689 "../../../../Cleaner.ump"
+  // line 691 "../../../../Cleaner.ump"
    protected void hook109() throws DatabaseException{
     
   }
 
-  // line 692 "../../../../Cleaner.ump"
+  // line 694 "../../../../Cleaner.ump"
    protected void hook110(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 695 "../../../../Cleaner.ump"
+  // line 697 "../../../../Cleaner.ump"
    protected void hook111(boolean wasCleaned) throws DatabaseException{
     
   }
 
-  // line 698 "../../../../Cleaner.ump"
-   protected boolean hook112(DatabaseImpl db, boolean c) throws DatabaseException{
-    return c;
-  }
 
-  // line 702 "../../../../Cleaner.ump"
-   protected void hook113(DatabaseImpl db) throws DatabaseException{
-    
-  }
-
-  // line 706 "../../../../Cleaner.ump"
+  /**
+   * protected boolean hook112(DatabaseImpl db, boolean c) throws DatabaseException {
+   * return c;
+   * }
+   * protected void hook113(DatabaseImpl db) throws DatabaseException {
+   * }
+   */
+  // line 708 "../../../../Cleaner.ump"
    protected void hook115(Set safeFiles) throws DatabaseException{
     for (Iterator i = safeFiles.iterator(); i.hasNext();) {
 	    Long fileNum = (Long) i.next();
@@ -970,6 +982,22 @@ env.getFileManager().releaseExclusiveLock();
   }
 
 
+  /**
+   * 
+   * Adds the DB ID to the pending DB set if it is being deleted but deletion is not yet complete.
+   */
+  // line 9 "../../../../DeleteOp_Cleaner.ump"
+  public void addPendingDB(DatabaseImpl db){
+    if (db != null && db.isDeleted() && !db.isDeleteFinished()) {
+					DatabaseId id = db.getId();
+					if (fileSelector.addPendingDB(id)) {
+							//this.hook85(id);
+							Label85: ;
+					}
+			}
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+
@@ -992,8 +1020,10 @@ env.getFileManager().releaseExclusiveLock();
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
   // line 4 "../../../../CriticalEviction_Cleaner_inner.ump"
+  // line 4 "../../../../DeleteOp_Cleaner_inner.ump"
   public static class Cleaner_processPending
   {
   
@@ -1043,6 +1073,19 @@ env.getFileManager().releaseExclusiveLock();
               _this.processPendingLN(ln,db1,key,dupKey,location);
             }
           }
+      // line 6 "../../../../DeleteOp_Cleaner_inner.ump"
+      //original();
+              pendingDBs=_this.fileSelector.getPendingDBs();
+              if (pendingDBs != null) {
+                for (int i=0; i < pendingDBs.length; i+=1) {
+                  dbId2=pendingDBs[i];
+                  db2=dbMapTree.getDb(dbId2,_this.lockTimeout);
+                  if (db2 == null || db2.isDeleteFinished()) {
+                    _this.fileSelector.removePendingDB(dbId2);
+                  }
+                }
+              }
+      // END OF UMPLE AFTER INJECTION
     }
   
     // line 40 "../../../../Cleaner_static.ump"
@@ -1119,7 +1162,7 @@ env.getFileManager().releaseExclusiveLock();
 // line 99 "../../../../Cleaner.ump"
   private Object deleteFileLock ;
 
-// line 357 "../../../../Cleaner.ump"
+// line 359 "../../../../Cleaner.ump"
   public void lazyMigrateLNs (final BIN bin, boolean proactiveMigration) throws DatabaseException 
   {
     DatabaseImpl db = bin.getDatabase();

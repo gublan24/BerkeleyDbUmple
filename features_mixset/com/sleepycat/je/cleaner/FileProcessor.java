@@ -41,6 +41,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../FileProcessor_static.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor_inner.ump"
+// line 3 "../../../../DeleteOp_FileProcessor.ump"
+// line 3 "../../../../DeleteOp_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -221,7 +223,40 @@ public class FileProcessor extends DaemonThread
 	    boolean obsolete = false;
 	    boolean dirtied = false;
 	    boolean completed = false;
-	    this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
+	    //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
+      Label125:
+      boolean b = db == null;
+			//b = this.hook159(db, b);
+      Label159:
+b |= db.isDeleted();
+//	return original(db, b);
+
+			if (b) {
+					//this.hook160(db);
+          Label160:
+cleaner.addPendingDB(db);
+			//original(db);
+
+					this.hook151();
+					obsolete = true;
+					completed = true;
+					throw new ReturnVoid();
+			}
+			Tree tree = db.getTree();
+			assert tree != null;
+			IN inInTree = findINInTree(tree, db, inClone, lsn);
+			if (inInTree == null) {
+					this.hook152();
+					obsolete = true;
+			} else {
+					this.hook153();
+					inInTree.setDirty(true);
+					inInTree.setProhibitNextDelta();
+					this.hook136(inInTree);
+					dirtied = true;
+			}
+			completed = true;
+      //End of hook125
 	} catch (ReturnVoid r) {
 	    return;
 	}
@@ -232,7 +267,7 @@ public class FileProcessor extends DaemonThread
    * 
    * Given a clone of an IN that has been taken out of the log, try to find it in the tree and verify that it is the current one in the log. Returns the node in the tree if it is found and it is current re: LSN's. Otherwise returns null if the clone is not found in the tree or it's not the latest version. Caller is responsible for unlatching the returned IN.
    */
-  // line 273 "../../../../FileProcessor.ump"
+  // line 300 "../../../../FileProcessor.ump"
    private IN findINInTree(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException{
     try {
 	    if (inClone.isDbRoot()) {
@@ -257,7 +292,7 @@ public class FileProcessor extends DaemonThread
    * 
    * Check if the cloned IN is the same node as the root in tree. Return the real root if it is, null otherwise. If non-null is returned, the returned IN (the root) is latched -- caller is responsible for unlatching it.
    */
-  // line 295 "../../../../FileProcessor.ump"
+  // line 322 "../../../../FileProcessor.ump"
    private IN isRoot(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException{
     RootDoWork rdw = new RootDoWork(db, inClone, lsn);
 	return tree.withRootLatchedShared(rdw);
@@ -268,61 +303,40 @@ public class FileProcessor extends DaemonThread
    * 
    * XXX: Was this intended to override Thread.toString()? If so it no longer does, because we separated Thread from DaemonThread.
    */
-  // line 303 "../../../../FileProcessor.ump"
+  // line 330 "../../../../FileProcessor.ump"
    public String toString(){
     StringBuffer sb = new StringBuffer();
 	sb.append("<Cleaner name=\"").append(name).append("\"/>");
 	return sb.toString();
   }
 
-  // line 309 "../../../../FileProcessor.ump"
+  // line 336 "../../../../FileProcessor.ump"
    protected void hook121(String traceMsg) throws DatabaseException,IOException{
     
   }
 
-  // line 312 "../../../../FileProcessor.ump"
+  // line 339 "../../../../FileProcessor.ump"
    protected void hook122(IOException IOE) throws DatabaseException{
     
   }
 
-  // line 315 "../../../../FileProcessor.ump"
+  // line 342 "../../../../FileProcessor.ump"
    protected void hook123(String traceMsg) throws DatabaseException{
     
   }
 
-  // line 319 "../../../../FileProcessor.ump"
+  // line 346 "../../../../FileProcessor.ump"
    protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed) throws DatabaseException{
     
   }
 
-  // line 323 "../../../../FileProcessor.ump"
-   protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed) throws DatabaseException{
-    boolean b = db == null;
-	b = this.hook159(db, b);
-	if (b) {
-	    this.hook160(db);
-	    this.hook151();
-	    obsolete = true;
-	    completed = true;
-	    throw new ReturnVoid();
-	}
-	Tree tree = db.getTree();
-	assert tree != null;
-	IN inInTree = findINInTree(tree, db, inClone, lsn);
-	if (inInTree == null) {
-	    this.hook152();
-	    obsolete = true;
-	} else {
-	    this.hook153();
-	    inInTree.setDirty(true);
-	    inInTree.setProhibitNextDelta();
-	    this.hook136(inInTree);
-	    dirtied = true;
-	}
-	completed = true;
-  }
 
-  // line 350 "../../../../FileProcessor.ump"
+  /**
+   * protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
+   * throws DatabaseException {
+   * }
+   */
+  // line 354 "../../../../FileProcessor.ump"
    protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result) throws DatabaseException{
     result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
 	if (!result.exactParentFound) {
@@ -348,67 +362,67 @@ public class FileProcessor extends DaemonThread
 	}
   }
 
-  // line 375 "../../../../FileProcessor.ump"
+  // line 379 "../../../../FileProcessor.ump"
    protected void hook136(IN inInTree) throws DatabaseException{
     
   }
 
-  // line 378 "../../../../FileProcessor.ump"
+  // line 382 "../../../../FileProcessor.ump"
    protected void hook138() throws DatabaseException{
     
   }
 
-  // line 381 "../../../../FileProcessor.ump"
+  // line 385 "../../../../FileProcessor.ump"
    protected String hook139(String traceMsg) throws DatabaseException,IOException{
     return traceMsg;
   }
 
-  // line 385 "../../../../FileProcessor.ump"
+  // line 389 "../../../../FileProcessor.ump"
    protected void hook140() throws DatabaseException,IOException{
     
   }
 
-  // line 388 "../../../../FileProcessor.ump"
+  // line 392 "../../../../FileProcessor.ump"
    protected String hook141(String traceMsg) throws DatabaseException{
     return traceMsg;
   }
 
-  // line 392 "../../../../FileProcessor.ump"
+  // line 396 "../../../../FileProcessor.ump"
    protected void hook142() throws DatabaseException{
     
   }
 
-  // line 395 "../../../../FileProcessor.ump"
+  // line 399 "../../../../FileProcessor.ump"
    protected void hook143() throws DatabaseException{
     
   }
 
-  // line 398 "../../../../FileProcessor.ump"
+  // line 402 "../../../../FileProcessor.ump"
    protected void hook144() throws DatabaseException{
     
   }
 
-  // line 401 "../../../../FileProcessor.ump"
+  // line 405 "../../../../FileProcessor.ump"
    protected void hook151() throws DatabaseException{
     
   }
 
-  // line 404 "../../../../FileProcessor.ump"
+  // line 408 "../../../../FileProcessor.ump"
    protected void hook152() throws DatabaseException{
     
   }
 
-  // line 407 "../../../../FileProcessor.ump"
+  // line 411 "../../../../FileProcessor.ump"
    protected void hook153() throws DatabaseException{
     
   }
 
-  // line 410 "../../../../FileProcessor.ump"
+  // line 414 "../../../../FileProcessor.ump"
    protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException{
     return b;
   }
 
-  // line 414 "../../../../FileProcessor.ump"
+  // line 418 "../../../../FileProcessor.ump"
    protected void hook160(DatabaseImpl db) throws DatabaseException{
     
   }
@@ -483,6 +497,7 @@ public class FileProcessor extends DaemonThread
     @MethodObject
   // line 28 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
+  // line 16 "../../../../DeleteOp_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -531,7 +546,10 @@ public class FileProcessor extends DaemonThread
   
           this.hook119();
           this.hook127();
-          this.hook154();
+          Label154:
+  checkPendingDbSet=new HashSet();
+          //original();
+   //this.hook154();
           dbCache=new HashMap();
           try {
             reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
@@ -567,7 +585,13 @@ public class FileProcessor extends DaemonThread
               }
               if (isObsolete) {
                 this.hook147();
-                this.hook156();
+                Label156:
+  dbId1=reader.getDatabaseId();
+          if (dbId1 != null) {
+            checkPendingDbSet.add(dbId1);
+          }
+          //original();
+   //this.hook156();
                 continue;
               }
               this.hook120();
@@ -599,7 +623,14 @@ public class FileProcessor extends DaemonThread
               }
             }
             this.hook129();
-            this.hook155();
+            Label155:
+  for (Iterator i=checkPendingDbSet.iterator(); i.hasNext(); ) {
+            dbId=(DatabaseId)i.next();
+            db=dbMapTree.getDb(dbId,_this.cleaner.lockTimeout,dbCache);
+            _this.cleaner.addPendingDB(db);
+          }
+          //original();
+   //this.hook155();
             this.hook145();
           }
       finally {
@@ -779,7 +810,9 @@ public class FileProcessor extends DaemonThread
   
   
   @MethodObject
+    @MethodObject
   // line 195 "../../../../FileProcessor_static.ump"
+  // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
   {
   
@@ -827,9 +860,15 @@ public class FileProcessor extends DaemonThread
           parentDIN=null;
           try {
             b=db == null;
-            this.hook157();
+            Label157:
+  b|=db.isDeleted();
+          //original();
+   //this.hook157();
             if (b) {
-              this.hook158();
+              Label158:
+  _this.cleaner.addPendingDB(db);
+          //original();
+   //this.hook158();
               this.hook148();
               obsolete=true;
               completed=true;

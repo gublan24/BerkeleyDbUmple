@@ -32,15 +32,16 @@ class FileSelector
     private Set lowUtilizationFiles;
 
     FileSelector() {
-	toBeCleanedFiles = new TreeSet();
-	cleanedFiles = new HashSet();
-	checkpointedFiles = new HashSet();
-	fullyProcessedFiles = new HashSet();
-	safeToDeleteFiles = new HashSet();
-	pendingLNs = new HashMap();
-	this.hook163();
-	lowUtilizationFiles = Collections.EMPTY_SET;
-	beingCleanedFiles = new HashSet();
+			toBeCleanedFiles = new TreeSet();
+			cleanedFiles = new HashSet();
+			checkpointedFiles = new HashSet();
+			fullyProcessedFiles = new HashSet();
+			safeToDeleteFiles = new HashSet();
+			pendingLNs = new HashMap();
+			//this.hook163();
+			Label163:
+			lowUtilizationFiles = Collections.EMPTY_SET;
+			beingCleanedFiles = new HashSet();
     }
 
     /** 
@@ -136,12 +137,12 @@ class FileSelector
      * Returns a copy of the cleaned and fully-processed files at the time a checkpoint starts.
      */
     synchronized Set[] getFilesAtCheckpointStart() {
-	anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
-	this.hook164();
-	Set[] files = new Set[2];
-	files[0] = (cleanedFiles.size() > 0) ? (new HashSet(cleanedFiles)) : null;
-	files[1] = (fullyProcessedFiles.size() > 0) ? (new HashSet(fullyProcessedFiles)) : null;
-	return (files[0] != null || files[1] != null) ? files : null;
+			anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
+			Label164: //this.hook164();
+			Set[] files = new Set[2];
+			files[0] = (cleanedFiles.size() > 0) ? (new HashSet(cleanedFiles)) : null;
+			files[1] = (fullyProcessedFiles.size() > 0) ? (new HashSet(fullyProcessedFiles)) : null;
+			return (files[0] != null || files[1] != null) ? files : null;
     }
 
     /** 
@@ -220,22 +221,22 @@ class FileSelector
      * If there are no pending LNs or DBs outstanding, move the checkpointed files to the fully-processed set.  The check for pending LNs/DBs and the copying of the checkpointed files must be done atomically in a synchronized block.  All methods that call this method are synchronized.
      */
     private void updateProcessedFiles() {
-	boolean b = pendingLNs.isEmpty();
-	b = this.hook165(b);
-	if (b) {
-	    fullyProcessedFiles.addAll(checkpointedFiles);
-	    checkpointedFiles.clear();
-	}
+			boolean b = pendingLNs.isEmpty();
+			Label165: //b = this.hook165(b);
+			if (b) {
+					fullyProcessedFiles.addAll(checkpointedFiles);
+					checkpointedFiles.clear();
+			}
     }
 
-    protected void hook163() {
-    }
+//    protected void hook163() {
+  //  }
 
-    protected void hook164() {
-    }
+    //protected void hook164() {
+    //}
 
-    protected boolean hook165(boolean b) {
-	return b;
-    }
+ //   protected boolean hook165(boolean b) {
+//	return b;
+ //   }
 
 }

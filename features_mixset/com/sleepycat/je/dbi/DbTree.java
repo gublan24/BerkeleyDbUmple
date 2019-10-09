@@ -40,6 +40,9 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../DbTree.ump"
 // line 3 "../../../../DbTree_static.ump"
 // line 3 "../../../../Evictor_DbTree.ump"
+// line 3 "../../../../RenameOp_DbTree.ump"
+// line 3 "../../../../Truncate_DbTree.ump"
+// line 3 "../../../../DeleteOp_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -691,6 +694,184 @@ idCursor.setAllowEviction(allowEviction);
   // line 660 "../../../../DbTree.ump"
    protected void hook305(CursorImpl cursor) throws DatabaseException{
     
+  }
+
+
+  /**
+   * 
+   * Return true if the operation succeeded, false otherwise.
+   */
+  // line 9 "../../../../RenameOp_DbTree.ump"
+  public boolean dbRename(Locker locker, String databaseName, String newName) throws DatabaseException{
+    CursorImpl nameCursor = null;
+			try {
+					NameLockResult result = lockNameLN(locker, databaseName, "rename");
+					nameCursor = result.nameCursor;
+					if (nameCursor == null) {
+				return false;
+					} else {
+				nameCursor.delete();
+				nameCursor.putLN(newName.getBytes("UTF-8"), new NameLN(result.dbImpl.getId()), false);
+				result.dbImpl.setDebugDatabaseName(newName);
+				return true;
+					}
+			} catch (UnsupportedEncodingException UEE) {
+					throw new DatabaseException(UEE);
+			} finally {
+					if (nameCursor != null) {
+				//this.hook298(nameCursor);
+        Label298:
+				nameCursor.close();
+					}
+			}
+  }
+
+
+  /**
+   * 
+   * To truncate, remove the database named by databaseName and create a new database in its place.
+   * @param returnCountif true, must return the count of records in the database,which can be an expensive option.
+   */
+  // line 10 "../../../../Truncate_DbTree.ump"
+  public long truncate(Locker locker, String databaseName, boolean returnCount) throws DatabaseException{
+    CursorImpl nameCursor = null;
+			Locker autoTxn = null;
+			try {
+					NameLockResult result = lockNameLN(locker, databaseName, "truncate");
+					nameCursor = result.nameCursor;
+					if (nameCursor == null) {
+				return 0;
+					} else {
+				DatabaseId newId = new DatabaseId(getNextDbId());
+				DatabaseImpl newDb = (DatabaseImpl) result.dbImpl.clone();
+				newDb.setId(newId);
+				newDb.setTree(new Tree(newDb));
+				CursorImpl idCursor = null;
+				boolean operationOk = false;
+				try {
+						autoTxn = createLocker(envImpl);
+						idCursor = new CursorImpl(idDatabase, autoTxn);
+						idCursor.putLN(newId.getBytes(), new MapLN(newDb), false);
+						operationOk = true;
+				} finally {
+						if (idCursor != null) {
+					idCursor.close();
+						}
+						if (autoTxn != null) {
+					autoTxn.operationEnd(operationOk);
+						}
+				}
+				result.nameLN.setId(newDb.getId());
+				long recordCount = 0;
+				if (returnCount) {
+						recordCount = result.dbImpl.countRecords();
+				}
+				DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
+				nameCursor.putCurrent(dataDbt, null, null);
+				//this.hook296(locker, result, newDb);
+        Label296:
+				return recordCount;
+					}
+			} catch (CloneNotSupportedException CNSE) {
+					throw new DatabaseException(CNSE);
+			} finally {
+					if (nameCursor != null) {
+						//this.hook294(nameCursor);
+				    Label294:
+						nameCursor.close();
+					}
+			}
+  }
+
+
+  /**
+   * 
+   * Truncate a database named by databaseName. Return the new DatabaseImpl object that represents the truncated database. The old one is marked as deleted.
+   * @deprecated This method used by Database.truncate()
+   */
+  // line 64 "../../../../Truncate_DbTree.ump"
+  public TruncateResult truncate(Locker locker, DatabaseImpl oldDatabase, boolean returnCount) throws DatabaseException{
+    CursorImpl nameCursor = new CursorImpl(nameDatabase, locker);
+			try {
+					String databaseName = getDbName(oldDatabase.getId());
+					DatabaseEntry keyDbt = new DatabaseEntry(databaseName.getBytes("UTF-8"));
+					boolean found = (nameCursor.searchAndPosition(keyDbt, null, SearchMode.SET, LockType.WRITE)
+						& CursorImpl.FOUND) != 0;
+					if (!found) {
+				throw new DatabaseException("Database " + databaseName + " not found in map tree");
+					}
+					NameLN nameLN = (NameLN) nameCursor.getCurrentLNAlreadyLatched(LockType.WRITE);
+					assert nameLN != null;
+					int handleCount = oldDatabase.getReferringHandleCount();
+					if (handleCount > 1) {
+				throw new DatabaseException(
+					"Can't truncate database " + databaseName + "," + handleCount + " open databases exist");
+					}
+					DatabaseImpl newDb;
+					DatabaseId newId = new DatabaseId(getNextDbId());
+					newDb = (DatabaseImpl) oldDatabase.clone();
+					newDb.setId(newId);
+					newDb.setTree(new Tree(newDb));
+					CursorImpl idCursor = null;
+					boolean operationOk = false;
+					Locker autoTxn = null;
+					try {
+				autoTxn = createLocker(envImpl);
+				idCursor = new CursorImpl(idDatabase, autoTxn);
+				idCursor.putLN(newId.getBytes(), new MapLN(newDb), false);
+				operationOk = true;
+					} finally {
+				if (idCursor != null) {
+						idCursor.close();
+				}
+				if (autoTxn != null) {
+						autoTxn.operationEnd(operationOk);
+				}
+					}
+					nameLN.setId(newDb.getId());
+					long count = 0;
+					if (returnCount) {
+				count = oldDatabase.countRecords();
+					}
+					//this.hook297(locker, oldDatabase);
+          Label297:
+					DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
+					nameCursor.putCurrent(dataDbt, null, null);
+					return new TruncateResult(newDb, (int) count);
+			} catch (CloneNotSupportedException CNSE) {
+					throw new DatabaseException(CNSE);
+			} catch (UnsupportedEncodingException UEE) {
+					throw new DatabaseException(UEE);
+			} finally {
+					//this.hook295(nameCursor);
+					Label295:
+					nameCursor.close();
+			}
+  }
+
+
+  /**
+   * 
+   * Remove the database by deleting the nameLN.
+   */
+  // line 9 "../../../../DeleteOp_DbTree.ump"
+  public void dbRemove(Locker locker, String databaseName) throws DatabaseException{
+    CursorImpl nameCursor = null;
+			try {
+					NameLockResult result = lockNameLN(locker, databaseName, "remove");
+					nameCursor = result.nameCursor;
+					if (nameCursor == null) {
+				return;
+					} else {
+				nameCursor.delete();
+				locker.markDeleteAtTxnEnd(result.dbImpl, true);
+					}
+			} finally {
+					if (nameCursor != null) {
+							Label293://this.hook293(nameCursor);
+							nameCursor.close();
+					}
+			}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

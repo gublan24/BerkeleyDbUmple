@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.HashSet;
 
 // line 3 "../../../../BasicLocker.ump"
+// line 3 "../../../../DeleteOp_BasicLocker.ump"
 public class BasicLocker extends Locker
 {
 
@@ -309,6 +310,13 @@ public class BasicLocker extends Locker
   // line 220 "../../../../BasicLocker.ump"
   public void moveWriteToReadLock(long nodeId, Lock lock){
     
+  }
+
+  // line 6 "../../../../DeleteOp_BasicLocker.ump"
+   public void markDeleteAtTxnEnd(DatabaseImpl db, boolean deleteAtCommit) throws DatabaseException{
+    if (deleteAtCommit) {
+					db.deleteAndReleaseINs();
+			}
   }
   
   //------------------------

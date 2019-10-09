@@ -260,7 +260,34 @@ class FileProcessor
 	    boolean obsolete = false;
 	    boolean dirtied = false;
 	    boolean completed = false;
-	    this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
+	    //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
+      Label125:
+      boolean b = db == null;
+			//b = this.hook159(db, b);
+      Label159:
+			if (b) {
+					//this.hook160(db);
+          Label160:
+					this.hook151();
+					obsolete = true;
+					completed = true;
+					throw new ReturnVoid();
+			}
+			Tree tree = db.getTree();
+			assert tree != null;
+			IN inInTree = findINInTree(tree, db, inClone, lsn);
+			if (inInTree == null) {
+					this.hook152();
+					obsolete = true;
+			} else {
+					this.hook153();
+					inInTree.setDirty(true);
+					inInTree.setProhibitNextDelta();
+					this.hook136(inInTree);
+					dirtied = true;
+			}
+			completed = true;
+      //End of hook125
 	} catch (ReturnVoid r) {
 	    return;
 	}
@@ -318,32 +345,9 @@ class FileProcessor
 	    throws DatabaseException {
     }
 
-    protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
-	    throws DatabaseException {
-	boolean b = db == null;
-	b = this.hook159(db, b);
-	if (b) {
-	    this.hook160(db);
-	    this.hook151();
-	    obsolete = true;
-	    completed = true;
-	    throw new ReturnVoid();
-	}
-	Tree tree = db.getTree();
-	assert tree != null;
-	IN inInTree = findINInTree(tree, db, inClone, lsn);
-	if (inInTree == null) {
-	    this.hook152();
-	    obsolete = true;
-	} else {
-	    this.hook153();
-	    inInTree.setDirty(true);
-	    inInTree.setProhibitNextDelta();
-	    this.hook136(inInTree);
-	    dirtied = true;
-	}
-	completed = true;
-    }
+ //   protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
+	 //   throws DatabaseException {
+	//    }
 
     protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result)
 	    throws DatabaseException {

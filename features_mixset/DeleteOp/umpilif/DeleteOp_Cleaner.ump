@@ -1,0 +1,31 @@
+namespace com.sleepycat.je.cleaner;
+
+class Cleaner
+{
+    /** 
+     * Adds the DB ID to the pending DB set if it is being deleted but deletion is not yet complete.
+     */
+    void addPendingDB(DatabaseImpl db) {
+			if (db != null && db.isDeleted() && !db.isDeleteFinished()) {
+					DatabaseId id = db.getId();
+					if (fileSelector.addPendingDB(id)) {
+							//this.hook85(id);
+							Label85: ;
+					}
+			}
+    }
+
+  //  protected void hook85(DatabaseId id) {
+  //  }
+
+    after Label112:processPendingLN(LN , DatabaseImpl , byte  , byte , TreeLocation ){
+			c = c || db.isDeleted();
+			//return original(db, c);
+    }
+
+  after Label113:processPendingLN(LN , DatabaseImpl , byte , byte , TreeLocation ){
+			addPendingDB(db);
+			//original(db);
+    }
+
+}

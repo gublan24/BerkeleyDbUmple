@@ -10,9 +10,9 @@
 
         <feature name=""/>
         <feature name=""/>
-        <feature name="Evictor"/>
-        <feature name="RenameOp"/>
-        <feature name="TruncateOp"/>
+        <feature name=""/>
+        <feature name=""/>
+        <feature name=""/>
         <feature name="DeleteOp"/>
         <feature name="CleanerDaemon"/>
         <feature name="INCompressor"/>

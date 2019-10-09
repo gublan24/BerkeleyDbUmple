@@ -57,6 +57,9 @@ import com.sleepycat.je.evictor.Evictor;
 // line 3 "../../../../MemoryBudget_EnvironmentImpl.ump"
 // line 3 "../../../../Evictor_EnvironmentImpl.ump"
 // line 3 "../../../../Evictor_EnvironmentImpl_inner.ump"
+// line 3 "../../../../RenameOp_EnvironmentImpl.ump"
+// line 3 "../../../../Truncate_EnvironmentImpl.ump"
+// line 3 "../../../../DeleteOp_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -818,6 +821,47 @@ if (evictor != null) {
     if (evictor != null) {
 					evictor.alert();
 			}
+  }
+
+
+  /**
+   * 
+   * Rename a database.
+   */
+  // line 9 "../../../../RenameOp_EnvironmentImpl.ump"
+   public void dbRename(Locker locker, String databaseName, String newName) throws DatabaseException{
+    dbMapTree.dbRename(locker, databaseName, newName);
+  }
+
+
+  /**
+   * 
+   * Truncate a database. Return a new DatabaseImpl object which represents the new truncated database. The old database is marked as deleted.
+   * @deprecated This supports Database.truncate(), which is deprecated.
+   */
+  // line 10 "../../../../Truncate_EnvironmentImpl.ump"
+   public TruncateResult truncate(Locker locker, DatabaseImpl database) throws DatabaseException{
+    return dbMapTree.truncate(locker, database, true);
+  }
+
+
+  /**
+   * 
+   * Truncate a database.
+   */
+  // line 17 "../../../../Truncate_EnvironmentImpl.ump"
+   public long truncate(Locker locker, String databaseName, boolean returnCount) throws DatabaseException{
+    return dbMapTree.truncate(locker, databaseName, returnCount);
+  }
+
+
+  /**
+   * 
+   * Remove a database.
+   */
+  // line 9 "../../../../DeleteOp_EnvironmentImpl.ump"
+   public void dbRemove(Locker locker, String databaseName) throws DatabaseException{
+    dbMapTree.dbRemove(locker, databaseName);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

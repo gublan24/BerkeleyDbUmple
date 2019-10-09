@@ -21,6 +21,7 @@ import java.util.Arrays;
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
+// line 3 "../../../../DeleteOp_SortedLSNTreeWalker.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -85,7 +86,12 @@ public class SortedLSNTreeWalker
 	    accumulateLSNs(root);
 	    releaseRootIN(root);
 	}
-	this.hook359();
+	Label359:
+if (setDbState) {
+			  dbImpl.finishedINListHarvest();
+		}
+		//original();
+ //this.hook359();
 	while (true) {
 	    maybeGetMoreINs();
 	    if (currentLSNs != null && currentLSNIdx < currentLSNs.length) {

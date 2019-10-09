@@ -29,6 +29,8 @@ import java.io.File;
 // line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
+// line 3 "../../../../DeleteOp_DbRunAction.ump"
+// line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -97,6 +99,34 @@ public class DbRunAction
    private static  void doEvict(Environment env) throws DatabaseException{
     new DbRunAction_doEvict(env).execute();
   }
+
+  // line 8 "../../../../DeleteOp_DbRunAction.ump"
+   private static  void removeAndClean(Environment env, String name) throws DatabaseException{
+    long a, b, c, d, e, f;
+			Transaction txn = env.beginTransaction(null, null);
+			CheckpointConfig force = new CheckpointConfig();
+			force.setForce(true);
+			a = System.currentTimeMillis();
+			env.removeDatabase(txn, name);
+			b = System.currentTimeMillis();
+			txn.commit();
+			c = System.currentTimeMillis();
+			int cleanedCount = 0;
+			while (env.cleanLog() > 0) {
+					cleanedCount++;
+			}
+			d = System.currentTimeMillis();
+			System.out.println("cleanedCount=" + cleanedCount);
+			e = 0;
+			f = 0;
+			if (cleanedCount > 0) {
+					e = System.currentTimeMillis();
+					env.checkpoint(force);
+					f = System.currentTimeMillis();
+			}
+			System.out.println("Remove of " + name + " remove: " + getSecs(a, b) + " commit: " + getSecs(b, c) + " clean: "
+				+ getSecs(c, d) + " checkpoint: " + getSecs(e, f));
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -105,9 +135,11 @@ public class DbRunAction
   @MethodObject
     @MethodObject
     @MethodObject
+    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
   // line 35 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -162,7 +194,25 @@ public class DbRunAction
                   doAction=CLEAN;
                 }
      else {
-                  this.hook841();
+                 Label841:// this.hook841();
+  							if (action.equalsIgnoreCase("checkpoint")) {
+  											doAction=CHECKPOINT;
+  										}
+  											Label846: //this.hook846();
+  											Label843:
+  if (action.equalsIgnoreCase("removedb")) {
+            doAction=REMOVEDB;
+          }
+  			// else { usage(); System.exit(1); } or// original();
+  				   //}
+   //this.hook843();
+  							 else {
+  
+  											Label839:
+  											 usage();
+  											 System.exit(1);
+  										}
+  							//End of hook841
                 }
               }
      else           if (nextArg.equals("-ro")) {
@@ -216,7 +266,11 @@ public class DbRunAction
             if (doAction == CHECKPOINT) {
               env.checkpoint(forceConfig);
             }
-            this.hook842();
+            Label842:
+  if (doAction == REMOVEDB) {
+            removeAndClean(env,dbName);}
+         // original();
+   //this.hook842();
             this.hook838();
             actionEnd=System.currentTimeMillis();
             env.close();
@@ -237,107 +291,106 @@ public class DbRunAction
           }
     }
   
-    // line 116 "../../../../DbRunAction_static.ump"
+    // line 128 "../../../../DbRunAction_static.ump"
      protected void hook838() throws Exception{
       
     }
   
-    // line 118 "../../../../DbRunAction_static.ump"
-     protected void hook839() throws Exception{
-      usage();
-          System.exit(1);
-    }
   
-    // line 122 "../../../../DbRunAction_static.ump"
+    /**
+     * protected void hook839() throws Exception {
+     * usage();
+     * System.exit(1);
+     * }
+     */
+    // line 134 "../../../../DbRunAction_static.ump"
      protected void hook840() throws Exception{
       
     }
   
-    // line 124 "../../../../DbRunAction_static.ump"
+    // line 137 "../../../../DbRunAction_static.ump"
      protected void hook841() throws Exception{
-      if (action.equalsIgnoreCase("checkpoint")) {
-            doAction=CHECKPOINT;
-          }
-     else {
-            this.hook846();
-          }
-    }
-  
-    // line 132 "../../../../DbRunAction_static.ump"
-     protected void hook842() throws Exception{
       
-    }
-  
-    // line 134 "../../../../DbRunAction_static.ump"
-     protected void hook843() throws Exception{
-      this.hook839();
     }
   
   
     /**
+     * protected void hook842() throws Exception {
+     * }
+     * protected void hook843() throws Exception {
+     * this.hook839();
+     * }
      * protected void hook844() throws Exception {
      * }
      * protected void hook845() throws Exception {
      * }
+     * protected void hook846() throws Exception {
+     * this.hook843();
+     * }
      */
-    // line 141 "../../../../DbRunAction_static.ump"
-     protected void hook846() throws Exception{
-      this.hook843();
-    }
-  
-    // line 144 "../../../../DbRunAction_static.ump"
+    // line 151 "../../../../DbRunAction_static.ump"
      protected void hook847() throws Exception{
       
     }
   
-    // line 146 "../../../../DbRunAction_static.ump"
+    // line 153 "../../../../DbRunAction_static.ump"
      protected void hook848() throws Exception{
       
+    }
+  
+    // line 50 "../../../../Evictor_DbRunAction_inner.ump"
+     protected void hook846() throws Exception{
+      if (action.equalsIgnoreCase("evict")) {
+            doAction=EVICT;
+          }
+     else {
+            original();
+          }
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 95 "../../../../DbRunAction_static.ump"
+    // line 107 "../../../../DbRunAction_static.ump"
     protected String[] argv ;
-  // line 96 "../../../../DbRunAction_static.ump"
-    protected long recoveryStart ;
-  // line 97 "../../../../DbRunAction_static.ump"
-    protected long actionStart ;
-  // line 98 "../../../../DbRunAction_static.ump"
-    protected long actionEnd ;
-  // line 99 "../../../../DbRunAction_static.ump"
-    protected int whichArg ;
-  // line 100 "../../../../DbRunAction_static.ump"
-    protected String dbName ;
-  // line 101 "../../../../DbRunAction_static.ump"
-    protected int doAction ;
-  // line 102 "../../../../DbRunAction_static.ump"
-    protected String envHome ;
-  // line 103 "../../../../DbRunAction_static.ump"
-    protected boolean readOnly ;
-  // line 104 "../../../../DbRunAction_static.ump"
-    protected String nextArg ;
-  // line 105 "../../../../DbRunAction_static.ump"
-    protected String action ;
-  // line 106 "../../../../DbRunAction_static.ump"
-    protected EnvironmentConfig envConfig ;
-  // line 107 "../../../../DbRunAction_static.ump"
-    protected Environment env ;
   // line 108 "../../../../DbRunAction_static.ump"
-    protected CheckpointConfig forceConfig ;
+    protected long recoveryStart ;
   // line 109 "../../../../DbRunAction_static.ump"
-    protected int nFiles ;
+    protected long actionStart ;
   // line 110 "../../../../DbRunAction_static.ump"
-    protected DatabaseConfig dbConfig ;
+    protected long actionEnd ;
   // line 111 "../../../../DbRunAction_static.ump"
-    protected Database db ;
+    protected int whichArg ;
   // line 112 "../../../../DbRunAction_static.ump"
-    protected DecimalFormat f ;
+    protected String dbName ;
   // line 113 "../../../../DbRunAction_static.ump"
-    protected long recoveryDuration ;
+    protected int doAction ;
   // line 114 "../../../../DbRunAction_static.ump"
+    protected String envHome ;
+  // line 115 "../../../../DbRunAction_static.ump"
+    protected boolean readOnly ;
+  // line 116 "../../../../DbRunAction_static.ump"
+    protected String nextArg ;
+  // line 117 "../../../../DbRunAction_static.ump"
+    protected String action ;
+  // line 118 "../../../../DbRunAction_static.ump"
+    protected EnvironmentConfig envConfig ;
+  // line 119 "../../../../DbRunAction_static.ump"
+    protected Environment env ;
+  // line 120 "../../../../DbRunAction_static.ump"
+    protected CheckpointConfig forceConfig ;
+  // line 121 "../../../../DbRunAction_static.ump"
+    protected int nFiles ;
+  // line 122 "../../../../DbRunAction_static.ump"
+    protected DatabaseConfig dbConfig ;
+  // line 123 "../../../../DbRunAction_static.ump"
+    protected Database db ;
+  // line 124 "../../../../DbRunAction_static.ump"
+    protected DecimalFormat f ;
+  // line 125 "../../../../DbRunAction_static.ump"
+    protected long recoveryDuration ;
+  // line 126 "../../../../DbRunAction_static.ump"
     protected long actionDuration ;
   
     
@@ -422,6 +475,8 @@ public class DbRunAction
   private static final int CHECKPOINT = 4 ;
 // line 5 "../../../../Evictor_DbRunAction.ump"
   private static final int EVICT = 3 ;
+// line 5 "../../../../DeleteOp_DbRunAction.ump"
+  private static final int REMOVEDB = 5 ;
 
   
 }

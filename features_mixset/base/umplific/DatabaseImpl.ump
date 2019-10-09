@@ -92,32 +92,34 @@ class DatabaseImpl
      */
     public DatabaseImpl(String dbName, DatabaseId id, EnvironmentImpl envImpl, DatabaseConfig dbConfig)
 	    throws DatabaseException {
-	this.id = id;
-	this.envImpl = envImpl;
-	this.btreeComparator = dbConfig.getBtreeComparator();
-	this.duplicateComparator = dbConfig.getDuplicateComparator();
-	duplicatesAllowed = dbConfig.getSortedDuplicates();
-	transactional = dbConfig.getTransactional();
-	maxMainTreeEntriesPerNode = dbConfig.getNodeMaxEntries();
-	maxDupTreeEntriesPerNode = dbConfig.getNodeMaxDupTreeEntries();
-	initDefaultSettings();
-	this.hook288();
-	tree = new Tree(this);
-	referringHandles = Collections.synchronizedSet(new HashSet());
-	eofNodeId = Node.getNextNodeId();
-	debugDatabaseName = dbName;
+			this.id = id;
+			this.envImpl = envImpl;
+			this.btreeComparator = dbConfig.getBtreeComparator();
+			this.duplicateComparator = dbConfig.getDuplicateComparator();
+			duplicatesAllowed = dbConfig.getSortedDuplicates();
+			transactional = dbConfig.getTransactional();
+			maxMainTreeEntriesPerNode = dbConfig.getNodeMaxEntries();
+			maxDupTreeEntriesPerNode = dbConfig.getNodeMaxDupTreeEntries();
+			initDefaultSettings();
+			//this.hook288();
+			Label288:
+			tree = new Tree(this);
+			referringHandles = Collections.synchronizedSet(new HashSet());
+			eofNodeId = Node.getNextNodeId();
+			debugDatabaseName = dbName;
     }
 
     /** 
      * Create an empty database object for initialization from the log. Note that the rest of the initialization comes from readFromLog(), except for the debugDatabaseName, which is set by the caller.
      */
     public DatabaseImpl() throws DatabaseException {
-	id = new DatabaseId();
-	envImpl = null;
-	this.hook289();
-	tree = new Tree();
-	referringHandles = Collections.synchronizedSet(new HashSet());
-	eofNodeId = Node.getNextNodeId();
+			id = new DatabaseId();
+			envImpl = null;
+			//this.hook289();
+			Label289:
+			tree = new Tree();
+			referringHandles = Collections.synchronizedSet(new HashSet());
+			eofNodeId = Node.getNextNodeId();
     }
 
     public void setDebugDatabaseName(String debugName) {
@@ -525,10 +527,10 @@ class DatabaseImpl
 	return binMaxDeltas;
     }
 
-    protected void hook288() throws DatabaseException {
-    }
+    //protected void hook288() throws DatabaseException {
+    //}
 
-    protected void hook289() throws DatabaseException {
-    }
+    //protected void hook289() throws DatabaseException {
+    //}
 
 }

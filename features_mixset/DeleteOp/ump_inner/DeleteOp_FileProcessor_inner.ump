@@ -1,0 +1,37 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/cleaner/FileProcessor.java
+namespace com.sleepycat.je.cleaner;
+class FileProcessor {
+  @MethodObject static class FileProcessor_processLN {
+      after Label157: execute() {
+        b|=db.isDeleted();
+        //original();
+      }
+			
+			after Label158: execute() {
+        _this.cleaner.addPendingDB(db);
+        //original();
+      }
+    }
+   
+   static class FileProcessor_processFile {
+      after Label154: execute() { 
+        checkPendingDbSet=new HashSet();
+        //original();
+      }
+      after Label155: execute() { 
+        for (Iterator i=checkPendingDbSet.iterator(); i.hasNext(); ) {
+          dbId=(DatabaseId)i.next();
+          db=dbMapTree.getDb(dbId,_this.cleaner.lockTimeout,dbCache);
+          _this.cleaner.addPendingDB(db);
+        }
+        //original();
+      }
+      after Label156: execute() { 
+        dbId1=reader.getDatabaseId();
+        if (dbId1 != null) {
+          checkPendingDbSet.add(dbId1);
+        }
+        //original();
+      }
+    }
+}

@@ -1,7 +1,6 @@
 use base/umplific/Master.ump;
 
 
-
 use loggingBase/umplific/Master.ump;
 
 use loggingConsoleHandler/umplific/Master.ump;
@@ -14,7 +13,6 @@ use EnvironmentLocking/umpilif/Master.ump;
 
 use DiskFullErro/umpilif/Master.ump;
 
-
 use FileHandleCache/umpilif/Master.ump;
 
 use CriticalEviction/umpilif/Master.ump;
@@ -22,3 +20,14 @@ use CriticalEviction/umpilif/Master.ump;
 use MemoryBudget/umpilif/Master.ump;
 
 use Evictor/umpilif/Master.ump;
+
+use RenameOp/umpilif/Master.ump;
+
+use TruncateOp/umpilif/Master.ump;
+
+use DeleteOp/umpilif/Master.ump;
+
+
+
+
+//rename 's/^/DeleteOp_/' *
