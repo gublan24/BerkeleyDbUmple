@@ -1,12 +1,12 @@
 
-use EnvironmentParams.ump;
+use loggingBase_EnvironmentParams.ump;
 use loggingBase_Sequence.ump;
 use loggingBase_Cursor.ump;
 use loggingBase_EnvironmentImpl.ump;
-use Txn.ump;
+use loggingBase_Txn.ump;
 use loggingBase_CmdUtil.ump;
 use loggingBase_Tracer.ump;
-use RecoveryManager.ump;
-use Database.ump;
+use loggingBase_RecoveryManager.ump;
+use loggingBase_Database.ump;
 
 use ../refactor_inner/ump_inner/Master.ump ;

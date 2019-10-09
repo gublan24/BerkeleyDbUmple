@@ -15,6 +15,8 @@ import java.util.Iterator;
 // line 3 "../../../../MemoryBudget_static.ump"
 // line 3 "../../../../MemoryBudget_MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_inner_inner.ump"
+// line 3 "../../../../Evictor_MemoryBudget.ump"
+// line 3 "../../../../Evictor_MemoryBudget_inner.ump"
 public class MemoryBudget implements EnvConfigObserver
 {
 
@@ -406,8 +408,10 @@ Iterator iter = inList.iterator();
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 16 "../../../../MemoryBudget_static.ump"
   // line 103 "../../../../MemoryBudget_inner_inner.ump"
+  // line 4 "../../../../Evictor_MemoryBudget_inner.ump"
   public static class MemoryBudget_reset
   {
   
@@ -472,7 +476,11 @@ Iterator iter = inList.iterator();
             startingBufferSize=EnvironmentParams.MIN_LOG_BUFFER_SIZE;
             newLogBufferBudget=numBuffers * startingBufferSize;
           }
-          this.hook350();
+          //this.hook350();
+          Label350:
+  newCriticalThreshold=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE)) / 100;
+          //original();
+  
           newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
           _this.maxMemory=newMaxMemory;
           this.hook349();
@@ -486,13 +494,8 @@ Iterator iter = inList.iterator();
       // END OF UMPLE AFTER INJECTION
     }
   
-    // line 75 "../../../../MemoryBudget_static.ump"
+    // line 76 "../../../../MemoryBudget_static.ump"
      protected void hook349() throws DatabaseException{
-      
-    }
-  
-    // line 77 "../../../../MemoryBudget_static.ump"
-     protected void hook350() throws DatabaseException{
       
     }
     
@@ -500,27 +503,27 @@ Iterator iter = inList.iterator();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 63 "../../../../MemoryBudget_static.ump"
+    // line 64 "../../../../MemoryBudget_static.ump"
     protected MemoryBudget _this ;
-  // line 64 "../../../../MemoryBudget_static.ump"
-    protected DbConfigManager configManager ;
   // line 65 "../../../../MemoryBudget_static.ump"
-    protected long newMaxMemory ;
+    protected DbConfigManager configManager ;
   // line 66 "../../../../MemoryBudget_static.ump"
-    protected long jvmMemory ;
+    protected long newMaxMemory ;
   // line 67 "../../../../MemoryBudget_static.ump"
-    protected int maxMemoryPercent ;
+    protected long jvmMemory ;
   // line 68 "../../../../MemoryBudget_static.ump"
-    protected long newLogBufferBudget ;
+    protected int maxMemoryPercent ;
   // line 69 "../../../../MemoryBudget_static.ump"
-    protected int numBuffers ;
+    protected long newLogBufferBudget ;
   // line 70 "../../../../MemoryBudget_static.ump"
-    protected long startingBufferSize ;
+    protected int numBuffers ;
   // line 71 "../../../../MemoryBudget_static.ump"
-    protected int logBufferSize ;
+    protected long startingBufferSize ;
   // line 72 "../../../../MemoryBudget_static.ump"
-    protected long newCriticalThreshold ;
+    protected int logBufferSize ;
   // line 73 "../../../../MemoryBudget_static.ump"
+    protected long newCriticalThreshold ;
+  // line 74 "../../../../MemoryBudget_static.ump"
     protected long newTrackerBudget ;
   
     

@@ -455,7 +455,8 @@ class EnvironmentImpl
     private void requestShutdownDaemons() {
 	closing = true;
 	this.hook331();
-	this.hook334();
+	//this.hook334();
+  Label334:
 	this.hook327();
     }
 

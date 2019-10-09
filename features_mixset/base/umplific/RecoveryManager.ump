@@ -88,15 +88,15 @@ class RecoveryManager
      * Make a recovery manager
      */
     public RecoveryManager(EnvironmentImpl env) throws DatabaseException {
-	this.env = env;
-	DbConfigManager cm = env.getConfigManager();
-	readBufferSize = cm.getInt(EnvironmentParams.LOG_ITERATOR_READ_SIZE);
-	committedTxnIds = new HashSet();
-	abortedTxnIds = new HashSet();
-	preparedTxns = new HashMap();
-	inListRebuildDbIds = new HashSet();
-	fileSummaryLsns = new HashMap();
-	this.hook578(env);
+			this.env = env;
+			DbConfigManager cm = env.getConfigManager();
+			readBufferSize = cm.getInt(EnvironmentParams.LOG_ITERATOR_READ_SIZE);
+			committedTxnIds = new HashSet();
+			abortedTxnIds = new HashSet();
+			preparedTxns = new HashMap();
+			inListRebuildDbIds = new HashSet();
+			fileSummaryLsns = new HashMap();
+			this.hook578(env);
     }
 
     /** 
@@ -104,73 +104,73 @@ class RecoveryManager
      * @return RecoveryInfo statistics about the recovery process.
      */
     public RecoveryInfo recover(boolean readOnly) throws DatabaseException {
-	info = new RecoveryInfo();
-	try {
-	    FileManager fileManager = env.getFileManager();
-	    DbConfigManager configManager = env.getConfigManager();
-	    boolean forceCheckpoint = configManager.getBoolean(EnvironmentParams.ENV_RECOVERY_FORCE_CHECKPOINT);
-	    if (fileManager.filesExist()) {
-		findEndOfLog(readOnly);
-		this.hook559();
-		findLastCheckpoint();
-		env.getLogManager().setLastLsnAtRecovery(fileManager.getLastUsedLsn());
-		this.hook558();
-		env.readMapTreeFromLog(info.useRootLsn);
-		buildTree();
-	    } else {
-		this.hook556();
-		this.hook560();
-		env.logMapTreeRoot();
-		forceCheckpoint = true;
-	    }
-	    if (preparedTxns.size() > 0) {
-		this.hook573();
-		preparedTxns = null;
-	    }
-	    if (DbInternal.getCreateUP(env.getConfigManager().getEnvironmentConfig())) {
-		env.getUtilizationProfile().populateCache();
-	    }
-	    if (!readOnly && (env.getLogManager().getLastLsnAtRecovery() != info.checkpointEndLsn || forceCheckpoint)) {
-		CheckpointConfig config = new CheckpointConfig();
-		config.setForce(true);
-		config.setMinimizeRecoveryTime(true);
-		env.invokeCheckpoint(config, false, "recovery");
-	    }
-	} catch (IOException e) {
-	    this.hook575(e);
-	    throw new RecoveryException(env, "Couldn't recover: " + e.getMessage(), e);
-	} finally {
-	    Tracer.trace(Level.CONFIG, env, "Recovery finished: " + info);
-	}
-	return info;
+			info = new RecoveryInfo();
+			try {
+					FileManager fileManager = env.getFileManager();
+					DbConfigManager configManager = env.getConfigManager();
+					boolean forceCheckpoint = configManager.getBoolean(EnvironmentParams.ENV_RECOVERY_FORCE_CHECKPOINT);
+					if (fileManager.filesExist()) {
+				findEndOfLog(readOnly);
+				this.hook559();
+				findLastCheckpoint();
+				env.getLogManager().setLastLsnAtRecovery(fileManager.getLastUsedLsn());
+				this.hook558();
+				env.readMapTreeFromLog(info.useRootLsn);
+				buildTree();
+					} else {
+				this.hook556();
+				this.hook560();
+				env.logMapTreeRoot();
+				forceCheckpoint = true;
+					}
+					if (preparedTxns.size() > 0) {
+				this.hook573();
+				preparedTxns = null;
+					}
+					if (DbInternal.getCreateUP(env.getConfigManager().getEnvironmentConfig())) {
+				env.getUtilizationProfile().populateCache();
+					}
+					if (!readOnly && (env.getLogManager().getLastLsnAtRecovery() != info.checkpointEndLsn || forceCheckpoint)) {
+				CheckpointConfig config = new CheckpointConfig();
+				config.setForce(true);
+				config.setMinimizeRecoveryTime(true);
+				env.invokeCheckpoint(config, false, "recovery");
+					}
+			} catch (IOException e) {
+					this.hook575(e);
+					throw new RecoveryException(env, "Couldn't recover: " + e.getMessage(), e);
+			} finally {
+					Tracer.trace(Level.CONFIG, env, "Recovery finished: " + info);
+			}
+			return info;
     }
 
     /** 
      * Find the end of the log, initialize the FileManager. While we're perusing the log, return the last checkpoint LSN if we happen to see it.
      */
     private void findEndOfLog(boolean readOnly) throws IOException, DatabaseException {
-	LastFileReader reader = new LastFileReader(env, readBufferSize);
-	while (reader.readNextEntry()) {
-	    LogEntryType type = reader.getEntryType();
-	    if (LogEntryType.LOG_CKPT_END.equals(type)) {
-		info.checkpointEndLsn = reader.getLastLsn();
-		info.partialCheckpointStartLsn = DbLsn.NULL_LSN;
-	    } else if (LogEntryType.LOG_CKPT_START.equals(type)) {
-		if (info.partialCheckpointStartLsn == DbLsn.NULL_LSN) {
-		    info.partialCheckpointStartLsn = reader.getLastLsn();
-		}
-	    }
-	}
-	assert (reader.getLastValidLsn() != reader.getEndOfLog()) : "lastUsed="
-		+ DbLsn.getNoFormatString(reader.getLastValidLsn()) + " end="
-		+ DbLsn.getNoFormatString(reader.getEndOfLog());
-	if (!readOnly) {
-	    reader.setEndOfFile();
-	}
-	info.lastUsedLsn = reader.getLastValidLsn();
-	info.nextAvailableLsn = reader.getEndOfLog();
-	info.nRepeatIteratorReads += reader.getNRepeatIteratorReads();
-	env.getFileManager().setLastPosition(info.nextAvailableLsn, info.lastUsedLsn, reader.getPrevOffset());
+			LastFileReader reader = new LastFileReader(env, readBufferSize);
+			while (reader.readNextEntry()) {
+					LogEntryType type = reader.getEntryType();
+					if (LogEntryType.LOG_CKPT_END.equals(type)) {
+				info.checkpointEndLsn = reader.getLastLsn();
+				info.partialCheckpointStartLsn = DbLsn.NULL_LSN;
+					} else if (LogEntryType.LOG_CKPT_START.equals(type)) {
+				if (info.partialCheckpointStartLsn == DbLsn.NULL_LSN) {
+						info.partialCheckpointStartLsn = reader.getLastLsn();
+				}
+					}
+			}
+			assert (reader.getLastValidLsn() != reader.getEndOfLog()) : "lastUsed="
+				+ DbLsn.getNoFormatString(reader.getLastValidLsn()) + " end="
+				+ DbLsn.getNoFormatString(reader.getEndOfLog());
+			if (!readOnly) {
+					reader.setEndOfFile();
+			}
+			info.lastUsedLsn = reader.getLastValidLsn();
+			info.nextAvailableLsn = reader.getEndOfLog();
+			info.nRepeatIteratorReads += reader.getNRepeatIteratorReads();
+			env.getFileManager().setLastPosition(info.nextAvailableLsn, info.lastUsedLsn, reader.getPrevOffset());
     }
 
     /** 
@@ -264,7 +264,8 @@ class RecoveryManager
 	end = System.currentTimeMillis();
 	this.hook564(start, end);
 	rebuildINList();
-	this.hook596();
+//	this.hook596();
+  Label596:
 	this.hook563();
 	start = System.currentTimeMillis();
 	Set lnSet = new HashSet();
@@ -417,7 +418,8 @@ class RecoveryManager
 		if (reader.isLN()) {
 		    Long txnId = reader.getTxnId();
 		    if (txnId != null && !committedTxnIds.contains(txnId)) {
-			this.hook597();
+			//this.hook597();
+      Label597:
 			LN ln = reader.getLN();
 			long logLsn = reader.getLastLsn();
 			long abortLsn = reader.getAbortLsn();
@@ -496,7 +498,8 @@ class RecoveryManager
 			}
 		    }
 		    if (processThisLN) {
-			this.hook598();
+			//this.hook598();
+      Label598:
 			LN ln = reader.getLN();
 			DatabaseId dbId = reader.getDatabaseId();
 			DatabaseImpl db = dbMapTree.getDb(dbId);
@@ -1085,11 +1088,11 @@ class RecoveryManager
 
     protected static boolean hook592(TreeLocation location, long logLsn, long abortLsn, boolean replaced,
 	    DIN duplicateRoot) throws DatabaseException {
-	if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
-	    duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
-	    replaced = true;
-	}
-	return replaced;
+			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
+					duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
+					replaced = true;
+			}
+			return replaced;
     }
 
     protected void hook593(INFileReader reader) throws IOException, DatabaseException {
@@ -1101,13 +1104,13 @@ class RecoveryManager
     protected static void hook595(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {
     }
 
-    protected void hook596() throws IOException, DatabaseException {
-    }
+  //  protected void hook596() throws IOException, DatabaseException {
+  //  }
 
-    protected void hook597() throws IOException, DatabaseException, Exception {
-    }
+  //  protected void hook597() throws IOException, DatabaseException, Exception {
+  //  }
 
-    protected void hook598() throws IOException, DatabaseException, Exception {
-    }
+  //  protected void hook598() throws IOException, DatabaseException, Exception {
+  //  }
 
 }

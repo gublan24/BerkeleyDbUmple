@@ -1,0 +1,17 @@
+use Evictor_EnvironmentParams.ump;
+use Evictor_Environment.ump;
+use Evictor_UtilizationTracker.ump;
+use Evictor_UtilizationProfile.ump;
+use Evictor_Cleaner.ump;
+use Evictor_Evictor.ump;
+use Evictor_IN.ump;
+use Evictor_BIN.ump;
+use Evictor_DbRunAction.ump;
+use Evictor_EnvironmentImpl.ump;
+use Evictor_MemoryBudget.ump;
+use Evictor_CursorImpl.ump;
+use Evictor_DbTree.ump;
+use Evictor_Checkpointer.ump;
+use Evictor_RecoveryManager.ump;
+
+use ../ump_inner/Evictor_Master.ump;

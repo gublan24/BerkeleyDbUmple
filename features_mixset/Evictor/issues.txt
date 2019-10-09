@@ -1,0 +1,27 @@
+1) two methods with synchronized keyword:
+
+ synchronized DatabaseImpl createDb(Locker locker, String databaseName, DatabaseConfig dbConfig)
+
+/home/abdulaziz/Desktop/BerkeleyDb/features_mixset/Evictor/umpilif/Evictor_DbTree.ump
+
+
+2) two methods with synchronized keyword:
+
+    after Label188: insertFileSummary(FileSummaryLN , long , int ) { // <<     private synchronized void insertFileSummary(...)
+
+ Evictor_UtilizationProfile
+
+3)        
+
+ after Label547:execute() {   //  synchronized (_this.envImpl.getEvictor()) { original(); } 
+
+ Evictor_Checkpointer_inner 
+
+
+4)   protected void hook846() throws Exception {
+        if (action.equalsIgnoreCase("evict")) {
+          doAction=EVICT;
+        }
+   else {
+          original();
+        }

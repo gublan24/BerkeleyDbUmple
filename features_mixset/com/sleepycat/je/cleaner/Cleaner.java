@@ -42,6 +42,7 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../EnvironmentLocking_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner_inner.ump"
+// line 3 "../../../../Evictor_Cleaner.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -943,6 +944,29 @@ env.getFileManager().releaseExclusiveLock();
 	    }
 	    this.hook96();
 	}
+  }
+
+
+  /**
+   * 
+   * Returns whether the given BIN entry may be stripped by the evictor. True is always returned if the BIN is not dirty. False is returned if the BIN is dirty and the entry will be migrated soon.
+   */
+  // line 9 "../../../../Evictor_Cleaner.ump"
+   public boolean isEvictable(BIN bin, int index){
+    if (bin.getDirty()) {
+					if (bin.getMigrate(index)) {
+				return false;
+					}
+					boolean isResident = (bin.getTarget(index) != null);
+					Long fileNum = new Long(DbLsn.getFileNumber(bin.getLsn(index)));
+					if ((PROACTIVE_MIGRATION || isResident) && mustBeCleanedFiles.contains(fileNum)) {
+				return false;
+					}
+					if ((clusterAll || (clusterResident && isResident)) && lowUtilizationFiles.contains(fileNum)) {
+				return false;
+					}
+			}
+			return true;
   }
 
 

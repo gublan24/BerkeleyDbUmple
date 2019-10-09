@@ -47,6 +47,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../UtilizationProfile_static.ump"
 // line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
 // line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+// line 3 "../../../../Evictor_UtilizationProfile.ump"
+// line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -396,7 +398,11 @@ public class UtilizationProfile implements EnvConfigObserver
 		    if (offsets != null) {
 			list.add(offsets.toArray());
 		    }
-		    this.hook187(cursor);
+		    //this.hook187(cursor);
+        Label187:
+cursor.evict();
+//	original(cursor);
+
 		}
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
@@ -442,7 +448,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Populate the profile for file selection.  This method performs eviction and is not synchronized.  It must be called before recovery is complete so that synchronization is unnecessary.  It must be called before the recovery checkpoint so that the checkpoint can flush file summary information.
    */
-  // line 509 "../../../../UtilizationProfile.ump"
+  // line 510 "../../../../UtilizationProfile.ump"
    public boolean populateCache() throws DatabaseException{
     return new UtilizationProfile_populateCache(this).execute();
   }
@@ -452,7 +458,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Positions at the most recent LN for the given file number.
    */
-  // line 517 "../../../../UtilizationProfile.ump"
+  // line 518 "../../../../UtilizationProfile.ump"
    private boolean getFirstFSLN(CursorImpl cursor, long fileNum, DatabaseEntry keyEntry, DatabaseEntry dataEntry, LockType lockType) throws DatabaseException{
     byte[] keyBytes = FileSummaryLN.makePartialKey(fileNum);
 	keyEntry.setData(keyBytes);
@@ -474,7 +480,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * If the file summary db is already open, return, otherwise attempt to open it.  If the environment is read-only and the database doesn't exist, return false.  If the environment is read-write the database will be created if it doesn't exist.
    */
-  // line 536 "../../../../UtilizationProfile.ump"
+  // line 537 "../../../../UtilizationProfile.ump"
    private boolean openFileSummaryDatabase() throws DatabaseException{
     if (fileSummaryDb != null) {
 	    return true;
@@ -507,7 +513,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * Checks that all FSLN offsets are indeed obsolete.  Assumes that the system is quiesent (does not lock LNs).  This method is not synchronized (because it doesn't access fileSummaryMap) and eviction is allowed.
    * @return true if no verification failures.
    */
-  // line 590 "../../../../UtilizationProfile.ump"
+  // line 593 "../../../../UtilizationProfile.ump"
    public boolean verifyFileSummaryDatabase() throws DatabaseException{
     DatabaseEntry key = new DatabaseEntry();
 	DatabaseEntry data = new DatabaseEntry();
@@ -535,7 +541,11 @@ public class UtilizationProfile implements EnvConfigObserver
 				}
 			    }
 			}
-			this.hook190(cursor);
+			//this.hook190(cursor);
+      Label190:
+cursor.evict();
+//	original(cursor);
+
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
 		}
@@ -551,7 +561,7 @@ public class UtilizationProfile implements EnvConfigObserver
 	return ok;
   }
 
-  // line 633 "../../../../UtilizationProfile.ump"
+  // line 637 "../../../../UtilizationProfile.ump"
    private boolean verifyLsnIsObsolete(long lsn) throws DatabaseException{
     try {
 	    Object o = env.getLogManager().getLogEntry(lsn);
@@ -577,37 +587,37 @@ public class UtilizationProfile implements EnvConfigObserver
 	}
   }
 
-  // line 658 "../../../../UtilizationProfile.ump"
+  // line 662 "../../../../UtilizationProfile.ump"
    protected void hook173() throws DatabaseException{
     
   }
 
-  // line 661 "../../../../UtilizationProfile.ump"
+  // line 665 "../../../../UtilizationProfile.ump"
    protected void hook174() throws DatabaseException{
     
   }
 
-  // line 664 "../../../../UtilizationProfile.ump"
+  // line 668 "../../../../UtilizationProfile.ump"
    protected void hook175() throws DatabaseException{
     
   }
 
-  // line 667 "../../../../UtilizationProfile.ump"
+  // line 671 "../../../../UtilizationProfile.ump"
    protected void hook177(long fileNum, int sequence, OperationStatus status) throws DatabaseException{
     
   }
 
-  // line 670 "../../../../UtilizationProfile.ump"
+  // line 674 "../../../../UtilizationProfile.ump"
    protected void hook178(CursorImpl cursor) throws DatabaseException{
     
   }
 
-  // line 673 "../../../../UtilizationProfile.ump"
+  // line 677 "../../../../UtilizationProfile.ump"
    protected void hook179(CursorImpl cursor) throws DatabaseException{
     
   }
 
-  // line 676 "../../../../UtilizationProfile.ump"
+  // line 680 "../../../../UtilizationProfile.ump"
    protected void hook180(long lsn, LNLogEntry entry, DatabaseImpl db, BIN bin) throws DatabaseException{
     Tree tree = db.getTree();
 	TreeLocation location = new TreeLocation();
@@ -628,27 +638,24 @@ public class UtilizationProfile implements EnvConfigObserver
 	throw new ReturnBoolean(false);
   }
 
-  // line 696 "../../../../UtilizationProfile.ump"
+  // line 700 "../../../../UtilizationProfile.ump"
    protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException{
     return b;
   }
 
-  // line 700 "../../../../UtilizationProfile.ump"
-   protected void hook187(CursorImpl cursor) throws DatabaseException{
-    
-  }
 
-  // line 703 "../../../../UtilizationProfile.ump"
-   protected void hook188(CursorImpl cursor) throws DatabaseException{
-    
-  }
-
-  // line 706 "../../../../UtilizationProfile.ump"
+  /**
+   * protected void hook187(CursorImpl cursor) throws DatabaseException {
+   * }
+   * protected void hook188(CursorImpl cursor) throws DatabaseException {
+   * }
+   */
+  // line 710 "../../../../UtilizationProfile.ump"
    protected void hook189(CursorImpl cursor) throws DatabaseException{
     
   }
 
-  // line 709 "../../../../UtilizationProfile.ump"
+  // line 713 "../../../../UtilizationProfile.ump"
    protected void hook190(CursorImpl cursor) throws DatabaseException{
     
   }
@@ -892,8 +899,10 @@ public class UtilizationProfile implements EnvConfigObserver
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 89 "../../../../UtilizationProfile_static.ump"
   // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+  // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -964,7 +973,11 @@ public class UtilizationProfile implements EnvConfigObserver
                     this.hook181();
                   }
      else {
-                    this.hook191();
+                   // this.hook191();
+                      Label191:
+  cursor.evict();
+          //original();
+  
                   }
                 }
      else {
@@ -1009,38 +1022,33 @@ public class UtilizationProfile implements EnvConfigObserver
           return true;
     }
   
-    // line 188 "../../../../UtilizationProfile_static.ump"
+    // line 189 "../../../../UtilizationProfile_static.ump"
      protected void hook176() throws DatabaseException{
       
     }
   
-    // line 190 "../../../../UtilizationProfile_static.ump"
+    // line 191 "../../../../UtilizationProfile_static.ump"
      protected void hook181() throws DatabaseException{
       
     }
   
-    // line 192 "../../../../UtilizationProfile_static.ump"
+    // line 193 "../../../../UtilizationProfile_static.ump"
      protected void hook182() throws DatabaseException{
       
     }
   
-    // line 194 "../../../../UtilizationProfile_static.ump"
+    // line 195 "../../../../UtilizationProfile_static.ump"
      protected void hook183() throws DatabaseException{
       
     }
   
-    // line 196 "../../../../UtilizationProfile_static.ump"
+    // line 197 "../../../../UtilizationProfile_static.ump"
      protected void hook184() throws DatabaseException{
       
     }
   
-    // line 198 "../../../../UtilizationProfile_static.ump"
+    // line 199 "../../../../UtilizationProfile_static.ump"
      protected void hook185() throws DatabaseException{
-      
-    }
-  
-    // line 200 "../../../../UtilizationProfile_static.ump"
-     protected void hook191() throws DatabaseException{
       
     }
     
@@ -1048,35 +1056,35 @@ public class UtilizationProfile implements EnvConfigObserver
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 172 "../../../../UtilizationProfile_static.ump"
+    // line 173 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 173 "../../../../UtilizationProfile_static.ump"
-    protected int oldMemorySize ;
   // line 174 "../../../../UtilizationProfile_static.ump"
-    protected Long[] existingFiles ;
+    protected int oldMemorySize ;
   // line 175 "../../../../UtilizationProfile_static.ump"
-    protected Locker locker ;
+    protected Long[] existingFiles ;
   // line 176 "../../../../UtilizationProfile_static.ump"
-    protected CursorImpl cursor ;
+    protected Locker locker ;
   // line 177 "../../../../UtilizationProfile_static.ump"
-    protected DatabaseEntry keyEntry ;
+    protected CursorImpl cursor ;
   // line 178 "../../../../UtilizationProfile_static.ump"
-    protected DatabaseEntry dataEntry ;
+    protected DatabaseEntry keyEntry ;
   // line 179 "../../../../UtilizationProfile_static.ump"
-    protected OperationStatus status ;
+    protected DatabaseEntry dataEntry ;
   // line 180 "../../../../UtilizationProfile_static.ump"
-    protected FileSummaryLN ln ;
+    protected OperationStatus status ;
   // line 181 "../../../../UtilizationProfile_static.ump"
-    protected byte[] keyBytes ;
+    protected FileSummaryLN ln ;
   // line 182 "../../../../UtilizationProfile_static.ump"
-    protected boolean isOldVersion ;
+    protected byte[] keyBytes ;
   // line 183 "../../../../UtilizationProfile_static.ump"
-    protected long fileNum ;
+    protected boolean isOldVersion ;
   // line 184 "../../../../UtilizationProfile_static.ump"
-    protected Long fileNumLong ;
+    protected long fileNum ;
   // line 185 "../../../../UtilizationProfile_static.ump"
-    protected int newMemorySize ;
+    protected Long fileNumLong ;
   // line 186 "../../../../UtilizationProfile_static.ump"
+    protected int newMemorySize ;
+  // line 187 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     
@@ -1244,7 +1252,7 @@ public class UtilizationProfile implements EnvConfigObserver
     return new UtilizationProfile_putFileSummary(this, tfs).execute();
   }
 
-// line 564 "../../../../UtilizationProfile.ump"
+// line 565 "../../../../UtilizationProfile.ump"
   private synchronized void insertFileSummary (FileSummaryLN ln, long fileNum, int sequence) throws DatabaseException 
   {
     byte[] keyBytes = FileSummaryLN.makeFullKey(fileNum, sequence);
@@ -1253,10 +1261,12 @@ public class UtilizationProfile implements EnvConfigObserver
 	try {
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    this.hook189(cursor);
+	    //this.hook189(cursor);
+      Label189:
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
 	    this.hook177(fileNum, sequence, status);
-	    this.hook188(cursor);
+	    //this.hook188(cursor);
+      Label188:
 	} finally {
 	    if (cursor != null) {
 		cursor.close();

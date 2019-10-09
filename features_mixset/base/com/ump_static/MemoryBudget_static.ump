@@ -54,7 +54,8 @@ class MemoryBudget {
           startingBufferSize=EnvironmentParams.MIN_LOG_BUFFER_SIZE;
           newLogBufferBudget=numBuffers * startingBufferSize;
         }
-        this.hook350();
+        //this.hook350();
+        Label350:
         newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
         _this.maxMemory=newMaxMemory;
         this.hook349();
@@ -73,7 +74,7 @@ class MemoryBudget {
       protected long newTrackerBudget;
       protected void hook349() throws DatabaseException {
       }
-      protected void hook350() throws DatabaseException {
-      }
+    //  protected void hook350() throws DatabaseException {
+    //  }
     }
 }

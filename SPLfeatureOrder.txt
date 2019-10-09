@@ -9,7 +9,7 @@
         <feature name="FileHandleCache"/> issue with while(true) { original(); } 
 
         <feature name=""/>
-        <feature name="MemoryBudget"/>
+        <feature name=""/>
         <feature name="Evictor"/>
         <feature name="RenameOp"/>
         <feature name="TruncateOp"/>

@@ -49,7 +49,8 @@ class DbRunAction {
           envConfig=new EnvironmentConfig();
           Label848:
           Label847:
-          this.hook845();
+          //this.hook845();
+          Label845:
           recoveryStart=System.currentTimeMillis();
           env=new Environment(new File(envHome),envConfig);
           forceConfig=new CheckpointConfig();
@@ -66,7 +67,8 @@ class DbRunAction {
             env.checkpoint(forceConfig);
           }
           this.hook840();
-          this.hook844();
+          //this.hook844();
+          Label844:
           if (doAction == CHECKPOINT) {
             env.checkpoint(forceConfig);
           }
@@ -131,10 +133,10 @@ class DbRunAction {
       protected void hook843() throws Exception {
         this.hook839();
       }
-      protected void hook844() throws Exception {
-      }
-      protected void hook845() throws Exception {
-      }
+    //  protected void hook844() throws Exception {
+    //  }
+     // protected void hook845() throws Exception {
+     // }
       protected void hook846() throws Exception {
         this.hook843();
       }

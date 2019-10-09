@@ -25,6 +25,7 @@ import java.io.File;
 
 // line 3 "../../../Environment.ump"
 // line 3 "../../../MemoryBudget_Environment.ump"
+// line 3 "../../../Evictor_Environment.ump"
 public class Environment
 {
 
@@ -499,6 +500,18 @@ public class Environment
     checkHandleIsValid();
 	    checkEnv();
 	    return environmentImpl.getMemoryBudget().getCacheMemoryUsage();
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 9 "../../../Evictor_Environment.ump"
+   public void evictMemory() throws DatabaseException{
+    checkHandleIsValid();
+			checkEnv();
+			environmentImpl.invokeEvictor();
   }
   
   //------------------------

@@ -1,0 +1,31 @@
+namespace com.sleepycat.je.dbi;
+
+class DbTree
+{
+    after Label306: createDb(Locker , String , DatabaseConfig , Database , boolean ){ // >>  public synchronized DatabaseImpl createDb (...)
+			idCursor.setAllowEviction(allowEviction);
+			//original(allowEviction, idCursor);
+    }
+
+     after Label307: createDb(Locker , String , DatabaseConfig , Database , boolean ){ // >>  public synchronized DatabaseImpl createDb (...)
+			nameCursor.setAllowEviction(allowEviction);
+			//original(allowEviction, nameCursor);
+    }
+
+     after Label308: getDb(Locker , String , Database , boolean ) {
+
+			nameCursor.setAllowEviction(allowEviction);
+			//original(allowEviction, nameCursor);
+    }
+
+     after Label309:getDb(DatabaseId , long , boolean , String ){
+
+			idCursor.setAllowEviction(allowEviction);
+			//original(allowEviction, idCursor);
+    }
+
+     after Label310:getDb(DatabaseId , long , boolean , String ){
+			idCursor.setAllowEviction(allowEviction);
+    }
+
+}

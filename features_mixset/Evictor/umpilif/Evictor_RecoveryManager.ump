@@ -1,0 +1,21 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryManager
+{
+
+    after Label596: buildTree() {
+			env.invokeEvictor();
+			//original();
+    }
+  
+    after Label597:undoLNs(RecoveryInfo , Set )
+    {
+      env.invokeEvictor();
+      			//original();
+    }
+    
+    after Label598:redoLNs(RecoveryInfo , Set ){
+      env.invokeEvictor();
+    }
+
+}

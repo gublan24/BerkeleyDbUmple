@@ -28,9 +28,9 @@ public class SecondaryDatabase extends Database
   // CONSTRUCTOR
   //------------------------
 
-  public SecondaryDatabase()
+  public SecondaryDatabase(Environment aEnvHandle, DatabaseConfig aConfiguration, Locker aHandleLocker)
   {
-    super();
+    super(aEnvHandle, aConfiguration, aHandleLocker);
   }
 
   //------------------------

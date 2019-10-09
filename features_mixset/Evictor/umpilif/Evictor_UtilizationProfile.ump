@@ -1,0 +1,25 @@
+namespace com.sleepycat.je.cleaner;
+
+class UtilizationProfile
+{
+    after Label187: getObsoleteDetail(Long , PackedOffsets , boolean ){
+	    cursor.evict();
+//	original(cursor);
+    }
+
+    after Label188: insertFileSummary(FileSummaryLN , long , int ) { // <<     private synchronized void insertFileSummary(...)
+	    cursor.evict();
+//	original(cursor);
+    }
+
+    after Label189: insertFileSummary(FileSummaryLN , long , int ) { // <<     private synchronized void insertFileSummary(...)
+	    cursor.setAllowEviction(false);
+//	original(cursor);
+    }
+
+   after Label190: verifyFileSummaryDatabase() {
+	   cursor.evict();
+//	original(cursor);
+    }
+
+}

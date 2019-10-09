@@ -37,6 +37,7 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../CursorImpl.ump"
 // line 3 "../../../../CursorImpl_static.ump"
 // line 3 "../../../../MemoryBudget_CursorImpl.ump"
+// line 3 "../../../../Evictor_CursorImpl.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -1795,6 +1796,29 @@ newLNSize = ln.getMemorySizeIncludedByParent();
    protected long hook286(LN ln, long oldLNSize) throws DatabaseException{
     return oldLNSize;
   }
+
+
+  /**
+   * 
+   * Disables or enables eviction during cursor operations for an internal cursor. For example, a cursor used to implement eviction should not itself perform eviction. Eviction is enabled by default.
+   */
+  // line 11 "../../../../Evictor_CursorImpl.ump"
+   public void setAllowEviction(boolean allowed){
+    allowEviction = allowed;
+  }
+
+
+  /**
+   * 
+   * Evict the LN node at the cursor position. This is used for internal databases only.
+   */
+  // line 18 "../../../../Evictor_CursorImpl.ump"
+   public void evict() throws DatabaseException{
+    //this.hook202();
+      Label202:
+			setTargetBin();
+			targetBin.evictLN(targetIndex);
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -2568,6 +2592,8 @@ newLNSize = ln.getMemorySizeIncludedByParent();
   public static final int EXACT_DATA = 0x4 ;
 // line 92 "../../../../CursorImpl.ump"
   public static final int FOUND_LAST = 0x8 ;
+// line 5 "../../../../Evictor_CursorImpl.ump"
+  private boolean allowEviction = true ;
 
   
 }

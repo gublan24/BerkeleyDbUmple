@@ -25,6 +25,7 @@ import com.sleepycat.je.log.*;
 
 // line 3 "../../../../BIN.ump"
 // line 3 "../../../../MemoryBudget_BIN.ump"
+// line 3 "../../../../Evictor_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -686,6 +687,79 @@ updateMemorySize(getTarget(index), null);
   // line 10 "../../../../MemoryBudget_BIN.ump"
    protected long getMemoryOverhead(MemoryBudget mb){
     return mb.getBINOverhead();
+  }
+
+
+  /**
+   * 
+   * @Override
+   */
+  // line 9 "../../../../Evictor_BIN.ump"
+  public int getChildEvictionType(){
+    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
+			for (int i = 0; i < getNEntries(); i++) {
+					Node node = getTarget(i);
+					if (node != null) {
+				if (node instanceof LN) {
+						if (cleaner.isEvictable(this, i)) {
+					return MAY_EVICT_LNS;
+						}
+				} else {
+						return MAY_NOT_EVICT;
+				}
+					}
+			}
+			return MAY_EVICT_NODE;
+  }
+
+
+  /**
+   * 
+   * Reduce memory consumption by evicting all LN targets. Note that the targets are not persistent, so this doesn't affect node dirtiness. The BIN should be latched by the caller.
+   * @return number of evicted bytes
+   */
+  // line 30 "../../../../Evictor_BIN.ump"
+   public long evictLNs() throws DatabaseException{
+    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
+			long removed = 0;
+			if (nCursors() == 0) {
+					for (int i = 0; i < getNEntries(); i++) {
+				removed += evictInternal(i, cleaner);
+					}
+					//this.hook601(removed);
+					Label601:  ;
+
+			}
+			return removed;
+  }
+
+
+  /**
+   * 
+   * Evict a single LN if allowed and adjust the memory budget.
+   */
+  // line 47 "../../../../Evictor_BIN.ump"
+   public void evictLN(int index) throws DatabaseException{
+    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
+			long removed = evictInternal(index, cleaner);
+			//this.hook602(removed);
+      Label602: ;
+  }
+
+
+  /**
+   * 
+   * Evict a single LN if allowed. The amount of memory freed is returned and must be subtracted from the memory budget by the caller.
+   */
+  // line 57 "../../../../Evictor_BIN.ump"
+   private long evictInternal(int index, Cleaner cleaner) throws DatabaseException{
+    Node n = getTarget(index);
+			if (n instanceof LN && cleaner.isEvictable(this, index)) {
+					setTarget(index, null);
+					return n.getMemorySizeIncludedByParent();
+			} else {
+					return 0;
+			}
   }
   
   //------------------------

@@ -1,0 +1,10 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/dbi/EnvironmentImpl.java
+namespace com.sleepycat.je.dbi;
+class EnvironmentImpl {
+  @MethodObject static class EnvironmentImpl_createDaemons {
+      before execute() {
+        _this.evictor=new Evictor(_this,"Evictor");
+        //original();
+      }
+    }
+}

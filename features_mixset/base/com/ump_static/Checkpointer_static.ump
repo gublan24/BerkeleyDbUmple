@@ -130,7 +130,21 @@ class Checkpointer {
 		      checkpointStart=DbLsn.NULL_LSN;
 		      firstActiveLsn=DbLsn.NULL_LSN;
 		      dirtyMap=null;
-		      this.hook547();
+		      //this.hook547();
+          Label547:
+					startEntry=new CheckpointStart(_this.checkpointId,invokingSource);
+		      checkpointStart=_this.logManager.log(startEntry);
+		      firstActiveLsn=_this.envImpl.getTxnManager().getFirstActiveLsn();
+		      if (firstActiveLsn == DbLsn.NULL_LSN) {
+		        firstActiveLsn=checkpointStart;
+		      }
+		 			else {
+		        if (DbLsn.compareTo(checkpointStart,firstActiveLsn) < 0) {
+		          firstActiveLsn=checkpointStart;
+		        	}
+		      }
+		      dirtyMap=_this.selectDirtyINs(flushAll,flushExtraLevel);
+//end of hook547
 		      //this.hook551();
 		      Label551:
 		      for (Iterator i=dirtyMap.values().iterator(); i.hasNext(); ) {
@@ -196,20 +210,9 @@ class Checkpointer {
       }
       protected void hook536() throws DatabaseException {
       }
-      protected void hook547() throws DatabaseException {
-        startEntry=new CheckpointStart(_this.checkpointId,invokingSource);
-        checkpointStart=_this.logManager.log(startEntry);
-        firstActiveLsn=_this.envImpl.getTxnManager().getFirstActiveLsn();
-        if (firstActiveLsn == DbLsn.NULL_LSN) {
-          firstActiveLsn=checkpointStart;
-        }
-   else {
-          if (DbLsn.compareTo(checkpointStart,firstActiveLsn) < 0) {
-            firstActiveLsn=checkpointStart;
-          }
-        }
-        dirtyMap=_this.selectDirtyINs(flushAll,flushExtraLevel);
-      }
+      //protected void hook547() throws DatabaseException {
+      
+      //}
    //   protected void hook548() throws DatabaseException {
    //   }
  //     protected void hook549() throws DatabaseException {
