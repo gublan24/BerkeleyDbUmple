@@ -27,7 +27,6 @@ import java.io.File;
 // line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
 // line 3 "../../../../DbRunAction_inner.ump"
 // line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
@@ -140,10 +139,8 @@ public class DbRunAction
     @MethodObject
     @MethodObject
     @MethodObject
-    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
-  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
   // line 35 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
   // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
@@ -246,12 +243,6 @@ public class DbRunAction
           //original(); //@Abdulaziz aaa
   
             Label847:
-  if (readOnly) {
-            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
-            envConfig.setReadOnly(true);
-          }
-          //original();
-  
             //this.hook845();
             Label845:
   if (doAction == EVICT) {

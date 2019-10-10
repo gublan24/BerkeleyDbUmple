@@ -19,7 +19,7 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="Verifier"/>
+        <feature name=""/>
         <feature name="CheckLeaks"/>
         <feature name="Statistics"/>
         <feature name="IO"/>

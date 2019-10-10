@@ -39,4 +39,6 @@ use CheckpointerDaemon/umpilif/Master.ump;
 
 use Verifier/umpilif/Master.ump;
 
+use CheckLeaks/umpilif/Master.ump;
+
 //rename 's/^/DeleteOp_/' *

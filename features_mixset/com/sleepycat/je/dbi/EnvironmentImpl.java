@@ -69,6 +69,8 @@ import com.sleepycat.je.VerifyConfig;
 // line 3 "../../../../CPTime_EnvironmentImpl_inner.ump"
 // line 3 "../../../../CheckpointerDaemon_EnvironmentImpl.ump"
 // line 3 "../../../../Verifier_EnvironmentImpl.ump"
+// line 3 "../../../../CheckLeaks_EnvironmentImpl.ump"
+// line 3 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -358,76 +360,85 @@ checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
   // line 323 "../../../../EnvironmentImpl.ump"
    private void doClose(boolean doCheckpoint) throws DatabaseException{
     StringBuffer errors = new StringBuffer();
-	try {
-	    this.hook319();
-	    try {
-		envState.checkState(DbEnvState.VALID_FOR_CLOSE, DbEnvState.CLOSED);
-	    } catch (DatabaseException DBE) {
-		throw DBE;
-	    }
-	    requestShutdownDaemons();
-	    if (doCheckpoint && !isReadOnly && (envState != DbEnvState.INVALID)
-		    && logManager.getLastLsnAtRecovery() != fileManager.getLastUsedLsn()) {
-		CheckpointConfig ckptConfig = new CheckpointConfig();
-		ckptConfig.setForce(true);
-		ckptConfig.setMinimizeRecoveryTime(true);
-		try {
-		    invokeCheckpoint(ckptConfig, false, "close");
-		} catch (DatabaseException IE) {
-		    errors.append("\nException performing checkpoint: ");
-		    errors.append(IE.toString()).append("\n");
-		}
-	    }
-	    try {
-		shutdownDaemons();
-	    } catch (InterruptedException IE) {
-		errors.append("\nException shutting down daemon threads: ");
-		errors.append(IE.toString()).append("\n");
-	    }
-	    this.hook318();
-	    try {
-		logManager.flush();
-	    } catch (DatabaseException DBE) {
-		errors.append("\nException flushing log manager: ");
-		errors.append(DBE.toString()).append("\n");
-	    }
-	    try {
-		fileManager.clear();
-	    } catch (IOException IOE) {
-		errors.append("\nException clearing file manager: ");
-		errors.append(IOE.toString()).append("\n");
-	    } catch (DatabaseException DBE) {
-		errors.append("\nException clearing file manager: ");
-		errors.append(DBE.toString()).append("\n");
-	    }
-	    try {
-		fileManager.close();
-	    } catch (IOException IOE) {
-		errors.append("\nException clearing file manager: ");
-		errors.append(IOE.toString()).append("\n");
-	    } catch (DatabaseException DBE) {
-		errors.append("\nException clearing file manager: ");
-		errors.append(DBE.toString()).append("\n");
-	    }
-	    try {
-		inMemoryINs.clear();
-	    } catch (DatabaseException DBE) {
-		errors.append("\nException closing file manager: ");
-		errors.append(DBE.toString()).append("\n");
-	    }
-	    //this.hook337();
-      Label337:
+			try {
+					this.hook319();
+					try {
+				envState.checkState(DbEnvState.VALID_FOR_CLOSE, DbEnvState.CLOSED);
+					} catch (DatabaseException DBE) {
+				throw DBE;
+					}
+					requestShutdownDaemons();
+					if (doCheckpoint && !isReadOnly && (envState != DbEnvState.INVALID)
+						&& logManager.getLastLsnAtRecovery() != fileManager.getLastUsedLsn()) {
+				CheckpointConfig ckptConfig = new CheckpointConfig();
+				ckptConfig.setForce(true);
+				ckptConfig.setMinimizeRecoveryTime(true);
+				try {
+						invokeCheckpoint(ckptConfig, false, "close");
+				} catch (DatabaseException IE) {
+						errors.append("\nException performing checkpoint: ");
+						errors.append(IE.toString()).append("\n");
+				}
+					}
+					try {
+				shutdownDaemons();
+					} catch (InterruptedException IE) {
+				errors.append("\nException shutting down daemon threads: ");
+				errors.append(IE.toString()).append("\n");
+					}
+					this.hook318();
+					try {
+				logManager.flush();
+					} catch (DatabaseException DBE) {
+				errors.append("\nException flushing log manager: ");
+				errors.append(DBE.toString()).append("\n");
+					}
+					try {
+				fileManager.clear();
+					} catch (IOException IOE) {
+				errors.append("\nException clearing file manager: ");
+				errors.append(IOE.toString()).append("\n");
+					} catch (DatabaseException DBE) {
+				errors.append("\nException clearing file manager: ");
+				errors.append(DBE.toString()).append("\n");
+					}
+					try {
+				fileManager.close();
+					} catch (IOException IOE) {
+				errors.append("\nException clearing file manager: ");
+				errors.append(IOE.toString()).append("\n");
+					} catch (DatabaseException DBE) {
+				errors.append("\nException clearing file manager: ");
+				errors.append(DBE.toString()).append("\n");
+					}
+					try {
+				inMemoryINs.clear();
+					} catch (DatabaseException DBE) {
+				errors.append("\nException closing file manager: ");
+				errors.append(DBE.toString()).append("\n");
+					}
+					//this.hook337();
+				  Label337:
 closeLogger();
 //	original();
 
-	    DbEnvPool.getInstance().remove(envHome);
-	    this.hook325(errors);
-	} finally {
-	    envState = DbEnvState.CLOSED;
-	}
-	if (errors.length() > 0 && savedInvalidatingException == null) {
-	    throw new RunRecoveryException(this, errors.toString());
-	}
+					DbEnvPool.getInstance().remove(envHome);
+					Label325:
+try {
+					checkLeaks();
+					Label311: //this.hook311();
+			} catch (DatabaseException DBE) {
+					errors.append("\nException performing validity checks: ");
+					errors.append(DBE.toString()).append("\n");
+			}
+			//original(errors);
+ //this.hook325(errors);
+			} finally {
+					envState = DbEnvState.CLOSED;
+			}
+			if (errors.length() > 0 && savedInvalidatingException == null) {
+					throw new RunRecoveryException(this, errors.toString());
+			}
   }
 
   // line 419 "../../../../EnvironmentImpl.ump"
@@ -753,11 +764,11 @@ checkpointer.shutdown();
     mapTreeRootLsn = rootLsn;
   }
 
-  // line 672 "../../../../EnvironmentImpl.ump"
-   protected void hook325(StringBuffer errors) throws DatabaseException{
-    
-  }
 
+  /**
+   * protected void hook325(StringBuffer errors) throws DatabaseException {
+   * }
+   */
   // line 675 "../../../../EnvironmentImpl.ump"
    protected void hook326(DbConfigManager mgr) throws DatabaseException{
     
@@ -1016,6 +1027,16 @@ checkpointer.shutdown();
    public int getINCompressorQueueSize() throws DatabaseException{
     return inCompressor.getBinRefQueueSize();
   }
+
+
+  /**
+   * 
+   * Debugging support. Check for leaked locks and transactions.
+   */
+  // line 9 "../../../../CheckLeaks_EnvironmentImpl.ump"
+   private void checkLeaks() throws DatabaseException{
+    new EnvironmentImpl_checkLeaks(this).execute();
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1151,6 +1172,68 @@ checkpointer.shutdown();
     protected int count ;
   // line 24 "../../../../loggingBase_EnvironmentImpl_inner.ump"
     protected String logFilePattern ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  @MethodObject
+  // line 4 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+  public static class EnvironmentImpl_checkLeaks
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public EnvironmentImpl_checkLeaks()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    public  EnvironmentImpl_checkLeaks(EnvironmentImpl _this){
+      this._this=_this;
+    }
+  
+    // line 9 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    public void execute() throws DatabaseException{
+      if (!_this.configManager.getBoolean(EnvironmentParams.ENV_CHECK_LEAKS)) {
+            return;
+          }
+          clean=true;
+          Label313: //this.hook313();
+          Label312: //this.hook312();
+          assert clean : "Lock, transaction, or latch left behind at environment close";
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 18 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    protected EnvironmentImpl _this ;
+  // line 19 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    protected boolean clean ;
+  // line 20 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    protected StatsConfig statsConfig ;
+  // line 21 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    protected LockStats lockStat ;
+  // line 22 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    protected TransactionStats txnStat ;
+  // line 23 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+    protected TransactionStats.Active[] active ;
   
     
   }  

@@ -10,19 +10,21 @@ class EnvironmentImpl {
           return;
         }
         clean=true;
-        this.hook313();
-        this.hook312();
+        Label313: //this.hook313();
+        Label312: //this.hook312();
         assert clean : "Lock, transaction, or latch left behind at environment close";
       }
+
       protected EnvironmentImpl _this;
       protected boolean clean;
       protected StatsConfig statsConfig;
       protected LockStats lockStat;
       protected TransactionStats txnStat;
       protected TransactionStats.Active[] active;
-      protected void hook312() throws DatabaseException {
-      }
-      protected void hook313() throws DatabaseException {
-      }
+      
+      //protected void hook312() throws DatabaseException {
+      //}
+      //protected void hook313() throws DatabaseException {
+      //}
     }
 }
