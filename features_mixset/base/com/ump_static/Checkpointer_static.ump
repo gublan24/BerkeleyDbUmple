@@ -32,7 +32,7 @@ class Checkpointer {
         this.configManager=configManager;
       }
       long execute() throws IllegalArgumentException, DatabaseException {
-        this.hook541();
+        Label541: //this.hook541();
         this.hook519();
         result=0;
         Label540: //this.hook540();
@@ -60,13 +60,16 @@ class Checkpointer {
           useTimeInterval=0;
           nextLsn=DbLsn.NULL_LSN;
           try {
-            if (config.getForce()) {
-              return true;
-            }
-   else {
-              Label543: //this.hook543();
-            }
-            Label542: //this.hook542();
+		        if (config.getForce()) {
+		            return true;
+		         }
+		 				else 
+		        {
+		            Label543: //this.hook543();
+		            Label544: //added from this.hook543();
+		        }
+		          Label542: //this.hook542();
+
           }
     finally {
             this.hook521();

@@ -66,6 +66,7 @@ import com.sleepycat.je.incomp.INCompressor;
 // line 3 "../../../../INCompressor_EnvironmentImpl_inner.ump"
 // line 3 "../../../../CPTime_EnvironmentImpl.ump"
 // line 3 "../../../../CPTime_EnvironmentImpl_inner.ump"
+// line 3 "../../../../CheckpointerDaemon_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -208,7 +209,10 @@ cleaner.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CLEANER)
 				&& !mgr.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY));
 			//original(mgr);
  //this.hook333(mgr);
-	    this.hook326(mgr);
+	    Label326:
+checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
+	//original(mgr);
+ //this.hook326(mgr);
 	}
 	this.hook317(mgr);
   }
@@ -474,7 +478,12 @@ if (evictor != null) {
 			}
 //			original();
 
-			this.hook327();
+			Label327:
+if (checkpointer != null) {
+					checkpointer.requestShutdown();
+			}
+			//original();
+ //this.hook327();
     // line 22 "../../../../CleanerDaemon_EnvironmentImpl.ump"
     //original();
     	if (cleaner != null) {
@@ -508,7 +517,11 @@ if (evictor != null) {
   // line 471 "../../../../EnvironmentImpl.ump"
   public void shutdownCheckpointer() throws InterruptedException{
     if (checkpointer != null) {
-	    this.hook328();
+	    Label328:
+checkpointer.shutdown();
+			checkpointer.clearEnv();
+			//original();
+ //this.hook328();
 	    checkpointer = null;
 	}
 	return;

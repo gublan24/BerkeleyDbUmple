@@ -50,15 +50,15 @@ class Checkpointer
     private volatile int highestFlushLevel;
 
     public Checkpointer(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
-	this.hook538(envImpl, waitTime, name);
-	this.envImpl = envImpl;
-	this.hook539(envImpl);
-	logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
-	this.hook531();
-	Label545: //this.hook545(waitTime);
-	lastCheckpointMillis = 0;
-	highestFlushLevel = IN.MIN_LEVEL;
-	logManager = envImpl.getLogManager();
+			Label538: //this.hook538(envImpl, waitTime, name);
+			this.envImpl = envImpl;
+			Label539: //this.hook539(envImpl);
+			logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
+			this.hook531();
+			Label545: //this.hook545(waitTime);
+			lastCheckpointMillis = 0;
+			highestFlushLevel = IN.MIN_LEVEL;
+			logManager = envImpl.getLogManager();
     }
 
     public int getHighestFlushLevel() {
@@ -308,11 +308,11 @@ class Checkpointer
     protected void hook537() throws DatabaseException {
     }
 
-    protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
-    }
+  //  protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
+  //  }
 
-    protected void hook539(EnvironmentImpl envImpl) throws DatabaseException {
-    }
+   // protected void hook539(EnvironmentImpl envImpl) throws DatabaseException {
+   // }
 
     protected void hook545(long waitTime) throws DatabaseException {
     }

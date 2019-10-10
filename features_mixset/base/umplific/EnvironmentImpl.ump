@@ -202,7 +202,7 @@ class EnvironmentImpl
 	if (!isReadOnly) {
 	    Label330: //this.hook330(mgr);
 	    Label333: //this.hook333(mgr);
-	    this.hook326(mgr);
+	    Label326: //this.hook326(mgr);
 	}
 	this.hook317(mgr);
     }
@@ -457,7 +457,7 @@ class EnvironmentImpl
 			Label331: //this.hook331();
 			//this.hook334();
 			Label334:
-			this.hook327();
+			Label327: //this.hook327();
     }
 
     /** 
@@ -469,7 +469,7 @@ class EnvironmentImpl
 
     void shutdownCheckpointer() throws InterruptedException {
 	if (checkpointer != null) {
-	    this.hook328();
+	    Label328: //this.hook328();
 	    checkpointer = null;
 	}
 	return;

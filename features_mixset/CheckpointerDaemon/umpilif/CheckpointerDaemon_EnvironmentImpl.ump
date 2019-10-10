@@ -1,0 +1,24 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    after Label326: runOrPauseDaemons(DbConfigManager ){
+			checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
+	//original(mgr);
+    }
+
+    after Label327:requestShutdownDaemons() { 
+			if (checkpointer != null) {
+					checkpointer.requestShutdown();
+			}
+			//original();
+    }
+
+    after Label328:shutdownCheckpointer() {
+
+			checkpointer.shutdown();
+			checkpointer.clearEnv();
+			//original();
+    }
+
+}

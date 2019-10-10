@@ -6,6 +6,7 @@ import de.ovgu.cide.jakutil.*;
 
 // line 3 "../../../CheckpointConfig.ump"
 // line 3 "../../../CPTime_CheckpointConfig.ump"
+// line 3 "../../../CPBytes_CheckpointConfig.ump"
 public class CheckpointConfig
 {
 
@@ -96,6 +97,26 @@ public class CheckpointConfig
    public int getMinutes(){
     return minutes;
   }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 11 "../../../CPBytes_CheckpointConfig.ump"
+   public void setKBytes(int kbytes){
+    this.kbytes = kbytes;
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 18 "../../../CPBytes_CheckpointConfig.ump"
+   public int getKBytes(){
+    return kbytes;
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -109,6 +130,8 @@ public class CheckpointConfig
   private boolean minimizeRecoveryTime = false ;
 // line 5 "../../../CPTime_CheckpointConfig.ump"
   private int minutes = 0 ;
+// line 5 "../../../CPBytes_CheckpointConfig.ump"
+  private int kbytes = 0 ;
 
   
 }

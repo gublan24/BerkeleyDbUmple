@@ -18,6 +18,8 @@ import java.io.File;
 // line 3 "../../../../Evictor_EnvironmentParams.ump"
 // line 3 "../../../../INCompressor_EnvironmentParams.ump"
 // line 3 "../../../../CPTime_EnvironmentParams.ump"
+// line 3 "../../../../CPBytes_EnvironmentParams.ump"
+// line 3 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -394,5 +396,15 @@ public class EnvironmentParams
 	    "# The checkpointer wakeup interval in microseconds. By default, this\n"
 		    + "# is inactive and we wakeup the checkpointer as a function of the\n"
 		    + "# number of bytes written to the log. (je.checkpointer.bytesInterval)");
+// line 5 ../../../../CPBytes_EnvironmentParams.ump
+  public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL = new LongConfigParam(
+	    "je.checkpointer.bytesInterval", new Long(0), new Long(Long.MAX_VALUE), new Long(20000000), false,
+	    "# Ask the checkpointer to run every time we write this many bytes\n"
+		    + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n"
+		    + "# use time based checkpointing, set this to 0.");// line 5 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
+  public static final IntConfigParam CHECKPOINTER_RETRY = new IntConfigParam("je.checkpointer.deadlockRetry",
+	    new Integer(0), new Integer(Integer.MAX_VALUE), new Integer(3), false,
+	    "# The number of times to retry a checkpoint if it runs into a deadlock.") ;
+
   
 }

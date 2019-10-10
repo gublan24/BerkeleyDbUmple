@@ -16,9 +16,9 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="CPTime"/>
-        <feature name="CPBytes"/>
-        <feature name="CheckpointerDaemon"/>
+        <feature name=""/>
+        <feature name=""/>
+        <feature name=""/>
         <feature name="Verifier"/>
         <feature name="CheckLeaks"/>
         <feature name="Statistics"/>

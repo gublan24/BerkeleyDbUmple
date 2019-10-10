@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.HashSet;
+import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../Checkpointer.ump"
 // line 3 "../../../../Checkpointer_static.ump"
@@ -44,7 +45,10 @@ import java.util.HashSet;
 // line 3 "../../../../INCompressor_Checkpointer.ump"
 // line 3 "../../../../CPTime_Checkpointer.ump"
 // line 3 "../../../../CPTime_Checkpointer_inner.ump"
-public class Checkpointer
+// line 3 "../../../../CPBytes_Checkpointer.ump"
+// line 3 "../../../../CPBytes_Checkpointer_inner.ump"
+// line 3 "../../../../CheckpointerDaemon_Checkpointer.ump"
+public class Checkpointer extends DaemonThread
 {
 
   //------------------------
@@ -56,29 +60,39 @@ public class Checkpointer
   //------------------------
 
   public Checkpointer()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {}
+  {
+    super.delete();
+  }
 
   // line 53 "../../../../Checkpointer.ump"
    public  Checkpointer(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException{
-    this.hook538(envImpl, waitTime, name);
-	this.envImpl = envImpl;
-	this.hook539(envImpl);
-	logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
-	this.hook531();
-	Label545:
+    Label538:
+super.init(0 + waitTime, name, envImpl);
+			//original(envImpl, waitTime, name);
+ //this.hook538(envImpl, waitTime, name);
+			this.envImpl = envImpl;
+			Label539:
+logSizeBytesInterval = envImpl.getConfigManager().getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
+			//original(envImpl);
+ //this.hook539(envImpl);
+			logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
+			this.hook531();
+			Label545:
 timeInterval = waitTime;
 //			original(waitTime);
  //this.hook545(waitTime);
-	lastCheckpointMillis = 0;
-	highestFlushLevel = IN.MIN_LEVEL;
-	logManager = envImpl.getLogManager();
+			lastCheckpointMillis = 0;
+			highestFlushLevel = IN.MIN_LEVEL;
+			logManager = envImpl.getLogManager();
   }
 
   // line 65 "../../../../Checkpointer.ump"
@@ -355,19 +369,46 @@ envImpl.lazyCompress(target);
     
   }
 
-  // line 312 "../../../../Checkpointer.ump"
-   protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException{
-    
-  }
 
-  // line 315 "../../../../Checkpointer.ump"
-   protected void hook539(EnvironmentImpl envImpl) throws DatabaseException{
-    
-  }
-
+  /**
+   * protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
+   * }
+   * protected void hook539(EnvironmentImpl envImpl) throws DatabaseException {
+   * }
+   */
   // line 318 "../../../../Checkpointer.ump"
    protected void hook545(long waitTime) throws DatabaseException{
     
+  }
+
+  // line 7 "../../../../CheckpointerDaemon_Checkpointer.ump"
+   public String toString(){
+    StringBuffer sb = new StringBuffer();
+			sb.append("<Checkpointer name=\"").append(name).append("\"/>");
+		return sb.toString();
+  }
+
+
+  /**
+   * 
+   * Return the number of retries when a deadlock exception occurs.
+   */
+  // line 20 "../../../../CheckpointerDaemon_Checkpointer.ump"
+   protected int nDeadlockRetries() throws DatabaseException{
+    return envImpl.getConfigManager().getInt(EnvironmentParams.CHECKPOINTER_RETRY);
+  }
+
+
+  /**
+   * 
+   * Called whenever the DaemonThread wakes up from a sleep.
+   */
+  // line 27 "../../../../CheckpointerDaemon_Checkpointer.ump"
+   protected void onWakeup() throws DatabaseException{
+    if (envImpl.isClosed()) {
+					return;
+			}
+			doCheckpoint(CheckpointConfig.DEFAULT, false, "daemon");
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -593,6 +634,7 @@ envImpl.lazyCompress(target);
   @MethodObject
   // line 30 "../../../../Checkpointer_static.ump"
   // line 4 "../../../../CPTime_Checkpointer_inner.ump"
+  // line 4 "../../../../CPBytes_Checkpointer_inner.ump"
   public static class Checkpointer_getWakeupPeriod
   {
   
@@ -625,10 +667,17 @@ envImpl.lazyCompress(target);
       wakeupPeriod=PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
               //return original();
       // END OF UMPLE BEFORE INJECTION
-      this.hook541();
+      Label541:
+  bytePeriod=configManager.getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
+          //original();
+   //this.hook541();
           this.hook519();
           result=0;
           Label540:
+  if (bytePeriod == 0) {
+  		        //original();
+  		      }
+  
   result+=wakeupPeriod;
           //original();
    //this.hook540();
@@ -672,6 +721,7 @@ envImpl.lazyCompress(target);
   @MethodObject
   // line 52 "../../../../Checkpointer_static.ump"
   // line 14 "../../../../CPTime_Checkpointer_inner.ump"
+  // line 16 "../../../../CPBytes_Checkpointer_inner.ump"
   public static class Checkpointer_isRunnable
   {
   
@@ -706,11 +756,19 @@ envImpl.lazyCompress(target);
             useTimeInterval=0;
             nextLsn=DbLsn.NULL_LSN;
             try {
-              if (config.getForce()) {
-                return true;
-              }
-     else {
-                Label543:
+  		        if (config.getForce()) {
+  		            return true;
+  		         }
+  		 				else 
+  		        {
+  		            Label543:
+  if (config.getKBytes() != 0) {
+  				      useBytesInterval=config.getKBytes() << 10;
+  				    }
+  					 else {
+  								  throw new ReturnBoolean(false); // add hook542
+  					 }
+  
   if (config.getMinutes() != 0) {
             useTimeInterval=config.getMinutes() * 60 * 1000;
   				}
@@ -718,8 +776,30 @@ envImpl.lazyCompress(target);
   						     Label544: useTimeInterval=_this.timeInterval; // from hook544() 
   				}
    //this.hook543();
-              }
-              Label542:
+  		            Label544:
+  if (_this.logSizeBytesInterval != 0) {
+            useBytesInterval=_this.logSizeBytesInterval;
+          }
+  //   else {
+  //          original();
+  //        }
+   //added from this.hook543();
+  		        }
+  		          Label542:
+  if (useBytesInterval != 0) {
+  		        nextLsn=_this.envImpl.getFileManager().getNextLsn();
+  		        if (DbLsn.getNoCleaningDistance(nextLsn,_this.lastCheckpointEnd,_this.logFileMax) >= useBytesInterval) {
+  		          throw new ReturnBoolean(true);
+  		        }
+  				 else {
+  						      throw new ReturnBoolean(false);
+  						  }
+  					}
+  
+  				//else {
+  				//    original();
+  				//	  }
+  
   if (useTimeInterval != 0) {
             lastUsedLsn=_this.envImpl.getFileManager().getLastUsedLsn();
             if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn,_this.lastCheckpointEnd) != 0)) {
@@ -733,6 +813,7 @@ envImpl.lazyCompress(target);
   						    throw new ReturnBoolean(false); // added from hook542() 
   						  }
    //this.hook542();
+  
             }
       finally {
               this.hook521();
@@ -744,7 +825,7 @@ envImpl.lazyCompress(target);
           }
     }
   
-    // line 88 "../../../../Checkpointer_static.ump"
+    // line 91 "../../../../Checkpointer_static.ump"
      protected void hook521() throws DatabaseException{
       
     }
@@ -753,19 +834,19 @@ envImpl.lazyCompress(target);
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 80 "../../../../Checkpointer_static.ump"
+    // line 83 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 81 "../../../../Checkpointer_static.ump"
-    protected CheckpointConfig config ;
-  // line 82 "../../../../Checkpointer_static.ump"
-    protected long useBytesInterval ;
-  // line 83 "../../../../Checkpointer_static.ump"
-    protected long useTimeInterval ;
   // line 84 "../../../../Checkpointer_static.ump"
-    protected long nextLsn ;
+    protected CheckpointConfig config ;
   // line 85 "../../../../Checkpointer_static.ump"
-    protected long lastUsedLsn ;
+    protected long useBytesInterval ;
   // line 86 "../../../../Checkpointer_static.ump"
+    protected long useTimeInterval ;
+  // line 87 "../../../../Checkpointer_static.ump"
+    protected long nextLsn ;
+  // line 88 "../../../../Checkpointer_static.ump"
+    protected long lastUsedLsn ;
+  // line 89 "../../../../Checkpointer_static.ump"
     protected StringBuffer sb ;
   
     
@@ -777,7 +858,7 @@ envImpl.lazyCompress(target);
   @MethodObject
     @MethodObject
     @MethodObject
-  // line 98 "../../../../Checkpointer_static.ump"
+  // line 101 "../../../../Checkpointer_static.ump"
   // line 21 "../../../../MemoryBudget_Checkpointer_inner.ump"
   // line 4 "../../../../Evictor_Checkpointer_inner.ump"
   public static class Checkpointer_doCheckpoint
@@ -801,7 +882,7 @@ envImpl.lazyCompress(target);
     public void delete()
     {}
   
-    // line 100 "../../../../Checkpointer_static.ump"
+    // line 103 "../../../../Checkpointer_static.ump"
     public  Checkpointer_doCheckpoint(Checkpointer _this, CheckpointConfig config, boolean flushAll, String invokingSource){
       this._this=_this;
           this.config=config;
@@ -809,7 +890,7 @@ envImpl.lazyCompress(target);
           this.invokingSource=invokingSource;
     }
   
-    // line 106 "../../../../Checkpointer_static.ump"
+    // line 109 "../../../../Checkpointer_static.ump"
     public void execute() throws DatabaseException{
       if (_this.envImpl.isReadOnly()) {
             return;
@@ -906,17 +987,17 @@ envImpl.lazyCompress(target);
           }
     }
   
-    // line 199 "../../../../Checkpointer_static.ump"
+    // line 202 "../../../../Checkpointer_static.ump"
      protected void hook522() throws DatabaseException{
       
     }
   
-    // line 201 "../../../../Checkpointer_static.ump"
+    // line 204 "../../../../Checkpointer_static.ump"
      protected void hook523() throws DatabaseException{
       
     }
   
-    // line 203 "../../../../Checkpointer_static.ump"
+    // line 206 "../../../../Checkpointer_static.ump"
      protected void hook524() throws DatabaseException{
       
     }
@@ -926,17 +1007,17 @@ envImpl.lazyCompress(target);
      * protected void hook525() throws DatabaseException {
      * }
      */
-    // line 208 "../../../../Checkpointer_static.ump"
+    // line 211 "../../../../Checkpointer_static.ump"
      protected void hook534() throws DatabaseException{
       
     }
   
-    // line 210 "../../../../Checkpointer_static.ump"
+    // line 213 "../../../../Checkpointer_static.ump"
      protected void hook535() throws DatabaseException{
       
     }
   
-    // line 212 "../../../../Checkpointer_static.ump"
+    // line 215 "../../../../Checkpointer_static.ump"
      protected void hook536() throws DatabaseException{
       
     }
@@ -945,45 +1026,45 @@ envImpl.lazyCompress(target);
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 178 "../../../../Checkpointer_static.ump"
+    // line 181 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 179 "../../../../Checkpointer_static.ump"
-    protected CheckpointConfig config ;
-  // line 180 "../../../../Checkpointer_static.ump"
-    protected boolean flushAll ;
-  // line 181 "../../../../Checkpointer_static.ump"
-    protected String invokingSource ;
   // line 182 "../../../../Checkpointer_static.ump"
-    protected boolean flushExtraLevel ;
+    protected CheckpointConfig config ;
   // line 183 "../../../../Checkpointer_static.ump"
-    protected Cleaner cleaner ;
+    protected boolean flushAll ;
   // line 184 "../../../../Checkpointer_static.ump"
-    protected Set[] cleanerFiles ;
+    protected String invokingSource ;
   // line 185 "../../../../Checkpointer_static.ump"
-    protected boolean success ;
+    protected boolean flushExtraLevel ;
   // line 186 "../../../../Checkpointer_static.ump"
-    protected boolean traced ;
+    protected Cleaner cleaner ;
   // line 187 "../../../../Checkpointer_static.ump"
-    protected int dirtyMapMemSize ;
+    protected Set[] cleanerFiles ;
   // line 188 "../../../../Checkpointer_static.ump"
-    protected MemoryBudget mb ;
+    protected boolean success ;
   // line 189 "../../../../Checkpointer_static.ump"
-    protected long checkpointStart ;
+    protected boolean traced ;
   // line 190 "../../../../Checkpointer_static.ump"
-    protected long firstActiveLsn ;
+    protected int dirtyMapMemSize ;
   // line 191 "../../../../Checkpointer_static.ump"
-    protected SortedMap dirtyMap ;
+    protected MemoryBudget mb ;
   // line 192 "../../../../Checkpointer_static.ump"
-    protected CheckpointStart startEntry ;
+    protected long checkpointStart ;
   // line 193 "../../../../Checkpointer_static.ump"
-    protected int totalSize ;
+    protected long firstActiveLsn ;
   // line 194 "../../../../Checkpointer_static.ump"
-    protected Set nodeSet ;
+    protected SortedMap dirtyMap ;
   // line 195 "../../../../Checkpointer_static.ump"
-    protected int size ;
+    protected CheckpointStart startEntry ;
   // line 196 "../../../../Checkpointer_static.ump"
-    protected boolean allowDeltas ;
+    protected int totalSize ;
   // line 197 "../../../../Checkpointer_static.ump"
+    protected Set nodeSet ;
+  // line 198 "../../../../Checkpointer_static.ump"
+    protected int size ;
+  // line 199 "../../../../Checkpointer_static.ump"
+    protected boolean allowDeltas ;
+  // line 200 "../../../../Checkpointer_static.ump"
     protected CheckpointEnd endEntry ;
   
     
@@ -994,7 +1075,7 @@ envImpl.lazyCompress(target);
   
   @MethodObject
     @MethodObject
-  // line 227 "../../../../Checkpointer_static.ump"
+  // line 230 "../../../../Checkpointer_static.ump"
   // line 4 "../../../../MemoryBudget_Checkpointer_inner.ump"
   public static class Checkpointer_selectDirtyINs
   {
@@ -1017,14 +1098,14 @@ envImpl.lazyCompress(target);
     public void delete()
     {}
   
-    // line 229 "../../../../Checkpointer_static.ump"
+    // line 232 "../../../../Checkpointer_static.ump"
     public  Checkpointer_selectDirtyINs(Checkpointer _this, boolean flushAll, boolean flushExtraLevel){
       this._this=_this;
           this.flushAll=flushAll;
           this.flushExtraLevel=flushExtraLevel;
     }
   
-    // line 234 "../../../../Checkpointer_static.ump"
+    // line 237 "../../../../Checkpointer_static.ump"
     public SortedMap execute() throws DatabaseException{
       newDirtyMap=new TreeMap();
           inMemINs=_this.envImpl.getInMemoryINs();
@@ -1092,7 +1173,7 @@ envImpl.lazyCompress(target);
           return newDirtyMap;
     }
   
-    // line 292 "../../../../Checkpointer_static.ump"
+    // line 295 "../../../../Checkpointer_static.ump"
      protected void hook529() throws DatabaseException{
       
     }
@@ -1101,27 +1182,27 @@ envImpl.lazyCompress(target);
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 277 "../../../../Checkpointer_static.ump"
+    // line 280 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 278 "../../../../Checkpointer_static.ump"
-    protected boolean flushAll ;
-  // line 279 "../../../../Checkpointer_static.ump"
-    protected boolean flushExtraLevel ;
-  // line 280 "../../../../Checkpointer_static.ump"
-    protected SortedMap newDirtyMap ;
   // line 281 "../../../../Checkpointer_static.ump"
-    protected INList inMemINs ;
+    protected boolean flushAll ;
   // line 282 "../../../../Checkpointer_static.ump"
-    protected long totalSize ;
+    protected boolean flushExtraLevel ;
   // line 283 "../../../../Checkpointer_static.ump"
-    protected MemoryBudget mb ;
+    protected SortedMap newDirtyMap ;
   // line 284 "../../../../Checkpointer_static.ump"
-    protected Iterator iter ;
+    protected INList inMemINs ;
   // line 285 "../../../../Checkpointer_static.ump"
-    protected IN in ;
+    protected long totalSize ;
   // line 286 "../../../../Checkpointer_static.ump"
-    protected Integer level ;
+    protected MemoryBudget mb ;
   // line 287 "../../../../Checkpointer_static.ump"
+    protected Iterator iter ;
+  // line 288 "../../../../Checkpointer_static.ump"
+    protected IN in ;
+  // line 289 "../../../../Checkpointer_static.ump"
+    protected Integer level ;
+  // line 290 "../../../../Checkpointer_static.ump"
     protected Set dirtySet ;
   
     
@@ -1161,6 +1242,14 @@ envImpl.lazyCompress(target);
   }
 // line 5 "../../../../CPTime_Checkpointer.ump"
   private long timeInterval ;
+// line 5 "../../../../CPBytes_Checkpointer.ump"
+  private long logSizeBytesInterval ;
+
+// line 12 "../../../../CheckpointerDaemon_Checkpointer.ump"
+  synchronized public void clearEnv () 
+  {
+    envImpl = null;
+  }
 
   
 }
