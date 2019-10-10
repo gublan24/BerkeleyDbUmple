@@ -757,7 +757,7 @@ class RecoveryManager
 		    if (DbLsn.compareTo(logLsn, location.childLsn) >= 0 && lnFromLog.isDeleted()) {
 			location.bin.setKnownDeletedLeaveTarget(location.index);
 			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			this.hook594(db, location, deletedKey);
+			Label594: //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;
@@ -793,8 +793,50 @@ class RecoveryManager
 	boolean found = false;
 	boolean replaced = false;
 	boolean success = false;
-	hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info,
-		splitsAllowed, found, replaced, success);
+	Label584: //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
+	location.reset();
+		found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
+			true);
+		if (lnFromLog.containsDuplicates()) {
+			  if (found) {
+			DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
+			replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			  }
+		} else {
+			  if (found) {
+			if (info != null) {
+				  info.lnFound++;
+			}
+			boolean updateEntry = DbLsn.compareTo(logLsn, location.childLsn) == 0;
+			if (updateEntry) {
+				  if (abortLsn == DbLsn.NULL_LSN) {
+				location.bin.setKnownDeletedLeaveTarget(location.index);
+				byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
+				Label595: //hook595(db, location, deletedKey);
+				  } else {
+				if (info != null) {
+					  info.lnReplaced++;
+				}
+				replaced = true;
+				location.bin.updateEntry(location.index, null, abortLsn);
+				if (abortKnownDeleted) {
+					  location.bin.setKnownDeleted(location.index);
+				} else {
+					  location.bin.clearKnownDeleted(location.index);
+				}
+				  }
+				  location.bin.clearPendingDeleted(location.index);
+			}
+			  } else {
+			if (info != null) {
+				  info.lnNotFound++;
+			}
+			  }
+		}
+		success = true;
+  
+
+// End hook584
     }
 
     /** 
@@ -1019,47 +1061,7 @@ class RecoveryManager
     protected static void hook584(Level traceLevel, DatabaseImpl db, TreeLocation location, LN lnFromLog,
 	    byte[] mainKey, byte[] dupKey, long logLsn, long abortLsn, boolean abortKnownDeleted, RecoveryInfo info,
 	    boolean splitsAllowed, boolean found, boolean replaced, boolean success) throws DatabaseException {
-	location.reset();
-	found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
-		true);
-	if (lnFromLog.containsDuplicates()) {
-	    if (found) {
-		DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
-		replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
-	    }
-	} else {
-	    if (found) {
-		if (info != null) {
-		    info.lnFound++;
-		}
-		boolean updateEntry = DbLsn.compareTo(logLsn, location.childLsn) == 0;
-		if (updateEntry) {
-		    if (abortLsn == DbLsn.NULL_LSN) {
-			location.bin.setKnownDeletedLeaveTarget(location.index);
-			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			hook595(db, location, deletedKey);
-		    } else {
-			if (info != null) {
-			    info.lnReplaced++;
-			}
-			replaced = true;
-			location.bin.updateEntry(location.index, null, abortLsn);
-			if (abortKnownDeleted) {
-			    location.bin.setKnownDeleted(location.index);
-			} else {
-			    location.bin.clearKnownDeleted(location.index);
-			}
-		    }
-		    location.bin.clearPendingDeleted(location.index);
-		}
-	    } else {
-		if (info != null) {
-		    info.lnNotFound++;
-		}
-	    }
-	}
-	success = true;
-    }
+	  }
 
     protected void hook585(IN in) throws DatabaseException {
     }

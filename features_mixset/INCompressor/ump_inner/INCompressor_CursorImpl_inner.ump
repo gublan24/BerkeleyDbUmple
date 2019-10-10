@@ -1,0 +1,11 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/INCompressor/com/sleepycat/je/dbi/CursorImpl.java
+namespace com.sleepycat.je.dbi;
+class CursorImpl {
+  @MethodObject static class CursorImpl_fetchCurrent {
+      after Label280: execute() {
+        envImpl=_this.database.getDbEnvironment();
+        envImpl.addToCompressorQueue(_this.targetBin,new Key(_this.targetBin.getKey(_this.targetIndex)),false);
+        //original();
+      }
+    }
+}

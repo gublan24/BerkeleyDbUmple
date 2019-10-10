@@ -52,6 +52,7 @@ import java.io.IOException;
 // line 3 "../../../../loggingBase_RecoveryManager.ump"
 // line 3 "../../../../loggingBase_RecoveryManager_inner.ump"
 // line 3 "../../../../Evictor_RecoveryManager.ump"
+// line 3 "../../../../INCompressor_RecoveryManager.ump"
 public class RecoveryManager
 {
 
@@ -799,7 +800,12 @@ env.invokeEvictor();
 		    if (DbLsn.compareTo(logLsn, location.childLsn) >= 0 && lnFromLog.isDeleted()) {
 			location.bin.setKnownDeletedLeaveTarget(location.index);
 			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			this.hook594(db, location, deletedKey);
+			Label594:
+if (deletedKey != null) {
+					db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
+			}
+			//original(db, location, deletedKey);
+ //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;
@@ -836,8 +842,53 @@ env.invokeEvictor();
     boolean found = false;
 	boolean replaced = false;
 	boolean success = false;
-	hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info,
-		splitsAllowed, found, replaced, success);
+	Label584: //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
+	location.reset();
+		found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
+			true);
+		if (lnFromLog.containsDuplicates()) {
+			  if (found) {
+			DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
+			replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			  }
+		} else {
+			  if (found) {
+			if (info != null) {
+				  info.lnFound++;
+			}
+			boolean updateEntry = DbLsn.compareTo(logLsn, location.childLsn) == 0;
+			if (updateEntry) {
+				  if (abortLsn == DbLsn.NULL_LSN) {
+				location.bin.setKnownDeletedLeaveTarget(location.index);
+				byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
+				Label595:
+db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
+			//original(db, location, deletedKey);
+ //hook595(db, location, deletedKey);
+				  } else {
+				if (info != null) {
+					  info.lnReplaced++;
+				}
+				replaced = true;
+				location.bin.updateEntry(location.index, null, abortLsn);
+				if (abortKnownDeleted) {
+					  location.bin.setKnownDeleted(location.index);
+				} else {
+					  location.bin.clearKnownDeleted(location.index);
+				}
+				  }
+				  location.bin.clearPendingDeleted(location.index);
+			}
+			  } else {
+			if (info != null) {
+				  info.lnNotFound++;
+			}
+			  }
+		}
+		success = true;
+  
+
+// End hook584
   }
 
 
@@ -850,7 +901,7 @@ env.invokeEvictor();
    * @param keyto use when creating a new ChildReference object.
    * @return true if LN was inserted, false if it was a duplicate duplicate orif an attempt was made to insert a duplicate when allowDuplicates was false.
    */
-  // line 810 "../../../../RecoveryManager.ump"
+  // line 852 "../../../../RecoveryManager.ump"
    private static  boolean insertRecovery(DatabaseImpl db, TreeLocation location, long logLsn) throws DatabaseException{
     ChildReference newLNRef = new ChildReference(null, location.lnKey, logLsn);
 	BIN parentBIN = location.bin;
@@ -885,7 +936,7 @@ env.invokeEvictor();
    * 
    * Update file utilization info during redo.
    */
-  // line 843 "../../../../RecoveryManager.ump"
+  // line 885 "../../../../RecoveryManager.ump"
    private void redoUtilizationInfo(long logLsn, long treeLsn, long abortLsn, boolean abortKnownDeleted, LN ln, TxnNodeId txnNodeId, Set countedAbortLsnNodes){
     UtilizationTracker tracker = env.getUtilizationTracker();
 	if (ln.isDeleted()) {
@@ -926,7 +977,7 @@ env.invokeEvictor();
    * 
    * Update file utilization info during recovery undo (not abort undo).
    */
-  // line 882 "../../../../RecoveryManager.ump"
+  // line 924 "../../../../RecoveryManager.ump"
    private void undoUtilizationInfo(LN ln, long logLsn, long abortLsn, boolean abortKnownDeleted, TxnNodeId txnNodeId, Map countedFileSummaries, Set countedAbortLsnNodes){
     UtilizationTracker tracker = env.getUtilizationTracker();
 	Long logFileNum = new Long(DbLsn.getFileNumber(logLsn));
@@ -951,7 +1002,7 @@ env.invokeEvictor();
    * 
    * Concoct a header for the recovery pass trace info.
    */
-  // line 904 "../../../../RecoveryManager.ump"
+  // line 946 "../../../../RecoveryManager.ump"
    private String passStartHeader(int passNum){
     return "Recovery Pass " + passNum + " start: ";
   }
@@ -961,7 +1012,7 @@ env.invokeEvictor();
    * 
    * Concoct a header for the recovery pass trace info.
    */
-  // line 911 "../../../../RecoveryManager.ump"
+  // line 953 "../../../../RecoveryManager.ump"
    private String passEndHeader(int passNum, long start, long end){
     return "Recovery Pass " + passNum + " end (" + (end - start) + "): ";
   }
@@ -971,240 +1022,201 @@ env.invokeEvictor();
    * 
    * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled. This is used to construct verbose trace messages for individual log entry processing.
    */
-  // line 920 "../../../../RecoveryManager.ump"
+  // line 962 "../../../../RecoveryManager.ump"
    private static  void trace(Level level, DatabaseImpl database, String debugType, boolean success, Node node, long logLsn, IN parent, boolean found, boolean replaced, boolean inserted, long replacedLsn, long abortLsn, int index){
     new RecoveryManager_trace(level, database, debugType, success, node, logLsn, parent, found, replaced, inserted,
 		replacedLsn, abortLsn, index).execute();
   }
 
-  // line 925 "../../../../RecoveryManager.ump"
+  // line 967 "../../../../RecoveryManager.ump"
    private void traceAndThrowException(long badLsn, String method, Exception origException) throws DatabaseException{
     String badLsnString = DbLsn.getNoFormatString(badLsn);
 	this.hook577(method, origException, badLsnString);
 	throw new DatabaseException("last LSN=" + badLsnString, origException);
   }
 
-  // line 931 "../../../../RecoveryManager.ump"
+  // line 973 "../../../../RecoveryManager.ump"
    protected void hook556() throws DatabaseException,IOException{
     
   }
 
-  // line 934 "../../../../RecoveryManager.ump"
+  // line 976 "../../../../RecoveryManager.ump"
    protected void hook557(DatabaseImpl db) throws DatabaseException{
     
   }
 
-  // line 937 "../../../../RecoveryManager.ump"
+  // line 979 "../../../../RecoveryManager.ump"
    protected void hook558() throws DatabaseException,IOException{
     
   }
 
-  // line 940 "../../../../RecoveryManager.ump"
+  // line 982 "../../../../RecoveryManager.ump"
    protected void hook559() throws DatabaseException,IOException{
     
   }
 
-  // line 943 "../../../../RecoveryManager.ump"
+  // line 985 "../../../../RecoveryManager.ump"
    protected void hook560() throws DatabaseException,IOException{
     
   }
 
-  // line 946 "../../../../RecoveryManager.ump"
+  // line 988 "../../../../RecoveryManager.ump"
    protected void hook561(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 949 "../../../../RecoveryManager.ump"
+  // line 991 "../../../../RecoveryManager.ump"
    protected void hook562(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 952 "../../../../RecoveryManager.ump"
+  // line 994 "../../../../RecoveryManager.ump"
    protected void hook563() throws IOException,DatabaseException{
     
   }
 
-  // line 955 "../../../../RecoveryManager.ump"
+  // line 997 "../../../../RecoveryManager.ump"
    protected void hook564(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 958 "../../../../RecoveryManager.ump"
+  // line 1000 "../../../../RecoveryManager.ump"
    protected void hook565(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 961 "../../../../RecoveryManager.ump"
+  // line 1003 "../../../../RecoveryManager.ump"
    protected void hook566(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 964 "../../../../RecoveryManager.ump"
+  // line 1006 "../../../../RecoveryManager.ump"
    protected void hook567(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 967 "../../../../RecoveryManager.ump"
+  // line 1009 "../../../../RecoveryManager.ump"
    protected void hook568(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 970 "../../../../RecoveryManager.ump"
+  // line 1012 "../../../../RecoveryManager.ump"
    protected void hook569(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 973 "../../../../RecoveryManager.ump"
+  // line 1015 "../../../../RecoveryManager.ump"
    protected void hook570(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 976 "../../../../RecoveryManager.ump"
+  // line 1018 "../../../../RecoveryManager.ump"
    protected void hook571(long start, long end) throws IOException,DatabaseException{
     
   }
 
-  // line 979 "../../../../RecoveryManager.ump"
+  // line 1021 "../../../../RecoveryManager.ump"
    protected void hook572() throws IOException,DatabaseException{
     
   }
 
-  // line 982 "../../../../RecoveryManager.ump"
+  // line 1024 "../../../../RecoveryManager.ump"
    protected void hook573() throws DatabaseException,IOException{
     
   }
 
-  // line 985 "../../../../RecoveryManager.ump"
+  // line 1027 "../../../../RecoveryManager.ump"
    protected void hook574(LNFileReader reader) throws IOException,DatabaseException,Exception{
     
   }
 
-  // line 988 "../../../../RecoveryManager.ump"
+  // line 1030 "../../../../RecoveryManager.ump"
    protected void hook575(IOException e) throws DatabaseException{
     
   }
 
-  // line 991 "../../../../RecoveryManager.ump"
+  // line 1033 "../../../../RecoveryManager.ump"
    protected void hook576(DatabaseImpl db, long logLsn, Exception e, String trace) throws DatabaseException{
     
   }
 
-  // line 994 "../../../../RecoveryManager.ump"
+  // line 1036 "../../../../RecoveryManager.ump"
    protected void hook577(String method, Exception origException, String badLsnString) throws DatabaseException{
     
   }
 
-  // line 997 "../../../../RecoveryManager.ump"
+  // line 1039 "../../../../RecoveryManager.ump"
    protected void hook578(EnvironmentImpl env) throws DatabaseException{
     
   }
 
-  // line 1001 "../../../../RecoveryManager.ump"
+  // line 1043 "../../../../RecoveryManager.ump"
    protected void hook579(long nodeId, boolean containsDuplicates, long logLsn, boolean found, boolean deleted, SearchResult result) throws DatabaseException{
     
   }
 
-  // line 1005 "../../../../RecoveryManager.ump"
+  // line 1047 "../../../../RecoveryManager.ump"
    protected void hook580(DatabaseImpl db, IN inFromLog, long lsn, boolean success, RootUpdater rootUpdater) throws DatabaseException{
     
   }
 
-  // line 1009 "../../../../RecoveryManager.ump"
+  // line 1051 "../../../../RecoveryManager.ump"
    protected void hook581(DatabaseImpl db, DIN inFromLog, long lsn, boolean found, boolean inserted, boolean replaced, long origLsn, IN parent, int index, boolean success) throws DatabaseException{
     
   }
 
-  // line 1013 "../../../../RecoveryManager.ump"
+  // line 1055 "../../../../RecoveryManager.ump"
    protected void hook582(DatabaseImpl db, IN inFromLog, long logLsn, boolean inserted, boolean replaced, long origLsn, boolean success, SearchResult result) throws DatabaseException{
     
   }
 
-  // line 1017 "../../../../RecoveryManager.ump"
+  // line 1059 "../../../../RecoveryManager.ump"
    protected void hook583(DatabaseImpl db, TreeLocation location, LN lnFromLog, long logLsn, boolean found, boolean replaced, boolean inserted, boolean success) throws DatabaseException{
     
   }
 
-  // line 1022 "../../../../RecoveryManager.ump"
+  // line 1064 "../../../../RecoveryManager.ump"
    protected static  void hook584(Level traceLevel, DatabaseImpl db, TreeLocation location, LN lnFromLog, byte [] mainKey, byte [] dupKey, long logLsn, long abortLsn, boolean abortKnownDeleted, RecoveryInfo info, boolean splitsAllowed, boolean found, boolean replaced, boolean success) throws DatabaseException{
-    location.reset();
-	found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
-		true);
-	if (lnFromLog.containsDuplicates()) {
-	    if (found) {
-		DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
-		replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
-	    }
-	} else {
-	    if (found) {
-		if (info != null) {
-		    info.lnFound++;
-		}
-		boolean updateEntry = DbLsn.compareTo(logLsn, location.childLsn) == 0;
-		if (updateEntry) {
-		    if (abortLsn == DbLsn.NULL_LSN) {
-			location.bin.setKnownDeletedLeaveTarget(location.index);
-			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			hook595(db, location, deletedKey);
-		    } else {
-			if (info != null) {
-			    info.lnReplaced++;
-			}
-			replaced = true;
-			location.bin.updateEntry(location.index, null, abortLsn);
-			if (abortKnownDeleted) {
-			    location.bin.setKnownDeleted(location.index);
-			} else {
-			    location.bin.clearKnownDeleted(location.index);
-			}
-		    }
-		    location.bin.clearPendingDeleted(location.index);
-		}
-	    } else {
-		if (info != null) {
-		    info.lnNotFound++;
-		}
-	    }
-	}
-	success = true;
+    
   }
 
-  // line 1065 "../../../../RecoveryManager.ump"
+  // line 1067 "../../../../RecoveryManager.ump"
    protected void hook585(IN in) throws DatabaseException{
     
   }
 
-  // line 1070 "../../../../RecoveryManager.ump"
+  // line 1072 "../../../../RecoveryManager.ump"
    protected void hook586(RecoveryInfo info, LNFileReader reader, TreeLocation location, LN ln, long logLsn, long abortLsn, boolean abortKnownDeleted, DatabaseImpl db) throws IOException,DatabaseException,Exception{
     undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,
 		abortKnownDeleted, info, true);
   }
 
-  // line 1075 "../../../../RecoveryManager.ump"
+  // line 1077 "../../../../RecoveryManager.ump"
    protected void hook587(IN inFromLog, long logLsn) throws DatabaseException{
     
   }
 
-  // line 1078 "../../../../RecoveryManager.ump"
+  // line 1080 "../../../../RecoveryManager.ump"
    protected void hook588(SearchResult result) throws DatabaseException{
     
   }
 
-  // line 1081 "../../../../RecoveryManager.ump"
+  // line 1083 "../../../../RecoveryManager.ump"
    protected void hook589(IN parent) throws DatabaseException{
     
   }
 
-  // line 1084 "../../../../RecoveryManager.ump"
+  // line 1086 "../../../../RecoveryManager.ump"
    protected void hook590(SearchResult result) throws DatabaseException{
     
   }
 
-  // line 1087 "../../../../RecoveryManager.ump"
+  // line 1089 "../../../../RecoveryManager.ump"
    protected void hook591(TreeLocation location) throws DatabaseException{
     
   }
 
-  // line 1091 "../../../../RecoveryManager.ump"
+  // line 1093 "../../../../RecoveryManager.ump"
    protected static  boolean hook592(TreeLocation location, long logLsn, long abortLsn, boolean replaced, DIN duplicateRoot) throws DatabaseException{
     if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
 					duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
@@ -1213,17 +1225,17 @@ env.invokeEvictor();
 			return replaced;
   }
 
-  // line 1099 "../../../../RecoveryManager.ump"
+  // line 1101 "../../../../RecoveryManager.ump"
    protected void hook593(INFileReader reader) throws IOException,DatabaseException{
     
   }
 
-  // line 1102 "../../../../RecoveryManager.ump"
+  // line 1104 "../../../../RecoveryManager.ump"
    protected void hook594(DatabaseImpl db, TreeLocation location, byte [] deletedKey) throws DatabaseException{
     
   }
 
-  // line 1105 "../../../../RecoveryManager.ump"
+  // line 1107 "../../../../RecoveryManager.ump"
    protected static  void hook595(DatabaseImpl db, TreeLocation location, byte [] deletedKey) throws DatabaseException{
     
   }

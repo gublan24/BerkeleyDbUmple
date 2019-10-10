@@ -266,7 +266,7 @@ class Txn
 					}
 						}
 						writeInfo = null;
-						this.hook803();
+						Label803: //this.hook803();
 				}
 				traceCommit(numWriteLocks, numReadLocks);
 					}
@@ -319,7 +319,7 @@ class Txn
 		numReadLocks = (readLocks == null) ? 0 : clearReadLocks();
 		Label808: //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
-		this.hook804();
+		Label804: //this.hook804();
 	    }
 	    Label807: //this.hook807();
 	    synchronized (this) {
@@ -790,11 +790,11 @@ class Txn
 		abortLsn, abortKnownDeleted, null, false);
     }
 
-    protected void hook803() throws DatabaseException, RunRecoveryException, Throwable {
-    }
+  //  protected void hook803() throws DatabaseException, RunRecoveryException, Throwable {
+  //  }
 
-    protected void hook804() throws DatabaseException {
-    }
+  //  protected void hook804() throws DatabaseException {
+  //  }
 
   //  protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
   //  }

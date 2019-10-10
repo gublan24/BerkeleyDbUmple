@@ -1,0 +1,11 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    after Label527: logTargetAndUpdateParent(IN , IN , int , boolean , long , boolean )
+    {
+			envImpl.lazyCompress(target);
+			//original(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
+    }
+
+}

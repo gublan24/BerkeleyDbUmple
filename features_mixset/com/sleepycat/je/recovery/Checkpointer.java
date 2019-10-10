@@ -41,6 +41,7 @@ import java.util.HashSet;
 // line 3 "../../../../Evictor_Checkpointer.ump"
 // line 3 "../../../../Evictor_Checkpointer_inner.ump"
 // line 3 "../../../../DeleteOp_Checkpointer.ump"
+// line 3 "../../../../INCompressor_Checkpointer.ump"
 public class Checkpointer
 {
 
@@ -244,26 +245,29 @@ if (!(targetRef.db.isDeleted())) {
   // line 220 "../../../../Checkpointer.ump"
    private String dumpParentChildInfo(SearchResult result, IN parent, long childNodeId, int currentLevel, Tree tree) throws DatabaseException{
     StringBuffer sb = new StringBuffer();
-	sb.append("ckptId=").append(checkpointId);
-	sb.append(" result=").append(result);
-	sb.append(" parent node=").append(parent.getNodeId());
-	sb.append(" level=").append(parent.getLevel());
-	sb.append(" child node=").append(childNodeId);
-	sb.append(" level=").append(currentLevel);
-	return sb.toString();
+			sb.append("ckptId=").append(checkpointId);
+			sb.append(" result=").append(result);
+			sb.append(" parent node=").append(parent.getNodeId());
+			sb.append(" level=").append(parent.getLevel());
+			sb.append(" child node=").append(childNodeId);
+			sb.append(" level=").append(currentLevel);
+			return sb.toString();
   }
 
   // line 232 "../../../../Checkpointer.ump"
    private boolean logTargetAndUpdateParent(IN target, IN parent, int index, boolean allowDeltas, long checkpointStart, boolean logProvisionally) throws DatabaseException{
     target.latch(false);
-	long newLsn = DbLsn.NULL_LSN;
-	boolean mustLogParent = true;
-	this.hook527(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
-	if (newLsn != DbLsn.NULL_LSN) {
-	    this.hook533(target);
-	    parent.updateEntry(index, newLsn);
-	}
-	return mustLogParent;
+			long newLsn = DbLsn.NULL_LSN;
+			boolean mustLogParent = true;
+			Label527:
+envImpl.lazyCompress(target);
+			//original(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
+ //this.hook527(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
+			if (newLsn != DbLsn.NULL_LSN) {
+					this.hook533(target);
+					parent.updateEntry(index, newLsn);
+			}
+			return mustLogParent;
   }
 
 

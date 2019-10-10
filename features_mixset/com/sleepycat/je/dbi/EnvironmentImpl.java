@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.File;
 import com.sleepycat.je.log.TraceLogHandler;
 import com.sleepycat.je.evictor.Evictor;
+import com.sleepycat.je.incomp.INCompressor;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
@@ -60,6 +61,9 @@ import com.sleepycat.je.evictor.Evictor;
 // line 3 "../../../../RenameOp_EnvironmentImpl.ump"
 // line 3 "../../../../Truncate_EnvironmentImpl.ump"
 // line 3 "../../../../DeleteOp_EnvironmentImpl.ump"
+// line 3 "../../../../CleanerDaemon_EnvironmentImpl.ump"
+// line 3 "../../../../INCompressor_EnvironmentImpl.ump"
+// line 3 "../../../../INCompressor_EnvironmentImpl_inner.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -193,8 +197,15 @@ memoryBudget.initCacheMemoryUsage();
   // line 202 "../../../../EnvironmentImpl.ump"
    private void runOrPauseDaemons(DbConfigManager mgr) throws DatabaseException{
     if (!isReadOnly) {
-	    this.hook330(mgr);
-	    this.hook333(mgr);
+	    Label330:
+inCompressor.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_INCOMPRESSOR));
+			//original(mgr);
+ //this.hook330(mgr);
+	    Label333:
+cleaner.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CLEANER)
+				&& !mgr.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY));
+			//original(mgr);
+ //this.hook333(mgr);
 	    this.hook326(mgr);
 	}
 	this.hook317(mgr);
@@ -448,15 +459,26 @@ closeLogger();
   // line 456 "../../../../EnvironmentImpl.ump"
    private void requestShutdownDaemons(){
     closing = true;
-	this.hook331();
-	//this.hook334();
-  Label334:
+			Label331:
+if (inCompressor != null) {
+					inCompressor.requestShutdown();
+			}
+			//original();
+ //this.hook331();
+			//this.hook334();
+			Label334:
 if (evictor != null) {
 					evictor.requestShutdown();
 			}
 //			original();
 
-	this.hook327();
+			this.hook327();
+    // line 22 "../../../../CleanerDaemon_EnvironmentImpl.ump"
+    //original();
+    	if (cleaner != null) {
+    	    cleaner.requestShutdown();
+    	}
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -466,6 +488,14 @@ if (evictor != null) {
    */
   // line 467 "../../../../EnvironmentImpl.ump"
    private void shutdownDaemons() throws InterruptedException{
+    // line 32 "../../../../CleanerDaemon_EnvironmentImpl.ump"
+    shutdownCleaner();
+    //	original();
+    // END OF UMPLE BEFORE INJECTION
+    // line 95 "../../../../INCompressor_EnvironmentImpl.ump"
+    shutdownINCompressor();
+    			//original();
+    // END OF UMPLE BEFORE INJECTION
     shutdownCheckpointer();
     // line 44 "../../../../Evictor_EnvironmentImpl.ump"
     //original();
@@ -863,6 +893,112 @@ if (evictor != null) {
    public void dbRemove(Locker locker, String databaseName) throws DatabaseException{
     dbMapTree.dbRemove(locker, databaseName);
   }
+
+
+  /**
+   * 
+   * public for unit tests.
+   */
+  // line 9 "../../../../CleanerDaemon_EnvironmentImpl.ump"
+   public void shutdownCleaner() throws InterruptedException{
+    if (cleaner != null) {
+					cleaner.shutdown();
+			}
+			return;
+  }
+
+
+  /**
+   * 
+   * Return the incompressor. In general, don't use this directly because it's easy to forget that the incompressor can be null at times (i.e during the shutdown procedure. Instead, wrap the functionality within this class, like lazyCompress.
+   */
+  // line 12 "../../../../INCompressor_EnvironmentImpl.ump"
+   public INCompressor getINCompressor(){
+    return inCompressor;
+  }
+
+
+  /**
+   * 
+   * Tells the asynchronous IN compressor thread about a BIN with a deleted entry.
+   */
+  // line 19 "../../../../INCompressor_EnvironmentImpl.ump"
+   public void addToCompressorQueue(BIN bin, Key deletedKey, boolean doWakeup) throws DatabaseException{
+    if (inCompressor != null) {
+					inCompressor.addBinKeyToQueue(bin, deletedKey, doWakeup);
+			}
+  }
+
+
+  /**
+   * 
+   * Tells the asynchronous IN compressor thread about a BINReference with a deleted entry.
+   */
+  // line 28 "../../../../INCompressor_EnvironmentImpl.ump"
+   public void addToCompressorQueue(BINReference binRef, boolean doWakeup) throws DatabaseException{
+    if (inCompressor != null) {
+					inCompressor.addBinRefToQueue(binRef, doWakeup);
+			}
+  }
+
+
+  /**
+   * 
+   * Tells the asynchronous IN compressor thread about a collections of BINReferences with deleted entries.
+   */
+  // line 37 "../../../../INCompressor_EnvironmentImpl.ump"
+   public void addToCompressorQueue(Collection binRefs, boolean doWakeup) throws DatabaseException{
+    if (inCompressor != null) {
+					inCompressor.addMultipleBinRefsToQueue(binRefs, doWakeup);
+			}
+  }
+
+
+  /**
+   * 
+   * Do lazy compression at opportune moments.
+   */
+  // line 46 "../../../../INCompressor_EnvironmentImpl.ump"
+   public void lazyCompress(IN in) throws DatabaseException{
+    if (inCompressor != null) {
+			  inCompressor.lazyCompress(in);
+			}
+  }
+
+
+  /**
+   * 
+   * Invoke a compress programatically. Note that only one compress may run at a time.
+   */
+  // line 55 "../../../../INCompressor_EnvironmentImpl.ump"
+   public boolean invokeCompressor() throws DatabaseException{
+    if (inCompressor != null) {
+					inCompressor.doCompress();
+					return true;
+			} else {
+					return false;
+			}
+  }
+
+
+  /**
+   * 
+   * Available for the unit tests.
+   */
+  // line 67 "../../../../INCompressor_EnvironmentImpl.ump"
+   public void shutdownINCompressor() throws InterruptedException{
+    if (inCompressor != null) {
+					inCompressor.shutdown();
+					inCompressor.clearEnv();
+					inCompressor = null;
+			}
+			return;
+  }
+
+  // line 76 "../../../../INCompressor_EnvironmentImpl.ump"
+   public int getINCompressorQueueSize() throws DatabaseException{
+    return inCompressor.getBinRefQueueSize();
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -870,8 +1006,10 @@ if (evictor != null) {
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 4 "../../../../EnvironmentImpl_static.ump"
   // line 4 "../../../../Evictor_EnvironmentImpl_inner.ump"
+  // line 4 "../../../../INCompressor_EnvironmentImpl_inner.ump"
   public static class EnvironmentImpl_createDaemons
   {
   
@@ -907,17 +1045,16 @@ if (evictor != null) {
       checkpointerWakeupTime=0;
           this.hook329();
           _this.checkpointer=new Checkpointer(_this,checkpointerWakeupTime,"Checkpointer");
-          this.hook332();
+          Label332:
+  compressorWakeupInterval=PropUtil.microsToMillis(_this.configManager.getLong(EnvironmentParams.COMPRESSOR_WAKEUP_INTERVAL));
+          _this.inCompressor=new INCompressor(_this,compressorWakeupInterval,"INCompressor");
+         // original();
+   //this.hook332();
           _this.cleaner=new Cleaner(_this,"Cleaner");
     }
   
     // line 19 "../../../../EnvironmentImpl_static.ump"
      protected void hook329() throws DatabaseException{
-      
-    }
-  
-    // line 21 "../../../../EnvironmentImpl_static.ump"
-     protected void hook332() throws DatabaseException{
       
     }
     
@@ -1148,6 +1285,8 @@ if (evictor != null) {
   private Logger envLogger ;
 // line 6 "../../../../Evictor_EnvironmentImpl.ump"
   private Evictor evictor ;
+// line 6 "../../../../INCompressor_EnvironmentImpl.ump"
+  private INCompressor inCompressor ;
 
   
 }

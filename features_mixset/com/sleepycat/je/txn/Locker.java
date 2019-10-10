@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 // line 3 "../../../../Locker.ump"
 // line 3 "../../../../DeleteOp_Locker.ump"
+// line 3 "../../../../INCompressor_Locker.ump"
 public abstract class Locker
 {
 
@@ -490,6 +491,27 @@ public abstract class Locker
    * Database operations like remove and truncate leave behind residual DatabaseImpls that must be purged at transaction commit or abort.
    */
    public abstract void markDeleteAtTxnEnd(DatabaseImpl db, boolean deleteAtCommit) throws DatabaseException;
+
+
+  /**
+   * 
+   * Add delete information, to be added to the inCompressor queue when the transaction ends.
+   */
+  // line 11 "../../../../INCompressor_Locker.ump"
+   public void addDeleteInfo(BIN bin, Key deletedKey) throws DatabaseException{
+    synchronized (this) {
+					if (deleteInfo == null) {
+				deleteInfo = new HashMap();
+					}
+					Long nodeId = new Long(bin.getNodeId());
+					BINReference binRef = (BINReference) deleteInfo.get(nodeId);
+					if (binRef == null) {
+				binRef = bin.createReference();
+				deleteInfo.put(nodeId, binRef);
+					}
+					binRef.addDeletedKey(deletedKey);
+			}
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -540,6 +562,8 @@ public abstract class Locker
     txnTimeOutMillis = timeOutMillis;
 	txnStartMillis = System.currentTimeMillis();
   }
+// line 5 "../../../../INCompressor_Locker.ump"
+  protected Map deleteInfo ;
 
   
 }

@@ -16,6 +16,7 @@ import java.util.HashSet;
 
 // line 3 "../../../../BasicLocker.ump"
 // line 3 "../../../../DeleteOp_BasicLocker.ump"
+// line 3 "../../../../INCompressor_BasicLocker.ump"
 public class BasicLocker extends Locker
 {
 
@@ -201,6 +202,15 @@ public class BasicLocker extends Locker
 	    }
 	    ownedLockSet.clear();
 	}
+    // line 9 "../../../../INCompressor_BasicLocker.ump"
+    //	original(operationOK);
+    			synchronized (this) {
+    					if ((deleteInfo != null) && (deleteInfo.size() > 0)) {
+    				envImpl.addToCompressorQueue(deleteInfo.values(), false);
+    				deleteInfo.clear();
+    	    }
+    	}
+    // END OF UMPLE AFTER INJECTION
   }
 
 

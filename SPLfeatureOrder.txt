@@ -13,8 +13,8 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="DeleteOp"/>
-        <feature name="CleanerDaemon"/>
+        <feature name=""/>
+        <feature name=""/>
         <feature name="INCompressor"/>
         <feature name="CPTime"/>
         <feature name="CPBytes"/>

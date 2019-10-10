@@ -26,6 +26,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../BIN.ump"
 // line 3 "../../../../MemoryBudget_BIN.ump"
 // line 3 "../../../../Evictor_BIN.ump"
+// line 3 "../../../../INCompressor_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -433,77 +434,80 @@ updateMemorySize(getTarget(index), null);
   // line 346 "../../../../BIN.ump"
    public boolean compress(BINReference binRef, boolean canFetch) throws DatabaseException{
     boolean ret = false;
-	boolean setNewIdKey = false;
-	boolean anyLocksDenied = false;
-	DatabaseImpl db = getDatabase();
-	BasicLocker lockingTxn = new BasicLocker(db.getDbEnvironment());
-	try {
-	    for (int i = 0; i < getNEntries(); i++) {
-		boolean deleteEntry = false;
-		if (binRef == null || isEntryPendingDeleted(i) || isEntryKnownDeleted(i)
-			|| binRef.hasDeletedKey(new Key(getKey(i)))) {
-		    Node n = null;
-		    if (canFetch) {
-			n = fetchTarget(i);
-		    } else {
-			n = getTarget(i);
-			if (n == null) {
-			    continue;
+			boolean setNewIdKey = false;
+			boolean anyLocksDenied = false;
+			DatabaseImpl db = getDatabase();
+			BasicLocker lockingTxn = new BasicLocker(db.getDbEnvironment());
+			try {
+					for (int i = 0; i < getNEntries(); i++) {
+				boolean deleteEntry = false;
+				if (binRef == null || isEntryPendingDeleted(i) || isEntryKnownDeleted(i)
+					|| binRef.hasDeletedKey(new Key(getKey(i)))) {
+						Node n = null;
+						if (canFetch) {
+					n = fetchTarget(i);
+						} else {
+					n = getTarget(i);
+					if (n == null) {
+							continue;
+					}
+						}
+						if (n == null) {
+					deleteEntry = true;
+						} else if (isEntryKnownDeleted(i)) {
+					LockResult lockRet = lockingTxn.nonBlockingLock(n.getNodeId(), LockType.READ, db);
+					if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+							anyLocksDenied = true;
+							continue;
+					}
+					deleteEntry = true;
+						} else {
+					if (!n.containsDuplicates()) {
+							LN ln = (LN) n;
+							LockResult lockRet = lockingTxn.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
+							if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+						anyLocksDenied = true;
+						continue;
+							}
+							if (ln.isDeleted()) {
+						deleteEntry = true;
+							}
+					}
+						}
+						if (binRef != null) {
+					binRef.removeDeletedKey(new Key(getKey(i)));
+						}
+				}
+				if (deleteEntry) {
+						boolean entryIsIdentifierKey = Key.compareKeys(getKey(i), getIdentifierKey(),
+							getKeyComparator()) == 0;
+						if (entryIsIdentifierKey) {
+					setNewIdKey = true;
+						}
+						boolean deleteSuccess = deleteEntry(i, true);
+						assert deleteSuccess;
+						i--;
+				}
+					}
+			} finally {
+					if (lockingTxn != null) {
+				lockingTxn.operationEnd();
+					}
 			}
-		    }
-		    if (n == null) {
-			deleteEntry = true;
-		    } else if (isEntryKnownDeleted(i)) {
-			LockResult lockRet = lockingTxn.nonBlockingLock(n.getNodeId(), LockType.READ, db);
-			if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-			    anyLocksDenied = true;
-			    continue;
+			if (anyLocksDenied && binRef != null) {
+					Label609:
+db.getDbEnvironment().addToCompressorQueue(binRef, false);
+			//original(binRef, db);
+ //this.hook609(binRef, db);
+					ret = true;
 			}
-			deleteEntry = true;
-		    } else {
-			if (!n.containsDuplicates()) {
-			    LN ln = (LN) n;
-			    LockResult lockRet = lockingTxn.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
-			    if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-				anyLocksDenied = true;
-				continue;
-			    }
-			    if (ln.isDeleted()) {
-				deleteEntry = true;
-			    }
+			if (getNEntries() != 0 && setNewIdKey) {
+					setIdentifierKey(getKey(0));
 			}
-		    }
-		    if (binRef != null) {
-			binRef.removeDeletedKey(new Key(getKey(i)));
-		    }
-		}
-		if (deleteEntry) {
-		    boolean entryIsIdentifierKey = Key.compareKeys(getKey(i), getIdentifierKey(),
-			    getKeyComparator()) == 0;
-		    if (entryIsIdentifierKey) {
-			setNewIdKey = true;
-		    }
-		    boolean deleteSuccess = deleteEntry(i, true);
-		    assert deleteSuccess;
-		    i--;
-		}
-	    }
-	} finally {
-	    if (lockingTxn != null) {
-		lockingTxn.operationEnd();
-	    }
-	}
-	if (anyLocksDenied && binRef != null) {
-	    this.hook609(binRef, db);
-	    ret = true;
-	}
-	if (getNEntries() != 0 && setNewIdKey) {
-	    setIdentifierKey(getKey(0));
-	}
-	if (getNEntries() == 0) {
-	    setGeneration(0);
-	}
-	return ret;
+			if (getNEntries() == 0) {
+					setGeneration(0);
+			}
+			return ret;
   }
 
   // line 421 "../../../../BIN.ump"
@@ -669,11 +673,11 @@ updateMemorySize(getTarget(index), null);
     
   }
 
-  // line 553 "../../../../BIN.ump"
-   protected void hook609(BINReference binRef, DatabaseImpl db) throws DatabaseException{
-    
-  }
 
+  /**
+   * protected void hook609(BINReference binRef, DatabaseImpl db) throws DatabaseException {
+   * }
+   */
   // line 556 "../../../../BIN.ump"
    protected void hook610(int index){
     

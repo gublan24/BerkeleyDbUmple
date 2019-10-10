@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.tree;
+
+class Tree
+{
+    after Label754:deleteDupSubtree(byte , BIN , int ) {
+			if (bin.getNEntries() == 0) {
+					database.getDbEnvironment().addToCompressorQueue(bin, null, false);
+			}
+			//original(bin);
+    }
+
+}

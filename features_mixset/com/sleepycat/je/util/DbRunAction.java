@@ -31,6 +31,8 @@ import java.io.File;
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
 // line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
+// line 3 "../../../../INCompressor_DbRunAction.ump"
+// line 3 "../../../../INCompressor_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -136,10 +138,12 @@ public class DbRunAction
     @MethodObject
     @MethodObject
     @MethodObject
+    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
   // line 35 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
+  // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -194,7 +198,14 @@ public class DbRunAction
                   doAction=CLEAN;
                 }
      else {
-                 Label841:// this.hook841();
+                 Label841:
+  if (action.equalsIgnoreCase("compress")) {
+            doAction=COMPRESS;
+          }
+   //  else {
+     //       original();
+       //   }
+  // this.hook841();
   							if (action.equalsIgnoreCase("checkpoint")) {
   											doAction=CHECKPOINT;
   										}
@@ -255,7 +266,12 @@ public class DbRunAction
               }
               env.checkpoint(forceConfig);
             }
-            this.hook840();
+            Label840:
+  if (doAction == COMPRESS) {
+            env.compress();
+          }
+          //original();
+   //this.hook840();
             //this.hook844();
             Label844:
   if (doAction == EVICT) {
@@ -302,12 +318,9 @@ public class DbRunAction
      * usage();
      * System.exit(1);
      * }
+     * protected void hook840() throws Exception {
+     * }
      */
-    // line 134 "../../../../DbRunAction_static.ump"
-     protected void hook840() throws Exception{
-      
-    }
-  
     // line 137 "../../../../DbRunAction_static.ump"
      protected void hook841() throws Exception{
       
@@ -477,6 +490,8 @@ public class DbRunAction
   private static final int EVICT = 3 ;
 // line 5 "../../../../DeleteOp_DbRunAction.ump"
   private static final int REMOVEDB = 5 ;
+// line 5 "../../../../INCompressor_DbRunAction.ump"
+  private static final int COMPRESS = 2 ;
 
   
 }

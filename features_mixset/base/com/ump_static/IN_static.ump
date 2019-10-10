@@ -327,7 +327,7 @@ class IN {
           newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
           _this.clearEntry(i);
         }
-        this.hook636();
+        Label636: //this.hook636();
         newSiblingNEntries=(high - low);
         if (low == 0) {
           _this.shiftEntriesLeft(newSiblingNEntries);

@@ -29,6 +29,7 @@ import java.io.File;
 // line 3 "../../../RenameOp_Environment.ump"
 // line 3 "../../../Truncate_Environment.ump"
 // line 3 "../../../DeleteOp_Environment.ump"
+// line 3 "../../../INCompressor_Environment.ump"
 public class Environment
 {
 
@@ -591,6 +592,18 @@ if (database != null && !database.isDeleted())
 				locker.operationEnd(operationOk);
 					}
 			}
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 9 "../../../INCompressor_Environment.ump"
+   public void compress() throws DatabaseException{
+    checkHandleIsValid();
+			checkEnv();
+			environmentImpl.invokeCompressor();
   }
   
   //------------------------

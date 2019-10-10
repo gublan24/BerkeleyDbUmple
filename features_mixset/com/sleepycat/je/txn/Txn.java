@@ -44,6 +44,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../MemoryBudget_Txn_inner.ump"
 // line 3 "../../../../DeleteOp_Txn.ump"
 // line 3 "../../../../DeleteOp_Txn_inner.ump"
+// line 3 "../../../../INCompressor_Txn.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -289,7 +290,13 @@ setDeletedDatabaseState(true);
 					}
 						}
 						writeInfo = null;
-						this.hook803();
+						Label803:
+if ((deleteInfo != null) && deleteInfo.size() > 0) {
+					envImpl.addToCompressorQueue(deleteInfo.values(), false);
+					deleteInfo.clear();
+			}
+			//original();
+ //this.hook803();
 				}
 				traceCommit(numWriteLocks, numReadLocks);
 					}
@@ -352,7 +359,10 @@ setDeletedDatabaseState(false);
 			//original();
  //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
-		this.hook804();
+		Label804:
+deleteInfo = null;
+			//original();
+ //this.hook804();
 	    }
 	    Label807:
 cleanupDatabaseImpls(false);
@@ -956,18 +966,12 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
 		abortLsn, abortKnownDeleted, null, false);
   }
 
-  // line 794 "../../../../Txn.ump"
-   protected void hook803() throws DatabaseException,RunRecoveryException,Throwable{
-    
-  }
-
-  // line 797 "../../../../Txn.ump"
-   protected void hook804() throws DatabaseException{
-    
-  }
-
 
   /**
+   * protected void hook803() throws DatabaseException, RunRecoveryException, Throwable {
+   * }
+   * protected void hook804() throws DatabaseException {
+   * }
    * protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
    * }
    * protected void hook806() throws DatabaseException, RunRecoveryException, Throwable {

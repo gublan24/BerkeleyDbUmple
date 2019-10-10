@@ -274,7 +274,7 @@ class CursorImpl {
   }
    else {
     if (_this.targetBin.isEntryPendingDeleted(_this.targetIndex)) {
-      this.hook280();
+      Label280://this.hook280();
     }
     this.hook260();
   }
@@ -360,7 +360,7 @@ class CursorImpl {
   protected void hook263() throws DatabaseException {
   throw new ReturnObject(_this.fetchCurrent(foundKey,foundData,lockType,first));
   }
-  protected void hook280() throws DatabaseException {
-  }
+//  protected void hook280() throws DatabaseException {
+//  }
   }
 }

@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.tree;
+
+class BIN
+{
+    after Label609:compress(BINReference , boolean ){
+			db.getDbEnvironment().addToCompressorQueue(binRef, false);
+			//original(binRef, db);
+    }
+
+}

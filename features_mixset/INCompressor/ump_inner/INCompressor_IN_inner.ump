@@ -1,0 +1,12 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/INCompressor/com/sleepycat/je/tree/IN.java
+namespace com.sleepycat.je.tree;
+class IN {
+   static class IN_splitInternal {
+      after Label636: execute(){
+        if (deletedEntrySeen) {
+          _this.databaseImpl.getDbEnvironment().addToCompressorQueue(binRef,false);
+        }
+//        original();
+      }
+    }
+}

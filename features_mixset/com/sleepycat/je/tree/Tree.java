@@ -37,6 +37,7 @@ import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Tree.ump"
 // line 3 "../../../../Tree_static.ump"
+// line 3 "../../../../INCompressor_Tree.ump"
 public class Tree implements LogWritable,LogReadable
 {
 
@@ -311,50 +312,55 @@ public class Tree implements LogWritable,LogReadable
   // line 282 "../../../../Tree.ump"
    private IN deleteDupSubtree(byte [] idKey, BIN bin, int index) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     EnvironmentImpl envImpl = database.getDbEnvironment();
-	boolean dupCountLNLocked = false;
-	DupCountLN dcl = null;
-	BasicLocker locker = new BasicLocker(envImpl);
-	DIN duplicateRoot = (DIN) bin.fetchTarget(index);
-	duplicateRoot.latch(false);
-	ArrayList nodeLadder = new ArrayList();
-	IN subtreeRootIN = null;
-	try {
-	    ChildReference dclRef = duplicateRoot.getDupCountLNRef();
-	    dcl = (DupCountLN) dclRef.fetchTarget(database, duplicateRoot);
-	    LockResult lockResult = locker.nonBlockingLock(dcl.getNodeId(), LockType.READ, database);
-	    if (lockResult.getLockGrant() == LockGrantType.DENIED) {
-		throw CursorsExistException.CURSORS_EXIST;
-	    } else {
-		dupCountLNLocked = true;
-	    }
-	    searchDeletableSubTree(duplicateRoot, idKey, nodeLadder);
-	    LogManager logManager = envImpl.getLogManager();
-	    if (nodeLadder.size() == 0) {
-		if (bin.nCursors() == 0) {
-		    boolean deleteOk = bin.deleteEntry(index, true);
-		    assert deleteOk;
-		    logManager.log(new INDupDeleteInfo(duplicateRoot.getNodeId(), duplicateRoot.getMainTreeKey(),
-			    duplicateRoot.getDupTreeKey(), database.getId()));
-		    subtreeRootIN = duplicateRoot;
-		    this.hook754(bin);
-		} else {
-		    throw CursorsExistException.CURSORS_EXIST;
-		}
-	    } else {
-		SplitInfo detachPoint = (SplitInfo) nodeLadder.get(nodeLadder.size() - 1);
-		boolean deleteOk = detachPoint.parent.deleteEntry(detachPoint.index, true);
-		assert deleteOk;
-		cascadeUpdates(nodeLadder, bin, index);
-		subtreeRootIN = detachPoint.child;
-	    }
-	} finally {
-	    this.hook676(nodeLadder);
-	    if (dupCountLNLocked) {
-		locker.releaseLock(dcl.getNodeId());
-	    }
-	    this.hook675(duplicateRoot);
-	}
-	return subtreeRootIN;
+			boolean dupCountLNLocked = false;
+			DupCountLN dcl = null;
+			BasicLocker locker = new BasicLocker(envImpl);
+			DIN duplicateRoot = (DIN) bin.fetchTarget(index);
+			duplicateRoot.latch(false);
+			ArrayList nodeLadder = new ArrayList();
+			IN subtreeRootIN = null;
+			try {
+					ChildReference dclRef = duplicateRoot.getDupCountLNRef();
+					dcl = (DupCountLN) dclRef.fetchTarget(database, duplicateRoot);
+					LockResult lockResult = locker.nonBlockingLock(dcl.getNodeId(), LockType.READ, database);
+					if (lockResult.getLockGrant() == LockGrantType.DENIED) {
+				throw CursorsExistException.CURSORS_EXIST;
+					} else {
+				dupCountLNLocked = true;
+					}
+					searchDeletableSubTree(duplicateRoot, idKey, nodeLadder);
+					LogManager logManager = envImpl.getLogManager();
+					if (nodeLadder.size() == 0) {
+				if (bin.nCursors() == 0) {
+						boolean deleteOk = bin.deleteEntry(index, true);
+						assert deleteOk;
+						logManager.log(new INDupDeleteInfo(duplicateRoot.getNodeId(), duplicateRoot.getMainTreeKey(),
+							duplicateRoot.getDupTreeKey(), database.getId()));
+						subtreeRootIN = duplicateRoot;
+						Label754:
+if (bin.getNEntries() == 0) {
+					database.getDbEnvironment().addToCompressorQueue(bin, null, false);
+			}
+			//original(bin);
+ //this.hook754(bin);
+				} else {
+						throw CursorsExistException.CURSORS_EXIST;
+				}
+					} else {
+				SplitInfo detachPoint = (SplitInfo) nodeLadder.get(nodeLadder.size() - 1);
+				boolean deleteOk = detachPoint.parent.deleteEntry(detachPoint.index, true);
+				assert deleteOk;
+				cascadeUpdates(nodeLadder, bin, index);
+				subtreeRootIN = detachPoint.child;
+					}
+			} finally {
+					this.hook676(nodeLadder);
+					if (dupCountLNLocked) {
+				locker.releaseLock(dcl.getNodeId());
+					}
+					this.hook675(duplicateRoot);
+			}
+			return subtreeRootIN;
   }
 
 
@@ -2092,11 +2098,6 @@ public class Tree implements LogWritable,LogReadable
 
   // line 1840 "../../../../Tree.ump"
    protected void hook753() throws DatabaseException{
-    
-  }
-
-  // line 1843 "../../../../Tree.ump"
-   protected void hook754(BIN bin) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     
   }
   /*PLEASE DO NOT EDIT THIS CODE*/

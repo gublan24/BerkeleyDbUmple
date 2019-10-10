@@ -37,6 +37,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../MemoryBudget_IN.ump"
 // line 3 "../../../../MemoryBudget_IN_inner.ump"
 // line 3 "../../../../Evictor_IN.ump"
+// line 3 "../../../../INCompressor_IN.ump"
+// line 3 "../../../../INCompressor_IN_inner.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -2735,6 +2737,7 @@ updateMemorySize(null, node);
     @MethodObject
   // line 281 "../../../../IN_static.ump"
   // line 4 "../../../../MemoryBudget_IN_inner.ump"
+  // line 4 "../../../../INCompressor_IN_inner.ump"
   public static class IN_splitInternal
   {
   
@@ -2807,7 +2810,12 @@ updateMemorySize(null, node);
             newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
             _this.clearEntry(i);
           }
-          this.hook636();
+          Label636:
+  if (deletedEntrySeen) {
+            _this.databaseImpl.getDbEnvironment().addToCompressorQueue(binRef,false);
+          }
+  //        original();
+   //this.hook636();
           newSiblingNEntries=(high - low);
           if (low == 0) {
             _this.shiftEntriesLeft(newSiblingNEntries);

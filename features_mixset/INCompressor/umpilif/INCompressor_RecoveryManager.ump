@@ -1,0 +1,17 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryManager
+{
+    after Label594: redo(DatabaseImpl , TreeLocation , LN , byte , byte , long ,RecoveryInfo ) {
+			if (deletedKey != null) {
+					db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
+			}
+			//original(db, location, deletedKey);
+    }
+
+    after Label595: undo(Level , DatabaseImpl , TreeLocation , LN , byte , byte , long , long , boolean , RecoveryInfo , boolean ) {
+			db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
+			//original(db, location, deletedKey);
+    }
+
+}

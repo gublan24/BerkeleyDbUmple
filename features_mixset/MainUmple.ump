@@ -27,7 +27,9 @@ use TruncateOp/umpilif/Master.ump;
 
 use DeleteOp/umpilif/Master.ump;
 
+use CleanerDaemon/umpilif/Master.ump;
 
+use INCompressor/umpilif/Master.ump;
 
 
 //rename 's/^/DeleteOp_/' *

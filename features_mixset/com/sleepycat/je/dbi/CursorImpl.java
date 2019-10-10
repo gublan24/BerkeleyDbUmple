@@ -38,6 +38,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../CursorImpl_static.ump"
 // line 3 "../../../../MemoryBudget_CursorImpl.ump"
 // line 3 "../../../../Evictor_CursorImpl.ump"
+// line 3 "../../../../INCompressor_CursorImpl.ump"
+// line 3 "../../../../INCompressor_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -514,9 +516,15 @@ newLNSize = ln.getMemorySizeIncludedByParent();
 	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
 	    this.hook268(dupRoot);
 	    dupRoot = null;
-	    this.hook281(lnKey);
+	    Label281:
+locker.addDeleteInfo(dupBin, new Key(lnKey));
+			//original(lnKey);
+ //this.hook281(lnKey);
 	} else {
-	    this.hook282(lnKey);
+	    Label282:
+locker.addDeleteInfo(bin, new Key(lnKey));
+			//original(lnKey);
+ //this.hook282(lnKey);
 	}
 	this.hook204(ln, oldLsn, newLsn);
 
@@ -1767,16 +1775,13 @@ newLNSize = ln.getMemorySizeIncludedByParent();
     
   }
 
-  // line 1549 "../../../../CursorImpl.ump"
-   protected void hook281(byte [] lnKey) throws DatabaseException{
-    
-  }
 
-  // line 1552 "../../../../CursorImpl.ump"
-   protected void hook282(byte [] lnKey) throws DatabaseException{
-    
-  }
-
+  /**
+   * protected void hook281(byte[] lnKey) throws DatabaseException {
+   * }
+   * protected void hook282(byte[] lnKey) throws DatabaseException {
+   * }
+   */
   // line 1555 "../../../../CursorImpl.ump"
    protected long hook283(LN ln, long newLNSize) throws DatabaseException{
     return newLNSize;
@@ -2358,7 +2363,9 @@ newLNSize = ln.getMemorySizeIncludedByParent();
   
   
   @MethodObject
+    @MethodObject
   // line 256 "../../../../CursorImpl_static.ump"
+  // line 4 "../../../../INCompressor_CursorImpl_inner.ump"
   public static class CursorImpl_fetchCurrent
   {
   
@@ -2403,7 +2410,11 @@ newLNSize = ln.getMemorySizeIncludedByParent();
     }
      else {
       if (_this.targetBin.isEntryPendingDeleted(_this.targetIndex)) {
-        this.hook280();
+        Label280:
+  envImpl=_this.database.getDbEnvironment();
+          envImpl.addToCompressorQueue(_this.targetBin,new Key(_this.targetBin.getKey(_this.targetIndex)),false);
+          //original();
+  //this.hook280();
       }
       this.hook260();
     }
@@ -2490,11 +2501,6 @@ newLNSize = ln.getMemorySizeIncludedByParent();
     // line 361 "../../../../CursorImpl_static.ump"
      protected void hook263() throws DatabaseException{
       throw new ReturnObject(_this.fetchCurrent(foundKey,foundData,lockType,first));
-    }
-  
-    // line 364 "../../../../CursorImpl_static.ump"
-     protected void hook280() throws DatabaseException{
-      
     }
     
     //------------------------

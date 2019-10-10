@@ -1,0 +1,17 @@
+use INCompressor_EnvironmentParams.ump;
+use INCompressor_Environment.ump;
+use INCompressor_Tree.ump;
+use INCompressor_IN.ump;
+use INCompressor_BIN.ump;
+use INCompressor_DbRunAction.ump;
+use INCompressor_EnvironmentImpl.ump;
+use INCompressor_CursorImpl.ump;
+use INCompressor_INCompressor.ump;
+use INCompressor_Locker.ump;
+use INCompressor_ReadCommittedLocker.ump;
+use INCompressor_BasicLocker.ump;
+use INCompressor_Txn.ump;
+use INCompressor_Checkpointer.ump;
+use INCompressor_RecoveryManager.ump;
+
+use ../ump_inner/INCompressor_Master.ump;

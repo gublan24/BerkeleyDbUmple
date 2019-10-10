@@ -476,9 +476,9 @@ class CursorImpl
 	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
 	    this.hook268(dupRoot);
 	    dupRoot = null;
-	    this.hook281(lnKey);
+	    Label281: //this.hook281(lnKey);
 	} else {
-	    this.hook282(lnKey);
+	    Label282: //this.hook282(lnKey);
 	}
 	this.hook204(ln, oldLsn, newLsn);
 
@@ -1545,11 +1545,11 @@ class CursorImpl
     protected void hook278() throws DatabaseException {
     }
 
-    protected void hook281(byte[] lnKey) throws DatabaseException {
-    }
+    //protected void hook281(byte[] lnKey) throws DatabaseException {
+    //}
 
-    protected void hook282(byte[] lnKey) throws DatabaseException {
-    }
+    //protected void hook282(byte[] lnKey) throws DatabaseException {
+    //}
 
     protected long hook283(LN ln, long newLNSize) throws DatabaseException {
 	return newLNSize;

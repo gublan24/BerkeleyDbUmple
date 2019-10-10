@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.io.IOException;
 import com.sleepycat.je.dbi.*;
+import com.sleepycat.je.utilint.*;
 
 /**
  * Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/cleaner/Cleaner.java
@@ -49,7 +50,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Evictor_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner_inner.ump"
-public class Cleaner implements EnvConfigObserver
+// line 3 "../../../../CleanerDaemon_Cleaner.ump"
+public class Cleaner implements EnvConfigObserver,DaemonRunner
 {
 
   //------------------------
@@ -995,6 +997,48 @@ addPendingDB(db);
 							Label85: ;
 					}
 			}
+  }
+
+  // line 7 "../../../../CleanerDaemon_Cleaner.ump"
+   public void runOrPause(boolean run){
+    if (!env.isNoLocking()) {
+					for (int i = 0; i < threads.length; i += 1) {
+				if (threads[i] != null) {
+						threads[i].runOrPause(run);
+				}
+					}
+			}
+  }
+
+  // line 17 "../../../../CleanerDaemon_Cleaner.ump"
+   public void requestShutdown(){
+    for (int i = 0; i < threads.length; i += 1) {
+					if (threads[i] != null) {
+				threads[i].requestShutdown();
+					}
+			}
+  }
+
+  // line 25 "../../../../CleanerDaemon_Cleaner.ump"
+   public void shutdown(){
+    for (int i = 0; i < threads.length; i += 1) {
+					if (threads[i] != null) {
+				threads[i].shutdown();
+				threads[i].clearEnv();
+				threads[i] = null;
+					}
+			}
+  }
+
+  // line 35 "../../../../CleanerDaemon_Cleaner.ump"
+   public int getNWakeupRequests(){
+    int count = 0;
+			for (int i = 0; i < threads.length; i += 1) {
+					if (threads[i] != null) {
+				count += threads[i].getNWakeupRequests();
+					}
+			}
+			return count;
   }
 
 

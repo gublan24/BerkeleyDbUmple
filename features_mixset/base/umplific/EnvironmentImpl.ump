@@ -200,8 +200,8 @@ class EnvironmentImpl
      */
     private void runOrPauseDaemons(DbConfigManager mgr) throws DatabaseException {
 	if (!isReadOnly) {
-	    this.hook330(mgr);
-	    this.hook333(mgr);
+	    Label330: //this.hook330(mgr);
+	    Label333: //this.hook333(mgr);
 	    this.hook326(mgr);
 	}
 	this.hook317(mgr);
@@ -453,11 +453,11 @@ class EnvironmentImpl
     }
 
     private void requestShutdownDaemons() {
-	closing = true;
-	this.hook331();
-	//this.hook334();
-  Label334:
-	this.hook327();
+			closing = true;
+			Label331: //this.hook331();
+			//this.hook334();
+			Label334:
+			this.hook327();
     }
 
     /** 

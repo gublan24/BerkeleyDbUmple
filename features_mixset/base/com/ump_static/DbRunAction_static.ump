@@ -78,7 +78,7 @@ class DbRunAction {
             }
             env.checkpoint(forceConfig);
           }
-          this.hook840();
+          Label840: //this.hook840();
           //this.hook844();
           Label844:
           if (doAction == CHECKPOINT) {
@@ -130,8 +130,8 @@ class DbRunAction {
    //     usage();
    //     System.exit(1);
     //  }
-      protected void hook840() throws Exception {
-      }
+  //    protected void hook840() throws Exception {
+   //   }
       protected void hook841() throws Exception {
       
       }

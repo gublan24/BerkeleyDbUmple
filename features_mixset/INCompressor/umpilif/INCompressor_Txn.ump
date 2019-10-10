@@ -1,0 +1,18 @@
+namespace com.sleepycat.je.txn;
+
+class Txn
+{
+    after Label803:commit(byte ){
+			if ((deleteInfo != null) && deleteInfo.size() > 0) {
+					envImpl.addToCompressorQueue(deleteInfo.values(), false);
+					deleteInfo.clear();
+			}
+			//original();
+    }
+
+    after Label804:abortInternal(boolean , boolean ){
+			deleteInfo = null;
+			//original();
+    }
+
+}
