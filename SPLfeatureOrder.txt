@@ -15,7 +15,7 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="INCompressor"/>
+        <feature name=""/>
         <feature name="CPTime"/>
         <feature name="CPBytes"/>
         <feature name="CheckpointerDaemon"/>

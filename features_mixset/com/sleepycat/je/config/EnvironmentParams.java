@@ -17,6 +17,7 @@ import java.io.File;
 // line 3 "../../../../LoggingFileHandler_EnvironmentParams.ump"
 // line 3 "../../../../Evictor_EnvironmentParams.ump"
 // line 3 "../../../../INCompressor_EnvironmentParams.ump"
+// line 3 "../../../../CPTime_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -387,5 +388,11 @@ public class EnvironmentParams
 	    new Long(1000000), new Long(4294967296L), new Long(5000000), false,
 	    "# The compressor wakeup interval in microseconds.") ;
 
+// line 5 ../../../../CPTime_EnvironmentParams.ump
+  public static final LongConfigParam CHECKPOINTER_WAKEUP_INTERVAL = new LongConfigParam(
+	    "je.checkpointer.wakeupInterval", new Long(1000000), new Long(4294967296L), new Long(0), false,
+	    "# The checkpointer wakeup interval in microseconds. By default, this\n"
+		    + "# is inactive and we wakeup the checkpointer as a function of the\n"
+		    + "# number of bytes written to the log. (je.checkpointer.bytesInterval)");
   
 }

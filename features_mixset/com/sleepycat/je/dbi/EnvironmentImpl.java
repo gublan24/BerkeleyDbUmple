@@ -64,6 +64,8 @@ import com.sleepycat.je.incomp.INCompressor;
 // line 3 "../../../../CleanerDaemon_EnvironmentImpl.ump"
 // line 3 "../../../../INCompressor_EnvironmentImpl.ump"
 // line 3 "../../../../INCompressor_EnvironmentImpl_inner.ump"
+// line 3 "../../../../CPTime_EnvironmentImpl.ump"
+// line 3 "../../../../CPTime_EnvironmentImpl_inner.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -1010,6 +1012,7 @@ if (evictor != null) {
   // line 4 "../../../../EnvironmentImpl_static.ump"
   // line 4 "../../../../Evictor_EnvironmentImpl_inner.ump"
   // line 4 "../../../../INCompressor_EnvironmentImpl_inner.ump"
+  // line 4 "../../../../CPTime_EnvironmentImpl_inner.ump"
   public static class EnvironmentImpl_createDaemons
   {
   
@@ -1043,7 +1046,10 @@ if (evictor != null) {
               //original();
       // END OF UMPLE BEFORE INJECTION
       checkpointerWakeupTime=0;
-          this.hook329();
+          Label329:
+  checkpointerWakeupTime=Checkpointer.getWakeupPeriod(_this.configManager);
+          //original();
+   //this.hook329();
           _this.checkpointer=new Checkpointer(_this,checkpointerWakeupTime,"Checkpointer");
           Label332:
   compressorWakeupInterval=PropUtil.microsToMillis(_this.configManager.getLong(EnvironmentParams.COMPRESSOR_WAKEUP_INTERVAL));
@@ -1051,11 +1057,6 @@ if (evictor != null) {
          // original();
    //this.hook332();
           _this.cleaner=new Cleaner(_this,"Cleaner");
-    }
-  
-    // line 19 "../../../../EnvironmentImpl_static.ump"
-     protected void hook329() throws DatabaseException{
-      
     }
     
     //------------------------

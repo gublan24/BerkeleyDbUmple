@@ -55,7 +55,7 @@ class Checkpointer
 	this.hook539(envImpl);
 	logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
 	this.hook531();
-	this.hook545(waitTime);
+	Label545: //this.hook545(waitTime);
 	lastCheckpointMillis = 0;
 	highestFlushLevel = IN.MIN_LEVEL;
 	logManager = envImpl.getLogManager();

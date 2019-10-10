@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    private long timeInterval;
+
+    after Label545:Checkpointer(EnvironmentImpl , long , String ){
+
+			timeInterval = waitTime;
+//			original(waitTime);
+    }
+
+}

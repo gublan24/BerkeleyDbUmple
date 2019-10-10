@@ -7,7 +7,7 @@ class EnvironmentImpl {
       }
       void execute() throws DatabaseException {
         checkpointerWakeupTime=0;
-        this.hook329();
+        Label329: //this.hook329();
         _this.checkpointer=new Checkpointer(_this,checkpointerWakeupTime,"Checkpointer");
         Label332: //this.hook332();
         _this.cleaner=new Cleaner(_this,"Cleaner");
@@ -15,8 +15,8 @@ class EnvironmentImpl {
       protected EnvironmentImpl _this;
       protected long checkpointerWakeupTime;
       protected long compressorWakeupInterval;
-      protected void hook329() throws DatabaseException {
-      }
+      //protected void hook329() throws DatabaseException {
+      //}
       //protected void hook332() throws DatabaseException {
       //}
     }

@@ -42,6 +42,8 @@ import java.util.HashSet;
 // line 3 "../../../../Evictor_Checkpointer_inner.ump"
 // line 3 "../../../../DeleteOp_Checkpointer.ump"
 // line 3 "../../../../INCompressor_Checkpointer.ump"
+// line 3 "../../../../CPTime_Checkpointer.ump"
+// line 3 "../../../../CPTime_Checkpointer_inner.ump"
 public class Checkpointer
 {
 
@@ -70,7 +72,10 @@ public class Checkpointer
 	this.hook539(envImpl);
 	logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
 	this.hook531();
-	this.hook545(waitTime);
+	Label545:
+timeInterval = waitTime;
+//			original(waitTime);
+ //this.hook545(waitTime);
 	lastCheckpointMillis = 0;
 	highestFlushLevel = IN.MIN_LEVEL;
 	logManager = envImpl.getLogManager();
@@ -587,6 +592,7 @@ envImpl.lazyCompress(target);
   
   @MethodObject
   // line 30 "../../../../Checkpointer_static.ump"
+  // line 4 "../../../../CPTime_Checkpointer_inner.ump"
   public static class Checkpointer_getWakeupPeriod
   {
   
@@ -615,10 +621,17 @@ envImpl.lazyCompress(target);
   
     // line 35 "../../../../Checkpointer_static.ump"
     public long execute() throws IllegalArgumentException,DatabaseException{
+      // line 6 "../../../../CPTime_Checkpointer_inner.ump"
+      wakeupPeriod=PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
+              //return original();
+      // END OF UMPLE BEFORE INJECTION
       this.hook541();
           this.hook519();
           result=0;
-          this.hook540();
+          Label540:
+  result+=wakeupPeriod;
+          //original();
+   //this.hook540();
           return result;
     }
   
@@ -627,11 +640,11 @@ envImpl.lazyCompress(target);
       
     }
   
-    // line 48 "../../../../Checkpointer_static.ump"
-     protected void hook540() throws IllegalArgumentException,DatabaseException{
-      
-    }
   
+    /**
+     * protected void hook540() throws IllegalArgumentException, DatabaseException {
+     * }
+     */
     // line 50 "../../../../Checkpointer_static.ump"
      protected void hook541() throws IllegalArgumentException,DatabaseException{
       
@@ -658,6 +671,7 @@ envImpl.lazyCompress(target);
   
   @MethodObject
   // line 52 "../../../../Checkpointer_static.ump"
+  // line 14 "../../../../CPTime_Checkpointer_inner.ump"
   public static class Checkpointer_isRunnable
   {
   
@@ -696,9 +710,29 @@ envImpl.lazyCompress(target);
                 return true;
               }
      else {
-                this.hook543();
+                Label543:
+  if (config.getMinutes() != 0) {
+            useTimeInterval=config.getMinutes() * 60 * 1000;
+  				}
+  				 else {
+  						     Label544: useTimeInterval=_this.timeInterval; // from hook544() 
+  				}
+   //this.hook543();
               }
-              this.hook542();
+              Label542:
+  if (useTimeInterval != 0) {
+            lastUsedLsn=_this.envImpl.getFileManager().getLastUsedLsn();
+            if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn,_this.lastCheckpointEnd) != 0)) {
+              throw new ReturnBoolean(true);
+            }
+  					 else {
+  								    throw new ReturnBoolean(false);
+  								  }
+  								}
+  				 else {
+  						    throw new ReturnBoolean(false); // added from hook542() 
+  						  }
+   //this.hook542();
             }
       finally {
               this.hook521();
@@ -712,21 +746,6 @@ envImpl.lazyCompress(target);
   
     // line 88 "../../../../Checkpointer_static.ump"
      protected void hook521() throws DatabaseException{
-      
-    }
-  
-    // line 90 "../../../../Checkpointer_static.ump"
-     protected void hook542() throws DatabaseException{
-      throw new ReturnBoolean(false);
-    }
-  
-    // line 93 "../../../../Checkpointer_static.ump"
-     protected void hook543() throws DatabaseException{
-      this.hook544();
-    }
-  
-    // line 96 "../../../../Checkpointer_static.ump"
-     protected void hook544() throws DatabaseException{
       
     }
     
@@ -1140,6 +1159,8 @@ envImpl.lazyCompress(target);
   {
     new Checkpointer_doCheckpoint(this, config, flushAll, invokingSource).execute();
   }
+// line 5 "../../../../CPTime_Checkpointer.ump"
+  private long timeInterval ;
 
   
 }

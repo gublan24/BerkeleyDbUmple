@@ -35,7 +35,7 @@ class Checkpointer {
         this.hook541();
         this.hook519();
         result=0;
-        this.hook540();
+        Label540: //this.hook540();
         return result;
       }
       protected DbConfigManager configManager;
@@ -44,8 +44,8 @@ class Checkpointer {
       protected int result;
       protected void hook519() throws IllegalArgumentException, DatabaseException {
       }
-      protected void hook540() throws IllegalArgumentException, DatabaseException {
-      }
+   //   protected void hook540() throws IllegalArgumentException, DatabaseException {
+    //  }
       protected void hook541() throws IllegalArgumentException, DatabaseException {
       }
     }
@@ -64,9 +64,9 @@ class Checkpointer {
               return true;
             }
    else {
-              this.hook543();
+              Label543: //this.hook543();
             }
-            this.hook542();
+            Label542: //this.hook542();
           }
     finally {
             this.hook521();
@@ -86,14 +86,14 @@ class Checkpointer {
       protected StringBuffer sb;
       protected void hook521() throws DatabaseException {
       }
-      protected void hook542() throws DatabaseException {
-        throw new ReturnBoolean(false);
-      }
-      protected void hook543() throws DatabaseException {
-        this.hook544();
-      }
-      protected void hook544() throws DatabaseException {
-      }
+     // protected void hook542() throws DatabaseException {
+      //  throw new ReturnBoolean(false);
+     // }
+  //    protected void hook543() throws DatabaseException {
+   //     this.hook544();
+    //  }
+    //  protected void hook544() throws DatabaseException {
+     // }
     }
   @MethodObject static class Checkpointer_doCheckpoint {
       Checkpointer_doCheckpoint(    Checkpointer _this,    CheckpointConfig config,    boolean flushAll,    String invokingSource){
