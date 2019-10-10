@@ -658,78 +658,78 @@ class CursorImpl
      */
     public KeyChangeStatus getNextWithKeyChangeStatus(DatabaseEntry foundKey, DatabaseEntry foundData,
 	    LockType lockType, boolean forward, boolean alreadyLatched) throws DatabaseException {
-	assert assertCursorState(true) : dumpToString(true);
-	this.hook224(alreadyLatched);
-	KeyChangeStatus result = new KeyChangeStatus(OperationStatus.NOTFOUND, true);
-	try {
-	    while (bin != null) {
-		if (dupBin != null) {
-		    this.hook277();
-		    if (getNextDuplicate(foundKey, foundData, lockType, forward,
-			    alreadyLatched) == OperationStatus.SUCCESS) {
-			result.status = OperationStatus.SUCCESS;
-			result.keyChange = false;
-			break;
-		    } else {
-			removeCursorDBIN();
-			alreadyLatched = this.hook226(alreadyLatched);
-			dupBin = null;
-			dupIndex = -1;
-			continue;
-		    }
-		}
-		alreadyLatched = this.hook225(alreadyLatched);
-		this.hook276();
-		if ((forward && ++index < bin.getNEntries()) || (!forward && --index > -1)) {
-		    OperationStatus ret = getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
-		    if (ret == OperationStatus.SUCCESS) {
-			incrementLNCount();
-			result.status = OperationStatus.SUCCESS;
-			break;
-		    } else {
-			this.hook227();
-			if (binToBeRemoved != null) {
-			    flushBINToBeRemoved();
+			assert assertCursorState(true) : dumpToString(true);
+			this.hook224(alreadyLatched);
+			KeyChangeStatus result = new KeyChangeStatus(OperationStatus.NOTFOUND, true);
+			try {
+					while (bin != null) {
+				if (dupBin != null) {
+						Label277: //this.hook277();
+						if (getNextDuplicate(foundKey, foundData, lockType, forward,
+							alreadyLatched) == OperationStatus.SUCCESS) {
+					result.status = OperationStatus.SUCCESS;
+					result.keyChange = false;
+					break;
+						} else {
+					removeCursorDBIN();
+					alreadyLatched = this.hook226(alreadyLatched);
+					dupBin = null;
+					dupIndex = -1;
+					continue;
+						}
+				}
+				alreadyLatched = this.hook225(alreadyLatched);
+				Label276: //this.hook276();
+				if ((forward && ++index < bin.getNEntries()) || (!forward && --index > -1)) {
+						OperationStatus ret = getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
+						if (ret == OperationStatus.SUCCESS) {
+					incrementLNCount();
+					result.status = OperationStatus.SUCCESS;
+					break;
+						} else {
+					this.hook227();
+					if (binToBeRemoved != null) {
+							flushBINToBeRemoved();
+					}
+					continue;
+						}
+				} else {
+						if (binToBeRemoved != null) {
+					this.hook229();
+					flushBINToBeRemoved();
+					this.hook228();
+						}
+						binToBeRemoved = bin;
+						bin = null;
+						BIN newBin;
+						assert TestHookExecute.doHookIfSet(testHook);
+						if (forward) {
+					newBin = database.getTree().getNextBin(binToBeRemoved, false);
+						} else {
+					newBin = database.getTree().getPrevBin(binToBeRemoved, false);
+						}
+						if (newBin == null) {
+					result.status = OperationStatus.NOTFOUND;
+					break;
+						} else {
+					if (forward) {
+							index = -1;
+					} else {
+							index = newBin.getNEntries();
+					}
+					addCursor(newBin);
+					bin = newBin;
+					this.hook230(alreadyLatched);
+						}
+				}
+					}
+			} finally {
+					this.hook231();
+					if (binToBeRemoved != null) {
+				flushBINToBeRemoved();
+					}
 			}
-			continue;
-		    }
-		} else {
-		    if (binToBeRemoved != null) {
-			this.hook229();
-			flushBINToBeRemoved();
-			this.hook228();
-		    }
-		    binToBeRemoved = bin;
-		    bin = null;
-		    BIN newBin;
-		    assert TestHookExecute.doHookIfSet(testHook);
-		    if (forward) {
-			newBin = database.getTree().getNextBin(binToBeRemoved, false);
-		    } else {
-			newBin = database.getTree().getPrevBin(binToBeRemoved, false);
-		    }
-		    if (newBin == null) {
-			result.status = OperationStatus.NOTFOUND;
-			break;
-		    } else {
-			if (forward) {
-			    index = -1;
-			} else {
-			    index = newBin.getNEntries();
-			}
-			addCursor(newBin);
-			bin = newBin;
-			this.hook230(alreadyLatched);
-		    }
-		}
-	    }
-	} finally {
-	    this.hook231();
-	    if (binToBeRemoved != null) {
-		flushBINToBeRemoved();
-	    }
-	}
-	return result;
+			return result;
     }
 
     private void flushBINToBeRemoved() throws DatabaseException {
@@ -1015,7 +1015,7 @@ class CursorImpl
      */
     public void checkCursorState(boolean mustBeInitialized) throws DatabaseException {
 	if (status == CURSOR_INITIALIZED) {
-	    this.hook278();
+	    Label278: //this.hook278();
 	    return;
 	} else if (status == CURSOR_NOT_INITIALIZED) {
 	    if (mustBeInitialized) {
@@ -1536,8 +1536,8 @@ class CursorImpl
     protected void hook274(IN in, DIN dupRoot) throws DatabaseException {
     }
 
-    protected void hook276() throws DatabaseException {
-    }
+    //protected void hook276() throws DatabaseException {
+    //}
 
     protected void hook277() throws DatabaseException {
     }

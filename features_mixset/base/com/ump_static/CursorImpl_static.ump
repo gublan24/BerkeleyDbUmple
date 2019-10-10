@@ -154,7 +154,7 @@ class CursorImpl {
   try {
     while (_this.dupBin != null) {
       this.hook251();
-      this.hook279();
+      Label279: //this.hook279();
       if ((forward && ++_this.dupIndex < _this.dupBin.getNEntries()) || (!forward && --_this.dupIndex > -1)) {
         ret=OperationStatus.SUCCESS;
         if (foundKey != null) {
@@ -250,8 +250,8 @@ class CursorImpl {
   }
   protected void hook275() throws DatabaseException {
   }
-  protected void hook279() throws DatabaseException {
-  }
+  //protected void hook279() throws DatabaseException {
+  //}
   }
   @MethodObject static class CursorImpl_fetchCurrent {
   CursorImpl_fetchCurrent(CursorImpl _this,DatabaseEntry foundKey,DatabaseEntry foundData,LockType lockType,boolean first){

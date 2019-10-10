@@ -27,6 +27,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../MemoryBudget_BIN.ump"
 // line 3 "../../../../Evictor_BIN.ump"
 // line 3 "../../../../INCompressor_BIN.ump"
+// line 3 "../../../../Verifier_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -763,6 +764,25 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
 					return n.getMemorySizeIncludedByParent();
 			} else {
 					return 0;
+			}
+  }
+
+
+  /**
+   * 
+   * For each cursor in this BIN's cursor set, ensure that the cursor is actually referring to this BIN.
+   */
+  // line 9 "../../../../Verifier_BIN.ump"
+   public void verifyCursors(){
+    if (cursorSet != null) {
+					Iterator iter = cursorSet.iterator();
+					while (iter.hasNext()) {
+				CursorImpl cursor = (CursorImpl) iter.next();
+				if (getCursorBINToBeRemoved(cursor) != this) {
+						BIN cBin = getCursorBIN(cursor);
+						assert cBin == this;
+				}
+					}
 			}
   }
   

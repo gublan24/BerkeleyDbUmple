@@ -49,6 +49,7 @@ import java.io.File;
 import com.sleepycat.je.log.TraceLogHandler;
 import com.sleepycat.je.evictor.Evictor;
 import com.sleepycat.je.incomp.INCompressor;
+import com.sleepycat.je.VerifyConfig;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
@@ -67,6 +68,7 @@ import com.sleepycat.je.incomp.INCompressor;
 // line 3 "../../../../CPTime_EnvironmentImpl.ump"
 // line 3 "../../../../CPTime_EnvironmentImpl_inner.ump"
 // line 3 "../../../../CheckpointerDaemon_EnvironmentImpl.ump"
+// line 3 "../../../../Verifier_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 

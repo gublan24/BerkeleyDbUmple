@@ -1,12 +1,13 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Verifier/com/sleepycat/je/dbi/CursorImpl.java
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
-  @MethodObject static class CursorImpl_getNextDuplicate {
-      protected void hook279() throws DatabaseException {
+
+  static class CursorImpl_getNextDuplicate {
+      after Label279: execute() {
         if (_this.DEBUG) {
           _this.verifyCursor(_this.dupBin);
         }
-        original();
+        //original();
       }
     }
 }

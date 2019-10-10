@@ -43,6 +43,7 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.nio.ByteBuffer;
 import java.io.PrintStream;
+import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
@@ -51,6 +52,7 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
 // line 3 "../../../../DeleteOp_DatabaseImpl.ump"
+// line 3 "../../../../Verifier_DatabaseImpl.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 

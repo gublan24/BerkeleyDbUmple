@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
 import java.io.PrintStream;
+import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DbTree.ump"
@@ -43,6 +44,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../RenameOp_DbTree.ump"
 // line 3 "../../../../Truncate_DbTree.ump"
 // line 3 "../../../../DeleteOp_DbTree.ump"
+// line 3 "../../../../Verifier_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 

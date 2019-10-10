@@ -40,6 +40,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../Evictor_CursorImpl.ump"
 // line 3 "../../../../INCompressor_CursorImpl.ump"
 // line 3 "../../../../INCompressor_CursorImpl_inner.ump"
+// line 3 "../../../../Verifier_CursorImpl.ump"
+// line 3 "../../../../Verifier_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -736,77 +738,87 @@ locker.addDeleteInfo(bin, new Key(lnKey));
   // line 661 "../../../../CursorImpl.ump"
    public KeyChangeStatus getNextWithKeyChangeStatus(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean forward, boolean alreadyLatched) throws DatabaseException{
     assert assertCursorState(true) : dumpToString(true);
-	this.hook224(alreadyLatched);
-	KeyChangeStatus result = new KeyChangeStatus(OperationStatus.NOTFOUND, true);
-	try {
-	    while (bin != null) {
-		if (dupBin != null) {
-		    this.hook277();
-		    if (getNextDuplicate(foundKey, foundData, lockType, forward,
-			    alreadyLatched) == OperationStatus.SUCCESS) {
-			result.status = OperationStatus.SUCCESS;
-			result.keyChange = false;
-			break;
-		    } else {
-			removeCursorDBIN();
-			alreadyLatched = this.hook226(alreadyLatched);
-			dupBin = null;
-			dupIndex = -1;
-			continue;
-		    }
-		}
-		alreadyLatched = this.hook225(alreadyLatched);
-		this.hook276();
-		if ((forward && ++index < bin.getNEntries()) || (!forward && --index > -1)) {
-		    OperationStatus ret = getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
-		    if (ret == OperationStatus.SUCCESS) {
-			incrementLNCount();
-			result.status = OperationStatus.SUCCESS;
-			break;
-		    } else {
-			this.hook227();
-			if (binToBeRemoved != null) {
-			    flushBINToBeRemoved();
+			this.hook224(alreadyLatched);
+			KeyChangeStatus result = new KeyChangeStatus(OperationStatus.NOTFOUND, true);
+			try {
+					while (bin != null) {
+				if (dupBin != null) {
+						Label277:
+if (DEBUG) {
+					verifyCursor(dupBin);
 			}
-			continue;
-		    }
-		} else {
-		    if (binToBeRemoved != null) {
-			this.hook229();
-			flushBINToBeRemoved();
-			this.hook228();
-		    }
-		    binToBeRemoved = bin;
-		    bin = null;
-		    BIN newBin;
-		    assert TestHookExecute.doHookIfSet(testHook);
-		    if (forward) {
-			newBin = database.getTree().getNextBin(binToBeRemoved, false);
-		    } else {
-			newBin = database.getTree().getPrevBin(binToBeRemoved, false);
-		    }
-		    if (newBin == null) {
-			result.status = OperationStatus.NOTFOUND;
-			break;
-		    } else {
-			if (forward) {
-			    index = -1;
-			} else {
-			    index = newBin.getNEntries();
-			}
-			addCursor(newBin);
-			bin = newBin;
-			this.hook230(alreadyLatched);
-		    }
+//			original();
+ //this.hook277();
+						if (getNextDuplicate(foundKey, foundData, lockType, forward,
+							alreadyLatched) == OperationStatus.SUCCESS) {
+					result.status = OperationStatus.SUCCESS;
+					result.keyChange = false;
+					break;
+						} else {
+					removeCursorDBIN();
+					alreadyLatched = this.hook226(alreadyLatched);
+					dupBin = null;
+					dupIndex = -1;
+					continue;
+						}
+				}
+				alreadyLatched = this.hook225(alreadyLatched);
+				Label276:
+if (DEBUG) {
+			  verifyCursor(bin);
 		}
-	    }
-	} finally {
-	    this.hook231();
-	    if (binToBeRemoved != null) {
-		flushBINToBeRemoved();
-	    }
-	}
-	return result;
+		//original();
+ //this.hook276();
+				if ((forward && ++index < bin.getNEntries()) || (!forward && --index > -1)) {
+						OperationStatus ret = getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
+						if (ret == OperationStatus.SUCCESS) {
+					incrementLNCount();
+					result.status = OperationStatus.SUCCESS;
+					break;
+						} else {
+					this.hook227();
+					if (binToBeRemoved != null) {
+							flushBINToBeRemoved();
+					}
+					continue;
+						}
+				} else {
+						if (binToBeRemoved != null) {
+					this.hook229();
+					flushBINToBeRemoved();
+					this.hook228();
+						}
+						binToBeRemoved = bin;
+						bin = null;
+						BIN newBin;
+						assert TestHookExecute.doHookIfSet(testHook);
+						if (forward) {
+					newBin = database.getTree().getNextBin(binToBeRemoved, false);
+						} else {
+					newBin = database.getTree().getPrevBin(binToBeRemoved, false);
+						}
+						if (newBin == null) {
+					result.status = OperationStatus.NOTFOUND;
+					break;
+						} else {
+					if (forward) {
+							index = -1;
+					} else {
+							index = newBin.getNEntries();
+					}
+					addCursor(newBin);
+					bin = newBin;
+					this.hook230(alreadyLatched);
+						}
+				}
+					}
+			} finally {
+					this.hook231();
+					if (binToBeRemoved != null) {
+				flushBINToBeRemoved();
+					}
+			}
+			return result;
   }
 
   // line 736 "../../../../CursorImpl.ump"
@@ -1126,7 +1138,17 @@ locker.addDeleteInfo(bin, new Key(lnKey));
   // line 1017 "../../../../CursorImpl.ump"
    public void checkCursorState(boolean mustBeInitialized) throws DatabaseException{
     if (status == CURSOR_INITIALIZED) {
-	    this.hook278();
+	    Label278:
+if (DEBUG) {
+					if (bin != null) {
+				verifyCursor(bin);
+					}
+					if (dupBin != null) {
+				verifyCursor(dupBin);
+					}
+			}
+			//original();
+ //this.hook278();
 	    return;
 	} else if (status == CURSOR_NOT_INITIALIZED) {
 	    if (mustBeInitialized) {
@@ -1760,11 +1782,11 @@ locker.addDeleteInfo(bin, new Key(lnKey));
     
   }
 
-  // line 1540 "../../../../CursorImpl.ump"
-   protected void hook276() throws DatabaseException{
-    
-  }
 
+  /**
+   * protected void hook276() throws DatabaseException {
+   * }
+   */
   // line 1543 "../../../../CursorImpl.ump"
    protected void hook277() throws DatabaseException{
     
@@ -1823,6 +1845,13 @@ locker.addDeleteInfo(bin, new Key(lnKey));
       Label202:
 			setTargetBin();
 			targetBin.evictLN(targetIndex);
+  }
+
+  // line 8 "../../../../Verifier_CursorImpl.ump"
+   private void verifyCursor(BIN bin) throws DatabaseException{
+    if (!bin.getCursorSet().contains(this)) {
+					throw new DatabaseException("BIN cursorSet is inconsistent.");
+			}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -2172,6 +2201,7 @@ locker.addDeleteInfo(bin, new Key(lnKey));
   
   @MethodObject
   // line 141 "../../../../CursorImpl_static.ump"
+  // line 5 "../../../../Verifier_CursorImpl_inner.ump"
   public static class CursorImpl_getNextDuplicate
   {
   
@@ -2211,7 +2241,12 @@ locker.addDeleteInfo(bin, new Key(lnKey));
     try {
       while (_this.dupBin != null) {
         this.hook251();
-        this.hook279();
+        Label279:
+  if (_this.DEBUG) {
+            _this.verifyCursor(_this.dupBin);
+          }
+          //original();
+   //this.hook279();
         if ((forward && ++_this.dupIndex < _this.dupBin.getNEntries()) || (!forward && --_this.dupIndex > -1)) {
           ret=OperationStatus.SUCCESS;
           if (foundKey != null) {
@@ -2321,11 +2356,6 @@ locker.addDeleteInfo(bin, new Key(lnKey));
   
     // line 252 "../../../../CursorImpl_static.ump"
      protected void hook275() throws DatabaseException{
-      
-    }
-  
-    // line 254 "../../../../CursorImpl_static.ump"
-     protected void hook279() throws DatabaseException{
       
     }
     
@@ -2600,6 +2630,8 @@ locker.addDeleteInfo(bin, new Key(lnKey));
   public static final int FOUND_LAST = 0x8 ;
 // line 5 "../../../../Evictor_CursorImpl.ump"
   private boolean allowEviction = true ;
+// line 5 "../../../../Verifier_CursorImpl.ump"
+  private static final boolean DEBUG = false ;
 
   
 }

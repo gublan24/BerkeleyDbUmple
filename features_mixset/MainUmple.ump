@@ -35,7 +35,8 @@ use CPTime/umpilif/Master.ump;
 
 use CPBytes/umpilif/Master.ump;
 
-use CheckpointerDaemon/umpilif/Master.ump ;
+use CheckpointerDaemon/umpilif/Master.ump;
 
+use Verifier/umpilif/Master.ump;
 
 //rename 's/^/DeleteOp_/' *
