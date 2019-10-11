@@ -39,6 +39,8 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../DiskFullErro_FileManager.ump"
 // line 3 "../../../../FileHandleCache_FileManager.ump"
 // line 3 "../../../../Statistics_FileManager.ump"
+// line 3 "../../../../IO_FileManager.ump"
+// line 3 "../../../../IO_FileManager_inner.ump"
 public class FileManager
 {
 
@@ -1237,6 +1239,7 @@ data.position(0);
   
   @MethodObject
   // line 75 "../../../../FileManager_static.ump"
+  // line 4 "../../../../IO_FileManager_inner.ump"
   public static class FileManager_writeToFile
   {
   
@@ -1270,8 +1273,26 @@ data.position(0);
     public int execute() throws IOException,DatabaseException{
       totalBytesWritten=0;
           this.hook455();
-          this.hook445();
+          this.hook445();        
+          // line 18 "../../../../IO_FileManager_inner.ump"
+          //            int result = original(); 
+          //{
+                        //  this.hook447();
+                      //}
+                      Label447:
+                      assert data.hasArray();
+                      assert data.arrayOffset() == 0;
+                      pos = data.position();
+                      size = data.limit() - pos;
+                      file.seek(destOffset);
+                      file.write(data.array(), pos, size);
+                      data.position(pos + size);
+                      totalBytesWritten = size;
+                      //end 
+                      return result;
+          // END OF UMPLE AFTER INJECTION
           return totalBytesWritten;
+  
     }
   
     // line 100 "../../../../FileManager_static.ump"
@@ -1319,6 +1340,7 @@ data.position(0);
   
   @MethodObject
   // line 104 "../../../../FileManager_static.ump"
+  // line 35 "../../../../IO_FileManager_inner.ump"
   public static class FileManager_readFromFile
   {
   
@@ -1351,6 +1373,21 @@ data.position(0);
     // line 112 "../../../../FileManager_static.ump"
     public void execute() throws IOException{
       this.hook446();
+      // line 48 "../../../../IO_FileManager_inner.ump"
+      //original(); {
+                  //    this.hook448();
+                  //}
+                 Label448:
+                 assert readBuffer.hasArray();
+                 assert readBuffer.arrayOffset() == 0;
+                 pos = readBuffer.position();
+                 size = readBuffer.limit() - pos;
+                 file.seek(offset);
+                 bytesRead2 = file.read(readBuffer.array(), pos, size);
+                 if (bytesRead2 > 0) {
+                      readBuffer.position(pos + bytesRead2);
+                 }
+      // END OF UMPLE AFTER INJECTION
     }
   
     // line 126 "../../../../FileManager_static.ump"

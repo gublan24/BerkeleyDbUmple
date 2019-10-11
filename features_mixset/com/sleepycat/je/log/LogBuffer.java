@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 
 // line 3 "../../../../LogBuffer.ump"
 // line 3 "../../../../DiskFullErro_LogBuffer.ump"
+// line 3 "../../../../IO_LogBuffer.ump"
 public class LogBuffer implements LogSource
 {
 
@@ -31,26 +32,29 @@ public class LogBuffer implements LogSource
   public void delete()
   {}
 
-  // line 20 "../../../../LogBuffer.ump"
+  // line 19 "../../../../LogBuffer.ump"
   public  LogBuffer(int capacity, EnvironmentImpl env) throws DatabaseException{
     this.hook481(capacity);
-	this.hook482(capacity);
-	this.hook479(env);
-	reinit();
+        Label482:
+buffer = ByteBuffer.allocate(capacity);
+			//original(capacity);
+ //this.hook482(capacity);
+            this.hook479(env);
+        reinit();
   }
 
-  // line 27 "../../../../LogBuffer.ump"
+  // line 26 "../../../../LogBuffer.ump"
   public  LogBuffer(ByteBuffer buffer, long firstLsn) throws DatabaseException{
     this.buffer = buffer;
-	this.firstLsn = firstLsn;
-	this.lastLsn = firstLsn;
+        this.firstLsn = firstLsn;
+        this.lastLsn = firstLsn;
   }
 
-  // line 33 "../../../../LogBuffer.ump"
+  // line 32 "../../../../LogBuffer.ump"
   public void reinit() throws DatabaseException{
     buffer.clear();
-	firstLsn = DbLsn.NULL_LSN;
-	lastLsn = DbLsn.NULL_LSN;
+        firstLsn = DbLsn.NULL_LSN;
+        lastLsn = DbLsn.NULL_LSN;
     // line 20 "../../../../DiskFullErro_LogBuffer.ump"
     //original();
     	rewriteAllowed = false;
@@ -62,7 +66,7 @@ public class LogBuffer implements LogSource
    * 
    * Return first LSN held in this buffer. Assumes the log write latch is held.
    */
-  // line 42 "../../../../LogBuffer.ump"
+  // line 41 "../../../../LogBuffer.ump"
   public long getFirstLsn(){
     return firstLsn;
   }
@@ -72,15 +76,15 @@ public class LogBuffer implements LogSource
    * 
    * This LSN has been written to the log.
    */
-  // line 49 "../../../../LogBuffer.ump"
+  // line 48 "../../../../LogBuffer.ump"
   public void registerLsn(long lsn) throws DatabaseException{
     if (lastLsn != DbLsn.NULL_LSN) {
-	    assert (DbLsn.compareTo(lsn, lastLsn) > 0);
-	}
-	lastLsn = lsn;
-	if (firstLsn == DbLsn.NULL_LSN) {
-	    firstLsn = lsn;
-	}
+            assert(DbLsn.compareTo(lsn, lastLsn) > 0);
+        }
+        lastLsn = lsn;
+        if (firstLsn == DbLsn.NULL_LSN) {
+            firstLsn = lsn;
+        }
   }
 
 
@@ -89,7 +93,7 @@ public class LogBuffer implements LogSource
    * Check capacity of buffer. Assumes that the log write latch is held.
    * @return true if this buffer can hold this many more bytes.
    */
-  // line 63 "../../../../LogBuffer.ump"
+  // line 62 "../../../../LogBuffer.ump"
   public boolean hasRoom(int numBytes){
     return (numBytes <= (buffer.capacity() - buffer.position()));
   }
@@ -99,7 +103,7 @@ public class LogBuffer implements LogSource
    * 
    * @return the actual data buffer.
    */
-  // line 70 "../../../../LogBuffer.ump"
+  // line 69 "../../../../LogBuffer.ump"
   public ByteBuffer getDataBuffer(){
     return buffer;
   }
@@ -109,7 +113,7 @@ public class LogBuffer implements LogSource
    * 
    * @return capacity in bytes
    */
-  // line 77 "../../../../LogBuffer.ump"
+  // line 76 "../../../../LogBuffer.ump"
   public int getCapacity(){
     return buffer.capacity();
   }
@@ -120,19 +124,19 @@ public class LogBuffer implements LogSource
    * Support for reading a log entry out of a still-in-memory log
    * @return true if this buffer holds the entry at this LSN. The buffer willbe latched for read. Returns false if LSN is not here, and releases the read latch.
    */
-  // line 85 "../../../../LogBuffer.ump"
+  // line 84 "../../../../LogBuffer.ump"
   public boolean containsLsn(long lsn) throws DatabaseException{
     boolean found = false;
-	if ((firstLsn != DbLsn.NULL_LSN)
-		&& ((DbLsn.compareTo(firstLsn, lsn) <= 0) && (DbLsn.compareTo(lastLsn, lsn) >= 0))) {
-	    found = true;
-	}
-	if (found) {
-	    return true;
-	} else {
-	    this.hook480();
-	    return false;
-	}
+        if ((firstLsn != DbLsn.NULL_LSN) &&
+            ((DbLsn.compareTo(firstLsn, lsn) <= 0) && (DbLsn.compareTo(lastLsn, lsn) >= 0))) {
+            found = true;
+        }
+        if (found) {
+            return true;
+        } else {
+            this.hook480();
+            return false;
+        }
   }
 
 
@@ -140,19 +144,19 @@ public class LogBuffer implements LogSource
    * 
    * @see LogSource#getBytes
    */
-  // line 102 "../../../../LogBuffer.ump"
+  // line 101 "../../../../LogBuffer.ump"
    public ByteBuffer getBytes(long fileOffset){
     ByteBuffer copy = null;
-	while (true) {
-	    try {
-		copy = buffer.duplicate();
-		copy.position((int) (fileOffset - DbLsn.getFileOffset(firstLsn)));
-		break;
-	    } catch (IllegalArgumentException IAE) {
-		continue;
-	    }
-	}
-	return copy;
+        while (true) {
+            try {
+                copy = buffer.duplicate();
+                copy.position((int)(fileOffset - DbLsn.getFileOffset(firstLsn)));
+                break;
+            } catch (IllegalArgumentException IAE) {
+                continue;
+            }
+        }
+        return copy;
   }
 
 
@@ -160,34 +164,33 @@ public class LogBuffer implements LogSource
    * 
    * @see LogSource#getBytes
    */
-  // line 119 "../../../../LogBuffer.ump"
+  // line 118 "../../../../LogBuffer.ump"
    public ByteBuffer getBytes(long fileOffset, int numBytes){
     ByteBuffer copy = getBytes(fileOffset);
-	assert (copy.remaining() >= numBytes) : "copy.remaining=" + copy.remaining() + " numBytes=" + numBytes;
-	return copy;
+        assert(copy.remaining() >= numBytes): "copy.remaining=" + copy.remaining() + " numBytes=" + numBytes;
+        return copy;
   }
 
-  // line 125 "../../../../LogBuffer.ump"
+  // line 123 "../../../../LogBuffer.ump"
    protected void hook479(EnvironmentImpl env) throws DatabaseException{
     
   }
 
-  // line 128 "../../../../LogBuffer.ump"
+  // line 125 "../../../../LogBuffer.ump"
    protected void hook480() throws DatabaseException{
     
   }
 
-  // line 131 "../../../../LogBuffer.ump"
+  // line 127 "../../../../LogBuffer.ump"
    protected void hook481(int capacity) throws DatabaseException{
     
   }
 
-  // line 134 "../../../../LogBuffer.ump"
-   protected void hook482(int capacity) throws DatabaseException{
-    
-  }
 
-  // line 137 "../../../../LogBuffer.ump"
+  /**
+   * protected void hook482(int capacity) throws DatabaseException {}
+   */
+  // line 131 "../../../../LogBuffer.ump"
    public void release() throws DatabaseException{
     
   }
@@ -206,13 +209,13 @@ public class LogBuffer implements LogSource
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 11 "../../../../LogBuffer.ump"
+  // line 10 "../../../../LogBuffer.ump"
   private static final String DEBUG_NAME = LogBuffer.class.getName() ;
-// line 13 "../../../../LogBuffer.ump"
+// line 12 "../../../../LogBuffer.ump"
   private ByteBuffer buffer ;
-// line 15 "../../../../LogBuffer.ump"
+// line 14 "../../../../LogBuffer.ump"
   private long firstLsn ;
-// line 17 "../../../../LogBuffer.ump"
+// line 16 "../../../../LogBuffer.ump"
   private long lastLsn ;
 // line 5 "../../../../DiskFullErro_LogBuffer.ump"
   private boolean rewriteAllowed ;
