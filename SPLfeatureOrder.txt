@@ -20,7 +20,7 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="CheckLeaks"/>
+        <feature name=""/>
         <feature name="Statistics"/>
         <feature name="IO"/>
         <feature name="ChunkedNIO"/>

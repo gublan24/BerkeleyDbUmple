@@ -41,4 +41,6 @@ use Verifier/umpilif/Master.ump;
 
 use CheckLeaks/umpilif/Master.ump;
 
+use Statistics/umpilif/Master.ump;
+
 //rename 's/^/DeleteOp_/' *

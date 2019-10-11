@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/LogManager.java
 namespace com.sleepycat.je.log;
 class LogManager {
-  @MethodObject static class LogManager_getLogEntryFromLogSource {
+   static class LogManager_getLogEntryFromLogSource {
       LogManager_getLogEntryFromLogSource(    LogManager _this,    long lsn,    LogSource logSource){
         this._this=_this;
         this.lsn=lsn;
@@ -18,7 +18,7 @@ class LogManager {
           itemSize=LogUtils.readInt(entryBuffer);
           if (entryBuffer.remaining() < itemSize) {
             entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
-            this.hook508();
+            Label508: //this.hook508();
           }
           this.hook506();
           assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;

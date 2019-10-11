@@ -29,6 +29,7 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../Truncate_Database.ump"
 // line 3 "../../../Truncate_Database_inner.ump"
 // line 3 "../../../DeleteOp_Database.ump"
+// line 3 "../../../Statistics_Database.ump"
 public class Database
 {
 
@@ -798,6 +799,18 @@ databaseImpl.checkIsDeleted("preload");
 			} finally {
 					locker.setHandleLockOwner(operationOk, this, false);
 			}
+  }
+
+  // line 6 "../../../Statistics_Database.ump"
+   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
+    checkEnv();
+			checkRequiredDbState(OPEN, "Can't call Database.stat");
+			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
+			if (databaseImpl != null) {
+					Label38: //this.hook38();
+					return databaseImpl.stat(useConfig);
+			}
+			return null;
   }
 
 

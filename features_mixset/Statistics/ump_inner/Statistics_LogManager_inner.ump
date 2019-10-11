@@ -1,0 +1,10 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/log/LogManager.java
+namespace com.sleepycat.je.log;
+class LogManager {
+   static class LogManager_getLogEntryFromLogSource {
+      after Label508:execute(){
+        _this.nRepeatFaultReads++;
+        //original();
+      }
+    }
+}

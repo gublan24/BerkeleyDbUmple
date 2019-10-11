@@ -1,0 +1,15 @@
+1) Statistics_Fileprocessor.ump:  //synchronized int doClean(boolean invokedFromDaemon, boolean cleanMultipleFiles, boolean forceCleaning)
+
+2) Statistics_Srquence.ump: //public synchronized long get(Transaction txn, int delta) throws DatabaseException {
+
+3)  Statistics_DatabaseImpl_inner.ump:
+		static class DatabaseImpl_preload {
+				  after Label287:execute() {
+				    try {
+				      //original();
+				    }
+			 catch (   HaltPreloadException HPE) {
+				      ret.status=HPE.getStatus();
+				    }
+				  }
+				}

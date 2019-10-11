@@ -19,11 +19,14 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.HashMap;
+import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../LockManager.ump"
 // line 3 "../../../../LockManager_static.ump"
 // line 3 "../../../../MemoryBudget_LockManager.ump"
+// line 3 "../../../../Statistics_LockManager.ump"
+// line 3 "../../../../Statistics_LockManager_inner.ump"
 public abstract class LockManager implements EnvConfigObserver
 {
 
@@ -61,7 +64,7 @@ nLockTables = configMgr.getInt(EnvironmentParams.N_LOCK_TABLES);
 			}
 			this.envImpl = envImpl;
 			memoryBudget = envImpl.getMemoryBudget();
-			this.hook774();
+			Label774: //this.hook774();
 			envConfigUpdate(configMgr);
 			envImpl.addConfigObserver(this);
   }
@@ -197,7 +200,7 @@ memoryBudget.updateLockMemoryUsage(TOTAL_LOCK_OVERHEAD, lockTableIndex);
 					success = true;
 			} else if (lockGrant == LockGrantType.DENIED) {
 			} else {
-					this.hook775();
+					Label775: //this.hook775();
 			}
 			return new LockAttemptResult(useLock, lockGrant, success);
   }
@@ -571,17 +574,31 @@ memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
   // line 492 "../../../../LockManager.ump"
    protected void dumpLockTableInternal(LockStats stats, int i){
     Map lockTable = lockTables[i];
-	this.hook776(stats, lockTable);
-	Iterator iter = lockTable.values().iterator();
-	while (iter.hasNext()) {
-	    Lock lock = (Lock) iter.next();
-	    this.hook777(stats, lock);
-	    Iterator ownerIter = lock.getOwnersClone().iterator();
-	    while (ownerIter.hasNext()) {
-		LockInfo info = (LockInfo) ownerIter.next();
-		this.hook778(stats, info);
-	    }
-	}
+			Label776:
+stats.accumulateNTotalLocks(lockTable.size());
+			//original(stats, lockTable);
+ //	this.hook776(stats, lockTable);
+			Iterator iter = lockTable.values().iterator();
+			while (iter.hasNext()) {
+					Lock lock = (Lock) iter.next();
+					Label777:
+stats.setNWaiters(stats.getNWaiters() + lock.nWaiters());
+			stats.setNOwners(stats.getNOwners() + lock.nOwners());
+			//original(stats, lock);
+ //this.hook777(stats, lock);
+					Iterator ownerIter = lock.getOwnersClone().iterator();
+					while (ownerIter.hasNext()) {
+					LockInfo info = (LockInfo) ownerIter.next();
+					Label778:
+if (info.getLockType().isWriteLock()) {
+					stats.setNWriteLocks(stats.getNWriteLocks() + 1);
+			} else {
+					stats.setNReadLocks(stats.getNReadLocks() + 1);
+			}
+			//original(stats, info);
+ //this.hook778(stats, info);
+					}
+			}
   }
 
 
@@ -691,11 +708,11 @@ memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
     dumpToStringNoLatch(sb, i);
   }
 
-  // line 598 "../../../../LockManager.ump"
-   protected void hook774() throws DatabaseException{
-    
-  }
 
+  /**
+   * protected void hook774() throws DatabaseException {
+   * }
+   */
   // line 601 "../../../../LockManager.ump"
    protected void hook775() throws DatabaseException{
     
@@ -724,6 +741,16 @@ memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
   // line 616 "../../../../LockManager.ump"
    protected void hook780(int lockTableIndex) throws DatabaseException{
     
+  }
+
+
+  /**
+   * 
+   * Statistics
+   */
+  // line 14 "../../../../Statistics_LockManager.ump"
+   public LockStats lockStat(StatsConfig config) throws DatabaseException{
+    return new LockManager_lockStat(this, config).execute();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -815,6 +842,69 @@ memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
               "  " + "useLock" + "=" + (getUseLock() != null ? !getUseLock().equals(this)  ? getUseLock().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
               "  " + "lockGrant" + "=" + (getLockGrant() != null ? !getLockGrant().equals(this)  ? getLockGrant().toString().replaceAll("  ","    ") : "this" : "null");
     }
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../Statistics_LockManager_inner.ump"
+  public static class LockManager_lockStat
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LockManager_lockStat()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../Statistics_LockManager_inner.ump"
+    public  LockManager_lockStat(LockManager _this, StatsConfig config){
+      this._this=_this;
+          this.config=config;
+    }
+  
+    // line 10 "../../../../Statistics_LockManager_inner.ump"
+    public LockStats execute() throws DatabaseException{
+      stats=new LockStats();
+          stats.setNRequests(_this.nRequests);
+          stats.setNWaits(_this.nWaits);
+          if (config.getClear()) {
+            _this.nWaits=0;
+            _this.nRequests=0;
+          }
+          Label769: //this.hook769();
+          if (!config.getFast()) {
+            _this.dumpLockTable(stats);
+          }
+          return stats;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 23 "../../../../Statistics_LockManager_inner.ump"
+    protected LockManager _this ;
+  // line 24 "../../../../Statistics_LockManager_inner.ump"
+    protected StatsConfig config ;
+  // line 25 "../../../../Statistics_LockManager_inner.ump"
+    protected LockStats stats ;
+  // line 26 "../../../../Statistics_LockManager_inner.ump"
+    protected LatchStats latchStats ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -845,6 +935,17 @@ memoryBudget.updateLockMemoryUsage(REMOVE_TOTAL_LOCK_OVERHEAD, lockTableIndex);
 	    + MemoryBudget.LONG_OVERHEAD ;
 // line 8 "../../../../MemoryBudget_LockManager.ump"
   private static final long REMOVE_TOTAL_LOCK_OVERHEAD = 0 - TOTAL_LOCK_OVERHEAD ;
+// line 6 "../../../../Statistics_LockManager.ump"
+  private long nRequests ;
+// line 8 "../../../../Statistics_LockManager.ump"
+  private long nWaits ;
+
+// line 29 "../../../../Statistics_LockManager.ump"
+  after Label775: attemptLockInternal (Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex) 
+  {
+    nWaits++;
+			//original();
+  }
 
   
 }

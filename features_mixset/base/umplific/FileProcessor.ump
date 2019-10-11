@@ -123,13 +123,13 @@ class FileProcessor
 	    if (fileNum == null) {
 		break;
 	    }
-	    this.hook138();
+	    Label138: //this.hook138();
 	    boolean finished = false;
 	    long fileNumValue = fileNum.longValue();
 	    int runId = ++cleaner.nCleanerRuns;
 	    try {
 		String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
-		traceMsg = this.hook139(traceMsg);
+		Label139: //traceMsg = this.hook139(traceMsg);
 		this.hook121(traceMsg);
 		if (DEBUG_TRACING) {
 		    System.out.println("\n" + traceMsg);
@@ -137,7 +137,7 @@ class FileProcessor
 		if (processFile(fileNum)) {
 		    fileSelector.addCleanedFile(fileNum);
 		    nFilesCleaned += 1;
-		    this.hook140();
+		    Label140: //this.hook140();
 		    finished = true;
 		}
 	    } catch (IOException IOE) {
@@ -149,7 +149,7 @@ class FileProcessor
 		}
 		String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue)
 			+ " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
-		traceMsg = this.hook141(traceMsg);
+		Label141: //traceMsg = this.hook141(traceMsg);
 		this.hook123(traceMsg);
 		if (DEBUG_TRACING) {
 		    System.out.println("\n" + traceMsg);
@@ -209,10 +209,10 @@ class FileProcessor
 		locker = new BasicLocker(env);
 		LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
 		if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-		    this.hook142();
+		    Label142: //this.hook142();
 		    lockDenied = true;
 		} else {
-		    this.hook143();
+		    Label143: //this.hook143();
 		    obsolete = true;
 		}
 	    }
@@ -237,7 +237,7 @@ class FileProcessor
 		    }
 		    bin.setGeneration();
 		}
-		this.hook144();
+		Label144: //this.hook144();
 		migrated = true;
 	    }
 	    completed = true;
@@ -268,7 +268,7 @@ class FileProcessor
 			if (b) {
 					//this.hook160(db);
           Label160:
-					this.hook151();
+					Label151: //this.hook151();
 					obsolete = true;
 					completed = true;
 					throw new ReturnVoid();
@@ -277,10 +277,10 @@ class FileProcessor
 			assert tree != null;
 			IN inInTree = findINInTree(tree, db, inClone, lsn);
 			if (inInTree == null) {
-					this.hook152();
+					Label152: //this.hook152();
 					obsolete = true;
 			} else {
-					this.hook153();
+					Label153: //this.hook153();
 					inInTree.setDirty(true);
 					inInTree.setProhibitNextDelta();
 					this.hook136(inInTree);
@@ -378,8 +378,8 @@ class FileProcessor
     protected void hook136(IN inInTree) throws DatabaseException {
     }
 
-    protected void hook138() throws DatabaseException {
-    }
+  //  protected void hook138() throws DatabaseException {
+  //  }
 
     protected String hook139(String traceMsg) throws DatabaseException, IOException {
 	return traceMsg;
@@ -392,23 +392,23 @@ class FileProcessor
 	return traceMsg;
     }
 
-    protected void hook142() throws DatabaseException {
-    }
+  //  protected void hook142() throws DatabaseException {
+  //  }
 
-    protected void hook143() throws DatabaseException {
-    }
+//    protected void hook143() throws DatabaseException {
+//    }
 
-    protected void hook144() throws DatabaseException {
-    }
+//    protected void hook144() throws DatabaseException {
+//    }
 
-    protected void hook151() throws DatabaseException {
-    }
+  //  protected void hook151() throws DatabaseException {
+  //  }
 
-    protected void hook152() throws DatabaseException {
-    }
+  //  protected void hook152() throws DatabaseException {
+   // }
 
-    protected void hook153() throws DatabaseException {
-    }
+   // protected void hook153() throws DatabaseException {
+   // }
 
     protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException {
 	return b;

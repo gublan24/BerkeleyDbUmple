@@ -42,6 +42,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../INCompressor_CursorImpl_inner.ump"
 // line 3 "../../../../Verifier_CursorImpl.ump"
 // line 3 "../../../../Verifier_CursorImpl_inner.ump"
+// line 3 "../../../../Statistics_CursorImpl.ump"
+// line 3 "../../../../Statistics_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -1853,6 +1855,11 @@ if (DEBUG) {
 					throw new DatabaseException("BIN cursorSet is inconsistent.");
 			}
   }
+
+  // line 6 "../../../../Statistics_CursorImpl.ump"
+   public LockStats getLockStats() throws DatabaseException{
+    return locker.collectStats(new LockStats());
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -2202,6 +2209,7 @@ if (DEBUG) {
   @MethodObject
   // line 141 "../../../../CursorImpl_static.ump"
   // line 5 "../../../../Verifier_CursorImpl_inner.ump"
+  // line 4 "../../../../Statistics_CursorImpl_inner.ump"
   public static class CursorImpl_getNextDuplicate
   {
   
@@ -2274,7 +2282,7 @@ if (DEBUG) {
           _this.dupBinToBeRemoved=_this.dupBin;
           _this.dupBin=null;
           this.hook255();
-          this.hook275();
+          Label275: //this.hook275();
           this.hook254();
     {
           }
@@ -2385,6 +2393,25 @@ if (DEBUG) {
     protected DupCountLN dcl ;
   // line 234 "../../../../CursorImpl_static.ump"
     protected DBIN newDupBin ;
+  
+  // line 19 "../../../../Statistics_CursorImpl_inner.ump"
+    after Label275 : execute () 
+    {
+      treeStatsAccumulator=_this.getTreeStatsAccumulator();
+          if (treeStatsAccumulator != null) {
+            Label200: //this.hook200();
+            if (_this.index < 0) {
+            throw new ReturnObject(OperationStatus.NOTFOUND);
+          }
+          duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
+          Label201: //this.hook201();
+          dcl=duplicateRoot.getDupCountLN();
+          	if (dcl != null) {
+          	  dcl.accumulateStats(treeStatsAccumulator);
+          	}
+          }
+          //original();
+    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/

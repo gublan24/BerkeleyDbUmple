@@ -30,12 +30,15 @@ import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.File;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
 
 // line 3 "../../../../FileManager.ump"
 // line 3 "../../../../FileManager_static.ump"
 // line 3 "../../../../EnvironmentLocking_FileManager.ump"
 // line 3 "../../../../DiskFullErro_FileManager.ump"
 // line 3 "../../../../FileHandleCache_FileManager.ump"
+// line 3 "../../../../Statistics_FileManager.ump"
 public class FileManager
 {
 

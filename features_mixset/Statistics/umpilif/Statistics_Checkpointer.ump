@@ -1,0 +1,74 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.EnvironmentStats;
+    private int nCheckpoints;
+
+    private long lastCheckpointStart;
+
+    private int nFullINFlush;
+
+    private int nFullBINFlush;
+
+    private int nDeltaINFlush;
+
+    private int nFullINFlushThisRun;
+
+    private int nDeltaINFlushThisRun;
+
+    /** 
+     * Load stats.
+     */
+    public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException {
+			stat.setNCheckpoints(nCheckpoints);
+			stat.setLastCheckpointStart(lastCheckpointStart);
+			stat.setLastCheckpointEnd(lastCheckpointEnd);
+			stat.setLastCheckpointId(checkpointId);
+			stat.setNFullINFlush(nFullINFlush);
+			stat.setNFullBINFlush(nFullBINFlush);
+			stat.setNDeltaINFlush(nDeltaINFlush);
+			if (config.getClear()) {
+					nCheckpoints = 0;
+					nFullINFlush = 0;
+					nFullBINFlush = 0;
+					nDeltaINFlush = 0;
+			}
+    }
+
+    /** 
+     * Reset per-run counters.
+     */
+    private void resetPerRunCounters() {
+			nFullINFlushThisRun = 0;
+			nDeltaINFlushThisRun = 0;
+    }
+
+    after Label531: Checkpointer(EnvironmentImpl , long , String ) { 
+			nCheckpoints = 0;
+			//	original();
+    }
+
+    after Label532: flushIN(CheckpointReference , Map , int , boolean , boolean, long ) {
+			nFullINFlushThisRun++;
+			nFullINFlush++;
+			//original();
+    }
+
+    after Label533: logTargetAndUpdateParent(IN , IN , int , boolean , long ,	boolean ) { 
+			nFullINFlushThisRun++;
+			nFullINFlush++;
+			if (target instanceof BIN) {
+					nFullBINFlush++;
+			}
+			//original(target);
+    }
+
+    after Label537: logTargetAndUpdateParent(IN , IN , int , boolean , long ,	boolean ) { 
+			nDeltaINFlushThisRun++;
+			nDeltaINFlush++;
+			//original();
+    }
+
+}

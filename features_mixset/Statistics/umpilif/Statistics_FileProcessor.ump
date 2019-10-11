@@ -1,0 +1,128 @@
+namespace com.sleepycat.je.cleaner;
+
+class FileProcessor
+{
+    private int nINsObsoleteThisRun = 0;
+
+    private int nINsCleanedThisRun = 0;
+
+    private int nINsDeadThisRun = 0;
+
+    private int nINsMigratedThisRun = 0;
+
+    private int nLNsObsoleteThisRun = 0;
+
+    private int nLNsCleanedThisRun = 0;
+
+    private int nLNsDeadThisRun = 0;
+
+    private int nLNsLockedThisRun = 0;
+
+    private int nLNsMigratedThisRun = 0;
+
+    private int nLNsMarkedThisRun = 0;
+
+    private int nLNQueueHitsThisRun = 0;
+
+    private int nEntriesReadThisRun;
+
+    private long nRepeatIteratorReadsThisRun;
+
+    /** 
+     * Reset per-run counters.
+     */
+    private void resetPerRunCounters() {
+			nINsObsoleteThisRun = 0;
+			nINsCleanedThisRun = 0;
+			nINsDeadThisRun = 0;
+			nINsMigratedThisRun = 0;
+			nLNsObsoleteThisRun = 0;
+			nLNsCleanedThisRun = 0;
+			nLNsDeadThisRun = 0;
+			nLNsMigratedThisRun = 0;
+			nLNsMarkedThisRun = 0;
+			nLNQueueHitsThisRun = 0;
+			nLNsLockedThisRun = 0;
+			nEntriesReadThisRun = 0;
+			nRepeatIteratorReadsThisRun = 0;
+    }
+
+    /** 
+     * Add per-run counters to total counters.
+     */
+    private void accumulatePerRunCounters() {
+	cleaner.nINsObsolete += nINsObsoleteThisRun;
+	cleaner.nINsCleaned += nINsCleanedThisRun;
+	cleaner.nINsDead += nINsDeadThisRun;
+	cleaner.nINsMigrated += nINsMigratedThisRun;
+	cleaner.nLNsObsolete += nLNsObsoleteThisRun;
+	cleaner.nLNsCleaned += nLNsCleanedThisRun;
+	cleaner.nLNsDead += nLNsDeadThisRun;
+	cleaner.nLNsMigrated += nLNsMigratedThisRun;
+	cleaner.nLNsMarked += nLNsMarkedThisRun;
+	cleaner.nLNQueueHits += nLNQueueHitsThisRun;
+	cleaner.nLNsLocked += nLNsLockedThisRun;
+	cleaner.nRepeatIteratorReads += nRepeatIteratorReadsThisRun;
+    }
+
+    after Label138: doClean(boolean , boolean , boolean ) {
+  //synchronized int doClean(boolean invokedFromDaemon, boolean cleanMultipleFiles, boolean forceCleaning)
+			resetPerRunCounters();
+			//original();
+    }
+
+    after Label139: doClean(boolean , boolean , boolean ) {
+			traceMsg += " begins backlog=" + cleaner.nBacklogFiles;
+			//return original(traceMsg);
+    }
+
+    after Label140: doClean(boolean , boolean , boolean ) {
+			accumulatePerRunCounters();
+			//original();
+    }
+
+   after Label141: doClean(boolean , boolean , boolean ) {
+			traceMsg += " nEntriesRead=" + nEntriesReadThisRun + " nINsObsolete=" + nINsObsoleteThisRun + " nINsCleaned="
+				+ nINsCleanedThisRun + " nINsDead=" + nINsDeadThisRun + " nINsMigrated=" + nINsMigratedThisRun
+				+ " nLNsObsolete=" + nLNsObsoleteThisRun + " nLNsCleaned=" + nLNsCleanedThisRun + " nLNsDead="
+				+ nLNsDeadThisRun + " nLNsMigrated=" + nLNsMigratedThisRun + " nLNsMarked=" + nLNsMarkedThisRun
+				+ " nLNQueueHits=" + nLNQueueHitsThisRun + " nLNsLocked=" + nLNsLockedThisRun;
+			//return original(traceMsg);
+    }
+
+    after Label142: processFoundLN(LNInfo , long , long , BIN , int , DIN ) { 
+			nLNsLockedThisRun++;
+			//original();
+    }
+
+    after Label143: processFoundLN(LNInfo , long , long , BIN , int , DIN ) { 
+			nLNsDeadThisRun++;
+			//original();
+    }
+
+    after Label144: processFoundLN(LNInfo , long , long , BIN , int , DIN ) { 
+			nLNsMarkedThisRun++;
+			//original();
+    }
+
+    after Label125: processIN(IN , DatabaseImpl , long) {
+			nINsCleanedThisRun++;
+			//original(inClone, db, lsn, obsolete, dirtied, completed);
+    }
+
+    after Label151: processIN(IN , DatabaseImpl , long) {
+			nINsDeadThisRun++;
+			//original();
+    }
+
+    after Label152: processIN(IN , DatabaseImpl , long) {
+			nINsDeadThisRun++;
+			//original();
+    }
+
+    after Label153: processIN(IN , DatabaseImpl , long) {
+			nINsMigratedThisRun++;
+			//original();
+    }
+
+}

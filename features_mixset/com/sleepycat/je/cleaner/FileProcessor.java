@@ -43,6 +43,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../MemoryBudget_FileProcessor_inner.ump"
 // line 3 "../../../../DeleteOp_FileProcessor.ump"
 // line 3 "../../../../DeleteOp_FileProcessor_inner.ump"
+// line 3 "../../../../Statistics_FileProcessor.ump"
+// line 3 "../../../../Statistics_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -169,10 +171,16 @@ public class FileProcessor extends DaemonThread
 		locker = new BasicLocker(env);
 		LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
 		if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-		    this.hook142();
+		    Label142:
+nLNsLockedThisRun++;
+			//original();
+ //this.hook142();
 		    lockDenied = true;
 		} else {
-		    this.hook143();
+		    Label143:
+nLNsDeadThisRun++;
+			//original();
+ //this.hook143();
 		    obsolete = true;
 		}
 	    }
@@ -197,7 +205,10 @@ public class FileProcessor extends DaemonThread
 		    }
 		    bin.setGeneration();
 		}
-		this.hook144();
+		Label144:
+nLNsMarkedThisRun++;
+			//original();
+ //this.hook144();
 		migrated = true;
 	    }
 	    completed = true;
@@ -225,6 +236,9 @@ public class FileProcessor extends DaemonThread
 	    boolean completed = false;
 	    //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
       Label125:
+nINsCleanedThisRun++;
+			//original(inClone, db, lsn, obsolete, dirtied, completed);
+
       boolean b = db == null;
 			//b = this.hook159(db, b);
       Label159:
@@ -237,7 +251,10 @@ b |= db.isDeleted();
 cleaner.addPendingDB(db);
 			//original(db);
 
-					this.hook151();
+					Label151:
+nINsDeadThisRun++;
+			//original();
+ //this.hook151();
 					obsolete = true;
 					completed = true;
 					throw new ReturnVoid();
@@ -246,10 +263,16 @@ cleaner.addPendingDB(db);
 			assert tree != null;
 			IN inInTree = findINInTree(tree, db, inClone, lsn);
 			if (inInTree == null) {
-					this.hook152();
+					Label152:
+nINsDeadThisRun++;
+			//original();
+ //this.hook152();
 					obsolete = true;
 			} else {
-					this.hook153();
+					Label153:
+nINsMigratedThisRun++;
+			//original();
+ //this.hook153();
 					inInTree.setDirty(true);
 					inInTree.setProhibitNextDelta();
 					this.hook136(inInTree);
@@ -367,11 +390,11 @@ cleaner.addPendingDB(db);
     
   }
 
-  // line 382 "../../../../FileProcessor.ump"
-   protected void hook138() throws DatabaseException{
-    
-  }
 
+  /**
+   * protected void hook138() throws DatabaseException {
+   * }
+   */
   // line 385 "../../../../FileProcessor.ump"
    protected String hook139(String traceMsg) throws DatabaseException,IOException{
     return traceMsg;
@@ -387,36 +410,21 @@ cleaner.addPendingDB(db);
     return traceMsg;
   }
 
-  // line 396 "../../../../FileProcessor.ump"
-   protected void hook142() throws DatabaseException{
-    
-  }
 
-  // line 399 "../../../../FileProcessor.ump"
-   protected void hook143() throws DatabaseException{
-    
-  }
-
-  // line 402 "../../../../FileProcessor.ump"
-   protected void hook144() throws DatabaseException{
-    
-  }
-
-  // line 405 "../../../../FileProcessor.ump"
-   protected void hook151() throws DatabaseException{
-    
-  }
-
-  // line 408 "../../../../FileProcessor.ump"
-   protected void hook152() throws DatabaseException{
-    
-  }
-
-  // line 411 "../../../../FileProcessor.ump"
-   protected void hook153() throws DatabaseException{
-    
-  }
-
+  /**
+   * protected void hook142() throws DatabaseException {
+   * }
+   * protected void hook143() throws DatabaseException {
+   * }
+   * protected void hook144() throws DatabaseException {
+   * }
+   * protected void hook151() throws DatabaseException {
+   * }
+   * protected void hook152() throws DatabaseException {
+   * }
+   * protected void hook153() throws DatabaseException {
+   * }
+   */
   // line 414 "../../../../FileProcessor.ump"
    protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException{
     return b;
@@ -425,6 +433,49 @@ cleaner.addPendingDB(db);
   // line 418 "../../../../FileProcessor.ump"
    protected void hook160(DatabaseImpl db) throws DatabaseException{
     
+  }
+
+
+  /**
+   * 
+   * Reset per-run counters.
+   */
+  // line 35 "../../../../Statistics_FileProcessor.ump"
+   private void resetPerRunCounters(){
+    nINsObsoleteThisRun = 0;
+			nINsCleanedThisRun = 0;
+			nINsDeadThisRun = 0;
+			nINsMigratedThisRun = 0;
+			nLNsObsoleteThisRun = 0;
+			nLNsCleanedThisRun = 0;
+			nLNsDeadThisRun = 0;
+			nLNsMigratedThisRun = 0;
+			nLNsMarkedThisRun = 0;
+			nLNQueueHitsThisRun = 0;
+			nLNsLockedThisRun = 0;
+			nEntriesReadThisRun = 0;
+			nRepeatIteratorReadsThisRun = 0;
+  }
+
+
+  /**
+   * 
+   * Add per-run counters to total counters.
+   */
+  // line 54 "../../../../Statistics_FileProcessor.ump"
+   private void accumulatePerRunCounters(){
+    cleaner.nINsObsolete += nINsObsoleteThisRun;
+	cleaner.nINsCleaned += nINsCleanedThisRun;
+	cleaner.nINsDead += nINsDeadThisRun;
+	cleaner.nINsMigrated += nINsMigratedThisRun;
+	cleaner.nLNsObsolete += nLNsObsoleteThisRun;
+	cleaner.nLNsCleaned += nLNsCleanedThisRun;
+	cleaner.nLNsDead += nLNsDeadThisRun;
+	cleaner.nLNsMigrated += nLNsMigratedThisRun;
+	cleaner.nLNsMarked += nLNsMarkedThisRun;
+	cleaner.nLNQueueHits += nLNQueueHitsThisRun;
+	cleaner.nLNsLocked += nLNsLockedThisRun;
+	cleaner.nRepeatIteratorReads += nRepeatIteratorReadsThisRun;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -498,6 +549,7 @@ cleaner.addPendingDB(db);
   // line 28 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
   // line 16 "../../../../DeleteOp_FileProcessor_inner.ump"
+  // line 23 "../../../../Statistics_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -558,7 +610,10 @@ cleaner.addPendingDB(db);
             location=new TreeLocation();
             nProcessedLNs=0;
             while (reader.readNextEntry()) {
-              this.hook146();
+              Label146:
+  _this.cleaner.nEntriesRead += 1;
+              //original();
+   //this.hook146();
               lsn=reader.getLastLsn();
               fileOffset=DbLsn.getFileOffset(lsn);
               isLN=reader.isLN();
@@ -584,7 +639,14 @@ cleaner.addPendingDB(db);
                 isObsolete=true;
               }
               if (isObsolete) {
-                this.hook147();
+                Label147:
+  if (isLN) {
+                  _this.nLNsObsoleteThisRun++;
+              } else if (isIN) {
+                  _this.nINsObsoleteThisRun++;
+              }
+              //original();
+   //this.hook147();
                 Label156:
   dbId1=reader.getDatabaseId();
           if (dbId1 != null) {
@@ -631,7 +693,11 @@ cleaner.addPendingDB(db);
           }
           //original();
    //this.hook155();
-            this.hook145();
+            Label145:
+  _this.nEntriesReadThisRun = reader.getNumRead();
+              _this.nRepeatIteratorReadsThisRun = reader.getNRepeatIteratorReads();
+              //original();
+   //this.hook145();
           }
       finally {
             //this.hook162();
@@ -688,21 +754,15 @@ cleaner.addPendingDB(db);
       
     }
   
-    // line 179 "../../../../FileProcessor_static.ump"
-     protected void hook145() throws DatabaseException,IOException{
-      
-    }
   
-    // line 181 "../../../../FileProcessor_static.ump"
-     protected void hook146() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 183 "../../../../FileProcessor_static.ump"
-     protected void hook147() throws DatabaseException,IOException{
-      
-    }
-  
+    /**
+     * protected void hook145() throws DatabaseException, IOException {
+     * }
+     * protected void hook146() throws DatabaseException, IOException {
+     * }
+     * protected void hook147() throws DatabaseException, IOException {
+     * }
+     */
     // line 185 "../../../../FileProcessor_static.ump"
      protected void hook154() throws DatabaseException,IOException{
       
@@ -813,6 +873,7 @@ cleaner.addPendingDB(db);
     @MethodObject
   // line 195 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
+  // line 5 "../../../../Statistics_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
   {
   
@@ -847,6 +908,10 @@ cleaner.addPendingDB(db);
   
     // line 206 "../../../../FileProcessor_static.ump"
     public void execute() throws DatabaseException{
+      // line 7 "../../../../Statistics_FileProcessor_inner.ump"
+      _this.nLNsCleanedThisRun++;
+                  //original();
+      // END OF UMPLE BEFORE INJECTION
       this.hook132();
           ln=info.getLN();
           key=info.getKey();
@@ -869,7 +934,10 @@ cleaner.addPendingDB(db);
   _this.cleaner.addPendingDB(db);
           //original();
    //this.hook158();
-              this.hook148();
+              Label148:
+  _this.nLNsDeadThisRun++;
+              //original();
+   //this.hook148();
               obsolete=true;
               completed=true;
               return;
@@ -880,13 +948,19 @@ cleaner.addPendingDB(db);
             bin=location.bin;
             index=location.index;
             if (!parentFound) {
-              this.hook149();
+              Label149:
+  _this.nLNsDeadThisRun++;
+              //original();
+   //this.hook149();
               obsolete=true;
               completed=true;
               return;
             }
             if (bin.isEntryKnownDeleted(index)) {
-              this.hook150();
+              Label150:
+  _this.nLNsDeadThisRun++;
+              //original();
+   //this.hook150();
               obsolete=true;
               completed=true;
               return;
@@ -935,21 +1009,15 @@ cleaner.addPendingDB(db);
       
     }
   
-    // line 303 "../../../../FileProcessor_static.ump"
-     protected void hook148() throws DatabaseException{
-      
-    }
   
-    // line 305 "../../../../FileProcessor_static.ump"
-     protected void hook149() throws DatabaseException{
-      
-    }
-  
-    // line 307 "../../../../FileProcessor_static.ump"
-     protected void hook150() throws DatabaseException{
-      
-    }
-  
+    /**
+     * protected void hook148() throws DatabaseException {
+     * }
+     * protected void hook149() throws DatabaseException {
+     * }
+     * protected void hook150() throws DatabaseException {
+     * }
+     */
     // line 309 "../../../../FileProcessor_static.ump"
      protected void hook157() throws DatabaseException{
       
@@ -1065,13 +1133,13 @@ cleaner.addPendingDB(db);
 	    if (fileNum == null) {
 		break;
 	    }
-	    this.hook138();
+	    Label138: //this.hook138();
 	    boolean finished = false;
 	    long fileNumValue = fileNum.longValue();
 	    int runId = ++cleaner.nCleanerRuns;
 	    try {
 		String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
-		traceMsg = this.hook139(traceMsg);
+		Label139: //traceMsg = this.hook139(traceMsg);
 		this.hook121(traceMsg);
 		if (DEBUG_TRACING) {
 		    System.out.println("\n" + traceMsg);
@@ -1079,7 +1147,7 @@ cleaner.addPendingDB(db);
 		if (processFile(fileNum)) {
 		    fileSelector.addCleanedFile(fileNum);
 		    nFilesCleaned += 1;
-		    this.hook140();
+		    Label140: //this.hook140();
 		    finished = true;
 		}
 	    } catch (IOException IOE) {
@@ -1091,7 +1159,7 @@ cleaner.addPendingDB(db);
 		}
 		String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue)
 			+ " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
-		traceMsg = this.hook141(traceMsg);
+		Label141: //traceMsg = this.hook141(traceMsg);
 		this.hook123(traceMsg);
 		if (DEBUG_TRACING) {
 		    System.out.println("\n" + traceMsg);
@@ -1103,6 +1171,32 @@ cleaner.addPendingDB(db);
 	}
 	return nFilesCleaned;
   }
+// line 5 "../../../../Statistics_FileProcessor.ump"
+  private int nINsObsoleteThisRun = 0 ;
+// line 7 "../../../../Statistics_FileProcessor.ump"
+  private int nINsCleanedThisRun = 0 ;
+// line 9 "../../../../Statistics_FileProcessor.ump"
+  private int nINsDeadThisRun = 0 ;
+// line 11 "../../../../Statistics_FileProcessor.ump"
+  private int nINsMigratedThisRun = 0 ;
+// line 13 "../../../../Statistics_FileProcessor.ump"
+  private int nLNsObsoleteThisRun = 0 ;
+// line 15 "../../../../Statistics_FileProcessor.ump"
+  private int nLNsCleanedThisRun = 0 ;
+// line 17 "../../../../Statistics_FileProcessor.ump"
+  private int nLNsDeadThisRun = 0 ;
+// line 19 "../../../../Statistics_FileProcessor.ump"
+  private int nLNsLockedThisRun = 0 ;
+// line 21 "../../../../Statistics_FileProcessor.ump"
+  private int nLNsMigratedThisRun = 0 ;
+// line 23 "../../../../Statistics_FileProcessor.ump"
+  private int nLNsMarkedThisRun = 0 ;
+// line 25 "../../../../Statistics_FileProcessor.ump"
+  private int nLNQueueHitsThisRun = 0 ;
+// line 27 "../../../../Statistics_FileProcessor.ump"
+  private int nEntriesReadThisRun ;
+// line 29 "../../../../Statistics_FileProcessor.ump"
+  private long nRepeatIteratorReadsThisRun ;
 
   
 }

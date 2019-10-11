@@ -1,0 +1,14 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/dbi/DatabaseImpl.java
+namespace com.sleepycat.je.dbi;
+class DatabaseImpl {
+  static class DatabaseImpl_preload {
+      after Label287:execute() {
+        try {
+          //original();
+        }
+   catch (   HaltPreloadException HPE) {
+          ret.status=HPE.getStatus();
+        }
+      }
+    }
+}

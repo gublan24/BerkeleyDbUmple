@@ -1,0 +1,33 @@
+namespace com.sleepycat.je.dbi;
+
+class DatabaseImpl
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.DatabaseStats;
+  depend com.sleepycat.je.BtreeStats;
+    private BtreeStats stats;
+
+    public DatabaseStats stat(StatsConfig config) throws DatabaseException {
+			if (stats == null) {
+					stats = new BtreeStats();
+			}
+			if (!config.getFast()) {
+					if (tree == null) {
+				return new BtreeStats();
+					}
+					PrintStream out = config.getShowProgressStream();
+					if (out == null) {
+				out = System.err;
+					}
+					StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), getEmptyStats());
+					walkDatabaseTree(statsAcc, out, true);
+					statsAcc.copyToStats(stats);
+			}
+			return stats;
+    }
+
+    public DatabaseStats getEmptyStats() {
+			return new BtreeStats();
+    }
+
+}

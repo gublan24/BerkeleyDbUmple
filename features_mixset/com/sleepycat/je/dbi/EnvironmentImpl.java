@@ -50,6 +50,9 @@ import com.sleepycat.je.log.TraceLogHandler;
 import com.sleepycat.je.evictor.Evictor;
 import com.sleepycat.je.incomp.INCompressor;
 import com.sleepycat.je.VerifyConfig;
+import com.sleepycat.je.TransactionStats;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
@@ -71,6 +74,7 @@ import com.sleepycat.je.VerifyConfig;
 // line 3 "../../../../Verifier_EnvironmentImpl.ump"
 // line 3 "../../../../CheckLeaks_EnvironmentImpl.ump"
 // line 3 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+// line 3 "../../../../Statistics_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -1386,6 +1390,31 @@ checkpointer.shutdown();
   private Evictor evictor ;
 // line 6 "../../../../INCompressor_EnvironmentImpl.ump"
   private INCompressor inCompressor ;
+
+// line 11 "../../../../Statistics_EnvironmentImpl.ump"
+  synchronized public EnvironmentStats loadStats (StatsConfig config) throws DatabaseException 
+  {
+    EnvironmentStats stats = new EnvironmentStats();
+			Label314: //this.hook314(config, stats);
+			Label315: //this.hook315(config, stats);
+			checkpointer.loadStats(config, stats);
+			cleaner.loadStats(config, stats);
+			logManager.loadStats(config, stats);
+			Label316: //this.hook316(config, stats);
+			return stats;
+  }
+
+// line 25 "../../../../Statistics_EnvironmentImpl.ump"
+  synchronized public LockStats lockStat (StatsConfig config) throws DatabaseException 
+  {
+    return txnManager.lockStat(config);
+  }
+
+// line 32 "../../../../Statistics_EnvironmentImpl.ump"
+  synchronized public TransactionStats txnStat (StatsConfig config) throws DatabaseException 
+  {
+    return txnManager.txnStat(config);
+  }
 
   
 }

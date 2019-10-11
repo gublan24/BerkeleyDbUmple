@@ -38,9 +38,8 @@ class DbRunAction {
 										}
 											Label846: //this.hook846();
 											Label843: //this.hook843();
+											Label839:// from hook843();
 							 else {
-
-											Label839:
 											 usage();
 											 System.exit(1);
 										}
@@ -85,7 +84,7 @@ class DbRunAction {
             env.checkpoint(forceConfig);
           }
           Label842: //this.hook842();
-          this.hook838();
+          Label838: //this.hook838();
           actionEnd=System.currentTimeMillis();
           env.close();
         }
@@ -124,8 +123,8 @@ class DbRunAction {
       protected DecimalFormat f;
       protected long recoveryDuration;
       protected long actionDuration;
-      protected void hook838() throws Exception {
-      }
+  //    protected void hook838() throws Exception {
+  //    }
    //   protected void hook839() throws Exception {
    //     usage();
    //     System.exit(1);
@@ -149,7 +148,7 @@ class DbRunAction {
      // }
       protected void hook847() throws Exception {
       }
-      protected void hook848() throws Exception {
-      }
+ //     protected void hook848() throws Exception {
+ //     }
     }
 }

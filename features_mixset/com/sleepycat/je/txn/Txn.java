@@ -45,6 +45,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../DeleteOp_Txn.ump"
 // line 3 "../../../../DeleteOp_Txn_inner.ump"
 // line 3 "../../../../INCompressor_Txn.ump"
+// line 3 "../../../../Statistics_Txn.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -1072,6 +1073,22 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
 					}
 					deletedDatabases = null;
 			}
+  }
+
+
+  /**
+   * 
+   * stats
+   */
+  // line 8 "../../../../Statistics_Txn.ump"
+   public LockStats collectStats(LockStats stats) throws DatabaseException{
+    synchronized(this) {
+            int nReadLocks = (readLocks == null) ? 0 : readLocks.size();
+            stats.setNReadLocks(stats.getNReadLocks() + nReadLocks);
+            int nWriteLocks = (writeInfo == null) ? 0 : writeInfo.size();
+            stats.setNWriteLocks(stats.getNWriteLocks() + nWriteLocks);
+        }
+        return stats;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

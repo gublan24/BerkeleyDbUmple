@@ -126,75 +126,75 @@ class Sequence
      * Javadoc for this public method is generated via the doc templates in the doc_src directory. <p>This method is synchronized to protect updating of the cached value, since multiple threads may share a single handle.  Multiple handles for the same database/key may be used to increase concurrency.</p>
      */
     public synchronized long get(Transaction txn, int delta) throws DatabaseException {
-	if (delta <= 0) {
-	    throw new IllegalArgumentException("Sequence delta must be greater than zero");
-	}
-	if (rangeMin > rangeMax - delta) {
-	    throw new IllegalArgumentException("Sequence delta is larger than the range");
-	}
-	boolean cached = true;
-	boolean wrapped = false;
-	if ((increment && delta > ((cacheLast - cacheValue) + 1))
-		|| (!increment && delta > ((cacheValue - cacheLast) + 1))) {
-	    cached = false;
-	    int adjust = (delta > cacheSize) ? delta : cacheSize;
-	    Locker locker = null;
-	    Cursor cursor = null;
-	    OperationStatus status = OperationStatus.NOTFOUND;
-	    try {
-		locker = LockerFactory.getWritableLocker(db.getEnvironment(), txn, db.isTransactional(), false,
-			autoCommitConfig);
-		cursor = new Cursor(db, locker, null);
-		readDataRequired(cursor, LockMode.RMW);
-		if (overflow) {
-		    throw new DatabaseException("Sequence overflow " + storedValue);
-		}
-		BigInteger availBig;
-		if (increment) {
-		    availBig = BigInteger.valueOf(rangeMax).subtract(BigInteger.valueOf(storedValue));
-		} else {
-		    availBig = BigInteger.valueOf(storedValue).subtract(BigInteger.valueOf(rangeMin));
-		}
-		if (availBig.compareTo(BigInteger.valueOf(adjust)) < 0) {
-		    int availInt = (int) availBig.longValue();
-		    if (availInt < delta) {
-			if (wrapAllowed) {
-			    storedValue = increment ? rangeMin : rangeMax;
-			    wrapped = true;
-			} else {
-			    overflow = true;
-			    adjust = 0;
+			if (delta <= 0) {
+					throw new IllegalArgumentException("Sequence delta must be greater than zero");
 			}
-		    } else {
-			adjust = availInt;
-		    }
-		}
-		if (!increment) {
-		    adjust = -adjust;
-		}
-		storedValue += adjust;
-		cursor.put(key, makeData());
-		status = OperationStatus.SUCCESS;
-	    } finally {
-		if (cursor != null) {
-		    cursor.close();
-		}
-		if (locker != null) {
-		    locker.operationEnd(status);
-		}
-	    }
-	    cacheValue = storedValue - adjust;
-	    cacheLast = storedValue + (increment ? (-1) : 1);
-	}
-	long retVal = cacheValue;
-	if (increment) {
-	    cacheValue += delta;
-	} else {
-	    cacheValue -= delta;
-	}
-	this.hook83(cached);
-	this.hook82(cached, wrapped, retVal);
-	return retVal;
+			if (rangeMin > rangeMax - delta) {
+					throw new IllegalArgumentException("Sequence delta is larger than the range");
+			}
+			boolean cached = true;
+			boolean wrapped = false;
+			if ((increment && delta > ((cacheLast - cacheValue) + 1))
+				|| (!increment && delta > ((cacheValue - cacheLast) + 1))) {
+					cached = false;
+					int adjust = (delta > cacheSize) ? delta : cacheSize;
+					Locker locker = null;
+					Cursor cursor = null;
+					OperationStatus status = OperationStatus.NOTFOUND;
+					try {
+				locker = LockerFactory.getWritableLocker(db.getEnvironment(), txn, db.isTransactional(), false,
+					autoCommitConfig);
+				cursor = new Cursor(db, locker, null);
+				readDataRequired(cursor, LockMode.RMW);
+				if (overflow) {
+						throw new DatabaseException("Sequence overflow " + storedValue);
+				}
+				BigInteger availBig;
+				if (increment) {
+						availBig = BigInteger.valueOf(rangeMax).subtract(BigInteger.valueOf(storedValue));
+				} else {
+						availBig = BigInteger.valueOf(storedValue).subtract(BigInteger.valueOf(rangeMin));
+				}
+				if (availBig.compareTo(BigInteger.valueOf(adjust)) < 0) {
+						int availInt = (int) availBig.longValue();
+						if (availInt < delta) {
+					if (wrapAllowed) {
+							storedValue = increment ? rangeMin : rangeMax;
+							wrapped = true;
+					} else {
+							overflow = true;
+							adjust = 0;
+					}
+						} else {
+					adjust = availInt;
+						}
+				}
+				if (!increment) {
+						adjust = -adjust;
+				}
+				storedValue += adjust;
+				cursor.put(key, makeData());
+				status = OperationStatus.SUCCESS;
+					} finally {
+				if (cursor != null) {
+						cursor.close();
+				}
+				if (locker != null) {
+						locker.operationEnd(status);
+				}
+					}
+					cacheValue = storedValue - adjust;
+					cacheLast = storedValue + (increment ? (-1) : 1);
+			}
+			long retVal = cacheValue;
+			if (increment) {
+					cacheValue += delta;
+			} else {
+					cacheValue -= delta;
+			}
+			Label83: //this.hook83(cached);
+			this.hook82(cached, wrapped, retVal);
+			return retVal;
     }
 
     /** 

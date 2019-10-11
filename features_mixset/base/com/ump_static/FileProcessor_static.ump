@@ -50,7 +50,7 @@ class FileProcessor {
           location=new TreeLocation();
           nProcessedLNs=0;
           while (reader.readNextEntry()) {
-            this.hook146();
+            Label146: //this.hook146();
             lsn=reader.getLastLsn();
             fileOffset=DbLsn.getFileOffset(lsn);
             isLN=reader.isLN();
@@ -76,7 +76,7 @@ class FileProcessor {
               isObsolete=true;
             }
             if (isObsolete) {
-              this.hook147();
+              Label147: //this.hook147();
               Label156: //this.hook156();
               continue;
             }
@@ -110,7 +110,7 @@ class FileProcessor {
           }
           this.hook129();
           Label155: //this.hook155();
-          this.hook145();
+          Label145: //this.hook145();
         }
     finally {
           //this.hook162();
@@ -175,12 +175,12 @@ class FileProcessor {
       }
       protected void hook137() throws DatabaseException, IOException {
       }
-      protected void hook145() throws DatabaseException, IOException {
-      }
-      protected void hook146() throws DatabaseException, IOException {
-      }
-      protected void hook147() throws DatabaseException, IOException {
-      }
+   //   protected void hook145() throws DatabaseException, IOException {
+   //   }
+   //   protected void hook146() throws DatabaseException, IOException {
+   //   }
+   //   protected void hook147() throws DatabaseException, IOException {
+   //   }
       protected void hook154() throws DatabaseException, IOException {
       }
       protected void hook155() throws DatabaseException, IOException {
@@ -219,7 +219,7 @@ class FileProcessor {
           Label157: //this.hook157();
           if (b) {
             Label158: //this.hook158();
-            this.hook148();
+            Label148: //this.hook148();
             obsolete=true;
             completed=true;
             return;
@@ -230,13 +230,13 @@ class FileProcessor {
           bin=location.bin;
           index=location.index;
           if (!parentFound) {
-            this.hook149();
+            Label149: //this.hook149();
             obsolete=true;
             completed=true;
             return;
           }
           if (bin.isEntryKnownDeleted(index)) {
-            this.hook150();
+            Label150: //this.hook150();
             obsolete=true;
             completed=true;
             return;
@@ -299,12 +299,12 @@ class FileProcessor {
       }
       protected void hook135() throws DatabaseException {
       }
-      protected void hook148() throws DatabaseException {
-      }
-      protected void hook149() throws DatabaseException {
-      }
-      protected void hook150() throws DatabaseException {
-      }
+    //  protected void hook148() throws DatabaseException {
+     // }
+     // protected void hook149() throws DatabaseException {
+     // }
+   //   protected void hook150() throws DatabaseException {
+   //   }
       protected void hook157() throws DatabaseException {
       }
       protected void hook158() throws DatabaseException {

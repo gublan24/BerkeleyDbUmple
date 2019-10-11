@@ -1,8 +1,0 @@
-use FileProcessor_inner.ump; 
-use DbRunAction_inner.ump; 
-use CursorImpl_inner.ump; 
-use DatabaseImpl_inner.ump; 
-use TransactionStats_inner.ump; 
-use LockManager_inner.ump; 
-use LogManager_inner.ump; 
-use Checkpointer_inner.ump; 

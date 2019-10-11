@@ -21,18 +21,22 @@ import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CheckpointConfig;
 import java.text.DecimalFormat;
 import java.io.File;
+import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../DbRunAction.ump"
 // line 3 "../../../../DbRunAction_static.ump"
 // line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
 // line 3 "../../../../DbRunAction_inner.ump"
 // line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
+// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
 // line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
 // line 3 "../../../../INCompressor_DbRunAction.ump"
 // line 3 "../../../../INCompressor_DbRunAction_inner.ump"
+// line 3 "../../../../Statistics_DbRunAction.ump"
+// line 3 "../../../../Statistics_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -139,11 +143,15 @@ public class DbRunAction
     @MethodObject
     @MethodObject
     @MethodObject
+    @MethodObject
+    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
+  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
   // line 35 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
   // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
+  // line 4 "../../../../Statistics_DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -217,9 +225,12 @@ public class DbRunAction
   			// else { usage(); System.exit(1); } or// original();
   				   //}
    //this.hook843();
-  							 else {
-  
   											Label839:
+  if (action.equalsIgnoreCase("dbstats")) {
+            doAction=DBSTATS;
+          }
+  // from hook843();
+  							 else {
   											 usage();
   											 System.exit(1);
   										}
@@ -243,6 +254,12 @@ public class DbRunAction
           //original(); //@Abdulaziz aaa
   
             Label847:
+  if (readOnly) {
+            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
+            envConfig.setReadOnly(true);
+          }
+          //original();
+  
             //this.hook845();
             Label845:
   if (doAction == EVICT) {
@@ -287,7 +304,21 @@ public class DbRunAction
             removeAndClean(env,dbName);}
          // original();
    //this.hook842();
-            this.hook838();
+            Label838:
+  if (doAction == DBSTATS) {
+            dbConfig=new DatabaseConfig();
+            dbConfig.setReadOnly(true);
+            DbInternal.setUseExistingConfig(dbConfig,true);
+            db=env.openDatabase(null,dbName,dbConfig);
+            try {
+              System.out.println(db.getStats(new StatsConfig()));
+            }
+      finally {
+              db.close();
+            }
+          }
+          //original();
+   //this.hook838();
             actionEnd=System.currentTimeMillis();
             env.close();
           }
@@ -307,13 +338,10 @@ public class DbRunAction
           }
     }
   
-    // line 128 "../../../../DbRunAction_static.ump"
-     protected void hook838() throws Exception{
-      
-    }
-  
   
     /**
+     * protected void hook838() throws Exception {
+     * }
      * protected void hook839() throws Exception {
      * usage();
      * System.exit(1);
@@ -321,7 +349,7 @@ public class DbRunAction
      * protected void hook840() throws Exception {
      * }
      */
-    // line 137 "../../../../DbRunAction_static.ump"
+    // line 136 "../../../../DbRunAction_static.ump"
      protected void hook841() throws Exception{
       
     }
@@ -341,13 +369,8 @@ public class DbRunAction
      * this.hook843();
      * }
      */
-    // line 151 "../../../../DbRunAction_static.ump"
+    // line 150 "../../../../DbRunAction_static.ump"
      protected void hook847() throws Exception{
-      
-    }
-  
-    // line 153 "../../../../DbRunAction_static.ump"
-     protected void hook848() throws Exception{
       
     }
   
@@ -365,45 +388,45 @@ public class DbRunAction
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 107 "../../../../DbRunAction_static.ump"
+    // line 106 "../../../../DbRunAction_static.ump"
     protected String[] argv ;
-  // line 108 "../../../../DbRunAction_static.ump"
+  // line 107 "../../../../DbRunAction_static.ump"
     protected long recoveryStart ;
-  // line 109 "../../../../DbRunAction_static.ump"
+  // line 108 "../../../../DbRunAction_static.ump"
     protected long actionStart ;
-  // line 110 "../../../../DbRunAction_static.ump"
+  // line 109 "../../../../DbRunAction_static.ump"
     protected long actionEnd ;
-  // line 111 "../../../../DbRunAction_static.ump"
+  // line 110 "../../../../DbRunAction_static.ump"
     protected int whichArg ;
-  // line 112 "../../../../DbRunAction_static.ump"
+  // line 111 "../../../../DbRunAction_static.ump"
     protected String dbName ;
-  // line 113 "../../../../DbRunAction_static.ump"
+  // line 112 "../../../../DbRunAction_static.ump"
     protected int doAction ;
-  // line 114 "../../../../DbRunAction_static.ump"
+  // line 113 "../../../../DbRunAction_static.ump"
     protected String envHome ;
-  // line 115 "../../../../DbRunAction_static.ump"
+  // line 114 "../../../../DbRunAction_static.ump"
     protected boolean readOnly ;
-  // line 116 "../../../../DbRunAction_static.ump"
+  // line 115 "../../../../DbRunAction_static.ump"
     protected String nextArg ;
-  // line 117 "../../../../DbRunAction_static.ump"
+  // line 116 "../../../../DbRunAction_static.ump"
     protected String action ;
-  // line 118 "../../../../DbRunAction_static.ump"
+  // line 117 "../../../../DbRunAction_static.ump"
     protected EnvironmentConfig envConfig ;
-  // line 119 "../../../../DbRunAction_static.ump"
+  // line 118 "../../../../DbRunAction_static.ump"
     protected Environment env ;
-  // line 120 "../../../../DbRunAction_static.ump"
+  // line 119 "../../../../DbRunAction_static.ump"
     protected CheckpointConfig forceConfig ;
-  // line 121 "../../../../DbRunAction_static.ump"
+  // line 120 "../../../../DbRunAction_static.ump"
     protected int nFiles ;
-  // line 122 "../../../../DbRunAction_static.ump"
+  // line 121 "../../../../DbRunAction_static.ump"
     protected DatabaseConfig dbConfig ;
-  // line 123 "../../../../DbRunAction_static.ump"
+  // line 122 "../../../../DbRunAction_static.ump"
     protected Database db ;
-  // line 124 "../../../../DbRunAction_static.ump"
+  // line 123 "../../../../DbRunAction_static.ump"
     protected DecimalFormat f ;
-  // line 125 "../../../../DbRunAction_static.ump"
+  // line 124 "../../../../DbRunAction_static.ump"
     protected long recoveryDuration ;
-  // line 126 "../../../../DbRunAction_static.ump"
+  // line 125 "../../../../DbRunAction_static.ump"
     protected long actionDuration ;
   
     
@@ -492,6 +515,8 @@ public class DbRunAction
   private static final int REMOVEDB = 5 ;
 // line 5 "../../../../INCompressor_DbRunAction.ump"
   private static final int COMPRESS = 2 ;
+// line 6 "../../../../Statistics_DbRunAction.ump"
+  private static final int DBSTATS = 6 ;
 
   
 }

@@ -17,6 +17,7 @@ import java.util.HashSet;
 // line 3 "../../../../BasicLocker.ump"
 // line 3 "../../../../DeleteOp_BasicLocker.ump"
 // line 3 "../../../../INCompressor_BasicLocker.ump"
+// line 3 "../../../../Statistics_BasicLocker.ump"
 public class BasicLocker extends Locker
 {
 
@@ -327,6 +328,34 @@ public class BasicLocker extends Locker
     if (deleteAtCommit) {
 					db.deleteAndReleaseINs();
 			}
+  }
+
+
+  /**
+   * 
+   * stats
+   */
+  // line 9 "../../../../Statistics_BasicLocker.ump"
+   public LockStats collectStats(LockStats stats) throws DatabaseException{
+    if (ownedLock != null) {
+					if (ownedLock.isOwnedWriteLock(this)) {
+				stats.setNWriteLocks(stats.getNWriteLocks() + 1);
+					} else {
+				stats.setNReadLocks(stats.getNReadLocks() + 1);
+					}
+			}
+			if (ownedLockSet != null) {
+					Iterator iter = ownedLockSet.iterator();
+					while (iter.hasNext()) {
+				Lock l = (Lock) iter.next();
+				if (l.isOwnedWriteLock(this)) {
+						stats.setNWriteLocks(stats.getNWriteLocks() + 1);
+				} else {
+						stats.setNReadLocks(stats.getNReadLocks() + 1);
+				}
+					}
+			}
+			return stats;
   }
   
   //------------------------

@@ -1,0 +1,30 @@
+namespace com.sleepycat.je.log;
+
+class LogManager
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.EnvironmentStats;
+    private int nRepeatFaultReads;
+
+    private long nTempBufferWrites;
+
+    public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException {
+			stats.setNRepeatFaultReads(nRepeatFaultReads);
+			stats.setNTempBufferWrites(nTempBufferWrites);
+			if (config.getClear()) {
+					nRepeatFaultReads = 0;
+					nTempBufferWrites = 0;
+			}
+			logBufferPool.loadStats(config, stats);
+			Label497: //this.hook497(config, stats);
+    }
+
+    //protected void hook497(StatsConfig config, EnvironmentStats stats) throws DatabaseException {
+    //}
+
+    after Label509: logInternal(LoggableObject , boolean , boolean , boolean , long , boolean , ByteBuffer ,UtilizationTracker ){
+			nTempBufferWrites++;
+		//	original();
+    }
+
+}

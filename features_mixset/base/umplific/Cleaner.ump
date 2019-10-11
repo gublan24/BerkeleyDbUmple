@@ -208,7 +208,7 @@ class Cleaner
 		    return;
 		}
 		//this.hook115(safeFiles);
-Label115:
+		Label115:
 for (Iterator i = safeFiles.iterator(); i.hasNext();) {
 	    Long fileNum = (Long) i.next();
 	    long fileNumValue = fileNum.longValue();
@@ -291,14 +291,14 @@ Label_115_1:
 	BIN bin = null;
 	DIN parentDIN = null;
 	try {
-	    this.hook97();
+	    Label97: //this.hook97();
 	    boolean c = db == null;
 	    //c = this.hook112(db, c);
       Label112:
 	    if (c) {
 		//this.hook113(db);
     Label113:
-		this.hook98();
+		Label98: //this.hook98();
 		obsolete = true;
 		completed = true;
 		return;
@@ -308,7 +308,7 @@ Label_115_1:
 	    locker = new BasicLocker(env);
 	    LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
 	    if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-		this.hook99();
+		Label99: //this.hook99();
 		lockDenied = true;
 		completed = true;
 		return;
@@ -317,7 +317,7 @@ Label_115_1:
 	    bin = location.bin;
 	    int index = location.index;
 	    if (!parentFound) {
-		this.hook100();
+		Label100: //this.hook100();
 		obsolete = true;
 		completed = true;
 		return;
@@ -426,16 +426,16 @@ Label_115_1:
 	boolean doMigration = false;
 	if (migrateFlag) {
 	    doMigration = true;
-	    this.hook101();
+	    Label101: //this.hook101();
 	} else if (!proactiveMigration || isBinInDupDb || env.isClosing()) {
 	} else {
 	    Long fileNum = new Long(DbLsn.getFileNumber(childLsn));
 	    if ((PROACTIVE_MIGRATION || isResident) && mustBeCleanedFiles.contains(fileNum)) {
 		doMigration = true;
-		this.hook102();
+		Label102: //this.hook102();
 	    } else if ((clusterAll || (clusterResident && isResident)) && lowUtilizationFiles.contains(fileNum)) {
 		doMigration = true;
-		this.hook103();
+		Label103: //this.hook103();
 	    }
 	}
 	return doMigration;
@@ -446,85 +446,85 @@ Label_115_1:
      */
     private void migrateLN(DatabaseImpl db, long lsn, BIN bin, int index, boolean wasCleaned, boolean isPending,
 	    long lockedPendingNodeId, String cleanAction) throws DatabaseException {
-	boolean obsolete = false;
-	boolean migrated = false;
-	boolean lockDenied = false;
-	boolean completed = false;
-	boolean clearTarget = false;
-	BasicLocker locker = null;
-	LN ln = null;
-	try {
-	    if (!bin.isEntryKnownDeleted(index)) {
-		ln = (LN) bin.getTarget(index);
-		if (ln == null) {
-		    ln = (LN) bin.fetchTarget(index);
-		    clearTarget = !db.getId().equals(DbTree.ID_DB_ID);
-		}
-	    }
-	    if (ln == null) {
-		this.hook105(wasCleaned);
-		obsolete = true;
-		completed = true;
-		return;
-	    }
-	    if (lockedPendingNodeId != ln.getNodeId()) {
-		locker = new BasicLocker(env);
-		LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
-		if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-		    this.hook106(wasCleaned);
-		    lockDenied = true;
-		    completed = true;
-		    return;
-		}
-	    }
-	    if (ln.isDeleted()) {
-		bin.setKnownDeletedLeaveTarget(index);
-		this.hook107(wasCleaned);
-		obsolete = true;
-		completed = true;
-		return;
-	    }
-	    if (bin.getMigrate(index)) {
-		Long fileNum = new Long(DbLsn.getFileNumber(lsn));
-		if (!fileSelector.isFileCleaningInProgress(fileNum)) {
-		    obsolete = true;
-		    completed = true;
-		    this.hook108(wasCleaned);
-		    return;
-		}
-	    }
-	    byte[] key = getLNMainKey(bin, index);
-	    long newLNLsn = ln.log(env, db.getId(), key, lsn, locker);
-	    bin.updateEntry(index, newLNLsn);
-	    this.hook104();
-	    migrated = true;
-	    completed = true;
-	    return;
-	} finally {
-	    if (isPending) {
-		if (completed && !lockDenied) {
-		    fileSelector.removePendingLN(lockedPendingNodeId);
-		}
-	    } else {
-		if (bin.getMigrate(index) && (!completed || lockDenied)) {
-		    byte[] key = getLNMainKey(bin, index);
-		    byte[] dupKey = getLNDupKey(bin, index, ln);
-		    fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
-		    if (!areThreadsRunning()) {
-			env.getUtilizationTracker().activateCleaner();
-		    }
-		    clearTarget = false;
-		}
-	    }
-	    bin.setMigrate(index, false);
-	    if (clearTarget) {
-		bin.updateEntry(index, null);
-	    }
-	    if (locker != null) {
-		locker.operationEnd();
-	    }
-	    this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
-	}
+			boolean obsolete = false;
+			boolean migrated = false;
+			boolean lockDenied = false;
+			boolean completed = false;
+			boolean clearTarget = false;
+			BasicLocker locker = null;
+			LN ln = null;
+			try {
+					if (!bin.isEntryKnownDeleted(index)) {
+				ln = (LN) bin.getTarget(index);
+				if (ln == null) {
+						ln = (LN) bin.fetchTarget(index);
+						clearTarget = !db.getId().equals(DbTree.ID_DB_ID);
+				}
+					}
+					if (ln == null) {
+				Label105: //this.hook105(wasCleaned);
+				obsolete = true;
+				completed = true;
+				return;
+					}
+					if (lockedPendingNodeId != ln.getNodeId()) {
+				locker = new BasicLocker(env);
+				LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
+				if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+						Label106: //this.hook106(wasCleaned);
+						lockDenied = true;
+						completed = true;
+						return;
+				}
+					}
+					if (ln.isDeleted()) {
+				bin.setKnownDeletedLeaveTarget(index);
+				Label107: //this.hook107(wasCleaned);
+				obsolete = true;
+				completed = true;
+				return;
+					}
+					if (bin.getMigrate(index)) {
+				Long fileNum = new Long(DbLsn.getFileNumber(lsn));
+				if (!fileSelector.isFileCleaningInProgress(fileNum)) {
+						obsolete = true;
+						completed = true;
+						Label108: //this.hook108(wasCleaned);
+						return;
+				}
+					}
+					byte[] key = getLNMainKey(bin, index);
+					long newLNLsn = ln.log(env, db.getId(), key, lsn, locker);
+					bin.updateEntry(index, newLNLsn);
+					Label104: //this.hook104();
+					migrated = true;
+					completed = true;
+					return;
+			} finally {
+					if (isPending) {
+				if (completed && !lockDenied) {
+						fileSelector.removePendingLN(lockedPendingNodeId);
+				}
+					} else {
+				if (bin.getMigrate(index) && (!completed || lockDenied)) {
+						byte[] key = getLNMainKey(bin, index);
+						byte[] dupKey = getLNDupKey(bin, index, ln);
+						fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
+						if (!areThreadsRunning()) {
+					env.getUtilizationTracker().activateCleaner();
+						}
+						clearTarget = false;
+				}
+					}
+					bin.setMigrate(index, false);
+					if (clearTarget) {
+				bin.updateEntry(index, null);
+					}
+					if (locker != null) {
+				locker.operationEnd();
+					}
+					this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
+			}
     }
 
     /** 
@@ -532,70 +532,70 @@ Label_115_1:
      */
     private void migrateDupCountLN(DatabaseImpl db, long lsn, DIN parentDIN, ChildReference dclRef, boolean wasCleaned,
 	    boolean isPending, long lockedPendingNodeId, String cleanAction) throws DatabaseException {
-	boolean obsolete = false;
-	boolean migrated = false;
-	boolean lockDenied = false;
-	boolean completed = false;
-	boolean clearTarget = false;
-	BasicLocker locker = null;
-	LN ln = null;
-	try {
-	    ln = (LN) dclRef.getTarget();
-	    if (ln == null) {
-		ln = (LN) dclRef.fetchTarget(db, parentDIN);
-		assert ln != null;
-		clearTarget = !db.getId().equals(DbTree.ID_DB_ID);
-	    }
-	    if (lockedPendingNodeId != ln.getNodeId()) {
-		locker = new BasicLocker(env);
-		LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
-		if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-		    this.hook110(wasCleaned);
-		    lockDenied = true;
-		    completed = true;
-		    return;
+			boolean obsolete = false;
+			boolean migrated = false;
+			boolean lockDenied = false;
+			boolean completed = false;
+			boolean clearTarget = false;
+			BasicLocker locker = null;
+			LN ln = null;
+			try {
+					ln = (LN) dclRef.getTarget();
+					if (ln == null) {
+				ln = (LN) dclRef.fetchTarget(db, parentDIN);
+				assert ln != null;
+				clearTarget = !db.getId().equals(DbTree.ID_DB_ID);
+					}
+					if (lockedPendingNodeId != ln.getNodeId()) {
+				locker = new BasicLocker(env);
+				LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
+				if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+						Label110: //this.hook110(wasCleaned);
+						lockDenied = true;
+						completed = true;
+						return;
+				}
+					}
+					Long fileNum = new Long(DbLsn.getFileNumber(lsn));
+					if (!fileSelector.isFileCleaningInProgress(fileNum)) {
+				obsolete = true;
+				completed = true;
+				Label111: //this.hook111(wasCleaned);
+				return;
+					}
+					byte[] key = parentDIN.getDupKey();
+					long newLNLsn = ln.log(env, db.getId(), key, lsn, locker);
+					parentDIN.updateDupCountLNRef(newLNLsn);
+					Label109: //this.hook109();
+					migrated = true;
+					completed = true;
+					return;
+			} finally {
+					if (isPending) {
+				if (completed && !lockDenied) {
+						fileSelector.removePendingLN(lockedPendingNodeId);
+				}
+					} else {
+				if (dclRef.getMigrate() && (!completed || lockDenied)) {
+						byte[] key = parentDIN.getDupKey();
+						byte[] dupKey = null;
+						fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
+						if (!areThreadsRunning()) {
+					env.getUtilizationTracker().activateCleaner();
+						}
+						clearTarget = false;
+				}
+					}
+					dclRef.setMigrate(false);
+					if (clearTarget) {
+				parentDIN.updateDupCountLN(null);
+					}
+					if (locker != null) {
+				locker.operationEnd();
+					}
+					this.hook93(lsn, cleanAction, obsolete, migrated, completed, ln);
+			}
 		}
-	    }
-	    Long fileNum = new Long(DbLsn.getFileNumber(lsn));
-	    if (!fileSelector.isFileCleaningInProgress(fileNum)) {
-		obsolete = true;
-		completed = true;
-		this.hook111(wasCleaned);
-		return;
-	    }
-	    byte[] key = parentDIN.getDupKey();
-	    long newLNLsn = ln.log(env, db.getId(), key, lsn, locker);
-	    parentDIN.updateDupCountLNRef(newLNLsn);
-	    this.hook109();
-	    migrated = true;
-	    completed = true;
-	    return;
-	} finally {
-	    if (isPending) {
-		if (completed && !lockDenied) {
-		    fileSelector.removePendingLN(lockedPendingNodeId);
-		}
-	    } else {
-		if (dclRef.getMigrate() && (!completed || lockDenied)) {
-		    byte[] key = parentDIN.getDupKey();
-		    byte[] dupKey = null;
-		    fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
-		    if (!areThreadsRunning()) {
-			env.getUtilizationTracker().activateCleaner();
-		    }
-		    clearTarget = false;
-		}
-	    }
-	    dclRef.setMigrate(false);
-	    if (clearTarget) {
-		parentDIN.updateDupCountLN(null);
-	    }
-	    if (locker != null) {
-		locker.operationEnd();
-	    }
-	    this.hook93(lsn, cleanAction, obsolete, migrated, completed, ln);
-	}
-    }
 
     /** 
      * Returns the main key for a given BIN entry.
@@ -703,34 +703,34 @@ Label_115_1:
  //   protected void hook113(DatabaseImpl db) throws DatabaseException {
  //   }
 
-    protected void hook115(Set safeFiles) throws DatabaseException {
-
-	for (Iterator i = safeFiles.iterator(); i.hasNext();) {
-	    Long fileNum = (Long) i.next();
-	    long fileNumValue = fileNum.longValue();
-	    boolean deleted = false;
-	    try {
-		if (expunge) {
-		    env.getFileManager().deleteFile(fileNumValue);
-		} else {
-		    env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
-		}
-		deleted = true;
-	    } catch (DatabaseException e) {
-		traceFileNotDeleted(e, fileNumValue);
-	    } catch (IOException e) {
-		traceFileNotDeleted(e, fileNumValue);
-	    }
-	    if (deleted) {
-		this.hook88(fileNumValue);
-		try {
-		    profile.removeFile(fileNum);
-		} finally {
-		    fileSelector.removeDeletedFile(fileNum);
-		}
-	    }
-	    this.hook96();
-	}
-    }
+//    protected void hook115(Set safeFiles) throws DatabaseException {
+//
+//	for (Iterator i = safeFiles.iterator(); i.hasNext();) {
+//	    Long fileNum = (Long) i.next();
+//	    long fileNumValue = fileNum.longValue();
+//	    boolean deleted = false;
+//	    try {
+//		if (expunge) {
+//		    env.getFileManager().deleteFile(fileNumValue);
+//		} else {
+//		    env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
+//		}
+//		deleted = true;
+//	    } catch (DatabaseException e) {
+//		traceFileNotDeleted(e, fileNumValue);
+//	    } catch (IOException e) {
+//		traceFileNotDeleted(e, fileNumValue);
+//	    }
+//	    if (deleted) {
+//		this.hook88(fileNumValue);
+//		try {
+//		    profile.removeFile(fileNum);
+//		} finally {
+//		    fileSelector.removeDeletedFile(fileNum);
+//		}
+//	    }
+//	    this.hook96();
+//	}
+//    }
 
 }

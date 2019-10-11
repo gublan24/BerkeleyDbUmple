@@ -1,0 +1,36 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/dbi/CursorImpl.java
+namespace com.sleepycat.je.dbi;
+class CursorImpl {
+   static class CursorImpl_getNextDuplicate {
+
+//       void hook200() throws DatabaseException {
+//        if (_this.index < 0) {
+//          throw new ReturnObject(OperationStatus.NOTFOUND);
+//        }
+//        duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
+//        this.hook201();
+//      }
+//      void hook201() throws DatabaseException {
+//        dcl=duplicateRoot.getDupCountLN();
+//        if (dcl != null) {
+//          dcl.accumulateStats(treeStatsAccumulator);
+//        }
+//      }
+      after Label275 : execute() {
+        treeStatsAccumulator=_this.getTreeStatsAccumulator();
+        if (treeStatsAccumulator != null) {
+          Label200: //this.hook200();
+          if (_this.index < 0) {
+          throw new ReturnObject(OperationStatus.NOTFOUND);
+        }
+        duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
+        Label201: //this.hook201();
+        dcl=duplicateRoot.getDupCountLN();
+        	if (dcl != null) {
+        	  dcl.accumulateStats(treeStatsAccumulator);
+        	}
+        }
+        //original();
+      }
+    }
+}

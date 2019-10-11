@@ -54,7 +54,7 @@ class Checkpointer
 			this.envImpl = envImpl;
 			Label539: //this.hook539(envImpl);
 			logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
-			this.hook531();
+			Label531: //this.hook531();
 			Label545: //this.hook545(waitTime);
 			lastCheckpointMillis = 0;
 			highestFlushLevel = IN.MIN_LEVEL;
@@ -172,7 +172,7 @@ class Checkpointer
 	    if (flushed) {
 		DbTree dbTree = targetRef.db.getDbEnvironment().getDbMapTree();
 		dbTree.modifyDbRoot(targetRef.db);
-		this.hook532();
+		Label532: //this.hook532();
 	    }
 	}
 	if (!targetWasRoot) {
@@ -233,8 +233,19 @@ class Checkpointer
 			long newLsn = DbLsn.NULL_LSN;
 			boolean mustLogParent = true;
 			Label527: //this.hook527(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
+			if (target.getDirty()) {
+					newLsn = target.log(logManager, allowDeltas, logProvisionally, true, parent);
+					if (allowDeltas && newLsn == DbLsn.NULL_LSN) {
+				Label537: //this.hook537();
+				long lastFullLsn = target.getLastFullVersion();
+				if (DbLsn.compareTo(lastFullLsn, checkpointStart) < 0) {
+						mustLogParent = false;
+				}
+					}
+			}
+			//End hook527
 			if (newLsn != DbLsn.NULL_LSN) {
-					this.hook533(target);
+					Label533: //this.hook533(target);
 					parent.updateEntry(index, newLsn);
 			}
 			return mustLogParent;
@@ -284,16 +295,7 @@ class Checkpointer
 
     protected void hook527(IN target, IN parent, boolean allowDeltas, long checkpointStart, boolean logProvisionally,
 	    long newLsn, boolean mustLogParent) throws DatabaseException {
-	if (target.getDirty()) {
-	    newLsn = target.log(logManager, allowDeltas, logProvisionally, true, parent);
-	    if (allowDeltas && newLsn == DbLsn.NULL_LSN) {
-		this.hook537();
-		long lastFullLsn = target.getLastFullVersion();
-		if (DbLsn.compareTo(lastFullLsn, checkpointStart) < 0) {
-		    mustLogParent = false;
-		}
-	    }
-	}
+			
     }
 
     protected void hook531() throws DatabaseException {
@@ -305,8 +307,8 @@ class Checkpointer
     protected void hook533(IN target) throws DatabaseException {
     }
 
-    protected void hook537() throws DatabaseException {
-    }
+ //   protected void hook537() throws DatabaseException {
+  //  }
 
   //  protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
   //  }

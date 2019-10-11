@@ -1,9 +1,0 @@
-namespace com.sleepycat.je.tree;
-
-class DupCountLN
-{
-    public void accumulateStats(TreeWalkerStatsAccumulator acc) {
-	acc.processDupCountLN(this, new Long(getNodeId()));
-    }
-
-}

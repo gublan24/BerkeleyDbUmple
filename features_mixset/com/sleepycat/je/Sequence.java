@@ -13,6 +13,7 @@ import java.math.BigInteger;
 
 // line 3 "../../../Sequence.ump"
 // line 3 "../../../loggingBase_Sequence.ump"
+// line 3 "../../../Statistics_Sequence.ump"
 public class Sequence
 {
 
@@ -231,6 +232,33 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
    protected void hook83(boolean cached) throws DatabaseException{
     
   }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 13 "../../../Statistics_Sequence.ump"
+   public SequenceStats getStats(StatsConfig config) throws DatabaseException{
+    if (config == null) {
+					config = StatsConfig.DEFAULT;
+			}
+			if (!config.getFast()) {
+					Cursor cursor = db.openCursor(null, null);
+					try {
+				readDataRequired(cursor, LockMode.READ_UNCOMMITTED);
+					} finally {
+				cursor.close();
+	    }
+	}
+	SequenceStats stats = new SequenceStats(nGets, nCachedGets, storedValue, cacheValue, cacheLast, rangeMin,
+		rangeMax, cacheSize);
+			if (config.getClear()) {
+					nGets = 0;
+					nCachedGets = 0;
+			}
+			return stats;
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -275,77 +303,81 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
   public synchronized long get (Transaction txn, int delta) throws DatabaseException 
   {
     if (delta <= 0) {
-	    throw new IllegalArgumentException("Sequence delta must be greater than zero");
-	}
-	if (rangeMin > rangeMax - delta) {
-	    throw new IllegalArgumentException("Sequence delta is larger than the range");
-	}
-	boolean cached = true;
-	boolean wrapped = false;
-	if ((increment && delta > ((cacheLast - cacheValue) + 1))
-		|| (!increment && delta > ((cacheValue - cacheLast) + 1))) {
-	    cached = false;
-	    int adjust = (delta > cacheSize) ? delta : cacheSize;
-	    Locker locker = null;
-	    Cursor cursor = null;
-	    OperationStatus status = OperationStatus.NOTFOUND;
-	    try {
-		locker = LockerFactory.getWritableLocker(db.getEnvironment(), txn, db.isTransactional(), false,
-			autoCommitConfig);
-		cursor = new Cursor(db, locker, null);
-		readDataRequired(cursor, LockMode.RMW);
-		if (overflow) {
-		    throw new DatabaseException("Sequence overflow " + storedValue);
-		}
-		BigInteger availBig;
-		if (increment) {
-		    availBig = BigInteger.valueOf(rangeMax).subtract(BigInteger.valueOf(storedValue));
-		} else {
-		    availBig = BigInteger.valueOf(storedValue).subtract(BigInteger.valueOf(rangeMin));
-		}
-		if (availBig.compareTo(BigInteger.valueOf(adjust)) < 0) {
-		    int availInt = (int) availBig.longValue();
-		    if (availInt < delta) {
-			if (wrapAllowed) {
-			    storedValue = increment ? rangeMin : rangeMax;
-			    wrapped = true;
-			} else {
-			    overflow = true;
-			    adjust = 0;
+					throw new IllegalArgumentException("Sequence delta must be greater than zero");
 			}
-		    } else {
-			adjust = availInt;
-		    }
-		}
-		if (!increment) {
-		    adjust = -adjust;
-		}
-		storedValue += adjust;
-		cursor.put(key, makeData());
-		status = OperationStatus.SUCCESS;
-	    } finally {
-		if (cursor != null) {
-		    cursor.close();
-		}
-		if (locker != null) {
-		    locker.operationEnd(status);
-		}
-	    }
-	    cacheValue = storedValue - adjust;
-	    cacheLast = storedValue + (increment ? (-1) : 1);
-	}
-	long retVal = cacheValue;
-	if (increment) {
-	    cacheValue += delta;
-	} else {
-	    cacheValue -= delta;
-	}
-	this.hook83(cached);
-	this.hook82(cached, wrapped, retVal);
-	return retVal;
+			if (rangeMin > rangeMax - delta) {
+					throw new IllegalArgumentException("Sequence delta is larger than the range");
+			}
+			boolean cached = true;
+			boolean wrapped = false;
+			if ((increment && delta > ((cacheLast - cacheValue) + 1))
+				|| (!increment && delta > ((cacheValue - cacheLast) + 1))) {
+					cached = false;
+					int adjust = (delta > cacheSize) ? delta : cacheSize;
+					Locker locker = null;
+					Cursor cursor = null;
+					OperationStatus status = OperationStatus.NOTFOUND;
+					try {
+				locker = LockerFactory.getWritableLocker(db.getEnvironment(), txn, db.isTransactional(), false,
+					autoCommitConfig);
+				cursor = new Cursor(db, locker, null);
+				readDataRequired(cursor, LockMode.RMW);
+				if (overflow) {
+						throw new DatabaseException("Sequence overflow " + storedValue);
+				}
+				BigInteger availBig;
+				if (increment) {
+						availBig = BigInteger.valueOf(rangeMax).subtract(BigInteger.valueOf(storedValue));
+				} else {
+						availBig = BigInteger.valueOf(storedValue).subtract(BigInteger.valueOf(rangeMin));
+				}
+				if (availBig.compareTo(BigInteger.valueOf(adjust)) < 0) {
+						int availInt = (int) availBig.longValue();
+						if (availInt < delta) {
+					if (wrapAllowed) {
+							storedValue = increment ? rangeMin : rangeMax;
+							wrapped = true;
+					} else {
+							overflow = true;
+							adjust = 0;
+					}
+						} else {
+					adjust = availInt;
+						}
+				}
+				if (!increment) {
+						adjust = -adjust;
+				}
+				storedValue += adjust;
+				cursor.put(key, makeData());
+				status = OperationStatus.SUCCESS;
+					} finally {
+				if (cursor != null) {
+						cursor.close();
+				}
+				if (locker != null) {
+						locker.operationEnd(status);
+				}
+					}
+					cacheValue = storedValue - adjust;
+					cacheLast = storedValue + (increment ? (-1) : 1);
+			}
+			long retVal = cacheValue;
+			if (increment) {
+					cacheValue += delta;
+			} else {
+					cacheValue -= delta;
+			}
+			Label83: //this.hook83(cached);
+			this.hook82(cached, wrapped, retVal);
+			return retVal;
   }
 // line 5 "../../../loggingBase_Sequence.ump"
   private Logger logger ;
+// line 5 "../../../Statistics_Sequence.ump"
+  private int nGets ;
+// line 7 "../../../Statistics_Sequence.ump"
+  private int nCachedGets ;
 
   
 }

@@ -53,7 +53,8 @@ class DatabaseImpl {
         ret=new PreloadStats();
         callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
         walker=new PreloadLSNTreeWalker(_this,callback,config);
-        this.hook287();
+        //Label287:  //
+this.hook287();
         return ret;
       }
       protected DatabaseImpl _this;
@@ -65,6 +66,7 @@ class DatabaseImpl {
       protected PreloadStats ret;
       protected PreloadProcessor callback;
       protected SortedLSNTreeWalker walker;
+
       protected void hook287() throws DatabaseException {
         walker.walk();
       }

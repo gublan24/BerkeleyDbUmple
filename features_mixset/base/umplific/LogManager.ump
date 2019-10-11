@@ -173,58 +173,67 @@ class LogManager
     protected LogResult logInternal(LoggableObject item, boolean isProvisional, boolean flushRequired,
 	    boolean forceNewLogFile, long oldNodeLsn, boolean marshallOutsideLatch, ByteBuffer marshalledBuffer,
 	    UtilizationTracker tracker) throws IOException, DatabaseException {
-	LogEntryType entryType = item.getLogType();
-	if (oldNodeLsn != DbLsn.NULL_LSN) {
-	    tracker.countObsoleteNode(oldNodeLsn, entryType);
-	}
-	int entrySize;
-	if (marshallOutsideLatch) {
-	    entrySize = marshalledBuffer.limit();
-	} else {
-	    entrySize = item.getLogSize() + HEADER_BYTES;
-	}
-	if (forceNewLogFile) {
-	    fileManager.forceNewLogFile();
-	}
-	boolean flippedFile = fileManager.bumpLsn(entrySize);
-	long currentLsn = DbLsn.NULL_LSN;
-	boolean wakeupCleaner = false;
-	boolean usedTemporaryBuffer = false;
-	try {
-	    currentLsn = fileManager.getLastUsedLsn();
-	    wakeupCleaner = tracker.countNewLogEntry(currentLsn, entryType, entrySize);
-	    if (item.countAsObsoleteWhenLogged()) {
-		tracker.countObsoleteNodeInexact(currentLsn, entryType);
-	    }
-	    if (!marshallOutsideLatch) {
-		marshalledBuffer = marshallIntoBuffer(item, entrySize - HEADER_BYTES, isProvisional, entrySize);
-	    }
-	    if (entrySize != marshalledBuffer.limit()) {
-		throw new DatabaseException(
-			"Logged item entrySize= " + entrySize + " but marshalledSize=" + marshalledBuffer.limit()
-				+ " type=" + entryType + " currentLsn=" + DbLsn.getNoFormatString(currentLsn));
-	    }
-	    LogBuffer useLogBuffer = logBufferPool.getWriteBuffer(entrySize, flippedFile);
-	    marshalledBuffer = addPrevOffsetAndChecksum(marshalledBuffer, fileManager.getPrevEntryOffset(), entrySize);
-	    usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,
-		    useLogBuffer);
-	} catch (Exception e) {
-	    fileManager.restoreLastPosition();
-	    if (e instanceof DatabaseException) {
-		throw (DatabaseException) e;
-	    } else if (e instanceof IOException) {
-		throw (IOException) e;
-	    } else {
-		throw new DatabaseException(e);
-	    }
-	}
-	if (!usedTemporaryBuffer) {
-	    logBufferPool.writeCompleted(currentLsn, flushRequired);
-	}
-	item.postLogWork(currentLsn);
-	boolean wakeupCheckpointer = false;
-	wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
-	return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
+			LogEntryType entryType = item.getLogType();
+			if (oldNodeLsn != DbLsn.NULL_LSN) {
+					tracker.countObsoleteNode(oldNodeLsn, entryType);
+			}
+			int entrySize;
+			if (marshallOutsideLatch) {
+					entrySize = marshalledBuffer.limit();
+			} else {
+					entrySize = item.getLogSize() + HEADER_BYTES;
+			}
+			if (forceNewLogFile) {
+					fileManager.forceNewLogFile();
+			}
+			boolean flippedFile = fileManager.bumpLsn(entrySize);
+			long currentLsn = DbLsn.NULL_LSN;
+			boolean wakeupCleaner = false;
+			boolean usedTemporaryBuffer = false;
+			try {
+					currentLsn = fileManager.getLastUsedLsn();
+					wakeupCleaner = tracker.countNewLogEntry(currentLsn, entryType, entrySize);
+					if (item.countAsObsoleteWhenLogged()) {
+				tracker.countObsoleteNodeInexact(currentLsn, entryType);
+					}
+					if (!marshallOutsideLatch) {
+				marshalledBuffer = marshallIntoBuffer(item, entrySize - HEADER_BYTES, isProvisional, entrySize);
+					}
+					if (entrySize != marshalledBuffer.limit()) {
+				throw new DatabaseException(
+					"Logged item entrySize= " + entrySize + " but marshalledSize=" + marshalledBuffer.limit()
+						+ " type=" + entryType + " currentLsn=" + DbLsn.getNoFormatString(currentLsn));
+					}
+					LogBuffer useLogBuffer = logBufferPool.getWriteBuffer(entrySize, flippedFile);
+					marshalledBuffer = addPrevOffsetAndChecksum(marshalledBuffer, fileManager.getPrevEntryOffset(), entrySize);
+					Label503: //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
+					ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
+					if (useBuffer.capacity() - useBuffer.position() < entrySize) {
+							fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
+							usedTemporaryBuffer = true;
+							assert useBuffer.position() == 0;
+							Label509: //this.hook509();
+					} else {
+							useBuffer.put(marshalledBuffer);
+					}
+				 //End hook503
+			} catch (Exception e) {
+					fileManager.restoreLastPosition();
+					if (e instanceof DatabaseException) {
+				throw (DatabaseException) e;
+					} else if (e instanceof IOException) {
+				throw (IOException) e;
+					} else {
+				throw new DatabaseException(e);
+					}
+			}
+			if (!usedTemporaryBuffer) {
+					logBufferPool.writeCompleted(currentLsn, flushRequired);
+			}
+			item.postLogWork(currentLsn);
+			boolean wakeupCheckpointer = false;
+			wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
     }
 
     /** 
@@ -407,19 +416,19 @@ class LogManager
     protected void hook502(EnvironmentImpl envImpl) throws DatabaseException {
     }
 
-    protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer,
-	    LogBuffer useLogBuffer) throws IOException, DatabaseException, Exception {
-	ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
-	if (useBuffer.capacity() - useBuffer.position() < entrySize) {
-	    fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
-	    usedTemporaryBuffer = true;
-	    assert useBuffer.position() == 0;
-	    this.hook509();
-	} else {
-	    useBuffer.put(marshalledBuffer);
-	}
-	return usedTemporaryBuffer;
-    }
+//    protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer,
+//	    LogBuffer useLogBuffer) throws IOException, DatabaseException, Exception {
+//	ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
+//	if (useBuffer.capacity() - useBuffer.position() < entrySize) {
+//	    fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
+//	    usedTemporaryBuffer = true;
+//	    assert useBuffer.position() == 0;
+//	    Label509: //this.hook509();
+//	} else {
+//	    useBuffer.put(marshalledBuffer);
+//	}
+//	return usedTemporaryBuffer;
+//    }
 
     protected static int hook504(int r) {
 	return r;
@@ -428,7 +437,7 @@ class LogManager
     protected void hook505(DbConfigManager configManager) throws DatabaseException {
     }
 
-    protected void hook509() throws IOException, DatabaseException, Exception {
-    }
+//    protected void hook509() throws IOException, DatabaseException, Exception {
+//    }
 
 }

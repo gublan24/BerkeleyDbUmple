@@ -99,13 +99,29 @@ class LogBufferPool
      * @return the buffer that contains this LSN, latched and ready toread, or return null.
      */
     LogBuffer getReadBuffer(long lsn) throws DatabaseException {
-	LogBuffer foundBuffer = null;
-	foundBuffer = this.hook489(lsn, foundBuffer);
-	if (foundBuffer == null) {
-	    return null;
-	} else {
-	    return foundBuffer;
-	}
+			LogBuffer foundBuffer = null;
+			Label489: //	foundBuffer = this.hook489(lsn, foundBuffer);
+			Iterator iter = bufferPool.iterator();
+			while (iter.hasNext()) {
+					LogBuffer l = (LogBuffer) iter.next();
+					if (l.containsLsn(lsn)) {
+				foundBuffer = l;
+				break;
+					}
+			}
+			if (foundBuffer == null && currentWriteBuffer.containsLsn(lsn)) {
+					foundBuffer = currentWriteBuffer;
+			}
+			if (foundBuffer == null) {
+					Label496: //this.hook496();
+			}
+			return foundBuffer;
+	//End of hook489
+		if (foundBuffer == null) {
+			  return null;
+		} else {
+			  return foundBuffer;
+		}
     }
 
     protected void hook485(EnvironmentImpl envImpl) throws DatabaseException {
@@ -145,23 +161,23 @@ class LogBufferPool
     protected void hook488() throws IOException, DatabaseException {
     }
 
-    protected LogBuffer hook489(long lsn, LogBuffer foundBuffer) throws DatabaseException {
-	Iterator iter = bufferPool.iterator();
-	while (iter.hasNext()) {
-	    LogBuffer l = (LogBuffer) iter.next();
-	    if (l.containsLsn(lsn)) {
-		foundBuffer = l;
-		break;
-	    }
-	}
-	if (foundBuffer == null && currentWriteBuffer.containsLsn(lsn)) {
-	    foundBuffer = currentWriteBuffer;
-	}
-	if (foundBuffer == null) {
-	    this.hook496();
-	}
-	return foundBuffer;
-    }
+//    protected LogBuffer hook489(long lsn, LogBuffer foundBuffer) throws DatabaseException {
+//		Iterator iter = bufferPool.iterator();
+//		while (iter.hasNext()) {
+//			  LogBuffer l = (LogBuffer) iter.next();
+//			  if (l.containsLsn(lsn)) {
+//			foundBuffer = l;
+//			break;
+//			  }
+//		}
+//		if (foundBuffer == null && currentWriteBuffer.containsLsn(lsn)) {
+//			  foundBuffer = currentWriteBuffer;
+//		}
+//		if (foundBuffer == null) {
+//			  Label496: //this.hook496();
+//		}
+//		return foundBuffer;
+//   }
 
     protected void hook490() throws IOException, DatabaseException {
     }
@@ -189,7 +205,7 @@ class LogBufferPool
     protected void hook495() throws IOException, DatabaseException {
     }
 
-    protected void hook496() throws DatabaseException {
-    }
+   // protected void hook496() throws DatabaseException {
+    //}
 
 }

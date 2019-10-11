@@ -44,7 +44,7 @@ class LockManager
 			}
 			this.envImpl = envImpl;
 			memoryBudget = envImpl.getMemoryBudget();
-			this.hook774();
+			Label774: //this.hook774();
 			envConfigUpdate(configMgr);
 			envImpl.addConfigObserver(this);
     }
@@ -170,7 +170,7 @@ class LockManager
 					success = true;
 			} else if (lockGrant == LockGrantType.DENIED) {
 			} else {
-					this.hook775();
+					Label775: //this.hook775();
 			}
 			return new LockAttemptResult(useLock, lockGrant, success);
     }
@@ -489,18 +489,18 @@ class LockManager
      * Do the real work of dumpLockTableInternal.
      */
     protected void dumpLockTableInternal(LockStats stats, int i) {
-	Map lockTable = lockTables[i];
-	this.hook776(stats, lockTable);
-	Iterator iter = lockTable.values().iterator();
-	while (iter.hasNext()) {
-	    Lock lock = (Lock) iter.next();
-	    this.hook777(stats, lock);
-	    Iterator ownerIter = lock.getOwnersClone().iterator();
-	    while (ownerIter.hasNext()) {
-		LockInfo info = (LockInfo) ownerIter.next();
-		this.hook778(stats, info);
-	    }
-	}
+			Map lockTable = lockTables[i];
+			Label776: //	this.hook776(stats, lockTable);
+			Iterator iter = lockTable.values().iterator();
+			while (iter.hasNext()) {
+					Lock lock = (Lock) iter.next();
+					Label777: //this.hook777(stats, lock);
+					Iterator ownerIter = lock.getOwnersClone().iterator();
+					while (ownerIter.hasNext()) {
+					LockInfo info = (LockInfo) ownerIter.next();
+					Label778: //this.hook778(stats, info);
+					}
+			}
     }
 
     /** 
@@ -594,8 +594,8 @@ class LockManager
 	dumpToStringNoLatch(sb, i);
     }
 
-    protected void hook774() throws DatabaseException {
-    }
+  //  protected void hook774() throws DatabaseException {
+  //  }
 
     protected void hook775() throws DatabaseException {
     }

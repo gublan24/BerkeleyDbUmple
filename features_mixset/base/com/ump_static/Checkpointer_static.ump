@@ -119,9 +119,9 @@ class Checkpointer {
           flushExtraLevel=true;
         }
         _this.lastCheckpointMillis=System.currentTimeMillis();
-        this.hook535();
+        Label535: //this.hook535();
         _this.checkpointId++;
-        this.hook534();
+        Label534: //this.hook534();
         success=false;
         this.hook522();
         //this.hook548();
@@ -164,7 +164,7 @@ class Checkpointer {
 		      this.hook523();
 		      _this.lastCheckpointEnd=_this.logManager.logForceFlush(endEntry,true);
 		      _this.lastFirstActiveLsn=firstActiveLsn;
-		      this.hook536();
+		      Label536: //this.hook536();
 		      _this.highestFlushLevel=IN.MIN_LEVEL;
 		      success=true;
 		      if (cleanerFiles != null) {

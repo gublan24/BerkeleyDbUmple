@@ -1,0 +1,28 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/util/DbRunAction.java
+namespace com.sleepycat.je.util;
+class DbRunAction {
+  @MethodObject static class DbRunAction_main {
+      after Label838: execute(){
+
+        if (doAction == DBSTATS) {
+          dbConfig=new DatabaseConfig();
+          dbConfig.setReadOnly(true);
+          DbInternal.setUseExistingConfig(dbConfig,true);
+          db=env.openDatabase(null,dbName,dbConfig);
+          try {
+            System.out.println(db.getStats(new StatsConfig()));
+          }
+    finally {
+            db.close();
+          }
+        }
+        //original();
+      }
+      after Label839: execute(){
+        if (action.equalsIgnoreCase("dbstats")) {
+          doAction=DBSTATS;
+        }
+
+      }
+    }
+}
