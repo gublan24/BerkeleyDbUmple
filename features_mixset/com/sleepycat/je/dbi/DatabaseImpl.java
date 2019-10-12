@@ -47,6 +47,7 @@ import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.DatabaseStats;
 import com.sleepycat.je.BtreeStats;
+import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
@@ -58,6 +59,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../Verifier_DatabaseImpl.ump"
 // line 3 "../../../../Statistics_DatabaseImpl.ump"
 // line 3 "../../../../Statistics_DatabaseImpl_inner.ump"
+// line 3 "../../../../Latches_DatabaseImpl.ump"
+// line 3 "../../../../Latches_DatabaseImpl_inner.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -865,9 +868,11 @@ deleteState = NOT_DELETED;
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
   // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
   // line 4 "../../../../Statistics_DatabaseImpl_inner.ump"
+  // line 4 "../../../../Latches_DatabaseImpl_inner.ump"
   public static class DatabaseImpl_preload
   {
   

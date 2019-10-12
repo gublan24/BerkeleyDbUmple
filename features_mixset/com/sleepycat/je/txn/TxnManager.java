@@ -19,10 +19,13 @@ import java.util.HashMap;
 import java.util.Collections;
 import com.sleepycat.je.TransactionStats;
 import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../TxnManager.ump"
 // line 3 "../../../../MemoryBudget_TxnManager.ump"
 // line 3 "../../../../Statistics_TxnManager.ump"
+// line 3 "../../../../Latches_TxnManager.ump"
 public class TxnManager
 {
 
@@ -251,7 +254,8 @@ if (isCommit) {
 
   // line 192 "../../../../TxnManager.ump"
    protected void hook821(EnvironmentImpl env) throws DatabaseException{
-    
+    allTxnLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
+	original(env);
   }
 
   // line 195 "../../../../TxnManager.ump"
@@ -408,6 +412,8 @@ if (isCommit) {
   private int numXACommits ;
 // line 16 "../../../../Statistics_TxnManager.ump"
   private int numXAAborts ;
+// line 7 "../../../../Latches_TxnManager.ump"
+  private Latch allTxnLatch ;
 
   
 }

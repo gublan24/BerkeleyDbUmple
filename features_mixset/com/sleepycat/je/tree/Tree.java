@@ -33,11 +33,15 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
+import com.sleepycat.je.latch.SharedLatch;
+import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Tree.ump"
 // line 3 "../../../../Tree_static.ump"
 // line 3 "../../../../INCompressor_Tree.ump"
+// line 3 "../../../../Latches_Tree.ump"
+// line 3 "../../../../Latches_Tree_inner.ump"
 public class Tree implements LogWritable,LogReadable
 {
 
@@ -1376,7 +1380,8 @@ if (bin.getNEntries() == 0) {
 
   // line 1222 "../../../../Tree.ump"
    protected void hook673() throws DatabaseException{
-    
+    assert rootLatch.isWriteLockedByCurrentThread();
+	original();
   }
 
   // line 1226 "../../../../Tree.ump"
@@ -1393,42 +1398,52 @@ if (bin.getNEntries() == 0) {
 
   // line 1237 "../../../../Tree.ump"
    protected void hook675(DIN duplicateRoot) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
-    
+    if (duplicateRoot != null) {
+	    duplicateRoot.releaseLatch();
+	}
+	original(duplicateRoot);
   }
 
   // line 1241 "../../../../Tree.ump"
    protected void hook676(ArrayList nodeLadder) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
-    
+    releaseNodeLadderLatches(nodeLadder);
+	original(nodeLadder);
   }
 
   // line 1244 "../../../../Tree.ump"
    protected void hook677(DIN dupRoot) throws DatabaseException{
-    
+    assert dupRoot.isLatchOwner();
+	original(dupRoot);
   }
 
   // line 1247 "../../../../Tree.ump"
    protected void hook678(DIN dupRoot) throws DatabaseException{
-    
+    assert dupRoot.isLatchOwner();
+	original(dupRoot);
   }
 
   // line 1250 "../../../../Tree.ump"
    protected void hook679(IN child) throws DatabaseException{
-    
+    child.releaseLatch();
+	original(child);
   }
 
   // line 1253 "../../../../Tree.ump"
    protected void hook680(IN child) throws DatabaseException{
-    
+    assert child.isLatchOwner();
+	original(child);
   }
 
   // line 1256 "../../../../Tree.ump"
    protected void hook681(IN potentialParent) throws DatabaseException{
-    
+    potentialParent.releaseLatchIfOwner();
+	original(potentialParent);
   }
 
   // line 1259 "../../../../Tree.ump"
    protected void hook682(IN searchResult) throws DatabaseException{
-    
+    searchResult.releaseLatchIfOwner();
+	original(searchResult);
   }
 
   // line 1264 "../../../../Tree.ump"
@@ -1451,7 +1466,10 @@ if (bin.getNEntries() == 0) {
 
   // line 1281 "../../../../Tree.ump"
    protected void hook684(BIN oldBIN) throws DatabaseException{
-    
+    if (oldBIN != null) {
+	    oldBIN.releaseLatch();
+	}
+	original(oldBIN);
   }
 
   // line 1286 "../../../../Tree.ump"
@@ -1554,7 +1572,8 @@ if (bin.getNEntries() == 0) {
 
   // line 1383 "../../../../Tree.ump"
    protected void hook687() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
+	original();
   }
 
   // line 1387 "../../../../Tree.ump"
@@ -1581,47 +1600,59 @@ if (bin.getNEntries() == 0) {
 
   // line 1408 "../../../../Tree.ump"
    protected void hook689(IN curRoot) throws DatabaseException{
-    
+    curRoot.latch();
+	original(curRoot);
   }
 
   // line 1411 "../../../../Tree.ump"
    protected void hook690(IN parent) throws DatabaseException{
-    
+    assert parent.isLatchOwner();
+	original(parent);
   }
 
   // line 1414 "../../../../Tree.ump"
    protected void hook691(IN parent) throws DatabaseException{
-    
+    parent.releaseLatch();
+	original(parent);
   }
 
   // line 1417 "../../../../Tree.ump"
    protected void hook692(IN parent) throws DatabaseException,Throwable{
-    
+    parent.releaseLatch();
+	original(parent);
   }
 
   // line 1420 "../../../../Tree.ump"
    protected void hook693(IN child) throws DatabaseException,Throwable{
-    
+    child.releaseLatch();
+	original(child);
   }
 
   // line 1423 "../../../../Tree.ump"
    protected void hook694(IN parent, IN child) throws DatabaseException{
-    
+    if (child != null) {
+	    child.releaseLatchIfOwner();
+	}
+	parent.releaseLatchIfOwner();
+	original(parent, child);
   }
 
   // line 1426 "../../../../Tree.ump"
    protected void hook695(IN parent) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
-    
+    assert parent.isLatchOwner();
+	original(parent);
   }
 
   // line 1429 "../../../../Tree.ump"
    protected void hook696(SplitInfo info5) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
-    
+    info5.child.releaseLatch();
+	original(info5);
   }
 
   // line 1433 "../../../../Tree.ump"
    protected void hook697(ArrayList nodeLadder) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
-    
+    releaseNodeLadderLatches(nodeLadder);
+	original(nodeLadder);
   }
 
   // line 1437 "../../../../Tree.ump"
@@ -1651,12 +1682,14 @@ if (bin.getNEntries() == 0) {
 
   // line 1461 "../../../../Tree.ump"
    protected void hook699(IN parent) throws DatabaseException,SplitRequiredException{
-    
+    assert parent.isLatchOwner();
+	original(parent);
   }
 
   // line 1464 "../../../../Tree.ump"
    protected void hook700(IN parent) throws DatabaseException,SplitRequiredException{
-    
+    parent.releaseLatch();
+	original(parent);
   }
 
   // line 1467 "../../../../Tree.ump"
@@ -1670,7 +1703,8 @@ if (bin.getNEntries() == 0) {
 
   // line 1475 "../../../../Tree.ump"
    protected void hook702() throws DatabaseException{
-    
+    rootLatch.acquireShared();
+	original();
   }
 
   // line 1479 "../../../../Tree.ump"
@@ -1844,7 +1878,8 @@ if (bin.getNEntries() == 0) {
 
   // line 1648 "../../../../Tree.ump"
    protected void hook705(DIN dupRoot) throws DatabaseException{
-    
+    dupRoot.releaseLatch();
+	original(dupRoot);
   }
 
   // line 1652 "../../../../Tree.ump"
@@ -1868,7 +1903,8 @@ if (bin.getNEntries() == 0) {
 
   // line 1670 "../../../../Tree.ump"
    protected void hook707(DIN newRoot) throws DatabaseException{
-    
+    newRoot.latch();
+	original(newRoot);
   }
 
   // line 1675 "../../../../Tree.ump"
@@ -1896,12 +1932,14 @@ if (bin.getNEntries() == 0) {
 
   // line 1697 "../../../../Tree.ump"
    protected void hook709(DBIN dupBin) throws DatabaseException{
-    
+    dupBin.latch();
+	original(dupBin);
   }
 
   // line 1700 "../../../../Tree.ump"
    protected void hook710(DIN dupRoot) throws DatabaseException{
-    
+    dupRoot.latch();
+	original(dupRoot);
   }
 
   // line 1704 "../../../../Tree.ump"
@@ -1949,7 +1987,8 @@ if (bin.getNEntries() == 0) {
 
   // line 1746 "../../../../Tree.ump"
    protected void hook712(BIN bin) throws DatabaseException{
-    
+    bin.releaseLatch();
+	original(bin);
   }
 
   // line 1749 "../../../../Tree.ump"
@@ -1973,132 +2012,171 @@ if (bin.getNEntries() == 0) {
 
   // line 1765 "../../../../Tree.ump"
    protected void hook728() throws DatabaseException{
-    
+    rootLatch.acquireExclusive();
+	original();
   }
 
   // line 1768 "../../../../Tree.ump"
    protected void hook729() throws DatabaseException{
-    
+    rootLatch.acquireShared();
+	original();
   }
 
   // line 1771 "../../../../Tree.ump"
    protected void hook730(IN in) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
-    
+    assert in.isLatchOwner();
+	original(in);
   }
 
   // line 1774 "../../../../Tree.ump"
    protected void hook731(TreeLocation location) throws DatabaseException{
-    
+    location.bin.releaseLatch();
+	original(location);
   }
 
   // line 1777 "../../../../Tree.ump"
    protected void hook732() throws DatabaseException{
-    
+    assert (LatchSupport.countLatchesHeld() == 1) : LatchSupport.latchesHeldToString();
+	original();
   }
 
   // line 1780 "../../../../Tree.ump"
    protected void hook733() throws DatabaseException{
-    
+    assert (LatchSupport.countLatchesHeld() == 0) : LatchSupport.latchesHeldToString();
+	original();
   }
 
   // line 1783 "../../../../Tree.ump"
    protected void hook734(IN next) throws DatabaseException{
-    
+    next.releaseLatch();
+	original(next);
   }
 
   // line 1786 "../../../../Tree.ump"
    protected void hook735(IN nextIN) throws DatabaseException{
-    
+    nextIN.latch();
+	assert (LatchSupport.countLatchesHeld() == 2) : LatchSupport.latchesHeldToString();
+	original(nextIN);
   }
 
   // line 1789 "../../../../Tree.ump"
    protected void hook736(IN parent) throws DatabaseException{
-    
+    parent.releaseLatch();
+	original(parent);
   }
 
   // line 1792 "../../../../Tree.ump"
    protected void hook737(IN parent) throws DatabaseException{
-    
+    parent.releaseLatch();
+	assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
+	original(parent);
   }
 
   // line 1795 "../../../../Tree.ump"
    protected void hook738(IN parent) throws DatabaseException,SplitRequiredException{
-    
+    parent.releaseLatch();
+	original(parent);
   }
 
   // line 1798 "../../../../Tree.ump"
    protected void hook739(IN parent, IN child) throws DatabaseException,SplitRequiredException{
-    
+    child.releaseLatch();
+	parent.releaseLatch();
+	original(parent, child);
   }
 
   // line 1801 "../../../../Tree.ump"
    protected void hook740(IN child) throws DatabaseException,SplitRequiredException{
-    
+    child.releaseLatch();
+	original(child);
   }
 
   // line 1804 "../../../../Tree.ump"
    protected void hook741(BIN bin) throws DatabaseException{
-    
+    assert bin.isLatchOwner();
+	original(bin);
   }
 
   // line 1807 "../../../../Tree.ump"
    protected void hook742(DBIN dupBin) throws DatabaseException{
-    
+    dupBin.releaseLatch();
+	original(dupBin);
   }
 
   // line 1810 "../../../../Tree.ump"
    protected void hook743(CursorImpl cursor) throws DatabaseException{
-    
+    cursor.releaseBIN();
+	original(cursor);
   }
 
   // line 1813 "../../../../Tree.ump"
    protected void hook744(DIN dupRoot) throws DatabaseException{
-    
+    dupRoot.latch();
+	original(dupRoot);
   }
 
   // line 1816 "../../../../Tree.ump"
    protected void hook745(CursorImpl cursor) throws DatabaseException{
-    
+    cursor.releaseBIN();
+	original(cursor);
   }
 
   // line 1819 "../../../../Tree.ump"
    protected void hook746(CursorImpl cursor) throws DatabaseException{
-    
+    cursor.latchBIN();
+	original(cursor);
   }
 
   // line 1822 "../../../../Tree.ump"
    protected void hook747(DBIN dupBin) throws DatabaseException{
-    
+    dupBin.releaseLatch();
+	original(dupBin);
   }
 
   // line 1825 "../../../../Tree.ump"
    protected void hook748() throws DatabaseException{
-    
+    rootLatch.acquireShared();
+	original();
   }
 
   // line 1828 "../../../../Tree.ump"
    protected void hook749() throws DatabaseException{
-    
+    rootLatch.release();
+	original();
   }
 
   // line 1831 "../../../../Tree.ump"
    protected void hook750(BIN bin) throws DatabaseException{
-    
+    bin.latch();
+	original(bin);
   }
 
   // line 1834 "../../../../Tree.ump"
    protected void hook751() throws DatabaseException{
-    
+    rootLatch.release();
+	rootLatch.acquireExclusive();
+	original();
   }
 
   // line 1837 "../../../../Tree.ump"
    protected void hook752() throws DatabaseException{
-    
+    rootLatch.release();
+	original();
   }
 
   // line 1840 "../../../../Tree.ump"
    protected void hook753() throws DatabaseException{
-    
+    rootLatch.release();
+	original();
+  }
+
+  // line 10 "../../../../Latches_Tree.ump"
+   private void releaseNodeLadderLatches(ArrayList nodeLadder) throws DatabaseException{
+    ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
+	while (iter.hasPrevious()) {
+	    SplitInfo info3 = (SplitInfo) iter.previous();
+	    info3.child.releaseLatch();
+	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -2150,6 +2228,7 @@ if (bin.getNEntries() == 0) {
   
   
   // line 11 "../../../../Tree_static.ump"
+  // line 92 "../../../../Latches_Tree_inner.ump"
   public class RootChildReference extends ChildReference
   {
   
@@ -2216,22 +2295,29 @@ if (bin.getNEntries() == 0) {
   
     // line 39 "../../../../Tree_static.ump"
      protected void hook666() throws DatabaseException{
-      
+      if (getTarget() == null && !rootLatch.isWriteLockedByCurrentThread()) {
+            rootLatch.release();
+            rootLatch.acquireExclusive();
+          }
+          original();
     }
   
     // line 41 "../../../../Tree_static.ump"
      protected void hook667(){
-      
+      assert rootLatch.isWriteLockedByCurrentThread();
+          original();
     }
   
     // line 43 "../../../../Tree_static.ump"
      protected void hook668(){
-      
+      assert rootLatch.isWriteLockedByCurrentThread();
+          original();
     }
   
     // line 45 "../../../../Tree_static.ump"
      protected void hook669(){
-      
+      assert rootLatch.isWriteLockedByCurrentThread();
+          original();
     }
   
   }  /*PLEASE DO NOT EDIT THIS CODE*/
@@ -2330,7 +2416,9 @@ if (bin.getNEntries() == 0) {
   
   
   @MethodObject
+    @MethodObject
   // line 57 "../../../../Tree_static.ump"
+  // line 49 "../../../../Latches_Tree_inner.ump"
   public static class Tree_searchSplitsAllowed
   {
   
@@ -2403,27 +2491,43 @@ if (bin.getNEntries() == 0) {
   
     // line 112 "../../../../Tree_static.ump"
      protected void hook717() throws DatabaseException{
-      
+      _this.rootLatch.acquireShared();
+          rootLatched=true;
+          rootLatchedExclusive=false;
+          original();
     }
   
     // line 114 "../../../../Tree_static.ump"
      protected void hook718() throws DatabaseException{
-      
+      rootIN.latch();
+          original();
     }
   
     // line 116 "../../../../Tree_static.ump"
      protected void hook719() throws DatabaseException{
-      
+      rootLatched=true;
+          _this.rootLatch.acquireExclusive();
+          original();
     }
   
     // line 118 "../../../../Tree_static.ump"
      protected void hook720() throws DatabaseException{
-      
+      _this.splitRoot();
+          _this.rootLatch.release();
+          rootLatched=false;
+          original();
     }
   
     // line 120 "../../../../Tree_static.ump"
      protected void hook721() throws DatabaseException{
-      
+      b=!rootLatchedExclusive;
+          if (b) {
+            rootIN=null;
+            _this.rootLatch.release();
+            _this.rootLatch.acquireExclusive();
+            rootLatchedExclusive=true;
+          }
+          original();
     }
     
     //------------------------
@@ -2458,7 +2562,9 @@ if (bin.getNEntries() == 0) {
   
   
   @MethodObject
+    @MethodObject
   // line 122 "../../../../Tree_static.ump"
+  // line 4 "../../../../Latches_Tree_inner.ump"
   public static class Tree_forceSplit
   {
   
@@ -2579,32 +2685,57 @@ if (bin.getNEntries() == 0) {
   
     // line 236 "../../../../Tree_static.ump"
      protected void hook722() throws DatabaseException,SplitRequiredException{
-      
+      isRootLatched=false;
+          original();
     }
   
     // line 238 "../../../../Tree_static.ump"
      protected void hook723() throws DatabaseException,SplitRequiredException{
-      
+      if (origParent.isDbRoot()) {
+            _this.rootLatch.acquireExclusive();
+            isRootLatched=true;
+          }
+          origParent.latch();
+          original();
     }
   
     // line 240 "../../../../Tree_static.ump"
      protected void hook724() throws DatabaseException,SplitRequiredException{
-      
+      child.latch();
+          original();
     }
   
     // line 242 "../../../../Tree_static.ump"
      protected void hook725() throws DatabaseException,SplitRequiredException{
-      
+      child.releaseLatch();
+          original();
     }
   
     // line 244 "../../../../Tree_static.ump"
      protected void hook726() throws DatabaseException,SplitRequiredException{
-      
+      assert isRootLatched;
+          original();
     }
   
     // line 246 "../../../../Tree_static.ump"
      protected void hook727() throws DatabaseException,SplitRequiredException{
-      
+      if (!success) {
+            if (child != null) {
+              child.releaseLatchIfOwner();
+            }
+            origParent.releaseLatchIfOwner();
+          }
+          if (nodeLadder.size() > 0) {
+            iter=nodeLadder.listIterator(nodeLadder.size());
+            while (iter.hasPrevious()) {
+              info2=(SplitInfo)iter.previous();
+              info2.child.releaseLatchIfOwner();
+            }
+          }
+          if (isRootLatched) {
+            _this.rootLatch.release();
+          }
+          original();
     }
     
     //------------------------
@@ -2688,6 +2819,8 @@ if (bin.getNEntries() == 0) {
   private TestHook searchHook ;
 // line 70 "../../../../Tree.ump"
   private TestHook ckptHook ;
+// line 7 "../../../../Latches_Tree.ump"
+  private SharedLatch rootLatch ;
 
   
 }

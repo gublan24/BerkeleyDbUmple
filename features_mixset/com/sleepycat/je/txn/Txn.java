@@ -46,6 +46,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../DeleteOp_Txn_inner.ump"
 // line 3 "../../../../INCompressor_Txn.ump"
 // line 3 "../../../../Statistics_Txn.ump"
+// line 3 "../../../../Latches_Txn.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 

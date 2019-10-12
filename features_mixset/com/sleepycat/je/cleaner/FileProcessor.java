@@ -47,6 +47,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Statistics_FileProcessor_inner.ump"
 // line 3 "../../../../Checksum_FileProcessor.ump"
 // line 3 "../../../../Checksum_FileProcessor_inner.ump"
+// line 3 "../../../../Latches_FileProcessor.ump"
+// line 3 "../../../../Latches_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -389,7 +391,8 @@ nINsMigratedThisRun++;
 
   // line 379 "../../../../FileProcessor.ump"
    protected void hook136(IN inInTree) throws DatabaseException{
-    
+    inInTree.releaseLatch();
+	original(inInTree);
   }
 
 
@@ -547,7 +550,6 @@ nINsMigratedThisRun++;
   
   
   @MethodObject
-    @MethodObject
     @MethodObject
   // line 28 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
@@ -878,9 +880,11 @@ nINsMigratedThisRun++;
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 195 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 5 "../../../../Statistics_FileProcessor_inner.ump"
+  // line 4 "../../../../Latches_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
   {
   
@@ -1013,7 +1017,13 @@ nINsMigratedThisRun++;
   
     // line 301 "../../../../FileProcessor_static.ump"
      protected void hook135() throws DatabaseException{
-      
+      if (parentDIN != null) {
+            parentDIN.releaseLatchIfOwner();
+          }
+          if (bin != null) {
+            bin.releaseLatchIfOwner();
+          }
+          original();
     }
   
   

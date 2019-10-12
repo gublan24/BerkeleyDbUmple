@@ -30,6 +30,8 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../Truncate_Database_inner.ump"
 // line 3 "../../../DeleteOp_Database.ump"
 // line 3 "../../../Statistics_Database.ump"
+// line 3 "../../../Latches_Database.ump"
+// line 3 "../../../Latches_Database_inner.ump"
 public class Database
 {
 
@@ -814,6 +816,17 @@ databaseImpl.checkIsDeleted("preload");
   }
 
 
+  /**
+   * 
+   * Releases a lock acquired by calling acquireTriggerListReadLock().
+   */
+  // line 9 "../../../Latches_Database.ump"
+   private void releaseTriggerListReadLock() throws DatabaseException{
+    EnvironmentImpl env = envHandle.getEnvironmentImpl();
+	env.getTriggerLatch().release();
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
@@ -871,7 +884,9 @@ databaseImpl.checkIsDeleted("preload");
   
   
   @MethodObject
+    @MethodObject
   // line 13 "../../../Database_static.ump"
+  // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
   {
   
@@ -921,7 +936,9 @@ databaseImpl.checkIsDeleted("preload");
   
   
   @MethodObject
+    @MethodObject
   // line 25 "../../../Database_static.ump"
+  // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
   {
   
@@ -971,7 +988,9 @@ databaseImpl.checkIsDeleted("preload");
   
   
   @MethodObject
+    @MethodObject
   // line 37 "../../../Database_static.ump"
+  // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock
   {
   

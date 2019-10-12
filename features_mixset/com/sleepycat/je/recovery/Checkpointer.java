@@ -52,6 +52,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../CheckpointerDaemon_Checkpointer.ump"
 // line 3 "../../../../Statistics_Checkpointer.ump"
 // line 3 "../../../../Statistics_Checkpointer_inner.ump"
+// line 3 "../../../../Latches_Checkpointer.ump"
+// line 3 "../../../../Latches_Checkpointer_inner.ump"
 public class Checkpointer extends DaemonThread
 {
 
@@ -370,7 +372,11 @@ nFullINFlushThisRun++;
 
   // line 299 "../../../../Checkpointer.ump"
    protected void hook527(IN target, IN parent, boolean allowDeltas, long checkpointStart, boolean logProvisionally, long newLsn, boolean mustLogParent) throws DatabaseException{
-    
+    try {
+	    original(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
+	} finally {
+	    target.releaseLatch();
+	}
   }
 
   // line 302 "../../../../Checkpointer.ump"
@@ -1139,8 +1145,10 @@ nFullINFlushThisRun++;
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 230 "../../../../Checkpointer_static.ump"
   // line 4 "../../../../MemoryBudget_Checkpointer_inner.ump"
+  // line 4 "../../../../Latches_Checkpointer_inner.ump"
   public static class Checkpointer_selectDirtyINs
   {
   
@@ -1239,7 +1247,28 @@ nFullINFlushThisRun++;
   
     // line 295 "../../../../Checkpointer_static.ump"
      protected void hook529() throws DatabaseException{
-      
+      inMemINs.latchMajor();
+          original();
+    }
+  
+    // line 6 "../../../../Latches_Checkpointer_inner.ump"
+     protected void hook528() throws DatabaseException{
+      try {
+            original();
+          }
+      finally {
+            inMemINs.releaseMajorLatchIfHeld();
+          }
+    }
+  
+    // line 18 "../../../../Latches_Checkpointer_inner.ump"
+     protected void hook530() throws DatabaseException{
+      try {
+            original();
+          }
+      finally {
+            in.releaseLatch();
+          }
     }
     
     //------------------------

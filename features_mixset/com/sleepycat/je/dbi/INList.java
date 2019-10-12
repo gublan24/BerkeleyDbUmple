@@ -10,11 +10,15 @@ import java.util.SortedSet;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.HashSet;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../INList.ump"
 // line 3 "../../../../INList_static.ump"
 // line 3 "../../../../MemoryBudget_INList.ump"
 // line 3 "../../../../MemoryBudget_INList_inner.ump"
+// line 3 "../../../../Latches_INList.ump"
+// line 3 "../../../../Latches_INList_inner.ump"
 public class INList
 {
 
@@ -162,17 +166,23 @@ if (updateMemoryUsage) {
 
   // line 107 "../../../../INList.ump"
    protected void hook338(EnvironmentImpl envImpl){
-    
+    addedINs = new HashSet();
+	majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
+	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
+	original(envImpl);
   }
 
   // line 110 "../../../../INList.ump"
    protected void hook339(EnvironmentImpl envImpl) throws DatabaseException{
-    
+    majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
+	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
+	original(envImpl);
   }
 
   // line 113 "../../../../INList.ump"
    protected void hook340() throws DatabaseException{
-    
+    addedINs = new HashSet();
+	original();
   }
 
   // line 116 "../../../../INList.ump"
@@ -182,12 +192,67 @@ if (updateMemoryUsage) {
 
   // line 120 "../../../../INList.ump"
    protected void hook342() throws DatabaseException{
-    
+    addedINs.clear();
+	minorLatch.release();
+	releaseMajorLatch();
+	original();
   }
 
   // line 123 "../../../../INList.ump"
    protected void hook346(IN in) throws DatabaseException{
     
+  }
+
+
+  /**
+   * 
+   * The locking hierarchy is: 1. INList major latch. 2. IN latch. In other words, the INList major latch must be taken before any IN latches to avoid deadlock.
+   */
+  // line 17 "../../../../Latches_INList.ump"
+   public void latchMajor() throws DatabaseException{
+    assert LatchSupport.countLatchesHeld() == 0;
+	majorLatch.acquire();
+  }
+
+  // line 22 "../../../../Latches_INList.ump"
+   public void releaseMajorLatchIfHeld() throws DatabaseException{
+    if (majorLatch.isOwner()) {
+	    releaseMajorLatch();
+	}
+  }
+
+  // line 28 "../../../../Latches_INList.ump"
+   public void releaseMajorLatch() throws DatabaseException{
+    latchMinorAndDumpAddedINs();
+	majorLatch.release();
+  }
+
+  // line 33 "../../../../Latches_INList.ump"
+   private void dumpAddedINsIntoMajorSet(){
+    if (addedINs.size() > 0) {
+	    ins.addAll(addedINs);
+	    addedINs.clear();
+	}
+  }
+
+  // line 40 "../../../../Latches_INList.ump"
+  public void latchMinorAndDumpAddedINs() throws DatabaseException{
+    latchMinor();
+	try {
+	    dumpAddedINsIntoMajorSet();
+	} finally {
+	    releaseMinorLatch();
+	}
+  }
+
+  // line 49 "../../../../Latches_INList.ump"
+   private void latchMinor() throws DatabaseException{
+    minorLatch.acquire();
+  }
+
+  // line 53 "../../../../Latches_INList.ump"
+   private void releaseMinorLatch() throws DatabaseException{
+    minorLatch.release();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -195,7 +260,9 @@ if (updateMemoryUsage) {
   
   
   @MethodObject
+    @MethodObject
   // line 4 "../../../../INList_static.ump"
+  // line 4 "../../../../Latches_INList_inner.ump"
   public static class INList_add
   {
   
@@ -237,7 +304,8 @@ if (updateMemoryUsage) {
   
     // line 22 "../../../../INList_static.ump"
      protected void hook344() throws DatabaseException{
-      
+      enteredWithLatchHeld=_this.majorLatch.isOwner();
+          original();
     }
   
     // line 24 "../../../../INList_static.ump"
@@ -339,6 +407,12 @@ if (updateMemoryUsage) {
   private EnvironmentImpl envImpl ;
 // line 5 "../../../../MemoryBudget_INList.ump"
   private boolean updateMemoryUsage ;
+// line 7 "../../../../Latches_INList.ump"
+  private Set addedINs = null ;
+// line 9 "../../../../Latches_INList.ump"
+  private Latch majorLatch ;
+// line 11 "../../../../Latches_INList.ump"
+  private Latch minorLatch ;
 
   
 }

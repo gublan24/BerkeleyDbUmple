@@ -22,6 +22,8 @@ import java.util.Arrays;
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
 // line 3 "../../../../DeleteOp_SortedLSNTreeWalker.ump"
+// line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
+// line 3 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -205,8 +207,10 @@ if (setDbState) {
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
   // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
+  // line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
   public static class SortedLSNTreeWalker_extractINsForDb
   {
   
@@ -295,17 +299,20 @@ if (setDbState) {
   
     // line 63 "../../../../SortedLSNTreeWalker_static.ump"
      protected void hook356() throws DatabaseException{
-      
+      inList.latchMajor();
+          original();
     }
   
     // line 65 "../../../../SortedLSNTreeWalker_static.ump"
      protected void hook357() throws DatabaseException{
-      
+      inList.latchMinorAndDumpAddedINs();
+          original();
     }
   
     // line 67 "../../../../SortedLSNTreeWalker_static.ump"
      protected void hook358() throws DatabaseException{
-      
+      inList.releaseMajorLatch();
+          original();
     }
     
     //------------------------

@@ -51,5 +51,6 @@ use NIO/umpilif/Master.ump;
 
 use Checksum/umpilif/Master.ump;
 
+use Latches/umpilif/Master.ump;
 
 //rename 's/^/DeleteOp_/' *

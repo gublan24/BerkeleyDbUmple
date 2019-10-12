@@ -12,6 +12,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.tree.*;
 
 // line 3 "../../../../RootFlusher.ump"
+// line 3 "../../../../Latches_RootFlusher.ump"
 public class RootFlusher implements WithRootLatched
 {
 

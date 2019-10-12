@@ -7,11 +7,14 @@ import com.sleepycat.je.utilint.DbLsn;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.DatabaseException;
 import java.nio.ByteBuffer;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogBuffer.ump"
 // line 3 "../../../../DiskFullErro_LogBuffer.ump"
 // line 3 "../../../../IO_LogBuffer.ump"
 // line 3 "../../../../NIO_LogBuffer.ump"
+// line 3 "../../../../Latches_LogBuffer.ump"
 public class LogBuffer implements LogSource
 {
 
@@ -177,12 +180,14 @@ buffer = ByteBuffer.allocate(capacity);
 
   // line 123 "../../../../LogBuffer.ump"
    protected void hook479(EnvironmentImpl env) throws DatabaseException{
-    
+    readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
+	original(env);
   }
 
   // line 125 "../../../../LogBuffer.ump"
    protected void hook480() throws DatabaseException{
-    
+    readLatch.release();
+	original();
   }
 
 
@@ -192,7 +197,7 @@ buffer = ByteBuffer.allocate(capacity);
    */
   // line 131 "../../../../LogBuffer.ump"
    public void release() throws DatabaseException{
-    
+    readLatch.releaseIfOwner();
   }
 
   // line 8 "../../../../DiskFullErro_LogBuffer.ump"
@@ -203,6 +208,16 @@ buffer = ByteBuffer.allocate(capacity);
   // line 12 "../../../../DiskFullErro_LogBuffer.ump"
   public void setRewriteAllowed(){
     rewriteAllowed = true;
+  }
+
+
+  /**
+   * 
+   * When modifying the buffer, acquire the readLatch. Call release() to release the latch. Note that containsLsn() acquires the latch for reading.
+   */
+  // line 13 "../../../../Latches_LogBuffer.ump"
+   public void latchForWrite() throws DatabaseException{
+    readLatch.acquire();
   }
   
   //------------------------
@@ -219,6 +234,8 @@ buffer = ByteBuffer.allocate(capacity);
   private long lastLsn ;
 // line 5 "../../../../DiskFullErro_LogBuffer.ump"
   private boolean rewriteAllowed ;
+// line 7 "../../../../Latches_LogBuffer.ump"
+  private Latch readLatch ;
 
   
 }

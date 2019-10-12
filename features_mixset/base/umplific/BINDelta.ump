@@ -78,7 +78,7 @@ class BINDelta
 	DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	fullBIN.setDatabase(db);
 	fullBIN.setLastFullLsn(lastFullLsn);
-	this.hook612(fullBIN);
+	Label612: //this.hook612(fullBIN);
 	for (int i = 0; i < deltas.size(); i++) {
 	    DeltaInfo info = (DeltaInfo) deltas.get(i);
 	    int foundIndex = fullBIN.findEntry(info.getKey(), true, false);
@@ -98,7 +98,7 @@ class BINDelta
 	    }
 	}
 	fullBIN.setGeneration(0);
-	this.hook611(fullBIN);
+	Label611: //this.hook611(fullBIN);
 	return fullBIN;
     }
 
@@ -179,10 +179,10 @@ class BINDelta
 	return 0;
     }
 
-    protected void hook611(BIN fullBIN) throws DatabaseException {
-    }
+    //protected void hook611(BIN fullBIN) throws DatabaseException {
+    //}
 
-    protected void hook612(BIN fullBIN) throws DatabaseException {
-    }
+    //protected void hook612(BIN fullBIN) throws DatabaseException {
+    //}
 
 }

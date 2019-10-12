@@ -338,7 +338,7 @@ Label_115_1:
 	    this.hook89(DBE);
 	    throw DBE;
 	} finally {
-	    this.hook95(bin, parentDIN);
+	    Label95: //this.hook95(bin, parentDIN);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }

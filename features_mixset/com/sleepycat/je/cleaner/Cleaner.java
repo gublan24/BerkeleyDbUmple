@@ -54,6 +54,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../DeleteOp_Cleaner_inner.ump"
 // line 3 "../../../../CleanerDaemon_Cleaner.ump"
 // line 3 "../../../../Statistics_Cleaner.ump"
+// line 3 "../../../../Latches_Cleaner.ump"
 public class Cleaner implements EnvConfigObserver,DaemonRunner
 {
 
@@ -1206,7 +1207,13 @@ nLNsMigrated++;
 
   // line 649 "../../../../Cleaner.ump"
    protected void hook95(BIN bin, DIN parentDIN) throws DatabaseException{
-    
+    if (parentDIN != null) {
+	    parentDIN.releaseLatchIfOwner();
+	}
+	if (bin != null) {
+	    bin.releaseLatchIfOwner();
+	}
+	original(bin, parentDIN);
   }
 
   // line 652 "../../../../Cleaner.ump"

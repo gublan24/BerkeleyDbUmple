@@ -53,6 +53,10 @@ import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.TransactionStats;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.log.LatchedLogManager;
+import com.sleepycat.je.latch.SharedLatch;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
@@ -75,6 +79,7 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../CheckLeaks_EnvironmentImpl.ump"
 // line 3 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
 // line 3 "../../../../Statistics_EnvironmentImpl.ump"
+// line 3 "../../../../Latches_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -745,7 +750,8 @@ checkpointer.shutdown();
 
   // line 655 "../../../../EnvironmentImpl.ump"
    protected void hook320() throws DatabaseException{
-    
+    triggerLatch = LatchSupport.makeSharedLatch("TriggerLatch", this);
+	original();
   }
 
   // line 658 "../../../../EnvironmentImpl.ump"
@@ -755,12 +761,14 @@ checkpointer.shutdown();
 
   // line 662 "../../../../EnvironmentImpl.ump"
    protected void hook322() throws DatabaseException{
-    
+    fairLatches = configManager.getBoolean(EnvironmentParams.ENV_FAIR_LATCHES);
+	original();
   }
 
   // line 665 "../../../../EnvironmentImpl.ump"
    protected void hook323() throws DatabaseException{
-    
+    mapTreeRootLatch = LatchSupport.makeLatch("MapTreeRoot", this);
+	original();
   }
 
   // line 668 "../../../../EnvironmentImpl.ump"
@@ -1040,6 +1048,21 @@ checkpointer.shutdown();
   // line 9 "../../../../CheckLeaks_EnvironmentImpl.ump"
    private void checkLeaks() throws DatabaseException{
     new EnvironmentImpl_checkLeaks(this).execute();
+  }
+
+  // line 16 "../../../../Latches_EnvironmentImpl.ump"
+   public static  boolean getFairLatches(){
+    return fairLatches;
+  }
+
+
+  /**
+   * 
+   * Returns the shared trigger latch.
+   */
+  // line 23 "../../../../Latches_EnvironmentImpl.ump"
+   public SharedLatch getTriggerLatch(){
+    return triggerLatch;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1415,6 +1438,12 @@ checkpointer.shutdown();
   {
     return txnManager.txnStat(config);
   }
+// line 9 "../../../../Latches_EnvironmentImpl.ump"
+  private static boolean fairLatches ;
+// line 11 "../../../../Latches_EnvironmentImpl.ump"
+  private Latch mapTreeRootLatch ;
+// line 13 "../../../../Latches_EnvironmentImpl.ump"
+  private SharedLatch triggerLatch ;
 
   
 }

@@ -445,11 +445,11 @@ class Cursor
 	try {
 	    origCursor = cursorImpl;
 	    dup = origCursor.cloneCursor(true);
-	    this.hook19(dup);
+	    Label19://this.hook19(dup);
 	    status = dup.delete();
 	    return status;
 	} finally {
-	    this.hook20(origCursor, dup);
+	    Label20://this.hook20(origCursor, dup);
 	    boolean success = (status == OperationStatus.SUCCESS);
 	    if (cursorImpl == dup) {
 		if (!success) {
@@ -549,7 +549,7 @@ class Cursor
 	    }
 	    return status;
 	} finally {
-	    this.hook21(origCursor);
+	    Label21: //this.hook21(origCursor);
 	    boolean success = (status == OperationStatus.SUCCESS);
 	    if (cursorImpl == dup) {
 		if (!success) {
@@ -605,9 +605,9 @@ class Cursor
 	    dup = beginRead(false);
 	    if (!dup.positionFirstOrLast(first, null)) {
 		status = OperationStatus.NOTFOUND;
-		this.hook22();
+		Label22://this.hook22();
 	    } else {
-		this.hook23();
+		Label23: //this.hook23();
 		status = dup.getCurrentAlreadyLatched(key, data, lockType, first);
 		if (status == OperationStatus.SUCCESS) {
 		    if (dup.getDupBIN() != null) {
@@ -618,7 +618,7 @@ class Cursor
 		}
 	    }
 	} finally {
-	    this.hook24();
+	    Label24: //this.hook24();
 	    endRead(dup, status == OperationStatus.SUCCESS);
 	}
 	return status;
@@ -709,7 +709,7 @@ class Cursor
 	assert key != null && data != null;
 	OperationStatus status = OperationStatus.NOTFOUND;
 	boolean keyChange = false;
-	this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,
+	Label25: //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,
 		keyChange);
 	return new KeyChangeStatus(status, keyChange);
     }

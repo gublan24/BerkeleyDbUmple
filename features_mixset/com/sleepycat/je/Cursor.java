@@ -22,9 +22,11 @@ import com.sleepycat.je.dbi.DatabaseImpl;
 import com.sleepycat.je.dbi.CursorImpl;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../Cursor.ump"
 // line 3 "../../../loggingBase_Cursor.ump"
+// line 3 "../../../Latches_Cursor.ump"
 public class Cursor
 {
 
@@ -1322,32 +1324,45 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
 
   // line 1138 "../../../Cursor.ump"
    protected void hook19(CursorImpl dup) throws DatabaseException{
-    
+    dup.latchBINs();
+	original(dup);
   }
 
   // line 1141 "../../../Cursor.ump"
    protected void hook20(CursorImpl origCursor, CursorImpl dup) throws DatabaseException{
-    
+    if (origCursor != null) {
+	    origCursor.releaseBINs();
+	}
+	if (dup != null) {
+	    dup.releaseBINs();
+	}
+	original(origCursor, dup);
   }
 
   // line 1144 "../../../Cursor.ump"
    protected void hook21(CursorImpl origCursor) throws DatabaseException{
-    
+    if (origCursor != null) {
+	    origCursor.releaseBINs();
+	}
+	original(origCursor);
   }
 
   // line 1147 "../../../Cursor.ump"
    protected void hook22() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
+	original();
   }
 
   // line 1150 "../../../Cursor.ump"
    protected void hook23() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
+	original();
   }
 
   // line 1153 "../../../Cursor.ump"
    protected void hook24() throws DatabaseException{
-    
+    cursorImpl.releaseBINs();
+	original();
   }
 
   // line 1158 "../../../Cursor.ump"
@@ -1404,52 +1419,62 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
 
   // line 1209 "../../../Cursor.ump"
    protected void hook26() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0;
+	original();
   }
 
   // line 1212 "../../../Cursor.ump"
    protected void hook27() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0;
+	original();
   }
 
   // line 1215 "../../../Cursor.ump"
    protected void hook28() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0;
+	original();
   }
 
   // line 1218 "../../../Cursor.ump"
    protected void hook29() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0;
+	original();
   }
 
   // line 1221 "../../../Cursor.ump"
    protected void hook30() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0;
+	original();
   }
 
   // line 1224 "../../../Cursor.ump"
    protected void hook31() throws DatabaseException{
-    
+    assert LatchSupport.countLatchesHeld() == 0;
+	original();
   }
 
   // line 1227 "../../../Cursor.ump"
    protected void hook32(CursorImpl origCursor) throws DatabaseException{
-    
+    origCursor.releaseBINs();
+	original(origCursor);
   }
 
   // line 1230 "../../../Cursor.ump"
    protected void hook33(CursorImpl origCursor) throws DatabaseException{
-    
+    origCursor.latchBINs();
+	original(origCursor);
   }
 
   // line 1233 "../../../Cursor.ump"
    protected void hook34(CursorImpl origCursor) throws DatabaseException{
-    
+    origCursor.releaseBINs();
+	original(origCursor);
   }
 
   // line 1236 "../../../Cursor.ump"
    protected void hook35(CursorImpl origCursor) throws DatabaseException{
-    
+    origCursor.latchBINs();
+	original(origCursor);
   }
 
   // line 1239 "../../../Cursor.ump"

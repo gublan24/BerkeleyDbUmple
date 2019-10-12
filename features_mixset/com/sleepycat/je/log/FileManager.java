@@ -32,6 +32,8 @@ import java.io.FileNotFoundException;
 import java.io.File;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../FileManager.ump"
 // line 3 "../../../../FileManager_static.ump"
@@ -44,6 +46,7 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../ChunckedNIO_FileManager.ump"
 // line 3 "../../../../NIO_FileManager.ump"
 // line 3 "../../../../NIO_FileManager_inner.ump"
+// line 3 "../../../../Latches_FileManager.ump"
 public class FileManager
 {
 
@@ -938,7 +941,8 @@ data.position(0);
    */
   // line 797 "../../../../FileManager.ump"
    protected void hook454(FileHandle fileHandle) throws LogException,DatabaseException{
-    
+    fileHandle.release();
+	original(fileHandle);
   }
 
 
@@ -1083,6 +1087,12 @@ data.position(0);
     while (true) {
 			  original(fileNum, fileId, fileHandle);
 			}
+  }
+
+  // line 8 "../../../../Latches_FileManager.ump"
+   protected void hook453(FileHandle fileHandle) throws LogException,DatabaseException{
+    fileHandle.latch();
+	original(fileHandle);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

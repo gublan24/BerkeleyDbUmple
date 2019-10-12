@@ -1,0 +1,116 @@
+namespace com.sleepycat.je;
+
+class Cursor
+{
+  depend com.sleepycat.je.latch.LatchSupport;
+    after Label19: deleteNoNotify() {
+
+	dup.latchBINs();
+	//original(dup);
+    }
+
+    after Label20:deleteNoNotify(){
+
+	if (origCursor != null) {
+	    origCursor.releaseBINs();
+	}
+	if (dup != null) {
+	    dup.releaseBINs();
+	}
+	//original(origCursor, dup);
+    }
+
+    after Label21: putAllowPhantoms(DatabaseEntry key, DatabaseEntry data, PutMode putMode,
+	    DatabaseEntry returnOldData, CursorImpl nextKeyCursor)
+
+	if (origCursor != null) {
+	    origCursor.releaseBINs();
+	}
+	//original(origCursor);
+    }
+
+    after Label22: positionAllowPhantoms(DatabaseEntry key, DatabaseEntry data, LockType lockType,
+	    boolean first) {
+
+	assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
+	//original();
+    }
+
+    after Label23:
+
+	assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
+	//original();
+    }
+
+    after Label24:
+
+	cursorImpl.releaseBINs();
+	//original();
+    }
+
+    after Label25:searchInternal(CursorImpl dup, DatabaseEntry key, DatabaseEntry data,
+	    LockType searchLockType, LockType advanceLockType, SearchMode searchMode, boolean advanceAfterRangeSearch)
+	    throws DatabaseException {
+
+	try {
+	    //original(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,
+		    keyChange);
+	} finally {
+	    cursorImpl.releaseBINs();
+	    if (status != OperationStatus.SUCCESS && dup != cursorImpl) {
+		dup.releaseBINs();
+	    }
+	}
+    }
+
+    after Label26() throws DatabaseException {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label27() throws DatabaseException {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label28() throws DatabaseException {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label29() throws DatabaseException {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label30() throws DatabaseException {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label31() throws DatabaseException {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label32(CursorImpl origCursor) throws DatabaseException {
+	origCursor.releaseBINs();
+	//original(origCursor);
+    }
+
+    after Label33(CursorImpl origCursor) throws DatabaseException {
+	origCursor.latchBINs();
+	//original(origCursor);
+    }
+
+    after Label34(CursorImpl origCursor) throws DatabaseException {
+	origCursor.releaseBINs();
+	//original(origCursor);
+    }
+
+    after Label35(CursorImpl origCursor) throws DatabaseException {
+	origCursor.latchBINs();
+	//original(origCursor);
+    }
+
+}

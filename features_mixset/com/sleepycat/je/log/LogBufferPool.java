@@ -13,9 +13,12 @@ import java.nio.ByteBuffer;
 import java.io.IOException;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogBufferPool.ump"
 // line 3 "../../../../Statistics_LogBufferPool.ump"
+// line 3 "../../../../Latches_LogBufferPool.ump"
 public class LogBufferPool
 {
 
@@ -157,12 +160,14 @@ nCacheMiss++;
 
   // line 128 "../../../../LogBufferPool.ump"
    protected void hook485(EnvironmentImpl envImpl) throws DatabaseException{
-    
+    bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
+	original(envImpl);
   }
 
   // line 131 "../../../../LogBufferPool.ump"
    protected void hook486() throws DatabaseException{
-    
+    bufferPoolLatch.acquire();
+	original();
   }
 
   // line 134 "../../../../LogBufferPool.ump"
@@ -196,7 +201,8 @@ nCacheMiss++;
 
   // line 162 "../../../../LogBufferPool.ump"
    protected void hook488() throws IOException,DatabaseException{
-    
+    currentWriteBuffer.latchForWrite();
+	original();
   }
 
 
@@ -221,17 +227,20 @@ nCacheMiss++;
    */
   // line 183 "../../../../LogBufferPool.ump"
    protected void hook490() throws IOException,DatabaseException{
-    
+    bufferPoolLatch.release();
+	original();
   }
 
   // line 186 "../../../../LogBufferPool.ump"
    protected void hook491() throws IOException,DatabaseException{
-    
+    bufferPoolLatch.acquire();
+	original();
   }
 
   // line 189 "../../../../LogBufferPool.ump"
    protected void hook492(LogBuffer latchedBuffer) throws IOException,DatabaseException{
-    
+    latchedBuffer.release();
+	original(latchedBuffer);
   }
 
   // line 192 "../../../../LogBufferPool.ump"
@@ -248,12 +257,14 @@ nCacheMiss++;
 
   // line 203 "../../../../LogBufferPool.ump"
    protected void hook494(LogBuffer latchedBuffer) throws IOException,DatabaseException{
-    
+    latchedBuffer.release();
+	original(latchedBuffer);
   }
 
   // line 206 "../../../../LogBufferPool.ump"
    protected void hook495() throws IOException,DatabaseException{
-    
+    bufferPoolLatch.acquire();
+	original();
   }
 
   // line 12 "../../../../Statistics_LogBufferPool.ump"
@@ -282,6 +293,17 @@ nCacheMiss++;
 			stats.setNLogBuffers(nLogBuffers);
 			stats.setBufferBytes(bufferBytes);
   }
+
+  // line 43 "../../../../Latches_LogBufferPool.ump"
+   protected LogBuffer hook489(long lsn, LogBuffer foundBuffer) throws DatabaseException{
+    bufferPoolLatch.acquire();
+	try {
+	    foundBuffer = original(lsn, foundBuffer);
+	} finally {
+	    bufferPoolLatch.releaseIfOwner();
+	}
+	return foundBuffer;
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -305,6 +327,8 @@ nCacheMiss++;
   private long nNotResident = 0 ;
 // line 9 "../../../../Statistics_LogBufferPool.ump"
   private long nCacheMiss = 0 ;
+// line 7 "../../../../Latches_LogBufferPool.ump"
+  private Latch bufferPoolLatch ;
 
   
 }

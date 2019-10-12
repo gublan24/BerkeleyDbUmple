@@ -17,6 +17,7 @@ import java.io.IOException;
 // line 3 "../../../../FileReader_static.ump"
 // line 3 "../../../../Checksum_FileReader.ump"
 // line 3 "../../../../Checksum_FileReader_inner.ump"
+// line 3 "../../../../Latches_FileReader.ump"
 public abstract class FileReader
 {
 
@@ -431,12 +432,16 @@ if (doValidateChecksum) {
 
   // line 403 "../../../../FileReader.ump"
    protected void hook470(FileHandle fileHandle) throws DatabaseException,EOFException,IOException{
-    
+    fileHandle.release();
+	original(fileHandle);
   }
 
   // line 406 "../../../../FileReader.ump"
    protected void hook471(FileHandle fileHandle) throws DatabaseException,EOFException{
-    
+    if (fileHandle != null) {
+	    fileHandle.release();
+	}
+	original(fileHandle);
   }
 
   // line 409 "../../../../FileReader.ump"
@@ -490,7 +495,6 @@ if (doValidateChecksum) {
   
   
   @MethodObject
-    @MethodObject
   // line 6 "../../../../FileReader_static.ump"
   // line 4 "../../../../Checksum_FileReader_inner.ump"
   public static class FileReader_readNextEntry

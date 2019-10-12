@@ -28,6 +28,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Evictor_BIN.ump"
 // line 3 "../../../../INCompressor_BIN.ump"
 // line 3 "../../../../Verifier_BIN.ump"
+// line 3 "../../../../Latches_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -627,22 +628,26 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
 
   // line 515 "../../../../BIN.ump"
    protected void hook603(Node child) throws DatabaseException{
-    
+    ((IN) child).releaseLatch();
+	original(child);
   }
 
   // line 518 "../../../../BIN.ump"
    protected void hook604() throws DatabaseException{
-    
+    releaseLatch();
+	original();
   }
 
   // line 521 "../../../../BIN.ump"
    protected void hook605() throws DatabaseException{
-    
+    releaseLatch();
+	original();
   }
 
   // line 524 "../../../../BIN.ump"
    protected void hook606() throws DatabaseException{
-    
+    releaseLatch();
+	original();
   }
 
   // line 527 "../../../../BIN.ump"
@@ -671,7 +676,10 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
 
   // line 550 "../../../../BIN.ump"
    protected void hook608(boolean needToLatch) throws DatabaseException{
-    
+    if (needToLatch) {
+	    latch();
+	}
+	original(needToLatch);
   }
 
 

@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../BINDelta.ump"
+// line 3 "../../../../Latches_BINDelta.ump"
 public class BINDelta implements LoggableObject,LogReadable
 {
 
@@ -233,12 +234,14 @@ public class BINDelta implements LoggableObject,LogReadable
 
   // line 183 "../../../../BINDelta.ump"
    protected void hook611(BIN fullBIN) throws DatabaseException{
-    
+    fullBIN.releaseLatch();
+	original(fullBIN);
   }
 
   // line 186 "../../../../BINDelta.ump"
    protected void hook612(BIN fullBIN) throws DatabaseException{
-    
+    fullBIN.latch();
+	original(fullBIN);
   }
   
   //------------------------

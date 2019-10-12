@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 // line 3 "../../../../PreloadLSNTreeWalker.ump"
 // line 3 "../../../../PreloadLSNTreeWalker_static.ump"
+// line 3 "../../../../Latches_PreloadLSNTreeWalker.ump"
 public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 {
 
@@ -82,6 +83,11 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 	    throw new ReturnObject(null);
 	}
 	throw new ReturnObject(in.fetchTarget(index));
+  }
+
+  // line 6 "../../../../Latches_PreloadLSNTreeWalker.ump"
+   protected void releaseRootIN(IN root) throws DatabaseException{
+    root.releaseLatch();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

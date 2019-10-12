@@ -45,6 +45,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Truncate_DbTree.ump"
 // line 3 "../../../../DeleteOp_DbTree.ump"
 // line 3 "../../../../Verifier_DbTree.ump"
+// line 3 "../../../../Latches_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -665,37 +666,44 @@ idCursor.setAllowEviction(allowEviction);
 
   // line 642 "../../../../DbTree.ump"
    protected void hook299(CursorImpl cursor) throws DatabaseException{
-    
+    cursor.releaseBINs();
+	original(cursor);
   }
 
   // line 645 "../../../../DbTree.ump"
    protected void hook300(NameLockResult result) throws DatabaseException,UnsupportedEncodingException{
-    
+    result.nameCursor.releaseBIN();
+	original(result);
   }
 
   // line 648 "../../../../DbTree.ump"
    protected void hook301(NameLockResult result) throws DatabaseException{
-    
+    result.nameCursor.releaseBIN();
+	original(result);
   }
 
   // line 651 "../../../../DbTree.ump"
    protected void hook302(NameLockResult result) throws DatabaseException{
-    
+    result.nameCursor.releaseBIN();
+	original(result);
   }
 
   // line 654 "../../../../DbTree.ump"
    protected void hook303(CursorImpl nameCursor) throws DatabaseException,UnsupportedEncodingException{
-    
+    nameCursor.releaseBIN();
+	original(nameCursor);
   }
 
   // line 657 "../../../../DbTree.ump"
    protected void hook304(CursorImpl idCursor) throws DatabaseException{
-    
+    idCursor.releaseBIN();
+	original(idCursor);
   }
 
   // line 660 "../../../../DbTree.ump"
    protected void hook305(CursorImpl cursor) throws DatabaseException{
-    
+    cursor.releaseBINs();
+	original(cursor);
   }
 
 

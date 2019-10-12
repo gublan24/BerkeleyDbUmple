@@ -24,6 +24,8 @@ import java.io.RandomAccessFile;
 import java.io.IOException;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogManager.ump"
 // line 3 "../../../../LogManager_static.ump"
@@ -31,6 +33,7 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../Statistics_LogManager_inner.ump"
 // line 3 "../../../../Checksum_LogManager.ump"
 // line 3 "../../../../Checksum_LogManager_inner.ump"
+// line 3 "../../../../Latches_LogManager.ump"
 public class LogManager
 {
 
@@ -455,7 +458,8 @@ nTempBufferWrites++;
 
   // line 417 "../../../../LogManager.ump"
    protected void hook502(EnvironmentImpl envImpl) throws DatabaseException{
-    
+    logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
+	original(envImpl);
   }
 
 
@@ -498,12 +502,22 @@ nTempBufferWrites++;
    public boolean getChecksumOnRead(){
     return doChecksumOnRead;
   }
+
+  // line 16 "../../../../Latches_LogManager.ump"
+   protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer, LogBuffer useLogBuffer) throws IOException,DatabaseException,Exception{
+    useLogBuffer.latchForWrite();
+	try {
+	    usedTemporaryBuffer = original(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer, useLogBuffer);
+	} finally {
+	    useLogBuffer.release();
+	}
+	return usedTemporaryBuffer;
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
-  @MethodObject
   // line 4 "../../../../LogManager_static.ump"
   // line 4 "../../../../Statistics_LogManager_inner.ump"
   // line 4 "../../../../Checksum_LogManager_inner.ump"
@@ -676,6 +690,8 @@ nTempBufferWrites++;
   private boolean doChecksumOnRead ;
 // line 9 "../../../../Checksum_LogManager.ump"
   protected static ChecksumValidator validator ;
+// line 7 "../../../../Latches_LogManager.ump"
+  protected Latch logWriteLatch ;
 
   
 }

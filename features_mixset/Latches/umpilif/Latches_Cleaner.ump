@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.cleaner;
+
+class Cleaner
+{
+    after Label95 : processPendingLN(LN , DatabaseImpl , byte , byte , TreeLocation ){
+
+			if (parentDIN != null) {
+					parentDIN.releaseLatchIfOwner();
+			}
+			if (bin != null) {
+					bin.releaseLatchIfOwner();
+			}
+			//original(bin, parentDIN);
+				}
+
+}

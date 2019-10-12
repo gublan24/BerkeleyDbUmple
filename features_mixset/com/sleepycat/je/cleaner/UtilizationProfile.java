@@ -50,6 +50,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Evictor_UtilizationProfile.ump"
 // line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
 // line 3 "../../../../DeleteOp_UtilizationProfile.ump"
+// line 3 "../../../../Latches_UtilizationProfile.ump"
+// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -613,12 +615,17 @@ b |= db.isDeleted();
 
   // line 674 "../../../../UtilizationProfile.ump"
    protected void hook178(CursorImpl cursor) throws DatabaseException{
-    
+    cursor.releaseBINs();
+	original(cursor);
   }
 
   // line 677 "../../../../UtilizationProfile.ump"
    protected void hook179(CursorImpl cursor) throws DatabaseException{
-    
+    if (cursor != null) {
+	    cursor.releaseBINs();
+	    cursor.close();
+	}
+	original(cursor);
   }
 
   // line 680 "../../../../UtilizationProfile.ump"
@@ -902,9 +909,11 @@ b |= db.isDeleted();
   @MethodObject
     @MethodObject
     @MethodObject
+    @MethodObject
   // line 89 "../../../../UtilizationProfile_static.ump"
   // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
+  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1031,27 +1040,32 @@ b |= db.isDeleted();
   
     // line 191 "../../../../UtilizationProfile_static.ump"
      protected void hook181() throws DatabaseException{
-      
+      cursor.releaseBIN();
+          original();
     }
   
     // line 193 "../../../../UtilizationProfile_static.ump"
      protected void hook182() throws DatabaseException{
-      
+      cursor.latchBIN();
+          original();
     }
   
     // line 195 "../../../../UtilizationProfile_static.ump"
      protected void hook183() throws DatabaseException{
-      
+      cursor.releaseBIN();
+          original();
     }
   
     // line 197 "../../../../UtilizationProfile_static.ump"
      protected void hook184() throws DatabaseException{
-      
+      cursor.latchBIN();
+          original();
     }
   
     // line 199 "../../../../UtilizationProfile_static.ump"
      protected void hook185() throws DatabaseException{
-      
+      cursor.releaseBINs();
+          original();
     }
     
     //------------------------

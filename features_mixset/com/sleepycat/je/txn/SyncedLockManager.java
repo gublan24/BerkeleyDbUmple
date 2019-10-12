@@ -11,6 +11,7 @@ import com.sleepycat.je.DatabaseException;
 import java.util.Set;
 
 // line 3 "../../../../SyncedLockManager.ump"
+// line 3 "../../../../Latches_SyncedLockManager.ump"
 public class SyncedLockManager extends LockManager
 {
 

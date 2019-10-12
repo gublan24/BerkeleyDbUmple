@@ -1,0 +1,14 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    after Label526:flushIN(CheckpointReference , Map , int , boolean , boolean , long ) { 
+        result.parent.releaseLatch()
+    }
+
+    after Label527_1:logTargetAndUpdateParent(IN , IN , int , boolean , long , boolean ) {
+	    target.releaseLatch(); 
+     }
+
+
+}

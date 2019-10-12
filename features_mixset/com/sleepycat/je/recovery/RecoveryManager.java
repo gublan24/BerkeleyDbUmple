@@ -46,6 +46,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.IOException;
+import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../../RecoveryManager.ump"
 // line 3 "../../../../RecoveryManager_static.ump"
@@ -54,6 +55,7 @@ import java.io.IOException;
 // line 3 "../../../../Evictor_RecoveryManager.ump"
 // line 3 "../../../../INCompressor_RecoveryManager.ump"
 // line 3 "../../../../Checksum_RecoveryManager.ump"
+// line 3 "../../../../Latches_RecoveryManager.ump"
 public class RecoveryManager
 {
 
@@ -1186,7 +1188,8 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
 
   // line 1067 "../../../../RecoveryManager.ump"
    protected void hook585(IN in) throws DatabaseException{
-    
+    in.latch();
+	original(in);
   }
 
   // line 1072 "../../../../RecoveryManager.ump"
@@ -1197,27 +1200,42 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
 
   // line 1077 "../../../../RecoveryManager.ump"
    protected void hook587(IN inFromLog, long logLsn) throws DatabaseException{
-    
+    inFromLog.releaseLatchIfOwner();
+	assert (LatchSupport.countLatchesHeld() == 0) : LatchSupport.latchesHeldToString() + "LSN = "
+		+ DbLsn.toString(logLsn) + " inFromLog = " + inFromLog.getNodeId();
+	original(inFromLog, logLsn);
   }
 
   // line 1080 "../../../../RecoveryManager.ump"
    protected void hook588(SearchResult result) throws DatabaseException{
-    
+    if (result.parent != null) {
+	    result.parent.releaseLatch();
+	}
+	original(result);
   }
 
   // line 1083 "../../../../RecoveryManager.ump"
    protected void hook589(IN parent) throws DatabaseException{
-    
+    if (parent != null) {
+	    parent.releaseLatch();
+	}
+	original(parent);
   }
 
   // line 1086 "../../../../RecoveryManager.ump"
    protected void hook590(SearchResult result) throws DatabaseException{
-    
+    if (result.parent != null) {
+	    result.parent.releaseLatch();
+	}
+	original(result);
   }
 
   // line 1089 "../../../../RecoveryManager.ump"
    protected void hook591(TreeLocation location) throws DatabaseException{
-    
+    if (location.bin != null) {
+	    location.bin.releaseLatchIfOwner();
+	}
+	original(location);
   }
 
   // line 1093 "../../../../RecoveryManager.ump"

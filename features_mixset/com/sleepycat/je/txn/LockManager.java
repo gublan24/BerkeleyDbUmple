@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.HashSet;
 import java.util.HashMap;
 import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../LockManager.ump"
@@ -27,6 +29,7 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../MemoryBudget_LockManager.ump"
 // line 3 "../../../../Statistics_LockManager.ump"
 // line 3 "../../../../Statistics_LockManager_inner.ump"
+// line 3 "../../../../Latches_LockManager.ump"
 public abstract class LockManager implements EnvConfigObserver
 {
 
@@ -690,17 +693,21 @@ if (info.getLockType().isWriteLock()) {
    */
   // line 585 "../../../../LockManager.ump"
    protected void hook770() throws DatabaseException{
-    
+    lockTableLatches = new Latch[nLockTables];
+	original();
   }
 
   // line 588 "../../../../LockManager.ump"
    protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException{
-    
+    lockTableLatches[i] = LatchSupport.makeLatch("Lock Table " + i, envImpl);
+	original(envImpl, i);
   }
 
   // line 591 "../../../../LockManager.ump"
    protected void hook772(boolean nonBlockingRequest) throws DeadlockException,DatabaseException{
-    
+    assert checkNoLatchesHeld(nonBlockingRequest) : LatchSupport.countLatchesHeld()
+		+ " latches held while trying to lock, lock table =" + LatchSupport.latchesHeldToString();
+	original(nonBlockingRequest);
   }
 
   // line 594 "../../../../LockManager.ump"
@@ -751,6 +758,15 @@ if (info.getLockType().isWriteLock()) {
   // line 14 "../../../../Statistics_LockManager.ump"
    public LockStats lockStat(StatsConfig config) throws DatabaseException{
     return new LockManager_lockStat(this, config).execute();
+  }
+
+  // line 10 "../../../../Latches_LockManager.ump"
+   private boolean checkNoLatchesHeld(boolean nonBlockingRequest){
+    if (nonBlockingRequest) {
+	    return true;
+	} else {
+	    return (LatchSupport.countLatchesHeld() == 0);
+	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -946,6 +962,8 @@ if (info.getLockType().isWriteLock()) {
     nWaits++;
 			//original();
   }
+// line 7 "../../../../Latches_LockManager.ump"
+  protected Latch[] lockTableLatches ;
 
   
 }

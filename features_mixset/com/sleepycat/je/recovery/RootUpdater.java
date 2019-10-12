@@ -12,6 +12,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.tree.*;
 
 // line 3 "../../../../RootUpdater.ump"
+// line 3 "../../../../Latches_RootUpdater.ump"
 public class RootUpdater implements WithRootLatched
 {
 
@@ -79,7 +80,8 @@ public class RootUpdater implements WithRootLatched
 
   // line 64 "../../../../RootUpdater.ump"
    protected void hook600() throws DatabaseException{
-    
+    inFromLog.releaseLatch();
+	original();
   }
   
   //------------------------

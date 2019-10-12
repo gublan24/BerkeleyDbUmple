@@ -6,9 +6,11 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.DatabaseException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import com.sleepycat.je.latch.LatchNotHeldException;
 import com.sleepycat.je.cleaner.*;
 
 // line 3 "../../../../TreeIterator.ump"
+// line 3 "../../../../Latches_TreeIterator.ump"
 public class TreeIterator extends Iterator
 {
 
@@ -90,27 +92,46 @@ public class TreeIterator extends Iterator
 
   // line 66 "../../../../TreeIterator.ump"
    protected void hook755() throws DatabaseException{
-    
+    if (nextBin != null) {
+	    nextBin.releaseLatch();
+	}
+	original();
   }
 
   // line 69 "../../../../TreeIterator.ump"
    protected void hook756() throws DatabaseException{
-    
+    if (nextBin != null) {
+	    nextBin.latch();
+	}
+	original();
   }
 
   // line 72 "../../../../TreeIterator.ump"
    protected void hook757(){
-    
+    try {
+	    if (nextBin != null) {
+		nextBin.releaseLatch();
+	    }
+	} catch (LatchNotHeldException e) {
+	}
+	original();
   }
 
   // line 75 "../../../../TreeIterator.ump"
    protected void hook758() throws DatabaseException{
-    
+    nextBin.latch();
+	original();
   }
 
   // line 78 "../../../../TreeIterator.ump"
    protected void hook759(){
-    
+    try {
+	    if (nextBin != null) {
+		nextBin.releaseLatch();
+	    }
+	} catch (LatchNotHeldException e) {
+	}
+	original();
   }
   
   //------------------------

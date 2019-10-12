@@ -9,9 +9,12 @@ import com.sleepycat.je.DatabaseException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../DaemonThread.ump"
+// line 3 "../../../../Latches_DaemonThread.ump"
 public class DaemonThread implements DaemonRunner,Runnable
 {
 
@@ -249,17 +252,20 @@ public class DaemonThread implements DaemonRunner,Runnable
 
   // line 223 "../../../../DaemonThread.ump"
    protected void hook856(String name, EnvironmentImpl env){
-    
+    workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
+	original(name, env);
   }
 
   // line 226 "../../../../DaemonThread.ump"
    protected void hook857() throws InterruptedException,Exception{
-    
+    workQueueLatch.release();
+	original();
   }
 
   // line 229 "../../../../DaemonThread.ump"
    protected void hook858() throws InterruptedException,Exception{
-    
+    workQueueLatch.acquire();
+	original();
   }
   
   //------------------------
@@ -290,6 +296,8 @@ public class DaemonThread implements DaemonRunner,Runnable
   private boolean running = false ;
 // line 199 "../../../../DaemonThread.ump"
   abstract protected void onWakeup() throws DatabaseException ;
+// line 7 "../../../../Latches_DaemonThread.ump"
+  protected Latch workQueueLatch ;
 
   
 }

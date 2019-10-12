@@ -96,7 +96,7 @@ class BIN
 	if (child.canBeAncestor(targetContainsDuplicates)) {
 	    if (targetContainsDuplicates && targetIsRoot) {
 		long childNid = child.getNodeId();
-		this.hook603(child);
+		Label603: //this.hook603(child);
 		result.keepSearching = false;
 		if (childNid == targetNodeId) {
 		    result.exactParentFound = true;
@@ -105,12 +105,12 @@ class BIN
 		}
 		if (requireExactMatch && !result.exactParentFound) {
 		    result.parent = null;
-		    this.hook604();
+		    Label604: //this.hook604();
 		} else {
 		    result.parent = this;
 		}
 	    } else {
-		this.hook605();
+		Label605: //this.hook605();
 		result.parent = (IN) child;
 	    }
 	} else {
@@ -119,7 +119,7 @@ class BIN
 	    if (!requireExactMatch && targetContainsDuplicates) {
 		result.parent = this;
 	    } else {
-		this.hook606();
+		Label606: //this.hook606();
 		result.parent = null;
 	    }
 	}
@@ -433,7 +433,31 @@ Label610:
 	    int validIndex = 0;
 	    int numValidEntries = 0;
 	    boolean needToLatch = false;
-	    this.hook607(validIndex, numValidEntries, needToLatch);
+	    Label607: //this.hook607(validIndex, numValidEntries, needToLatch);
+      label608: //this.hook608(needToLatch);
+				for (int i = 0; i < getNEntries(); i++) {
+					if (!isEntryKnownDeleted(i)) {
+							numValidEntries++;
+							validIndex = i;
+					}
+				}
+				if (numValidEntries > 1) {
+						throw new ReturnBoolean(false);
+				} 
+				else {
+						if (nCursors() > 0) {
+					throw new ReturnBoolean(false);
+						}
+						if (numValidEntries == 1) {
+							Node child = fetchTarget(validIndex);
+							throw new ReturnBoolean(child != null && child.isValidForDelete());
+						} 
+						else {
+									throw new ReturnBoolean(true);
+						}
+				}
+//End hook607
+Label607_1:
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
@@ -511,8 +535,8 @@ Label610:
 	}
     }
 
-    protected void hook603(Node child) throws DatabaseException {
-    }
+  //  protected void hook603(Node child) throws DatabaseException {
+  //  }
 
     protected void hook604() throws DatabaseException {
     }
@@ -523,28 +547,30 @@ Label610:
     protected void hook606() throws DatabaseException {
     }
 
-    protected void hook607(int validIndex, int numValidEntries, boolean needToLatch) throws DatabaseException {
-	this.hook608(needToLatch);
-	for (int i = 0; i < getNEntries(); i++) {
-	    if (!isEntryKnownDeleted(i)) {
-		numValidEntries++;
-		validIndex = i;
-	    }
-	}
-	if (numValidEntries > 1) {
-	    throw new ReturnBoolean(false);
-	} else {
-	    if (nCursors() > 0) {
-		throw new ReturnBoolean(false);
-	    }
-	    if (numValidEntries == 1) {
-		Node child = fetchTarget(validIndex);
-		throw new ReturnBoolean(child != null && child.isValidForDelete());
-	    } else {
-		throw new ReturnBoolean(true);
-	    }
-	}
-    }
+ //   protected void hook607(int validIndex, int numValidEntries, boolean needToLatch) throws DatabaseException {
+//				label608: //this.hook608(needToLatch);
+//				for (int i = 0; i < getNEntries(); i++) {
+//					if (!isEntryKnownDeleted(i)) {
+//							numValidEntries++;
+//							validIndex = i;
+//					}
+//				}
+//				if (numValidEntries > 1) {
+//						throw new ReturnBoolean(false);
+//				} 
+//				else {
+//						if (nCursors() > 0) {
+//					throw new ReturnBoolean(false);
+//						}
+//						if (numValidEntries == 1) {
+//							Node child = fetchTarget(validIndex);
+//							throw new ReturnBoolean(child != null && child.isValidForDelete());
+//						} 
+//						else {
+//									throw new ReturnBoolean(true);
+//						}
+//				}
+ //   }
 
     protected void hook608(boolean needToLatch) throws DatabaseException {
     }

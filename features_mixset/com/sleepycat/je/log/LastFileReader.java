@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.File;
 
 // line 3 "../../../../LastFileReader.ump"
+// line 3 "../../../../Latches_LastFileReader.ump"
 public class LastFileReader extends FileReader
 {
 
@@ -223,12 +224,16 @@ public class LastFileReader extends FileReader
 
   // line 179 "../../../../LastFileReader.ump"
    protected void hook477(FileHandle fileHandle) throws IOException,DatabaseException{
-    
+    fileHandle.release();
+	original(fileHandle);
   }
 
   // line 182 "../../../../LastFileReader.ump"
    protected void hook478(FileHandle fileHandle) throws IOException,DatabaseException{
-    
+    if (fileHandle != null) {
+	    fileHandle.release();
+	}
+	original(fileHandle);
   }
   
   //------------------------

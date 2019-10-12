@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.tree;
+
+class BINDelta
+{
+    after Label611: reconstituteBIN(EnvironmentImpl ) {
+
+	fullBIN.releaseLatch();
+	//original(fullBIN);
+    }
+
+    after Label612: reconstituteBIN(EnvironmentImpl ) {
+	fullBIN.latch();
+	//original(fullBIN);
+    }
+
+}
