@@ -45,7 +45,7 @@ class FileProcessor {
         dbCache=new HashMap();
         try {
           reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
-          this.hook137();
+          Label137: //this.hook137();
           dbMapTree=_this.env.getDbMapTree();
           location=new TreeLocation();
           nProcessedLNs=0;

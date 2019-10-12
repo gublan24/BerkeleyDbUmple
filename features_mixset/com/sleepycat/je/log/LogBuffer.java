@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 // line 3 "../../../../LogBuffer.ump"
 // line 3 "../../../../DiskFullErro_LogBuffer.ump"
 // line 3 "../../../../IO_LogBuffer.ump"
+// line 3 "../../../../NIO_LogBuffer.ump"
 public class LogBuffer implements LogSource
 {
 
@@ -34,7 +35,10 @@ public class LogBuffer implements LogSource
 
   // line 19 "../../../../LogBuffer.ump"
   public  LogBuffer(int capacity, EnvironmentImpl env) throws DatabaseException{
-    this.hook481(capacity);
+    Label481:
+buffer = ByteBuffer.allocateDirect(capacity);
+			//original(capacity);
+ //this.hook481(capacity);
         Label482:
 buffer = ByteBuffer.allocate(capacity);
 			//original(capacity);
@@ -181,13 +185,9 @@ buffer = ByteBuffer.allocate(capacity);
     
   }
 
-  // line 127 "../../../../LogBuffer.ump"
-   protected void hook481(int capacity) throws DatabaseException{
-    
-  }
-
 
   /**
+   * protected void hook481(int capacity) throws DatabaseException {}
    * protected void hook482(int capacity) throws DatabaseException {}
    */
   // line 131 "../../../../LogBuffer.ump"

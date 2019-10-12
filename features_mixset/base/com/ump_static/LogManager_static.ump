@@ -11,7 +11,7 @@ class LogManager {
         try {
           fileOffset=DbLsn.getFileOffset(lsn);
           entryBuffer=logSource.getBytes(fileOffset);
-          this.hook507();
+          Label507: //this.hook507();
           loggableType=entryBuffer.get();
           version=entryBuffer.get();
           entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
@@ -20,7 +20,7 @@ class LogManager {
             entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
             Label508: //this.hook508();
           }
-          this.hook506();
+          Label506: //this.hook506();
           assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
           logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
           logEntry.readEntry(entryBuffer,itemSize,version,true);
@@ -54,11 +54,11 @@ class LogManager {
       protected byte version;
       protected int itemSize;
       protected LogEntry logEntry;
-      protected void hook506() throws DatabaseException, ClosedChannelException, Exception {
-      }
-      protected void hook507() throws DatabaseException, ClosedChannelException, Exception {
-      }
-      protected void hook508() throws DatabaseException, ClosedChannelException, Exception {
-      }
+    //  protected void hook506() throws DatabaseException, ClosedChannelException, Exception {
+     // }
+    //  protected void hook507() throws DatabaseException, ClosedChannelException, Exception {
+    //  }
+    //  protected void hook508() throws DatabaseException, ClosedChannelException, Exception {
+  //    }
     }
 }

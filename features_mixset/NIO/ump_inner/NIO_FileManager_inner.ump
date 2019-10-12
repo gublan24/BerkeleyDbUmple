@@ -1,0 +1,26 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/NIO/com/sleepycat/je/log/FileManager.java
+namespace com.sleepycat.je.log;
+class FileManager {
+   static class FileManager_writeToFile {
+      after Label455:execute(){ 
+
+        channel=file.getChannel();
+        //original();
+      }
+      after Label445:execute(){ 
+        totalBytesWritten=channel.write(data,destOffset);
+        //original();
+      }
+    }
+   static class FileManager_readFromFile {
+      before execute()  {
+        channel=file.getChannel();
+        //original();
+      }
+      after Label446: execute()  {
+
+        channel.read(readBuffer,offset);
+        //original();
+      }
+    }
+}

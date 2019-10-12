@@ -1,0 +1,11 @@
+//original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Checksum/com/sleepycat/je/cleaner/FileProcessor.java
+namespace com.sleepycat.je.cleaner;
+class FileProcessor {
+   static class FileProcessor_processFile {
+      after Label137: execute() {
+
+        reader.setAlwaysValidateChecksum(true);
+        //original();
+      }
+    }
+}

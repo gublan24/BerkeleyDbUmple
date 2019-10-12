@@ -15,6 +15,8 @@ import java.io.IOException;
 
 // line 3 "../../../../FileReader.ump"
 // line 3 "../../../../FileReader_static.ump"
+// line 3 "../../../../Checksum_FileReader.ump"
+// line 3 "../../../../Checksum_FileReader_inner.ump"
 public abstract class FileReader
 {
 
@@ -46,7 +48,10 @@ public abstract class FileReader
    public  FileReader(EnvironmentImpl env, int readBufferSize, boolean forward, long startLsn, Long singleFileNumber, long endOfFileLsn, long finishLsn) throws IOException,DatabaseException{
     this.env = env;
 	this.fileManager = env.getFileManager();
-	this.hook473(env);
+	Label473:
+this.doValidateChecksum = env.getLogManager().getChecksumOnRead();
+        //original(env);
+ //this.hook473(env);
 	this.singleFile = (singleFileNumber != null);
 	this.forward = forward;
 	readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -58,7 +63,12 @@ public abstract class FileReader
 	this.finishLsn = finishLsn;
 	initStartingPosition(endOfFileLsn, singleFileNumber);
 	nRead = 0;
-	this.hook472();
+	Label472:
+if (doValidateChecksum) {
+            cksumValidator = new ChecksumValidator();
+        }
+        ////original();
+ //this.hook472();
 	anticipateChecksumErrors = false;
   }
 
@@ -438,13 +448,51 @@ public abstract class FileReader
    protected void hook473(EnvironmentImpl env) throws IOException,DatabaseException{
     
   }
+
+
+  /**
+   * 
+   * Whether to always validate the checksum, even for non-target entries.
+   */
+  // line 15 "../../../../Checksum_FileReader.ump"
+   public void setAlwaysValidateChecksum(boolean validate){
+    alwaysValidateChecksum = validate;
+  }
+
+
+  /**
+   * 
+   * Reset the checksum and add the header bytes. This method must be called with the entry header data at the buffer mark.
+   */
+  // line 22 "../../../../Checksum_FileReader.ump"
+   private void startChecksum(ByteBuffer dataBuffer) throws DatabaseException{
+    cksumValidator.reset();
+        int entryStart = threadSafeBufferPosition(dataBuffer);
+        dataBuffer.reset();
+        cksumValidator.update(env, dataBuffer, LogManager.HEADER_CONTENT_BYTES(), anticipateChecksumErrors);
+        threadSafeBufferPosition(dataBuffer, entryStart);
+  }
+
+
+  /**
+   * 
+   * Add the entry bytes to the checksum and check the value. This method must be called with the buffer positioned at the start of the entry.
+   */
+  // line 33 "../../../../Checksum_FileReader.ump"
+   private void validateChecksum(ByteBuffer entryBuffer) throws DatabaseException{
+    cksumValidator.update(env, entryBuffer, currentEntrySize, anticipateChecksumErrors);
+        cksumValidator.validate(env, currentEntryChecksum, readBufferFileNum, currentEntryOffset,
+            anticipateChecksumErrors);
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
   @MethodObject
+    @MethodObject
   // line 6 "../../../../FileReader_static.ump"
+  // line 4 "../../../../Checksum_FileReader_inner.ump"
   public static class FileReader_readNextEntry
   {
   
@@ -480,15 +528,29 @@ public abstract class FileReader
               dataBuffer=_this.readData(LogManager.HEADER_BYTES,true);
               _this.readHeader(dataBuffer);
               isTargetEntry=_this.isTargetEntry(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
-              this.hook476();
+              Label476:
+  doValidate=_this.doValidateChecksum && (isTargetEntry || _this.alwaysValidateChecksum);
+          //original();
+   //this.hook476();
               collectData=isTargetEntry;
-              this.hook475();
+              Label475:
+  collectData|=doValidate;
+          if (doValidate) {
+            _this.startChecksum(dataBuffer);
+          }
+          //original();
+   //this.hook475();
               dataBuffer=_this.readData(_this.currentEntrySize,collectData);
               if (_this.forward) {
                 _this.currentEntryOffset=_this.nextEntryOffset;
                 _this.nextEntryOffset+=LogManager.HEADER_BYTES + _this.currentEntrySize;
               }
-              this.hook474();
+              Label474:
+  if (doValidate) {
+            _this.validateChecksum(dataBuffer);
+          }
+          //original();
+   //this.hook474();
               if (isTargetEntry) {
                 if (_this.processEntry(dataBuffer)) {
                   foundEntry=true;
@@ -504,30 +566,10 @@ public abstract class FileReader
             _this.eof=true;
           }
     catch (      DatabaseException e) {
-            this.hook468();
+            Label468: //this.hook468();
             throw e;
           }
           return foundEntry;
-    }
-  
-    // line 55 "../../../../FileReader_static.ump"
-     protected void hook468() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 57 "../../../../FileReader_static.ump"
-     protected void hook474() throws DatabaseException,IOException,EOFException{
-      
-    }
-  
-    // line 59 "../../../../FileReader_static.ump"
-     protected void hook475() throws DatabaseException,IOException,EOFException{
-      
-    }
-  
-    // line 61 "../../../../FileReader_static.ump"
-     protected void hook476() throws DatabaseException,IOException,EOFException{
-      
     }
     
     //------------------------
@@ -607,6 +649,12 @@ public abstract class FileReader
   {
     
   }
+// line 5 "../../../../Checksum_FileReader.ump"
+  protected ChecksumValidator cksumValidator ;
+// line 7 "../../../../Checksum_FileReader.ump"
+  private boolean doValidateChecksum ;
+// line 9 "../../../../Checksum_FileReader.ump"
+  private boolean alwaysValidateChecksum ;
 
   
 }

@@ -66,7 +66,7 @@ class FileReader
 	    long endOfFileLsn, long finishLsn) throws IOException, DatabaseException {
 	this.env = env;
 	this.fileManager = env.getFileManager();
-	this.hook473(env);
+	Label473: //this.hook473(env);
 	this.singleFile = (singleFileNumber != null);
 	this.forward = forward;
 	readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -78,7 +78,7 @@ class FileReader
 	this.finishLsn = finishLsn;
 	initStartingPosition(endOfFileLsn, singleFileNumber);
 	nRead = 0;
-	this.hook472();
+	Label472: //this.hook472();
 	anticipateChecksumErrors = false;
     }
 

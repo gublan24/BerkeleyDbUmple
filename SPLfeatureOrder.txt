@@ -22,9 +22,9 @@
         <feature name=""/>
         <feature name=""/>
         <feature name=""/>
-        <feature name="IO"/>
-        <feature name="ChunkedNIO"/>
-        <feature name="NIO"/>
+        <feature name=""/>
+        <feature name=""/>
+        <feature name=""/>
         <feature name="Checksum"/>
         <feature name="Latches"/>
         <feature name="LookAHEADCache"/>

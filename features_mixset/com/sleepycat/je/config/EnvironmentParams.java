@@ -20,6 +20,7 @@ import java.io.File;
 // line 3 "../../../../CPTime_EnvironmentParams.ump"
 // line 3 "../../../../CPBytes_EnvironmentParams.ump"
 // line 3 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
+// line 3 "../../../../Checksum_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -405,6 +406,9 @@ public class EnvironmentParams
   public static final IntConfigParam CHECKPOINTER_RETRY = new IntConfigParam("je.checkpointer.deadlockRetry",
 	    new Integer(0), new Integer(Integer.MAX_VALUE), new Integer(3), false,
 	    "# The number of times to retry a checkpoint if it runs into a deadlock.") ;
+// line 5 "../../../../Checksum_EnvironmentParams.ump"
+  public static final BooleanConfigParam LOG_CHECKSUM_READ = new BooleanConfigParam("je.log.checksumRead", true,
+	    false, "# If true, perform a checksum check when reading entries from log.") ;
 
   
 }

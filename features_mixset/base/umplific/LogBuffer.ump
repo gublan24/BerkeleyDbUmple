@@ -16,7 +16,7 @@ class LogBuffer {
     private long lastLsn;
 
     LogBuffer(int capacity, EnvironmentImpl env) throws DatabaseException {
-        this.hook481(capacity);
+        Label481: //this.hook481(capacity);
         Label482: //this.hook482(capacity);
             this.hook479(env);
         reinit();
@@ -124,7 +124,7 @@ class LogBuffer {
 
     protected void hook480() throws DatabaseException {}
 
-    protected void hook481(int capacity) throws DatabaseException {}
+ //   protected void hook481(int capacity) throws DatabaseException {}
 
   //  protected void hook482(int capacity) throws DatabaseException {}
 

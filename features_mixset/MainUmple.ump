@@ -45,4 +45,11 @@ use Statistics/umpilif/Master.ump;
 
 use IO/umpilif/Master.ump;
 
+use ChunkedNIO/umpilif/Master.ump;
+
+use NIO/umpilif/Master.ump;
+
+use Checksum/umpilif/Master.ump;
+
+
 //rename 's/^/DeleteOp_/' *

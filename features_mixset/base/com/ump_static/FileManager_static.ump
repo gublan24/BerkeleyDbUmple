@@ -81,8 +81,8 @@ class FileManager {
       }
       int execute() throws IOException, DatabaseException {
         totalBytesWritten=0;
-        this.hook455();
-        this.hook445();
+        Label455: //this.hook455();
+        Label445: //this.hook445();
         return totalBytesWritten;
       }
       protected FileManager _this;
@@ -96,10 +96,10 @@ class FileManager {
       protected int bytesWritten;
       protected int pos;
       protected int size;
-      protected void hook445() throws IOException, DatabaseException {
-      }
-      protected void hook455() throws IOException, DatabaseException {
-      }
+    //  protected void hook445() throws IOException, DatabaseException {
+     // }
+     // protected void hook455() throws IOException, DatabaseException {
+     // }
     }
   @MethodObject static class FileManager_readFromFile {
       FileManager_readFromFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer readBuffer,    long offset){
@@ -109,7 +109,7 @@ class FileManager {
         this.offset=offset;
       }
       void execute() throws IOException {
-        this.hook446();
+        Label446: //this.hook446();
       }
       protected FileManager _this;
       protected RandomAccessFile file;

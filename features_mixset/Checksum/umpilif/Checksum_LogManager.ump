@@ -1,0 +1,26 @@
+namespace com.sleepycat.je.log;
+
+class LogManager {
+
+    static final int HEADER_CHECKSUM_OFFSET = 0;
+
+    private boolean doChecksumOnRead;
+
+    protected static ChecksumValidator validator;
+
+    public boolean getChecksumOnRead() {
+        return doChecksumOnRead;
+    }
+
+    after Label504: HEADER_CONTENT_BYTES() {
+        r -= CHECKSUM_BYTES;
+        //return original(r);
+    }
+
+    after Label505:LogManager(EnvironmentImpl , boolean ) {
+
+        doChecksumOnRead = configManager.getBoolean(EnvironmentParams.LOG_CHECKSUM_READ);
+        //original(configManager);
+    }
+
+}

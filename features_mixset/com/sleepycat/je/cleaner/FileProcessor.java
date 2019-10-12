@@ -45,6 +45,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../DeleteOp_FileProcessor_inner.ump"
 // line 3 "../../../../Statistics_FileProcessor.ump"
 // line 3 "../../../../Statistics_FileProcessor_inner.ump"
+// line 3 "../../../../Checksum_FileProcessor.ump"
+// line 3 "../../../../Checksum_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -546,10 +548,12 @@ nINsMigratedThisRun++;
   
   @MethodObject
     @MethodObject
+    @MethodObject
   // line 28 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
   // line 16 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 23 "../../../../Statistics_FileProcessor_inner.ump"
+  // line 4 "../../../../Checksum_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -605,7 +609,10 @@ nINsMigratedThisRun++;
           dbCache=new HashMap();
           try {
             reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
-            this.hook137();
+            Label137:
+  reader.setAlwaysValidateChecksum(true);
+          //original();
+   //this.hook137();
             dbMapTree=_this.env.getDbMapTree();
             location=new TreeLocation();
             nProcessedLNs=0;

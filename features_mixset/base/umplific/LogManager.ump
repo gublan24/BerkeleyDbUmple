@@ -53,24 +53,24 @@ class LogManager
     private TestHook readHook;
 
     static int HEADER_CONTENT_BYTES() {
-	int r = HEADER_BYTES;
-	r = hook504(r);
-	return r;
+			int r = HEADER_BYTES;
+			Label504: //r = hook504(r);
+			return r;
     }
 
     /** 
      * There is a single log manager per database environment.
      */
     public LogManager(EnvironmentImpl envImpl, boolean readOnly) throws DatabaseException {
-	this.envImpl = envImpl;
-	this.fileManager = envImpl.getFileManager();
-	DbConfigManager configManager = envImpl.getConfigManager();
-	this.readOnly = readOnly;
-	logBufferPool = new LogBufferPool(fileManager, envImpl);
-	this.hook505(configManager);
-	this.hook502(envImpl);
-	readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-	this.hook498(envImpl);
+			this.envImpl = envImpl;
+			this.fileManager = envImpl.getFileManager();
+			DbConfigManager configManager = envImpl.getConfigManager();
+			this.readOnly = readOnly;
+			logBufferPool = new LogBufferPool(fileManager, envImpl);
+			Label505: //this.hook505(configManager);
+			this.hook502(envImpl);
+			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
+			this.hook498(envImpl);
     }
 
     public long getLastLsnAtRecovery() {
@@ -430,9 +430,9 @@ class LogManager
 //	return usedTemporaryBuffer;
 //    }
 
-    protected static int hook504(int r) {
-	return r;
-    }
+//    protected static int hook504(int r) {
+//	return r;
+ //   }
 
     protected void hook505(DbConfigManager configManager) throws DatabaseException {
     }

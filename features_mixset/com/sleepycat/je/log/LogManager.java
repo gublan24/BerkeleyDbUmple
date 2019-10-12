@@ -29,6 +29,8 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../LogManager_static.ump"
 // line 3 "../../../../Statistics_LogManager.ump"
 // line 3 "../../../../Statistics_LogManager_inner.ump"
+// line 3 "../../../../Checksum_LogManager.ump"
+// line 3 "../../../../Checksum_LogManager_inner.ump"
 public class LogManager
 {
 
@@ -53,8 +55,11 @@ public class LogManager
   // line 56 "../../../../LogManager.ump"
    static  int HEADER_CONTENT_BYTES(){
     int r = HEADER_BYTES;
-	r = hook504(r);
-	return r;
+			Label504:
+r -= CHECKSUM_BYTES;
+        //return original(r);
+ //r = hook504(r);
+			return r;
   }
 
 
@@ -65,14 +70,17 @@ public class LogManager
   // line 65 "../../../../LogManager.ump"
    public  LogManager(EnvironmentImpl envImpl, boolean readOnly) throws DatabaseException{
     this.envImpl = envImpl;
-	this.fileManager = envImpl.getFileManager();
-	DbConfigManager configManager = envImpl.getConfigManager();
-	this.readOnly = readOnly;
-	logBufferPool = new LogBufferPool(fileManager, envImpl);
-	this.hook505(configManager);
-	this.hook502(envImpl);
-	readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-	this.hook498(envImpl);
+			this.fileManager = envImpl.getFileManager();
+			DbConfigManager configManager = envImpl.getConfigManager();
+			this.readOnly = readOnly;
+			logBufferPool = new LogBufferPool(fileManager, envImpl);
+			Label505:
+doChecksumOnRead = configManager.getBoolean(EnvironmentParams.LOG_CHECKSUM_READ);
+        //original(configManager);
+ //this.hook505(configManager);
+			this.hook502(envImpl);
+			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
+			this.hook498(envImpl);
   }
 
   // line 77 "../../../../LogManager.ump"
@@ -465,12 +473,10 @@ nTempBufferWrites++;
    * }
    * return usedTemporaryBuffer;
    * }
+   * protected static int hook504(int r) {
+   * return r;
+   * }
    */
-  // line 434 "../../../../LogManager.ump"
-   protected static  int hook504(int r){
-    return r;
-  }
-
   // line 438 "../../../../LogManager.ump"
    protected void hook505(DbConfigManager configManager) throws DatabaseException{
     
@@ -487,13 +493,20 @@ nTempBufferWrites++;
 			logBufferPool.loadStats(config, stats);
 			Label497: //this.hook497(config, stats);
   }
+
+  // line 12 "../../../../Checksum_LogManager.ump"
+   public boolean getChecksumOnRead(){
+    return doChecksumOnRead;
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
+  @MethodObject
   // line 4 "../../../../LogManager_static.ump"
   // line 4 "../../../../Statistics_LogManager_inner.ump"
+  // line 4 "../../../../Checksum_LogManager_inner.ump"
   public static class LogManager_getLogEntryFromLogSource
   {
   
@@ -527,7 +540,15 @@ nTempBufferWrites++;
       try {
             fileOffset=DbLsn.getFileOffset(lsn);
             entryBuffer=logSource.getBytes(fileOffset);
-            this.hook507();
+            Label507:
+  validator=null;
+          storedChecksum=LogUtils.getUnsignedInt(entryBuffer);
+          if (_this.doChecksumOnRead) {
+            validator=new ChecksumValidator();
+            validator.update(_this.envImpl,entryBuffer,_this.HEADER_CONTENT_BYTES(),false);
+          }
+          //original();
+   //this.hook507();
             loggableType=entryBuffer.get();
             version=entryBuffer.get();
             entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
@@ -539,7 +560,13 @@ nTempBufferWrites++;
           //original();
    //this.hook508();
             }
-            this.hook506();
+            Label506:
+  if (_this.doChecksumOnRead) {
+            validator.update(_this.envImpl,entryBuffer,itemSize,false);
+            validator.validate(_this.envImpl,storedChecksum,lsn);
+          }
+          //original();
+   //this.hook506();
             assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
             logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
             logEntry.readEntry(entryBuffer,itemSize,version,true);
@@ -562,21 +589,6 @@ nTempBufferWrites++;
               logSource.release();
             }
           }
-    }
-  
-    // line 58 "../../../../LogManager_static.ump"
-     protected void hook506() throws DatabaseException,ClosedChannelException,Exception{
-      
-    }
-  
-    // line 60 "../../../../LogManager_static.ump"
-     protected void hook507() throws DatabaseException,ClosedChannelException,Exception{
-      
-    }
-  
-    // line 62 "../../../../LogManager_static.ump"
-     protected void hook508() throws DatabaseException,ClosedChannelException,Exception{
-      
     }
     
     //------------------------
@@ -658,6 +670,12 @@ nTempBufferWrites++;
   private int nRepeatFaultReads ;
 // line 9 "../../../../Statistics_LogManager.ump"
   private long nTempBufferWrites ;
+// line 5 "../../../../Checksum_LogManager.ump"
+  static final int HEADER_CHECKSUM_OFFSET = 0 ;
+// line 7 "../../../../Checksum_LogManager.ump"
+  private boolean doChecksumOnRead ;
+// line 9 "../../../../Checksum_LogManager.ump"
+  protected static ChecksumValidator validator ;
 
   
 }

@@ -1,0 +1,11 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryManager
+{
+		after Label593: readINsAndTrackIds(long )
+		{
+			reader.setAlwaysValidateChecksum(true);
+			//original(reader);
+    }
+
+}

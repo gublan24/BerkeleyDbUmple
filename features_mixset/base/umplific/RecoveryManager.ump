@@ -293,7 +293,7 @@ class RecoveryManager
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	this.hook593(reader);
+	Label593://this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();
@@ -1097,8 +1097,8 @@ class RecoveryManager
 			return replaced;
     }
 
-    protected void hook593(INFileReader reader) throws IOException, DatabaseException {
-    }
+    //protected void hook593(INFileReader reader) throws IOException, DatabaseException {
+    //}
 
     protected void hook594(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {
     }

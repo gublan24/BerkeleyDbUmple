@@ -1,0 +1,22 @@
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Checksum/com/sleepycat/je/log/LogManager.java
+namespace com.sleepycat.je.log;
+class LogManager {
+   static class LogManager_getLogEntryFromLogSource {
+      after Label506: execute() {
+        if (_this.doChecksumOnRead) {
+          validator.update(_this.envImpl,entryBuffer,itemSize,false);
+          validator.validate(_this.envImpl,storedChecksum,lsn);
+        }
+        //original();
+      }
+      after Label507: execute() {
+        validator=null;
+        storedChecksum=LogUtils.getUnsignedInt(entryBuffer);
+        if (_this.doChecksumOnRead) {
+          validator=new ChecksumValidator();
+          validator.update(_this.envImpl,entryBuffer,_this.HEADER_CONTENT_BYTES(),false);
+        }
+        //original();
+      }
+    }
+}

@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.log;
+
+class FileManager
+{
+    private long chunkedNIOSize = 0;
+
+    after Label456:FileManager(EnvironmentImpl , File , boolean ) {
+
+			chunkedNIOSize = configManager.getLong(EnvironmentParams.LOG_CHUNKED_NIO);
+			//original(configManager);
+    }
+
+}

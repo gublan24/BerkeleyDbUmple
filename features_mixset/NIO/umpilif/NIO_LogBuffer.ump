@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.log;
+
+class LogBuffer
+{
+    after Label481:  LogBuffer(int , EnvironmentImpl ) {
+			buffer = ByteBuffer.allocateDirect(capacity);
+			//original(capacity);
+    }
+
+}

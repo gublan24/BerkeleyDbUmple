@@ -1,0 +1,9 @@
+use Checksum_EnvironmentParams.ump;
+use Checksum_FileProcessor.ump;
+use Checksum_ChecksumValidator.ump;
+use Checksum_FileReader.ump;
+use Checksum_LogManager.ump;
+use Checksum_RecoveryManager.ump;
+
+ // adding inner elements ; 
+use ../ump_inner/Checksum_Master.ump ; 
