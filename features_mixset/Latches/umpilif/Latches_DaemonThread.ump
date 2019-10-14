@@ -6,32 +6,39 @@ class DaemonThread
   depend com.sleepycat.je.latch.Latch;
     protected Latch workQueueLatch;
 
-    protected void hook856(String name, EnvironmentImpl env) {
+    after Label856: init(long , String , EnvironmentImpl ) {
 	workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
-	original(name, env);
+	//original(name, env);
     }
 
-    public void addToQueue(Object o) throws DatabaseException {
+    before addToQueue(Object ) {
 	workQueueLatch.acquire();
-	original(o);
+	//original(o);
+	} 
+
+   after addToQueue(Object ) {
 	workQueueLatch.release();
     }
 
-    public int getQueueSize() throws DatabaseException {
+  before getQueueSize()  {
 	workQueueLatch.acquire();
-	int result = original();
+	}
+
+	after getQueueSize() {
+	//int result = //original();
+		workQueueLatch.release();
+		//return result;
+		  }
+
+    after Label857: run() {
 	workQueueLatch.release();
-	return result;
+	//original();
     }
 
-    protected void hook857() throws InterruptedException, Exception {
-	workQueueLatch.release();
-	original();
-    }
+    after Label858: : run() {
 
-    protected void hook858() throws InterruptedException, Exception {
 	workQueueLatch.acquire();
-	original();
+	//original();
     }
 
 }

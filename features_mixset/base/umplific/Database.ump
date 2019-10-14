@@ -452,7 +452,18 @@ class Database
 	List list = new ArrayList();
 	if (hasTriggers()) {
 	    acquireTriggerListReadLock();
-	    this.hook53(list);
+	    Label53://this.hook53(list);
+			try {
+				for (int i = 0; i < triggerList.size(); i += 1) {
+						Object obj = triggerList.get(i);
+						if (obj instanceof SecondaryTrigger) {
+					list.add(((SecondaryTrigger) obj).getDb());
+						}
+				}
+			}
+		  finally {
+						Label53_1:   ;//
+			}
 	} else {
 	}
 	return list;
@@ -619,8 +630,18 @@ class Database
      */
     void notifyTriggers(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData)
 	    throws DatabaseException {
-	acquireTriggerListReadLock();
-	this.hook54(locker, priKey, oldData, newData);
+				acquireTriggerListReadLock();
+				try {	
+						Label54: //this.hook54(locker, priKey, oldData, newData);
+						for (int i = 0; i < triggerList.size(); i += 1) {
+									DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
+									trigger.databaseUpdated(this, locker, priKey, oldData, newData);
+							}
+						}
+				finally {
+									hook54_1://releaseTriggerListReadLock();
+							}
+    //End of hook54
     }
 
     protected void hook44() throws DatabaseException {
@@ -651,22 +672,29 @@ class Database
     protected void hook52(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException {
     }
 
-    protected void hook53(List list) throws DatabaseException {
-	for (int i = 0; i < triggerList.size(); i += 1) {
-	    Object obj = triggerList.get(i);
-	    if (obj instanceof SecondaryTrigger) {
-		list.add(((SecondaryTrigger) obj).getDb());
-	    }
-	}
-    }
+/*    protected void hook53(List list) throws DatabaseException {
+			try {
+				for (int i = 0; i < triggerList.size(); i += 1) {
+						Object obj = triggerList.get(i);
+						if (obj instanceof SecondaryTrigger) {
+					list.add(((SecondaryTrigger) obj).getDb());
+						}
+				}
+			}
+		  finally {
+Label53:   ;//
+			}
 
-    protected void hook54(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData)
+    }
+*/
+  /*  protected void hook54(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData)
 	    throws DatabaseException {
 	for (int i = 0; i < triggerList.size(); i += 1) {
 	    DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
 	    trigger.databaseUpdated(this, locker, priKey, oldData, newData);
 	}
     }
+*/
 
 //    protected void hook55() throws DatabaseException {
 //    }

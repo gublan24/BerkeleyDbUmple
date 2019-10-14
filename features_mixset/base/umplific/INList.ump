@@ -19,7 +19,7 @@ class INList
     INList(EnvironmentImpl envImpl) {
 	this.envImpl = envImpl;
 	ins = new TreeSet();
-	this.hook338(envImpl);
+	Label338: ;//this.hook338(envImpl);
     }
 
     /** 
@@ -27,9 +27,9 @@ class INList
      */
     public INList(INList orig, EnvironmentImpl envImpl) throws DatabaseException {
 	ins = new TreeSet(orig.getINs());
-	this.hook340();
+	Lanbel340: //this.hook340();
 	this.envImpl = envImpl;
-	this.hook339(envImpl);
+	Label339: //this.hook339(envImpl);
     }
 
     public SortedSet getINs() {
@@ -56,7 +56,7 @@ class INList
      */
     public void removeLatchAlreadyHeld(IN in) throws DatabaseException {
 		boolean removeDone = ins.remove(in);
-		removeDone = this.hook341(in, removeDone);
+		Label341: //removeDone = this.hook341(in, removeDone);
 		assert removeDone;
 		//this.hook346(in);
     Label346:
@@ -66,7 +66,11 @@ class INList
      * An IN is getting swept or is displaced by recovery.
      */
     public void remove(IN in) throws DatabaseException {
-	removeLatchAlreadyHeld(in);
+				try {
+						 	removeLatchAlreadyHeld(in); //original(in);
+					} finally {
+							LabelRemove_1://releaseMajorLatch();
+					}
     }
 
     public SortedSet tailSet(IN in) throws DatabaseException {
@@ -90,7 +94,7 @@ class INList
      */
     public void clear() throws DatabaseException {
 	ins.clear();
-	this.hook342();
+	//this.hook342();
     }
 
     public void dump() {
@@ -103,21 +107,21 @@ class INList
 	}
     }
 
-    protected void hook338(EnvironmentImpl envImpl) {
-    }
+ //   protected void hook338(EnvironmentImpl envImpl) {
+   // }
 
-    protected void hook339(EnvironmentImpl envImpl) throws DatabaseException {
-    }
+ //   protected void hook339(EnvironmentImpl envImpl) throws DatabaseException {
+  //  }
 
-    protected void hook340() throws DatabaseException {
-    }
+   // protected void hook340() throws DatabaseException {
+   // }
 
-    protected boolean hook341(IN in, boolean removeDone) throws DatabaseException {
-	return removeDone;
-    }
+//    protected boolean hook341(IN in, boolean removeDone) throws DatabaseException {
+//	return removeDone;
+ //   }
 
-    protected void hook342() throws DatabaseException {
-    }
+  //  protected void hook342() throws DatabaseException {
+  //  }
 
     protected void hook346(IN in) throws DatabaseException {
     }

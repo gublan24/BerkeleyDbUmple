@@ -188,7 +188,16 @@ class FileReader
 		    }
 		}
 		FileHandle fileHandle = fileManager.getFileHandle(readBufferFileNum);
-		this.hook469(fileHandle);
+		Label469: //this.hook469(fileHandle);
+		try
+		{
+			readBuffer.clear();
+			fileManager.readFromFile(fileHandle.getFile(), readBuffer, readBufferFileStart);
+			assert EnvironmentImpl.maybeForceYield();
+		}
+		finally {
+					Label469_1://fileHandle.release();
+			}
 		readBufferFileEnd = readBufferFileStart + threadSafeBufferPosition(readBuffer);
 		threadSafeBufferFlip(readBuffer);
 		threadSafeBufferPosition(readBuffer, (int) (currentEntryPrevOffset - readBufferFileStart));
@@ -319,7 +328,7 @@ class FileReader
 		    Long nextFile = fileManager.getFollowingFileNum(readBufferFileNum, forward);
 		    if (nextFile != null) {
 			readBufferFileNum = nextFile.longValue();
-			this.hook470(fileHandle);
+			Label470: //this.hook470(fileHandle);
 			fileHandle = fileManager.getFileHandle(readBufferFileNum);
 			fileOk = true;
 			readBufferFileEnd = 0;
@@ -342,7 +351,7 @@ class FileReader
 	    throw new DatabaseException(
 		    "Problem in fillReadBuffer, readBufferFileNum = " + readBufferFileNum + ": " + e.getMessage());
 	} finally {
-	    this.hook471(fileHandle);
+	    Label471: //this.hook471(fileHandle);
 	}
     }
 
@@ -393,12 +402,20 @@ class FileReader
 	}
     }
 
-    protected void hook469(FileHandle fileHandle) throws IOException, DatabaseException, EOFException {
+/*    protected void hook469(FileHandle fileHandle) throws IOException, DatabaseException, EOFException {
+try
+{
 	readBuffer.clear();
 	fileManager.readFromFile(fileHandle.getFile(), readBuffer, readBufferFileStart);
 	assert EnvironmentImpl.maybeForceYield();
-    }
+}
+finally {
+	    //fileHandle.release();
+	}    
+}
+*/
 
+/*
     protected void hook470(FileHandle fileHandle) throws DatabaseException, EOFException, IOException {
     }
 
@@ -410,5 +427,5 @@ class FileReader
 
     protected void hook473(EnvironmentImpl env) throws IOException, DatabaseException {
     }
-
+*/
 }

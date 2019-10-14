@@ -416,7 +416,7 @@ class FileManager {
             Label464:
                 Label453:
                 if (fileHandle.getFile() == null) {
-                    Label454:
+                    Label454: ;//
                 }
             else {
                 throw new ReturnObject(fileHandle);
@@ -794,7 +794,7 @@ class FileManager {
     //protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
     //}
 
-    protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {}
+//    protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {}
 
     //   protected void hook456(DbConfigManager configManager) throws DatabaseException {
     //   }

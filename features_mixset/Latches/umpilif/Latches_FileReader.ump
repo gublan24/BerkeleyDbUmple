@@ -2,24 +2,21 @@ namespace com.sleepycat.je.log;
 
 class FileReader
 {
-    protected void hook469(FileHandle fileHandle) throws IOException, DatabaseException, EOFException {
-	try {
-	    original(fileHandle);
-	} finally {
+    after Label469_1: getLogEntryInReadBuffer() {
 	    fileHandle.release();
-	}
+	
     }
 
-    protected void hook470(FileHandle fileHandle) throws DatabaseException, EOFException, IOException {
+    after Label470: fillReadBuffer(int ){
 	fileHandle.release();
-	original(fileHandle);
+	//original(fileHandle);
     }
 
-    protected void hook471(FileHandle fileHandle) throws DatabaseException, EOFException {
+    after Label471: fillReadBuffer(int ) {
 	if (fileHandle != null) {
 	    fileHandle.release();
 	}
-	original(fileHandle);
+	//original(fileHandle);
     }
 
 }

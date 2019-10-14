@@ -29,10 +29,10 @@ class Java5LatchImpl
     public void acquire() throws DatabaseException {
 	try {
 	    if (lock.isHeldByCurrentThread()) {
-		this.hook417();
+		Label417:           ;  //this.hook417();
 		throw new LatchException(name + " already held");
 	    }
-	    this.hook416();
+	    Label416:           ;  //this.hook416();
 	    lock.lock();
 	    assert noteLatch();
 	} finally {
@@ -48,15 +48,15 @@ class Java5LatchImpl
     public boolean acquireNoWait() throws LatchException {
 	try {
 	    if (lock.isHeldByCurrentThread()) {
-		this.hook418();
+		Label418:           ;  //this.hook418();
 		throw new LatchException(name + " already held");
 	    }
 	    boolean ret = lock.tryLock();
 	    if (ret) {
 		assert noteLatch();
-		this.hook419();
+		Label419:           ;  //this.hook419();
 	    } else {
-		this.hook420();
+		Label420:           ;  //this.hook420();
 	    }
 	    return ret;
 	} finally {
@@ -91,7 +91,7 @@ class Java5LatchImpl
 		return true;
 	    }
 	    lock.unlock();
-	    this.hook421();
+	    Label421:           ;  //this.hook421();
 	    assert unNoteLatch(checkHeld);
 	} catch (IllegalMonitorStateException IMSE) {
 	    return true;
@@ -148,7 +148,7 @@ class Java5LatchImpl
 	    return true;
 	}
     }
-
+/*
     protected void hook416() throws DatabaseException {
     }
 
@@ -166,5 +166,5 @@ class Java5LatchImpl
 
     protected void hook421() throws IllegalMonitorStateException {
     }
-
+*/
 }

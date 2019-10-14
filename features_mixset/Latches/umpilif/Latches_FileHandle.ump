@@ -18,9 +18,9 @@ class FileHandle
 	fileLatch.release();
     }
 
-    protected void hook444(String fileName, EnvironmentImpl env) {
+  after Label444:  FileHandle(RandomAccessFile , String , EnvironmentImpl , boolean ) {
 	fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
-	original(fileName, env);
+//	original(fileName, env);
     }
 
 }

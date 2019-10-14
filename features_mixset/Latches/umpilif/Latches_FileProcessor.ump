@@ -2,20 +2,16 @@ namespace com.sleepycat.je.cleaner;
 
 class FileProcessor
 {
-    protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result)
-	    throws DatabaseException {
-	try {
-	    original(tree, db, inClone, lsn, result);
-	} finally {
+    after Label134_1:findINInTree(Tree , DatabaseImpl , IN , long ) {
 	    if ((result != null) && (result.exactParentFound)) {
-		result.parent.releaseLatch();
+					result.parent.releaseLatch();
 	    }
-	}
+	
     }
 
-    protected void hook136(IN inInTree) throws DatabaseException {
+     after hook136: processIN(IN , DatabaseImpl , long ) {
 	inInTree.releaseLatch();
-	original(inInTree);
+//	original(inInTree);
     }
 
 }

@@ -14,7 +14,7 @@ class FileHandle
     FileHandle(RandomAccessFile file, String fileName, EnvironmentImpl env, boolean oldHeaderVersion) {
 	this.file = file;
 	this.oldHeaderVersion = oldHeaderVersion;
-	this.hook444(fileName, env);
+	Label444: //this.hook444(fileName, env);
     }
 
     RandomAccessFile getFile() {
@@ -32,7 +32,7 @@ class FileHandle
 	}
     }
 
-    protected void hook444(String fileName, EnvironmentImpl env) {
-    }
+    //protected void hook444(String fileName, EnvironmentImpl env) {
+    //}
 
 }

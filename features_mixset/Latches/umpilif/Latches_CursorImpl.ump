@@ -1,352 +1,365 @@
 namespace com.sleepycat.je.dbi;
 
-class CursorImpl
-{
-  depend com.sleepycat.je.latch.LatchSupport;
-  depend com.sleepycat.je.latch.LatchNotHeldException;
+class CursorImpl {
+    depend com.sleepycat.je.latch.LatchSupport;
+    depend com.sleepycat.je.latch.LatchNotHeldException;
     public void releaseBIN() throws LatchNotHeldException {
-	if (bin != null) {
-	    bin.releaseLatchIfOwner();
-	}
+        if (bin != null) {
+            bin.releaseLatchIfOwner();
+        }
     }
 
     public void latchBINs() throws DatabaseException {
-	latchBIN();
-	latchDBIN();
+        latchBIN();
+        latchDBIN();
     }
 
     public void releaseBINs() throws LatchNotHeldException {
-	releaseBIN();
-	releaseDBIN();
+        releaseBIN();
+        releaseDBIN();
     }
 
     public void releaseDBIN() throws LatchNotHeldException {
-	if (dupBin != null) {
-	    dupBin.releaseLatchIfOwner();
-	}
+        if (dupBin != null) {
+            dupBin.releaseLatchIfOwner();
+        }
     }
 
     private boolean checkAlreadyLatched(boolean alreadyLatched) {
-	if (alreadyLatched) {
-	    if (dupBin != null) {
-		return dupBin.isLatchOwner();
-	    } else if (bin != null) {
-		return bin.isLatchOwner();
-	    }
-	}
-	return true;
+        if (alreadyLatched) {
+            if (dupBin != null) {
+                return dupBin.isLatchOwner();
+            } else if (bin != null) {
+                return bin.isLatchOwner();
+            }
+        }
+        return true;
     }
 
-    protected void hook206() throws DatabaseException, CloneNotSupportedException {
-	latchBINs();
-	original();
+    after Label206:  cloneCursor(boolean , CursorImpl ){
+
+        latchBINs();
+        //original();
     }
 
-    protected void hook207() throws DatabaseException {
-	releaseBINs();
-	original();
+    after Label207:  cloneCursor(boolean , CursorImpl ) {
+        releaseBINs();
+        //original();
     }
 
-    protected void hook208(BIN bin) {
-	assert bin.isLatchOwner();
-	original(bin);
+    after Label208:  addCursor(BIN bin) {
+
+        assert bin.isLatchOwner();
+        //original(bin);
     }
 
-    protected void hook209(BIN abin) throws DatabaseException {
-	abin.releaseLatch();
-	original(abin);
+    after Label209: removeCursorBIN()  {
+        abin.releaseLatch();
+        //original(abin);
     }
 
-    protected void hook210(DBIN abin) throws DatabaseException {
-	abin.releaseLatch();
-	original(abin);
+    after Label210: removeCursorDBIN() {
+        abin.releaseLatch();
+        //original(abin);
     }
 
-    protected void hook211() throws DatabaseException {
-	dupBin.releaseLatch();
-	original();
+    after Label211: clearDupBIN(boolean alreadyLatched) {
+        dupBin.releaseLatch();
+        //original();
     }
 
-    protected void hook212(LockType lockType) throws DatabaseException {
-	latchBIN();
-	try {
-	    original(lockType);
-	} finally {
-	    releaseBIN();
-	}
+		before  count(LockType)
+		{
+				    latchBIN();
+		}
+
+    after Label212: {
+     //   latchBIN();
+ //       try {
+            //original(lockType);
+  //      } finally {
+            releaseBIN();
+   //     }
     }
 
-    protected void hook213(boolean isDup, LN ln, LockResult lockResult, LockResult dclLockResult, DIN dupRoot)
-	    throws DatabaseException {
-	try {
-	    original(isDup, ln, lockResult, dclLockResult, dupRoot);
-	} finally {
-	    if (dupRoot != null) {
-		dupRoot.releaseLatchIfOwner();
-	    }
-	}
+    after Label213_1: delete() {
+
+        //try {original(isDup, ln, lockResult, dclLockResult, dupRoot);} finally {
+
+            if (dupRoot != null) {
+                dupRoot.releaseLatchIfOwner();
+            }
+      //  }
     }
 
-    protected void hook214() throws DatabaseException {
-	releaseBINs();
-	original();
+    after Label214: delete() {
+
+
+        releaseBINs();
+        //original();
     }
 
-    protected void hook215() throws DatabaseException {
-	releaseBINs();
-	original();
+    after Label215: delete() {
+
+        releaseBINs();
+        //original();
     }
 
-    protected void hook216() throws DatabaseException {
-	releaseBINs();
-	original();
+    after Label216:  delete() {
+        releaseBINs();
+        //original();
     }
 
-    protected void hook217() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	original();
+    after Label217: putLN(byte, LN , boolean ) { 
+        assert LatchSupport.countLatchesHeld() == 0;
+        //original();
     }
 
-    protected void hook218(DatabaseEntry data, DatabaseEntry foundKey, DatabaseEntry foundData, boolean isDup)
-	    throws DatabaseException {
-	try {
-	    original(data, foundKey, foundData, isDup);
-	} finally {
-	    releaseBINs();
-	}
+    after Label218_1: putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
+    //    try {
+            //original(data, foundKey, foundData, isDup);
+      //  } finally {
+            releaseBINs();
+        //}
     }
 
-    protected void hook219() throws DatabaseException {
-	latchBINs();
-	original();
+    after Label219: putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
+
+        latchBINs();
+        //original();
     }
 
-    protected void hook220() throws DatabaseException {
-	if (dupBin == null) {
-	    latchBIN();
-	} else {
-	    latchDBIN();
-	}
-	original();
+    after Label220: getCurrent(DatabaseEntry , DatabaseEntry , LockType ){
+        if (dupBin == null) {
+            latchBIN();
+        } else {
+            latchDBIN();
+        }
+        //original();
     }
 
-    protected void hook221(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first)
-	    throws DatabaseException {
-	assert checkAlreadyLatched(true) : dumpToString(true);
-	try {
-	    original(foundKey, foundData, lockType, first);
-	} finally {
-	    releaseBINs();
-	}
+    after Label221: getCurrentAlreadyLatched(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType,
+        boolean first){
+        assert checkAlreadyLatched(true): dumpToString(true);
+        try {
+                    throw new ReturnObject(fetchCurrent(foundKey, foundData, lockType, first));
+										//original(foundKey, foundData, lockType, first);
+        } finally {
+            releaseBINs();
+        }
     }
 
-    protected void hook222() throws DatabaseException {
-	latchBIN();
-	original();
+    after Label222:getCurrentLN(LockType lockType){
+        latchBIN();
+        //original();
     }
 
-    protected void hook223(LockType lockType) throws DatabaseException {
-	try {
-	    original(lockType);
-	} finally {
-	    releaseBINs();
-	}
+    after Label223_1: getCurrentLNAlreadyLatched(LockType ) {
+
+       // try {
+            //original(lockType);
+        //} finally {
+            releaseBINs();
+        //}
     }
 
-    protected void hook224(boolean alreadyLatched) throws DatabaseException {
-	assert checkAlreadyLatched(alreadyLatched) : dumpToString(true);
-	original(alreadyLatched);
+    after Label224: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        assert checkAlreadyLatched(alreadyLatched): dumpToString(true);
+        //original(alreadyLatched);
     }
 
-    protected boolean hook225(boolean alreadyLatched) throws DatabaseException {
-	assert checkAlreadyLatched(alreadyLatched) : dumpToString(true);
-	if (!alreadyLatched) {
-	    latchBIN();
-	} else {
-	    alreadyLatched = false;
-	}
-	return original(alreadyLatched);
+    protected boolean hook225: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        assert checkAlreadyLatched(alreadyLatched): dumpToString(true);
+        if (!alreadyLatched) {
+            latchBIN();
+        } else {
+            alreadyLatched = false;
+        }
+        return //original(alreadyLatched);
     }
 
-    protected boolean hook226(boolean alreadyLatched) throws DatabaseException {
-	alreadyLatched = false;
-	return original(alreadyLatched);
+    protected boolean hook226:  getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        alreadyLatched = false;
+        return //original(alreadyLatched);
     }
 
-    protected void hook227() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	original();
+    after Label227:getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        assert LatchSupport.countLatchesHeld() == 0;
+        //original();
     }
 
-    protected void hook228() throws DatabaseException {
-	latchBIN();
-	original();
+    after Label228: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        latchBIN();
+        //original();
     }
 
-    protected void hook229() throws DatabaseException {
-	releaseBIN();
-	original();
+    after Label229: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        releaseBIN();
+        //original();
     }
 
-    protected void hook230(boolean alreadyLatched) throws DatabaseException {
-	alreadyLatched = true;
-	original(alreadyLatched);
+    after Label230: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        alreadyLatched = true;
+        //original(alreadyLatched);
     }
 
-    protected void hook231() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
-	original();
+    after Label231: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+        assert LatchSupport.countLatchesHeld() == 0: LatchSupport.latchesHeldToString();
+        //original();
     }
 
-    private void flushBINToBeRemoved() throws DatabaseException {
-	binToBeRemoved.latch();
-	original();
+    before flushBINToBeRemoved() {
+
+        binToBeRemoved.latch();
+        //original();
     }
 
-    protected void hook232() throws DatabaseException {
-	binToBeRemoved.releaseLatch();
-	original();
+    after Label232:flushBINToBeRemoved() {
+        binToBeRemoved.releaseLatch();
+        //original();
     }
 
-    private void flushDBINToBeRemoved() throws DatabaseException {
-	dupBinToBeRemoved.latch();
-	original();
+    before flushDBINToBeRemoved() {
+        dupBinToBeRemoved.latch();
+        //original();
     }
 
-    protected void hook233() throws DatabaseException {
-	dupBinToBeRemoved.releaseLatch();
-	original();
+    after Label233: flushDBINToBeRemoved(){
+        dupBinToBeRemoved.releaseLatch();
+        //original();
     }
 
-    protected void hook234(boolean first, DIN duplicateRoot, IN in, boolean found) throws DatabaseException {
-	try {
-	    original(first, duplicateRoot, in, found);
-	} catch (DatabaseException e) {
-	    if (in != null) {
-		in.releaseLatch();
-	    }
-	    throw e;
-	}
+    after Label234_1: positionFirstOrLast(boolean , DIN ) {
+        //try {
+            //original(first, duplicateRoot, in, found);
+       // } 
+       catch (DatabaseException e) {
+            if ( in != null) 
+            { in .releaseLatch();
+            }
+            throw e;
+        }
     }
 
-    protected void hook235(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode, LockType lockType,
-	    boolean foundSomething, boolean foundExactKey, boolean foundExactData, boolean foundLast,
-	    boolean exactSearch, BINBoundary binBoundary) throws DatabaseException {
-	try {
-	    original(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData,
-		    foundLast, exactSearch, binBoundary);
-	} catch (DatabaseException e) {
-	    releaseBIN();
-	    throw e;
-	}
-    }
+    after Label235_1:searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode ,        LockType )
 
-    protected void hook236(DIN duplicateRoot) throws DatabaseException {
-	duplicateRoot.latch();
-	releaseBIN();
-	original(duplicateRoot);
+        //try {
+            //original(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData, foundLast,            exactSearch,            binBoundary);
+//    } 
+catch (DatabaseException e) {
+        releaseBIN();
+        throw e;
     }
+}
 
-    protected void hook237() throws DatabaseException {
-	latchBINs();
-	original();
-    }
+after Label236: searchAndPositionBoth(boolean , Node , DatabaseEntry , boolean , LockType , long ){
+    duplicateRoot.latch();
+    releaseBIN();
+    //original(duplicateRoot);
+}
 
-    protected void hook238() throws DatabaseException {
-	releaseBINs();
-	original();
-    }
+after Label237: lockLNDeletedAllowed(LN , LockType )  {
+    latchBINs();
+    //original();
+}
 
-    protected void hook239(DIN dupRoot) throws DatabaseException {
-	dupRoot.latch();
-	latchDBIN();
-	original(dupRoot);
-    }
+after Label238: lockLNDeletedAllowed(LN , LockType )  {
+    releaseBINs();
+    //original();
+}
 
-    protected void hook240() throws DatabaseException {
-	latchBIN();
-	original();
-    }
+after Label239: lockDupCountLN(DIN , LockType )  {
+    dupRoot.latch();
+    latchDBIN();
+    //original(dupRoot);
+}
 
-    protected void hook241(DIN dupRoot) throws DatabaseException {
-	dupRoot.releaseLatch();
-	releaseBINs();
-	original(dupRoot);
-    }
+after Label240: lockDupCountLN(DIN , LockType )  {
 
-    protected void hook242(boolean isDBINLatched, DIN dupRoot) throws DatabaseException {
-	if (isDBINLatched) {
-	    if (!dupRoot.latchNoWait()) {
-		releaseDBIN();
-		dupRoot.latch();
-		latchDBIN();
-	    }
-	} else {
-	    dupRoot.latch();
-	}
-	original(isDBINLatched, dupRoot);
-    }
+    latchBIN();
+    //original();
+}
 
-    protected void hook243() throws DatabaseException {
-	assert bin.isLatchOwner();
-	original();
-    }
+after Label241: lockDupCountLN(DIN , LockType )  {
+    dupRoot.releaseLatch();
+    releaseBINs();
+    //original(dupRoot);
+}
 
-    protected void hook264(DIN dupRoot) throws DatabaseException {
-	dupRoot.releaseLatch();
-	original(dupRoot);
-    }
+after Label242: getLatchedDupRoot(boolean ){
 
-    protected void hook265(DIN dupRoot) throws DatabaseException {
-	dupRoot.latch();
-	releaseBIN();
-	original(dupRoot);
+    if (isDBINLatched) {
+        if (!dupRoot.latchNoWait()) {
+            releaseDBIN();
+            dupRoot.latch();
+            latchDBIN();
+        }
+    } else {
+        dupRoot.latch();
     }
+    //original(isDBINLatched, dupRoot);
+}
 
-    protected void hook266() throws DatabaseException {
-	releaseBINs();
-	original();
-    }
+after Label243: getLatchedDupRoot(boolean ){
+    assert bin.isLatchOwner();
+    //original();
+}
 
-    protected void hook267() throws DatabaseException {
-	releaseBIN();
-	original();
-    }
+after Label264: count(LockType ) {
+    dupRoot.releaseLatch();
+    //original(dupRoot);
+}
 
-    protected void hook268(DIN dupRoot) throws DatabaseException {
-	dupRoot.releaseLatch();
-	original(dupRoot);
-    }
+after Label265: count(LockType ) {
 
-    protected void hook269() throws DatabaseException {
-	releaseBINs();
-	original();
-    }
+    dupRoot.latch();
+    releaseBIN();
+    //original(dupRoot);
+}
 
-    protected void hook270() throws DatabaseException {
-	releaseBINs();
-	original();
-    }
+after Label266: delete() {
+    releaseBINs();
+    //original();
+}
 
-    protected void hook271() throws DatabaseException {
-	releaseBINs();
-	original();
-    }
+after Label267:: delete() {
+    releaseBIN();
+    //original();
+}
 
-    protected void hook272() throws DatabaseException {
-	assert checkAlreadyLatched(true) : dumpToString(true);
-	original();
-    }
+after Label268: delete() {
+    dupRoot.releaseLatch();
+    //original(dupRoot);
+}
 
-    protected void hook273() throws DatabaseException {
-	releaseBIN();
-	original();
-    }
+after Label269:putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
+    releaseBINs();
+    //original();
+}
 
-    protected void hook274(IN in, DIN dupRoot) throws DatabaseException {
-	dupRoot.latch();
-	in.releaseLatch();
-	original(in, dupRoot);
-    }
+after Label270: putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
+    releaseBINs();
+    //original();
+}
+
+after Label271: putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
+    releaseBINs();
+    //original();
+}
+
+after Label272:  getCurrentLNAlreadyLatched(LockType ) {
+    assert checkAlreadyLatched(true): dumpToString(true);
+    //original();
+}
+
+after Label273:  getCurrentLNAlreadyLatched(LockType ) {
+    releaseBIN();
+    //original();
+}
+
+after Label274: positionFirstOrLast(boolean , DIN ){
+    dupRoot.latch(); in .releaseLatch();
+    //original(in, dupRoot);
+}
 
 }

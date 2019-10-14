@@ -19,21 +19,21 @@ class INList
     }
 
     public void releaseMajorLatchIfHeld() throws DatabaseException {
-	if (majorLatch.isOwner()) {
-	    releaseMajorLatch();
-	}
-    }
+			if (majorLatch.isOwner()) {
+					releaseMajorLatch();
+			}
+				}
 
-    public void releaseMajorLatch() throws DatabaseException {
-	latchMinorAndDumpAddedINs();
-	majorLatch.release();
-    }
+				public void releaseMajorLatch() throws DatabaseException {
+			latchMinorAndDumpAddedINs();
+			majorLatch.release();
+				}
 
-    private void dumpAddedINsIntoMajorSet() {
-	if (addedINs.size() > 0) {
-	    ins.addAll(addedINs);
-	    addedINs.clear();
-	}
+				private void dumpAddedINsIntoMajorSet() {
+			if (addedINs.size() > 0) {
+					ins.addAll(addedINs);
+					addedINs.clear();
+			}
     }
 
     void latchMinorAndDumpAddedINs() throws DatabaseException {
@@ -53,92 +53,92 @@ class INList
 	minorLatch.release();
     }
 
-    protected void hook338(EnvironmentImpl envImpl) {
+    after Label338: INList(EnvironmentImpl ) {
 	addedINs = new HashSet();
 	majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
 	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
-	original(envImpl);
+	//original(envImpl);
     }
 
-    protected void hook339(EnvironmentImpl envImpl) throws DatabaseException {
+    after Label339: INList(INList , EnvironmentImpl ) {
 	majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
 	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
-	original(envImpl);
+	//original(envImpl);
     }
 
-    protected void hook340() throws DatabaseException {
+    after Label340: INList(INList , EnvironmentImpl ) {
 	addedINs = new HashSet();
-	original();
+	//original();
     }
 
     /** 
      * An IN is getting evicted or is displaced by recovery.  Caller is responsible for acquiring the major latch before calling this and releasing it when they're done.
      */
-    public void removeLatchAlreadyHeld(IN in) throws DatabaseException {
+  before removeLatchAlreadyHeld(IN ) {
 	assert majorLatch.isOwner();
-	original(in);
+	//original(in);
     }
 
-    protected boolean hook341(IN in, boolean removeDone) throws DatabaseException {
-	if (!removeDone) {
-	    minorLatch.acquire();
-	    try {
-		removeDone = addedINs.remove(in);
-		dumpAddedINsIntoMajorSet();
-	    } finally {
-		minorLatch.release();
-	    }
-	}
-	return original(in, removeDone);
+    protected boolean hook341: removeLatchAlreadyHeld(IN ){
+		if (!removeDone) {
+			  minorLatch.acquire();
+			  try {
+			removeDone = addedINs.remove(in);
+			dumpAddedINsIntoMajorSet();
+			  } finally {
+			minorLatch.release();
+			  }
+		}
+			//	return //original(in, removeDone);
     }
 
     /** 
      * An IN is getting swept or is displaced by recovery.
      */
-    public void remove(IN in) throws DatabaseException {
+  before remove(IN ) {
 	assert LatchSupport.countLatchesHeld() == 0;
 	majorLatch.acquire();
-	try {
-	    original(in);
-	} finally {
-	    releaseMajorLatch();
 	}
+
+  after LabelRemove_1:remove(IN ) {
+	   releaseMajorLatch();
+
     }
 
-    public SortedSet tailSet(IN in) throws DatabaseException {
+  before tailSet(IN ) { 
 	assert majorLatch.isOwner();
-	return original(in);
+	//return //original(in);
     }
 
-    public IN first() throws DatabaseException {
+  before first() {
 	assert majorLatch.isOwner();
-	return original();
+	//return //original();
     }
 
     /** 
      * Return an iterator over the main 'ins' set.  Returned iterator will not show the elements in addedINs. The major latch should be held before entering.  The caller is responsible for releasing the major latch when they're finished with the iterator.
      * @return an iterator over the main 'ins' set.
      */
-    public Iterator iterator() {
+    before iterator() {
 	assert majorLatch.isOwner();
-	return original();
+	//return //original();
     }
 
     /** 
      * Clear the entire list during recovery and at shutdown.
      */
-    public void clear() throws DatabaseException {
+  before clear() {
 	assert LatchSupport.countLatchesHeld() == 0;
 	majorLatch.acquire();
 	minorLatch.acquire();
-	original();
+	//original();
     }
 
-    protected void hook342() throws DatabaseException {
+    after clear(){
 	addedINs.clear();
 	minorLatch.release();
 	releaseMajorLatch();
-	original();
+	//original();
     }
 
 }

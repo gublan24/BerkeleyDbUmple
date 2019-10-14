@@ -4,14 +4,15 @@ class FileManager
 {
   depend com.sleepycat.je.latch.LatchSupport;
   depend com.sleepycat.je.latch.Latch;
-    protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
+    before Label453:getFileHandle(long ) {
+
 	fileHandle.latch();
-	original(fileHandle);
+	//original(fileHandle);
     }
 
-    protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {
+    after Label454: getFileHandle(long ){
 	fileHandle.release();
-	original(fileHandle);
+//	original(fileHandle);
     }
 
 }

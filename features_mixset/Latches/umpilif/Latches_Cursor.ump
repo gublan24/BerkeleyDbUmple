@@ -5,110 +5,98 @@ class Cursor
   depend com.sleepycat.je.latch.LatchSupport;
     after Label19: deleteNoNotify() {
 
-	dup.latchBINs();
-	//original(dup);
+			dup.latchBINs();
+			//original(dup);
     }
 
     after Label20:deleteNoNotify(){
 
-	if (origCursor != null) {
-	    origCursor.releaseBINs();
-	}
-	if (dup != null) {
-	    dup.releaseBINs();
-	}
-	//original(origCursor, dup);
+			if (origCursor != null) {
+					origCursor.releaseBINs();
+			}
+			if (dup != null) {
+					dup.releaseBINs();
+			}
+			//original(origCursor, dup);
     }
 
-    after Label21: putAllowPhantoms(DatabaseEntry key, DatabaseEntry data, PutMode putMode,
-	    DatabaseEntry returnOldData, CursorImpl nextKeyCursor)
+    after Label21: putAllowPhantoms(DatabaseEntry , DatabaseEntry, PutMode ,	DatabaseEntry , CursorImpl ) {
 
-	if (origCursor != null) {
-	    origCursor.releaseBINs();
-	}
-	//original(origCursor);
+			if (origCursor != null) {
+					origCursor.releaseBINs();
+			}
+			//original(origCursor);
     }
 
-    after Label22: positionAllowPhantoms(DatabaseEntry key, DatabaseEntry data, LockType lockType,
-	    boolean first) {
+    after Label22: positionAllowPhantoms(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
+				assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
+      	//original();
+    }
 
-	assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
+    after Label23: positionAllowPhantoms(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
+				assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
+				//original();
+    }
+
+    after Label24:  positionAllowPhantoms(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
+			
+			cursorImpl.releaseBINs();
+			//original();
+    }
+
+    after Label25:searchInternal(CursorImpl , DatabaseEntry , DatabaseEntry , LockType , LockType , SearchMode , boolean ) {
+			cursorImpl.releaseBINs();
+			if (status != OperationStatus.SUCCESS && dup != cursorImpl) {
+				dup.releaseBINs();								
+			}
+    }
+
+    after Label26: getNextDupAndRangeLock(DatabaseEntry , DatabaseEntry , LockMode )  {
+			assert LatchSupport.countLatchesHeld() == 0;
+		//original();
+    }
+
+    after Label27:getNextDupAndRangeLock(DatabaseEntry , DatabaseEntry , LockMode )  {
+			assert LatchSupport.countLatchesHeld() == 0;
+			//original();
+    }
+
+    after Label28: rangeLockCurrentPosition(GetMode ) { 
+			assert LatchSupport.countLatchesHeld() == 0;
+		//original();
+    }
+
+    after Label29: rangeLockCurrentPosition(GetMode ) { 
+			assert LatchSupport.countLatchesHeld() == 0;
+		//original();
+    }
+
+    after Label30: retrieveNextAllowPhantoms(DatabaseEntry , DatabaseEntry, LockType , GetMode )  {
+			assert LatchSupport.countLatchesHeld() == 0;
 	//original();
     }
 
-    after Label23:
-
-	assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
-	//original();
-    }
-
-    after Label24:
-
-	cursorImpl.releaseBINs();
-	//original();
-    }
-
-    after Label25:searchInternal(CursorImpl dup, DatabaseEntry key, DatabaseEntry data,
-	    LockType searchLockType, LockType advanceLockType, SearchMode searchMode, boolean advanceAfterRangeSearch)
-	    throws DatabaseException {
-
-	try {
-	    //original(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,
-		    keyChange);
-	} finally {
-	    cursorImpl.releaseBINs();
-	    if (status != OperationStatus.SUCCESS && dup != cursorImpl) {
-		dup.releaseBINs();
-	    }
-	}
-    }
-
-    after Label26() throws DatabaseException {
+    after Label31: retrieveNextAllowPhantoms(DatabaseEntry , DatabaseEntry, LockType , GetMode )  {
 	assert LatchSupport.countLatchesHeld() == 0;
 	//original();
     }
 
-    after Label27() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	//original();
-    }
-
-    after Label28() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	//original();
-    }
-
-    after Label29() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	//original();
-    }
-
-    after Label30() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	//original();
-    }
-
-    after Label31() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
-	//original();
-    }
-
-    after Label32(CursorImpl origCursor) throws DatabaseException {
+    after Label32: checkForInsertion(GetMode , CursorImpl , CursorImpl ) {
 	origCursor.releaseBINs();
 	//original(origCursor);
     }
 
-    after Label33(CursorImpl origCursor) throws DatabaseException {
+    after Label33: checkForInsertion(GetMode , CursorImpl , CursorImpl )  {
 	origCursor.latchBINs();
 	//original(origCursor);
     }
 
-    after Label34(CursorImpl origCursor) throws DatabaseException {
+    after Label34: checkForInsertion(GetMode , CursorImpl , CursorImpl )  {
 	origCursor.releaseBINs();
 	//original(origCursor);
     }
 
-    after Label35(CursorImpl origCursor) throws DatabaseException {
+    after Label35: checkForInsertion(GetMode , CursorImpl , CursorImpl )  {
 	origCursor.latchBINs();
 	//original(origCursor);
     }

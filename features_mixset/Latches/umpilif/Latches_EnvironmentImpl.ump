@@ -23,60 +23,60 @@ class EnvironmentImpl
 	return triggerLatch;
     }
 
-    protected void hook320() throws DatabaseException {
+    after Label320: EnvironmentImpl(File , EnvironmentConfig ) {
 	triggerLatch = LatchSupport.makeSharedLatch("TriggerLatch", this);
-	original();
+	//original();
     }
 
-    protected void hook321() throws DatabaseException {
-	if (fairLatches) {
-	    logManager = new LatchedLogManager(this, isReadOnly);
-	} else {
-	    original();
-	}
+    after Label321: EnvironmentImpl(File , EnvironmentConfig ) { 
+			if (fairLatches) {
+					logManager = new LatchedLogManager(this, isReadOnly);
+			} else 
     }
 
-    protected void hook322() throws DatabaseException {
+    after Label322: EnvironmentImpl(File , EnvironmentConfig ) { 
 	fairLatches = configManager.getBoolean(EnvironmentParams.ENV_FAIR_LATCHES);
-	original();
+	//original();
     }
 
-    protected void hook323() throws DatabaseException {
+    after Label323: EnvironmentImpl(File , EnvironmentConfig ) { 
 	mapTreeRootLatch = LatchSupport.makeLatch("MapTreeRoot", this);
-	original();
+	//original();
     }
 
     /** 
      * Log the map tree root and save the LSN.
      */
-    public void logMapTreeRoot() throws DatabaseException {
-	mapTreeRootLatch.acquire();
-	try {
-	    original();
-	} finally {
-	    mapTreeRootLatch.release();
-	}
+
+		before logMapTreeRoot() {
+			mapTreeRootLatch.acquire();
+		}
+	
+		after logMapTreeRoot_1:logMapTreeRoot() {
+
+			//try {original();} finally {
+					mapTreeRootLatch.release();
+			//}
     }
 
     /** 
      * Force a rewrite of the map tree root if required.
      */
-    public void rewriteMapTreeRoot(long cleanerTargetLsn) throws DatabaseException {
-	mapTreeRootLatch.acquire();
-	try {
-	    original(cleanerTargetLsn);
-	} finally {
-	    mapTreeRootLatch.release();
-	}
+  before rewriteMapTreeRoot(long ) {
+			mapTreeRootLatch.acquire();
     }
 
-    protected void hook324(long rootLsn) throws DatabaseException {
-	mapTreeRootLatch.acquire();
-	try {
-	    original(rootLsn);
-	} finally {
+    after Label_rewriteMapTreeRoot_1: rewriteMapTreeRoot(long ) {
 	    mapTreeRootLatch.release();
+	
+    }
+
+  after Label324: readMapTreeFromLog(long ) {
+	mapTreeRootLatch.acquire();
 	}
+
+  after Label324_1: readMapTreeFromLog(long ) {
+	   mapTreeRootLatch.release();
     }
 
 }

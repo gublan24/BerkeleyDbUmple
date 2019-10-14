@@ -53,11 +53,11 @@ class LatchImpl
 	    LatchWaiter waitTarget = null;
 	    synchronized (this) {
 		if (thread == owner) {
-		    this.hook422();
+		    Label422:           ;  //this.hook422();
 		    throw new LatchException(getNameString() + " already held");
 		}
 		if (owner == null) {
-		    this.hook423();
+		    Label423:           ;  //this.hook423();
 		    owner = thread;
 		} else {
 		    if (waiters == null) {
@@ -65,7 +65,7 @@ class LatchImpl
 		    }
 		    waitTarget = new LatchWaiter(thread);
 		    waiters.add(waitTarget);
-		    this.hook424();
+		    Label424:           ;  //this.hook424();
 		}
 	    }
 	    if (waitTarget != null) {
@@ -105,16 +105,16 @@ class LatchImpl
 	try {
 	    Thread thread = Thread.currentThread();
 	    if (thread == owner) {
-		this.hook425();
+		Label425:           ;  //this.hook425();
 		throw new LatchException(getNameString() + " already held");
 	    }
 	    if (owner == null) {
 		owner = thread;
-		this.hook426();
+		Label426:           ;  //this.hook426();
 		assert noteLatch();
 		return true;
 	    } else {
-		this.hook427();
+		Label427:           ;  //this.hook427();
 		return false;
 	    }
 	} finally {
@@ -157,7 +157,7 @@ class LatchImpl
 		} else {
 		    owner = null;
 		}
-		this.hook428();
+		Label428:           ;  //this.hook428();
 		assert unNoteLatch(checkHeld);
 	    }
 	} finally {
@@ -232,7 +232,7 @@ class LatchImpl
     /** 
      * Simple class that encapsulates a Thread to be 'notify()ed'.
      */
-    protected void hook422() throws DatabaseException, InterruptedException {
+ /*   protected void hook422() throws DatabaseException, InterruptedException {
     }
 
     protected void hook423() throws DatabaseException, InterruptedException {
@@ -252,5 +252,5 @@ class LatchImpl
 
     protected void hook428() {
     }
-
+*/
 }

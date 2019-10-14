@@ -2,39 +2,39 @@ namespace com.sleepycat.je.dbi;
 
 class DbTree
 {
-    protected void hook299(CursorImpl cursor) throws DatabaseException {
+    after Label299: modifyDbRoot(DatabaseImpl )  {
 	cursor.releaseBINs();
-	original(cursor);
+	//original(cursor);
     }
 
-    protected void hook300(NameLockResult result) throws DatabaseException, UnsupportedEncodingException {
+    after Label300: lockNameLN(Locker , String , String )  {
 	result.nameCursor.releaseBIN();
-	original(result);
+	//original(result);
     }
 
-    protected void hook301(NameLockResult result) throws DatabaseException {
+    after Label301: lockNameLN(Locker , String , String )  {
 	result.nameCursor.releaseBIN();
-	original(result);
+	//original(result);
     }
 
-    protected void hook302(NameLockResult result) throws DatabaseException {
+    after Label302: lockNameLN(Locker , String , String )  {
 	result.nameCursor.releaseBIN();
-	original(result);
+	//original(result);
     }
 
-    protected void hook303(CursorImpl nameCursor) throws DatabaseException, UnsupportedEncodingException {
+    after Label303:  getDb(Locker , String , Database , boolean ){
 	nameCursor.releaseBIN();
-	original(nameCursor);
+	//original(nameCursor);
     }
 
-    protected void hook304(CursorImpl idCursor) throws DatabaseException {
+    after Label304: getDb(DatabaseId , long , boolean , String ) {
 	idCursor.releaseBIN();
-	original(idCursor);
+	//original(idCursor);
     }
 
-    protected void hook305(CursorImpl cursor) throws DatabaseException {
+    after Label305: getDbName(DatabaseId ) {
 	cursor.releaseBINs();
-	original(cursor);
+	//original(cursor);
     }
 
 }

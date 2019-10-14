@@ -71,14 +71,14 @@ class LastFileReader
 		    fileLen = fileHandle.getFile().length();
 		    if (fileLen <= FileManager.firstLogEntryOffset()) {
 			lastNum = fileManager.getFollowingFileNum(lastNum.longValue(), false);
-			this.hook477(fileHandle);
+			Label477: //this.hook477(fileHandle);
 			fileHandle = null;
 		    }
 		} catch (DatabaseException e) {
 		    lastNum = attemptToMoveBadFile(e);
 		    fileHandle = null;
 		} finally {
-		    this.hook478(fileHandle);
+		    Label478: //this.hook478(fileHandle);
 		}
 	    }
 	}
@@ -175,10 +175,10 @@ class LastFileReader
 	return foundEntry;
     }
 
-    protected void hook477(FileHandle fileHandle) throws IOException, DatabaseException {
-    }
+   // protected void hook477(FileHandle fileHandle) throws IOException, DatabaseException {
+    //}
 
-    protected void hook478(FileHandle fileHandle) throws IOException, DatabaseException {
-    }
+   // protected void hook478(FileHandle fileHandle) throws IOException, DatabaseException {
+   // }
 
 }

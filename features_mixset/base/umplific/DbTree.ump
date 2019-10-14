@@ -199,7 +199,7 @@ class DbTree
 			cursor = new CursorImpl(idDatabase, locker);
 			continue;
 		    } finally {
-			this.hook299(cursor);
+			Label299: //this.hook299(cursor);
 		    }
 		    break;
 		}
@@ -227,7 +227,7 @@ class DbTree
 	    boolean found = (result.nameCursor.searchAndPosition(key, null, SearchMode.SET, LockType.WRITE)
 		    & CursorImpl.FOUND) != 0;
 	    if (!found) {
-		this.hook300(result);
+		Label300: //this.hook300(result);
 		result.nameCursor.close();
 		result.nameCursor = null;
 		return result;
@@ -240,11 +240,11 @@ class DbTree
 			"Can't " + action + " database " + databaseName + "," + handleCount + " open Dbs exist");
 	    }
 	} catch (UnsupportedEncodingException UEE) {
-	    this.hook301(result);
+	    Label301: //this.hook301(result);
 	    result.nameCursor.close();
 	    throw new DatabaseException(UEE);
 	} catch (DatabaseException e) {
-	    this.hook302(result);
+	    Label302: //this.hook302(result);
 	    result.nameCursor.close();
 	    throw e;
 	}
@@ -311,7 +311,7 @@ class DbTree
 		}
 	    } finally {
 		if (nameCursor != null) {
-		    this.hook303(nameCursor);
+		    Label303: //this.hook303(nameCursor);
 		    nameCursor.close();
 		}
 	    }
@@ -395,7 +395,7 @@ class DbTree
         Label310:
 		    continue;
 		} finally {
-		    this.hook304(idCursor);
+		    Label304: //this.hook304(idCursor);
 		    idCursor.close();
 		    locker.operationEnd(true);
 		}
@@ -459,7 +459,7 @@ class DbTree
 	    throw new DatabaseException(UEE);
 	} finally {
 	    if (cursor != null) {
-		this.hook305(cursor);
+		Label305: //this.hook305(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -638,7 +638,7 @@ class DbTree
 	nameDatabase.getTree().dump();
     }
 
-    protected void hook299(CursorImpl cursor) throws DatabaseException {
+   /* protected void hook299(CursorImpl cursor) throws DatabaseException {
     }
 
     protected void hook300(NameLockResult result) throws DatabaseException, UnsupportedEncodingException {
@@ -658,6 +658,7 @@ class DbTree
 
     protected void hook305(CursorImpl cursor) throws DatabaseException {
     }
+*/
 
   //  protected void hook306(boolean allowEviction, CursorImpl idCursor)
 	//    throws DatabaseException, UnsupportedEncodingException {

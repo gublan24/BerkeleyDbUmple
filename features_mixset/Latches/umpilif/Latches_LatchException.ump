@@ -3,6 +3,7 @@ namespace com.sleepycat.je.latch;
 class LatchException
 {
   isA DatabaseException;
+
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
     public LatchException() {
