@@ -155,7 +155,7 @@ class LogManager
 	} catch (IOException e) {
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
-	this.hook501(fsyncRequired);
+	Label501: //this.hook501(fsyncRequired);
 	this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
@@ -411,8 +411,7 @@ class LogManager
 	return wakeupCheckpointer;
     }
 
-    protected void hook501(boolean fsyncRequired) throws DatabaseException {
-    }
+//    protected void hook501(boolean fsyncRequired) throws DatabaseException { }
 
     protected void hook502(EnvironmentImpl envImpl) throws DatabaseException {
     }

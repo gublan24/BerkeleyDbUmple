@@ -2,11 +2,11 @@ namespace com.sleepycat.je.log;
 
 class LogManager
 {
-    protected void hook501(boolean fsyncRequired) throws DatabaseException {
+  After Label501:log(LoggableObject , boolean , boolean , boolean , boolean , long ){
 	if (fsyncRequired) {
 	    fileManager.groupSync();
 	}
-	original(fsyncRequired);
+	//original(fsyncRequired);
     }
 
 }

@@ -11,9 +11,9 @@ class FileManager
 	syncManager.fsync();
     }
 
-    protected void hook452(EnvironmentImpl envImpl) throws DatabaseException {
+   after Label452:FileManager(EnvironmentImpl , File , boolean ){
 	syncManager = new FSyncManager(envImpl);
-	original(envImpl);
+	//original(envImpl);
     }
 
 }

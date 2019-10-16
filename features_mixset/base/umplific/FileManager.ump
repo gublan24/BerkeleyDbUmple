@@ -139,7 +139,7 @@ class FileManager {
         if (stopOnWriteProp != null) {
             stopOnWriteCount = Long.parseLong(stopOnWriteProp);
         }
-        this.hook452(envImpl);
+        Label452: //this.hook452(envImpl);
     }
 
     /** 
@@ -789,7 +789,7 @@ class FileManager {
         return fileHandle;
     }
 
-    protected void hook452(EnvironmentImpl envImpl) throws DatabaseException {}
+    //protected void hook452(EnvironmentImpl envImpl) throws DatabaseException {}
 
     //protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
     //}

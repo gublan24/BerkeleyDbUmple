@@ -19,7 +19,7 @@ class FSyncManager
     FSyncManager(EnvironmentImpl envImpl) throws DatabaseException {
 	timeout = PropUtil.microsToMillis(envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FSYNC_TIMEOUT));
 	this.envImpl = envImpl;
-	this.hook434(envImpl);
+	Label434:           ;  //this.hook434(envImpl);
 	fsyncInProgress = false;
 	nextFSyncWaiters = new FSyncGroup(timeout, envImpl);
     }
@@ -34,7 +34,7 @@ class FSyncManager
 	FSyncGroup inProgressGroup = null;
 	FSyncGroup myGroup = null;
 	synchronized (this) {
-	    this.hook435();
+	    Label435:           ;  //this.hook435();
 	    if (fsyncInProgress) {
 		needToWait = true;
 		myGroup = nextFSyncWaiters;
@@ -60,13 +60,13 @@ class FSyncManager
 		}
 	    } else if (waitStatus == FSyncGroup.DO_TIMEOUT_FSYNC) {
 		doFsync = true;
-		this.hook436();
+		Label436:           ;  //this.hook436();
 	    }
 	}
 	if (doFsync) {
 	    executeFSync();
 	    synchronized (this) {
-		this.hook437();
+		Label437:           ;  //this.hook437();
 		if (isLeader) {
 		    inProgressGroup.wakeupAll();
 		    nextFSyncWaiters.wakeupOne();
@@ -82,7 +82,7 @@ class FSyncManager
     protected void executeFSync() throws DatabaseException {
 	envImpl.getFileManager().syncLogEnd();
     }
-
+/*
     protected void hook434(EnvironmentImpl envImpl) throws DatabaseException {
     }
 
@@ -94,5 +94,5 @@ class FSyncManager
 
     protected void hook437() throws DatabaseException {
     }
-
+*/
 }
