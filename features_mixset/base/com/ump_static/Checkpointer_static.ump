@@ -236,7 +236,7 @@ class Checkpointer {
       SortedMap execute() throws DatabaseException {
         newDirtyMap=new TreeMap();
         inMemINs=_this.envImpl.getInMemoryINs();
-        this.hook529();
+        Label529: //this.hook529();
         //this.hook553();
         Label553:
         //this.hook528();
@@ -259,6 +259,7 @@ class Checkpointer {
 				      dirtySet.add(new CheckpointReference(in.getDatabase(),in.getNodeId(),in.containsDuplicates(),in.isDbRoot(),in.getMainTreeKey(),in.getDupTreeKey()));
 				    }
 				}
+        Label530_1:
         //this.hook554(); //excute()
         Label554:
         if (newDirtyMap.size() > 0) {
@@ -291,8 +292,9 @@ class Checkpointer {
       
      
    
-      protected void hook529() throws DatabaseException {
-      }
+    //  protected void hook529() throws DatabaseException {
+    //  }
+/*
       after Label530: execute(){
         if (in.getDirty()) {
           level=new Integer(in.getLevel());
@@ -306,6 +308,7 @@ class Checkpointer {
           dirtySet.add(new CheckpointReference(in.getDatabase(),in.getNodeId(),in.containsDuplicates(),in.isDbRoot(),in.getMainTreeKey(),in.getDupTreeKey()));
         }
       }
+*/
       //protected void hook553() throws DatabaseException {
       //}
      // protected void hook554() throws DatabaseException {

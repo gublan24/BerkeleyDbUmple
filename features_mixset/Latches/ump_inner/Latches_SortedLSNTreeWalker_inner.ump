@@ -1,18 +1,18 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
 namespace com.sleepycat.je.dbi;
 class SortedLSNTreeWalker {
-  @MethodObject static class SortedLSNTreeWalker_extractINsForDb {
-      protected void hook356() throws DatabaseException {
+   static class SortedLSNTreeWalker_extractINsForDb {
+      after Label356:execute(){
         inList.latchMajor();
-        original();
+        //original();
       }
-      protected void hook357() throws DatabaseException {
+      after Label357:execute() {
         inList.latchMinorAndDumpAddedINs();
-        original();
+        //original();
       }
-      protected void hook358() throws DatabaseException {
+      after Label358: execute(){
         inList.releaseMajorLatch();
-        original();
+        //original();
       }
     }
 }

@@ -1,15 +1,15 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/cleaner/FileProcessor.java
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-  @MethodObject static class FileProcessor_processLN {
-      protected void hook135() throws DatabaseException {
+   static class FileProcessor_processLN {
+      after Label135: execute() {
         if (parentDIN != null) {
           parentDIN.releaseLatchIfOwner();
         }
         if (bin != null) {
           bin.releaseLatchIfOwner();
         }
-        original();
+        //original();
       }
     }
 }

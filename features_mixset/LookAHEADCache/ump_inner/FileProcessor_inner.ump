@@ -1,21 +1,23 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LookAHEADCache/com/sleepycat/je/cleaner/FileProcessor.java
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-  @MethodObject static class FileProcessor_processLN {
+   static class FileProcessor_processLN {
   	protected LookAheadCache lookAheadCache;
   	
-      protected void hook117() throws DatabaseException {
-      }
-      void execute() throws DatabaseException {
+//      after Label117() throws DatabaseException {  }
+      before execute() {
         lookAheadCache=(LookAheadCache)lookAheadCachep;
-        original();
+        //original();
       }
-      protected void hook132() throws DatabaseException {
+      after Label132: execute(){
+
         offset=lookAheadCache.nextOffset();
         info=lookAheadCache.remove(offset);
-        original();
+       // original();
       }
-      protected void hook133() throws DatabaseException {
+
+      after Label133:execute(){
+
         if (!isDupCountLN) {
           for (int i=0; i < bin.getNEntries(); i+=1) {
             lsn=bin.getLsn(i);
@@ -23,42 +25,47 @@ class FileProcessor {
               myOffset=new Long(DbLsn.getFileOffset(lsn));
               myInfo=lookAheadCache.remove(myOffset);
               if (myInfo != null) {
-                this.hook117();
+                Label117: //this.hook117();
                 _this.processFoundLN(myInfo,lsn,lsn,bin,i,null);
               }
             }
           }
         }
-        original();
+        //original();
       }
     }
-  @MethodObject static class FileProcessor_processFile {
-      protected void hook116() throws DatabaseException, IOException {
-      }
-      protected void hook127() throws DatabaseException, IOException {
+   static class FileProcessor_processFile {
+
+//      after Label116() throws DatabaseException, IOException {}
+
+      after Label127:  execute(){
         lookAheadCache=new LookAheadCache(lookAheadCacheSize);
-        original();
+//        original();
       }
-      protected void hook128() throws DatabaseException, IOException {
+
+
+      after Label128:  execute(){
         lookAheadCacheSize=_this.cleaner.lookAheadCacheSize;
-        original();
+        //original();
       }
-      protected void hook129() throws DatabaseException, IOException {
+
+      after Label129: execute() {
         while (!lookAheadCache.isEmpty()) {
-          this.hook116();
+          Label116: //this.hook116();
           _this.processLN(fileNum,location,null,null,lookAheadCache,dbCache);
         }
-        original();
+        //original();
       }
-      protected void hook130() throws DatabaseException, IOException {
+      after Label130: execute() {
+
         lookAheadCache.add(aLsn,aLninfo);
         if (lookAheadCache.isFull()) {
-          original();
+          //original();
         }
       }
-      protected void hook131() throws DatabaseException, IOException {
+      after Label131: execute() {
         p=lookAheadCache;
-        original();
+        //original();
       }
     }
 }

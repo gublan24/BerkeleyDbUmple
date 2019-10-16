@@ -1,32 +1,32 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/tree/Tree.java
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/tree/Tree.java
 namespace com.sleepycat.je.tree;
 class Tree {
-  @MethodObject static class Tree_forceSplit {
-      protected void hook722() throws DatabaseException, SplitRequiredException {
+   static class Tree_forceSplit {
+      after Label722: execute()   {
         isRootLatched=false;
-        original();
+        //original();
       }
-      protected void hook723() throws DatabaseException, SplitRequiredException {
+      after Label723:execute()   {
         if (origParent.isDbRoot()) {
           _this.rootLatch.acquireExclusive();
           isRootLatched=true;
         }
         origParent.latch();
-        original();
+        //original();
       }
-      protected void hook724() throws DatabaseException, SplitRequiredException {
+      after Label724:execute()    {
         child.latch();
-        original();
+        //original();
       }
-      protected void hook725() throws DatabaseException, SplitRequiredException {
+      after Label725: execute()    {
         child.releaseLatch();
-        original();
+        //original();
       }
-      protected void hook726() throws DatabaseException, SplitRequiredException {
+      after Label726:execute()    {
         assert isRootLatched;
-        original();
+        //original();
       }
-      protected void hook727() throws DatabaseException, SplitRequiredException {
+      after Label727: execute()   {
         if (!success) {
           if (child != null) {
             child.releaseLatchIfOwner();
@@ -43,42 +43,38 @@ class Tree {
         if (isRootLatched) {
           _this.rootLatch.release();
         }
-        original();
+        //original();
       }
     }
-  @MethodObject static class Tree_searchSplitsAllowed {
-      protected void hook716() throws DatabaseException {
-        try {
-          original();
-        }
-    finally {
+   static class Tree_searchSplitsAllowed {
+      after Label716_1:execute()   {
           if (rootLatched) {
             _this.rootLatch.release();
           }
-        }
+        
       }
-      protected void hook717() throws DatabaseException {
+      after Label717:execute()    {
         _this.rootLatch.acquireShared();
         rootLatched=true;
         rootLatchedExclusive=false;
-        original();
+        //original();
       }
-      protected void hook718() throws DatabaseException {
+      after Label718:execute()    {
         rootIN.latch();
-        original();
+        //original();
       }
-      protected void hook719() throws DatabaseException {
+      after Label719:execute()    {
         rootLatched=true;
         _this.rootLatch.acquireExclusive();
-        original();
+        //original();
       }
-      protected void hook720() throws DatabaseException {
+      after Label720:execute()    {
         _this.splitRoot();
         _this.rootLatch.release();
         rootLatched=false;
-        original();
+        //original();
       }
-      protected void hook721() throws DatabaseException {
+      after Label721:execute()    {
         b=!rootLatchedExclusive;
         if (b) {
           rootIN=null;
@@ -86,28 +82,48 @@ class Tree {
           _this.rootLatch.acquireExclusive();
           rootLatchedExclusive=true;
         }
-        original();
+        //original();
       }
     }
   inner class RootChildReference {
-      protected void hook666() throws DatabaseException {
+      after Label666: fetchTarget(    DatabaseImpl ,    IN )   {
         if (getTarget() == null && !rootLatch.isWriteLockedByCurrentThread()) {
           rootLatch.release();
           rootLatch.acquireExclusive();
         }
-        original();
+        //original();
       }
-      protected void hook667(){
+      after Label667: setTarget(    Node target){
         assert rootLatch.isWriteLockedByCurrentThread();
-        original();
+        //original();
       }
-      protected void hook668(){
+      after Label668: clearTarget(){
         assert rootLatch.isWriteLockedByCurrentThread();
-        original();
+        //original();
       }
-      protected void hook669(){
+      after Label669: setLsn(    long ){
         assert rootLatch.isWriteLockedByCurrentThread();
-        original();
+        //original();
       }
     }
 }
+
+
+
+
+     public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
+        Label666:           ;  //this.hook666();
+        return super.fetchTarget(database,in);
+      }
+      public void setTarget(    Node target){
+        Label667:           ;  //this.hook667();
+        super.setTarget(target);
+      }
+      public void clearTarget(){
+        Label668:           ;  //this.hook668();
+        super.clearTarget();
+      }
+      public void setLsn(    long lsn){
+        Label669:           ;  //this.hook669();
+        super.setLsn(lsn);
+      }

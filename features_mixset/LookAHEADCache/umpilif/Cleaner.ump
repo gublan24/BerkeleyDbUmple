@@ -4,9 +4,9 @@ class Cleaner
 {
     int lookAheadCacheSize;
 
-    protected void hook94(DbConfigManager cm) throws DatabaseException {
+    after Label94:  envConfigUpdate(DbConfigManager ) {
 	lookAheadCacheSize = cm.getInt(EnvironmentParams.CLEANER_LOOK_AHEAD_CACHE_SIZE);
-	original(cm);
+//	original(cm);
     }
 
 }

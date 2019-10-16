@@ -53,8 +53,8 @@ class DatabaseImpl {
         ret=new PreloadStats();
         callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
         walker=new PreloadLSNTreeWalker(_this,callback,config);
-        //Label287:  //
-this.hook287();
+        //Label287:  //this.hook287();
+ 				execute_Latches_DatabaseImpl_preload:
         return ret;
       }
       protected DatabaseImpl _this;

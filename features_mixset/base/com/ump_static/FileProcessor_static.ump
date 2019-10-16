@@ -36,11 +36,11 @@ class FileProcessor {
         obsoleteIter=obsoleteOffsets.iterator();
         nextObsolete=-1;
         readBufferSize=_this.cleaner.readBufferSize;
-        this.hook128();
+        Label128: //this.hook128();
         //this.hook161();
         Label161:
         this.hook119();
-        this.hook127();
+        Label127: //this.hook127();
         Label154: //this.hook154();
         dbCache=new HashMap();
         try {
@@ -88,7 +88,11 @@ class FileProcessor {
               dupKey=reader.getDupTreeKey();
               aLsn=new Long(DbLsn.getFileOffset(lsn));
               aLninfo=new LNInfo(targetLN,dbId2,key,dupKey);
-              this.hook130();
+              Label130: //this.hook130();
+  						p=null;
+        			Label131: //this.hook131();
+        			_this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
+//end hook130
               nProcessedLNs+=1;
               if (nProcessedLNs % _this.PROCESS_PENDING_EVERY_N_LNS == 0) {
                 _this.cleaner.processPending();
@@ -108,7 +112,7 @@ class FileProcessor {
               assert false;
             }
           }
-          this.hook129();
+          Label129: //this.hook129();
           Label155: //this.hook155();
           Label145: //this.hook145();
         }
@@ -156,25 +160,24 @@ class FileProcessor {
       protected DatabaseImpl db3;
       protected DatabaseId dbId;
       protected DatabaseImpl db;
+/*
       protected void hook119() throws DatabaseException, IOException {
       }
       protected void hook120() throws DatabaseException, IOException {
       }
-      protected void hook127() throws DatabaseException, IOException {
-      }
+      protected void hook127() throws DatabaseException, IOException { }
       protected void hook128() throws DatabaseException, IOException {
       }
       protected void hook129() throws DatabaseException, IOException {
       }
+*/
       protected void hook130() throws DatabaseException, IOException {
         p=null;
         this.hook131();
         _this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
       }
-      protected void hook131() throws DatabaseException, IOException {
-      }
-      protected void hook137() throws DatabaseException, IOException {
-      }
+  //    protected void hook131() throws DatabaseException, IOException {}
+//      protected void hook137() throws DatabaseException, IOException {}
    //   protected void hook145() throws DatabaseException, IOException {
    //   }
    //   protected void hook146() throws DatabaseException, IOException {
@@ -203,7 +206,7 @@ class FileProcessor {
         this.dbCache=dbCache;
       }
       void execute() throws DatabaseException {
-        this.hook132();
+        Label132: //this.hook132();
         ln=info.getLN();
         key=info.getKey();
         dupKey=info.getDupKey();
@@ -256,12 +259,12 @@ class FileProcessor {
           processedHere=false;
           _this.processFoundLN(info,logLsn,treeLsn,bin,index,parentDIN);
           completed=true;
-          this.hook133();
+          Label133: //this.hook133();
           return;
         }
     finally {
-          this.hook135();
-          this.hook126();
+          Label135: //this.hook135();
+          Label126: //this.hook126();
         }
       }
       protected FileProcessor _this;
@@ -291,7 +294,8 @@ class FileProcessor {
       protected long lsn;
       protected Long myOffset;
       protected LNInfo myInfo;
-      protected void hook126() throws DatabaseException {
+/*     
+ protected void hook126() throws DatabaseException {
       }
       protected void hook132() throws DatabaseException {
       }
@@ -309,5 +313,6 @@ class FileProcessor {
       }
       protected void hook158() throws DatabaseException {
       }
+*/
     }
 }

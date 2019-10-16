@@ -1,26 +1,30 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/cleaner/UtilizationProfile.java
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/cleaner/UtilizationProfile.java
 namespace com.sleepycat.je.cleaner;
 class UtilizationProfile {
-  @MethodObject static class UtilizationProfile_populateCache {
-      protected void hook181() throws DatabaseException {
+   static class UtilizationProfile_populateCache {
+      after Label181:  execute() {
+
         cursor.releaseBIN();
-        original();
+        //original();
       }
-      protected void hook182() throws DatabaseException {
+      after Label182:  execute() {
+
         cursor.latchBIN();
-        original();
+        //original();
       }
-      protected void hook183() throws DatabaseException {
+      after Label183:  execute() {
+
         cursor.releaseBIN();
-        original();
+        //original();
       }
-      protected void hook184() throws DatabaseException {
+      after Label184:  execute() {
+
         cursor.latchBIN();
-        original();
+        //original();
       }
-      protected void hook185() throws DatabaseException {
+      after Label185:  execute() {
         cursor.releaseBINs();
-        original();
+        //original();
       }
     }
 }

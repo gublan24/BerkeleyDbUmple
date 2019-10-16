@@ -14,7 +14,7 @@ class SortedLSNTreeWalker {
         foundSet=new HashSet();
         //this.hook360();
         Label360:
-        this.hook356();
+        Label356: //this.hook356();
         try {
           this.hook357();
           iter=inList.iterator();
@@ -37,7 +37,7 @@ class SortedLSNTreeWalker {
           throw e;
         }
    finally {
-          this.hook358();
+          Label358: //this.hook358();
         }
         if (foundSome) {
           iter1=foundSet.iterator();
@@ -59,12 +59,12 @@ class SortedLSNTreeWalker {
       protected IN thisIN;
       protected Iterator iter1;
       protected IN thisIN1;
-      protected void hook356() throws DatabaseException {
-      }
-      protected void hook357() throws DatabaseException {
-      }
-      protected void hook358() throws DatabaseException {
-      }
+      //protected void hook356() throws DatabaseException {
+      //}
+     // protected void hook357() throws DatabaseException {
+     // }
+     // protected void hook358() throws DatabaseException {
+     // }
      // protected void hook360() throws DatabaseException {
      // }
      // protected void hook361() throws DatabaseException {

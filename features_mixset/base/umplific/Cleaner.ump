@@ -120,7 +120,7 @@ class Cleaner
 	if (readBufferSize <= 0) {
 	    readBufferSize = cm.getInt(EnvironmentParams.LOG_ITERATOR_READ_SIZE);
 	}
-	this.hook94(cm);
+	Label94: //this.hook94(cm);
 	nDeadlockRetries = cm.getInt(EnvironmentParams.CLEANER_DEADLOCK_RETRY);
 	expunge = cm.getBoolean(EnvironmentParams.CLEANER_REMOVE);
 	clusterResident = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER);
@@ -642,8 +642,8 @@ Label_115_1:
 	    throws DatabaseException {
     }
 
-    protected void hook94(DbConfigManager cm) throws DatabaseException {
-    }
+   // protected void hook94(DbConfigManager cm) throws DatabaseException {
+   // }
 
     protected void hook95(BIN bin, DIN parentDIN) throws DatabaseException {
     }

@@ -1,28 +1,28 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/CursorImpl.java
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
-  @MethodObject static class CursorImpl_latchBIN {
-      protected void hook244() throws DatabaseException {
+   static class CursorImpl_latchBIN {
+      after Label244: execute() {
         while (_this.bin != null) {
-          original();
+         // original();
         }
         throw new ReturnObject(null);
       }
-      protected void hook245() throws DatabaseException {
+      after Label245: execute() {
         waitingOn=_this.bin;
         waitingOn.latch();
         if (_this.bin == waitingOn) {
-          original();
+         // original();
         }
         waitingOn.releaseLatch();
       }
     }
-  @MethodObject static class CursorImpl_getNextDuplicate {
-      protected void hook250() throws DatabaseException {
+   static class CursorImpl_getNextDuplicate {
+      after Label250() throws DatabaseException {
         assert _this.checkAlreadyLatched(alreadyLatched) : _this.dumpToString(true);
         original();
       }
-      protected void hook251() throws DatabaseException {
+      after Label251() throws DatabaseException {
         if (!alreadyLatched) {
           _this.latchDBIN();
         }
@@ -31,34 +31,34 @@ class CursorImpl {
         }
         original();
       }
-      protected void hook252() throws DatabaseException {
+      after Label252() throws DatabaseException {
         _this.releaseDBIN();
         original();
       }
-      protected void hook253() throws DatabaseException {
+      after Label253() throws DatabaseException {
         assert LatchSupport.countLatchesHeld() == 0;
         original();
       }
-      protected void hook254() throws DatabaseException {
+      after Label254() throws DatabaseException {
         assert (LatchSupport.countLatchesHeld() == 0);
         _this.dupBinToBeRemoved.latch();
         original();
       }
-      protected void hook255() throws DatabaseException {
+      after Label255() throws DatabaseException {
         _this.dupBinToBeRemoved.releaseLatch();
         original();
       }
-      protected void hook256() throws DatabaseException {
+      after Label256() throws DatabaseException {
         alreadyLatched=true;
         original();
       }
-      protected void hook257() throws DatabaseException {
+      after Label257() throws DatabaseException {
         assert LatchSupport.countLatchesHeld() == 0;
         original();
       }
     }
   @MethodObject static class CursorImpl_lockNextKeyForInsert {
-      protected void hook248() throws DatabaseException {
+      after Label248() throws DatabaseException {
         latched=true;
         try {
           original();
@@ -69,19 +69,19 @@ class CursorImpl {
           }
         }
       }
-      protected void hook249() throws DatabaseException {
+      after Label249() throws DatabaseException {
         latched=false;
         original();
       }
     }
   @MethodObject static class CursorImpl_latchDBIN {
-      protected void hook246() throws DatabaseException {
+      after Label246() throws DatabaseException {
         while (_this.dupBin != null) {
           original();
         }
         throw new ReturnObject(null);
       }
-      protected void hook247() throws DatabaseException {
+      after Label247() throws DatabaseException {
         waitingOn=_this.dupBin;
         waitingOn.latch();
         if (_this.dupBin == waitingOn) {
@@ -91,7 +91,7 @@ class CursorImpl {
       }
     }
   @MethodObject static class CursorImpl_fetchCurrent {
-      protected void hook258() throws DatabaseException {
+      after Label258() throws DatabaseException {
         try {
           original();
         }
@@ -99,11 +99,11 @@ class CursorImpl {
           _this.releaseBINs();
         }
       }
-      protected void hook259() throws DatabaseException {
+      after Label259() throws DatabaseException {
         assert _this.targetBin.isLatchOwner();
         original();
       }
-      protected void hook260() throws DatabaseException {
+      after Label260() throws DatabaseException {
         try {
           original();
         }
@@ -112,16 +112,16 @@ class CursorImpl {
           throw DE;
         }
       }
-      protected void hook261() throws DatabaseException {
+      after Label261() throws DatabaseException {
         _this.targetBin.releaseLatchIfOwner();
         original();
       }
-      protected void hook262() throws DatabaseException {
+      after Label262() throws DatabaseException {
         duplicateRoot.latch();
         _this.targetBin.releaseLatch();
         original();
       }
-      protected void hook263() throws DatabaseException {
+      after Label263() throws DatabaseException {
         try {
           original();
         }

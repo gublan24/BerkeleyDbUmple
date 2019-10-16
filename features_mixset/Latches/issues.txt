@@ -3,3 +3,7 @@
 Latches_SyncedLockManager.ump
 
 2) all methods have Latches_LogManger.ump
+
+3)
+/home/abdulaziz/Desktop/BerkeleyDb/features_mixset/Latches/ump_inner/Latches_Checkpointer_inner.ump
+/home/abdulaziz/Desktop/BerkeleyDb/features_mixset/Latches/ump_inner/Latches_CursorImpl_inner.ump

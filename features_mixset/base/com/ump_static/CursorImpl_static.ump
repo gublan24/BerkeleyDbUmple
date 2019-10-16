@@ -52,7 +52,9 @@ class CursorImpl {
   }
   BIN execute() throws DatabaseException {
   try {
-  this.hook244();
+  Label244: //this.hook244();
+  Label245: //this.hook245();
+  throw new ReturnObject(_this.bin);
   throw ReturnHack.returnObject;
   }
    catch (ReturnObject r) {
@@ -61,12 +63,14 @@ class CursorImpl {
   }
   protected CursorImpl _this;
   protected BIN waitingOn;
+/*
   protected void hook244() throws DatabaseException {
-  this.hook245();
+  Label245: //this.hook245();
   }
   protected void hook245() throws DatabaseException {
   throw new ReturnObject(_this.bin);
   }
+*/
   }
   @MethodObject static class CursorImpl_latchDBIN {
   CursorImpl_latchDBIN(CursorImpl _this){

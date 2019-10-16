@@ -1,75 +1,73 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/tree/IN.java
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/tree/IN.java
 namespace com.sleepycat.je.tree;
 class IN {
-  @MethodObject static class IN_splitInternal {
-      protected void hook630() throws DatabaseException {
-        try {
-          original();
-        }
-    finally {
+   static class IN_splitInternal {
+      after Label630: execute() {
+//        try {          //original();}//  finally {
           newSibling.releaseLatch();
-        }
+    //    }
       }
-      protected void hook631() throws DatabaseException {
+
+      after Label631: execute() {
         newSibling.latch();
-        original();
+        //original();
       }
     }
-  @MethodObject static class IN_isValidForDelete {
-      protected void hook634() throws DatabaseException {
+   static class IN_isValidForDelete {
+      after Label634:execute() {
         needToLatch=!_this.isLatchOwner();
-        try {
-          original();
-        }
-    finally {
+}
+   after Label634_1:execute() {
+//        try {          //original();} finally {
           if (needToLatch) {
             _this.releaseLatchIfOwner();
           }
-        }
+  //      }
       }
-      protected void hook635() throws DatabaseException {
+      after Label635: execute() {
         if (needToLatch) {
           _this.latch();
         }
-        original();
+        //original();
       }
     }
-  @MethodObject static class IN_validateSubtreeBeforeDelete {
-      protected void hook628() throws DatabaseException {
+   static class IN_validateSubtreeBeforeDelete {
+      after Label628: execute() {
         needToLatch=!_this.isLatchOwner();
-        try {
-          original();
-        }
-    finally {
+        
+//try {          //original();//      }
+    
+
+  after Label628_1: execute() {
           if (needToLatch) {
             _this.releaseLatchIfOwner();
           }
-        }
       }
-      protected void hook629() throws DatabaseException {
+
+      after Label629: execute() {
         if (needToLatch) {
           _this.latch();
         }
-        original();
+        //original();
       }
     }
-  @MethodObject static class IN_verify {
-      void execute() throws DatabaseException {
+   static class IN_verify {
+      before execute()  {
         unlatchThis=false;
-        original();
+        //original();
       }
-      protected void hook632() throws DatabaseException {
+      after Label632: execute() {
         if (!_this.isLatchOwner()) {
           _this.latch();
           unlatchThis=true;
         }
-        original();
+        //original();
       }
-      protected void hook633() throws DatabaseException {
+      after Label633: execute() {
         if (unlatchThis) {
           _this.releaseLatch();
         }
-        original();
+        //original();
       }
     }
 }

@@ -254,10 +254,20 @@ class IN {
       }
       boolean execute() throws DatabaseException {
         try {
-          this.hook628();
+          Label628: //this.hook628();
+	 				this.hook629();
+		      if (index >= _this.nEntries) {
+		        throw new ReturnBoolean(true);
+		      }
+					 else {
+		        child=_this.fetchTarget(index);
+		        throw new ReturnBoolean(child != null && child.isValidForDelete());
+		      }
+// end hook628
           throw ReturnHack.returnBoolean;
         }
    catch (      ReturnBoolean r) {
+Label628_1:
           return r.value;
         }
       }
@@ -265,8 +275,9 @@ class IN {
       protected int index;
       protected boolean needToLatch;
       protected Node child;
-      protected void hook628() throws DatabaseException {
-        this.hook629();
+
+ /*     protected void hook628() throws DatabaseException {
+        Label629: //this.hook629();
         if (index >= _this.nEntries) {
           throw new ReturnBoolean(true);
         }
@@ -275,8 +286,8 @@ class IN {
           throw new ReturnBoolean(child != null && child.isValidForDelete());
         }
       }
-      protected void hook629() throws DatabaseException {
-      }
+*/
+//      protected void hook629() throws DatabaseException {}
     }
   @MethodObject static class IN_splitInternal {
       IN_splitInternal(    IN _this,    IN parent,    int childIndex,    int maxEntries,    int splitIndex){
@@ -297,7 +308,12 @@ class IN {
   {
         }
         newSibling=null;
-        if (idKeyIndex < splitIndex) {
+        if (idKeyIndearentLsn=DbLsn.NULL_LSN;
+        newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
+        Label631: //this.hook631();
+        oldMemorySize=_this.inMemorySize;
+        //this.hook630();
+        Label630:x < splitIndex) {
           low=splitIndex;
           high=_this.nEntries;
         }
@@ -306,12 +322,7 @@ class IN {
           high=splitIndex;
         }
         newIdKey=_this.entryKeyVals[low];
-        parentLsn=DbLsn.NULL_LSN;
-        newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
-        this.hook631();
-        oldMemorySize=_this.inMemorySize;
-        //this.hook630();
-        Label630:
+        p
         toIdx=0;
         deletedEntrySeen=false;
         binRef=null;
@@ -416,7 +427,7 @@ class IN {
       }
       void execute() throws DatabaseException {
         try {
-          this.hook632();
+          Label632: //this.hook632();
           userCompareToFcn=(_this.databaseImpl == null ? null : _this.getKeyComparator());
           key1=null;
           for (int i=1; i < _this.nEntries; i++) {
@@ -441,7 +452,7 @@ class IN {
           DE.printStackTrace(System.out);
         }
    finally {
-          this.hook633();
+          Label633: //this.hook633();
         }
       }
       protected IN _this;
@@ -452,10 +463,8 @@ class IN {
       protected byte[] key2;
       protected int s;
       protected boolean inconsistent;
-      protected void hook632() throws DatabaseException {
-      }
-      protected void hook633() throws DatabaseException {
-      }
+ //     protected void hook632() throws DatabaseException { }
+ //     protected void hook633() throws DatabaseException {}
     }
   @MethodObject static class IN_isValidForDelete {
       IN_isValidForDelete(    IN _this){
@@ -463,17 +472,34 @@ class IN {
       }
       boolean execute() throws DatabaseException {
         try {
-          this.hook634();
+				      Label634: //this.hook634();
+							Label635: //this.hook635();
+						  if (_this.nEntries > 1) {
+						    throw new ReturnBoolean(false);
+						  }
+				 else       if (_this.nEntries == 1) {
+						    child=_this.fetchTarget(0);
+						    throw new ReturnBoolean(child != null && child.isValidForDelete());
+						  }
+				 else {
+						    throw new ReturnBoolean(true);
+						  }
+
+//end hook634
+
           throw ReturnHack.returnBoolean;
         }
    catch (      ReturnBoolean r) {
+Label634_1: 
           return r.value;
         }
       }
       protected IN _this;
       protected boolean needToLatch;
       protected Node child;
-      protected void hook634() throws DatabaseException {
+
+ /*     protected void hook634() throws DatabaseException {
+
         this.hook635();
         if (_this.nEntries > 1) {
           throw new ReturnBoolean(false);
@@ -488,6 +514,7 @@ class IN {
       }
       protected void hook635() throws DatabaseException {
       }
+*/
     }
   @MethodObject static class IN_trackProvisionalObsolete {
       IN_trackProvisionalObsolete(    IN _this,    IN child,    long obsoleteLsn1,    long obsoleteLsn2){

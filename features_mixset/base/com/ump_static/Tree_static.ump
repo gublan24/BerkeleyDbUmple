@@ -5,6 +5,7 @@ class Tree {
       public static final SearchType NORMAL=new SearchType();
       public static final SearchType LEFT=new SearchType();
       public static final SearchType RIGHT=new SearchType();
+
       private SearchType(){
       }
     }
@@ -20,29 +21,25 @@ class Tree {
         super(target,key,lsn,existingState);
       }
       public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
-        this.hook666();
+        Label666:           ;  //this.hook666();
         return super.fetchTarget(database,in);
       }
       public void setTarget(    Node target){
-        this.hook667();
+        Label667:           ;  //this.hook667();
         super.setTarget(target);
       }
       public void clearTarget(){
-        this.hook668();
+        Label668:           ;  //this.hook668();
         super.clearTarget();
       }
       public void setLsn(    long lsn){
-        this.hook669();
+        Label669:           ;  //this.hook669();
         super.setLsn(lsn);
       }
-      protected void hook666() throws DatabaseException {
-      }
-      protected void hook667(){
-      }
-      protected void hook668(){
-      }
-      protected void hook669(){
-      }
+//      protected void hook666() throws DatabaseException {}
+      //protected void hook667(){}
+      //protected void hook668(){}
+      //protected void hook669(){}
     }
   static  class SplitInfo {
       IN parent;
@@ -64,9 +61,32 @@ class Tree {
       IN execute() throws DatabaseException {
         insertTarget=null;
         while (insertTarget == null) {
-          this.hook717();
+          Label717:           ;  //this.hook717();
           rootIN=null;
-          this.hook716();
+          Label716:           ;  //this.hook716();
+try{
+       while (true) {
+          if (_this.root != null) {
+            rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+            if (rootIN.needsSplitting()) {
+              b=true;
+              Label721:           ;  //this.hook721();
+              if (b)             continue;
+              Label720:           ;  //this.hook720();
+              env=_this.database.getDbEnvironment();
+              env.getDbMapTree().modifyDbRoot(_this.database);
+              Label719:           ;  //this.hook719();
+              rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+            }
+            Label718:           ;  //this.hook718();
+          }
+          break;
+        }
+}
+finally {
+Label716_1:
+}
+//End of hook716
           if (rootIN == null) {
             break;
           }
@@ -89,25 +109,28 @@ class Tree {
       protected IN rootIN;
       protected boolean b;
       protected EnvironmentImpl env;
+/*
       protected void hook716() throws DatabaseException {
         while (true) {
           if (_this.root != null) {
             rootIN=(IN)_this.root.fetchTarget(_this.database,null);
             if (rootIN.needsSplitting()) {
               b=true;
-              this.hook721();
+              Label721:           ;  //this.hook721();
               if (b)             continue;
-              this.hook720();
+              Label720:           ;  //this.hook720();
               env=_this.database.getDbEnvironment();
               env.getDbMapTree().modifyDbRoot(_this.database);
-              this.hook719();
+              Label719:           ;  //this.hook719();
               rootIN=(IN)_this.root.fetchTarget(_this.database,null);
             }
-            this.hook718();
+            Label718:           ;  //this.hook718();
           }
           break;
         }
       }
+*/
+/*
       protected void hook717() throws DatabaseException {
       }
       protected void hook718() throws DatabaseException {
@@ -118,6 +141,7 @@ class Tree {
       }
       protected void hook721() throws DatabaseException {
       }
+*/
     }
   @MethodObject static class Tree_forceSplit {
       Tree_forceSplit(    Tree _this,    IN parent,    byte[] key){
@@ -134,10 +158,10 @@ class Tree {
         child=null;
         origParent=parent;
         iter=null;
-        this.hook722();
+        Label722:           ;  //this.hook722();
         success=false;
         try {
-          this.hook723();
+          Label723:           ;  //this.hook723();
           if (origParent.needsSplitting() || !origParent.isRoot()) {
             throw _this.splitRequiredException;
           }
@@ -160,7 +184,7 @@ class Tree {
               break;
             }
    else {
-              this.hook724();
+              Label724:           ;  //this.hook724();
               nodeLadder.add(new SplitInfo(parent,child,index));
             }
             parent=child;
@@ -186,7 +210,7 @@ class Tree {
               lastParentForSplit=parent.getNodeId();
               startedSplits=true;
               if (parent.isDbRoot()) {
-                this.hook726();
+                Label726:           ;  //this.hook726();
                 _this.root.setLsn(parent.getLastFullVersion());
                 parent.setDirty(true);
               }
@@ -203,14 +227,14 @@ class Tree {
                 parent.updateEntry(index,newLsn);
               }
             }
-            this.hook725();
+            Label725:           ;  //this.hook725();
             child=null;
             iter.remove();
           }
           success=true;
         }
     finally {
-          this.hook727();
+          Label727:           ;  //this.hook727();
         }
       }
       protected Tree _this;
@@ -232,6 +256,7 @@ class Tree {
       protected int maxEntriesPerNode;
       protected long newLsn;
       protected SplitInfo info2;
+/*
       protected void hook722() throws DatabaseException, SplitRequiredException {
       }
       protected void hook723() throws DatabaseException, SplitRequiredException {
@@ -244,5 +269,6 @@ class Tree {
       }
       protected void hook727() throws DatabaseException, SplitRequiredException {
       }
+*/
     }
 }
