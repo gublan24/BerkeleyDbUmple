@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    after Label318: doClose(boolean ){
+	Tracer.trace(Level.FINE, this, "Env " + envHome + " daemons shutdown");
+	//original();
+    }
+
+    after Label319: doClose(boolean ){
+	Tracer.trace(Level.FINE, this, "Close of environment " + envHome + " started");
+	//original();
+    }
+
+}

@@ -1,0 +1,35 @@
+namespace com.sleepycat.je.cleaner;
+
+class Cleaner
+{
+    Level detailedTraceLevel;
+
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    void trace(Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete,
+	    boolean dirtiedMigrated) {
+	new Cleaner_trace(this, level, action, node, logLsn, completed, obsolete, dirtiedMigrated).execute();
+    }
+
+    after Label90: envConfigUpdate(DbConfigManager ) {
+	detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_CLEANER);
+	//original();
+    }
+
+    after Label91: processPendingLN(LN , DatabaseImpl , byte , byte , TreeLocation ) {
+	trace(detailedTraceLevel, CLEAN_PENDING_LN, ln, DbLsn.NULL_LSN, completed, obsolete, false);
+	//original(ln, obsolete, completed);
+    }
+
+    after Label92: migrateLN(DatabaseImpl , long , BIN , int , boolean , boolean , long , String ){
+	trace(detailedTraceLevel, cleanAction, ln, lsn, completed, obsolete, migrated);
+	//original(lsn, cleanAction, obsolete, migrated, completed, ln);
+    }
+
+    after Label93: igrateDupCountLN(DatabaseImpl , long , DIN , ChildReference , boolean , boolean , long , String ) {
+	trace(detailedTraceLevel, cleanAction, ln, lsn, completed, obsolete, migrated);
+	//original(lsn, cleanAction, obsolete, migrated, completed, ln);
+    }
+
+}

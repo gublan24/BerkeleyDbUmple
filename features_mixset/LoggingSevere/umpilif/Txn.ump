@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.txn;
+
+class Txn
+{
+    after Label800: commit(byte ) {
+	Tracer.trace(envImpl, "Txn", "commit", "Commit of transaction " + id + " failed", t);
+	//original(t);
+    }
+
+    after Label801: undo() {
+	Tracer.trace(envImpl, "Txn", "undo", "for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
+	//original(nodeId, undoLsn, e);
+    }
+
+}

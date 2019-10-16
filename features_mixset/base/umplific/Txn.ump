@@ -278,7 +278,7 @@ class Txn
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				this.hook800(t);
+				Label800: //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -324,7 +324,7 @@ class Txn
 	    Label807: //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799: //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -375,7 +375,7 @@ class Txn
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    this.hook801(nodeId, undoLsn, e);
+	    Label801: //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
     }
@@ -777,14 +777,11 @@ class Txn
     /** 
      * Store information about a DatabaseImpl that will have to be purged at transaction commit or abort. This handles cleanup after operations like Environment.truncateDatabase,  Environment.removeDatabase. Cleanup like this is done outside the usual transaction commit or node undo processing, because the mapping tree is always AutoTxn'ed to avoid deadlock and is  essentially  non-transactional
      */
-    protected void hook799(int numReadLocks, int numWriteLocks, boolean openCursors) throws DatabaseException {
-    }
+    //protected void hook799(int numReadLocks, int numWriteLocks, boolean openCursors) throws DatabaseException {}
 
-    protected void hook800(Throwable t) throws DatabaseException, Throwable {
-    }
+  //  protected void hook800(Throwable t) throws DatabaseException, Throwable {}
 
-    protected void hook801(Long nodeId, long undoLsn, DatabaseException e) throws DatabaseException {
-    }
+//    protected void hook801(Long nodeId, long undoLsn, DatabaseException e) throws DatabaseException {}
 
 /*    protected void hook802(long undoLsn, TreeLocation location, LNLogEntry undoEntry, LN undoLN, DatabaseImpl db,
 	    long abortLsn, boolean abortKnownDeleted) throws DatabaseException, RuntimeException {

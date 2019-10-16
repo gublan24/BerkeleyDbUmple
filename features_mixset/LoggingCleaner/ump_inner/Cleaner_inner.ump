@@ -1,0 +1,28 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingCleaner/com/sleepycat/je/cleaner/Cleaner.java
+namespace com.sleepycat.je.cleaner;
+class Cleaner {
+   static class Cleaner_trace {
+      Cleaner_trace(    Cleaner _this,    Level level,    String action,    Node node,    long logLsn,    boolean completed,    boolean obsolete,    boolean dirtiedMigrated){
+        this._this=_this;
+        this.level=level;
+        this.action=action;
+        this.node=node;
+        this.logLsn=logLsn;
+        this.completed=completed;
+        this.obsolete=obsolete;
+        this.dirtiedMigrated=dirtiedMigrated;
+      }
+      void execute(){
+      }
+      protected Cleaner _this;
+      protected Level level;
+      protected String action;
+      protected Node node;
+      protected long logLsn;
+      protected boolean completed;
+      protected boolean obsolete;
+      protected boolean dirtiedMigrated;
+      protected Logger logger;
+      protected StringBuffer sb;
+    }
+}

@@ -129,7 +129,7 @@ class FileProcessor {
             try {
                 String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
                 Label139: //traceMsg = this.hook139(traceMsg);
-                    this.hook121(traceMsg);
+                Label121: //this.hook121(traceMsg);
                 if (DEBUG_TRACING) {
                     System.out.println("\n" + traceMsg);
                 }
@@ -140,7 +140,7 @@ class FileProcessor {
                         finished = true;
                 }
             } catch (IOException IOE) {
-                this.hook122(IOE);
+                Label122: //this.hook122(IOE);
                 throw new DatabaseException(IOE);
             } finally {
                 if (!finished) {
@@ -149,7 +149,7 @@ class FileProcessor {
                 String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue) +
                     " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
                 Label141: //traceMsg = this.hook141(traceMsg);
-                    this.hook123(traceMsg);
+                Label123:    //this.hook123(traceMsg);
                 if (DEBUG_TRACING) {
                     System.out.println("\n" + traceMsg);
                 }
@@ -248,7 +248,7 @@ class FileProcessor {
             if (completed && lockDenied) {
                 fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
             }
-            this.hook124(logLsn, ln, obsolete, migrated, completed);
+            Label124: //this.hook124(logLsn, ln, obsolete, migrated, completed);
         }
     }
 
@@ -291,6 +291,8 @@ class FileProcessor {
         } catch (ReturnVoid r) {
             return;
         }
+Label125_1: ;//;
+
     }
 
     /** 
@@ -353,14 +355,14 @@ class FileProcessor {
         return sb.toString();
     }
 
-    protected void hook121(String traceMsg) throws DatabaseException, IOException {}
+    //protected void hook121(String traceMsg) throws DatabaseException, IOException {}
 
-    protected void hook122(IOException IOE) throws DatabaseException {}
+   // protected void hook122(IOException IOE) throws DatabaseException {}
 
-    protected void hook123(String traceMsg) throws DatabaseException {}
+  //  protected void hook123(String traceMsg) throws DatabaseException {}
 
-    protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed)
-    throws DatabaseException {}
+   // protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed)
+   // throws DatabaseException {}
 
     //   protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
     //   throws DatabaseException {

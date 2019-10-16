@@ -1,0 +1,49 @@
+namespace com.sleepycat.je.tree;
+
+class Tree
+{
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    private void traceSplitRoot(Level level, String splitType, IN newRoot, long newRootLsn, IN oldRoot,
+	    long oldRootLsn) {
+	new Tree_traceSplitRoot(this, level, splitType, newRoot, newRootLsn, oldRoot, oldRootLsn).execute();
+    }
+
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    private void traceMutate(Level level, BIN theBin, LN existingLn, LN newLn, long newLsn, DupCountLN dupCountLN,
+	    long dupRootLsn, DIN dupRoot, long ddinLsn, DBIN dupBin, long dbinLsn) {
+	new Tree_traceMutate(this, level, theBin, existingLn, newLn, newLsn, dupCountLN, dupRootLsn, dupRoot, ddinLsn,
+		dupBin, dbinLsn).execute();
+    }
+
+    protected void hook661: delete(byte , UtilizationTracker ){
+	RecoveryManager.traceRootDeletion(Level.FINE, database);
+//	original();
+    }
+
+    protected void hook662: splitRoot(){
+	traceSplitRoot(Level.FINE, TRACE_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
+//	original(curRoot, curRootLsn, logLsn, newRoot);
+    }
+
+    protected void hook663: maybeSplitDuplicateRoot(BIN , int ){
+	traceSplitRoot(Level.FINE, TRACE_DUP_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
+//	original(curRoot, newRoot, curRootLsn, logLsn);
+    }
+
+    protected void hook664: createDuplicateTree(byte , LogManager , INList , LN , CursorImpl ) {
+	traceMutate(Level.FINE, bin, existingLN, newLN, newLsn, dupCountLN, dupCountLsn, dupRoot, dinLsn, dupBin,		dbinLsn);
+//	original(newLN, dupRoot, dupBin, bin, existingLN, dupCountLN, dbinLsn, dinLsn, dupCountLsn, newLsn);
+    }
+
+    protected void hook665: accountForSubtreeRemoval(INList , IN , UtilizationTracker ){
+
+	Tracer.trace(Level.FINE, database.getDbEnvironment(),
+		"SubtreeRemoval: subtreeRoot = " + subtreeRoot.getNodeId());
+	//original(subtreeRoot);
+    }
+
+}

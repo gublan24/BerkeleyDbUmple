@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.txn;
+
+class Txn
+{
+    after Label799: abortInternal(boolean , boolean ) {
+
+	Tracer.trace(Level.FINE, envImpl, "Abort:id = " + id + " numWriteLocks= " + numWriteLocks + " numReadLocks= "
+		+ numReadLocks + " openCursors= " + openCursors);
+	//original(numReadLocks, numWriteLocks, openCursors);
+    }
+
+}

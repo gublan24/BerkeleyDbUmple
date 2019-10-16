@@ -339,7 +339,7 @@ class EnvironmentImpl
     private void doClose(boolean doCheckpoint) throws DatabaseException {
 			StringBuffer errors = new StringBuffer();
 			try {
-					this.hook319();
+					Label319: //this.hook319();
 					try {
 				envState.checkState(DbEnvState.VALID_FOR_CLOSE, DbEnvState.CLOSED);
 					} catch (DatabaseException DBE) {
@@ -364,7 +364,7 @@ class EnvironmentImpl
 				errors.append("\nException shutting down daemon threads: ");
 				errors.append(IE.toString()).append("\n");
 					}
-					this.hook318();
+					Label318: //this.hook318();
 					try {
 				logManager.flush();
 					} catch (DatabaseException DBE) {
@@ -659,14 +659,11 @@ class EnvironmentImpl
 	return true;
     }
 
-    protected void hook317(DbConfigManager mgr) throws DatabaseException {
-    }
+//    protected void hook317(DbConfigManager mgr) throws DatabaseException {    }
 
-    protected void hook318() throws DatabaseException {
-    }
+ //   protected void hook318() throws DatabaseException {}
 
-    protected void hook319() throws DatabaseException {
-    }
+   // protected void hook319() throws DatabaseException {}
 
  //   protected void hook320() throws DatabaseException {
   //  }

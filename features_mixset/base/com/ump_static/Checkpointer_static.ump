@@ -123,7 +123,7 @@ class Checkpointer {
         _this.checkpointId++;
         Label534: //this.hook534();
         success=false;
-        this.hook522();
+        Label522: //this.hook522();
         //this.hook548();
         Label548:
         mb=_this.envImpl.getMemoryBudget();
@@ -161,7 +161,7 @@ class Checkpointer {
 		      _this.flushDirtyNodes(dirtyMap,flushAll,allowDeltas,flushExtraLevel,checkpointStart);
 		      _this.flushUtilizationInfo();
 		      endEntry=new CheckpointEnd(invokingSource,checkpointStart,_this.envImpl.getRootLsn(),firstActiveLsn,Node.getLastId(),_this.envImpl.getDbMapTree().getLastDbId(),_this.envImpl.getTxnManager().getLastTxnId(),_this.checkpointId);
-		      this.hook523();
+		      Label523: //this.hook523();
 		      _this.lastCheckpointEnd=_this.logManager.logForceFlush(endEntry,true);
 		      _this.lastFirstActiveLsn=firstActiveLsn;
 		      Label536: //this.hook536();
@@ -175,7 +175,7 @@ class Checkpointer {
     finally {
           //this.hook549();
             Label549:
-          this.hook524();
+          Label524: //this.hook524();
         }
       }
       protected Checkpointer _this;
@@ -198,12 +198,9 @@ class Checkpointer {
       protected int size;
       protected boolean allowDeltas;
       protected CheckpointEnd endEntry;
-      protected void hook522() throws DatabaseException {
-      }
-      protected void hook523() throws DatabaseException {
-      }
-      protected void hook524() throws DatabaseException {
-      }
+    //  protected void hook522() throws DatabaseException {}
+  //    protected void hook523() throws DatabaseException {}
+//      protected void hook524() throws DatabaseException {}
       //protected void hook525() throws DatabaseException {
        
       //}

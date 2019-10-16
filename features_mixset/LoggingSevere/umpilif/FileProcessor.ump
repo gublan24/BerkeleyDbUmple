@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.cleaner;
+
+class FileProcessor
+{
+    after Label122: doClean(boolean , boolean , boolean ){
+
+	Tracer.trace(env, "Cleaner", "doClean", "", IOE);
+	//original(IOE);
+    }
+
+    after Label123: doClean(boolean , boolean , boolean ) {
+	Tracer.trace(Level.SEVERE, env, traceMsg);
+	//original(traceMsg);
+    }
+
+}

@@ -1618,16 +1618,16 @@ class Tree {
 
     protected void hook660(LN newLN, long binNid, DBIN dupBin, long newLsn) throws DatabaseException {}
 
-    protected void hook661() throws DatabaseException, NodeNotEmptyException, CursorsExistException {}
+   // protected void hook661() throws DatabaseException, NodeNotEmptyException, CursorsExistException {}
 
-    protected void hook662(IN curRoot, long curRootLsn, long logLsn, IN newRoot) throws DatabaseException {}
+    //protected void hook662(IN curRoot, long curRootLsn, long logLsn, IN newRoot) throws DatabaseException {}
 
-    protected void hook663(DIN curRoot, DIN newRoot, long curRootLsn, long logLsn) throws DatabaseException {}
+  //  protected void hook663(DIN curRoot, DIN newRoot, long curRootLsn, long logLsn) throws DatabaseException {}
 
-    protected void hook664(LN newLN, DIN dupRoot, DBIN dupBin, BIN bin, LN existingLN, DupCountLN dupCountLN,
-        long dbinLsn, long dinLsn, long dupCountLsn, long newLsn) throws DatabaseException {}
+    //protected void hook664(LN newLN, DIN dupRoot, DBIN dupBin, BIN bin, LN existingLN, DupCountLN dupCountLN,
+      //  long dbinLsn, long dinLsn, long dupCountLsn, long newLsn) throws DatabaseException {}
 
-    protected void hook665(IN subtreeRoot) throws DatabaseException {}
+  //  protected void hook665(IN subtreeRoot) throws DatabaseException {}
 
     /*  protected void hook670(WithRootLatched wrl) throws DatabaseException {
 	Label:           ;  //this.hook728();

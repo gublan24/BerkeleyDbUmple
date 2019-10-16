@@ -96,7 +96,7 @@ class RecoveryManager
 			preparedTxns = new HashMap();
 			inListRebuildDbIds = new HashSet();
 			fileSummaryLsns = new HashMap();
-			Label:           ;  //this.hook578(env);
+			Label578:           ;  //this.hook578(env);
     }
 
     /** 
@@ -124,7 +124,7 @@ class RecoveryManager
 				forceCheckpoint = true;
 					}
 					if (preparedTxns.size() > 0) {
-				Label:           ;  //this.hook573();
+				Label573:           ;  //this.hook573();
 				preparedTxns = null;
 					}
 					if (DbInternal.getCreateUP(env.getConfigManager().getEnvironmentConfig())) {
@@ -262,7 +262,7 @@ class RecoveryManager
 	start = System.currentTimeMillis();
 	info.numBinDeltas += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DUP_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label:           ;  //this.hook564(start, end);
+	Label564:           ;  //this.hook564(start, end);
 	rebuildINList();
 //	Label:           ;  //this.hook596();
   Label596:
@@ -974,10 +974,10 @@ class RecoveryManager
 
     private void traceAndThrowException(long badLsn, String method, Exception origException) throws DatabaseException {
 	String badLsnString = DbLsn.getNoFormatString(badLsn);
-	Label:           ;  //this.hook577(method, origException, badLsnString);
+	Label577:           ;  //this.hook577(method, origException, badLsnString);
 	throw new DatabaseException("last LSN=" + badLsnString, origException);
     }
-
+/*
     protected void hook556() throws DatabaseException, IOException {
     }
 
@@ -1071,7 +1071,7 @@ class RecoveryManager
 	    byte[] mainKey, byte[] dupKey, long logLsn, long abortLsn, boolean abortKnownDeleted, RecoveryInfo info,
 	    boolean splitsAllowed, boolean found, boolean replaced, boolean success) throws DatabaseException {
 	  }
-
+*/
   //  protected void hook585(IN in) throws DatabaseException {
     //}
 
@@ -1110,11 +1110,9 @@ class RecoveryManager
     //protected void hook593(INFileReader reader) throws IOException, DatabaseException {
     //}
 
-    protected void hook594(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {
-    }
+//    protected void hook594(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {   }
 
-    protected static void hook595(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {
-    }
+//    protected static void hook595(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {  }
 
   //  protected void hook596() throws IOException, DatabaseException {
   //  }

@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.cleaner;
+
+class FileProcessor
+{
+    after Label124:processFoundLN(LNInfo , long , long , BIN , int , DIN ){
+			cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln, logLsn, completed, obsolete, migrated);
+			//original(logLsn, ln, obsolete, migrated, completed);
+    }
+
+    after Label125_1:processIN(IN , DatabaseImpl, long ) {
+			finally {
+	    cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, completed, obsolete, dirtied);
+    	}
+  }
+
+}

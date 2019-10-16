@@ -1,0 +1,12 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingCleaner/com/sleepycat/je/cleaner/FileProcessor.java
+namespace com.sleepycat.je.cleaner;
+class FileProcessor {
+   static class FileProcessor_processLN {
+      after Label126: execute() {
+        if (processedHere) {
+          _this.cleaner.trace(_this.cleaner.detailedTraceLevel,Cleaner.CLEAN_LN,ln,logLsn,completed,obsolete,false);
+        }
+       // original();
+      }
+    }
+}
