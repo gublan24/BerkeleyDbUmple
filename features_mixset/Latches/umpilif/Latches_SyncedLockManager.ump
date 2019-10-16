@@ -2,94 +2,88 @@ namespace com.sleepycat.je.txn;
 
 class SyncedLockManager
 {
-    protected void hook782(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex)
-	    throws DatabaseException {
+    after Label782:attemptLock(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest){
+
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	   // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
 	}
     }
 
-    protected void hook783(String lockOrTxn, Locker locker, long nodeId, LockType type, LockGrantType grantType,
-	    Lock useLock, long timeout, long start, long now, DatabaseImpl database, int lockTableIndex) {
+    after Label783: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,
+	    ////original(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,
 		    lockTableIndex);
 	}
     }
 
-    protected void hook784(long nodeId, Lock lock, Locker locker, boolean removeFromLocker, int lockTableIndex)
-	    throws DatabaseException {
+    after Label784:{
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, lock, locker, removeFromLocker, lockTableIndex);
+	    ////original(nodeId, lock, locker, removeFromLocker, lockTableIndex);
 	}
     }
 
-    protected void hook785(long nodeId, Locker owningLocker, Locker destLocker, boolean demoteToRead,
-	    int lockTableIndex) throws DatabaseException {
+    after Label785: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
+	    //original(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
 	}
     }
 
-    protected void hook786(long nodeId, Locker owningLocker, Locker[] destLockers, int lockTableIndex)
-	    throws DatabaseException {
+    after Label786:
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, owningLocker, destLockers, lockTableIndex);
+	    //original(nodeId, owningLocker, destLockers, lockTableIndex);
 	}
     }
 
-    protected void hook787(long nodeId, Locker locker, int lockTableIndex) throws DatabaseException {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, locker, lockTableIndex);
+    after Label787:
+	    //original(nodeId, locker, lockTableIndex);
 	}
     }
 
-    protected void hook788(Long nodeId, int lockTableIndex) {
+    after Label788: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, lockTableIndex);
+	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    protected void hook789(Long nodeId, Locker locker, LockType type, int lockTableIndex) {
+    after Label789: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, locker, type, lockTableIndex);
+	    //original(nodeId, locker, type, lockTableIndex);
 	}
     }
 
-    protected void hook790(Long nodeId, Locker locker, int lockTableIndex) {
+    after Label790: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, locker, lockTableIndex);
+	    //original(nodeId, locker, lockTableIndex);
 	}
     }
 
-    protected void hook791(Long nodeId, int lockTableIndex) {
+    after Label791:  {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, lockTableIndex);
+	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    protected void hook792(Long nodeId, int lockTableIndex) {
+    after Label792: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, lockTableIndex);
+	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    protected void hook793(Long nodeId, int lockTableIndex) throws DatabaseException {
+    after Label793: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, lockTableIndex);
+	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    protected void hook794(Long nodeId, Locker locker, LockType type, boolean flushFromWaiters, MemoryBudget mb,
-	    int lockTableIndex) throws DatabaseException {
+    after Label794: {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    original(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
+	    //original(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
 	}
     }
 
-    protected void hook795(LockStats stats, int i) throws DatabaseException {
+    after Label795: {
 	synchronized (lockTableLatches[i]) {
-	    original(stats, i);
+	    //original(stats, i);
 	}
     }
 

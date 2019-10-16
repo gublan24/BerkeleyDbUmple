@@ -6,20 +6,20 @@ class LogManager
   depend com.sleepycat.je.latch.Latch;
     protected Latch logWriteLatch;
 
-    protected void hook502(EnvironmentImpl envImpl) throws DatabaseException {
+    after Label502: LogManager(EnvironmentImpl , boolean ){
 	logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
-	original(envImpl);
+	//original(envImpl);
     }
 
-    protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer,
-	    LogBuffer useLogBuffer) throws IOException, DatabaseException, Exception {
-	useLogBuffer.latchForWrite();
-	try {
-	    usedTemporaryBuffer = original(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer, useLogBuffer);
-	} finally {
-	    useLogBuffer.release();
+    after Label503: logInternal(LoggableObject , boolean , boolean ,	 boolean , long , boolean , ByteBuffer , UtilizationTracker ) {
+      useLogBuffer.latchForWrite();
 	}
-	return usedTemporaryBuffer;
+
+    after Label503_1: logInternal(LoggableObject , boolean , boolean ,	 boolean , long , boolean , ByteBuffer , UtilizationTracker ) {
+//try {	    usedTemporaryBuffer = original(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer, useLogBuffer);} finally {
+	    useLogBuffer.release();
+	//}
+//	return usedTemporaryBuffer;
     }
 
 }

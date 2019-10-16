@@ -2,9 +2,9 @@ namespace com.sleepycat.je.recovery;
 
 class RootUpdater
 {
-    protected void hook600() throws DatabaseException {
+  after Label600: doWork(ChildReference ){
 	inFromLog.releaseLatch();
-	original();
+	//original();
     }
 
 }

@@ -3,43 +3,43 @@ namespace com.sleepycat.je.tree;
 class TreeIterator
 {
   depend com.sleepycat.je.latch.LatchNotHeldException;
-    protected void hook755() throws DatabaseException {
+    after Label755:TreeIterator(Tree )   {
 	if (nextBin != null) {
 	    nextBin.releaseLatch();
 	}
-	original();
+	//original();
     }
 
-    protected void hook756() throws DatabaseException {
+    after Label756: hasNext()  {
 	if (nextBin != null) {
 	    nextBin.latch();
 	}
-	original();
+	//original();
     }
 
-    protected void hook757() {
+    after Label757: hasNext() {
 	try {
 	    if (nextBin != null) {
 		nextBin.releaseLatch();
 	    }
 	} catch (LatchNotHeldException e) {
 	}
-	original();
+	//original();
     }
 
-    protected void hook758() throws DatabaseException {
+    after Label758: next()   {
 	nextBin.latch();
-	original();
+	//original();
     }
 
-    protected void hook759() {
+    after Label759: next() {
 	try {
 	    if (nextBin != null) {
 		nextBin.releaseLatch();
 	    }
 	} catch (LatchNotHeldException e) {
 	}
-	original();
+	//original();
     }
 
 }

@@ -1,0 +1,5 @@
+1) all methods have synchr() {original();}
+
+Latches_SyncedLockManager.ump
+
+2) all methods have Latches_LogManger.ump

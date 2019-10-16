@@ -57,9 +57,9 @@ class SharedLatchImpl
 		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
 	    }
 	    if (waiters.size() == 1) {
-		this.hook429();
+		Label429:           ;  //this.hook429();
 	    } else {
-		this.hook430();
+		Label430:           ;  //this.hook430();
 		while (waiters.get(0) != owner) {
 		    wait();
 		}
@@ -82,7 +82,7 @@ class SharedLatchImpl
 		    Owner owner = new Owner(thread, Owner.EXCLUSIVE);
 		    waiters.add(owner);
 		    owner.nAcquires += 1;
-		    this.hook431();
+		    Label431:           ;  //this.hook431();
 		    assert (noteLatch ? noteLatch() : true);
 		    return true;
 		} else {
@@ -115,7 +115,7 @@ class SharedLatchImpl
 		wait();
 	    }
 	    owner.nAcquires += 1;
-	    this.hook432();
+	    Label432:           ;  //this.hook432();
 	    assert (noteLatch ? noteLatch() : true);
 	} catch (InterruptedException e) {
 	    throw new RunRecoveryException(env, e);
@@ -141,7 +141,7 @@ class SharedLatchImpl
 		assert (noteLatch ? unNoteLatch() : true);
 		notifyAll();
 	    }
-	    this.hook433();
+	    Label433:           ;  //this.hook433();
 	} finally {
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -204,7 +204,7 @@ class SharedLatchImpl
 	    return false;
 	}
     }
-
+/*
     protected void hook429() throws DatabaseException, InterruptedException {
     }
 
@@ -219,5 +219,5 @@ class SharedLatchImpl
 
     protected void hook433() throws LatchNotHeldException {
     }
-
+*/
 }

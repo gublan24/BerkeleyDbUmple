@@ -385,7 +385,7 @@ class UtilizationProfile
 	    }
 	    OperationStatus status = OperationStatus.SUCCESS;
 	    while (status == OperationStatus.SUCCESS) {
-		this.hook173();
+		Label173:           ;  //this.hook173();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -401,7 +401,7 @@ class UtilizationProfile
 	    }
 	} finally {
 	    if (cursor != null) {
-		this.hook178(cursor);
+		Label178:           ;  //this.hook178(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -451,7 +451,7 @@ class UtilizationProfile
 		status = OperationStatus.NOTFOUND;
 	    }
 	    while (status == OperationStatus.SUCCESS) {
-		this.hook174();
+		Label:           ;  //this.hook174();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -461,13 +461,13 @@ class UtilizationProfile
 		    if (offsets != null) {
 			list.add(offsets.toArray());
 		    }
-		    //this.hook187(cursor);
+		    //Label:           ;  //this.hook187(cursor);
         Label187:
 		}
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
 	} finally {
-	    this.hook179(cursor);
+	    Label179:           ;  //this.hook179(cursor);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -569,11 +569,11 @@ class UtilizationProfile
 	try {
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    //this.hook189(cursor);
+	    //Label:           ;  //this.hook189(cursor);
       Label189:
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    this.hook177(fileNum, sequence, status);
-	    //this.hook188(cursor);
+	    Label:           ;  //this.hook177(fileNum, sequence, status);
+	    //Label:           ;  //this.hook188(cursor);
       Label188:
 	} finally {
 	    if (cursor != null) {
@@ -602,7 +602,7 @@ class UtilizationProfile
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    this.hook175();
+		    Label:           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());
@@ -616,7 +616,7 @@ class UtilizationProfile
 				}
 			    }
 			}
-			//this.hook190(cursor);
+			//Label:           ;  //this.hook190(cursor);
       Label190:
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
@@ -646,19 +646,38 @@ class UtilizationProfile
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    Label186: //b = this.hook186(db, b);
+	    Label186: //b = Label:           ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
 	    BIN bin = null;
-	    this.hook180(lsn, entry, db, bin);
+	    Label180:           ;  //this.hook180(lsn, entry, db, bin);
+			Tree tree = db.getTree();
+			TreeLocation location = new TreeLocation();
+			boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(), false, true, false, false);
+			bin = location.bin;
+			int index = location.index;
+			if (!parentFound) {
+					throw new ReturnBoolean(true);
+			}
+			if (bin.isEntryKnownDeleted(index)) {
+					throw new ReturnBoolean(true);
+			}
+			if (bin.getLsn(index) != lsn) {
+					throw new ReturnBoolean(true);
+			}
+			System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
+			throw new ReturnBoolean(false);
+//end hook180
+
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
+	    Label180_1:           ;
 	    return r.value;
 	}
     }
 
-    protected void hook173() throws DatabaseException {
+  /*  protected void hook173() throws DatabaseException {
     }
 
     protected void hook174() throws DatabaseException {
@@ -695,7 +714,7 @@ class UtilizationProfile
 	System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
 	throw new ReturnBoolean(false);
     }
-
+*/
 //    protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
 //	return b;
 //    }

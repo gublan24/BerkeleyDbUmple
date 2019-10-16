@@ -18,7 +18,7 @@ class LogBuffer {
     LogBuffer(int capacity, EnvironmentImpl env) throws DatabaseException {
         Label481: //this.hook481(capacity);
         Label482: //this.hook482(capacity);
-            this.hook479(env);
+        Label479://    this.hook479(env);
         reinit();
     }
 
@@ -45,6 +45,7 @@ class LogBuffer {
      * This LSN has been written to the log.
      */
     void registerLsn(long lsn) throws DatabaseException {
+
         if (lastLsn != DbLsn.NULL_LSN) {
             assert(DbLsn.compareTo(lsn, lastLsn) > 0);
         }
@@ -89,7 +90,7 @@ class LogBuffer {
         if (found) {
             return true;
         } else {
-            this.hook480();
+            Label480: //this.hook480();
             return false;
         }
     }
@@ -120,9 +121,9 @@ class LogBuffer {
         return copy;
     }
 
-    protected void hook479(EnvironmentImpl env) throws DatabaseException {}
+ //   protected void hook479(EnvironmentImpl env) throws DatabaseException {}
 
-    protected void hook480() throws DatabaseException {}
+ //   protected void hook480() throws DatabaseException {}
 
  //   protected void hook481(int capacity) throws DatabaseException {}
 

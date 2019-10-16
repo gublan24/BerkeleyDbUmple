@@ -3,67 +3,64 @@ namespace com.sleepycat.je.recovery;
 class RecoveryManager
 {
   depend com.sleepycat.je.latch.LatchSupport;
-    protected void hook585(IN in) throws DatabaseException {
+
+    after Label585: replayOneIN(INFileReader , DatabaseImpl , boolean ) {
 	in.latch();
-	original(in);
+	//original(in);
     }
 
-    protected void hook586(RecoveryInfo info, LNFileReader reader, TreeLocation location, LN ln, long logLsn,
-	    long abortLsn, boolean abortKnownDeleted, DatabaseImpl db)
-	    throws IOException, DatabaseException, Exception {
-	try {
-	    original(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);
-	} finally {
+    after Label586_1: undoLNs(RecoveryInfo , Set ) {
+//	try {	    //original(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);	} finally {
 	    if (location.bin != null) {
 		location.bin.releaseLatchIfOwner();
 	    }
-	}
+	//}
     }
 
-    protected void hook587(IN inFromLog, long logLsn) throws DatabaseException {
+    after Label587:  replaceOrInsert(DatabaseImpl , IN , long , long , boolean ) {
 	inFromLog.releaseLatchIfOwner();
 	assert (LatchSupport.countLatchesHeld() == 0) : LatchSupport.latchesHeldToString() + "LSN = "
 		+ DbLsn.toString(logLsn) + " inFromLog = " + inFromLog.getNodeId();
-	original(inFromLog, logLsn);
+	//original(inFromLog, logLsn);
     }
 
-    protected void hook588(SearchResult result) throws DatabaseException {
+    after Label588:replayINDelete(DatabaseImpl , long , boolean , byte , byte , long ) {
 	if (result.parent != null) {
 	    result.parent.releaseLatch();
 	}
-	original(result);
+	//original(result);
     }
 
-    protected void hook589(IN parent) throws DatabaseException {
+    after Label589: replaceOrInsertDuplicateRoot(DatabaseImpl , DIN , long ) {
 	if (parent != null) {
 	    parent.releaseLatch();
 	}
-	original(parent);
+	//original(parent);
     }
 
-    protected void hook590(SearchResult result) throws DatabaseException {
+    after Label590: replaceOrInsertChild(DatabaseImpl , IN , long , long , List , boolean )  {
 	if (result.parent != null) {
 	    result.parent.releaseLatch();
 	}
-	original(result);
+	//original(result);
     }
 
-    protected void hook591(TreeLocation location) throws DatabaseException {
+    after Label591: redo(DatabaseImpl , TreeLocation , LN , byte , byte , long , RecoveryInfo ) {
 	if (location.bin != null) {
 	    location.bin.releaseLatchIfOwner();
 	}
-	original(location);
+	//original(location);
     }
 
-    protected static boolean hook592(TreeLocation location, long logLsn, long abortLsn, boolean replaced,
-	    DIN duplicateRoot) throws DatabaseException {
+    after Label592 : undo(Level , DatabaseImpl , TreeLocation , LN , byte ,byte , long , long , boolean , RecoveryInfo ,  boolean ) {
+//(TreeLocation location, long logLsn, long abortLsn, boolean replaced,    DIN duplicateRoot) throws DatabaseException {
 	duplicateRoot.latch();
-	try {
-	    replaced = original(location, logLsn, abortLsn, replaced, duplicateRoot);
-	} finally {
-	    duplicateRoot.releaseLatch();
-	}
-	return replaced;
+  }
+
+    after Label592_1: undo (Level , DatabaseImpl , TreeLocation , LN , byte ,byte , long , long , boolean , RecoveryInfo ,  boolean ) {
+	//try {replaced = //original(location, logLsn, abortLsn, replaced, duplicateRoot);} finally {
+	    duplicateRoot.releaseLatch();//}return replaced;
     }
+
 
 }

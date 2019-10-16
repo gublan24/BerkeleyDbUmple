@@ -68,7 +68,7 @@ class LogManager
 			this.readOnly = readOnly;
 			logBufferPool = new LogBufferPool(fileManager, envImpl);
 			Label505: //this.hook505(configManager);
-			this.hook502(envImpl);
+			Label502: //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
 			this.hook498(envImpl);
     }
@@ -216,6 +216,7 @@ class LogManager
 					} else {
 							useBuffer.put(marshalledBuffer);
 					}
+					Label503_1:
 				 //End hook503
 			} catch (Exception e) {
 					fileManager.restoreLastPosition();

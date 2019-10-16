@@ -20,41 +20,49 @@ class LogBuffer
 	readLatch.releaseIfOwner();
     }
 
-    protected void hook479(EnvironmentImpl env) throws DatabaseException {
+    after Label479 :  LogBuffer(int , EnvironmentImpl ) {
+
 	readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
-	original(env);
+	////original(env);
     }
 
-    void reinit() throws DatabaseException {
+  before reinit(){
 	readLatch.acquire();
-	original();
+	//original();
+	//readLatch.release();
+    }  
+
+
+  after reinit(){
 	readLatch.release();
     }
 
     /** 
      * This LSN has been written to the log.
      */
-    void registerLsn(long lsn) throws DatabaseException {
+    before registerLsn(long )  {
 	readLatch.acquire();
-	try {
-	    original(lsn);
-	} finally {
-	    readLatch.release();
-	}
     }
+
+
+    after registerLsn(long )  {
+	    readLatch.release();
+	
+    }
+
 
     /** 
      * Support for reading a log entry out of a still-in-memory log
      * @return true if this buffer holds the entry at this LSN. The buffer willbe latched for read. Returns false if LSN is not here, and releases the read latch.
      */
-    boolean containsLsn(long lsn) throws DatabaseException {
+  before containsLsn(long )  {
 	readLatch.acquire();
-	return original(lsn);
+	//return //original(lsn);
     }
 
-    protected void hook480() throws DatabaseException {
+    after Label480: containsLsn(long ) {
 	readLatch.release();
-	original();
+	//original();
     }
 
 }

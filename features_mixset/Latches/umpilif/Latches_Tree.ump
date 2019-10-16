@@ -1,522 +1,487 @@
 namespace com.sleepycat.je.tree;
 
-class Tree
-{
-  depend com.sleepycat.je.latch.SharedLatch;
-  depend com.sleepycat.je.latch.LatchSupport;
+class Tree {
+    depend com.sleepycat.je.latch.SharedLatch;
+    depend com.sleepycat.je.latch.LatchSupport;
     private SharedLatch rootLatch;
 
-    private void releaseNodeLadderLatches(ArrayList nodeLadder) throws DatabaseException {
-	ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
-	while (iter.hasPrevious()) {
-	    SplitInfo info3 = (SplitInfo) iter.previous();
-	    info3.child.releaseLatch();
-	}
+    private void releaseNodeLadderLatches(ArrayList nodeLadder) {
+        ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
+        while (iter.hasPrevious()) {
+            SplitInfo info3 = (SplitInfo) iter.previous();
+            info3.child.releaseLatch();
+        }
     }
 
     /** 
      * constructor helper
      */
-    private void init(DatabaseImpl database) {
-	rootLatch = LatchSupport.makeSharedLatch("RootLatch", (database != null) ? database.getDbEnvironment() : null);
-	original(database);
+    before init(DatabaseImpl) {
+        rootLatch = LatchSupport.makeSharedLatch("RootLatch", (database != null) ? database.getDbEnvironment() : null);
+        ////original(database);
     }
 
     /** 
      * Set the root for the tree. Should only be called within the root latch.
      */
-    public void setRoot(ChildReference newRoot, boolean notLatched) {
-	assert (notLatched || rootLatch.isWriteLockedByCurrentThread());
-	original(newRoot, notLatched);
+    before setRoot(ChildReference, boolean) {
+        assert(notLatched || rootLatch.isWriteLockedByCurrentThread());
+        ////original(newRoot, notLatched);
     }
 
-    protected void hook670(WithRootLatched wrl) throws DatabaseException {
-	try {
-	    original(wrl);
-	} finally {
-	    rootLatch.release();
-	}
+    after Label670_1: withRootLatchedExclusive(WithRootLatched) {
+
+        //	try {	    //original(wrl);} finally {
+        rootLatch.release();
+        //	}
     }
 
-    protected void hook671(WithRootLatched wrl) throws DatabaseException {
-	try {
-	    original(wrl);
-	} finally {
-	    rootLatch.release();
-	}
+    protected void Label671_1: withRootLatchedExclusive(WithRootLatched) {
+
+        //	try {   //original(wrl);	} finally {
+        rootLatch.release();
+        //}
     }
 
-    protected void hook672(byte[] idKey, UtilizationTracker tracker, IN subtreeRootIN, ArrayList nodeLadder, IN rootIN,
-	    boolean rootNeedsUpdating) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	rootLatch.acquireExclusive();
-	try {
-	    original(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
-	} finally {
-	    releaseNodeLadderLatches(nodeLadder);
-	    if (rootIN != null) {
-		rootIN.releaseLatch();
-	    }
-	    rootLatch.release();
-	}
+    after Label672: {
+        rootLatch.acquireExclusive();
+    }
+
+
+    after Label672_1: {
+        //finally {
+        releaseNodeLadderLatches(nodeLadder);
+        if (rootIN != null) {
+            rootIN.releaseLatch();
+        }
+        rootLatch.release();
     }
 
     /** 
      * This entire tree is empty, clear the root and log a new MapLN
      * @return the rootIN that has been detached, or null if there hasn't beenany removal.
      */
-    private IN logTreeRemoval(IN rootIN, UtilizationTracker tracker) throws DatabaseException {
-	assert rootLatch.isWriteLockedByCurrentThread();
-	return original(rootIN, tracker);
+    before logTreeRemoval(IN, UtilizationTracker) {
+        assert rootLatch.isWriteLockedByCurrentThread();
+        //	return //original(rootIN, tracker);
     }
 
-    protected void hook673() throws DatabaseException {
-	assert rootLatch.isWriteLockedByCurrentThread();
-	original();
+    after Label673: cascadeUpdates(ArrayList, BIN, int) {
+        assert rootLatch.isWriteLockedByCurrentThread();
+        //original();
     }
 
-    protected IN hook674(byte[] idKey, byte[] mainKey, IN in, IN deletedSubtreeRoot)
-	    throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	try {
-	    deletedSubtreeRoot = original(idKey, mainKey, in, deletedSubtreeRoot);
-	} finally {
-	    in.releaseLatch();
-	}
-	return deletedSubtreeRoot;
+    after Label674_1: deleteDupSubtree(byte, BIN, int) {
+        //try {// deletedSubtreeRoot = //original(idKey, mainKey, in, deletedSubtreeRoot);} finally {
+        in .releaseLatch();
+        //}
+        //return deletedSubtreeRoot;
     }
 
-    protected void hook675(DIN duplicateRoot) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	if (duplicateRoot != null) {
-	    duplicateRoot.releaseLatch();
-	}
-	original(duplicateRoot);
-    }
+    after Label675: deleteDupSubtree(byte, BIN, int) {
 
-    protected void hook676(ArrayList nodeLadder)
-	    throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	releaseNodeLadderLatches(nodeLadder);
-	original(nodeLadder);
+        if (duplicateRoot != null) {
+            duplicateRoot.releaseLatch();
+        }
+        //original(duplicateRoot);
     }
 
-    protected void hook677(DIN dupRoot) throws DatabaseException {
-	assert dupRoot.isLatchOwner();
-	original(dupRoot);
+    after Label676: deleteDupSubtree(byte, BIN, int) {
+        releaseNodeLadderLatches(nodeLadder);
+        //original(nodeLadder);
     }
 
-    protected void hook678(DIN dupRoot) throws DatabaseException {
-	assert dupRoot.isLatchOwner();
-	original(dupRoot);
+    after Label677: getFirstNode(DIN) {
+        assert dupRoot.isLatchOwner();
+        //original(dupRoot);
     }
 
-    protected void hook679(IN child) throws DatabaseException {
-	child.releaseLatch();
-	original(child);
+    after Label678: getLastNode(DIN) {
+        assert dupRoot.isLatchOwner();
+        //original(dupRoot);
     }
 
-    protected void hook680(IN child) throws DatabaseException {
-	assert child.isLatchOwner();
-	original(child);
+    after Label679: getParentINForChildIN(IN, boolean, boolean, int, List) {
+        child.releaseLatch();
+        //original(child);
     }
 
-    protected void hook681(IN potentialParent) throws DatabaseException {
-	potentialParent.releaseLatchIfOwner();
-	original(potentialParent);
+    after Label680: getParentINForChildIN(IN, boolean, boolean, int, List) {
+        assert child.isLatchOwner();
+        //original(child);
     }
 
-    protected void hook682(IN searchResult) throws DatabaseException {
-	searchResult.releaseLatchIfOwner();
-	original(searchResult);
-    }
+    after Label681: getParentINForChildIN(long, boolean, boolean, byte, byte, boolean, boolean, int, List, boolean) {
 
-    protected void hook683(TreeLocation location, byte[] mainKey, byte[] dupKey, LN ln, boolean splitsAllowed,
-	    boolean findDeletedEntries, boolean searchDupTree, boolean updateGeneration, boolean exactSearch,
-	    boolean indicateIfExact, Node childNode) throws DatabaseException {
-	try {
-	    original(location, mainKey, dupKey, ln, splitsAllowed, findDeletedEntries, searchDupTree, updateGeneration,
-		    exactSearch, indicateIfExact, childNode);
-	} catch (DatabaseException e) {
-	    location.bin.releaseLatchIfOwner();
-	    throw e;
-	}
+        potentialParent.releaseLatchIfOwner();
+        //original(potentialParent);
     }
 
-    protected void hook684(BIN oldBIN) throws DatabaseException {
-	if (oldBIN != null) {
-	    oldBIN.releaseLatch();
-	}
-	original(oldBIN);
+    after Label682: getParentBINForChildLN(TreeLocation, byte, byte, LN, boolean, boolean, boolean, boolean) {
+        searchResult.releaseLatchIfOwner();
+        //original(searchResult);
     }
 
-    protected void hook685(TreeLocation location, byte[] dupKey, DIN dupRoot, LN ln, boolean findDeletedEntries,
-	    boolean indicateIfExact, boolean exactSearch, boolean splitsAllowed, boolean updateGeneration)
-	    throws DatabaseException {
-	dupRoot.latch();
-	try {
-	    original(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed,
-		    updateGeneration);
-	} catch (DatabaseException e) {
-	    dupRoot.releaseLatchIfOwner();
-	    throw e;
-	}
-    }
+    after Label683_1: getParentBINForChildLN(TreeLocation, byte, byte, LN, boolean, boolean, boolean, boolean) {
+        //	try {	    //original(location, mainKey, dupKey, ln, splitsAllowed, findDeletedEntries, searchDupTree, updateGeneration,		    exactSearch, indicateIfExact, childNode);} 
 
-    protected void hook686(boolean traverseWithinDupTree, boolean forward, byte[] idKey, IN next, IN parent, IN nextIN)
-	    throws DatabaseException {
-	try {
-	    original(traverseWithinDupTree, forward, idKey, next, parent, nextIN);
-	} catch (DatabaseException e) {
-	    next.releaseLatchIfOwner();
-	    if (parent != null) {
-		parent.releaseLatchIfOwner();
-	    }
-	    if (nextIN != null) {
-		nextIN.releaseLatchIfOwner();
-	    }
-	    throw e;
-	}
+        catch (DatabaseException e) {
+            location.bin.releaseLatchIfOwner();
+            throw e;
+        }
     }
 
-    protected void hook687() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
-	original();
+    after Label684: searchDupTreeByNodeId(TreeLocation, Node, LN, boolean, boolean) {
+        if (oldBIN != null) {
+            oldBIN.releaseLatch();
+        }
+        //original(oldBIN);
     }
 
-    protected void hook688(LogManager logManager, INList inMemoryINs, IN curRoot, long curRootLsn, long logLsn,
-	    IN newRoot) throws DatabaseException {
-	try {
-	    original(logManager, inMemoryINs, curRoot, curRootLsn, logLsn, newRoot);
-	} finally {
-	    curRoot.releaseLatch();
-	}
+    after Label685: searchDupTreeForDBIN(TreeLocation, byte, DIN, LN, boolean, boolean, boolean, boolean, boolean) {
+        dupRoot.latch();
     }
 
-    protected void hook689(IN curRoot) throws DatabaseException {
-	curRoot.latch();
-	original(curRoot);
-    }
+    after Label685_1: searchDupTreeForDBIN(TreeLocation, byte, DIN, LN, boolean, boolean, boolean, boolean, boolean) {
 
-    protected void hook690(IN parent) throws DatabaseException {
-	assert parent.isLatchOwner();
-	original(parent);
+        //	try {	    //original(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed, updateGeneration);} 
+        catch (DatabaseException e) {
+            dupRoot.releaseLatchIfOwner();
+            throw e;
+        }
     }
 
-    protected void hook691(IN parent) throws DatabaseException {
-	parent.releaseLatch();
-	original(parent);
-    }
+    after Label686_1::getNextBinInternal(boolean, BIN, boolean) {
+        //					try {							//original(traverseWithinDupTree, forward, idKey, next, parent, nextIN);} 
 
-    protected void hook692(IN parent) throws DatabaseException, Throwable {
-	parent.releaseLatch();
-	original(parent);
+        catch (DatabaseException e) {
+            next.releaseLatchIfOwner();
+            if (parent != null) {
+                parent.releaseLatchIfOwner();
+            }
+            if (nextIN != null) {
+                nextIN.releaseLatchIfOwner();
+            }
+            throw e;
+        }
     }
 
-    protected void hook693(IN child) throws DatabaseException, Throwable {
-	child.releaseLatch();
-	original(child);
+    after Label687: getNextBinInternal(boolean, BIN, boolean) {
+        assert LatchSupport.countLatchesHeld() == 1: LatchSupport.latchesHeldToString();
+        //original();
     }
 
-    protected void hook694(IN parent, IN child) throws DatabaseException {
-	if (child != null) {
-	    child.releaseLatchIfOwner();
-	}
-	parent.releaseLatchIfOwner();
-	original(parent, child);
-    }
+    after Label688_1: splitRoot() {
 
-    protected void hook695(IN parent) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	assert parent.isLatchOwner();
-	original(parent);
-    }
+        curRoot.releaseLatch();
 
-    protected void hook696(SplitInfo info5) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	info5.child.releaseLatch();
-	original(info5);
     }
 
-    protected void hook697(ArrayList nodeLadder)
-	    throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	releaseNodeLadderLatches(nodeLadder);
-	original(nodeLadder);
-    }
+    after Label689: splitRoot() {
 
-    protected void hook698(IN parent, byte[] key, long nid, boolean updateGeneration, int index, IN child)
-	    throws DatabaseException, SplitRequiredException {
-	try {
-	    original(parent, key, nid, updateGeneration, index, child);
-	} catch (DatabaseException e) {
-	    if (child != null) {
-		child.releaseLatchIfOwner();
-	    }
-	    parent.releaseLatchIfOwner();
-	    throw e;
-	}
+        curRoot.latch();
+        //original(curRoot);
     }
 
-    protected void hook699(IN parent) throws DatabaseException, SplitRequiredException {
-	assert parent.isLatchOwner();
-	original(parent);
+    after Label690: searchSubTree(IN, byte, SearchType, long, BINBoundary, boolean) {
+        assert parent.isLatchOwner();
+        //original(parent);
     }
 
-    protected void hook700(IN parent) throws DatabaseException, SplitRequiredException {
-	parent.releaseLatch();
-	original(parent);
-    }
+    after Label691: searchSubTree(IN, byte, SearchType, long, BINBoundary, boolean) {
 
-    protected void hook701(boolean updateGeneration, IN rootIN) throws DatabaseException {
-	try {
-	    original(updateGeneration, rootIN);
-	} finally {
-	    rootLatch.release();
-	}
+        parent.releaseLatch();
+        //original(parent);
     }
 
-    protected void hook702() throws DatabaseException {
-	rootLatch.acquireShared();
-	original();
+    after Label692: searchSubTree(IN, byte, SearchType, long, BINBoundary, boolean) {
+        parent.releaseLatch();
+        //original(parent);
     }
 
-    protected void hook703(LN ln, byte[] key, boolean allowDuplicates, CursorImpl cursor, LockResult lnLock,
-	    EnvironmentImpl env, LogManager logManager, INList inMemoryINs, BIN bin) throws DatabaseException {
-	try {
-	    original(ln, key, allowDuplicates, cursor, lnLock, env, logManager, inMemoryINs, bin);
-	} finally {
-	    cursor.releaseBIN();
-	}
+    after Label693: searchSubTree(IN, byte, SearchType, long, BINBoundary, boolean) {
+        child.releaseLatch();
+        //original(child);
     }
 
-    protected void hook704(byte[] key, BIN bin, LN newLN, CursorImpl cursor, LockResult lnLock, boolean allowDuplicates,
-	    EnvironmentImpl env, int index, boolean successfulInsert, DIN dupRoot, Node n, long binNid, DBIN dupBin)
-	    throws DatabaseException {
-	try {
-	    original(key, bin, newLN, cursor, lnLock, allowDuplicates, env, index, successfulInsert, dupRoot, n, binNid,
-		    dupBin);
-	} finally {
-	    if (dupBin != null) {
-		dupBin.releaseLatchIfOwner();
-	    }
-	    if (dupRoot != null) {
-		dupRoot.releaseLatchIfOwner();
-	    }
-	}
+    after Label694: searchSubTree(IN, byte, SearchType, long, BINBoundary, boolean) {
+        if (child != null) {
+            child.releaseLatchIfOwner();
+        }
+        parent.releaseLatchIfOwner();
+        //original(parent, child);
     }
 
-    protected void hook705(DIN dupRoot) throws DatabaseException {
-	dupRoot.releaseLatch();
-	original(dupRoot);
+    after Label695: searchDeletableSubTree(IN, byte, ArrayList) {
+        assert parent.isLatchOwner();
+        //original(parent);
     }
 
-    protected void hook706(BIN bin, int index, DIN curRoot, LogManager logManager, INList inMemoryINs, byte[] rootIdKey,
-	    DIN newRoot, long curRootLsn, long logLsn) throws DatabaseException {
-	try {
-	    original(bin, index, curRoot, logManager, inMemoryINs, rootIdKey, newRoot, curRootLsn, logLsn);
-	} finally {
-	    curRoot.releaseLatch();
-	}
+    after Label696: searchDeletableSubTree(IN, byte, ArrayList) {
+        info5.child.releaseLatch();
+        //original(info5);
     }
 
-    protected void hook707(DIN newRoot) throws DatabaseException {
-	newRoot.latch();
-	original(newRoot);
+    after Label697: searchDeletableSubTree(IN, byte, ArrayList) {
+        releaseNodeLadderLatches(nodeLadder);
+        //original(nodeLadder);
     }
 
-    protected void hook708(byte[] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor,
-	    EnvironmentImpl env, DIN dupRoot, DBIN dupBin, BIN bin, int index, LN existingLN, byte[] newLNKey,
-	    Locker locker, DupCountLN dupCountLN, long firstDupCountLNLsn) throws DatabaseException {
-	try {
-	    original(key, logManager, inMemoryINs, newLN, cursor, env, dupRoot, dupBin, bin, index, existingLN,
-		    newLNKey, locker, dupCountLN, firstDupCountLNLsn);
-	} catch (DatabaseException e) {
-	    dupBin.releaseLatchIfOwner();
-	    dupRoot.releaseLatchIfOwner();
-	    throw e;
-	}
-    }
+    after Label698_1: searchSubTreeUntilSplit(IN, byte, long, boolean) {
+        catch (DatabaseException e) {
+            if (child != null) {
+                child.releaseLatchIfOwner();
+            }
+            parent.releaseLatchIfOwner();
+            throw e;
+        }
 
-    protected void hook709(DBIN dupBin) throws DatabaseException {
-	dupBin.latch();
-	original(dupBin);
-    }
+        after Label699: searchSubTreeUntilSplit(IN, byte, long, boolean) {
+            assert parent.isLatchOwner();
+            //original(parent);
+        }
 
-    protected void hook710(DIN dupRoot) throws DatabaseException {
-	dupRoot.latch();
-	original(dupRoot);
-    }
+        after Label700: searchSubTreeUntilSplit(IN, byte, long, boolean) {
+            parent.releaseLatch();
+            //original(parent);
+        }
 
-    protected BIN hook711(byte[] key, LogManager logManager, INList inMemoryINs, BIN bin, boolean rootLatchIsHeld)
-	    throws DatabaseException {
-	try {
-	    bin = original(key, logManager, inMemoryINs, bin, rootLatchIsHeld);
-	} finally {
-	    if (rootLatchIsHeld) {
-		rootLatch.release();
-	    }
-	}
-	return bin;
-    }
+        after Label701_1: getRootIN(boolean) {
 
-    protected void hook712(BIN bin) throws DatabaseException {
-	bin.releaseLatch();
-	original(bin);
-    }
+            rootLatch.release();
 
-    protected void hook713(INList inList, IN subtreeRoot, UtilizationTracker tracker) throws DatabaseException {
-	inList.latchMajor();
-	try {
-	    original(inList, subtreeRoot, tracker);
-	} finally {
-	    inList.releaseMajorLatch();
-	}
-    }
+        }
 
-    protected void hook714(INList inMemoryList) throws DatabaseException {
-	rootLatch.acquireShared();
-	try {
-	    original(inMemoryList);
-	} finally {
-	    rootLatch.release();
-	}
-    }
+        after Label702: getRootIN(boolean) {
+            rootLatch.acquireShared();
+            //original();
+        }
 
-    protected void hook715(int index) throws DatabaseException {
-	rootLatch.acquireShared();
-	try {
-	    original(index);
-	} finally {
-	    rootLatch.release();
-	}
-    }
+        after Label703_1: insert(LN, byte, boolean, CursorImpl, LockResult) {
 
-    protected void hook728() throws DatabaseException {
-	rootLatch.acquireExclusive();
-	original();
-    }
 
-    protected void hook729() throws DatabaseException {
-	rootLatch.acquireShared();
-	original();
-    }
+            cursor.releaseBIN();
 
-    protected void hook730(IN in) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	assert in.isLatchOwner();
-	original(in);
-    }
+        }
 
-    protected void hook731(TreeLocation location) throws DatabaseException {
-	location.bin.releaseLatch();
-	original(location);
-    }
+        after Label704_1: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            if (dupBin != null) {
+                dupBin.releaseLatchIfOwner();
+            }
+            if (dupRoot != null) {
+                dupRoot.releaseLatchIfOwner();
+            }
+        }
 
-    protected void hook732() throws DatabaseException {
-	assert (LatchSupport.countLatchesHeld() == 1) : LatchSupport.latchesHeldToString();
-	original();
-    }
+        after Label705: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            dupRoot.releaseLatch();
+            //original(dupRoot);
+        }
 
-    protected void hook733() throws DatabaseException {
-	assert (LatchSupport.countLatchesHeld() == 0) : LatchSupport.latchesHeldToString();
-	original();
-    }
+        after Label706_1: maybeSplitDuplicateRoot(BIN, int) {
 
-    protected void hook734(IN next) throws DatabaseException {
-	next.releaseLatch();
-	original(next);
-    }
+            curRoot.releaseLatch();
 
-    protected void hook735(IN nextIN) throws DatabaseException {
-	nextIN.latch();
-	assert (LatchSupport.countLatchesHeld() == 2) : LatchSupport.latchesHeldToString();
-	original(nextIN);
-    }
+        }
 
-    protected void hook736(IN parent) throws DatabaseException {
-	parent.releaseLatch();
-	original(parent);
-    }
+        after Label707: maybeSplitDuplicateRoot(BIN, int) {
+            newRoot.latch();
+            //original(newRoot);
+        }
 
-    protected void hook737(IN parent) throws DatabaseException {
-	parent.releaseLatch();
-	assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
-	original(parent);
-    }
+        after Label708_1: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
 
-    protected void hook738(IN parent) throws DatabaseException, SplitRequiredException {
-	parent.releaseLatch();
-	original(parent);
-    }
+            catch (DatabaseException e) {
+                dupBin.releaseLatchIfOwner();
+                dupRoot.releaseLatchIfOwner();
+                throw e;
+            }
+        }
 
-    protected void hook739(IN parent, IN child) throws DatabaseException, SplitRequiredException {
-	child.releaseLatch();
-	parent.releaseLatch();
-	original(parent, child);
-    }
+        after Label709: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
+            dupBin.latch();
+            //original(dupBin);
+        }
 
-    protected void hook740(IN child) throws DatabaseException, SplitRequiredException {
-	child.releaseLatch();
-	original(child);
-    }
+        after Label710: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
+            dupRoot.latch();
+            //original(dupRoot);
+        }
 
-    protected void hook741(BIN bin) throws DatabaseException {
-	assert bin.isLatchOwner();
-	original(bin);
-    }
+        after Label711_1: findBinForInsert(byte, LogManager, INList, CursorImpl) {
 
-    protected void hook742(DBIN dupBin) throws DatabaseException {
-	dupBin.releaseLatch();
-	original(dupBin);
-    }
+            if (rootLatchIsHeld) {
+                rootLatch.release();
+            }
+        }
 
-    protected void hook743(CursorImpl cursor) throws DatabaseException {
-	cursor.releaseBIN();
-	original(cursor);
-    }
 
-    protected void hook744(DIN dupRoot) throws DatabaseException {
-	dupRoot.latch();
-	original(dupRoot);
-    }
+        after Label712: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            bin.releaseLatch();
+            //original(bin);
+        }
 
-    protected void hook745(CursorImpl cursor) throws DatabaseException {
-	cursor.releaseBIN();
-	original(cursor);
-    }
+        after Label713: accountForSubtreeRemoval(INList, IN, UtilizationTracker) {
+            inList.latchMajor();
+        }
 
-    protected void hook746(CursorImpl cursor) throws DatabaseException {
-	cursor.latchBIN();
-	original(cursor);
-    }
 
-    protected void hook747(DBIN dupBin) throws DatabaseException {
-	dupBin.releaseLatch();
-	original(dupBin);
-    }
+        after Label713_1: accountForSubtreeRemoval(INList, IN, UtilizationTracker) {
+            inList.releaseMajorLatch();
 
-    protected void hook748() throws DatabaseException {
-	rootLatch.acquireShared();
-	original();
-    }
+        }
 
-    protected void hook749() throws DatabaseException {
-	rootLatch.release();
-	original();
-    }
+        after Label714: validateDelete(int) {
+            rootLatch.acquireShared();
+            try {
+                //original(inMemoryList);
+            } finally {
+                rootLatch.release();
+            }
+        }
 
-    protected void hook750(BIN bin) throws DatabaseException {
-	bin.latch();
-	original(bin);
-    }
+        after Label715: validateDelete(int) {
+            rootLatch.acquireShared();
+        }
+        after Label715_1: validateDelete(int) {
 
-    protected void hook751() throws DatabaseException {
-	rootLatch.release();
-	rootLatch.acquireExclusive();
-	original();
-    }
+            //	try {    //original(index);	} finally {
+            rootLatch.release();
+            //}
+        }
 
-    protected void hook752() throws DatabaseException {
-	rootLatch.release();
-	original();
-    }
+        after Label728: withRootLatchedShared(WithRootLatched) {
+            rootLatch.acquireExclusive();
+            //original();
+        }
 
-    protected void hook753() throws DatabaseException {
-	rootLatch.release();
-	original();
-    }
+        after Label729: withRootLatchedShared(WithRootLatched) {
+            rootLatch.acquireShared();
+            //original();
+        }
+
+        after Label730: deleteDup(byte, byte, UtilizationTracker) {
+            assert in .isLatchOwner();
+            //original(in);
+        }
+
+        after Label731: searchDupTreeForDBIN(TreeLocation, byte, DIN, LN, boolean, boolean, boolean, boolean, boolean) {
+            location.bin.releaseLatch();
+            //original(location);
+        }
+
+        after Label732: getNextBinInternal(boolean, BIN, boolean) {
+            assert(LatchSupport.countLatchesHeld() == 1): LatchSupport.latchesHeldToString();
+            //original();
+        }
+
+        after Label733: getNextBinInternal(boolean, BIN, boolean) {
+            assert(LatchSupport.countLatchesHeld() == 0): LatchSupport.latchesHeldToString();
+            //original();
+        }
+
+        after Label734: getNextBinInternal(boolean, BIN, boolean) {
+            next.releaseLatch();
+            //original(next);
+        }
+
+        after Label735(IN nextIN) {
+            nextIN.latch();
+            assert(LatchSupport.countLatchesHeld() == 2): LatchSupport.latchesHeldToString();
+            //original(nextIN);
+        }
+
+        after Label736: getNextBinInternal(boolean, BIN, boolean) {
+            parent.releaseLatch();
+            //original(parent);
+        }
+
+        after Label737: getNextBinInternal(boolean, BIN, boolean) {
+            parent.releaseLatch();
+            assert LatchSupport.countLatchesHeld() == 1: LatchSupport.latchesHeldToString();
+            //original(parent);
+        }
 
-}
+        after Label738: searchSubTreeUntilSplit(IN, byte, long, boolean) {
+            parent.releaseLatch();
+            //original(parent);
+        }
+
+        after Label739: searchSubTreeUntilSplit(IN, byte, long, boolean) {
+            child.releaseLatch();
+            parent.releaseLatch();
+            //original(parent, child);
+        }
+
+        after Label740: searchSubTreeUntilSplit(IN, byte, long, boolean) {
+            child.releaseLatch();
+            //original(child);
+        }
+
+        after Label741: insert(LN, byte, boolean, CursorImpl, LockResult) {
+            assert bin.isLatchOwner();
+            //original(bin);
+        }
+
+        after Label742: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            dupBin.releaseLatch();
+            //original(dupBin);
+        }
+
+        after Label743: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            cursor.releaseBIN();
+            //original(cursor);
+        }
+
+        after Label744: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            dupRoot.latch();
+            //original(dupRoot);
+        }
+
+        after Label745: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            cursor.releaseBIN();
+            //original(cursor);
+        }
+
+        after Label746: insertDuplicate(byte, BIN, LN, LogManager, INList, CursorImpl, LockResult, boolean) {
+            cursor.latchBIN();
+            //original(cursor);
+        }
+
+        after Label747: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
+            dupBin.releaseLatch();
+            //original(dupBin);
+        }
+
+        after Label748: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            rootLatch.acquireShared();
+            //original();
+        }
+
+        after Label749: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            rootLatch.release();
+            //original();
+        }
+
+        after Label750: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            bin.latch();
+            //original(bin);
+        }
+
+        after Label751: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            rootLatch.release();
+            rootLatch.acquireExclusive();
+            //original();
+        }
+
+        after Label752: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            rootLatch.release();
+            //original();
+        }
+
+        after Label753: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+            rootLatch.release();
+            //original();
+        }
+
+    }

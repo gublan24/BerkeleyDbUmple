@@ -363,7 +363,9 @@ class Txn
 		    undoLN.postFetchInit(db, undoLsn);
 		    long abortLsn = undoEntry.getAbortLsn();
 		    boolean abortKnownDeleted = undoEntry.getAbortKnownDeleted();
-		    this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
+		    Label802: //this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
+				RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn, abortLsn, abortKnownDeleted, null, false);
+		    Label802_1: //end of hook802
 		    if (!undoLN.isDeleted()) {
 			logManager.countObsoleteNode(undoLsn, null);
 		    }
@@ -784,12 +786,11 @@ class Txn
     protected void hook801(Long nodeId, long undoLsn, DatabaseException e) throws DatabaseException {
     }
 
-    protected void hook802(long undoLsn, TreeLocation location, LNLogEntry undoEntry, LN undoLN, DatabaseImpl db,
+/*    protected void hook802(long undoLsn, TreeLocation location, LNLogEntry undoEntry, LN undoLN, DatabaseImpl db,
 	    long abortLsn, boolean abortKnownDeleted) throws DatabaseException, RuntimeException {
 	RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn,
 		abortLsn, abortKnownDeleted, null, false);
     }
-
   //  protected void hook803() throws DatabaseException, RunRecoveryException, Throwable {
   //  }
 

@@ -37,13 +37,18 @@ class TxnManager {
     private int nActiveSerializable;
 
     public TxnManager(EnvironmentImpl env) throws DatabaseException {
-        this.hook822(env);
+        Label822:           ;  //this.hook822(env);
+   			if (env.isNoLocking()) {
+            lockManager = new DummyLockManager(env);
+        } else {
+            lockManager = new SyncedLockManager(env);
+        }
         this.env = env;
         allTxns = new HashSet();
-        this.hook821(env);
+        Label821:           ;  //this.hook821(env);
         allXATxns = Collections.synchronizedMap(new HashMap());
         thread2Txn = Collections.synchronizedMap(new HashMap());
-        Label824: //this.hook824();
+        Label824:            ;  //this.hook824();
         lastUsedTxnId = 0;
     }
 
@@ -103,9 +108,9 @@ class TxnManager {
      */
     void unRegisterTxn(Txn txn, boolean isCommit) throws DatabaseException {
         allTxns.remove(txn);
-        //	this.hook828(txn);
+        //	Label:           ;  //this.hook828(txn);
         Label828:
-            Label825: //this.hook825(isCommit);
+            Label825: //Label:           ;  //this.hook825(isCommit);
         if (txn.isSerializableIsolation()) {
             nActiveSerializable--;
         }
@@ -117,10 +122,10 @@ class TxnManager {
     public void registerXATxn(Xid xid, Txn txn, boolean isPrepare) throws DatabaseException {
         if (!allXATxns.containsKey(xid)) {
             allXATxns.put(xid, txn);
-            //	    this.hook829();
+            //	    Label:           ;  //this.hook829();
             Label829:
         }
-        Label826: //this.hook826(isPrepare);
+        Label826: //Label:           ;  //this.hook826(isPrepare);
     }
 
     /** 
@@ -130,9 +135,9 @@ class TxnManager {
         if (allXATxns.remove(xid) == null) {
             throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
         }
-        //	this.hook830();
+        //	Label:           ;  //this.hook830();
         Label830:
-            Label827: //this.hook827(isCommit);
+            Label827: //Label:           ;  //this.hook827(isCommit);
     }
 
     /** 
@@ -184,13 +189,30 @@ class TxnManager {
      * Get the earliest LSN of all the active transactions, for checkpoint.
      */
     public long getFirstActiveLsn() throws DatabaseException {
-        long firstActive = DbLsn.NULL_LSN;
-        firstActive = this.hook823(firstActive);
+			try{
+						  long firstActive = DbLsn.NULL_LSN;
+						  Label823: //firstActive = this.hook823(firstActive);
+							Iterator iter = allTxns.iterator();
+						  while (iter.hasNext()) {
+						      long txnFirstActive = ((Txn) iter.next()).getFirstActiveLsn();
+						      if (firstActive == DbLsn.NULL_LSN) {
+						          firstActive = txnFirstActive;
+						      } else if (txnFirstActive != DbLsn.NULL_LSN) {
+						          if (DbLsn.compareTo(txnFirstActive, firstActive) < 0) {
+						              firstActive = txnFirstActive;
+						          }
+						      }
+						  }
+			}
+			finally{
+			Label823_1:
+			}
+//end of hook823
         return firstActive;
     }
 
-    protected void hook821(EnvironmentImpl env) throws DatabaseException {}
-
+   // protected void hook821(EnvironmentImpl env) throws DatabaseException {}
+/*
     protected void hook822(EnvironmentImpl env) throws DatabaseException {
         if (env.isNoLocking()) {
             lockManager = new DummyLockManager(env);
@@ -213,7 +235,7 @@ class TxnManager {
         }
         return firstActive;
     }
-
+*/
     //    protected void hook824() throws DatabaseException {
     //    }
 

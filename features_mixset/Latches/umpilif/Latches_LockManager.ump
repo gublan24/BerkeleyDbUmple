@@ -14,29 +14,32 @@ class LockManager
 	}
     }
 
-    protected void hook770() throws DatabaseException {
+    after Label770: LockManager(EnvironmentImpl ) {
 	lockTableLatches = new Latch[nLockTables];
-	original();
+	//original();
     }
 
-    protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException {
+    after Label771: LockManager(EnvironmentImpl ) {
+
 	lockTableLatches[i] = LatchSupport.makeLatch("Lock Table " + i, envImpl);
-	original(envImpl, i);
+	//original(envImpl, i);
     }
 
-    protected void hook772(boolean nonBlockingRequest) throws DeadlockException, DatabaseException {
+    after Label772: lock(long , Locker , LockType , long , boolean ,   DatabaseImpl ) {
+
 	assert checkNoLatchesHeld(nonBlockingRequest) : LatchSupport.countLatchesHeld()
 		+ " latches held while trying to lock, lock table =" + LatchSupport.latchesHeldToString();
-	original(nonBlockingRequest);
+//	original(nonBlockingRequest);
     }
 
-    protected void hook773(StringBuffer sb, int i) throws DatabaseException {
-	lockTableLatches[i].acquire();
-	try {
-	    original(sb, i);
-	} finally {
+		after Label773:dumpToString()
+		{
+			lockTableLatches[i].acquire();
+		}
+
+    after Label773_1:
+		{
 	    lockTableLatches[i].release();
-	}
     }
 
 }

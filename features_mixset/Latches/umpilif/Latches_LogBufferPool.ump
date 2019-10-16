@@ -6,80 +6,82 @@ class LogBufferPool
   depend com.sleepycat.je.latch.Latch;
     private Latch bufferPoolLatch;
 
-    protected void hook485(EnvironmentImpl envImpl) throws DatabaseException {
+    after Label485: LogBufferPool(FileManager fileManager, EnvironmentImpl envImpl) {
 	bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
-	original(envImpl);
+	//original(envImpl);
     }
 
     /** 
      * Initialize the pool at construction time and when the cache is resized. This method is called after the memory budget has been calculated.
      */
-    void reset(DbConfigManager configManager) throws DatabaseException {
-	original(configManager);
+    after reset(DbConfigManager )  {
+	//original(configManager);
 	bufferPoolLatch.release();
     }
 
-    protected void hook486() throws DatabaseException {
+    after Label486: void reset(DbConfigManager ) {
 	bufferPoolLatch.acquire();
-	original();
+	//original();
     }
 
-    protected void hook487(int bufferSize, LogBuffer latchedBuffer) throws IOException, DatabaseException {
-	try {
-	    original(bufferSize, latchedBuffer);
-	} finally {
+    after Label487_1:writeBufferToFile(int ) {
+
+//	try { //original(bufferSize, latchedBuffer);} finally {
 	    if (latchedBuffer != null) {
 		latchedBuffer.release();
 	    }
-	}
+//	}
     }
 
-    protected void hook488() throws IOException, DatabaseException {
+    after Label488:writeBufferToFile(int ) {
+
 	currentWriteBuffer.latchForWrite();
-	original();
+	//original();
     }
 
-    protected LogBuffer hook489(long lsn, LogBuffer foundBuffer) throws DatabaseException {
+    protected LogBuffer hook489: getReadBuffer(long ) {
 	bufferPoolLatch.acquire();
-	try {
-	    foundBuffer = original(lsn, foundBuffer);
-	} finally {
-	    bufferPoolLatch.releaseIfOwner();
-	}
-	return foundBuffer;
+//	try {foundBuffer = //original(lsn, foundBuffer);} finally {	    bufferPoolLatch.releaseIfOwner();}
+	//return foundBuffer;
     }
 
-    protected void hook490() throws IOException, DatabaseException {
+    protected LogBuffer Label489_1: getReadBuffer(long ) {
+
+	    bufferPoolLatch.releaseIfOwner();
+	//return foundBuffer;
+    }
+
+
+    after Label490: writeBufferToFile(int ) { 
 	bufferPoolLatch.release();
-	original();
+	//original();
     }
 
-    protected void hook491() throws IOException, DatabaseException {
+    after Label491: writeBufferToFile(int ) { 
 	bufferPoolLatch.acquire();
-	original();
+	//original();
     }
 
-    protected void hook492(LogBuffer latchedBuffer) throws IOException, DatabaseException {
+    after Label492: writeBufferToFile(int ) { 
 	latchedBuffer.release();
-	original(latchedBuffer);
+	//original(latchedBuffer);
     }
 
-    protected void hook493(LogBuffer nextToUse) throws IOException, DatabaseException {
-	try {
-	    original(nextToUse);
-	} finally {
+    after Label493: writeBufferToFile(int ) { 
+//	try {	    //original(nextToUse);} finally {
 	    bufferPoolLatch.releaseIfOwner();
-	}
+	//}
     }
 
-    protected void hook494(LogBuffer latchedBuffer) throws IOException, DatabaseException {
+    after Label494: writeBufferToFile(int ) { 
 	latchedBuffer.release();
-	original(latchedBuffer);
+	//original(latchedBuffer);
     }
 
-    protected void hook495() throws IOException, DatabaseException {
+    after Label495: writeBufferToFile(int ) { 
+
 	bufferPoolLatch.acquire();
-	original();
+	//original();
     }
 
 }

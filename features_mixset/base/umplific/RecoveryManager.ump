@@ -96,7 +96,7 @@ class RecoveryManager
 			preparedTxns = new HashMap();
 			inListRebuildDbIds = new HashSet();
 			fileSummaryLsns = new HashMap();
-			this.hook578(env);
+			Label:           ;  //this.hook578(env);
     }
 
     /** 
@@ -111,20 +111,20 @@ class RecoveryManager
 					boolean forceCheckpoint = configManager.getBoolean(EnvironmentParams.ENV_RECOVERY_FORCE_CHECKPOINT);
 					if (fileManager.filesExist()) {
 				findEndOfLog(readOnly);
-				this.hook559();
+				Label559:           ;  //this.hook559();
 				findLastCheckpoint();
 				env.getLogManager().setLastLsnAtRecovery(fileManager.getLastUsedLsn());
-				this.hook558();
+				Label558:           ;  //this.hook558();
 				env.readMapTreeFromLog(info.useRootLsn);
 				buildTree();
 					} else {
-				this.hook556();
-				this.hook560();
+				Label556:           ;  //this.hook556();
+				Label560:           ;  //this.hook560();
 				env.logMapTreeRoot();
 				forceCheckpoint = true;
 					}
 					if (preparedTxns.size() > 0) {
-				this.hook573();
+				Label:           ;  //this.hook573();
 				preparedTxns = null;
 					}
 					if (DbInternal.getCreateUP(env.getConfigManager().getEnvironmentConfig())) {
@@ -137,7 +137,7 @@ class RecoveryManager
 				env.invokeCheckpoint(config, false, "recovery");
 					}
 			} catch (IOException e) {
-					this.hook575(e);
+					Label575:           ;  //this.hook575(e);
 					throw new RecoveryException(env, "Couldn't recover: " + e.getMessage(), e);
 			} finally {
 					Tracer.trace(Level.CONFIG, env, "Recovery finished: " + info);
@@ -222,15 +222,15 @@ class RecoveryManager
      */
     private void buildTree() throws IOException, DatabaseException {
 	inListClearCounter = 0;
-	this.hook572();
+	Label572:           ;  //this.hook572();
 	long start = System.currentTimeMillis();
 	readINsAndTrackIds(info.checkpointStartLsn);
 	long end = System.currentTimeMillis();
-	this.hook571(start, end);
+	Label571:           ;  //this.hook571(start, end);
 	start = System.currentTimeMillis();
 	info.numOtherINs += readINs(info.checkpointStartLsn, true, LogEntryType.LOG_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	this.hook570(start, end);
+	Label570:           ;  //this.hook570(start, end);
 	start = System.currentTimeMillis();
 	Set mapLNSet = new HashSet();
 	mapLNSet.add(LogEntryType.LOG_MAPLN_TRANSACTIONAL);
@@ -239,34 +239,34 @@ class RecoveryManager
 	mapLNSet.add(LogEntryType.LOG_TXN_PREPARE);
 	undoLNs(info, mapLNSet);
 	end = System.currentTimeMillis();
-	this.hook569(start, end);
+	Label569:           ;  //this.hook569(start, end);
 	start = System.currentTimeMillis();
 	mapLNSet.add(LogEntryType.LOG_MAPLN);
 	redoLNs(info, mapLNSet);
 	end = System.currentTimeMillis();
-	this.hook568(start, end);
+	Label568:           ;  //this.hook568(start, end);
 	start = System.currentTimeMillis();
 	info.numOtherINs += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_IN, LogEntryType.LOG_BIN,
 		LogEntryType.LOG_IN_DELETE_INFO, false);
 	end = System.currentTimeMillis();
-	this.hook567(start, end);
+	Label567:           ;  //this.hook567(start, end);
 	start = System.currentTimeMillis();
 	info.numBinDeltas = readINs(info.checkpointStartLsn, false, LogEntryType.LOG_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	this.hook566(start, end);
+	Label566:           ;  //this.hook566(start, end);
 	start = System.currentTimeMillis();
 	info.numDuplicateINs += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DIN, LogEntryType.LOG_DBIN,
 		LogEntryType.LOG_IN_DUPDELETE_INFO, true);
 	end = System.currentTimeMillis();
-	this.hook565(start, end);
+	Label565:           ;  //this.hook565(start, end);
 	start = System.currentTimeMillis();
 	info.numBinDeltas += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DUP_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	this.hook564(start, end);
+	Label:           ;  //this.hook564(start, end);
 	rebuildINList();
-//	this.hook596();
+//	Label:           ;  //this.hook596();
   Label596:
-	this.hook563();
+	Label563:           ;  //this.hook563();
 	start = System.currentTimeMillis();
 	Set lnSet = new HashSet();
 	lnSet.add(LogEntryType.LOG_LN_TRANSACTIONAL);
@@ -275,7 +275,7 @@ class RecoveryManager
 	lnSet.add(LogEntryType.LOG_DUPCOUNTLN_TRANSACTIONAL);
 	undoLNs(info, lnSet);
 	end = System.currentTimeMillis();
-	this.hook562(start, end);
+	Label562:           ;  //this.hook562(start, end);
 	start = System.currentTimeMillis();
 	lnSet.add(LogEntryType.LOG_LN);
 	lnSet.add(LogEntryType.LOG_NAMELN);
@@ -284,7 +284,7 @@ class RecoveryManager
 	lnSet.add(LogEntryType.LOG_FILESUMMARYLN);
 	redoLNs(info, lnSet);
 	end = System.currentTimeMillis();
-	this.hook561(start, end);
+	Label561:           ;  //this.hook561(start, end);
     }
 
     private void readINsAndTrackIds(long rollForwardLsn) throws IOException, DatabaseException {
@@ -293,7 +293,7 @@ class RecoveryManager
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	Label593://this.hook593(reader);
+	Label593://Label:           ;  //this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();
@@ -387,7 +387,7 @@ class RecoveryManager
 	    IN in = reader.getIN();
 	    long inLsn = reader.getLsnOfIN();
 	    in.postRecoveryInit(db, inLsn);
-	    this.hook585(in);
+	    Label585: ;  //this.hook585(in);
 	    replaceOrInsert(db, in, reader.getLastLsn(), inLsn, requireExactMatch);
 	}
 	if ((++inListClearCounter % CLEAR_INCREMENT) == 0) {
@@ -402,6 +402,7 @@ class RecoveryManager
 	long firstActiveLsn = info.firstActiveLsn;
 	long lastUsedLsn = info.lastUsedLsn;
 	long endOfFileLsn = info.nextAvailableLsn;
+
 	LNFileReader reader = new LNFileReader(env, readBufferSize, lastUsedLsn, false, endOfFileLsn, firstActiveLsn,
 		null);
 	Iterator iter = lnTypes.iterator();
@@ -418,7 +419,7 @@ class RecoveryManager
 		if (reader.isLN()) {
 		    Long txnId = reader.getTxnId();
 		    if (txnId != null && !committedTxnIds.contains(txnId)) {
-			//this.hook597();
+		  //this.hook597();
       Label597:
 			LN ln = reader.getLN();
 			long logLsn = reader.getLastLsn();
@@ -428,7 +429,9 @@ class RecoveryManager
 			DatabaseImpl db = dbMapTree.getDb(dbId);
 			if (db != null) {
 			    ln.postFetchInit(db, logLsn);
-			    this.hook586(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);
+			    Label586:           ;  //this.hook586(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);
+					undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,		abortKnownDeleted, info, true);
+					Label586_1:
 			    TxnNodeId txnNodeId = new TxnNodeId(reader.getNodeId(), txnId.longValue());
 			    undoUtilizationInfo(ln, logLsn, abortLsn, abortKnownDeleted, txnNodeId,
 				    countedFileSummaries, countedAbortLsnNodes);
@@ -444,7 +447,7 @@ class RecoveryManager
 			preparedTxn.setLockTimeout(0);
 			preparedTxns.put(prepareIdL, preparedTxn);
 			env.getTxnManager().registerXATxn(reader.getTxnPrepareXid(), preparedTxn, true);
-			this.hook574(reader);
+			Label574:           ;  //this.hook574(reader);
 		    }
 		} else if (reader.isAbort()) {
 		    abortedTxnIds.add(new Long(reader.getTxnAbortId()));
@@ -498,7 +501,7 @@ class RecoveryManager
 			}
 		    }
 		    if (processThisLN) {
-			//this.hook598();
+			//Label:           ;  //this.hook598();
       Label598:
 			LN ln = reader.getLN();
 			DatabaseId dbId = reader.getDatabaseId();
@@ -571,10 +574,10 @@ class RecoveryManager
 	    }
 	} catch (Exception e) {
 	    String trace = printTrackList(trackingList);
-	    this.hook576(db, logLsn, e, trace);
+	    Label576:           ;  //this.hook576(db, logLsn, e, trace);
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(logLsn), e);
 	} finally {
-	    this.hook587(inFromLog, logLsn);
+	    Label587:           ;  //this.hook587(inFromLog, logLsn);
 	}
     }
 
@@ -613,15 +616,15 @@ class RecoveryManager
 		tree.withRootLatchedExclusive(new RootDeleter(tree));
 		DbTree dbTree = db.getDbEnvironment().getDbMapTree();
 		dbTree.modifyDbRoot(db);
-		this.hook557(db);
+		Label557:           ;  //this.hook557(db);
 		deleted = true;
 	    } else if (result.exactParentFound) {
 		found = true;
 		deleted = result.parent.deleteEntry(result.index, false);
 	    }
 	} finally {
-	    this.hook588(result);
-	    this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
+	    Label588:           ;  //this.hook588(result);
+	    Label579:           ;  //this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
 	}
     }
 
@@ -642,7 +645,7 @@ class RecoveryManager
 	    success = false;
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(lsn), e);
 	} finally {
-	    this.hook580(db, inFromLog, lsn, success, rootUpdater);
+	    Label580:           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
 	}
     }
 
@@ -680,8 +683,8 @@ class RecoveryManager
 	    }
 	    success = true;
 	} finally {
-	    this.hook589(parent);
-	    this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
+	    Label589:           ;  //this.hook589(parent);
+	    Label581:           ;  //this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
 	}
     }
 
@@ -711,8 +714,8 @@ class RecoveryManager
 	    }
 	    success = true;
 	} finally {
-	    this.hook590(result);
-	    this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
+	    Label590:           ;  //this.hook590(result);
+	    Label582:           ;  //this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
 	}
     }
 
@@ -757,7 +760,7 @@ class RecoveryManager
 		    if (DbLsn.compareTo(logLsn, location.childLsn) >= 0 && lnFromLog.isDeleted()) {
 			location.bin.setKnownDeletedLeaveTarget(location.index);
 			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			Label594: //this.hook594(db, location, deletedKey);
+			Label594: //Label:           ;  //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;
@@ -772,8 +775,8 @@ class RecoveryManager
 	    success = true;
 	    return found ? location.childLsn : DbLsn.NULL_LSN;
 	} finally {
-	    this.hook591(location);
-	    this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
+	    Label591:           ;  //this.hook591(location);
+	    Label583:           ;  //this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
 	}
     }
 
@@ -800,7 +803,13 @@ class RecoveryManager
 		if (lnFromLog.containsDuplicates()) {
 			  if (found) {
 			DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
-			replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			Label592: //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
+							duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
+							replaced = true;
+					}
+			Label592_1:
+			//end hook592
 			  }
 		} else {
 			  if (found) {
@@ -965,7 +974,7 @@ class RecoveryManager
 
     private void traceAndThrowException(long badLsn, String method, Exception origException) throws DatabaseException {
 	String badLsnString = DbLsn.getNoFormatString(badLsn);
-	this.hook577(method, origException, badLsnString);
+	Label:           ;  //this.hook577(method, origException, badLsnString);
 	throw new DatabaseException("last LSN=" + badLsnString, origException);
     }
 
@@ -1063,32 +1072,33 @@ class RecoveryManager
 	    boolean splitsAllowed, boolean found, boolean replaced, boolean success) throws DatabaseException {
 	  }
 
-    protected void hook585(IN in) throws DatabaseException {
-    }
+  //  protected void hook585(IN in) throws DatabaseException {
+    //}
 
+/*
     protected void hook586(RecoveryInfo info, LNFileReader reader, TreeLocation location, LN ln, long logLsn,
 	    long abortLsn, boolean abortKnownDeleted, DatabaseImpl db)
 	    throws IOException, DatabaseException, Exception {
 	undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,
 		abortKnownDeleted, info, true);
     }
+*/
+  //  protected void hook587(IN inFromLog, long logLsn) throws DatabaseException {
+   // }
 
-    protected void hook587(IN inFromLog, long logLsn) throws DatabaseException {
-    }
+//    protected void hook588(SearchResult result) throws DatabaseException {
+ //   }
 
-    protected void hook588(SearchResult result) throws DatabaseException {
-    }
+  //  protected void hook589(IN parent) throws DatabaseException {
+  //  }
 
-    protected void hook589(IN parent) throws DatabaseException {
-    }
+ //   protected void hook590(SearchResult result) throws DatabaseException {
+  //  }
 
-    protected void hook590(SearchResult result) throws DatabaseException {
-    }
+    //protected void hook591(TreeLocation location) throws DatabaseException {
+   // }
 
-    protected void hook591(TreeLocation location) throws DatabaseException {
-    }
-
-    protected static boolean hook592(TreeLocation location, long logLsn, long abortLsn, boolean replaced,
+/*    protected static boolean hook592(TreeLocation location, long logLsn, long abortLsn, boolean replaced,
 	    DIN duplicateRoot) throws DatabaseException {
 			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
 					duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
@@ -1096,7 +1106,7 @@ class RecoveryManager
 			}
 			return replaced;
     }
-
+*/
     //protected void hook593(INFileReader reader) throws IOException, DatabaseException {
     //}
 

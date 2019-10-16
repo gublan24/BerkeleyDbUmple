@@ -30,7 +30,7 @@ class RootUpdater
 
     public IN doWork(ChildReference root) throws DatabaseException {
 	ChildReference newRoot = tree.makeRootChildReference(inFromLog, new byte[0], lsn);
-	this.hook600();
+	Label600: //this.hook600();
 	if (root == null) {
 	    tree.setRoot(newRoot, false);
 	    inserted = true;

@@ -15,7 +15,7 @@ class TreeIterator
 
     public TreeIterator(Tree tree) throws DatabaseException {
 	nextBin = (BIN) tree.getFirstNode();
-	this.hook755();
+	Label755:           ;  //this.hook755();
 	index = -1;
 	this.tree = tree;
     }
@@ -23,12 +23,12 @@ class TreeIterator
     public boolean hasNext() {
 	boolean ret = false;
 	try {
-	    this.hook756();
+	    Label756:           ;  //this.hook756();
 	    advance();
 	    ret = (nextBin != null) && (index < nextBin.getNEntries());
 	} catch (DatabaseException e) {
 	} finally {
-	    this.hook757();
+	    Label757:           ;  //this.hook757();
 	}
 	return ret;
     }
@@ -39,11 +39,11 @@ class TreeIterator
 	    if (nextBin == null) {
 		throw new NoSuchElementException();
 	    }
-	    this.hook758();
+	    Label758:           ;  //this.hook758();
 	    ret = nextBin.getKey(index);
 	} catch (DatabaseException e) {
 	} finally {
-	    this.hook759();
+	    Label759:           ;  //this.hook759();
 	}
 	return ret;
     }
@@ -61,7 +61,7 @@ class TreeIterator
 	    index = -1;
 	}
     }
-
+/*
     protected void hook755() throws DatabaseException {
     }
 
@@ -76,5 +76,5 @@ class TreeIterator
 
     protected void hook759() {
     }
-
+*/
 }

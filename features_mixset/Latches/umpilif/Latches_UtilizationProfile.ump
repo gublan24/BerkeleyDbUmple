@@ -2,27 +2,26 @@ namespace com.sleepycat.je.cleaner;
 
 class UtilizationProfile
 {
-    protected void hook178(CursorImpl cursor) throws DatabaseException {
+    after Label178: deleteFileSummary(Long ) {
+
 	cursor.releaseBINs();
-	original(cursor);
+//	original(cursor);
     }
 
-    protected void hook179(CursorImpl cursor) throws DatabaseException {
+    after Label179: getObsoleteDetail(Long , PackedOffsets , boolean ){
 	if (cursor != null) {
 	    cursor.releaseBINs();
 	    cursor.close();
 	}
-	original(cursor);
+	//original(cursor);
     }
 
-    protected void hook180(long lsn, LNLogEntry entry, DatabaseImpl db, BIN bin) throws DatabaseException {
-	try {
-	    original(lsn, entry, db, bin);
-	} finally {
+    after Label180_1: verifyLsnIsObsolete(long ) {
+	//try {	    //original(lsn, entry, db, bin);} finally {
 	    if (bin != null) {
 		bin.releaseLatch();
 	    }
-	}
+	//}
     }
 
 }
