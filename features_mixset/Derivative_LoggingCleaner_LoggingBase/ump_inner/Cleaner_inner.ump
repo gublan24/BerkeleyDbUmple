@@ -1,0 +1,24 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingCleaner_LoggingBase/com/sleepycat/je/cleaner/Cleaner.java
+namespace com.sleepycat.je.cleaner;
+class Cleaner {
+   static class Cleaner_trace {
+      before execute(){
+        logger=_this.env.getLogger();
+        if (logger.isLoggable(level)) {
+          sb=new StringBuffer();
+          sb.append(action);
+          if (node != null) {
+            sb.append(" node=");
+            sb.append(node.getNodeId());
+          }
+          sb.append(" logLsn=");
+          sb.append(DbLsn.getNoFormatString(logLsn));
+          sb.append(" complete=").append(completed);
+          sb.append(" obsolete=").append(obsolete);
+          sb.append(" dirtiedOrMigrated=").append(dirtiedMigrated);
+          logger.log(level,sb.toString());
+        }
+        //original();
+      }
+    }
+}

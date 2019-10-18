@@ -35,8 +35,8 @@ class FileCache
 			  while (!done && iter.hasNext()) {
 			Long evictId = (Long) iter.next();
 			FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
-		//	this.hook438(iter, done, evictId, evictTarget);
-		    Label438:
+
+		    Label438: 		//	this.hook438(iter, done, evictId, evictTarget);
 			  }
 		}
 		fileList.add(fileId);
@@ -52,8 +52,18 @@ class FileCache
 					Long evictId = (Long) iter.next();
 					if (evictId.longValue() == fileNum) {
 						FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
-						//this.hook439(iter, evictId, evictTarget);
-						Label439:
+
+						try { 
+                Label439: 						//this.hook439(iter, evictId, evictTarget);
+								//this.hook442(evictTarget);
+									Label442: //remove(long fileNum)
+									fileMap.remove(evictId);
+									iter.remove();
+									evictTarget.close();
+															}
+						finally {
+								Label439_1: //end of hook439
+						}
 					}
 			}
 		}
@@ -63,7 +73,11 @@ class FileCache
 			while (iter.hasNext()) {
 					FileHandle fileHandle = (FileHandle) iter.next();
 					//this.hook440(iter, fileHandle);
-				  Label440:
+				  Label440:	 // this.hook443(fileHandle);
+					Label443:
+					fileHandle.close();
+					iter.remove();
+					Label440_1: // end of hook440
 			}
 			fileMap.clear();
 			fileList.clear();
@@ -91,15 +105,18 @@ class FileCache
 	  }
 	done = true;
   }
-
+/*
   after Label439: remove(long ) {
 	  //this.hook442(evictTarget);
     Label442: //remove(long fileNum)
 	  fileMap.remove(evictId);
 	  iter.remove();
 	  evictTarget.close();
+
     
   }
+*/
+
 //    protected void hook439(Iterator iter, Long evictId, FileHandle evictTarget) throws IOException, DatabaseException {
 //	this.hook442(evictTarget);
 //	fileMap.remove(evictId);

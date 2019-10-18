@@ -201,10 +201,8 @@ class IN {
       protected int oldSize;
      // protected void hook645() throws DatabaseException {
      // }
-      protected void hook646() throws DatabaseException {
-      }
-      protected void hook647() throws DatabaseException {
-      }
+  //    protected void hook646() throws DatabaseException {}
+//      protected void hook647() throws DatabaseException {}
     }
   @MethodObject static class IN_deleteEntry {
       IN_deleteEntry(    IN _this,    int index,    boolean maybeValidate){
@@ -229,7 +227,7 @@ class IN {
           _this.nEntries--;
           _this.setDirty(true);
           _this.setProhibitNextDelta();
-          this.hook616();
+          Label616: //this.hook616();
           return true;
         }
    else {
@@ -240,8 +238,7 @@ class IN {
       protected int index;
       protected boolean maybeValidate;
       protected int oldLSNArraySize;
-      protected void hook616() throws DatabaseException {
-      }
+//      protected void hook616() throws DatabaseException {}
       //protected void hook648() throws DatabaseException {
       //}
      // protected void hook649() throws DatabaseException {
@@ -379,7 +376,7 @@ Label628_1:
         //this.hook650();
         Label650:
         inMemoryINs.add(newSibling);
-        this.hook617();
+        Label617: ;//this.hook617();
 
 
 
@@ -409,14 +406,10 @@ Label628_1:
       protected boolean insertOk1;
       protected boolean insertOk2;
       protected long newSize;
-      protected void hook617() throws DatabaseException {
-      }
-      protected void hook630() throws DatabaseException {
-              }
-      protected void hook631() throws DatabaseException {
-      }
-      protected void hook636() throws DatabaseException {
-      }
+//      protected void hook617() throws DatabaseException {}
+//      protected void hook630() throws DatabaseException {}
+//      protected void hook631() throws DatabaseException {    }
+//      protected void hook636() throws DatabaseException {    }
      // protected void hook650() throws DatabaseException {
      // }
     }

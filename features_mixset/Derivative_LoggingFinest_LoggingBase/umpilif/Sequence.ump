@@ -1,0 +1,12 @@
+namespace com.sleepycat.je;
+
+class Sequence
+{
+    after Label82:synchronized long get(Transaction , int ) { 
+	if (logger.isLoggable(Level.FINEST)) {
+	    logger.log(Level.FINEST, "Sequence.get" + " value=" + retVal + " cached=" + cached + " wrapped=" + wrapped);
+	}
+	//original(cached, wrapped, retVal);
+    }
+
+}

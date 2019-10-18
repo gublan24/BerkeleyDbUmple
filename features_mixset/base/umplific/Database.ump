@@ -119,7 +119,7 @@ class Database
 	StringBuffer errors = null;
 	checkEnv();
 	checkProhibitedDbState(CLOSED, "Can't close Database:");
-	this.hook44();
+	Label44:           ;  //this.hook44();
 	removeAllTriggers();
 	envHandle.removeReferringHandle(this);
 	if (cursors.size() > 0) {
@@ -156,7 +156,7 @@ class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call Database.openSequence:");
 	checkWritable("openSequence");
-	this.hook45(txn, key);
+	Label45:           ;  //this.hook45(txn, key);
 	return new Sequence(this, txn, key, config);
     }
 
@@ -174,7 +174,7 @@ class Database
 	if (useConfig.getReadUncommitted() && useConfig.getReadCommitted()) {
 	    throw new IllegalArgumentException("Only one may be specified: ReadCommitted or ReadUncommitted");
 	}
-	this.hook46(txn, cursorConfig);
+	Label46:           ;  //this.hook46(txn, cursorConfig);
 	Cursor ret = newDbcInstance(txn, useConfig);
 	return ret;
     }
@@ -191,7 +191,7 @@ class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call Database.delete:");
 	checkWritable("delete");
-	this.hook47(txn, key);
+	Label47:           ;  //this.hook47(txn, key);
 	OperationStatus commitStatus = OperationStatus.NOTFOUND;
 	Locker locker = null;
 	try {
@@ -247,7 +247,7 @@ class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call Database.get:");
-	this.hook48(txn, key, lockMode);
+	Label48:           ;  //this.hook48(txn, key, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -271,7 +271,7 @@ class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(data, "data", true);
 	checkRequiredDbState(OPEN, "Can't call Database.getSearchBoth:");
-	this.hook49(txn, key, data, lockMode);
+	Label49:           ;  //this.hook49(txn, key, data, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -296,7 +296,7 @@ class Database
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.put");
 	checkWritable("put");
-	this.hook50(txn, key, data);
+	Label50:           ;  //this.hook50(txn, key, data);
 	return putInternal(txn, key, data, PutMode.OVERWRITE);
     }
 
@@ -308,7 +308,7 @@ class Database
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.putNoOverWrite");
 	checkWritable("putNoOverwrite");
-	this.hook51(txn, key, data);
+	Label51:           ;  //this.hook51(txn, key, data);
 	return putInternal(txn, key, data, PutMode.NOOVERWRITE);
     }
 
@@ -320,7 +320,7 @@ class Database
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.putNoDupData");
 	checkWritable("putNoDupData");
-	this.hook52(txn, key, data);
+	Label52:           ;  //this.hook52(txn, key, data);
 	return putInternal(txn, key, data, PutMode.NODUP);
     }
 
@@ -385,7 +385,7 @@ class Database
     public void preload(long maxBytes) throws DatabaseException {
 			checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
-			//this.hook55();
+			//Label:           ;  //this.hook55();
 			Label55:
 			PreloadConfig config = new PreloadConfig();
 			config.setMaxBytes(maxBytes);
@@ -395,7 +395,7 @@ class Database
     public void preload(long maxBytes, long maxMillisecs) throws DatabaseException {
 	checkEnv();
 	checkRequiredDbState(OPEN, "Can't call Database.preload");
-	//this.hook56();
+	//Label:           ;  //this.hook56();
   Label56:
 	PreloadConfig config = new PreloadConfig();
 	config.setMaxBytes(maxBytes);
@@ -406,7 +406,7 @@ class Database
     public PreloadStats preload(PreloadConfig config) throws DatabaseException {
 			checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
-			//this.hook57();
+			//Label:           ;  //this.hook57();
       Label57:
 			return databaseImpl.preload(config);
     }
@@ -452,7 +452,7 @@ class Database
 	List list = new ArrayList();
 	if (hasTriggers()) {
 	    acquireTriggerListReadLock();
-	    Label53://this.hook53(list);
+	    Label53://Label:           ;  //this.hook53(list);
 			try {
 				for (int i = 0; i < triggerList.size(); i += 1) {
 						Object obj = triggerList.get(i);
@@ -632,7 +632,7 @@ class Database
 	    throws DatabaseException {
 				acquireTriggerListReadLock();
 				try {	
-						Label54: //this.hook54(locker, priKey, oldData, newData);
+						Label54: //Label:           ;  //this.hook54(locker, priKey, oldData, newData);
 						for (int i = 0; i < triggerList.size(); i += 1) {
 									DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
 									trigger.databaseUpdated(this, locker, priKey, oldData, newData);
@@ -644,6 +644,7 @@ class Database
     //End of hook54
     }
 
+/*
     protected void hook44() throws DatabaseException {
     }
 
@@ -671,6 +672,7 @@ class Database
 
     protected void hook52(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException {
     }
+*/
 
 /*    protected void hook53(List list) throws DatabaseException {
 			try {

@@ -572,7 +572,7 @@ class UtilizationProfile
 	    //Label:           ;  //this.hook189(cursor);
       Label189:
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    Label:           ;  //this.hook177(fileNum, sequence, status);
+	    Label177:           ;  //this.hook177(fileNum, sequence, status);
 	    //Label:           ;  //this.hook188(cursor);
       Label188:
 	} finally {

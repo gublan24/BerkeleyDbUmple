@@ -11,6 +11,7 @@ class EnvironmentImpl {
         logger.setUseParentHandlers(false);
         level=Tracer.parseLevel(_this,EnvironmentParams.JE_LOGGING_LEVEL);
         logger.setLevel(level);
+        LabelExecute_loggingBase:
         return logger;
       }
       protected EnvironmentImpl _this;

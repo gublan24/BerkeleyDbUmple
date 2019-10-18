@@ -72,7 +72,7 @@ class Checkpointer {
 
           }
     finally {
-            this.hook521();
+            Label521: //this.hook521();
           }
           throw ReturnHack.returnBoolean;
         }
@@ -87,8 +87,7 @@ class Checkpointer {
       protected long nextLsn;
       protected long lastUsedLsn;
       protected StringBuffer sb;
-      protected void hook521() throws DatabaseException {
-      }
+//      protected void hook521() throws DatabaseException {  }
      // protected void hook542() throws DatabaseException {
       //  throw new ReturnBoolean(false);
      // }

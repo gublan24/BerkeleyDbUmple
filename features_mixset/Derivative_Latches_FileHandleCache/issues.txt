@@ -1,0 +1,9 @@
+1) Block of code in the following: FileCache.ump:
+
+
+   after Label438:  add(Long , FileHandle ){
+
+	if (evictTarget.latchNoWait()) {
+		    original(iter, done, evictId, evictTarget);
+   }
+}

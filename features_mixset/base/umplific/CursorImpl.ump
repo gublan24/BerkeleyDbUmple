@@ -691,7 +691,7 @@ class CursorImpl {
 				    Label285:
 				        targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
 				    Label269://this.hook269();
-				    this.hook205(ln, oldLsn, newLsn);
+				    Label205: //this.hook205(ln, oldLsn, newLsn);
 				    status = CURSOR_INITIALIZED;
 				    //throw new ReturnObject(OperationStatus.SUCCESS);
 //End of hook218(            
@@ -1309,7 +1309,7 @@ catch (ReturnBoolean r) {
     public void setTestHook(TestHook hook) {
         testHook = hook;
     }
-
+/*
     protected void hook204(LN ln, long oldLsn, long newLsn) throws DatabaseException {}
 
     protected void hook205(LN ln, long oldLsn, long newLsn) throws DatabaseException {}
@@ -1325,7 +1325,7 @@ catch (ReturnBoolean r) {
     protected void hook210(DBIN abin) throws DatabaseException {}
 
     protected void hook211() throws DatabaseException {}
-
+*/
    /* protected void hook212(LockType lockType) throws DatabaseException {
         if (bin.getNEntries() <= index) {
             throw new ReturnInt(0);

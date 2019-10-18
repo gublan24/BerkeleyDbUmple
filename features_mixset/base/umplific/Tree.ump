@@ -1114,7 +1114,7 @@ class Tree {
                     bin.updateEntry(index, ln, newLsn, key);
                     bin.clearKnownDeleted(index);
                     bin.clearPendingDeleted(index);
-                    Label: ; //this.hook658(ln, env, bin, index, newLsn);
+                    Label658: ; //this.hook658(ln, env, bin, index, newLsn);
                     throw new ReturnBoolean(true);
                 } else {
                     throw new ReturnBoolean(
@@ -1221,7 +1221,7 @@ class Tree {
                         dupBin.updateEntry(dupIndex, newLN, newLsn, newLNKey);
                         dupBin.clearKnownDeleted(dupIndex);
                         dupBin.clearPendingDeleted(dupIndex);
-                        Label: ; //this.hook660(newLN, binNid, dupBin, newLsn);
+                        Label660: ; //this.hook660(newLN, binNid, dupBin, newLsn);
                         successfulInsert = true;
                     } else {
                         successfulInsert = false;
@@ -1609,7 +1609,7 @@ class Tree {
     public void setCkptHook(TestHook hook) {
         ckptHook = hook;
     }
-
+/*
     protected void hook657(LN ln, EnvironmentImpl env, BIN bin, int index, long newLsn) throws DatabaseException {}
 
     protected void hook658(LN ln, EnvironmentImpl env, BIN bin, int index, long newLsn) throws DatabaseException {}
@@ -1617,7 +1617,7 @@ class Tree {
     protected void hook659(LN newLN, long binNid, DBIN dupBin, long newLsn) throws DatabaseException {}
 
     protected void hook660(LN newLN, long binNid, DBIN dupBin, long newLsn) throws DatabaseException {}
-
+*/
    // protected void hook661() throws DatabaseException, NodeNotEmptyException, CursorsExistException {}
 
     //protected void hook662(IN curRoot, long curRootLsn, long logLsn, IN newRoot) throws DatabaseException {}

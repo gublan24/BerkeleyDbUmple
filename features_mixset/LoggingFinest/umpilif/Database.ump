@@ -1,0 +1,69 @@
+namespace com.sleepycat.je;
+
+class Database
+{
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    void trace(Level level, String methodName, Transaction txn, DatabaseEntry key, DatabaseEntry data,
+	    LockMode lockMode) throws DatabaseException {
+	new Database_trace(this, level, methodName, txn, key, data, lockMode).execute();
+    }
+
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    void trace(Level level, String methodName, Transaction txn, CursorConfig config) throws DatabaseException {
+	new Database_trace2(this, level, methodName, txn, config).execute();
+    }
+
+    after Label44:  close()  { //synchronized void close() 
+	trace(Level.FINEST, "Database.close: ", null, null);
+	//original();
+    }
+
+    after Label45:  openSequence(Transaction , DatabaseEntry , SequenceConfig ) {
+	trace(Level.FINEST, "Database.openSequence", txn, key, null, null);
+	//original(txn, key);
+    }
+
+    after Label46:  openCursor(Transaction , CursorConfig ) {
+	trace(Level.FINEST, "Database.openCursor", txn, cursorConfig);
+	//original(txn, cursorConfig);
+    }
+
+    after Label47: delete(Transaction , DatabaseEntry ){
+	trace(Level.FINEST, "Database.delete", txn, key, null, null);
+	//original(txn, key);
+    }
+
+    after Label48: get(Transaction , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "Database.get", txn, key, null, lockMode);
+	//original(txn, key, lockMode);
+    }
+
+    after Label49: getSearchBoth(Transaction , DatabaseEntry , DatabaseEntry , LockMode )
+  {
+	trace(Level.FINEST, "Database.getSearchBoth", txn, key, data, lockMode);
+	//original(txn, key, data, lockMode);
+  }
+
+    after Label50:  put(Transaction , DatabaseEntry , DatabaseEntry ){
+	trace(Level.FINEST, "Database.put", txn, key, data, null);
+	//original(txn, key, data);
+    }
+
+    after Label51: putNoOverwrite(Transaction , DatabaseEntry , DatabaseEntry )
+   {
+	trace(Level.FINEST, "Database.putNoOverwrite", txn, key, data, null);
+	//original(txn, key, data);
+    }
+
+    after Label52: putNoDupData(Transaction , DatabaseEntry , DatabaseEntry ){
+
+	trace(Level.FINEST, "Database.putNoDupData", txn, key, data, null);
+	//original(txn, key, data);
+    }
+
+}

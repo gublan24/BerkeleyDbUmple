@@ -1,0 +1,88 @@
+namespace com.sleepycat.je;
+
+class SecondaryCursor
+{
+    after Label65:  delete() {
+	trace(Level.FINEST, "SecondaryCursor.delete: ", null);
+	//original();
+    }
+
+    after Label66: getCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getCurrent: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label67: getFirst(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getFirst: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label68: getLast(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getLast: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label69: getNext(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getNext: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label70: etNextDup(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getNextDup: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label71:  getNextNoDup(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode )
+{
+
+	trace(Level.FINEST, "SecondaryCursor.getNextNoDup: ", null, null, lockMode);
+	//original(lockMode);
+    }
+
+    after Label72: getPrev(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getPrev: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label73:  getPrevDup(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getPrevDup: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label74: getPrevNoDup(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getPrevNoDup: ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label75:getSearchKey(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getSearchKey: ", key, null, lockMode);
+	//original(key, lockMode);
+    }
+
+    after Label76: getSearchKeyRange(DatabaseEntry , DatabaseEntry , DatabaseEntry ,	    LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getSearchKeyRange: ", key, data, lockMode);
+	//original(key, data, lockMode);
+    }
+
+    after Label77: getSearchBoth(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+
+	trace(Level.FINEST, "SecondaryCursor.getSearchBoth: ", key, data, lockMode);
+	//original(key, data, lockMode);
+    }
+
+    after Label78: getSearchBothRange(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){
+	trace(Level.FINEST, "SecondaryCursor.getSearchBothRange: ", key, data, lockMode);
+	//original(key, data, lockMode);
+    }
+
+}

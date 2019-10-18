@@ -1,0 +1,20 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryManager
+{
+    after hook556: recover(boolean ){
+
+	env.enableDebugLoggingToDbLog();
+	//original();
+    }
+
+    /** 
+     * Find the end of the log, initialize the FileManager. While we're perusing the log, return the last checkpoint LSN if we happen to see it.
+     */
+  after findEndOfLog(boolean ) {
+
+	//original(readOnly);
+	env.enableDebugLoggingToDbLog();
+    }
+
+}

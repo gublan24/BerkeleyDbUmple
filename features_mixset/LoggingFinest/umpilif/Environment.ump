@@ -1,0 +1,12 @@
+namespace com.sleepycat.je;
+
+class Environment
+{
+    protected void hook58: openDb(Transaction , Database , String , DatabaseConfig , boolean )
+	{
+
+	Tracer.trace(Level.FINEST, environmentImpl,		"Environment.open: " + " name=" + databaseName + " dbConfig=" + dbConfig);
+	//original(databaseName, dbConfig);
+    }
+
+}

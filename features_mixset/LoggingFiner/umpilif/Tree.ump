@@ -1,0 +1,40 @@
+namespace com.sleepycat.je.tree;
+
+class Tree
+{
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    private void traceInsert(Level level, EnvironmentImpl env, BIN insertingBin, LN ln, long lnLsn, int index) {
+	new Tree_traceInsert(this, level, env, insertingBin, ln, lnLsn, index).execute();
+    }
+
+    /** 
+     * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+     */
+    private void traceInsertDuplicate(Level level, EnvironmentImpl env, BIN insertingDBin, LN ln, long lnLsn,
+	    long binNid) {
+	new Tree_traceInsertDuplicate(this, level, env, insertingDBin, ln, lnLsn, binNid).execute();
+    }
+
+    protected void hook657: insert(LN , byte , boolean , CursorImpl , LockResult ) {
+	traceInsert(Level.FINER, env, bin, ln, newLsn, index);
+	//original(ln, env, bin, index, newLsn);
+    }
+
+    protected void hook658: insert(LN , byte , boolean , CursorImpl , LockResult ) {
+	traceInsert(Level.FINER, env, bin, ln, newLsn, index);
+	//original(ln, env, bin, index, newLsn);
+    }
+
+    protected void hook659: insertDuplicate(byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) {
+	traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
+	//original(newLN, binNid, dupBin, newLsn);
+    }
+
+    protected void hook660: insertDuplicate(byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) {
+	traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
+	//original(newLN, binNid, dupBin, newLsn);
+    }
+
+}

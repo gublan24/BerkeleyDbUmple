@@ -1,0 +1,12 @@
+namespace com.sleepycat.je.recovery;
+
+class RecoveryManager
+{
+    after Label555: undo(Level , DatabaseImpl , TreeLocation , LN , byte ,
+	    byte , long , long , boolean , RecoveryInfo , boolean ){ //>>> reuse LoggingRecovery_RecoveryManager.ump
+
+	trace(traceLevel, db, TRACE_LN_UNDO, success, lnFromLog, logLsn, location.bin, found, replaced, false,	location.childLsn, abortLsn, location.index);
+	//original(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+    }
+
+}

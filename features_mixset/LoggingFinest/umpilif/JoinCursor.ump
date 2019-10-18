@@ -1,0 +1,16 @@
+namespace com.sleepycat.je;
+
+class JoinCursor
+{
+    after Label62: getNext(DatabaseEntry , LockMode ) {
+
+	priCursor.trace(Level.FINEST, "JoinCursor.getNext(key): ", lockMode);
+	//original(lockMode);
+    }
+
+    after Label63: getNext(DatabaseEntry , DatabaseEntry , LockMode ){
+	priCursor.trace(Level.FINEST, "JoinCursor.getNext(key,data): ", lockMode);
+	//original(lockMode);
+    }
+
+}

@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFine/com/sleepycat/je/tree/IN.java
 namespace com.sleepycat.je.tree;
 class IN {
-  @MethodObject static class IN_traceSplit {
+   static class IN_traceSplit {
       IN_traceSplit(    IN _this,    Level level,    IN parent,    IN newSibling,    long parentLsn,    long myNewLsn,    long newSiblingLsn,    int splitIndex,    int idKeyIndex,    int childIndex){
         this._this=_this;
         this.level=level;
@@ -29,10 +29,10 @@ class IN {
       protected Logger logger;
       protected StringBuffer sb;
     }
-  @MethodObject static class IN_splitInternal {
-      protected void hook617() throws DatabaseException {
+   static class IN_splitInternal {
+      after Label617: execute(){
         _this.traceSplit(Level.FINE,parent,newSibling,parentLsn,myNewLsn,newSiblingLsn,splitIndex,idKeyIndex,childIndex);
-        original();
+       // original();
       }
     }
 }

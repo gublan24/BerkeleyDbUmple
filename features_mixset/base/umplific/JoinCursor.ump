@@ -134,7 +134,7 @@ class JoinCursor
     public OperationStatus getNext(DatabaseEntry key, LockMode lockMode) throws DatabaseException {
 	priCursor.checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", false);
-	this.hook62(lockMode);
+	Label62:           ;  //this.hook62(lockMode);
 	return retrieveNext(key, null, lockMode);
     }
 
@@ -145,7 +145,7 @@ class JoinCursor
 	priCursor.checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	this.hook63(lockMode);
+	Label63:           ;  //this.hook63(lockMode);
 	return retrieveNext(key, data, lockMode);
     }
 
@@ -193,11 +193,11 @@ class JoinCursor
 	    return OperationStatus.SUCCESS;
 	}
     }
-
+/*
     protected void hook62(LockMode lockMode) throws DatabaseException {
     }
 
     protected void hook63(LockMode lockMode) throws DatabaseException {
     }
-
+*/
 }

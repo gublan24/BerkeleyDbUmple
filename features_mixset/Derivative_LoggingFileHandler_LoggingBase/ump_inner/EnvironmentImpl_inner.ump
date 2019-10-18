@@ -1,0 +1,25 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFileHandler_LoggingBase/com/sleepycat/je/dbi/EnvironmentImpl.java
+namespace com.sleepycat.je.dbi;
+class EnvironmentImpl {
+   static class EnvironmentImpl_initLogger {
+      after execute() {  // Original method: loggingBase_EnvironmentImpl_inner.ump
+        //Logger result=original();
+        fileHandler=null;
+        try {
+          if (_this.configManager.getBoolean(EnvironmentParams.JE_LOGGING_FILE)) {
+            limit=_this.configManager.getInt(EnvironmentParams.JE_LOGGING_FILE_LIMIT);
+            count=_this.configManager.getInt(EnvironmentParams.JE_LOGGING_FILE_COUNT);
+            logFilePattern=envHome + "/" + Tracer.INFO_FILES;
+            fileHandler=new FileHandler(logFilePattern,limit,count,true);
+            fileHandler.setFormatter(new SimpleFormatter());
+            fileHandler.setLevel(level);
+            logger.addHandler(fileHandler);
+          }
+        }
+   catch (      IOException e) {
+          throw new DatabaseException(e.getMessage());
+        }
+//        return result;
+      }
+    }
+}

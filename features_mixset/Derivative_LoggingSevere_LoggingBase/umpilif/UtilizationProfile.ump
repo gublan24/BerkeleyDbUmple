@@ -1,0 +1,13 @@
+namespace com.sleepycat.je.cleaner;
+
+class UtilizationProfile
+{
+    after Label177: insertFileSummary(FileSummaryLN , long , int ){
+//synchronized void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence)
+	    env.getLogger().log(Level.SEVERE, "Cleaner duplicate key sequence file=0x" + Long.toHexString(fileNum)
+		    + " sequence=0x" + Long.toHexString(sequence));
+	}
+	//original(fileNum, sequence, status);
+    }
+
+}

@@ -1,0 +1,15 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingConsoleHandler_LoggingBase/com/sleepycat/je/dbi/EnvironmentImpl.java
+namespace com.sleepycat.je.dbi;
+class EnvironmentImpl {
+   static class EnvironmentImpl_initLogger {
+      after LabelExecute_loggingBase: execute() {
+        //Logger result=original();
+        if (_this.configManager.getBoolean(EnvironmentParams.JE_LOGGING_CONSOLE)) {
+          consoleHandler=new ConsoleHandler();
+          consoleHandler.setLevel(level);
+          logger.addHandler(consoleHandler);
+        }
+        //return result;
+      }
+    }
+}

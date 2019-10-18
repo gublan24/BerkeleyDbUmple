@@ -193,7 +193,7 @@ class Sequence
 					cacheValue -= delta;
 			}
 			Label83: //this.hook83(cached);
-			this.hook82(cached, wrapped, retVal);
+			Label82: //this.hook82(cached, wrapped, retVal);
 			return retVal;
     }
 
@@ -280,11 +280,9 @@ class Sequence
 	return new DatabaseEntry(data);
     }
 
-    protected void hook82(boolean cached, boolean wrapped, long retVal) throws DatabaseException {
-    }
+  //  protected void hook82(boolean cached, boolean wrapped, long retVal) throws DatabaseException {    }
 
-    protected void hook83(boolean cached) throws DatabaseException {
-    }
+//    protected void hook83(boolean cached) throws DatabaseException {    }
 
    // protected void hook84(Database db) throws DatabaseException {
    // }

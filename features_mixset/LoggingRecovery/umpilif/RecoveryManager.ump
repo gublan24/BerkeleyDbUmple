@@ -16,42 +16,42 @@ class RecoveryManager
     }
   */
 
-  protected void hook578: RecoveryManager(EnvironmentImpl ) {
+  after Label578: RecoveryManager(EnvironmentImpl ) {
 	detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_RECOVERY);
 	//original(env);
     }
 
-    protected void hook579:  replayINDelete(DatabaseImpl , long , boolean , byte , byte , long ){
+    after Label579:  replayINDelete(DatabaseImpl , long , boolean , byte , byte , long ){
 	traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplicates);
 	//original(nodeId, containsDuplicates, logLsn, found, deleted, result);
     }
 
-    protected void hook580 : replaceOrInsertRoot(DatabaseImpl , IN , long ){
+    after Label580 : replaceOrInsertRoot(DatabaseImpl , IN , long ){
 	trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
 		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getoriginalLsn(), DbLsn.NULL_LSN, -1);
 	//original(db, inFromLog, lsn, success, rootUpdater);
     }
 
-    protected void hook581: replaceOrInsertDuplicateRoot(DatabaseImpl , DIN , long ) {
+    after Label581: replaceOrInsertDuplicateRoot(DatabaseImpl , DIN , long ) {
 
 	trace(detailedTraceLevel, db, TRACE_DUP_ROOT_REPLACE, success, inFromLog, lsn, parent, found, replaced,
 		inserted, origLsn, DbLsn.NULL_LSN, index);
 	//original(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
     }
 
-    protected void hook582: replaceOrInsertChild(DatabaseImpl , IN , long , long , List , boolean ) {
+    after Label582: replaceOrInsertChild(DatabaseImpl , IN , long , long , List , boolean ) {
 	trace(detailedTraceLevel, db, TRACE_IN_REPLACE, success, inFromLog, logLsn, result.parent,
 		result.exactParentFound, replaced, inserted, origLsn, DbLsn.NULL_LSN, result.index);
 	//original(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
     }
 
-    protected void hook583:  redo(DatabaseImpl , TreeLocation , LN , byte , byte , long ,	  RecoveryInfo ) {
+    after Label583:  redo(DatabaseImpl , TreeLocation , LN , byte , byte , long ,	  RecoveryInfo ) {
 	trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, location.bin, found, replaced,
 		inserted, location.childLsn, DbLsn.NULL_LSN, location.index);
 	//original(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
     }
 
-    protected static void hook584: undo(Level , DatabaseImpl , TreeLocation , LN , byte ,
+  after Label584: undo(Level , DatabaseImpl , TreeLocation , LN , byte ,
 	    byte , long , long , boolean , RecoveryInfo , boolean ){
 
 	try {
