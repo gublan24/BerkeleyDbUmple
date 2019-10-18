@@ -18,8 +18,8 @@ class IN
 			if (calcMemorySize != inMemorySize) {
 					String msg = "-Warning: Out of sync. " + "Should be " + calcMemorySize + " / actual: " + inMemorySize
 						+ " node: " + getNodeId();
-				 // this.hook615(msg);
-				  Label615:
+
+				  Label615:				 // this.hook615(msg);
 					System.out.println(msg);
 					return false;
 			} 

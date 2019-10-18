@@ -1,0 +1,40 @@
+namespace com.sleepycat.je.dbi;
+
+class MemoryBudget
+{
+    private long criticalThreshold;
+
+    public long getCriticalThreshold() {
+	return criticalThreshold;
+    }
+
+    /** 
+     * Update the environment wide tree memory count, wake up the evictor if necessary.
+     * @param incrementnote that increment may be negative.
+     */
+    after updateTreeMemoryUsage(long ) {
+				//original(increment);
+				if (getCacheMemoryUsage() > cacheBudget) {
+						envImpl.alertEvictor();
+				}
+    }
+
+    /** 
+     * Update the environment wide misc memory count, wake up the evictor if necessary.
+     * @param incrementnote that increment may be negative.
+     */
+    after updateMiscMemoryUsage(long ) {
+			//original(increment);
+			if (getCacheMemoryUsage() > cacheBudget) {
+					envImpl.alertEvictor();
+			}
+    }
+
+    after updateLockMemoryUsage(long , int ) {
+			//original(increment, lockTableIndex);
+			if (getCacheMemoryUsage() > cacheBudget) {
+					envImpl.alertEvictor();
+			}
+    }
+
+}

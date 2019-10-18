@@ -1,19 +1,18 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/MemoryBudget.java
 namespace com.sleepycat.je.dbi;
 class MemoryBudget {
-  @MethodObject static class MemoryBudget_sinit {
+   static class MemoryBudget_sinit {
       void execute(){
-        this.hook348();
+        Label348: //this.hook348();
       }
       protected boolean is64;
       protected boolean isJVM14;
       protected String overrideArch;
       protected String arch;
       protected RuntimeException RE;
-      protected void hook348(){
-      }
+//      protected void hook348(){ }
     }
-  @MethodObject static class MemoryBudget_reset {
+   static class MemoryBudget_reset {
       MemoryBudget_reset(    MemoryBudget _this,    DbConfigManager configManager){
         this._this=_this;
         this.configManager=configManager;
@@ -54,11 +53,11 @@ class MemoryBudget {
           startingBufferSize=EnvironmentParams.MIN_LOG_BUFFER_SIZE;
           newLogBufferBudget=numBuffers * startingBufferSize;
         }
-        //this.hook350();
-        Label350:
+
+        Label350:        //this.hook350();
         newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
         _this.maxMemory=newMaxMemory;
-        this.hook349();
+        Label349: //this.hook349();
         _this.logBufferBudget=newLogBufferBudget;
       }
       protected MemoryBudget _this;
@@ -72,8 +71,8 @@ class MemoryBudget {
       protected int logBufferSize;
       protected long newCriticalThreshold;
       protected long newTrackerBudget;
-      protected void hook349() throws DatabaseException {
-      }
+    //  protected void hook349() throws DatabaseException {
+      //}
     //  protected void hook350() throws DatabaseException {
     //  }
     }

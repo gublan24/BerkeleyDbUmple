@@ -217,8 +217,20 @@ class MemoryBudget
     public long calcTreeCacheUsage() throws DatabaseException {
 			long totalSize = 0;
 			INList inList = envImpl.getInMemoryINs();
-			//	totalSize = this.hook347(totalSize, inList);
-			Label347:
+			Label347:			//	totalSize = this.hook347(totalSize, inList);
+try {
+			Iterator iter = inList.iterator();
+			while (iter.hasNext()) {
+					IN in = (IN) iter.next();
+					long size = in.getInMemorySize();
+					totalSize += size;
+			}
+	} 
+
+finally {
+Label347_1:
+	}
+		//end of 347
 		return totalSize;
     }
 
@@ -320,16 +332,6 @@ class MemoryBudget
 //		return totalSize;
  //   }
 
-	after Label347:calcTreeCacheUsage(){
-
-		Iterator iter = inList.iterator();
-		while (iter.hasNext()) {
-			  IN in = (IN) iter.next();
-			  long size = in.getInMemorySize();
-			  totalSize += size;
-		}
-
-	}
 
     after Label351: MemoryBudget(EnvironmentImpl , DbConfigManager ) {
 			inOverhead = IN.computeOverhead(configManager);

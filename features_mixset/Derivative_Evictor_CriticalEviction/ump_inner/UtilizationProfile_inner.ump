@@ -1,0 +1,11 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_CriticalEviction/com/sleepycat/je/cleaner/UtilizationProfile.java
+namespace com.sleepycat.je.cleaner;
+class UtilizationProfile {
+   static class UtilizationProfile_populateCache {
+      after Label176:execute(){
+
+        _this.env.getEvictor().doCriticalEviction();
+       // original();
+      }
+    }
+}

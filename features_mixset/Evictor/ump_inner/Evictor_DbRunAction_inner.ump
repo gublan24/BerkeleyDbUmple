@@ -1,17 +1,15 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/util/DbRunAction.java
 namespace com.sleepycat.je.util;
 class DbRunAction {
-  @MethodObject static class DbRunAction_doEvict {
+   static class DbRunAction_doEvict {
       DbRunAction_doEvict(    Environment env){
         this.env=env;
       }
       void execute() throws DatabaseException {
         envImpl=DbInternal.envGetEnvironmentImpl(env);
-        //this.hook837();
-        Label837:
+        Label837:        //this.hook837();
         c=new EnvironmentMutableConfig();
-        //this.hook836();
-        Label836:
+        Label836:        //this.hook836();
         env.setMutableConfig(c);
         start=System.currentTimeMillis();
         env.evictMemory();
@@ -32,7 +30,7 @@ class DbRunAction {
   //    protected void hook837() throws DatabaseException {
   //    }
     }
-  @MethodObject static class DbRunAction_main {
+   static class DbRunAction_main {
       after Label844:execute(){
         if (doAction == EVICT) {
           preload(env,dbName);

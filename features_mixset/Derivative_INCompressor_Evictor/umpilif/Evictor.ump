@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.evictor;
+
+class Evictor
+{
+    after Label385: evict(INList , IN , ScanIterator ){
+	envImpl.lazyCompress(target);
+	//original(target);
+    }
+
+}

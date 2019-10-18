@@ -1,0 +1,26 @@
+namespace com.sleepycat.je.cleaner;
+
+class LookAheadCache
+{
+    LookAheadCache(int lookAheadCacheSize) {
+	usedMem = MemoryBudget.TREEMAP_OVERHEAD;
+    }
+
+    after Label166:add(Long , LNInfo ) {
+	usedMem += info.getMemorySize();
+	usedMem += MemoryBudget.TREEMAP_ENTRY_OVERHEAD - 1;
+	//original(info);
+    }
+
+    after Label167: remove(Long ) {
+	usedMem--;
+	usedMem -= info.getMemorySize();
+	usedMem -= MemoryBudget.TREEMAP_ENTRY_OVERHEAD + 1;
+	//original(info);
+    }
+
+}
+
+
+
+

@@ -245,16 +245,15 @@ class DbCacheSize
 			try {
 					out.println("\nMeasuring with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
 					insertRecords(out, env, db, records, keySize, dataSize, randomKeys);
-				 // hook832(out, env);
-				  Label832:
+
+				  Label832:				 // hook832(out, env);
 					db.close();
 					env.close();
 					env = openEnvironment(dir, false);
 					db = openDatabase(env, nodeMax, false);
 					out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
 					preloadRecords(out, db);
-					//hook831(out, env);
-				  Label831:
+				  Label831:					//hook831(out, env);
 			} finally {
 					try {
 				db.close();

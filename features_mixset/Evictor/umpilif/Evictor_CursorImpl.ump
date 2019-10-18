@@ -30,8 +30,8 @@ class CursorImpl
     /** 
      * Shallow copy. addCursor() is optionally called. Allows inheriting the BIN position from some other cursor.
      */
-    public CursorImpl cloneCursor(boolean addCursor, CursorImpl usePosition) throws DatabaseException {
-	CursorImpl result = original(addCursor, usePosition);
+  after cloneCursor(boolean , CursorImpl ) {
+	//CursorImpl result = original(addCursor, usePosition);
 	if (allowEviction) {
 	   // this.hook203();
      Label203:

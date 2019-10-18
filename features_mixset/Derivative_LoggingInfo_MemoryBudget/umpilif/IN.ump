@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.tree;
+
+class IN
+{
+    after Label615: verifyMemorySize(){
+	Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
+	//original(msg);
+    }
+
+}

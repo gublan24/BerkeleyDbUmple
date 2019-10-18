@@ -1,0 +1,18 @@
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_CriticalEviction/com/sleepycat/je/cleaner/FileProcessor.java
+namespace com.sleepycat.je.cleaner;
+class FileProcessor {
+   static class FileProcessor_processFile {
+      after Label119: execute(){
+        if (Cleaner.DO_CRITICAL_EVICTION) {
+          _this.env.getEvictor().doCriticalEviction();
+        }
+        //original();
+      }
+      after Label120: execute(){
+        if (Cleaner.DO_CRITICAL_EVICTION) {
+          _this.env.getEvictor().doCriticalEviction();
+        }
+        //original();
+      }
+    }
+}

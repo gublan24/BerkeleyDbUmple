@@ -1,0 +1,11 @@
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_MemoryBudget/com/sleepycat/je/dbi/MemoryBudget.java
+namespace com.sleepycat.je.dbi;
+class MemoryBudget {
+   static class MemoryBudget_reset {
+      after Label349: execute(){
+
+        _this.criticalThreshold=newCriticalThreshold;
+        //original();
+      }
+    }
+}

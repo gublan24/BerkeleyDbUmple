@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.tree;
+
+class BIN
+{
+    after Label601: evictLNs() { // Label601 from  Evictor_BIN.ump
+	updateMemorySize(removed, 0);
+//	original(removed);
+    }
+
+    after Label602: evictLN(int ) { // Label602 from  Evictor_BIN.ump
+	updateMemorySize(removed, 0);
+	//original(removed);
+    }
+
+}

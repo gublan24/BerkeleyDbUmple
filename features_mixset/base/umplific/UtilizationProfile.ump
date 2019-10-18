@@ -451,7 +451,7 @@ class UtilizationProfile
 		status = OperationStatus.NOTFOUND;
 	    }
 	    while (status == OperationStatus.SUCCESS) {
-		Label:           ;  //this.hook174();
+		Label174:           ;  //this.hook174();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -602,7 +602,7 @@ class UtilizationProfile
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    Label:           ;  //this.hook175();
+		    Label175:           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());

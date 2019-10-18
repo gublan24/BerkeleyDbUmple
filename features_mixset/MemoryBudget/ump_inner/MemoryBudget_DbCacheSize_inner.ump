@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/util/DbCacheSize.java
 namespace com.sleepycat.je.util;
 class DbCacheSize {
-  @MethodObject static class DbCacheSize_insertRecords {
+   static class DbCacheSize_insertRecords {
       DbCacheSize_insertRecords(    PrintStream out,    Environment env,    Database db,    long records,    int keySize,    int dataSize,    boolean randomKeys){
         this.out=out;
         this.env=env;
@@ -48,8 +48,7 @@ class DbCacheSize {
               return;
             }
             if (i % 10000 == 0) {
-              //this.hook833();
-              Label833:
+              Label833:              //this.hook833();
               out.print(".");
               out.flush();
             }

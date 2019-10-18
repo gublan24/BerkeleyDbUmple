@@ -137,7 +137,7 @@ class Checkpointer {
             Iterator iter = nodeSet.iterator();
             while (iter.hasNext()) {
                 CheckpointReference targetRef = (CheckpointReference) iter.next();
-                this.hook520();
+                Label520: //this.hook520();
                 //this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
                 Label546:
                     iter.remove();
@@ -287,7 +287,7 @@ class Checkpointer {
         inSet.add(new CheckpointReference( in .getDatabase(), in .getNodeId(), in .containsDuplicates(), in .isDbRoot(), in .getMainTreeKey(), in .getDupTreeKey()));
     }
 
-    protected void hook520() throws DatabaseException {}
+  //  protected void hook520() throws DatabaseException {}
 
  //   protected void hook526(CheckpointReference targetRef, Map dirtyMap, int currentLevel, boolean logProvisionally,
  //       boolean allowDeltas, long checkpointStart, Tree tree, SearchResult result, boolean mustLogParent)

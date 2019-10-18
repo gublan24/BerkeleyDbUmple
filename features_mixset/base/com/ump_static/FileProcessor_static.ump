@@ -39,7 +39,7 @@ class FileProcessor {
         Label128: //this.hook128();
         //this.hook161();
         Label161:
-        this.hook119();
+        Label119: //this.hook119();
         Label127: //this.hook127();
         Label154: //this.hook154();
         dbCache=new HashMap();
@@ -80,7 +80,7 @@ class FileProcessor {
               Label156: //this.hook156();
               continue;
             }
-            this.hook120();
+            Label120: //this.hook120();
             if (isLN) {
               targetLN=reader.getLN();
               dbId2=reader.getDatabaseId();

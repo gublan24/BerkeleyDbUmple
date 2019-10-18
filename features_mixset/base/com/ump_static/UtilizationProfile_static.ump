@@ -86,7 +86,7 @@ class UtilizationProfile {
     //  protected void hook193() throws DatabaseException {
      // }
     }
-  @MethodObject static class UtilizationProfile_populateCache {
+   static class UtilizationProfile_populateCache {
       UtilizationProfile_populateCache(    UtilizationProfile _this){
         this._this=_this;
       }

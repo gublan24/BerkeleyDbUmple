@@ -1,0 +1,20 @@
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_DeleteOp_MemoryBudget/com/sleepycat/je/txn/Txn.java
+namespace com.sleepycat.je.txn;
+class Txn {
+   static class Txn_markDeleteAtTxnEnd {
+      after Label796: execute(){
+
+        delta+=MemoryBudget.HASHSET_ENTRY_OVERHEAD + MemoryBudget.OBJECT_OVERHEAD;
+        _this.updateMemoryUsage(delta);
+        //original();
+      }
+      after Label797 : execute(){
+        delta=0;
+        //original();
+      }
+      after Label798:  execute(){ 
+        delta+=MemoryBudget.HASHSET_OVERHEAD;
+        //original();
+      }
+    }
+}

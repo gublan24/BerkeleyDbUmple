@@ -153,8 +153,7 @@ class Evictor
 				nNodesScannedThisRun++;
 				DatabaseImpl db = in.getDatabase();
 				boolean b = db == null;
-				//b = this.hook387(db, b);
-        Label387:
+        Label387:				//b = this.hook387(db, b);
 				if (b) {
 						String inInfo = " IN type=" + in.getLogType() + " id=" + in.getNodeId() + " not expected on INList";
 						String errMsg = (db == null) ? inInfo
@@ -162,8 +161,7 @@ class Evictor
 						throw new DatabaseException(errMsg);
 				}
 				boolean b2 = false;
-				//b2 = this.hook386(db, b2);
-        Label386:
+        Label386:				//b2 = this.hook386(db, b2);
 				if (b2) {
 						continue;
 				}
@@ -242,8 +240,8 @@ class Evictor
 					//evictedBytes = this.hook374(inList, target, scanIter, envIsReadOnly, evictedBytes);
          Label374:
 				if (target instanceof BIN) {
-							//this.hook385(target);
-              Label385:
+
+              Label385:							//this.hook385(target);
 							evictedBytes = ((BIN) target).evictLNs();
 							//this.hook383(evictedBytes);
               Label383:
@@ -293,8 +291,7 @@ class Evictor
 						scanIter.mark();
 						inlist.removeLatchAlreadyHeld(renewedChild);
 						scanIter.resetToMark();
-						//evictBytes = this.hook389(evictBytes, renewedChild);
-            Label389:
+            Label389: 						//evictBytes = this.hook389(evictBytes, renewedChild);
 						if (newChildLsn) {
 								parent.updateEntry(index, null, renewedChildLsn);
 						} else {

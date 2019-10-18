@@ -125,15 +125,14 @@ class Evictor {
  //     protected void hook382() throws DatabaseException {
   //    }
     }
-  @MethodObject static class Evictor_isRunnable {
+   static class Evictor_isRunnable {
       Evictor_isRunnable(    Evictor _this,    String source){
         this._this=_this;
         this.source=source;
       }
       boolean execute() throws DatabaseException {
         mb=_this.envImpl.getMemoryBudget();
-        //this.hook388();
-        Label388:
+        Label388:        //this.hook388();
         //this.hook372();
         Label372:
         result=false;

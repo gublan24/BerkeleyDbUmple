@@ -1,0 +1,21 @@
+namespace com.sleepycat.je.cleaner;
+
+class UtilizationProfile
+{
+    after Label173: deleteFileSummary(Long){
+
+	env.getEvictor().doCriticalEviction();
+	//original();
+    }
+
+    after Label174:getObsoleteDetail(Long , PackedOffsets , boolean ){
+	env.getEvictor().doCriticalEviction();
+	//original();
+    }
+
+    after Label175: verifyFileSummaryDatabase() {
+	env.getEvictor().doCriticalEviction();
+	//original();
+    }
+
+}

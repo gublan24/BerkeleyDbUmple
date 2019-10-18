@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/recovery/Checkpointer.java
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-  @MethodObject static class Checkpointer_doCheckpoint {
+   static class Checkpointer_doCheckpoint {
       after Label547:execute() {   //  synchronized (_this.envImpl.getEvictor()) { original(); } 
         synchronized (_this.envImpl.getEvictor()) {
           //original();

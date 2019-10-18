@@ -1,0 +1,32 @@
+namespace com.sleepycat.je.dbi;
+
+class CursorImpl
+{
+    after Label203:  cloneCursor(boolean , CursorImpl ) { // Label203 introduced in Evictor_CursorImpl.ump
+
+	database.getDbEnvironment().getEvictor().doCriticalEviction();
+//	original();
+    }
+
+    /** 
+     * Reset a cursor to an uninitialized state, but unlike close(), allow it to be used further.
+     */
+ after reset() {
+	//original();
+	if (allowEviction) {
+	    database.getDbEnvironment().getEvictor().doCriticalEviction();
+	}
+    }
+
+    /** 
+     * Close a cursor.
+     * @throws DatabaseExceptionif the cursor was previously closed.
+     */
+  after close()  {
+	//original();
+	if (allowEviction) {
+	    database.getDbEnvironment().getEvictor().doCriticalEviction();
+	}
+    }
+
+}
