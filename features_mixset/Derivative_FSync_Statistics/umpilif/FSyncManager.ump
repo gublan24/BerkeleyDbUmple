@@ -1,0 +1,53 @@
+namespace com.sleepycat.je.log;
+
+class FSyncManager
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.EnvironmentStats;
+    private long nFSyncRequests = 0;
+
+    private long nFSyncs = 0;
+
+    private long nTimeouts = 0;
+
+    long getNFSyncRequests() {
+	return nFSyncRequests;
+    }
+
+    long getNFSyncs() {
+	return nFSyncs;
+    }
+
+    long getNTimeouts() {
+	return nTimeouts;
+    }
+
+    void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException {
+	stats.setNFSyncs(nFSyncs);
+	stats.setNFSyncRequests(nFSyncRequests);
+	stats.setNFSyncTimeouts(nTimeouts);
+	if (config.getClear()) {
+	    nFSyncs = 0;
+	    nFSyncRequests = 0;
+	    nTimeouts = 0;
+	}
+    }
+
+    after Label435: fsync(){
+	nFSyncRequests++;
+	//original();
+    }
+
+    after Label436: fsync(){
+	synchronized (this) {
+	    nTimeouts++;
+	}
+	//original();
+    }
+
+    after Label437: fsync(){
+	nFSyncs++;
+	//original();
+    }
+
+}

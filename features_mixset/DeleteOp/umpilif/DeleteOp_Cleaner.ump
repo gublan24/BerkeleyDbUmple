@@ -9,8 +9,8 @@ class Cleaner
 			if (db != null && db.isDeleted() && !db.isDeleteFinished()) {
 					DatabaseId id = db.getId();
 					if (fileSelector.addPendingDB(id)) {
-							//this.hook85(id);
-							Label85: ;
+
+							Label85: ;							//this.hook85(id);
 					}
 			}
     }

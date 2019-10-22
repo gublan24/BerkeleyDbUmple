@@ -19,15 +19,21 @@ class LogBufferPool
 			long bufferBytes = 0;
 			int nLogBuffers = 0;
 			Label483: //this.hook483(bufferBytes, nLogBuffers);
+	try {
 			Iterator iter = bufferPool.iterator();
 				while (iter.hasNext()) {
 	    		LogBuffer l = (LogBuffer) iter.next();
 	    		nLogBuffers++;
 	    		bufferBytes += l.getCapacity();
 				}
-			// End hook483
+			// End hook483	
+} 
+finally {
+
 			stats.setNLogBuffers(nLogBuffers);
 			stats.setBufferBytes(bufferBytes);
+Label483_1: ;;//
+}
     }
 
   //   protected void hook483(long bufferBytes, int nLogBuffers) throws DatabaseException {

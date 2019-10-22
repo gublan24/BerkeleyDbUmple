@@ -1,0 +1,17 @@
+namespace com.sleepycat.je;
+
+class Database
+{
+    public DatabaseStats verify(VerifyConfig config) throws DatabaseException {
+	checkEnv();
+	checkRequiredDbState(OPEN, "Can't call Database.verify");
+	Label37: //this.hook37();
+	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
+	DatabaseStats stats = databaseImpl.getEmptyStats();
+	databaseImpl.verify(useConfig, stats);
+	return stats;
+    }
+
+//    protected void hook37() throws DatabaseException {}
+
+}

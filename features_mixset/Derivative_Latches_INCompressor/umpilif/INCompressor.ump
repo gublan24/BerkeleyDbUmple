@@ -1,0 +1,74 @@
+namespace com.sleepycat.je.incomp;
+
+class INCompressor
+{
+  depend com.sleepycat.je.latch.LatchSupport;
+
+    after Label393: doCompress() {
+//synchronized void doCompress()
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label394: doCompress() {
+	foundBin.releaseLatch();
+	//original(foundBin);
+    }
+
+    after Label395: doCompress() {
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+    }
+
+    after Label396_1: compressBin(DatabaseImpl , BIN , BINReference , UtilizationTracker ){
+
+	    bin.releaseLatch();
+	
+    }
+
+    after Label397_1:searchForBIN(DatabaseImpl , BINReference ) {
+
+//	try {	    //original(mainKey, dupKey, tree, duplicateRoot, duplicateBin, bin);} catch (DatabaseException DBE) {
+	
+    if (bin != null) {
+		bin.releaseLatchIfOwner();
+	    }
+	    if (duplicateRoot != null) {
+		duplicateRoot.releaseLatchIfOwner();
+	    }
+	    if (duplicateBin != null) {
+		duplicateBin.releaseLatchIfOwner();
+	    }
+//	    throw DBE;	}
+    }
+
+    after Label398: lazyCompress(IN ){
+
+	assert in.isLatchOwner();
+	//original(in);
+    }
+
+    after Label399: findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
+	if (binSearch.bin != null) {
+	    binSearch.bin.releaseLatch();
+	}
+	//original(binSearch);
+    }
+
+    after Label400:  searchForBIN(DatabaseImpl , byte , byte ){
+	bin.releaseLatch();
+	//original(bin);
+    }
+
+    after Label401:  searchForBIN(DatabaseImpl , byte , byte ){
+	duplicateRoot.latch();
+	bin.releaseLatch();
+	//original(duplicateRoot, bin);
+    }
+
+    after Label402:  searchForBIN(DatabaseImpl , byte , byte ){
+	bin.releaseLatch();
+	//original(bin);
+    }
+
+}

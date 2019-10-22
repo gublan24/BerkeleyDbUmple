@@ -5,7 +5,7 @@ class Checkpointer {
 //      protected void hook517() throws DatabaseException {}
 //      protected void hook518() throws DatabaseException {    }
   
-    protected void hook521: execute() {
+    after Label521: execute() {
 
         sb=new StringBuffer();
   		{

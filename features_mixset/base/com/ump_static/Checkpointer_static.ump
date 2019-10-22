@@ -27,13 +27,13 @@ class Checkpointer {
         return (int)nodeId;
       }
     }
-  @MethodObject static class Checkpointer_getWakeupPeriod {
+   static class Checkpointer_getWakeupPeriod {
       Checkpointer_getWakeupPeriod(    DbConfigManager configManager){
         this.configManager=configManager;
       }
       long execute() throws IllegalArgumentException, DatabaseException {
         Label541: //this.hook541();
-        this.hook519();
+        Label519: //this.hook519();
         result=0;
         Label540: //this.hook540();
         return result;

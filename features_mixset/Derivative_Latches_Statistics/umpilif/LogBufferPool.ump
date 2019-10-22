@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.log;
+
+class LogBufferPool
+{
+    after Label483_1: loadStats(StatsConfig , EnvironmentStats ){
+
+	    bufferPoolLatch.release();
+	
+    }
+
+    after Label484: loadStats(StatsConfig , EnvironmentStats ){
+	bufferPoolLatch.acquire();
+	//original();
+    }
+
+}

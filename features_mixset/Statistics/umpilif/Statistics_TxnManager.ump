@@ -21,6 +21,8 @@ class TxnManager {
     public TransactionStats txnStat(StatsConfig config) throws DatabaseException {
         TransactionStats stats = new TransactionStats();
         Label820://this.hook820(config, stats);
+	try {
+
         stats.setNCommits(numCommits);
         stats.setNAborts(numAborts);
         stats.setNXAPrepares(numXAPrepares);
@@ -43,6 +45,10 @@ class TxnManager {
             numXAAborts = 0;
         }
       //End hook820
+	} 
+finally {
+Label820_1: ; //
+}
         return stats;
     }
 

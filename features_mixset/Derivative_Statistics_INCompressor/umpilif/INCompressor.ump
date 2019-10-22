@@ -1,0 +1,148 @@
+namespace com.sleepycat.je.incomp;
+
+class INCompressor
+{
+  depend com.sleepycat.je.StatsConfig;
+  depend com.sleepycat.je.EnvironmentStats;
+    private int splitBins = 0;
+
+    private int dbClosedBins = 0;
+
+    private int cursorsBins = 0;
+
+    private int nonEmptyBins = 0;
+
+    private int processedBins = 0;
+
+    private int splitBinsThisRun = 0;
+
+    private int dbClosedBinsThisRun = 0;
+
+    private int cursorsBinsThisRun = 0;
+
+    private int nonEmptyBinsThisRun = 0;
+
+    private int processedBinsThisRun = 0;
+
+    private int lazyProcessed = 0;
+
+    private int lazyEmpty = 0;
+
+    private int lazySplit = 0;
+
+    private int wokenUp = 0;
+
+    /** 
+     * Return stats
+     */
+    public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException {
+	stat.setSplitBins(splitBins);
+	stat.setDbClosedBins(dbClosedBins);
+	stat.setCursorsBins(cursorsBins);
+	stat.setNonEmptyBins(nonEmptyBins);
+	stat.setProcessedBins(processedBins);
+	stat.setInCompQueueSize(getBinRefQueueSize());
+	if (DEBUG) {
+	    System.out.println("lazyProcessed = " + lazyProcessed);
+	    System.out.println("lazyEmpty = " + lazyEmpty);
+	    System.out.println("lazySplit = " + lazySplit);
+	    System.out.println("wokenUp=" + wokenUp);
+	}
+	if (config.getClear()) {
+	    splitBins = 0;
+	    dbClosedBins = 0;
+	    cursorsBins = 0;
+	    nonEmptyBins = 0;
+	    processedBins = 0;
+	    lazyProcessed = 0;
+	    lazyEmpty = 0;
+	    lazySplit = 0;
+	    wokenUp = 0;
+	}
+    }
+
+    /** 
+     * Reset per-run counters.
+     */
+    private void resetPerRunCounters() {
+	splitBinsThisRun = 0;
+	dbClosedBinsThisRun = 0;
+	cursorsBinsThisRun = 0;
+	nonEmptyBinsThisRun = 0;
+	processedBinsThisRun = 0;
+    }
+
+    private void accumulatePerRunCounters() {
+	splitBins += splitBinsThisRun;
+	dbClosedBins += dbClosedBinsThisRun;
+	cursorsBins += cursorsBinsThisRun;
+	nonEmptyBins += nonEmptyBinsThisRun;
+	processedBins += processedBinsThisRun;
+    }
+
+    after Label403:  nDeadlockRetries() {
+	wokenUp++;
+	//original();
+    }
+
+    after Label404: doCompress(){
+
+	resetPerRunCounters();
+	//original();
+    }
+
+    after Label405: doCompress() {
+// synchronized void doCompress()
+
+	accumulatePerRunCounters();
+	//original();
+    }
+
+    after Label406: pruneBIN(DatabaseImpl , BINReference , byte , boolean ,	    byte , UtilizationTracker ){
+	processedBinsThisRun++;
+	//original();
+    }
+
+    after Label407: pruneBIN(DatabaseImpl , BINReference , byte , boolean ,
+	    byte , UtilizationTracker ){
+	nonEmptyBinsThisRun++;
+	//original();
+    }
+
+    after Label408: pruneBIN(DatabaseImpl , BINReference , byte , boolean ,	    byte , UtilizationTracker ){
+
+	cursorsBinsThisRun++;
+	//original();
+    }
+
+    after Label409:lazyCompress(IN ){
+	lazyProcessed++;
+	//original();
+    }
+
+    after Label410:lazyCompress(IN ){
+	lazySplit++;
+	//original();
+    }
+
+    after Label411:lazyCompress(IN ){
+	lazyEmpty++;
+	//original();
+    }
+
+    after Label412: findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
+	dbClosedBinsThisRun++;
+	//original();
+    }
+
+    after Label413: findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
+	splitBinsThisRun++;
+	//original();
+    }
+
+    after Label414: compressBin(DatabaseImpl , BIN , BINReference , UtilizationTracker ){
+	cursorsBinsThisRun++;
+	//original();
+    }
+
+}

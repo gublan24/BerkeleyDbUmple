@@ -1,0 +1,7 @@
+1)    EnvironmentImpl.ump
+
+synchronized public EnvironmentStats loadStats(StatsConfig config) throws DatabaseException {
+
+2)  INCompressor_INCompressor.ump
+
+synchronized void doCompress()

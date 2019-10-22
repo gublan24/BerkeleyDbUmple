@@ -12,7 +12,7 @@ class EnvironmentImpl
    // protected void hook311() throws DatabaseException {
    // }
 
-    after Label325:doClose(boolean ){
+    after Label325: doClose(boolean ){
 		try {
 					checkLeaks();
 					Label311: //this.hook311();

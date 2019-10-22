@@ -185,7 +185,7 @@ class CursorImpl {
         }
         _this.dupBinToBeRemoved=_this.dupBin;
         _this.dupBin=null;
-        this.hook255();
+        Label255: //this.hook255();
         Label275: //this.hook275();
         this.hook254();
   {
@@ -208,13 +208,13 @@ class CursorImpl {
           }
           _this.addCursor(newDupBin);
           _this.dupBin=newDupBin;
-          this.hook256();
+          Label256: //this.hook256();
         }
       }
     }
   }
     finally {
-    this.hook257();
+    Label257: //this.hook257();
     if (_this.dupBinToBeRemoved != null) {
       _this.flushDBINToBeRemoved();
     }

@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.txn;
+
+class TxnManager
+{
+    after Label820:
+  {
+
+	allTxnLatch.acquire();
+  }
+
+ after Label820_1: txnStat(StatsConfig ){
+	    allTxnLatch.release();
+    }
+
+}

@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/CheckLeaks/com/sleepycat/je/dbi/EnvironmentImpl.java
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
-  @MethodObject static class EnvironmentImpl_checkLeaks {
+   static class EnvironmentImpl_checkLeaks {
       EnvironmentImpl_checkLeaks(    EnvironmentImpl _this){
         this._this=_this;
       }

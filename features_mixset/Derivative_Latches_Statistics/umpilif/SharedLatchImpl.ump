@@ -1,0 +1,33 @@
+namespace com.sleepycat.je.latch;
+
+class SharedLatchImpl
+{
+    private LatchStats stats = new LatchStats();
+
+    after Label429:  acquireExclusive() {  //synchronized void acquireExclusive()
+
+	stats.nAcquiresNoWaiters++;
+	//original();
+    }
+
+    after Label430:  acquireExclusive() {  //synchronized void acquireExclusive()
+	stats.nAcquiresWithContention++;
+	//original();
+    }
+
+    after Label431:  acquireExclusiveNoWait() {
+	stats.nAcquiresNoWaiters++;
+	//original();
+    }
+
+    after Label432() throws DatabaseException, InterruptedException {
+	stats.nAcquireSharedSuccessful++;
+	//original();
+    }
+
+    after Label433: release() { // synchronized void release() 
+	stats.nReleases++;
+	//original();
+    }
+
+}

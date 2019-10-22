@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    after Label314:  loadStats(StatsConfig ) {
+	inCompressor.loadStats(config, stats);
+	//original(config, stats);
+    }
+
+}

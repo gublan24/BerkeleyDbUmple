@@ -1,0 +1,14 @@
+1)     LatchImp.ump has synchronized methods ...>
+
+after Label425: acquireNoWait(){ //synchronized boolean acquireNoWait()
+
+
+2) class SharedLatchImpl
+{
+
+    after Label429:  acquireExclusive() {  //synchronized void acquireExclusive()
+
+		 after Label433: release() { // synchronized void release() 
+
+...
+

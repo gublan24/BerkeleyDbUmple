@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class DbTree
+{
+    protected void hook293: bRemove(Locker , String {
+	nameCursor.releaseBIN();
+	//original(nameCursor);
+    }
+
+}

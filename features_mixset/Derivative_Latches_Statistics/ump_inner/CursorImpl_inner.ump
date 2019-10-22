@@ -1,0 +1,24 @@
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Latches_Statistics/com/sleepycat/je/dbi/CursorImpl.java
+namespace com.sleepycat.je.dbi;
+class CursorImpl {
+   static class CursorImpl_getNextDuplicate {
+      after Label200 : execute() {
+        _this.latchBIN();
+        try {
+          //original();
+        }
+    finally {
+          _this.releaseBIN();
+        }
+      }
+      after Label201 : execute() {
+        duplicateRoot.latch();
+        try {
+          //original();
+        }
+    finally {
+          duplicateRoot.releaseLatch();
+        }
+      }
+    }
+}

@@ -1,0 +1,54 @@
+namespace com.sleepycat.je.latch;
+
+class Java5LatchImpl
+{
+    private LatchStats stats = new LatchStats();
+
+    /** 
+     * @return a LatchStats object with information about this latch.
+     */
+    public LatchStats getLatchStats() {
+	LatchStats s = null;
+	try {
+	    s = (LatchStats) stats.clone();
+	} catch (CloneNotSupportedException e) {
+	}
+	return s;
+    }
+
+    after Label416:acquire() {
+
+	if (lock.isLocked()) {
+	    stats.nAcquiresWithContention++;
+	} else {
+	    stats.nAcquiresNoWaiters++;
+	}
+	//original();
+    }
+
+    after Label417:acquire() {
+	stats.nAcquiresSelfOwned++;
+	//original();
+    }
+
+    after Label418:acquireNoWait() {
+	stats.nAcquiresSelfOwned++;
+	//original();
+    }
+
+    after Label419:acquireNoWait() {
+	stats.nAcquireNoWaitSuccessful++;
+	//original();
+    }
+
+    after Label420:acquireNoWait() {
+	stats.nAcquireNoWaitUnsuccessful++;
+	//original();
+    }
+
+    after Label421:doRelease(boolean ) {
+	stats.nReleases++;
+	//original();
+    }
+
+}

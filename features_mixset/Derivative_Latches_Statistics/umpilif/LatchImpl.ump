@@ -1,0 +1,54 @@
+namespace com.sleepycat.je.latch;
+
+class LatchImpl
+{
+    private LatchStats stats = new LatchStats();
+
+    /** 
+     * @return a LatchStats object with information about this latch.
+     */
+    public LatchStats getLatchStats() {
+	LatchStats s = null;
+	try {
+	    s = (LatchStats) stats.clone();
+	} catch (CloneNotSupportedException e) {
+	}
+	return s;
+    }
+
+    after Label422:acquire(){
+	stats.nAcquiresSelfOwned++;
+	//original();
+    }
+
+    after Label423:acquire(){
+	stats.nAcquiresNoWaiters++;
+	//original();
+    }
+
+    after Label424:acquire(){
+	stats.nAcquiresWithContention++;
+	//original();
+    }
+
+    after Label425: acquireNoWait(){ //synchronized boolean acquireNoWait()
+	stats.nAcquiresSelfOwned++;
+	//original();
+    }
+
+    after Label426: acquireNoWait(){ //synchronized boolean acquireNoWait()
+	stats.nAcquireNoWaitSuccessful++;
+	//original();
+    }
+
+    after Label427: acquireNoWait(){ //synchronized boolean acquireNoWait()
+	stats.nAcquireNoWaitUnsuccessful++;
+	//original();
+    }
+
+    after Label428: doRelease(boolean checkHeld) {
+	stats.nReleases++;
+	//original();
+    }
+
+}

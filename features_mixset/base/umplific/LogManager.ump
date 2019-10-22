@@ -70,7 +70,7 @@ class LogManager
 			Label505: //this.hook505(configManager);
 			Label502: //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-			this.hook498(envImpl);
+			Label498: //this.hook498(envImpl);
     }
 
     public long getLastLsnAtRecovery() {
@@ -156,7 +156,7 @@ class LogManager
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
 	Label501: //this.hook501(fsyncRequired);
-	this.hook499(logResult);
+	Label499: //this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -233,7 +233,7 @@ class LogManager
 			}
 			item.postLogWork(currentLsn);
 			boolean wakeupCheckpointer = false;
-			wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			Label500: //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
 			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
     }
 
@@ -400,16 +400,12 @@ class LogManager
 	readHook = hook;
     }
 
-    protected void hook498(EnvironmentImpl envImpl) throws DatabaseException {
-    }
+  //  protected void hook498(EnvironmentImpl envImpl) throws DatabaseException { }
 
-    protected void hook499(LogResult logResult) throws DatabaseException {
-    }
-
-    protected boolean hook500(LoggableObject item, int entrySize, boolean wakeupCheckpointer)
-	    throws IOException, DatabaseException {
-	return wakeupCheckpointer;
-    }
+//    protected void hook499(LogResult logResult) throws DatabaseException { }
+    
+//protected boolean hook500(LoggableObject item, int entrySize, boolean wakeupCheckpointer)
+//	    throws IOException, DatabaseException {	return wakeupCheckpointer; }
 
 //    protected void hook501(boolean fsyncRequired) throws DatabaseException { }
 

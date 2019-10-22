@@ -1,0 +1,11 @@
+namespace com.sleepycat.je.incomp;
+
+class INCompressor
+{
+    after Label392: doCompress(){
+
+	Tracer.trace(Level.FINE, env, "InCompress.doCompress called, queue size: " + binQueueSize);
+	//original(binQueueSize);
+    }
+
+}
