@@ -1,0 +1,16 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase/com/sleepycat/je/evictor/Evictor.java
+namespace com.sleepycat.je.evictor;
+class Evictor {
+   static class Evictor_evictBatch {
+
+      after Label368: execute(){ //     after Label371: execute(){
+        msg+=" nNodesSelected=" + _this.nNodesSelectedThisRun + " nEvicted="+ _this.nNodesEvictedThisRun+ " nBINsStripped="+ _this.nBINsStrippedThisRun;
+        //original();
+      }
+
+      after Label369: execute(){ //     after Label371: execute(){
+        msg+="pass=" + _this.nEvictPasses;
+       // original();
+      }
+    }
+}

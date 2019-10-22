@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.incomp;
+
+class INCompressor
+{
+    protected void hook390: verifyCursors() {//synchronized void verifyCursors()
+	bin.releaseLatch();
+	//original(bin);
+    }
+
+}

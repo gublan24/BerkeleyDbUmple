@@ -131,8 +131,8 @@ class Evictor {
       boolean execute() throws DatabaseException {
         mb=_this.envImpl.getMemoryBudget();
         Label388:        //this.hook388();
-        //this.hook372();
-        Label372:
+
+        Label372:        //this.hook372();
         result=false;
         return result;
       }

@@ -72,7 +72,7 @@ class FileManager {
         }
       }
     }
-  @MethodObject static class FileManager_writeToFile {
+   static class FileManager_writeToFile {
       FileManager_writeToFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer data,    long destOffset){
         this._this=_this;
         this.file=file;
@@ -101,7 +101,7 @@ class FileManager {
      // protected void hook455() throws IOException, DatabaseException {
      // }
     }
-  @MethodObject static class FileManager_readFromFile {
+   static class FileManager_readFromFile {
       FileManager_readFromFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer readBuffer,    long offset){
         this._this=_this;
         this.file=file;
@@ -122,7 +122,6 @@ class FileManager {
       protected int pos;
       protected int size;
       protected int bytesRead2;
-      protected void hook446() throws IOException {
-      }
+//      protected void hook446() throws IOException { }
     }
 }

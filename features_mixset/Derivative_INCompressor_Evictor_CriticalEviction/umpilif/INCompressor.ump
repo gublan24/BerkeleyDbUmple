@@ -1,0 +1,11 @@
+namespace com.sleepycat.je.incomp;
+
+class INCompressor
+{
+    after Label391: findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
+
+	env.getEvictor().doCriticalEviction();
+	//original();
+    }
+
+}

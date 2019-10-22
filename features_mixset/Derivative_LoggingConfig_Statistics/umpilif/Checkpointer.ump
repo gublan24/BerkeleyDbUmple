@@ -1,0 +1,11 @@
+namespace com.sleepycat.je.recovery;
+
+class Checkpointer
+{
+    after Label516:trace(EnvironmentImpl , String , boolean ) {
+	sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
+	sb.append(" nDeltaINFlushThisRun=").append(nDeltaINFlushThisRun);
+//	original(sb);
+    }
+
+}

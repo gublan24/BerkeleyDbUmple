@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.log;
+
+class FSyncManager
+{
+  depend com.sleepycat.je.latch.LatchSupport;
+  depend com.sleepycat.je.latch.Latch;
+   
+ private Latch fsyncLatch;
+
+    protected void hook434: FSyncManager(EnvironmentImpl ){
+	fsyncLatch = LatchSupport.makeLatch("fsyncLatch", envImpl);
+//	original(envImpl);
+    }
+
+}

@@ -16,7 +16,7 @@ class DbTree
 	} catch (DatabaseException DE) {
 	    ret = false;
 	}
-	Label291: //ret = this.hook292(config, out, ret);
+	Label292: //ret = this.hook292(config, out, ret);
 	Locker locker = null;
 	CursorImpl cursor = null;
 	LockType lockType = LockType.NONE;
@@ -54,7 +54,7 @@ class DbTree
 		locker.operationEnd();
 	    }
 	}
-	//end of hook291
+	//end of hook292
 	return ret;
     }
 
