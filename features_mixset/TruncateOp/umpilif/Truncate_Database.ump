@@ -18,8 +18,8 @@ class Database
 			if (databaseImpl == null) {
 					throw new DatabaseException("couldn't find database - truncate");
 			}
-			//this.hook43();
-			Label43:
+
+			Label43:			//this.hook43();
 			if (handleLocker.isHandleLockTransferrable()) {
 					handleLocker.transferHandleLock(this, locker, false);
 			}

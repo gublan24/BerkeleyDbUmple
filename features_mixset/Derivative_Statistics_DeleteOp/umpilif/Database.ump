@@ -1,0 +1,10 @@
+namespace com.sleepycat.je;
+
+class Database
+{
+    after Label38: getStats(StatsConfig ){
+	databaseImpl.checkIsDeleted("stat");
+	//original();
+    }
+
+}

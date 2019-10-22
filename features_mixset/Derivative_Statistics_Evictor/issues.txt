@@ -1,0 +1,1 @@
+ synchronized public EnvironmentStats loadStats(StatsConfig config) throws DatabaseException {

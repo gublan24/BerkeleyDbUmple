@@ -1,0 +1,30 @@
+namespace com.sleepycat.je.evictor;
+
+class Evictor
+{
+  depend com.sleepycat.je.latch.LatchSupport;
+    
+after Label374_1: evict(INList , IN , ScanIterator )
+  {
+
+	    target.releaseLatchIfOwner();
+
+  }
+
+    protected long hook375_1: evictIN(IN , IN , int , INList , ScanIterator , boolean ){
+
+	    parent.releaseLatch();
+
+    }
+
+    after Label378: evictIN(IN , IN , int , INList , ScanIterator , boolean ){
+
+	assert parent.isLatchOwner();
+//	original(parent);
+    }
+
+    after Label375_1: evictIN(IN , IN , int , INList , ScanIterator , boolean ){ // Label379_1 reuses Label375_1
+	    renewedChild.releaseLatch();
+	
+
+}

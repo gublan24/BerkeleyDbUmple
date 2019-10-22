@@ -68,8 +68,8 @@ class Evictor
 			nodesPerScan = configManager.getInt(EnvironmentParams.EVICTOR_NODES_PER_SCAN);
 			evictBytesSetting = configManager.getLong(EnvironmentParams.EVICTOR_EVICT_BYTES);
 			evictByLruOnly = configManager.getBoolean(EnvironmentParams.EVICTOR_LRU_ONLY);
-			//this.hook373(envImpl);
-      Label737:
+
+      Label737:			//this.hook373(envImpl);
 			evictProfile = new EvictProfile();
 			formatter = NumberFormat.getNumberInstance();
 			active = false;
@@ -213,8 +213,8 @@ class Evictor
 				}
 					}
 			}
-			//this.hook380(target);
-      Label380:
+
+      Label380:			//this.hook380(target);
 			return target;
 		}
 
@@ -234,6 +234,7 @@ class Evictor
      * @return number of bytes evicted.
      */
     private long evict(INList inList, IN target, ScanIterator scanIter) throws DatabaseException {
+	try {	
 	boolean envIsReadOnly = envImpl.isReadOnly();
 			long evictedBytes = 0;
 			if (target.latchNoWait(false)) {
@@ -243,8 +244,8 @@ class Evictor
 
               Label385:							//this.hook385(target);
 							evictedBytes = ((BIN) target).evictLNs();
-							//this.hook383(evictedBytes);
-              Label383:
+
+              Label383:							//this.hook383(evictedBytes);
 					}
 					if (evictedBytes == 0 && target.isEvictable()) {
 							Tree tree = target.getDatabase().getTree();
@@ -253,7 +254,10 @@ class Evictor
 						evictedBytes = evictIN(target, result.parent, result.index, inList, scanIter, envIsReadOnly);
 							}
 					}
-		// end hook374
+} finally {
+Label374_1: ;//		// end hook374
+}
+
 			}
 			return evictedBytes;
     }
@@ -263,17 +267,15 @@ class Evictor
      */
     private long evictIN(IN child, IN parent, int index, INList inlist, ScanIterator scanIter, boolean envIsReadOnly)
 	    throws DatabaseException {
+try{
 			long evictBytes = 0;
-			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
-			Label375:
-			//this.hook378(parent);
-      Label378:
+			Label375:			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
+      Label378:			//this.hook378(parent);
 			long oldGenerationCount = child.getGeneration();
 			IN renewedChild = (IN) parent.getTarget(index);
 			if ((renewedChild != null) && (renewedChild.getGeneration() <= oldGenerationCount)
 				&& renewedChild.latchNoWait(false)) {
-					//evictBytes = this.hook379(parent, index, inlist, scanIter, envIsReadOnly, evictBytes, renewedChild);
-          Label379:
+          Label379:					//evictBytes = this.hook379(parent, index, inlist, scanIter, envIsReadOnly, evictBytes, renewedChild);
 					if (renewedChild.isEvictable()) {
 							long renewedChildLsn = DbLsn.NULL_LSN;
 							boolean newChildLsn = false;
@@ -297,13 +299,16 @@ class Evictor
 						} else {
 								parent.updateEntry(index, (Node) null);
 						}
-						//this.hook384();
-            Label384:
+
+            Label384:						//this.hook384();
 							}
 					}
 					// end of hook379
 			}
-			// end of hook375
+}finally {
+Label375_1: ;//		// end hook375
+}
+
 			return evictBytes;
     }
 

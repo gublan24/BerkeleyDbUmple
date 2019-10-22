@@ -48,7 +48,7 @@ class Evictor {
         iter.remove();
       }
     }
-  @MethodObject static class Evictor_evictBatch {
+   static class Evictor_evictBatch {
       Evictor_evictBatch(    Evictor _this,    String source,    long requiredEvictBytes){
         this._this=_this;
         this.source=source;
@@ -56,16 +56,16 @@ class Evictor {
       }
       long execute() throws DatabaseException {
         _this.nNodesScannedThisRun=0;
-        //this.hook381();
-        Label381:
+
+        Label381:        //this.hook381();
         assert _this.evictProfile.clear();
         nBatchSets=0;
         finished=false;
         evictBytes=0;
         evictBytes+=_this.envImpl.getUtilizationTracker().evictMemory();
         inList=_this.envImpl.getInMemoryINs();
-        //this.hook376();
-        Label376:
+
+        Label376:        //this.hook376();
         inListStartSize=inList.getSize();
         try {
           if (inListStartSize == 0) {
@@ -93,12 +93,10 @@ class Evictor {
           finished=true;
         }
     finally {
-         // this.hook382();
-         Label382:
-         // this.hook377();
-          Label377:
-          //this.hook371();
-          Label371:
+
+         	Label382:         // this.hook382();
+          Label377:         // this.hook377();
+          Label371:          //this.hook371();
         }
         return evictBytes;
       }

@@ -1,0 +1,20 @@
+namespace com.sleepycat.je.dbi;
+
+class CursorImpl
+{
+    /** 
+     * Evict the LN node at the cursor position. This is used for internal databases only.
+     */
+    after LabelEvict_1:evict() {
+
+
+	    releaseBINs();
+	//}
+    }
+
+    after Label202: evict(){
+	latchBINs();
+	//original();
+    }
+
+}

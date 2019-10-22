@@ -1,0 +1,21 @@
+// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Latches_TruncateOp/com/sleepycat/je/Database.java
+namespace com.sleepycat.je;
+class Database {
+   static class Database_truncate {
+      after Label40:  execute() {
+
+        triggerLock=false;
+        //original();
+      }
+      after Label41:  execute() {
+        triggerLock=true;
+        //original();
+      }
+      after Label42: execute()  {
+        if (triggerLock) {
+          _this.releaseTriggerListReadLock();
+        }
+        //original();
+      }
+    }
+}

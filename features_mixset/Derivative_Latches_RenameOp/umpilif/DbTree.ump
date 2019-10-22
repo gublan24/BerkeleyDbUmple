@@ -1,0 +1,10 @@
+namespace com.sleepycat.je.dbi;
+
+class DbTree
+{
+    after Label298: dbRename(Locker , String , String ){
+	nameCursor.releaseBIN();
+//	original(nameCursor);
+    }
+
+}

@@ -15,10 +15,17 @@ class CursorImpl
      * Evict the LN node at the cursor position. This is used for internal databases only.
      */
     public void evict() throws DatabaseException {
-			//this.hook202();
-      Label202:
+
+	try {
+      Label202:			//this.hook202();
 			setTargetBin();
 			targetBin.evictLN(targetIndex);
+
+	} finally {
+
+LabelEvict_1: ;//
+
+}
     }
 
   //  protected void hook202() throws DatabaseException {
@@ -33,8 +40,8 @@ class CursorImpl
   after cloneCursor(boolean , CursorImpl ) {
 	//CursorImpl result = original(addCursor, usePosition);
 	if (allowEviction) {
-	   // this.hook203();
-     Label203:
+
+     Label203:	   // this.hook203();
 	}
 	return result;
     }

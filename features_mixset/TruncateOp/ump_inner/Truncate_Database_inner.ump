@@ -1,7 +1,7 @@
 
 //namespace com.sleepycat.je;
 class Database {
-  @MethodObject static class Database_truncate {
+   static class Database_truncate {
       Database_truncate(    Database _this,    Transaction txn,    boolean countRecords){
         this._this=_this;
         this.txn=txn;

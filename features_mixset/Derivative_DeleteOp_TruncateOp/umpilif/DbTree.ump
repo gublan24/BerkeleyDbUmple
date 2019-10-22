@@ -1,0 +1,16 @@
+namespace com.sleepycat.je.dbi;
+
+class DbTree
+{
+    protected void hook296: truncate(Locker , String , boolean ){
+	locker.markDeleteAtTxnEnd(result.dbImpl, true);
+	locker.markDeleteAtTxnEnd(newDb, false);
+//	original(locker, result, newDb);
+    }
+
+    protected void hook297: truncate(Locker , String , boolean ){
+	locker.markDeleteAtTxnEnd(oldDatabase, true);
+	//original(locker, oldDatabase);
+    }
+
+}

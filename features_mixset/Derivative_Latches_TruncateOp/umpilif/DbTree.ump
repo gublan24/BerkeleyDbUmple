@@ -1,0 +1,15 @@
+namespace com.sleepycat.je.dbi;
+
+class DbTree
+{
+    after Label294: truncate(Locker , String , boolean ){
+	nameCursor.releaseBIN();
+//	original(nameCursor);
+    }
+
+    after Label295: truncate(Locker , DatabaseImpl , boolean ){
+	nameCursor.releaseBIN();
+//	original(nameCursor);
+    }
+
+}
