@@ -3,7 +3,7 @@ namespace com.sleepycat.je.config;
 class ConfigParam
 {
   depend de.ovgu.cide.jakutil.*;
- //@Abdulaziz   public static final String CONFIG_DELIM = " ";
+ //@Abdulaziz   public static final String CONFIG_DELIM = ";";
 
     String name;
 
