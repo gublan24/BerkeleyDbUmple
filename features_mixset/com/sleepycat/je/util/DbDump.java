@@ -223,7 +223,7 @@ public class DbDump
 
     public void dump() throws IOException, DatabaseException {
 	openEnv(true);
-	this.hook834();
+	Label834: //this.hook834();
 	DatabaseEntry foundKey = new DatabaseEntry();
 	DatabaseEntry foundData = new DatabaseEntry();
 	DatabaseConfig dbConfig = new DatabaseConfig();
@@ -261,7 +261,6 @@ public class DbDump
 	o.println(sb.toString());
     }
 
-    protected void hook834() throws IOException, DatabaseException {
-    }
+//    protected void hook834() throws IOException, DatabaseException { }
   
 }

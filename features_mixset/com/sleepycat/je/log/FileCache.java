@@ -55,7 +55,7 @@ public class FileCache
 			  while (!done && iter.hasNext()) {
 			Long evictId = (Long) iter.next();
 			FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
-		//	this.hook438(iter, done, evictId, evictTarget);
+
 		    Label438:
 try {
 	      fileMap.remove(evictId);
@@ -70,7 +70,7 @@ try {
 	    //this.hook441(evictTarget);
 	  }
 	done = true;
-
+ 		//	this.hook438(iter, done, evictId, evictTarget);
 			  }
 		}
 		fileList.add(fileId);
@@ -89,19 +89,23 @@ try {
 					Long evictId = (Long) iter.next();
 					if (evictId.longValue() == fileNum) {
 						FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
-						//this.hook439(iter, evictId, evictTarget);
-						Label439:
-//this.hook442(evictTarget);
-    Label442: //remove(long fileNum)
-	  fileMap.remove(evictId);
-	  iter.remove();
-	  evictTarget.close();
 
+						try { 
+                Label439: 						//this.hook439(iter, evictId, evictTarget);
+								//this.hook442(evictTarget);
+									Label442: //remove(long fileNum)
+									fileMap.remove(evictId);
+									iter.remove();
+									evictTarget.close();
+															}
+						finally {
+								Label439_1: //end of hook439
+						}
 					}
 			}
   }
 
-  // line 62 "../../../../FileHandleCache_FileCache.ump"
+  // line 72 "../../../../FileHandleCache_FileCache.ump"
   public void clear() throws IOException,DatabaseException{
     Iterator iter = fileMap.values().iterator();
 			while (iter.hasNext()) {
@@ -112,13 +116,17 @@ try {
     Label443:
 	  fileHandle.close();
 	  iter.remove();
-
+	 // this.hook443(fileHandle);
+					Label443:
+					fileHandle.close();
+					iter.remove();
+					Label440_1: // end of hook440
 			}
 			fileMap.clear();
 			fileList.clear();
   }
 
-  // line 73 "../../../../FileHandleCache_FileCache.ump"
+  // line 87 "../../../../FileHandleCache_FileCache.ump"
   public Set getCacheKeys(){
     return fileMap.keySet();
   }

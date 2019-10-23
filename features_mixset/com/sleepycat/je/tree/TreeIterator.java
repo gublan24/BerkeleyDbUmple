@@ -39,7 +39,12 @@ public class TreeIterator extends Iterator
   // line 17 "../../../../TreeIterator.ump"
    public  TreeIterator(Tree tree) throws DatabaseException{
     nextBin = (BIN) tree.getFirstNode();
-	this.hook755();
+	Label755:
+if (nextBin != null) {
+	    nextBin.releaseLatch();
+	}
+	//original();
+           ;  //this.hook755();
 	index = -1;
 	this.tree = tree;
   }
@@ -48,12 +53,25 @@ public class TreeIterator extends Iterator
    public boolean hasNext(){
     boolean ret = false;
 	try {
-	    this.hook756();
+	    Label756:
+if (nextBin != null) {
+	    nextBin.latch();
+	}
+	//original();
+           ;  //this.hook756();
 	    advance();
 	    ret = (nextBin != null) && (index < nextBin.getNEntries());
 	} catch (DatabaseException e) {
 	} finally {
-	    this.hook757();
+	    Label757:
+try {
+	    if (nextBin != null) {
+		nextBin.releaseLatch();
+	    }
+	} catch (LatchNotHeldException e) {
+	}
+	//original();
+           ;  //this.hook757();
 	}
 	return ret;
   }
@@ -65,11 +83,22 @@ public class TreeIterator extends Iterator
 	    if (nextBin == null) {
 		throw new NoSuchElementException();
 	    }
-	    this.hook758();
+	    Label758:
+nextBin.latch();
+	//original();
+           ;  //this.hook758();
 	    ret = nextBin.getKey(index);
 	} catch (DatabaseException e) {
 	} finally {
-	    this.hook759();
+	    Label759:
+try {
+	    if (nextBin != null) {
+		nextBin.releaseLatch();
+	    }
+	} catch (LatchNotHeldException e) {
+	}
+	//original();
+           ;  //this.hook759();
 	}
 	return ret;
   }
@@ -88,50 +117,6 @@ public class TreeIterator extends Iterator
 	    nextBin = tree.getNextBin(nextBin, false);
 	    index = -1;
 	}
-  }
-
-  // line 66 "../../../../TreeIterator.ump"
-   protected void hook755() throws DatabaseException{
-    if (nextBin != null) {
-	    nextBin.releaseLatch();
-	}
-	original();
-  }
-
-  // line 69 "../../../../TreeIterator.ump"
-   protected void hook756() throws DatabaseException{
-    if (nextBin != null) {
-	    nextBin.latch();
-	}
-	original();
-  }
-
-  // line 72 "../../../../TreeIterator.ump"
-   protected void hook757(){
-    try {
-	    if (nextBin != null) {
-		nextBin.releaseLatch();
-	    }
-	} catch (LatchNotHeldException e) {
-	}
-	original();
-  }
-
-  // line 75 "../../../../TreeIterator.ump"
-   protected void hook758() throws DatabaseException{
-    nextBin.latch();
-	original();
-  }
-
-  // line 78 "../../../../TreeIterator.ump"
-   protected void hook759(){
-    try {
-	    if (nextBin != null) {
-		nextBin.releaseLatch();
-	    }
-	} catch (LatchNotHeldException e) {
-	}
-	original();
   }
   
   //------------------------

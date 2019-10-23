@@ -37,7 +37,10 @@ public class FileHandle
   public  FileHandle(RandomAccessFile file, String fileName, EnvironmentImpl env, boolean oldHeaderVersion){
     this.file = file;
 	this.oldHeaderVersion = oldHeaderVersion;
-	this.hook444(fileName, env);
+	Label444:
+fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
+//	original(fileName, env);
+ //this.hook444(fileName, env);
   }
 
   // line 21 "../../../../FileHandle.ump"
@@ -56,12 +59,6 @@ public class FileHandle
 	    file.close();
 	    file = null;
 	}
-  }
-
-  // line 36 "../../../../FileHandle.ump"
-   protected void hook444(String fileName, EnvironmentImpl env){
-    fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
-	original(fileName, env);
   }
 
   // line 10 "../../../../Latches_FileHandle.ump"

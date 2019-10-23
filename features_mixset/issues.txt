@@ -1,0 +1,4 @@
+1) synch methods 
+2) arround key word
+3) umple issues 
+4) label cascading extention 

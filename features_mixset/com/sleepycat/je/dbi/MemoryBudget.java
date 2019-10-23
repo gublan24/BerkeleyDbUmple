@@ -134,15 +134,20 @@ inOverhead = IN.computeOverhead(configManager);
    public long calcTreeCacheUsage() throws DatabaseException{
     long totalSize = 0;
 			INList inList = envImpl.getInMemoryINs();
-			//	totalSize = this.hook347(totalSize, inList);
-			Label347:
-Iterator iter = inList.iterator();
-		while (iter.hasNext()) {
-			  IN in = (IN) iter.next();
-			  long size = in.getInMemorySize();
-			  totalSize += size;
-		}
+			Label347:			//	totalSize = this.hook347(totalSize, inList);
+try {
+			Iterator iter = inList.iterator();
+			while (iter.hasNext()) {
+					IN in = (IN) iter.next();
+					long size = in.getInMemorySize();
+					totalSize += size;
+			}
+	} 
 
+finally {
+Label347_1:
+	}
+		//end of 347
 		return totalSize;
   }
 
@@ -152,7 +157,7 @@ Iterator iter = inList.iterator();
    * Update the environment wide tree memory count, wake up the evictor if necessary.
    * @param incrementnote that increment may be negative.
    */
-  // line 230 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 242 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateTreeMemoryUsage(long increment){
     synchronized (memoryUsageSynchronizer) {
 					treeMemoryUsage += increment;
@@ -165,31 +170,31 @@ Iterator iter = inList.iterator();
    * Update the environment wide misc memory count, wake up the evictor if necessary.
    * @param incrementnote that increment may be negative.
    */
-  // line 240 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 252 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateMiscMemoryUsage(long increment){
     synchronized (memoryUsageSynchronizer) {
 					miscMemoryUsage += increment;
 			}
   }
 
-  // line 246 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 258 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateLockMemoryUsage(long increment, int lockTableIndex){
     lockMemoryUsage[lockTableIndex] += increment;
   }
 
-  // line 250 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 262 "../../../../MemoryBudget_MemoryBudget.ump"
    public long accumulateNewUsage(IN in, long newSize){
     return in.getInMemorySize() + newSize;
   }
 
-  // line 254 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 266 "../../../../MemoryBudget_MemoryBudget.ump"
    public void refreshTreeMemoryUsage(long newSize){
     synchronized (memoryUsageSynchronizer) {
 					treeMemoryUsage = newSize;
 			}
   }
 
-  // line 260 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 272 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getCacheMemoryUsage(){
     long accLockMemoryUsage = 0;
 			if (nLockTables == 1) {
@@ -207,37 +212,37 @@ Iterator iter = inList.iterator();
    * 
    * Used for unit testing.
    */
-  // line 275 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 287 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getTreeMemoryUsage(){
     return treeMemoryUsage;
   }
 
-  // line 279 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 291 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getTrackerBudget(){
     return trackerBudget;
   }
 
-  // line 283 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 295 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getCacheBudget(){
     return cacheBudget;
   }
 
-  // line 287 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 299 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getINOverhead(){
     return inOverhead;
   }
 
-  // line 291 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 303 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getBINOverhead(){
     return binOverhead;
   }
 
-  // line 295 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 307 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getDINOverhead(){
     return dinOverhead;
   }
 
-  // line 299 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 311 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getDBINOverhead(){
     return dbinOverhead;
   }
@@ -247,7 +252,7 @@ Iterator iter = inList.iterator();
    * 
    * Returns the memory size occupied by a byte array of a given length.
    */
-  // line 306 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 318 "../../../../MemoryBudget_MemoryBudget.ump"
    public static  int byteArraySize(int arrayLen){
     int size = BYTE_ARRAY_OVERHEAD;
 		if (arrayLen > 4) {
@@ -261,7 +266,6 @@ Iterator iter = inList.iterator();
   
   
   @MethodObject
-    @MethodObject
   // line 4 "../../../../MemoryBudget_static.ump"
   // line 4 "../../../../MemoryBudget_inner_inner.ump"
   public static class MemoryBudget_sinit
@@ -291,7 +295,7 @@ Iterator iter = inList.iterator();
       is64=false;
               isJVM14=true;
       // END OF UMPLE BEFORE INJECTION
-      this.hook348();
+      Label348: //this.hook348();
       // line 12 "../../../../MemoryBudget_inner_inner.ump"
       //  original();
               overrideArch=System.getProperty(FORCE_JVM_ARCH);
@@ -384,11 +388,6 @@ Iterator iter = inList.iterator();
               }
       // END OF UMPLE AFTER INJECTION
     }
-  
-    // line 14 "../../../../MemoryBudget_static.ump"
-     protected void hook348(){
-      
-    }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
@@ -413,8 +412,7 @@ Iterator iter = inList.iterator();
   
   @MethodObject
     @MethodObject
-    @MethodObject
-  // line 16 "../../../../MemoryBudget_static.ump"
+  // line 15 "../../../../MemoryBudget_static.ump"
   // line 103 "../../../../MemoryBudget_inner_inner.ump"
   // line 4 "../../../../Evictor_MemoryBudget_inner.ump"
   public static class MemoryBudget_reset
@@ -438,13 +436,13 @@ Iterator iter = inList.iterator();
     public void delete()
     {}
   
-    // line 18 "../../../../MemoryBudget_static.ump"
+    // line 17 "../../../../MemoryBudget_static.ump"
     public  MemoryBudget_reset(MemoryBudget _this, DbConfigManager configManager){
       this._this=_this;
           this.configManager=configManager;
     }
   
-    // line 22 "../../../../MemoryBudget_static.ump"
+    // line 21 "../../../../MemoryBudget_static.ump"
     public void execute() throws DatabaseException{
       newMaxMemory=configManager.getLong(EnvironmentParams.MAX_MEMORY);
           jvmMemory=_this.getRuntimeMaxMemory();
@@ -481,14 +479,14 @@ Iterator iter = inList.iterator();
             startingBufferSize=EnvironmentParams.MIN_LOG_BUFFER_SIZE;
             newLogBufferBudget=numBuffers * startingBufferSize;
           }
-          //this.hook350();
+  
           Label350:
   newCriticalThreshold=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE)) / 100;
           //original();
-  
+          //this.hook350();
           newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
           _this.maxMemory=newMaxMemory;
-          this.hook349();
+          Label349: //this.hook349();
           _this.logBufferBudget=newLogBufferBudget;
       // line 105 "../../../../MemoryBudget_inner_inner.ump"
       //original();
@@ -498,37 +496,32 @@ Iterator iter = inList.iterator();
               _this.lockMemoryUsage=new long[_this.nLockTables];
       // END OF UMPLE AFTER INJECTION
     }
-  
-    // line 76 "../../../../MemoryBudget_static.ump"
-     protected void hook349() throws DatabaseException{
-      
-    }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 64 "../../../../MemoryBudget_static.ump"
+    // line 63 "../../../../MemoryBudget_static.ump"
     protected MemoryBudget _this ;
-  // line 65 "../../../../MemoryBudget_static.ump"
+  // line 64 "../../../../MemoryBudget_static.ump"
     protected DbConfigManager configManager ;
-  // line 66 "../../../../MemoryBudget_static.ump"
+  // line 65 "../../../../MemoryBudget_static.ump"
     protected long newMaxMemory ;
-  // line 67 "../../../../MemoryBudget_static.ump"
+  // line 66 "../../../../MemoryBudget_static.ump"
     protected long jvmMemory ;
-  // line 68 "../../../../MemoryBudget_static.ump"
+  // line 67 "../../../../MemoryBudget_static.ump"
     protected int maxMemoryPercent ;
-  // line 69 "../../../../MemoryBudget_static.ump"
+  // line 68 "../../../../MemoryBudget_static.ump"
     protected long newLogBufferBudget ;
-  // line 70 "../../../../MemoryBudget_static.ump"
+  // line 69 "../../../../MemoryBudget_static.ump"
     protected int numBuffers ;
-  // line 71 "../../../../MemoryBudget_static.ump"
+  // line 70 "../../../../MemoryBudget_static.ump"
     protected long startingBufferSize ;
-  // line 72 "../../../../MemoryBudget_static.ump"
+  // line 71 "../../../../MemoryBudget_static.ump"
     protected int logBufferSize ;
-  // line 73 "../../../../MemoryBudget_static.ump"
+  // line 72 "../../../../MemoryBudget_static.ump"
     protected long newCriticalThreshold ;
-  // line 74 "../../../../MemoryBudget_static.ump"
+  // line 73 "../../../../MemoryBudget_static.ump"
     protected long newTrackerBudget ;
   
     

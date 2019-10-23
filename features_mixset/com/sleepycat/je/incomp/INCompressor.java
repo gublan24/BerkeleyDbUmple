@@ -227,7 +227,8 @@ public class INCompressor extends DaemonThread
    */
   // line 260 "../../../../INCompressor_INCompressor.ump"
    private boolean compressBin(DatabaseImpl db, BIN bin, BINReference binRef, UtilizationTracker tracker) throws DatabaseException{
-    boolean empty = false;
+    try {
+			boolean empty = false;
 			boolean requeued = false;
 			byte[] idKey = bin.getIdentifierKey();
 			byte[] dupKey = null;
@@ -253,6 +254,10 @@ public class INCompressor extends DaemonThread
 			if (empty) {
 					requeued = pruneBIN(db, binRef, idKey, isDBIN, dupKey, tracker);
 			}
+	} finally {
+Label396_1: //
+}
+
 			return requeued;
   }
 
@@ -262,7 +267,7 @@ public class INCompressor extends DaemonThread
    * If the target BIN is empty, attempt to remove the empty branch of the  tree.
    * @return true if the pruning was unable to proceed and the BINReferencewas requeued.
    */
-  // line 295 "../../../../INCompressor_INCompressor.ump"
+  // line 300 "../../../../INCompressor_INCompressor.ump"
    private boolean pruneBIN(DatabaseImpl dbImpl, BINReference binRef, byte [] idKey, boolean containsDups, byte [] dupKey, UtilizationTracker tracker) throws DatabaseException{
     boolean requeued = false;
 			try {
@@ -283,7 +288,7 @@ public class INCompressor extends DaemonThread
 			return requeued;
   }
 
-  // line 316 "../../../../INCompressor_INCompressor.ump"
+  // line 321 "../../../../INCompressor_INCompressor.ump"
    private void checkForRelocatedSlots(DatabaseImpl db, BINReference binRef, UtilizationTracker tracker) throws DatabaseException{
     Iterator iter = binRef.getDeletedKeyIterator();
 	if (iter != null) {
@@ -301,7 +306,7 @@ public class INCompressor extends DaemonThread
 	}
   }
 
-  // line 333 "../../../../INCompressor_INCompressor.ump"
+  // line 338 "../../../../INCompressor_INCompressor.ump"
    private boolean isRunnable() throws DatabaseException{
     return true;
   }
@@ -313,16 +318,17 @@ public class INCompressor extends DaemonThread
    * @param binRef the BINReference that indicates the bin we want.
    * @return the BIN or DBIN that corresponds to this BINReference. Thenode is latched upon return. Returns null if the BIN can't be found.
    */
-  // line 342 "../../../../INCompressor_INCompressor.ump"
+  // line 347 "../../../../INCompressor_INCompressor.ump"
    public BIN searchForBIN(DatabaseImpl db, BINReference binRef) throws DatabaseException{
     return searchForBIN(db, binRef.getKey(), binRef.getData());
   }
 
-  // line 346 "../../../../INCompressor_INCompressor.ump"
+  // line 351 "../../../../INCompressor_INCompressor.ump"
    private BIN searchForBIN(DatabaseImpl db, byte [] mainKey, byte [] dupKey) throws DatabaseException{
     try {
 	    Tree tree = db.getTree();
-	    IN in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
+	    I
+N in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
 	    if (in == null) {
 		return null;
 	    }
@@ -358,6 +364,7 @@ public class INCompressor extends DaemonThread
       //End of hook397
 	    throw ReturnHack.returnObject;
 	} catch (ReturnObject r) {
+hook397_1:
 	    return (BIN) r.value;
 	}
   }
@@ -367,7 +374,7 @@ public class INCompressor extends DaemonThread
    * 
    * Lazily compress a single BIN. Do not do any pruning. The target IN should be latched when we enter, and it will be remain latched.
    */
-  // line 392 "../../../../INCompressor_INCompressor.ump"
+  // line 399 "../../../../INCompressor_INCompressor.ump"
    public void lazyCompress(IN in) throws DatabaseException{
     if (!in.isCompressible()) {
 					return;
@@ -397,7 +404,7 @@ public class INCompressor extends DaemonThread
 			}
   }
 
-  // line 422 "../../../../INCompressor_INCompressor.ump"
+  // line 429 "../../../../INCompressor_INCompressor.ump"
    private boolean findDBAndBIN(BINSearch binSearch, BINReference binRef, DbTree dbTree, Map dbCache) throws DatabaseException{
     binSearch.db = dbTree.getDb(binRef.getDatabaseId(), lockTimeout, dbCache);
 			boolean close = binSearch.db == null;

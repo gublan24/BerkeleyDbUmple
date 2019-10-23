@@ -32,12 +32,12 @@ public class LatchException extends DatabaseException
     super.delete();
   }
 
-  // line 9 "../../../../Latches_LatchException.ump"
+  // line 10 "../../../../Latches_LatchException.ump"
    public  LatchException(){
     super();
   }
 
-  // line 13 "../../../../Latches_LatchException.ump"
+  // line 14 "../../../../Latches_LatchException.ump"
    public  LatchException(String message){
     super(message);
   }

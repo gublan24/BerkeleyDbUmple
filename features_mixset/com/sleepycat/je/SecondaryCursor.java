@@ -100,7 +100,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus delete() throws DatabaseException{
     checkState(true);
 	checkUpdatesAllowed("delete");
-	this.hook65();
+	Label65:           ;  //this.hook65();
 	DatabaseEntry key = new DatabaseEntry();
 	DatabaseEntry pKey = new DatabaseEntry();
 	OperationStatus status = getCurrentInternal(key, pKey, LockMode.RMW);
@@ -169,7 +169,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getCurrent(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook66(lockMode);
+	Label66:           ;  //this.hook66(lockMode);
 	return getCurrentInternal(key, pKey, data, lockMode);
   }
 
@@ -192,7 +192,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getFirst(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook67(lockMode);
+	Label67:           ;  //this.hook67(lockMode);
 	return position(key, pKey, data, lockMode, true);
   }
 
@@ -215,7 +215,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getLast(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook68(lockMode);
+	Label68:           ;  //this.hook68(lockMode);
 	return position(key, pKey, data, lockMode, false);
   }
 
@@ -238,7 +238,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getNext(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook69(lockMode);
+	Label69:           ;  //this.hook69(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, true);
 	} else {
@@ -265,7 +265,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getNextDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook70(lockMode);
+	Label70:           ;  //this.hook70(lockMode);
 	return retrieveNext(key, pKey, data, lockMode, GetMode.NEXT_DUP);
   }
 
@@ -288,7 +288,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getNextNoDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook71(lockMode);
+	Label71:           ;  //this.hook71(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, true);
 	} else {
@@ -315,7 +315,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getPrev(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook72(lockMode);
+	Label72:           ;  //this.hook72(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, false);
 	} else {
@@ -342,7 +342,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getPrevDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook73(lockMode);
+	Label73:           ;  //this.hook73(lockMode);
 	return retrieveNext(key, pKey, data, lockMode, GetMode.PREV_DUP);
   }
 
@@ -365,7 +365,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus getPrevNoDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	this.hook74(lockMode);
+	Label74:           ;  //this.hook74(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, false);
 	} else {
@@ -394,7 +394,7 @@ public class SecondaryCursor extends Cursor
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	this.hook75(key, lockMode);
+	Label75:           ;  //this.hook75(key, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.SET);
   }
 
@@ -419,7 +419,7 @@ public class SecondaryCursor extends Cursor
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	this.hook76(key, data, lockMode);
+	Label76:           ;  //this.hook76(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.SET_RANGE);
   }
 
@@ -444,7 +444,7 @@ public class SecondaryCursor extends Cursor
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	this.hook77(key, data, lockMode);
+	Label77:           ;  //this.hook77(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.BOTH);
   }
 
@@ -469,7 +469,7 @@ public class SecondaryCursor extends Cursor
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	this.hook78(key, data, lockMode);
+	Label78:           ;  //this.hook78(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.BOTH_RANGE);
   }
 

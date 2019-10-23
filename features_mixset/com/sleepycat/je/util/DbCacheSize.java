@@ -45,7 +45,6 @@ public class DbCacheSize
   
   
   
-  @MethodObject
   // line 4 "../../../../MemoryBudget_DbCacheSize_inner.ump"
   public static class DbCacheSize_insertRecords
   {
@@ -117,8 +116,7 @@ public class DbCacheSize
                 return;
               }
               if (i % 10000 == 0) {
-                //this.hook833();
-                Label833:
+                Label833:              //this.hook833();
                 out.print(".");
                 out.flush();
               }
@@ -133,37 +131,37 @@ public class DbCacheSize
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 62 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+    // line 61 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected PrintStream out ;
-  // line 63 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 62 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected Environment env ;
-  // line 64 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 63 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected Database db ;
-  // line 65 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 64 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected long records ;
-  // line 66 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 65 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected int keySize ;
-  // line 67 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 66 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected int dataSize ;
-  // line 68 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 67 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected boolean randomKeys ;
-  // line 69 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 68 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected DatabaseEntry key ;
-  // line 70 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 69 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected DatabaseEntry data ;
-  // line 71 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 70 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected BigInteger bigInt ;
-  // line 72 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 71 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected Random rnd ;
-  // line 73 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 72 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected byte[] a ;
-  // line 74 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 73 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected byte[] a2 ;
-  // line 75 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 74 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected byte[] a3 ;
-  // line 76 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 75 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected OperationStatus status ;
-  // line 77 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 76 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     protected EnvironmentStats stats ;
   
     
@@ -402,16 +400,15 @@ public class DbCacheSize
 			try {
 					out.println("\nMeasuring with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
 					insertRecords(out, env, db, records, keySize, dataSize, randomKeys);
-				 // hook832(out, env);
-				  Label832:
+
+				  Label832:				 // hook832(out, env);
 					db.close();
 					env.close();
 					env = openEnvironment(dir, false);
 					db = openDatabase(env, nodeMax, false);
 					out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
 					preloadRecords(out, db);
-					//hook831(out, env);
-				  Label831:
+				  Label831:					//hook831(out, env);
 			} finally {
 					try {
 				db.close();

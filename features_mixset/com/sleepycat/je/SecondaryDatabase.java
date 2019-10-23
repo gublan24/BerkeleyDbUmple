@@ -243,7 +243,7 @@ public class SecondaryDatabase extends Database
     checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.delete:");
-	this.hook79(txn, key);
+	Label79:           ;  //this.hook79(txn, key);
 	Locker locker = null;
 	Cursor cursor = null;
 	OperationStatus commitStatus = OperationStatus.NOTFOUND;
@@ -288,7 +288,7 @@ public class SecondaryDatabase extends Database
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.get:");
-	this.hook80(txn, key, lockMode);
+	Label80:           ;  //this.hook80(txn, key, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -327,7 +327,7 @@ public class SecondaryDatabase extends Database
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.getSearchBoth:");
-	this.hook81(txn, key, data, lockMode);
+	Label81:           ;  //this.hook81(txn, key, data, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -624,21 +624,6 @@ public class SecondaryDatabase extends Database
   // line 555 "../../../SecondaryDatabase.ump"
    static  UnsupportedOperationException notAllowedException(){
     throw new UnsupportedOperationException("Operation not allowed on a secondary");
-  }
-
-  // line 559 "../../../SecondaryDatabase.ump"
-   protected void hook79(Transaction txn, DatabaseEntry key) throws DatabaseException{
-    
-  }
-
-  // line 562 "../../../SecondaryDatabase.ump"
-   protected void hook80(Transaction txn, DatabaseEntry key, LockMode lockMode) throws DatabaseException{
-    
-  }
-
-  // line 566 "../../../SecondaryDatabase.ump"
-   protected void hook81(Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
-    
   }
   
   //------------------------

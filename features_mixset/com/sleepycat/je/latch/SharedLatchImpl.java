@@ -54,7 +54,7 @@ public class SharedLatchImpl implements SharedLatch
 		    Owner owner = new Owner(thread, Owner.EXCLUSIVE);
 		    waiters.add(owner);
 		    owner.nAcquires += 1;
-		    this.hook431();
+		    Label431:           ;  //this.hook431();
 		    assert (noteLatch ? noteLatch() : true);
 		    return true;
 		} else {
@@ -130,31 +130,6 @@ public class SharedLatchImpl implements SharedLatch
   // line 196 "../../../../Latches_SharedLatchImpl.ump"
    private boolean unNoteLatch() throws LatchNotHeldException{
     return LatchSupport.latchTable.unNoteLatch(this, name);
-  }
-
-  // line 209 "../../../../Latches_SharedLatchImpl.ump"
-   protected void hook429() throws DatabaseException,InterruptedException{
-    
-  }
-
-  // line 212 "../../../../Latches_SharedLatchImpl.ump"
-   protected void hook430() throws DatabaseException,InterruptedException{
-    
-  }
-
-  // line 215 "../../../../Latches_SharedLatchImpl.ump"
-   protected void hook431() throws DatabaseException{
-    
-  }
-
-  // line 218 "../../../../Latches_SharedLatchImpl.ump"
-   protected void hook432() throws DatabaseException,InterruptedException{
-    
-  }
-
-  // line 221 "../../../../Latches_SharedLatchImpl.ump"
-   protected void hook433() throws LatchNotHeldException{
-    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -295,9 +270,9 @@ public class SharedLatchImpl implements SharedLatch
 		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
 	    }
 	    if (waiters.size() == 1) {
-		this.hook429();
+		Label429:           ;  //this.hook429();
 	    } else {
-		this.hook430();
+		Label430:           ;  //this.hook430();
 		while (waiters.get(0) != owner) {
 		    wait();
 		}
@@ -328,7 +303,7 @@ public class SharedLatchImpl implements SharedLatch
 		wait();
 	    }
 	    owner.nAcquires += 1;
-	    this.hook432();
+	    Label432:           ;  //this.hook432();
 	    assert (noteLatch ? noteLatch() : true);
 	} catch (InterruptedException e) {
 	    throw new RunRecoveryException(env, e);
@@ -353,7 +328,7 @@ public class SharedLatchImpl implements SharedLatch
 		assert (noteLatch ? unNoteLatch() : true);
 		notifyAll();
 	    }
-	    this.hook433();
+	    Label433:           ;  //this.hook433();
 	} finally {
 	    assert EnvironmentImpl.maybeForceYield();
 	}

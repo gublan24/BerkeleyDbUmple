@@ -241,7 +241,7 @@ class CursorImpl {
         }
     }
 
-    after Label235_1:searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode ,        LockType )
+    after Label235_1:searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode ,        LockType ) {
 
         //try {
             //original(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData, foundLast,            exactSearch,            binBoundary);

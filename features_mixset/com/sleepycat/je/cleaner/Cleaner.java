@@ -48,7 +48,6 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Cleaner_static.ump"
 // line 3 "../../../../EnvironmentLocking_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner.ump"
-// line 3 "../../../../CriticalEviction_Cleaner_inner.ump"
 // line 3 "../../../../Evictor_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner_inner.ump"
@@ -593,13 +592,13 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
 	if (readBufferSize <= 0) {
 	    readBufferSize = cm.getInt(EnvironmentParams.LOG_ITERATOR_READ_SIZE);
 	}
-	this.hook94(cm);
+	Label94: //this.hook94(cm);
 	nDeadlockRetries = cm.getInt(EnvironmentParams.CLEANER_DEADLOCK_RETRY);
 	expunge = cm.getBoolean(EnvironmentParams.CLEANER_REMOVE);
 	clusterResident = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER);
 	clusterAll = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER_ALL);
 	maxBatchFiles = cm.getInt(EnvironmentParams.CLEANER_MAX_BATCH_FILES);
-	this.hook90();
+	Label90: //this.hook90();
 	if (clusterResident && clusterAll) {
 	    throw new IllegalArgumentException("Both " + EnvironmentParams.CLEANER_CLUSTER + " and "
 		    + EnvironmentParams.CLEANER_CLUSTER_ALL + " may not be set to true.");
@@ -870,7 +869,7 @@ nLNsDead++;
 	    this.hook89(DBE);
 	    throw DBE;
 	} finally {
-	    this.hook95(bin, parentDIN);
+	    Label95: //this.hook95(bin, parentDIN);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -878,7 +877,7 @@ nLNsDead++;
 		if (completed && !lockDenied) {
 		    fileSelector.removePendingLN(ln.getNodeId());
 		}
-		this.hook91(ln, obsolete, completed);
+		Label91: //this.hook91(ln, obsolete, completed);
 	    }
 	}
   }
@@ -1050,7 +1049,7 @@ nLNsMigrated++;
 					if (locker != null) {
 				locker.operationEnd();
 					}
-					this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
+					Label92: //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
 			}
   }
 
@@ -1135,7 +1134,7 @@ nLNsMigrated++;
 					if (locker != null) {
 				locker.operationEnd();
 					}
-					this.hook93(lsn, cleanAction, obsolete, migrated, completed, ln);
+					Label93: //this.hook93(lsn, cleanAction, obsolete, migrated, completed, ln);
 			}
   }
 
@@ -1180,122 +1179,6 @@ nLNsMigrated++;
     
   }
 
-  // line 632 "../../../../Cleaner.ump"
-   protected void hook90() throws DatabaseException{
-    
-  }
-
-  // line 635 "../../../../Cleaner.ump"
-   protected void hook91(LN ln, boolean obsolete, boolean completed) throws DatabaseException{
-    
-  }
-
-  // line 639 "../../../../Cleaner.ump"
-   protected void hook92(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln) throws DatabaseException{
-    
-  }
-
-  // line 643 "../../../../Cleaner.ump"
-   protected void hook93(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln) throws DatabaseException{
-    
-  }
-
-  // line 646 "../../../../Cleaner.ump"
-   protected void hook94(DbConfigManager cm) throws DatabaseException{
-    
-  }
-
-  // line 649 "../../../../Cleaner.ump"
-   protected void hook95(BIN bin, DIN parentDIN) throws DatabaseException{
-    if (parentDIN != null) {
-	    parentDIN.releaseLatchIfOwner();
-	}
-	if (bin != null) {
-	    bin.releaseLatchIfOwner();
-	}
-	original(bin, parentDIN);
-  }
-
-  // line 652 "../../../../Cleaner.ump"
-   protected void hook96() throws DatabaseException{
-    
-  }
-
-  // line 655 "../../../../Cleaner.ump"
-   protected void hook97() throws DatabaseException{
-    
-  }
-
-  // line 658 "../../../../Cleaner.ump"
-   protected void hook98() throws DatabaseException{
-    
-  }
-
-  // line 661 "../../../../Cleaner.ump"
-   protected void hook99() throws DatabaseException{
-    
-  }
-
-  // line 664 "../../../../Cleaner.ump"
-   protected void hook100() throws DatabaseException{
-    
-  }
-
-  // line 667 "../../../../Cleaner.ump"
-   protected void hook101(){
-    
-  }
-
-  // line 670 "../../../../Cleaner.ump"
-   protected void hook102(){
-    
-  }
-
-  // line 673 "../../../../Cleaner.ump"
-   protected void hook103(){
-    
-  }
-
-  // line 676 "../../../../Cleaner.ump"
-   protected void hook104() throws DatabaseException{
-    
-  }
-
-  // line 679 "../../../../Cleaner.ump"
-   protected void hook105(boolean wasCleaned) throws DatabaseException{
-    
-  }
-
-  // line 682 "../../../../Cleaner.ump"
-   protected void hook106(boolean wasCleaned) throws DatabaseException{
-    
-  }
-
-  // line 685 "../../../../Cleaner.ump"
-   protected void hook107(boolean wasCleaned) throws DatabaseException{
-    
-  }
-
-  // line 688 "../../../../Cleaner.ump"
-   protected void hook108(boolean wasCleaned) throws DatabaseException{
-    
-  }
-
-  // line 691 "../../../../Cleaner.ump"
-   protected void hook109() throws DatabaseException{
-    
-  }
-
-  // line 694 "../../../../Cleaner.ump"
-   protected void hook110(boolean wasCleaned) throws DatabaseException{
-    
-  }
-
-  // line 697 "../../../../Cleaner.ump"
-   protected void hook111(boolean wasCleaned) throws DatabaseException{
-    
-  }
-
 
   /**
    * 
@@ -1329,8 +1212,8 @@ nLNsMigrated++;
     if (db != null && db.isDeleted() && !db.isDeleteFinished()) {
 					DatabaseId id = db.getId();
 					if (fileSelector.addPendingDB(id)) {
-							//this.hook85(id);
-							Label85: ;
+
+							Label85: ;							//this.hook85(id);
 					}
 			}
   }
@@ -1472,9 +1355,7 @@ nLNsMigrated++;
   
   @MethodObject
     @MethodObject
-    @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
-  // line 4 "../../../../CriticalEviction_Cleaner_inner.ump"
   // line 4 "../../../../DeleteOp_Cleaner_inner.ump"
   public static class Cleaner_processPending
   {
@@ -1516,11 +1397,6 @@ nLNsMigrated++;
               dupKey=info.getDupKey();
               ln=info.getLN();
               Label114:
-  if (_this.DO_CRITICAL_EVICTION) {
-            Label86:        
-            //this.hook86();
-          }
-  
   //            this.hook114();
               _this.processPendingLN(ln,db1,key,dupKey,location);
             }
@@ -1543,11 +1419,6 @@ nLNsMigrated++;
     // line 40 "../../../../Cleaner_static.ump"
      protected void hook114() throws DatabaseException{
       
-    }
-  
-    // line 6 "../../../../CriticalEviction_Cleaner_inner.ump"
-     protected void hook86() throws DatabaseException{
-      // Label86 is introduced by CriticalEviction_Cleaner_inner.ump
     }
     
     //------------------------
@@ -1655,6 +1526,18 @@ nLNsMigrated++;
   }
 // line 8 "../../../../CriticalEviction_Cleaner.ump"
   static final boolean DO_CRITICAL_EVICTION = true ;
+
+// line 5 "../../../../Latches_Cleaner.ump"
+  after Label95 : processPendingLN (LN , DatabaseImpl , byte , byte , TreeLocation ) 
+  {
+    if (parentDIN != null) {
+					parentDIN.releaseLatchIfOwner();
+			}
+			if (bin != null) {
+					bin.releaseLatchIfOwner();
+			}
+			//original(bin, parentDIN);
+  }
 
   
 }

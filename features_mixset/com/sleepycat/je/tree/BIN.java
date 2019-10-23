@@ -135,7 +135,10 @@ public class BIN extends IN implements LoggableObject
     if (child.canBeAncestor(targetContainsDuplicates)) {
 	    if (targetContainsDuplicates && targetIsRoot) {
 		long childNid = child.getNodeId();
-		this.hook603(child);
+		Label603:
+((IN) child).releaseLatch();
+        //original(child);
+ //this.hook603(child);
 		result.keepSearching = false;
 		if (childNid == targetNodeId) {
 		    result.exactParentFound = true;
@@ -144,12 +147,18 @@ public class BIN extends IN implements LoggableObject
 		}
 		if (requireExactMatch && !result.exactParentFound) {
 		    result.parent = null;
-		    this.hook604();
+		    Label604:
+releaseLatch();
+        //original();
+ //this.hook604();
 		} else {
 		    result.parent = this;
 		}
 	    } else {
-		this.hook605();
+		Label605:
+releaseLatch();
+        //original();
+ //this.hook605();
 		result.parent = (IN) child;
 	    }
 	} else {
@@ -158,7 +167,10 @@ public class BIN extends IN implements LoggableObject
 	    if (!requireExactMatch && targetContainsDuplicates) {
 		result.parent = this;
 	    } else {
-		this.hook606();
+		Label606:
+releaseLatch();
+        //original();
+ //this.hook606();
 		result.parent = null;
 	    }
 	}
@@ -264,6 +276,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 202 "../../../../BIN.ump"
    public void addCursor(CursorImpl cursor){
+    // line 31 "../../../../Latches_BIN.ump"
+    assert isLatchOwner();
+            //original(cursor);
+    // END OF UMPLE BEFORE INJECTION
     cursorSet.add(cursor);
   }
 
@@ -275,6 +291,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 210 "../../../../BIN.ump"
    public void removeCursor(CursorImpl cursor){
+    // line 40 "../../../../Latches_BIN.ump"
+    assert isLatchOwner();
+            //original(cursor);
+    // END OF UMPLE BEFORE INJECTION
     cursorSet.remove(cursor);
   }
 
@@ -347,6 +367,11 @@ updateMemorySize(getTarget(index), null);
    */
   // line 267 "../../../../BIN.ump"
   public void adjustCursors(IN newSibling, int newSiblingLow, int newSiblingHigh){
+    // line 50 "../../../../Latches_BIN.ump"
+    assert newSibling.isLatchOwner();
+            assert this.isLatchOwner();
+            //original(newSibling, newSiblingLow, newSiblingHigh);
+    // END OF UMPLE BEFORE INJECTION
     int adjustmentDelta = (newSiblingHigh - newSiblingLow);
 	Iterator iter = cursorSet.iterator();
 	while (iter.hasNext()) {
@@ -386,6 +411,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 303 "../../../../BIN.ump"
   public void adjustCursorsForInsert(int insertIndex){
+    // line 60 "../../../../Latches_BIN.ump"
+    assert this.isLatchOwner();
+            //original(insertIndex);
+    // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
 	    Iterator iter = cursorSet.iterator();
 	    while (iter.hasNext()) {
@@ -411,6 +440,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 325 "../../../../BIN.ump"
   public void adjustCursorsForMutation(int binIndex, DBIN dupBin, int dupBinIndex, CursorImpl excludeCursor){
+    // line 72 "../../../../Latches_BIN.ump"
+    assert this.isLatchOwner();
+            //original(binIndex, dupBin, dupBinIndex, excludeCursor);
+    // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
 	    Iterator iter = cursorSet.iterator();
 	    while (iter.hasNext()) {
@@ -533,14 +566,44 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
 	    int validIndex = 0;
 	    int numValidEntries = 0;
 	    boolean needToLatch = false;
-	    this.hook607(validIndex, numValidEntries, needToLatch);
+	    Label607:
+needToLatch = !isLatchOwner();
+ //this.hook607(validIndex, numValidEntries, needToLatch);
+      label608: //this.hook608(needToLatch);
+				for (int i = 0; i < getNEntries(); i++) {
+					if (!isEntryKnownDeleted(i)) {
+							numValidEntries++;
+							validIndex = i;
+					}
+				}
+				if (numValidEntries > 1) {
+						throw new ReturnBoolean(false);
+				} 
+				else {
+						if (nCursors() > 0) {
+					throw new ReturnBoolean(false);
+						}
+						if (numValidEntries == 1) {
+							Node child = fetchTarget(validIndex);
+							throw new ReturnBoolean(child != null && child.isValidForDelete());
+						} 
+						else {
+									throw new ReturnBoolean(true);
+						}
+				}
+//End hook607
+Label607_1:
+if (needToLatch && isLatchOwner()) {
+            releaseLatch();
+        }
+
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
 	}
   }
 
-  // line 444 "../../../../BIN.ump"
+  // line 468 "../../../../BIN.ump"
   public void accumulateStats(TreeWalkerStatsAccumulator acc){
     acc.processBIN(this, new Long(getNodeId()), getLevel());
   }
@@ -550,17 +613,17 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    * 
    * Return the relevant user defined comparison function for this type of node. For IN's and BIN's, this is the BTree Comparison function. Overriden by DBIN.
    */
-  // line 451 "../../../../BIN.ump"
+  // line 475 "../../../../BIN.ump"
    public Comparator getKeyComparator(){
     return getDatabase().getBtreeComparator();
   }
 
-  // line 455 "../../../../BIN.ump"
+  // line 479 "../../../../BIN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 459 "../../../../BIN.ump"
+  // line 483 "../../../../BIN.ump"
    public String endTag(){
     return END_TAG;
   }
@@ -570,12 +633,12 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    * 
    * @see LoggableObject#getLogType
    */
-  // line 466 "../../../../BIN.ump"
+  // line 490 "../../../../BIN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_BIN;
   }
 
-  // line 470 "../../../../BIN.ump"
+  // line 494 "../../../../BIN.ump"
    public String shortClassName(){
     return "BIN";
   }
@@ -585,7 +648,7 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    * 
    * Decide how to log this node. BINs may be logged provisionally. If logging a delta, return an null for the LSN.
    */
-  // line 478 "../../../../BIN.ump"
+  // line 502 "../../../../BIN.ump"
    protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional, boolean proactiveMigration, IN parent) throws DatabaseException{
     boolean doDeltaLog = false;
 	long lastFullVersion = getLastFullVersion();
@@ -616,7 +679,7 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    * Decide whether to log a full or partial BIN, depending on the ratio of the delta size to full BIN size, and the number of deltas that have been logged since the last full.
    * @return true if we should log the deltas of this BIN
    */
-  // line 506 "../../../../BIN.ump"
+  // line 530 "../../../../BIN.ump"
    private boolean doDeltaLog(BINDelta deltaInfo) throws DatabaseException{
     int maxDiffs = (getNEntries() * getDatabase().getBinDeltaPercent()) / 100;
 	if ((deltaInfo.getNumDeltas() <= maxDiffs) && (numDeltasSinceLastFull < getDatabase().getBinMaxDeltas())) {
@@ -626,60 +689,56 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
 	}
   }
 
-  // line 515 "../../../../BIN.ump"
-   protected void hook603(Node child) throws DatabaseException{
-    ((IN) child).releaseLatch();
-	original(child);
-  }
 
-  // line 518 "../../../../BIN.ump"
+  /**
+   * protected void hook603(Node child) throws DatabaseException {
+   * }
+   */
+  // line 542 "../../../../BIN.ump"
    protected void hook604() throws DatabaseException{
-    releaseLatch();
-	original();
+    
   }
 
-  // line 521 "../../../../BIN.ump"
+  // line 545 "../../../../BIN.ump"
    protected void hook605() throws DatabaseException{
-    releaseLatch();
-	original();
+    
   }
 
-  // line 524 "../../../../BIN.ump"
+  // line 548 "../../../../BIN.ump"
    protected void hook606() throws DatabaseException{
-    releaseLatch();
-	original();
+    
   }
 
-  // line 527 "../../../../BIN.ump"
-   protected void hook607(int validIndex, int numValidEntries, boolean needToLatch) throws DatabaseException{
-    this.hook608(needToLatch);
-	for (int i = 0; i < getNEntries(); i++) {
-	    if (!isEntryKnownDeleted(i)) {
-		numValidEntries++;
-		validIndex = i;
-	    }
-	}
-	if (numValidEntries > 1) {
-	    throw new ReturnBoolean(false);
-	} else {
-	    if (nCursors() > 0) {
-		throw new ReturnBoolean(false);
-	    }
-	    if (numValidEntries == 1) {
-		Node child = fetchTarget(validIndex);
-		throw new ReturnBoolean(child != null && child.isValidForDelete());
-	    } else {
-		throw new ReturnBoolean(true);
-	    }
-	}
-  }
 
-  // line 550 "../../../../BIN.ump"
+  /**
+   * protected void hook607(int validIndex, int numValidEntries, boolean needToLatch) throws DatabaseException {
+   * label608: //this.hook608(needToLatch);
+   * for (int i = 0; i < getNEntries(); i++) {
+   * if (!isEntryKnownDeleted(i)) {
+   * numValidEntries++;
+   * validIndex = i;
+   * }
+   * }
+   * if (numValidEntries > 1) {
+   * throw new ReturnBoolean(false);
+   * }
+   * else {
+   * if (nCursors() > 0) {
+   * throw new ReturnBoolean(false);
+   * }
+   * if (numValidEntries == 1) {
+   * Node child = fetchTarget(validIndex);
+   * throw new ReturnBoolean(child != null && child.isValidForDelete());
+   * }
+   * else {
+   * throw new ReturnBoolean(true);
+   * }
+   * }
+   * }
+   */
+  // line 576 "../../../../BIN.ump"
    protected void hook608(boolean needToLatch) throws DatabaseException{
-    if (needToLatch) {
-	    latch();
-	}
-	original(needToLatch);
+    
   }
 
 
@@ -687,7 +746,7 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    * protected void hook609(BINReference binRef, DatabaseImpl db) throws DatabaseException {
    * }
    */
-  // line 556 "../../../../BIN.ump"
+  // line 582 "../../../../BIN.ump"
    protected void hook610(int index){
     
   }
@@ -739,8 +798,8 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
 					for (int i = 0; i < getNEntries(); i++) {
 				removed += evictInternal(i, cleaner);
 					}
-					//this.hook601(removed);
-					Label601:  ;
+
+					Label601:  					//this.hook601(removed);;
 
 			}
 			return removed;
@@ -755,8 +814,8 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    public void evictLN(int index) throws DatabaseException{
     Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
 			long removed = evictInternal(index, cleaner);
-			//this.hook602(removed);
-      Label602: ;
+
+      Label602: 			//this.hook602(removed);
   }
 
 

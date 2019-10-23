@@ -28,6 +28,7 @@ import com.sleepycat.je.StatsConfig;
 // line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
 // line 3 "../../../../DbRunAction_inner.ump"
 // line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
+// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
@@ -145,7 +146,8 @@ public class DbRunAction
     @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
-  // line 35 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
+  // line 33 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
   // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
   // line 4 "../../../../Statistics_DbRunAction_inner.ump"
@@ -251,6 +253,12 @@ public class DbRunAction
           //original(); //@Abdulaziz aaa
   
             Label847:
+  if (readOnly) {
+            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
+            envConfig.setReadOnly(true);
+          }
+          //original();
+  
             //this.hook845();
             Label845:
   if (doAction == EVICT) {
@@ -365,7 +373,7 @@ public class DbRunAction
       
     }
   
-    // line 50 "../../../../Evictor_DbRunAction_inner.ump"
+    // line 48 "../../../../Evictor_DbRunAction_inner.ump"
      protected void hook846() throws Exception{
       if (action.equalsIgnoreCase("evict")) {
             doAction=EVICT;
@@ -426,7 +434,6 @@ public class DbRunAction
   
   
   
-  @MethodObject
   // line 4 "../../../../Evictor_DbRunAction_inner.ump"
   public static class DbRunAction_doEvict
   {
@@ -457,11 +464,9 @@ public class DbRunAction
     // line 9 "../../../../Evictor_DbRunAction_inner.ump"
     public void execute() throws DatabaseException{
       envImpl=DbInternal.envGetEnvironmentImpl(env);
-          //this.hook837();
-          Label837:
+          Label837:        //this.hook837();
           c=new EnvironmentMutableConfig();
-          //this.hook836();
-          Label836:
+          Label836:        //this.hook836();
           env.setMutableConfig(c);
           start=System.currentTimeMillis();
           env.evictMemory();
@@ -475,19 +480,19 @@ public class DbRunAction
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 23 "../../../../Evictor_DbRunAction_inner.ump"
+    // line 21 "../../../../Evictor_DbRunAction_inner.ump"
     protected Environment env ;
-  // line 24 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 22 "../../../../Evictor_DbRunAction_inner.ump"
     protected EnvironmentImpl envImpl ;
-  // line 25 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 23 "../../../../Evictor_DbRunAction_inner.ump"
     protected long cacheUsage ;
-  // line 26 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 24 "../../../../Evictor_DbRunAction_inner.ump"
     protected EnvironmentMutableConfig c ;
-  // line 27 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 25 "../../../../Evictor_DbRunAction_inner.ump"
     protected long start ;
-  // line 28 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 26 "../../../../Evictor_DbRunAction_inner.ump"
     protected long end ;
-  // line 29 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 27 "../../../../Evictor_DbRunAction_inner.ump"
     protected DecimalFormat f ;
   
     

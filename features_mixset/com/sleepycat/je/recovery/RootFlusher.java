@@ -51,33 +51,37 @@ public class RootFlusher implements WithRootLatched
   // line 35 "../../../../RootFlusher.ump"
    public IN doWork(ChildReference root) throws DatabaseException{
     if (root == null) {
-	    return null;
-	}
-	IN rootIN = (IN) root.fetchTarget(db, null);
-	this.hook599(root, rootIN);
-	return null;
+					return null;
+			}
+			IN rootIN = (IN) root.fetchTarget(db, null);
+			Label599:
+rootIN.latch(false);
+ //this.hook599(root, rootIN);
+			if (rootIN.getNodeId() == targetNodeId) {
+							stillRoot = true;
+							if (rootIN.getDirty()) {
+						long newLsn = rootIN.log(logManager);
+						root.setLsn(newLsn);
+						flushed = true;
+							}
+					}
+		//hook599
+    Label599_1:
+//			try {original(root, rootIN);} finally {
+					rootIN.releaseLatch();
+	//		}
+
+		return null;
   }
 
-  // line 44 "../../../../RootFlusher.ump"
+  // line 54 "../../../../RootFlusher.ump"
   public boolean getFlushed(){
     return flushed;
   }
 
-  // line 48 "../../../../RootFlusher.ump"
+  // line 58 "../../../../RootFlusher.ump"
   public boolean stillRoot(){
     return stillRoot;
-  }
-
-  // line 52 "../../../../RootFlusher.ump"
-   protected void hook599(ChildReference root, IN rootIN) throws DatabaseException{
-    if (rootIN.getNodeId() == targetNodeId) {
-	    stillRoot = true;
-	    if (rootIN.getDirty()) {
-		long newLsn = rootIN.log(logManager);
-		root.setLsn(newLsn);
-		flushed = true;
-	    }
-	}
   }
   
   //------------------------

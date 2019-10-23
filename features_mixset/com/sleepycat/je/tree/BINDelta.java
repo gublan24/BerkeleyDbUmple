@@ -112,7 +112,10 @@ public class BINDelta implements LoggableObject,LogReadable
 	DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	fullBIN.setDatabase(db);
 	fullBIN.setLastFullLsn(lastFullLsn);
-	this.hook612(fullBIN);
+	Label612:
+fullBIN.latch();
+		//original(fullBIN);
+ //this.hook612(fullBIN);
 	for (int i = 0; i < deltas.size(); i++) {
 	    DeltaInfo info = (DeltaInfo) deltas.get(i);
 	    int foundIndex = fullBIN.findEntry(info.getKey(), true, false);
@@ -132,7 +135,10 @@ public class BINDelta implements LoggableObject,LogReadable
 	    }
 	}
 	fullBIN.setGeneration(0);
-	this.hook611(fullBIN);
+	Label611:
+fullBIN.releaseLatch();
+		//original(fullBIN);
+ //this.hook611(fullBIN);
 	return fullBIN;
   }
 
@@ -230,18 +236,6 @@ public class BINDelta implements LoggableObject,LogReadable
   // line 179 "../../../../BINDelta.ump"
    public long getTransactionId(){
     return 0;
-  }
-
-  // line 183 "../../../../BINDelta.ump"
-   protected void hook611(BIN fullBIN) throws DatabaseException{
-    fullBIN.releaseLatch();
-	original(fullBIN);
-  }
-
-  // line 186 "../../../../BINDelta.ump"
-   protected void hook612(BIN fullBIN) throws DatabaseException{
-    fullBIN.latch();
-	original(fullBIN);
   }
   
   //------------------------

@@ -868,7 +868,6 @@ deleteState = NOT_DELETED;
   
   @MethodObject
     @MethodObject
-    @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
   // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
   // line 4 "../../../../Statistics_DatabaseImpl_inner.ump"
@@ -924,8 +923,12 @@ deleteState = NOT_DELETED;
           ret=new PreloadStats();
           callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
           walker=new PreloadLSNTreeWalker(_this,callback,config);
-          //Label287:  //
-  this.hook287();
+          //Label287:  //this.hook287();
+   				execute_Latches_DatabaseImpl_preload:
+  PreloadStats result=original();
+          assert LatchSupport.countLatchesHeld() == 0;
+          //return result;
+  
           return ret;
     }
   

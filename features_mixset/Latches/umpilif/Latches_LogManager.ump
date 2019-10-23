@@ -7,6 +7,7 @@ class LogManager
     protected Latch logWriteLatch;
 
     after Label502: LogManager(EnvironmentImpl , boolean ){
+
 	logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
 	//original(envImpl);
     }

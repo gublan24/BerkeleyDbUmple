@@ -74,21 +74,21 @@ public class FileProcessor extends DaemonThread
     super.delete();
   }
 
-  // line 61 "../../../../FileProcessor.ump"
+  // line 60 "../../../../FileProcessor.ump"
   public  FileProcessor(String name, EnvironmentImpl env, Cleaner cleaner, UtilizationProfile profile, FileSelector fileSelector){
     super(0, name, env);
-	this.env = env;
-	this.cleaner = cleaner;
-	this.fileSelector = fileSelector;
-	this.profile = profile;
+        this.env = env;
+        this.cleaner = cleaner;
+        this.fileSelector = fileSelector;
+        this.profile = profile;
   }
 
-  // line 69 "../../../../FileProcessor.ump"
+  // line 68 "../../../../FileProcessor.ump"
    public void clearEnv(){
     env = null;
-	cleaner = null;
-	fileSelector = null;
-	profile = null;
+        cleaner = null;
+        fileSelector = null;
+        profile = null;
   }
 
 
@@ -96,7 +96,7 @@ public class FileProcessor extends DaemonThread
    * 
    * Return the number of retries when a deadlock exception occurs.
    */
-  // line 79 "../../../../FileProcessor.ump"
+  // line 78 "../../../../FileProcessor.ump"
    protected int nDeadlockRetries() throws DatabaseException{
     return cleaner.nDeadlockRetries;
   }
@@ -106,7 +106,7 @@ public class FileProcessor extends DaemonThread
    * 
    * Cleaner doesn't have a work queue so just throw an exception if it's ever called.
    */
-  // line 86 "../../../../FileProcessor.ump"
+  // line 85 "../../../../FileProcessor.ump"
    public void addToQueue(Object o) throws DatabaseException{
     throw new DatabaseException("Cleaner.addToQueue should never be called.");
   }
@@ -116,7 +116,7 @@ public class FileProcessor extends DaemonThread
    * 
    * Activates the cleaner. Is normally called when je.cleaner.byteInterval bytes are written to the log.
    */
-  // line 93 "../../../../FileProcessor.ump"
+  // line 92 "../../../../FileProcessor.ump"
    public void onWakeup() throws DatabaseException{
     doClean(true, true, false);
   }
@@ -127,7 +127,7 @@ public class FileProcessor extends DaemonThread
    * Process all log entries in the given file. Note that we check for obsolete entries using the active TFS (TrackedFileSummary) for a file while it is being processed, and we prohibit flushing (eviction) of that offset information until file processing is complete. An entry could become obsolete because: 1- normal application activity deletes or updates the entry, 2- proactive migration migrates the entry before we process it, or 3- if trackDetail is false. However, checking the TFS is expensive if it has many entries, because we perform a linear search. There is a tradeoff between the cost of the TFS lookup and its benefit, which is to avoid a tree search if the entry is obsolete. Note that many more lookups for non-obsolete entries than obsolete entries will typically be done. In spite of that we check the tracked summary to avoid the situation where eviction does proactive migration, and evicts a BIN that is very soon afterward fetched during cleaning.
    * @return false if we aborted file processing because the environment isbeing closed.
    */
-  // line 170 "../../../../FileProcessor.ump"
+  // line 169 "../../../../FileProcessor.ump"
    private boolean processFile(Long fileNum) throws DatabaseException,IOException{
     return new FileProcessor_processFile(this, fileNum).execute();
   }
@@ -139,7 +139,7 @@ public class FileProcessor extends DaemonThread
    * @param info
    * @param offset
    */
-  // line 180 "../../../../FileProcessor.ump"
+  // line 179 "../../../../FileProcessor.ump"
    private void processLN(Long fileNum, TreeLocation location, Long offset, LNInfo info, Object lookAheadCachep, Map dbCache) throws DatabaseException{
     new FileProcessor_processLN(this, fileNum, location, offset, info, lookAheadCachep, dbCache).execute();
   }
@@ -155,76 +155,77 @@ public class FileProcessor extends DaemonThread
    * @param indexis the BIN index found in the tree.
    * @param parentDINis non-null for a DupCountLN only; if non-null, is latched onmethod entry and exit.
    */
-  // line 194 "../../../../FileProcessor.ump"
+  // line 193 "../../../../FileProcessor.ump"
    private void processFoundLN(LNInfo info, long logLsn, long treeLsn, BIN bin, int index, DIN parentDIN) throws DatabaseException{
     LN ln = info.getLN();
-	byte[] key = info.getKey();
-	byte[] dupKey = info.getDupKey();
-	DatabaseImpl db = bin.getDatabase();
-	boolean isDupCountLN = parentDIN != null;
-	boolean obsolete = false;
-	boolean migrated = false;
-	boolean lockDenied = false;
-	boolean completed = false;
-	long nodeId = ln.getNodeId();
-	BasicLocker locker = null;
-	try {
-	    Tree tree = db.getTree();
-	    assert tree != null;
-	    if (treeLsn != logLsn) {
-		locker = new BasicLocker(env);
-		LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
-		if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-		    Label142:
+        byte[] key = info.getKey();
+        byte[] dupKey = info.getDupKey();
+        DatabaseImpl db = bin.getDatabase();
+        boolean isDupCountLN = parentDIN != null;
+        boolean obsolete = false;
+        boolean migrated = false;
+        boolean lockDenied = false;
+        boolean completed = false;
+        long nodeId = ln.getNodeId();
+        BasicLocker locker = null;
+        try {
+            Tree tree = db.getTree();
+            assert tree != null;
+            if (treeLsn != logLsn) {
+                locker = new BasicLocker(env);
+                LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
+                if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+                    Label142:
 nLNsLockedThisRun++;
 			//original();
  //this.hook142();
-		    lockDenied = true;
-		} else {
-		    Label143:
+                        lockDenied = true;
+                }
+                else {
+                    Label143:
 nLNsDeadThisRun++;
 			//original();
  //this.hook143();
-		    obsolete = true;
-		}
-	    }
-	    if (!obsolete && !lockDenied) {
-		if (isDupCountLN) {
-		    ChildReference dclRef = parentDIN.getDupCountLNRef();
-		    dclRef.setMigrate(true);
-		    parentDIN.setDirty(true);
-		    if (treeLsn == logLsn && dclRef.getTarget() == null) {
-			ln.postFetchInit(db, logLsn);
-			parentDIN.updateDupCountLN(ln);
-		    }
-		} else {
-		    bin.setMigrate(index, true);
-		    bin.setDirty(true);
-		    if (treeLsn == logLsn && bin.getTarget(index) == null) {
-			ln.postFetchInit(db, logLsn);
-			bin.updateEntry(index, ln);
-		    }
-		    if (PROHIBIT_DELTAS_WHEN_FETCHING && bin.getGeneration() == 0) {
-			bin.setProhibitNextDelta();
-		    }
-		    bin.setGeneration();
-		}
-		Label144:
+                        obsolete = true;
+                }
+            }
+            if (!obsolete && !lockDenied) {
+                if (isDupCountLN) {
+                    ChildReference dclRef = parentDIN.getDupCountLNRef();
+                    dclRef.setMigrate(true);
+                    parentDIN.setDirty(true);
+                    if (treeLsn == logLsn && dclRef.getTarget() == null) {
+                        ln.postFetchInit(db, logLsn);
+                        parentDIN.updateDupCountLN(ln);
+                    }
+                } else {
+                    bin.setMigrate(index, true);
+                    bin.setDirty(true);
+                    if (treeLsn == logLsn && bin.getTarget(index) == null) {
+                        ln.postFetchInit(db, logLsn);
+                        bin.updateEntry(index, ln);
+                    }
+                    if (PROHIBIT_DELTAS_WHEN_FETCHING && bin.getGeneration() == 0) {
+                        bin.setProhibitNextDelta();
+                    }
+                    bin.setGeneration();
+                }
+                Label144:
 nLNsMarkedThisRun++;
 			//original();
  //this.hook144();
-		migrated = true;
-	    }
-	    completed = true;
-	} finally {
-	    if (locker != null) {
-		locker.operationEnd();
-	    }
-	    if (completed && lockDenied) {
-		fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
-	    }
-	    this.hook124(logLsn, ln, obsolete, migrated, completed);
-	}
+                    migrated = true;
+            }
+            completed = true;
+        } finally {
+            if (locker != null) {
+                locker.operationEnd();
+            }
+            if (completed && lockDenied) {
+                fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
+            }
+            Label124: //this.hook124(logLsn, ln, obsolete, migrated, completed);
+        }
   }
 
 
@@ -235,58 +236,59 @@ nLNsMarkedThisRun++;
   // line 259 "../../../../FileProcessor.ump"
    private void processIN(IN inClone, DatabaseImpl db, long lsn) throws DatabaseException{
     try {
-	    boolean obsolete = false;
-	    boolean dirtied = false;
-	    boolean completed = false;
-	    //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
-      Label125:
+            boolean obsolete = false;
+            boolean dirtied = false;
+            boolean completed = false;
+            //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
+            Label125:
 nINsCleanedThisRun++;
 			//original(inClone, db, lsn, obsolete, dirtied, completed);
 
-      boolean b = db == null;
-			//b = this.hook159(db, b);
-      Label159:
+                boolean b = db == null;
+            //b = this.hook159(db, b);
+            Label159:
 b |= db.isDeleted();
 //	return original(db, b);
 
-			if (b) {
-					//this.hook160(db);
-          Label160:
+                if (b) {
+                    //this.hook160(db);
+                    Label160:
 cleaner.addPendingDB(db);
 			//original(db);
-
-					Label151:
+ Label151:
 nINsDeadThisRun++;
 			//original();
  //this.hook151();
-					obsolete = true;
-					completed = true;
-					throw new ReturnVoid();
-			}
-			Tree tree = db.getTree();
-			assert tree != null;
-			IN inInTree = findINInTree(tree, db, inClone, lsn);
-			if (inInTree == null) {
-					Label152:
+                        obsolete = true;
+                    completed = true;
+                    throw new ReturnVoid();
+                }
+            Tree tree = db.getTree();
+            assert tree != null;
+            IN inInTree = findINInTree(tree, db, inClone, lsn);
+            if (inInTree == null) {
+                Label152:
 nINsDeadThisRun++;
 			//original();
  //this.hook152();
-					obsolete = true;
-			} else {
-					Label153:
+                    obsolete = true;
+            }
+            else {
+                Label153:
 nINsMigratedThisRun++;
 			//original();
  //this.hook153();
-					inInTree.setDirty(true);
-					inInTree.setProhibitNextDelta();
-					this.hook136(inInTree);
-					dirtied = true;
-			}
-			completed = true;
-      //End of hook125
-	} catch (ReturnVoid r) {
-	    return;
-	}
+                    inInTree.setDirty(true);
+                inInTree.setProhibitNextDelta();
+                Label136: //this.hook136(inInTree);
+                    dirtied = true;
+            }
+            completed = true;
+            //End of hook125
+        } catch (ReturnVoid r) {
+            return;
+        }
+Label125_1: ;//;
   }
 
 
@@ -294,24 +296,49 @@ nINsMigratedThisRun++;
    * 
    * Given a clone of an IN that has been taken out of the log, try to find it in the tree and verify that it is the current one in the log. Returns the node in the tree if it is found and it is current re: LSN's. Otherwise returns null if the clone is not found in the tree or it's not the latest version. Caller is responsible for unlatching the returned IN.
    */
-  // line 300 "../../../../FileProcessor.ump"
+  // line 302 "../../../../FileProcessor.ump"
    private IN findINInTree(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException{
     try {
-	    if (inClone.isDbRoot()) {
-		IN rootIN = isRoot(tree, db, inClone, lsn);
-		if (rootIN == null) {
-		    return null;
-		} else {
-		    return rootIN;
-		}
+            if (inClone.isDbRoot()) {
+                IN rootIN = isRoot(tree, db, inClone, lsn);
+                if (rootIN == null) {
+                    return null;
+                } else {
+                    return rootIN;
+                }
+            }
+            inClone.latch(Cleaner.UPDATE_GENERATION);
+            SearchResult result = null;
+            Label134: //this.hook134(tree, db, inClone, lsn, result);
+            result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
+            if (!result.exactParentFound) {
+                throw new ReturnObject(null);
+            }
+            int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
+            if (compareVal > 0) {
+                throw new ReturnObject(null);
+            } 
+            else {
+                IN in ;
+                if (compareVal == 0) { in = (IN) result.parent.getTarget(result.index);
+                    if ( in == null) { in = inClone; in .postFetchInit(db, lsn);
+                        result.parent.updateEntry(result.index, in );
+                    }
+                } else { in = (IN) result.parent.fetchTarget(result.index);
+                } in.latch(Cleaner.UPDATE_GENERATION);
+                throw new ReturnObject( in );
+            }
+            Label134_1:
+if ((result != null) && (result.exactParentFound)) {
+					result.parent.releaseLatch();
 	    }
-	    inClone.latch(Cleaner.UPDATE_GENERATION);
-	    SearchResult result = null;
-	    this.hook134(tree, db, inClone, lsn, result);
-	    throw ReturnHack.returnObject;
-	} catch (ReturnObject r) {
-	    return (IN) r.value;
-	}
+ ;//
+            //End of hook134
+
+            throw ReturnHack.returnObject;
+        } catch (ReturnObject r) {
+            return (IN) r.value;
+        }
   }
 
 
@@ -319,10 +346,10 @@ nINsMigratedThisRun++;
    * 
    * Check if the cloned IN is the same node as the root in tree. Return the real root if it is, null otherwise. If non-null is returned, the returned IN (the root) is latched -- caller is responsible for unlatching it.
    */
-  // line 322 "../../../../FileProcessor.ump"
+  // line 345 "../../../../FileProcessor.ump"
    private IN isRoot(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException{
     RootDoWork rdw = new RootDoWork(db, inClone, lsn);
-	return tree.withRootLatchedShared(rdw);
+        return tree.withRootLatchedShared(rdw);
   }
 
 
@@ -330,87 +357,65 @@ nINsMigratedThisRun++;
    * 
    * XXX: Was this intended to override Thread.toString()? If so it no longer does, because we separated Thread from DaemonThread.
    */
-  // line 330 "../../../../FileProcessor.ump"
+  // line 353 "../../../../FileProcessor.ump"
    public String toString(){
     StringBuffer sb = new StringBuffer();
-	sb.append("<Cleaner name=\"").append(name).append("\"/>");
-	return sb.toString();
-  }
-
-  // line 336 "../../../../FileProcessor.ump"
-   protected void hook121(String traceMsg) throws DatabaseException,IOException{
-    
-  }
-
-  // line 339 "../../../../FileProcessor.ump"
-   protected void hook122(IOException IOE) throws DatabaseException{
-    
-  }
-
-  // line 342 "../../../../FileProcessor.ump"
-   protected void hook123(String traceMsg) throws DatabaseException{
-    
-  }
-
-  // line 346 "../../../../FileProcessor.ump"
-   protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed) throws DatabaseException{
-    
+        sb.append("<Cleaner name=\"").append(name).append("\"/>");
+        return sb.toString();
   }
 
 
   /**
+   * protected void hook121(String traceMsg) throws DatabaseException, IOException {}
+   * protected void hook122(IOException IOE) throws DatabaseException {}
+   * protected void hook123(String traceMsg) throws DatabaseException {}
+   * protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed)
+   * throws DatabaseException {}
    * protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
    * throws DatabaseException {
    * }
-   */
-  // line 354 "../../../../FileProcessor.ump"
-   protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result) throws DatabaseException{
-    result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
-	if (!result.exactParentFound) {
-	    throw new ReturnObject(null);
-	}
-	int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
-	if (compareVal > 0) {
-	    throw new ReturnObject(null);
-	} else {
-	    IN in;
-	    if (compareVal == 0) {
-		in = (IN) result.parent.getTarget(result.index);
-		if (in == null) {
-		    in = inClone;
-		    in.postFetchInit(db, lsn);
-		    result.parent.updateEntry(result.index, in);
-		}
-	    } else {
-		in = (IN) result.parent.fetchTarget(result.index);
-	    }
-	    in.latch(Cleaner.UPDATE_GENERATION);
-	    throw new ReturnObject(in);
-	}
-  }
-
-  // line 379 "../../../../FileProcessor.ump"
-   protected void hook136(IN inInTree) throws DatabaseException{
-    inInTree.releaseLatch();
-	original(inInTree);
-  }
-
-
-  /**
+   * protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result)
+   * throws DatabaseException {
+   * 
+   * result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
+   * if (!result.exactParentFound) {
+   * throw new ReturnObject(null);
+   * }
+   * int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
+   * if (compareVal > 0) {
+   * throw new ReturnObject(null);
+   * } else {
+   * IN in;
+   * if (compareVal == 0) {
+   * in = (IN) result.parent.getTarget(result.index);
+   * if (in == null) {
+   * in = inClone;
+   * in.postFetchInit(db, lsn);
+   * result.parent.updateEntry(result.index, in);
+   * }
+   * } else {
+   * in = (IN) result.parent.fetchTarget(result.index);
+   * }
+   * in.latch(Cleaner.UPDATE_GENERATION);
+   * throw new ReturnObject(in);
+   * }
+   * }
+   * protected void hook136(IN inInTree) throws DatabaseException {
+   * }
    * protected void hook138() throws DatabaseException {
    * }
    */
-  // line 385 "../../../../FileProcessor.ump"
+  // line 406 "../../../../FileProcessor.ump"
    protected String hook139(String traceMsg) throws DatabaseException,IOException{
     return traceMsg;
   }
 
-  // line 389 "../../../../FileProcessor.ump"
+  // line 409 "../../../../FileProcessor.ump"
    protected void hook140() throws DatabaseException,IOException{
     
   }
 
-  // line 392 "../../../../FileProcessor.ump"
+  // line 412 "../../../../FileProcessor.ump"
    protected String hook141(String traceMsg) throws DatabaseException{
     return traceMsg;
   }
@@ -430,12 +435,12 @@ nINsMigratedThisRun++;
    * protected void hook153() throws DatabaseException {
    * }
    */
-  // line 414 "../../../../FileProcessor.ump"
+  // line 434 "../../../../FileProcessor.ump"
    protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException{
     return b;
   }
 
-  // line 418 "../../../../FileProcessor.ump"
+  // line 437 "../../../../FileProcessor.ump"
    protected void hook160(DatabaseImpl db) throws DatabaseException{
     
   }
@@ -590,7 +595,7 @@ nINsMigratedThisRun++;
           obsoleteIter=obsoleteOffsets.iterator();
           nextObsolete=-1;
           readBufferSize=_this.cleaner.readBufferSize;
-          this.hook128();
+          Label128: //this.hook128();
           //this.hook161();
           Label161:
   adjustMem=(2 * readBufferSize) + obsoleteOffsets.getLogSize();
@@ -602,8 +607,8 @@ nINsMigratedThisRun++;
           }
           //original();
   
-          this.hook119();
-          this.hook127();
+          Label119: //this.hook119();
+          Label127: //this.hook127();
           Label154:
   checkPendingDbSet=new HashSet();
           //original();
@@ -665,7 +670,7 @@ nINsMigratedThisRun++;
    //this.hook156();
                 continue;
               }
-              this.hook120();
+              Label120: //this.hook120();
               if (isLN) {
                 targetLN=reader.getLN();
                 dbId2=reader.getDatabaseId();
@@ -673,7 +678,11 @@ nINsMigratedThisRun++;
                 dupKey=reader.getDupTreeKey();
                 aLsn=new Long(DbLsn.getFileOffset(lsn));
                 aLninfo=new LNInfo(targetLN,dbId2,key,dupKey);
-                this.hook130();
+                Label130: //this.hook130();
+    						p=null;
+          			Label131: //this.hook131();
+          			_this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
+  //end hook130
                 nProcessedLNs+=1;
                 if (nProcessedLNs % _this.PROCESS_PENDING_EVERY_N_LNS == 0) {
                   _this.cleaner.processPending();
@@ -693,7 +702,7 @@ nINsMigratedThisRun++;
                 assert false;
               }
             }
-            this.hook129();
+            Label129: //this.hook129();
             Label155:
   for (Iterator i=checkPendingDbSet.iterator(); i.hasNext(); ) {
             dbId=(DatabaseId)i.next();
@@ -721,50 +730,29 @@ nINsMigratedThisRun++;
           return true;
     }
   
-    // line 160 "../../../../FileProcessor_static.ump"
-     protected void hook119() throws DatabaseException,IOException{
-      
-    }
   
-    // line 162 "../../../../FileProcessor_static.ump"
-     protected void hook120() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 164 "../../../../FileProcessor_static.ump"
-     protected void hook127() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 166 "../../../../FileProcessor_static.ump"
-     protected void hook128() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 168 "../../../../FileProcessor_static.ump"
-     protected void hook129() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 170 "../../../../FileProcessor_static.ump"
+    /**
+     * protected void hook119() throws DatabaseException, IOException {
+     * }
+     * protected void hook120() throws DatabaseException, IOException {
+     * }
+     * protected void hook127() throws DatabaseException, IOException { }
+     * protected void hook128() throws DatabaseException, IOException {
+     * }
+     * protected void hook129() throws DatabaseException, IOException {
+     * }
+     */
+    // line 175 "../../../../FileProcessor_static.ump"
      protected void hook130() throws DatabaseException,IOException{
       p=null;
           this.hook131();
           _this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
     }
   
-    // line 175 "../../../../FileProcessor_static.ump"
-     protected void hook131() throws DatabaseException,IOException{
-      
-    }
-  
-    // line 177 "../../../../FileProcessor_static.ump"
-     protected void hook137() throws DatabaseException,IOException{
-      
-    }
-  
   
     /**
+     * protected void hook131() throws DatabaseException, IOException {}
+     * protected void hook137() throws DatabaseException, IOException {}
      * protected void hook145() throws DatabaseException, IOException {
      * }
      * protected void hook146() throws DatabaseException, IOException {
@@ -772,27 +760,27 @@ nINsMigratedThisRun++;
      * protected void hook147() throws DatabaseException, IOException {
      * }
      */
-    // line 185 "../../../../FileProcessor_static.ump"
+    // line 188 "../../../../FileProcessor_static.ump"
      protected void hook154() throws DatabaseException,IOException{
       
     }
   
-    // line 187 "../../../../FileProcessor_static.ump"
+    // line 190 "../../../../FileProcessor_static.ump"
      protected void hook155() throws DatabaseException,IOException{
       
     }
   
-    // line 189 "../../../../FileProcessor_static.ump"
+    // line 192 "../../../../FileProcessor_static.ump"
      protected void hook156() throws DatabaseException,IOException{
       
     }
   
-    // line 191 "../../../../FileProcessor_static.ump"
+    // line 194 "../../../../FileProcessor_static.ump"
      protected void hook161() throws DatabaseException,IOException{
       
     }
   
-    // line 193 "../../../../FileProcessor_static.ump"
+    // line 196 "../../../../FileProcessor_static.ump"
      protected void hook162() throws DatabaseException,IOException{
       
     }
@@ -801,75 +789,75 @@ nINsMigratedThisRun++;
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 124 "../../../../FileProcessor_static.ump"
+    // line 128 "../../../../FileProcessor_static.ump"
     protected FileProcessor _this ;
-  // line 125 "../../../../FileProcessor_static.ump"
-    protected Long fileNum ;
-  // line 126 "../../../../FileProcessor_static.ump"
-    protected PackedOffsets obsoleteOffsets ;
-  // line 127 "../../../../FileProcessor_static.ump"
-    protected TrackedFileSummary tfs ;
-  // line 128 "../../../../FileProcessor_static.ump"
-    protected PackedOffsets.Iterator obsoleteIter ;
   // line 129 "../../../../FileProcessor_static.ump"
-    protected long nextObsolete ;
+    protected Long fileNum ;
   // line 130 "../../../../FileProcessor_static.ump"
-    protected int readBufferSize ;
+    protected PackedOffsets obsoleteOffsets ;
   // line 131 "../../../../FileProcessor_static.ump"
-    protected int lookAheadCacheSize ;
+    protected TrackedFileSummary tfs ;
   // line 132 "../../../../FileProcessor_static.ump"
-    protected int adjustMem ;
+    protected PackedOffsets.Iterator obsoleteIter ;
   // line 133 "../../../../FileProcessor_static.ump"
-    protected MemoryBudget budget ;
+    protected long nextObsolete ;
   // line 134 "../../../../FileProcessor_static.ump"
-    protected Set checkPendingDbSet ;
+    protected int readBufferSize ;
   // line 135 "../../../../FileProcessor_static.ump"
-    protected Map dbCache ;
+    protected int lookAheadCacheSize ;
   // line 136 "../../../../FileProcessor_static.ump"
-    protected CleanerFileReader reader ;
+    protected int adjustMem ;
   // line 137 "../../../../FileProcessor_static.ump"
-    protected DbTree dbMapTree ;
+    protected MemoryBudget budget ;
   // line 138 "../../../../FileProcessor_static.ump"
-    protected TreeLocation location ;
+    protected Set checkPendingDbSet ;
   // line 139 "../../../../FileProcessor_static.ump"
-    protected int nProcessedLNs ;
+    protected Map dbCache ;
   // line 140 "../../../../FileProcessor_static.ump"
-    protected long lsn ;
+    protected CleanerFileReader reader ;
   // line 141 "../../../../FileProcessor_static.ump"
-    protected long fileOffset ;
+    protected DbTree dbMapTree ;
   // line 142 "../../../../FileProcessor_static.ump"
-    protected boolean isLN ;
+    protected TreeLocation location ;
   // line 143 "../../../../FileProcessor_static.ump"
-    protected boolean isIN ;
+    protected int nProcessedLNs ;
   // line 144 "../../../../FileProcessor_static.ump"
-    protected boolean isRoot ;
+    protected long lsn ;
   // line 145 "../../../../FileProcessor_static.ump"
-    protected boolean isObsolete ;
+    protected long fileOffset ;
   // line 146 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId1 ;
+    protected boolean isLN ;
   // line 147 "../../../../FileProcessor_static.ump"
-    protected LN targetLN ;
+    protected boolean isIN ;
   // line 148 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId2 ;
+    protected boolean isRoot ;
   // line 149 "../../../../FileProcessor_static.ump"
-    protected byte[] key ;
+    protected boolean isObsolete ;
   // line 150 "../../../../FileProcessor_static.ump"
-    protected byte[] dupKey ;
+    protected DatabaseId dbId1 ;
   // line 151 "../../../../FileProcessor_static.ump"
-    protected Long aLsn ;
+    protected LN targetLN ;
   // line 152 "../../../../FileProcessor_static.ump"
-    protected LNInfo aLninfo ;
+    protected DatabaseId dbId2 ;
   // line 153 "../../../../FileProcessor_static.ump"
-    protected Object p ;
+    protected byte[] key ;
   // line 154 "../../../../FileProcessor_static.ump"
-    protected IN targetIN ;
+    protected byte[] dupKey ;
   // line 155 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId3 ;
+    protected Long aLsn ;
   // line 156 "../../../../FileProcessor_static.ump"
-    protected DatabaseImpl db3 ;
+    protected LNInfo aLninfo ;
   // line 157 "../../../../FileProcessor_static.ump"
-    protected DatabaseId dbId ;
+    protected Object p ;
   // line 158 "../../../../FileProcessor_static.ump"
+    protected IN targetIN ;
+  // line 159 "../../../../FileProcessor_static.ump"
+    protected DatabaseId dbId3 ;
+  // line 160 "../../../../FileProcessor_static.ump"
+    protected DatabaseImpl db3 ;
+  // line 161 "../../../../FileProcessor_static.ump"
+    protected DatabaseId dbId ;
+  // line 162 "../../../../FileProcessor_static.ump"
     protected DatabaseImpl db ;
   
     
@@ -880,8 +868,7 @@ nINsMigratedThisRun++;
   
   @MethodObject
     @MethodObject
-    @MethodObject
-  // line 195 "../../../../FileProcessor_static.ump"
+  // line 198 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 5 "../../../../Statistics_FileProcessor_inner.ump"
   // line 4 "../../../../Latches_FileProcessor_inner.ump"
@@ -906,7 +893,7 @@ nINsMigratedThisRun++;
     public void delete()
     {}
   
-    // line 197 "../../../../FileProcessor_static.ump"
+    // line 200 "../../../../FileProcessor_static.ump"
     public  FileProcessor_processLN(FileProcessor _this, Long fileNum, TreeLocation location, Long offset, LNInfo info, Object lookAheadCachep, Map dbCache){
       this._this=_this;
           this.fileNum=fileNum;
@@ -917,13 +904,13 @@ nINsMigratedThisRun++;
           this.dbCache=dbCache;
     }
   
-    // line 206 "../../../../FileProcessor_static.ump"
+    // line 209 "../../../../FileProcessor_static.ump"
     public void execute() throws DatabaseException{
       // line 7 "../../../../Statistics_FileProcessor_inner.ump"
       _this.nLNsCleanedThisRun++;
                   //original();
       // END OF UMPLE BEFORE INJECTION
-      this.hook132();
+      Label132: //this.hook132();
           ln=info.getLN();
           key=info.getKey();
           dupKey=info.getDupKey();
@@ -991,117 +978,80 @@ nINsMigratedThisRun++;
             processedHere=false;
             _this.processFoundLN(info,logLsn,treeLsn,bin,index,parentDIN);
             completed=true;
-            this.hook133();
+            Label133: //this.hook133();
             return;
           }
       finally {
-            this.hook135();
-            this.hook126();
-          }
-    }
-  
-    // line 295 "../../../../FileProcessor_static.ump"
-     protected void hook126() throws DatabaseException{
-      
-    }
-  
-    // line 297 "../../../../FileProcessor_static.ump"
-     protected void hook132() throws DatabaseException{
-      
-    }
-  
-    // line 299 "../../../../FileProcessor_static.ump"
-     protected void hook133() throws DatabaseException{
-      
-    }
-  
-    // line 301 "../../../../FileProcessor_static.ump"
-     protected void hook135() throws DatabaseException{
-      if (parentDIN != null) {
+            Label135:
+  if (parentDIN != null) {
             parentDIN.releaseLatchIfOwner();
           }
           if (bin != null) {
             bin.releaseLatchIfOwner();
           }
-          original();
-    }
-  
-  
-    /**
-     * protected void hook148() throws DatabaseException {
-     * }
-     * protected void hook149() throws DatabaseException {
-     * }
-     * protected void hook150() throws DatabaseException {
-     * }
-     */
-    // line 309 "../../../../FileProcessor_static.ump"
-     protected void hook157() throws DatabaseException{
-      
-    }
-  
-    // line 311 "../../../../FileProcessor_static.ump"
-     protected void hook158() throws DatabaseException{
-      
+          //original();
+   //this.hook135();
+            Label126: //this.hook126();
+          }
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 267 "../../../../FileProcessor_static.ump"
+    // line 270 "../../../../FileProcessor_static.ump"
     protected FileProcessor _this ;
-  // line 268 "../../../../FileProcessor_static.ump"
-    protected Long fileNum ;
-  // line 269 "../../../../FileProcessor_static.ump"
-    protected TreeLocation location ;
-  // line 270 "../../../../FileProcessor_static.ump"
-    protected Long offset ;
   // line 271 "../../../../FileProcessor_static.ump"
-    protected LNInfo info ;
+    protected Long fileNum ;
   // line 272 "../../../../FileProcessor_static.ump"
-    protected Object lookAheadCachep ;
+    protected TreeLocation location ;
   // line 273 "../../../../FileProcessor_static.ump"
-    protected Map dbCache ;
+    protected Long offset ;
   // line 274 "../../../../FileProcessor_static.ump"
-    protected LN ln ;
+    protected LNInfo info ;
   // line 275 "../../../../FileProcessor_static.ump"
-    protected byte[] key ;
+    protected Object lookAheadCachep ;
   // line 276 "../../../../FileProcessor_static.ump"
-    protected byte[] dupKey ;
+    protected Map dbCache ;
   // line 277 "../../../../FileProcessor_static.ump"
-    protected long logLsn ;
+    protected LN ln ;
   // line 278 "../../../../FileProcessor_static.ump"
-    protected DatabaseImpl db ;
+    protected byte[] key ;
   // line 279 "../../../../FileProcessor_static.ump"
-    protected boolean processedHere ;
+    protected byte[] dupKey ;
   // line 280 "../../../../FileProcessor_static.ump"
-    protected boolean obsolete ;
+    protected long logLsn ;
   // line 281 "../../../../FileProcessor_static.ump"
-    protected boolean completed ;
+    protected DatabaseImpl db ;
   // line 282 "../../../../FileProcessor_static.ump"
-    protected BIN bin ;
+    protected boolean processedHere ;
   // line 283 "../../../../FileProcessor_static.ump"
-    protected DIN parentDIN ;
+    protected boolean obsolete ;
   // line 284 "../../../../FileProcessor_static.ump"
-    protected boolean b ;
+    protected boolean completed ;
   // line 285 "../../../../FileProcessor_static.ump"
-    protected Tree tree ;
+    protected BIN bin ;
   // line 286 "../../../../FileProcessor_static.ump"
-    protected boolean parentFound ;
+    protected DIN parentDIN ;
   // line 287 "../../../../FileProcessor_static.ump"
-    protected int index ;
+    protected boolean b ;
   // line 288 "../../../../FileProcessor_static.ump"
-    protected boolean isDupCountLN ;
+    protected Tree tree ;
   // line 289 "../../../../FileProcessor_static.ump"
-    protected long treeLsn ;
+    protected boolean parentFound ;
   // line 290 "../../../../FileProcessor_static.ump"
-    protected ChildReference dclRef ;
+    protected int index ;
   // line 291 "../../../../FileProcessor_static.ump"
-    protected long lsn ;
+    protected boolean isDupCountLN ;
   // line 292 "../../../../FileProcessor_static.ump"
-    protected Long myOffset ;
+    protected long treeLsn ;
   // line 293 "../../../../FileProcessor_static.ump"
+    protected ChildReference dclRef ;
+  // line 294 "../../../../FileProcessor_static.ump"
+    protected long lsn ;
+  // line 295 "../../../../FileProcessor_static.ump"
+    protected Long myOffset ;
+  // line 296 "../../../../FileProcessor_static.ump"
     protected LNInfo myInfo ;
   
     
@@ -1110,83 +1060,83 @@ nINsMigratedThisRun++;
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 42 "../../../../FileProcessor.ump"
+  // line 41 "../../../../FileProcessor.ump"
   private static final int PROCESS_PENDING_EVERY_N_LNS = 100 ;
-// line 47 "../../../../FileProcessor.ump"
+// line 46 "../../../../FileProcessor.ump"
   private static final boolean PROHIBIT_DELTAS_WHEN_FETCHING = false ;
-// line 49 "../../../../FileProcessor.ump"
+// line 48 "../../../../FileProcessor.ump"
   private static final boolean DEBUG_TRACING = false ;
-// line 51 "../../../../FileProcessor.ump"
+// line 50 "../../../../FileProcessor.ump"
   private EnvironmentImpl env ;
-// line 53 "../../../../FileProcessor.ump"
+// line 52 "../../../../FileProcessor.ump"
   private Cleaner cleaner ;
-// line 55 "../../../../FileProcessor.ump"
+// line 54 "../../../../FileProcessor.ump"
   private FileSelector fileSelector ;
-// line 57 "../../../../FileProcessor.ump"
+// line 56 "../../../../FileProcessor.ump"
   private UtilizationProfile profile ;
 
-// line 103 "../../../../FileProcessor.ump"
+// line 102 "../../../../FileProcessor.ump"
   public synchronized int doClean (boolean invokedFromDaemon, boolean cleanMultipleFiles, boolean forceCleaning)
-	    throws DatabaseException 
+    throws DatabaseException 
   {
     if (env.isClosed()) {
-	    return 0;
-	}
-	int nOriginalLogFiles = profile.getNumberOfFiles();
-	int nFilesCleaned = 0;
-	while (true) {
-	    if (nFilesCleaned >= nOriginalLogFiles) {
-		break;
-	    }
-	    if (env.isClosing()) {
-		break;
-	    }
-	    cleaner.processPending();
-	    cleaner.deleteSafeToDeleteFiles();
-	    boolean needLowUtilizationSet = cleaner.clusterResident || cleaner.clusterAll;
-	    Long fileNum = fileSelector.selectFileForCleaning(profile, forceCleaning, needLowUtilizationSet,
-		    cleaner.maxBatchFiles);
-	    cleaner.updateReadOnlyFileCollections();
-	    if (fileNum == null) {
-		break;
-	    }
-	    Label138: //this.hook138();
-	    boolean finished = false;
-	    long fileNumValue = fileNum.longValue();
-	    int runId = ++cleaner.nCleanerRuns;
-	    try {
-		String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
-		Label139: //traceMsg = this.hook139(traceMsg);
-		this.hook121(traceMsg);
-		if (DEBUG_TRACING) {
-		    System.out.println("\n" + traceMsg);
-		}
-		if (processFile(fileNum)) {
-		    fileSelector.addCleanedFile(fileNum);
-		    nFilesCleaned += 1;
-		    Label140: //this.hook140();
-		    finished = true;
-		}
-	    } catch (IOException IOE) {
-		this.hook122(IOE);
-		throw new DatabaseException(IOE);
-	    } finally {
-		if (!finished) {
-		    fileSelector.putBackFileForCleaning(fileNum);
-		}
-		String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue)
-			+ " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
-		Label141: //traceMsg = this.hook141(traceMsg);
-		this.hook123(traceMsg);
-		if (DEBUG_TRACING) {
-		    System.out.println("\n" + traceMsg);
-		}
-	    }
-	    if (!cleanMultipleFiles) {
-		break;
-	    }
-	}
-	return nFilesCleaned;
+            return 0;
+        }
+        int nOriginalLogFiles = profile.getNumberOfFiles();
+        int nFilesCleaned = 0;
+        while (true) {
+            if (nFilesCleaned >= nOriginalLogFiles) {
+                break;
+            }
+            if (env.isClosing()) {
+                break;
+            }
+            cleaner.processPending();
+            cleaner.deleteSafeToDeleteFiles();
+            boolean needLowUtilizationSet = cleaner.clusterResident || cleaner.clusterAll;
+            Long fileNum = fileSelector.selectFileForCleaning(profile, forceCleaning, needLowUtilizationSet,
+                cleaner.maxBatchFiles);
+            cleaner.updateReadOnlyFileCollections();
+            if (fileNum == null) {
+                break;
+            }
+            Label138: //this.hook138();
+                boolean finished = false;
+            long fileNumValue = fileNum.longValue();
+            int runId = ++cleaner.nCleanerRuns;
+            try {
+                String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
+                Label139: //traceMsg = this.hook139(traceMsg);
+                Label121: //this.hook121(traceMsg);
+                if (DEBUG_TRACING) {
+                    System.out.println("\n" + traceMsg);
+                }
+                if (processFile(fileNum)) {
+                    fileSelector.addCleanedFile(fileNum);
+                    nFilesCleaned += 1;
+                    Label140: //this.hook140();
+                        finished = true;
+                }
+            } catch (IOException IOE) {
+                Label122: //this.hook122(IOE);
+                throw new DatabaseException(IOE);
+            } finally {
+                if (!finished) {
+                    fileSelector.putBackFileForCleaning(fileNum);
+                }
+                String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue) +
+                    " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
+                Label141: //traceMsg = this.hook141(traceMsg);
+                Label123:    //this.hook123(traceMsg);
+                if (DEBUG_TRACING) {
+                    System.out.println("\n" + traceMsg);
+                }
+            }
+            if (!cleanMultipleFiles) {
+                break;
+            }
+        }
+        return nFilesCleaned;
   }
 // line 5 "../../../../Statistics_FileProcessor.ump"
   private int nINsObsoleteThisRun = 0 ;

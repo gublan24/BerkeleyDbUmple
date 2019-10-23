@@ -44,7 +44,7 @@ public class LogBufferPool
   public  LogBufferPool(FileManager fileManager, EnvironmentImpl envImpl) throws DatabaseException{
     this.fileManager = fileManager;
 	this.envImpl = envImpl;
-	this.hook485(envImpl);
+	Label485: //this.hook485(envImpl);
 	DbConfigManager configManager = envImpl.getConfigManager();
 	runInMemory = configManager.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY);
 	reset(configManager);
@@ -71,9 +71,14 @@ public class LogBufferPool
 	for (int i = 0; i < numBuffers; i++) {
 	    newPool.add(new LogBuffer(newBufferSize, envImpl));
 	}
-	this.hook486();
+	Label486: //this.hook486();
 	bufferPool = newPool;
 	logBufferSize = newBufferSize;
+    
+    // line 18 "../../../../Latches_LogBufferPool.ump"
+    //original(configManager);
+    	bufferPoolLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -104,9 +109,73 @@ public class LogBufferPool
   // line 81 "../../../../LogBufferPool.ump"
   public void writeBufferToFile(int sizeNeeded) throws IOException,DatabaseException{
     int bufferSize = ((logBufferSize > sizeNeeded) ? logBufferSize : sizeNeeded);
-	this.hook488();
+	Label488:
+currentWriteBuffer.latchForWrite();
+	//original();
+ //this.hook488();
 	LogBuffer latchedBuffer = currentWriteBuffer;
-	this.hook487(bufferSize, latchedBuffer);
+	Label487: //this.hook487(bufferSize, latchedBuffer);
+  ByteBuffer currentByteBuffer = currentWriteBuffer.getDataBuffer();
+	int savePosition = currentByteBuffer.position();
+	int saveLimit = currentByteBuffer.limit();
+	currentByteBuffer.flip();
+	if (runInMemory) {
+	    Label492:
+latchedBuffer.release();
+	//original(latchedBuffer);
+ //this.hook492(latchedBuffer);
+	    latchedBuffer = null;
+	    Label491:
+bufferPoolLatch.acquire();
+	//original();
+ //this.hook491();
+	    currentWriteBuffer = new LogBuffer(bufferSize, envImpl);
+	    bufferPool.add(currentWriteBuffer);
+	    Label490:
+bufferPoolLatch.release();
+	//original();
+ //this.hook490();
+	} else {
+	    try {
+		fileManager.writeLogBuffer(currentWriteBuffer);
+		currentWriteBuffer.getDataBuffer().rewind();
+		Label494:
+latchedBuffer.release();
+	//original(latchedBuffer);
+ //this.hook494(latchedBuffer);
+		latchedBuffer = null;
+		LogBuffer nextToUse = null;
+		Label493:
+//	try {	    //original(nextToUse);} finally {
+	    bufferPoolLatch.releaseIfOwner();
+	//}
+ //this.hook493(nextToUse);
+		Label495:
+bufferPoolLatch.acquire();
+	//original();
+ //this.hook495();
+		Iterator iter = bufferPool.iterator();
+		nextToUse = (LogBuffer) iter.next();
+		boolean done = bufferPool.remove(nextToUse);
+		assert done;
+		nextToUse.reinit();
+		bufferPool.add(nextToUse);
+		currentWriteBuffer = nextToUse;
+//End of hook 493
+	    } catch (DatabaseException DE) {
+		currentByteBuffer.position(savePosition);
+		currentByteBuffer.limit(saveLimit);
+		throw DE;
+	    }
+	}
+Label487_1:
+//	try { //original(bufferSize, latchedBuffer);} finally {
+	    if (latchedBuffer != null) {
+		latchedBuffer.release();
+	    }
+//	}
+
+// End of hook487
   }
 
 
@@ -114,7 +183,7 @@ public class LogBufferPool
    * 
    * A loggable object has been freshly marshalled into the write log buffer. 1. Update buffer so it knows what LSNs it contains. 2. If this object requires a flush, write this buffer out to the  backing file. Assumes log write latch is held.
    */
-  // line 91 "../../../../LogBufferPool.ump"
+  // line 127 "../../../../LogBufferPool.ump"
   public void writeCompleted(long lsn, boolean flushRequired) throws DatabaseException,IOException{
     currentWriteBuffer.registerLsn(lsn);
 	if (flushRequired) {
@@ -128,7 +197,7 @@ public class LogBufferPool
    * Find a buffer that holds this LSN.
    * @return the buffer that contains this LSN, latched and ready toread, or return null.
    */
-  // line 102 "../../../../LogBufferPool.ump"
+  // line 138 "../../../../LogBufferPool.ump"
   public LogBuffer getReadBuffer(long lsn) throws DatabaseException{
     LogBuffer foundBuffer = null;
 			Label489: //	foundBuffer = this.hook489(lsn, foundBuffer);
@@ -149,7 +218,7 @@ nCacheMiss++;
 			//original();
  //this.hook496();
 			}
-			return foundBuffer;
+Label489_1:
 	//End of hook489
 		if (foundBuffer == null) {
 			  return null;
@@ -158,118 +227,54 @@ nCacheMiss++;
 		}
   }
 
-  // line 128 "../../../../LogBufferPool.ump"
+  // line 164 "../../../../LogBufferPool.ump"
    protected void hook485(EnvironmentImpl envImpl) throws DatabaseException{
-    bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
-	original(envImpl);
+    
   }
 
-  // line 131 "../../../../LogBufferPool.ump"
+  // line 167 "../../../../LogBufferPool.ump"
    protected void hook486() throws DatabaseException{
-    bufferPoolLatch.acquire();
-	original();
-  }
-
-  // line 134 "../../../../LogBufferPool.ump"
-   protected void hook487(int bufferSize, LogBuffer latchedBuffer) throws IOException,DatabaseException{
-    ByteBuffer currentByteBuffer = currentWriteBuffer.getDataBuffer();
-	int savePosition = currentByteBuffer.position();
-	int saveLimit = currentByteBuffer.limit();
-	currentByteBuffer.flip();
-	if (runInMemory) {
-	    this.hook492(latchedBuffer);
-	    latchedBuffer = null;
-	    this.hook491();
-	    currentWriteBuffer = new LogBuffer(bufferSize, envImpl);
-	    bufferPool.add(currentWriteBuffer);
-	    this.hook490();
-	} else {
-	    try {
-		fileManager.writeLogBuffer(currentWriteBuffer);
-		currentWriteBuffer.getDataBuffer().rewind();
-		this.hook494(latchedBuffer);
-		latchedBuffer = null;
-		LogBuffer nextToUse = null;
-		this.hook493(nextToUse);
-	    } catch (DatabaseException DE) {
-		currentByteBuffer.position(savePosition);
-		currentByteBuffer.limit(saveLimit);
-		throw DE;
-	    }
-	}
-  }
-
-  // line 162 "../../../../LogBufferPool.ump"
-   protected void hook488() throws IOException,DatabaseException{
-    currentWriteBuffer.latchForWrite();
-	original();
+    
   }
 
 
   /**
-   * protected LogBuffer hook489(long lsn, LogBuffer foundBuffer) throws DatabaseException {
-   * Iterator iter = bufferPool.iterator();
-   * while (iter.hasNext()) {
-   * LogBuffer l = (LogBuffer) iter.next();
-   * if (l.containsLsn(lsn)) {
-   * foundBuffer = l;
-   * break;
+   * protected void hook487(int bufferSize, LogBuffer latchedBuffer) throws IOException, DatabaseException {
+   * ByteBuffer currentByteBuffer = currentWriteBuffer.getDataBuffer();
+   * int savePosition = currentByteBuffer.position();
+   * int saveLimit = currentByteBuffer.limit();
+   * currentByteBuffer.flip();
+   * if (runInMemory) {
+   * this.hook492(latchedBuffer);
+   * latchedBuffer = null;
+   * this.hook491();
+   * currentWriteBuffer = new LogBuffer(bufferSize, envImpl);
+   * bufferPool.add(currentWriteBuffer);
+   * this.hook490();
+   * } else {
+   * 
+   * fileManager.writeLogBuffer(currentWriteBuffer);
+   * currentWriteBuffer.getDataBuffer().rewind();
+   * this.hook494(latchedBuffer);
+   * latchedBuffer = null;
+   * LogBuffer nextToUse = null;
+   * this.hook493(nextToUse);
+   * } catch (DatabaseException DE) {
+   * currentByteBuffer.position(savePosition);
+   * currentByteBuffer.limit(saveLimit);
+   * throw DE;
    * }
-   * }
-   * if (foundBuffer == null && currentWriteBuffer.containsLsn(lsn)) {
-   * foundBuffer = currentWriteBuffer;
-   * }
-   * if (foundBuffer == null) {
-   * Label496: //this.hook496();
-   * }
-   * return foundBuffer;
+   * 
    * }
    */
-  // line 183 "../../../../LogBufferPool.ump"
-   protected void hook490() throws IOException,DatabaseException{
-    bufferPoolLatch.release();
-	original();
-  }
-
-  // line 186 "../../../../LogBufferPool.ump"
-   protected void hook491() throws IOException,DatabaseException{
-    bufferPoolLatch.acquire();
-	original();
-  }
-
-  // line 189 "../../../../LogBufferPool.ump"
-   protected void hook492(LogBuffer latchedBuffer) throws IOException,DatabaseException{
-    latchedBuffer.release();
-	original(latchedBuffer);
-  }
-
-  // line 192 "../../../../LogBufferPool.ump"
-   protected void hook493(LogBuffer nextToUse) throws IOException,DatabaseException{
-    this.hook495();
-	Iterator iter = bufferPool.iterator();
-	nextToUse = (LogBuffer) iter.next();
-	boolean done = bufferPool.remove(nextToUse);
-	assert done;
-	nextToUse.reinit();
-	bufferPool.add(nextToUse);
-	currentWriteBuffer = nextToUse;
-  }
-
-  // line 203 "../../../../LogBufferPool.ump"
-   protected void hook494(LogBuffer latchedBuffer) throws IOException,DatabaseException{
-    latchedBuffer.release();
-	original(latchedBuffer);
-  }
-
-  // line 206 "../../../../LogBufferPool.ump"
-   protected void hook495() throws IOException,DatabaseException{
-    bufferPoolLatch.acquire();
-	original();
+  // line 199 "../../../../LogBufferPool.ump"
+   protected void hook488() throws IOException,DatabaseException{
+    
   }
 
   // line 12 "../../../../Statistics_LogBufferPool.ump"
   public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
-    // line 40 "../../../../Statistics_LogBufferPool.ump"
+    // line 46 "../../../../Statistics_LogBufferPool.ump"
     nNotResident++;
     			//return original(lsn, foundBuffer);
     // END OF UMPLE BEFORE INJECTION
@@ -283,26 +288,21 @@ nCacheMiss++;
 			long bufferBytes = 0;
 			int nLogBuffers = 0;
 			Label483: //this.hook483(bufferBytes, nLogBuffers);
+	try {
 			Iterator iter = bufferPool.iterator();
 				while (iter.hasNext()) {
 	    		LogBuffer l = (LogBuffer) iter.next();
 	    		nLogBuffers++;
 	    		bufferBytes += l.getCapacity();
 				}
-			// End hook483
+			// End hook483	
+} 
+finally {
+
 			stats.setNLogBuffers(nLogBuffers);
 			stats.setBufferBytes(bufferBytes);
-  }
-
-  // line 43 "../../../../Latches_LogBufferPool.ump"
-   protected LogBuffer hook489(long lsn, LogBuffer foundBuffer) throws DatabaseException{
-    bufferPoolLatch.acquire();
-	try {
-	    foundBuffer = original(lsn, foundBuffer);
-	} finally {
-	    bufferPoolLatch.releaseIfOwner();
-	}
-	return foundBuffer;
+Label483_1: ;;//
+}
   }
   
   //------------------------
@@ -329,6 +329,35 @@ nCacheMiss++;
   private long nCacheMiss = 0 ;
 // line 7 "../../../../Latches_LogBufferPool.ump"
   private Latch bufferPoolLatch ;
+
+// line 9 "../../../../Latches_LogBufferPool.ump"
+  after Label485: LogBufferPool (FileManager fileManager, EnvironmentImpl envImpl) 
+  {
+    bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
+	//original(envImpl);
+  }
+
+// line 22 "../../../../Latches_LogBufferPool.ump"
+  after Label486: void reset (DbConfigManager ) 
+  {
+    bufferPoolLatch.acquire();
+	//original();
+  }
+
+// line 42 "../../../../Latches_LogBufferPool.ump"
+  protected LogBuffer hook489: getReadBuffer (long ) 
+  {
+    bufferPoolLatch.acquire();
+//	try {foundBuffer = //original(lsn, foundBuffer);} finally {	    bufferPoolLatch.releaseIfOwner();}
+	//return foundBuffer;
+  }
+
+// line 48 "../../../../Latches_LogBufferPool.ump"
+  protected LogBuffer Label489_1: getReadBuffer (long ) 
+  {
+    bufferPoolLatch.releaseIfOwner();
+	//return foundBuffer;
+  }
 
   
 }

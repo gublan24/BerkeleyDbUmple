@@ -309,20 +309,20 @@ public class UtilizationTracker
           a=_this.snapshot;
           for (int i=0; i < a.length; i+=1) {
             tfs=a[i];
-            //this.hook198();
-            Label198:
+  
+            Label198:          //this.hook198();
             b1=tfs.getAllowFlush();
-            //this.hook197();
-            Label197:
+  
+            Label197:          //this.hook197();
             if (b1) {
-             // this.hook199();
-               Label199:
+  
+               Label199:           // this.hook199();
               bestFile=tfs;
             }
           }
           b2=bestFile != null;
-          //this.hook196();
-            Label196:
+  
+            Label196:        //this.hook196();
           if (b2) {
             _this.env.getUtilizationProfile().flushFileSummary(bestFile);
             totalEvicted+=largestBytes;

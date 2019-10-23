@@ -1,11 +1,14 @@
 namespace com.sleepycat.je.tree;
 
 class Tree {
+
     depend com.sleepycat.je.latch.SharedLatch;
     depend com.sleepycat.je.latch.LatchSupport;
-    private SharedLatch rootLatch;
+    
+private SharedLatch rootLatch;
 
     private void releaseNodeLadderLatches(ArrayList nodeLadder) {
+
         ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
         while (iter.hasPrevious()) {
             SplitInfo info3 = (SplitInfo) iter.previous();
@@ -30,25 +33,23 @@ class Tree {
     }
 
     after Label670_1: withRootLatchedExclusive(WithRootLatched) {
-
         //	try {	    //original(wrl);} finally {
         rootLatch.release();
         //	}
     }
 
     protected void Label671_1: withRootLatchedExclusive(WithRootLatched) {
-
         //	try {   //original(wrl);	} finally {
         rootLatch.release();
         //}
     }
 
-    after Label672: {
+    after Label672: delete(byte , UtilizationTracker ){
         rootLatch.acquireExclusive();
     }
 
 
-    after Label672_1: {
+    after Label672_1: delete(byte , UtilizationTracker  ){
         //finally {
         releaseNodeLadderLatches(nodeLadder);
         if (rootIN != null) {
@@ -151,7 +152,7 @@ class Tree {
         }
     }
 
-    after Label686_1::getNextBinInternal(boolean, BIN, boolean) {
+    after Label686_1: getNextBinInternal(boolean, BIN, boolean) {
         //					try {							//original(traverseWithinDupTree, forward, idKey, next, parent, nextIN);} 
 
         catch (DatabaseException e) {
@@ -235,6 +236,7 @@ class Tree {
             parent.releaseLatchIfOwner();
             throw e;
         }
+    }
 
         after Label699: searchSubTreeUntilSplit(IN, byte, long, boolean) {
             assert parent.isLatchOwner();
@@ -316,22 +318,22 @@ class Tree {
         }
 
 
-        after Label712: findBinForInsert(byte, LogManager, INList, CursorImpl) {
+        after Label712: findBinForInsert(byte , LogManager , INList , CursorImpl ) {
             bin.releaseLatch();
             //original(bin);
         }
 
-        after Label713: accountForSubtreeRemoval(INList, IN, UtilizationTracker) {
+        after Label713: accountForSubtreeRemoval(INList , IN , UtilizationTracker ) {
             inList.latchMajor();
         }
 
 
-        after Label713_1: accountForSubtreeRemoval(INList, IN, UtilizationTracker) {
+        after Label713_1: accountForSubtreeRemoval(INList , IN , UtilizationTracker ) {
             inList.releaseMajorLatch();
 
         }
 
-        after Label714: validateDelete(int) {
+        after Label714: validateDelete(int ) {
             rootLatch.acquireShared();
             try {
                 //original(inMemoryList);
@@ -340,22 +342,22 @@ class Tree {
             }
         }
 
-        after Label715: validateDelete(int) {
+        after Label715: validateDelete(int ) {
             rootLatch.acquireShared();
         }
-        after Label715_1: validateDelete(int) {
+        after Label715_1: validateDelete(int ) {
 
             //	try {    //original(index);	} finally {
             rootLatch.release();
             //}
         }
 
-        after Label728: withRootLatchedShared(WithRootLatched) {
+        after Label728: withRootLatchedShared(WithRootLatched ) {
             rootLatch.acquireExclusive();
             //original();
         }
 
-        after Label729: withRootLatchedShared(WithRootLatched) {
+        after Label729: withRootLatchedShared(WithRootLatched ) {
             rootLatch.acquireShared();
             //original();
         }
@@ -385,7 +387,7 @@ class Tree {
             //original(next);
         }
 
-        after Label735(IN nextIN) {
+        after Label735(IN  ) {
             nextIN.latch();
             assert(LatchSupport.countLatchesHeld() == 2): LatchSupport.latchesHeldToString();
             //original(nextIN);

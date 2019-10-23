@@ -74,7 +74,7 @@ class CursorImpl {
         original();
       }
     }
-  @MethodObject static class CursorImpl_latchDBIN {
+   static class CursorImpl_latchDBIN {
       after Label246() throws DatabaseException {
         while (_this.dupBin != null) {
           original();

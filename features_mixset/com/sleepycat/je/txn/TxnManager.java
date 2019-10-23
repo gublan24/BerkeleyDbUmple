@@ -49,10 +49,19 @@ public class TxnManager
 
   // line 40 "../../../../TxnManager.ump"
    public  TxnManager(EnvironmentImpl env) throws DatabaseException{
-    this.hook822(env);
+    Label822:
+if (EnvironmentImpl.getFairLatches()) {
+			  lockManager = new LatchedLockManager(env);
+		} else
+           ;  //this.hook822(env);
+   			if (env.isNoLocking()) {
+            lockManager = new DummyLockManager(env);
+        } else {
+            lockManager = new SyncedLockManager(env);
+        }
         this.env = env;
         allTxns = new HashSet();
-        this.hook821(env);
+        Label821:           ;  //this.hook821(env);
         allXATxns = Collections.synchronizedMap(new HashMap());
         thread2Txn = Collections.synchronizedMap(new HashMap());
         Label824:
@@ -62,7 +71,7 @@ numCommits = 0;
         numXACommits = 0;
         numXAAborts = 0;
         //original();
- //this.hook824();
+            ;  //this.hook824();
         lastUsedTxnId = 0;
   }
 
@@ -74,7 +83,7 @@ numCommits = 0;
    * @param txnConfigspecifies txn attributes
    * @return the new txn
    */
-  // line 78 "../../../../TxnManager.ump"
+  // line 83 "../../../../TxnManager.ump"
    public Txn txnBegin(Transaction parent, TransactionConfig txnConfig) throws DatabaseException{
     if (parent != null) {
             throw new DatabaseException("Nested transactions are not supported yet.");
@@ -87,7 +96,7 @@ numCommits = 0;
    * 
    * Give transactions and environment access to lock manager.
    */
-  // line 88 "../../../../TxnManager.ump"
+  // line 93 "../../../../TxnManager.ump"
    public LockManager getLockManager(){
     return lockManager;
   }
@@ -97,12 +106,20 @@ numCommits = 0;
    * 
    * Called when txn is created.
    */
-  // line 95 "../../../../TxnManager.ump"
+  // line 100 "../../../../TxnManager.ump"
   public void registerTxn(Txn txn) throws DatabaseException{
+    // line 27 "../../../../Latches_TxnManager.ump"
+    allTxnLatch.acquire();
+    	//original(txn);
+    // END OF UMPLE BEFORE INJECTION
     allTxns.add(txn);
         if (txn.isSerializableIsolation()) {
             nActiveSerializable++;
         }
+    // line 33 "../../../../Latches_TxnManager.ump"
+    //original(txn);
+    	allTxnLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -110,10 +127,13 @@ numCommits = 0;
    * 
    * Called when txn ends.
    */
-  // line 105 "../../../../TxnManager.ump"
+  // line 110 "../../../../TxnManager.ump"
   public void unRegisterTxn(Txn txn, boolean isCommit) throws DatabaseException{
+    // line 42 "../../../../Latches_TxnManager.ump"
+    allTxnLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
     allTxns.remove(txn);
-        //	this.hook828(txn);
+        //	Label:           ;  //this.hook828(txn);
         Label828:
 env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
 //      original(txn);
@@ -125,10 +145,15 @@ if (isCommit) {
             numAborts++;
         }
         //original(isCommit);
- //this.hook825(isCommit);
+ //Label:           ;  //this.hook825(isCommit);
         if (txn.isSerializableIsolation()) {
             nActiveSerializable--;
         }
+    // line 46 "../../../../Latches_TxnManager.ump"
+    //try {	    //original(txn, isCommit);	} finally {
+    	    allTxnLatch.release();
+    	//}
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -136,11 +161,11 @@ if (isCommit) {
    * 
    * Called when txn is created.
    */
-  // line 118 "../../../../TxnManager.ump"
+  // line 123 "../../../../TxnManager.ump"
    public void registerXATxn(Xid xid, Txn txn, boolean isPrepare) throws DatabaseException{
     if (!allXATxns.containsKey(xid)) {
             allXATxns.put(xid, txn);
-            //	    this.hook829();
+            //	    Label:           ;  //this.hook829();
             Label829:
 env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
       //original();
@@ -151,7 +176,7 @@ if (isPrepare) {
             numXAPrepares++;
         }
         //original(isPrepare);
- //this.hook826(isPrepare);
+ //Label:           ;  //this.hook826(isPrepare);
   }
 
 
@@ -159,12 +184,12 @@ if (isPrepare) {
    * 
    * Called when txn ends.
    */
-  // line 130 "../../../../TxnManager.ump"
+  // line 135 "../../../../TxnManager.ump"
   public void unRegisterXATxn(Xid xid, boolean isCommit) throws DatabaseException{
     if (allXATxns.remove(xid) == null) {
             throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
         }
-        //	this.hook830();
+        //	Label:           ;  //this.hook830();
         Label830:
 env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
       //original();
@@ -176,7 +201,7 @@ if (isCommit) {
             numXAAborts++;
         }
          //        original(isCommit);
- //this.hook827(isCommit);
+ //Label:           ;  //this.hook827(isCommit);
   }
 
 
@@ -184,7 +209,7 @@ if (isCommit) {
    * 
    * Retrieve a Txn object from an Xid.
    */
-  // line 142 "../../../../TxnManager.ump"
+  // line 147 "../../../../TxnManager.ump"
    public Txn getTxnFromXid(Xid xid) throws DatabaseException{
     return (Txn) allXATxns.get(xid);
   }
@@ -194,7 +219,7 @@ if (isCommit) {
    * 
    * Called when txn is assoc'd with this thread.
    */
-  // line 149 "../../../../TxnManager.ump"
+  // line 154 "../../../../TxnManager.ump"
    public void setTxnForThread(Transaction txn){
     Thread curThread = Thread.currentThread();
         thread2Txn.put(curThread, txn);
@@ -205,7 +230,7 @@ if (isCommit) {
    * 
    * Called when txn is assoc'd with this thread.
    */
-  // line 157 "../../../../TxnManager.ump"
+  // line 162 "../../../../TxnManager.ump"
    public Transaction unsetTxnForThread() throws DatabaseException{
     Thread curThread = Thread.currentThread();
         return (Transaction) thread2Txn.remove(curThread);
@@ -216,12 +241,12 @@ if (isCommit) {
    * 
    * Retrieve a Txn object for this Thread.
    */
-  // line 165 "../../../../TxnManager.ump"
+  // line 170 "../../../../TxnManager.ump"
    public Transaction getTxnForThread() throws DatabaseException{
     return (Transaction) thread2Txn.get(Thread.currentThread());
   }
 
-  // line 169 "../../../../TxnManager.ump"
+  // line 174 "../../../../TxnManager.ump"
    public Xid[] XARecover() throws DatabaseException{
     Set xidSet = allXATxns.keySet();
         Xid[] ret = new Xid[xidSet.size()];
@@ -234,7 +259,7 @@ if (isCommit) {
    * 
    * Returns whether there are any active serializable transactions, excluding the transaction given (if non-null). This is intentionally returned without latching, since latching would not make the act of reading an integer more atomic than it already is.
    */
-  // line 179 "../../../../TxnManager.ump"
+  // line 184 "../../../../TxnManager.ump"
    public boolean areOtherSerializableTransactionsActive(Locker excludeLocker){
     int exclude = (excludeLocker != null && excludeLocker.isSerializableIsolation()) ? 1 : 0;
         return (nActiveSerializable - exclude > 0);
@@ -245,60 +270,73 @@ if (isCommit) {
    * 
    * Get the earliest LSN of all the active transactions, for checkpoint.
    */
-  // line 187 "../../../../TxnManager.ump"
-   public long getFirstActiveLsn() throws DatabaseException{
-    long firstActive = DbLsn.NULL_LSN;
-        firstActive = this.hook823(firstActive);
-        return firstActive;
-  }
-
   // line 192 "../../../../TxnManager.ump"
-   protected void hook821(EnvironmentImpl env) throws DatabaseException{
-    allTxnLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
-	original(env);
-  }
+   public long getFirstActiveLsn() throws DatabaseException{
+    try{
+						  long firstActive = DbLsn.NULL_LSN;
+						  Label823:
+allTxnLatch.acquire();
+ //firstActive = this.hook823(firstActive);
+							Iterator iter = allTxns.iterator();
+						  while (iter.hasNext()) {
+						      long txnFirstActive = ((Txn) iter.next()).getFirstActiveLsn();
+						      if (firstActive == DbLsn.NULL_LSN) {
+						          firstActive = txnFirstActive;
+						      } else if (txnFirstActive != DbLsn.NULL_LSN) {
+						          if (DbLsn.compareTo(txnFirstActive, firstActive) < 0) {
+						              firstActive = txnFirstActive;
+						          }
+						      }
+						  }
+			}
+			finally{
+			Label823_1:
+allTxnLatch.release();
 
-  // line 195 "../../../../TxnManager.ump"
-   protected void hook822(EnvironmentImpl env) throws DatabaseException{
-    if (env.isNoLocking()) {
-            lockManager = new DummyLockManager(env);
-        } else {
-            lockManager = new SyncedLockManager(env);
-        }
-  }
-
-  // line 203 "../../../../TxnManager.ump"
-   protected long hook823(long firstActive) throws DatabaseException{
-    Iterator iter = allTxns.iterator();
-        while (iter.hasNext()) {
-            long txnFirstActive = ((Txn) iter.next()).getFirstActiveLsn();
-            if (firstActive == DbLsn.NULL_LSN) {
-                firstActive = txnFirstActive;
-            } else if (txnFirstActive != DbLsn.NULL_LSN) {
-                if (DbLsn.compareTo(txnFirstActive, firstActive) < 0) {
-                    firstActive = txnFirstActive;
-                }
-            }
-        }
+			}
+//end of hook823
         return firstActive;
   }
 
 
   /**
+   * protected void hook821(EnvironmentImpl env) throws DatabaseException {}
+   * protected void hook822(EnvironmentImpl env) throws DatabaseException {
+   * if (env.isNoLocking()) {
+   * lockManager = new DummyLockManager(env);
+   * 
+   * lockManager = new SyncedLockManager(env);
+   * }
+   * }
+   * 
+   * protected long hook823(long firstActive) throws DatabaseException {
+   * Iterator iter = allTxns.iterator();
+   * while (iter.hasNext()) {
+   * long txnFirstActive = ((Txn) iter.next()).getFirstActiveLsn();
+   * if (firstActive == DbLsn.NULL_LSN) {
+   * firstActive = txnFirstActive;
+   * } else if (txnFirstActive != DbLsn.NULL_LSN) {
+   * if (DbLsn.compareTo(txnFirstActive, firstActive) < 0) {
+   * firstActive = txnFirstActive;
+   * }
+   * }
+   * }
+   * return firstActive;
+   * }
    * protected void hook824() throws DatabaseException {
    * }
    */
-  // line 220 "../../../../TxnManager.ump"
+  // line 242 "../../../../TxnManager.ump"
    protected void hook825(boolean isCommit) throws DatabaseException{
     
   }
 
-  // line 222 "../../../../TxnManager.ump"
+  // line 244 "../../../../TxnManager.ump"
    protected void hook826(boolean isPrepare) throws DatabaseException{
     
   }
 
-  // line 224 "../../../../TxnManager.ump"
+  // line 246 "../../../../TxnManager.ump"
    protected void hook827(boolean isCommit) throws DatabaseException{
     
   }
@@ -308,12 +346,12 @@ if (isCommit) {
    * protected void hook828(Txn txn) throws DatabaseException {
    * }
    */
-  // line 229 "../../../../TxnManager.ump"
+  // line 251 "../../../../TxnManager.ump"
    protected void hook829() throws DatabaseException{
     
   }
 
-  // line 231 "../../../../TxnManager.ump"
+  // line 253 "../../../../TxnManager.ump"
    protected void hook830() throws DatabaseException{
     
   }
@@ -327,6 +365,8 @@ if (isCommit) {
    public TransactionStats txnStat(StatsConfig config) throws DatabaseException{
     TransactionStats stats = new TransactionStats();
         Label820://this.hook820(config, stats);
+	try {
+
         stats.setNCommits(numCommits);
         stats.setNAborts(numAborts);
         stats.setNXAPrepares(numXAPrepares);
@@ -349,6 +389,10 @@ if (isCommit) {
             numXAAborts = 0;
         }
       //End hook820
+	} 
+finally {
+Label820_1: ; //
+}
         return stats;
   }
 
@@ -357,7 +401,7 @@ if (isCommit) {
    * 
    * Collect lock related stats.
    */
-  // line 53 "../../../../Statistics_TxnManager.ump"
+  // line 59 "../../../../Statistics_TxnManager.ump"
    public LockStats lockStat(StatsConfig config) throws DatabaseException{
     return lockManager.lockStat(config);
   }
@@ -385,19 +429,19 @@ if (isCommit) {
 // line 37 "../../../../TxnManager.ump"
   private int nActiveSerializable ;
 
-// line 53 "../../../../TxnManager.ump"
+// line 58 "../../../../TxnManager.ump"
   synchronized public void setLastTxnId (long lastId) 
   {
     this.lastUsedTxnId = lastId;
   }
 
-// line 60 "../../../../TxnManager.ump"
+// line 65 "../../../../TxnManager.ump"
   public synchronized long getLastTxnId () 
   {
     return lastUsedTxnId;
   }
 
-// line 67 "../../../../TxnManager.ump"
+// line 72 "../../../../TxnManager.ump"
   synchronized long incTxnId () 
   {
     return ++lastUsedTxnId;

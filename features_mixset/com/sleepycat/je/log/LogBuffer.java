@@ -46,7 +46,7 @@ buffer = ByteBuffer.allocateDirect(capacity);
 buffer = ByteBuffer.allocate(capacity);
 			//original(capacity);
  //this.hook482(capacity);
-            this.hook479(env);
+        Label479://    this.hook479(env);
         reinit();
   }
 
@@ -59,12 +59,20 @@ buffer = ByteBuffer.allocate(capacity);
 
   // line 32 "../../../../LogBuffer.ump"
   public void reinit() throws DatabaseException{
+    // line 30 "../../../../Latches_LogBuffer.ump"
+    readLatch.acquire();
+    	//original();
+    	//readLatch.release();
+    // END OF UMPLE BEFORE INJECTION
     buffer.clear();
         firstLsn = DbLsn.NULL_LSN;
         lastLsn = DbLsn.NULL_LSN;
     // line 20 "../../../../DiskFullErro_LogBuffer.ump"
     //original();
     	rewriteAllowed = false;
+    // END OF UMPLE AFTER INJECTION
+    // line 37 "../../../../Latches_LogBuffer.ump"
+    readLatch.release();
     // END OF UMPLE AFTER INJECTION
   }
 
@@ -83,8 +91,11 @@ buffer = ByteBuffer.allocate(capacity);
    * 
    * This LSN has been written to the log.
    */
-  // line 48 "../../../../LogBuffer.ump"
+  // line 49 "../../../../LogBuffer.ump"
   public void registerLsn(long lsn) throws DatabaseException{
+    // line 44 "../../../../Latches_LogBuffer.ump"
+    readLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
     if (lastLsn != DbLsn.NULL_LSN) {
             assert(DbLsn.compareTo(lsn, lastLsn) > 0);
         }
@@ -92,6 +103,9 @@ buffer = ByteBuffer.allocate(capacity);
         if (firstLsn == DbLsn.NULL_LSN) {
             firstLsn = lsn;
         }
+    // line 49 "../../../../Latches_LogBuffer.ump"
+    readLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -100,7 +114,7 @@ buffer = ByteBuffer.allocate(capacity);
    * Check capacity of buffer. Assumes that the log write latch is held.
    * @return true if this buffer can hold this many more bytes.
    */
-  // line 62 "../../../../LogBuffer.ump"
+  // line 63 "../../../../LogBuffer.ump"
   public boolean hasRoom(int numBytes){
     return (numBytes <= (buffer.capacity() - buffer.position()));
   }
@@ -110,7 +124,7 @@ buffer = ByteBuffer.allocate(capacity);
    * 
    * @return the actual data buffer.
    */
-  // line 69 "../../../../LogBuffer.ump"
+  // line 70 "../../../../LogBuffer.ump"
   public ByteBuffer getDataBuffer(){
     return buffer;
   }
@@ -120,7 +134,7 @@ buffer = ByteBuffer.allocate(capacity);
    * 
    * @return capacity in bytes
    */
-  // line 76 "../../../../LogBuffer.ump"
+  // line 77 "../../../../LogBuffer.ump"
   public int getCapacity(){
     return buffer.capacity();
   }
@@ -131,8 +145,12 @@ buffer = ByteBuffer.allocate(capacity);
    * Support for reading a log entry out of a still-in-memory log
    * @return true if this buffer holds the entry at this LSN. The buffer willbe latched for read. Returns false if LSN is not here, and releases the read latch.
    */
-  // line 84 "../../../../LogBuffer.ump"
+  // line 85 "../../../../LogBuffer.ump"
   public boolean containsLsn(long lsn) throws DatabaseException{
+    // line 59 "../../../../Latches_LogBuffer.ump"
+    readLatch.acquire();
+    	//return //original(lsn);
+    // END OF UMPLE BEFORE INJECTION
     boolean found = false;
         if ((firstLsn != DbLsn.NULL_LSN) &&
             ((DbLsn.compareTo(firstLsn, lsn) <= 0) && (DbLsn.compareTo(lastLsn, lsn) >= 0))) {
@@ -141,7 +159,10 @@ buffer = ByteBuffer.allocate(capacity);
         if (found) {
             return true;
         } else {
-            this.hook480();
+            Label480:
+readLatch.release();
+	//original();
+ //this.hook480();
             return false;
         }
   }
@@ -151,7 +172,7 @@ buffer = ByteBuffer.allocate(capacity);
    * 
    * @see LogSource#getBytes
    */
-  // line 101 "../../../../LogBuffer.ump"
+  // line 102 "../../../../LogBuffer.ump"
    public ByteBuffer getBytes(long fileOffset){
     ByteBuffer copy = null;
         while (true) {
@@ -171,31 +192,21 @@ buffer = ByteBuffer.allocate(capacity);
    * 
    * @see LogSource#getBytes
    */
-  // line 118 "../../../../LogBuffer.ump"
+  // line 119 "../../../../LogBuffer.ump"
    public ByteBuffer getBytes(long fileOffset, int numBytes){
     ByteBuffer copy = getBytes(fileOffset);
         assert(copy.remaining() >= numBytes): "copy.remaining=" + copy.remaining() + " numBytes=" + numBytes;
         return copy;
   }
 
-  // line 123 "../../../../LogBuffer.ump"
-   protected void hook479(EnvironmentImpl env) throws DatabaseException{
-    readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
-	original(env);
-  }
-
-  // line 125 "../../../../LogBuffer.ump"
-   protected void hook480() throws DatabaseException{
-    readLatch.release();
-	original();
-  }
-
 
   /**
+   * protected void hook479(EnvironmentImpl env) throws DatabaseException {}
+   * protected void hook480() throws DatabaseException {}
    * protected void hook481(int capacity) throws DatabaseException {}
    * protected void hook482(int capacity) throws DatabaseException {}
    */
-  // line 131 "../../../../LogBuffer.ump"
+  // line 132 "../../../../LogBuffer.ump"
    public void release() throws DatabaseException{
     readLatch.releaseIfOwner();
   }
@@ -236,6 +247,13 @@ buffer = ByteBuffer.allocate(capacity);
   private boolean rewriteAllowed ;
 // line 7 "../../../../Latches_LogBuffer.ump"
   private Latch readLatch ;
+
+// line 23 "../../../../Latches_LogBuffer.ump"
+  after Label479 :  LogBuffer (int , EnvironmentImpl ) 
+  {
+    readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
+	////original(env);
+  }
 
   
 }

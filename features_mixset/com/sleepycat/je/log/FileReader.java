@@ -194,7 +194,18 @@ if (doValidateChecksum) {
 		    }
 		}
 		FileHandle fileHandle = fileManager.getFileHandle(readBufferFileNum);
-		this.hook469(fileHandle);
+		Label469: //this.hook469(fileHandle);
+		try
+		{
+			readBuffer.clear();
+			fileManager.readFromFile(fileHandle.getFile(), readBuffer, readBufferFileStart);
+			assert EnvironmentImpl.maybeForceYield();
+		}
+		finally {
+					Label469_1:
+fileHandle.release();
+//fileHandle.release();
+			}
 		readBufferFileEnd = readBufferFileStart + threadSafeBufferPosition(readBuffer);
 		threadSafeBufferFlip(readBuffer);
 		threadSafeBufferPosition(readBuffer, (int) (currentEntryPrevOffset - readBufferFileStart));
@@ -215,7 +226,7 @@ if (doValidateChecksum) {
    * 
    * Read the log entry header, leaving the buffer mark at the beginning of the checksummed header data.
    */
-  // line 211 "../../../../FileReader.ump"
+  // line 220 "../../../../FileReader.ump"
    private void readHeader(ByteBuffer dataBuffer) throws DatabaseException{
     currentEntryChecksum = LogUtils.getUnsignedInt(dataBuffer);
 	dataBuffer.mark();
@@ -236,7 +247,7 @@ if (doValidateChecksum) {
    * @param collectDatais true if we need to actually look at the data. If false, weknow we're skipping this entry, and all we need to do is to count until we get to the right spot.
    * @return a byte buffer positioned at the head of the desired portion, ornull if we reached eof.
    */
-  // line 230 "../../../../FileReader.ump"
+  // line 239 "../../../../FileReader.ump"
    private ByteBuffer readData(int amountToRead, boolean collectData) throws IOException,DatabaseException,EOFException{
     int alreadyRead = 0;
 	ByteBuffer completeBuffer = null;
@@ -273,7 +284,7 @@ if (doValidateChecksum) {
    * 
    * Change the read buffer size if we start hitting large log entries so we don't get into an expensive cycle of multiple reads and piecing together of log entries.
    */
-  // line 264 "../../../../FileReader.ump"
+  // line 273 "../../../../FileReader.ump"
    private void adjustReadBufferSize(int amountToRead){
     int readBufferSize = readBuffer.capacity();
 	if (amountToRead > readBufferSize) {
@@ -299,7 +310,7 @@ if (doValidateChecksum) {
    * 
    * Copy the required number of bytes into the save buffer.
    */
-  // line 287 "../../../../FileReader.ump"
+  // line 296 "../../../../FileReader.ump"
    private void copyToSaveBuffer(int bytesNeeded){
     int bytesFromThisBuffer;
 	if (bytesNeeded <= readBuffer.remaining()) {
@@ -325,7 +336,7 @@ if (doValidateChecksum) {
    * 
    * Fill up the read buffer with more data.
    */
-  // line 310 "../../../../FileReader.ump"
+  // line 319 "../../../../FileReader.ump"
    private void fillReadBuffer(int bytesNeeded) throws DatabaseException,EOFException{
     FileHandle fileHandle = null;
 	try {
@@ -339,7 +350,10 @@ if (doValidateChecksum) {
 		    Long nextFile = fileManager.getFollowingFileNum(readBufferFileNum, forward);
 		    if (nextFile != null) {
 			readBufferFileNum = nextFile.longValue();
-			this.hook470(fileHandle);
+			Label470:
+fileHandle.release();
+	//original(fileHandle);
+ //this.hook470(fileHandle);
 			fileHandle = fileManager.getFileHandle(readBufferFileNum);
 			fileOk = true;
 			readBufferFileEnd = 0;
@@ -362,7 +376,12 @@ if (doValidateChecksum) {
 	    throw new DatabaseException(
 		    "Problem in fillReadBuffer, readBufferFileNum = " + readBufferFileNum + ": " + e.getMessage());
 	} finally {
-	    this.hook471(fileHandle);
+	    Label471:
+if (fileHandle != null) {
+	    fileHandle.release();
+	}
+	//original(fileHandle);
+ //this.hook471(fileHandle);
 	}
   }
 
@@ -371,7 +390,7 @@ if (doValidateChecksum) {
    * 
    * @return true if this reader should process this entry, or just skip overit.
    */
-  // line 353 "../../../../FileReader.ump"
+  // line 362 "../../../../FileReader.ump"
    protected boolean isTargetEntry(byte logEntryTypeNumber, byte logEntryTypeVersion) throws DatabaseException{
     return true;
   }
@@ -390,7 +409,7 @@ if (doValidateChecksum) {
    * 
    * Note that we catch Exception here because it is possible that another thread is modifying the state of buffer simultaneously. Specifically, this can happen if another thread is writing this log buffer out and it does (e.g.) a flip operation on it. The actual mark/pos of the buffer may be caught in an unpredictable state. We could add another latch to protect this buffer, but that's heavier weight than we need. So the easiest thing to do is to just retry the duplicate operation. See [#9822].
    */
-  // line 367 "../../../../FileReader.ump"
+  // line 376 "../../../../FileReader.ump"
    private Buffer threadSafeBufferFlip(ByteBuffer buffer){
     while (true) {
 	    try {
@@ -401,7 +420,7 @@ if (doValidateChecksum) {
 	}
   }
 
-  // line 377 "../../../../FileReader.ump"
+  // line 386 "../../../../FileReader.ump"
    private int threadSafeBufferPosition(ByteBuffer buffer){
     while (true) {
 	    try {
@@ -412,7 +431,7 @@ if (doValidateChecksum) {
 	}
   }
 
-  // line 387 "../../../../FileReader.ump"
+  // line 396 "../../../../FileReader.ump"
    private Buffer threadSafeBufferPosition(ByteBuffer buffer, int newPosition){
     while (true) {
 	    try {
@@ -421,37 +440,6 @@ if (doValidateChecksum) {
 		continue;
 	    }
 	}
-  }
-
-  // line 397 "../../../../FileReader.ump"
-   protected void hook469(FileHandle fileHandle) throws IOException,DatabaseException,EOFException{
-    readBuffer.clear();
-	fileManager.readFromFile(fileHandle.getFile(), readBuffer, readBufferFileStart);
-	assert EnvironmentImpl.maybeForceYield();
-  }
-
-  // line 403 "../../../../FileReader.ump"
-   protected void hook470(FileHandle fileHandle) throws DatabaseException,EOFException,IOException{
-    fileHandle.release();
-	original(fileHandle);
-  }
-
-  // line 406 "../../../../FileReader.ump"
-   protected void hook471(FileHandle fileHandle) throws DatabaseException,EOFException{
-    if (fileHandle != null) {
-	    fileHandle.release();
-	}
-	original(fileHandle);
-  }
-
-  // line 409 "../../../../FileReader.ump"
-   protected void hook472() throws IOException,DatabaseException{
-    
-  }
-
-  // line 412 "../../../../FileReader.ump"
-   protected void hook473(EnvironmentImpl env) throws IOException,DatabaseException{
-    
   }
 
 

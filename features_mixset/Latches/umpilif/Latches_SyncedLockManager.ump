@@ -2,86 +2,86 @@ namespace com.sleepycat.je.txn;
 
 class SyncedLockManager
 {
-    after Label782:attemptLock(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest){
+    after Label782:attemptLock(Long , Locker , LockType , boolean ){
 
 	synchronized (lockTableLatches[lockTableIndex]) {
 	   // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
 	}
     }
 
-    after Label783: {
+    after Label783: makeTimeoutMsg(String , Locker , long , LockType , LockGrantType , Lock , long , long , long , DatabaseImpl ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
-	    ////original(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,
-		    lockTableIndex);
+	    ////original(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,  lockTableIndex);
 	}
     }
 
-    after Label784:{
+    after Label784: releaseAndFindNotifyTargets(long , Lock , Locker , boolean ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    ////original(nodeId, lock, locker, removeFromLocker, lockTableIndex);
 	}
     }
 
-    after Label785: {
+    after Label785: transfer(long , Locker , Locker , boolean )  {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
 	}
     }
 
-    after Label786:
+    after Label786:  	transferMultiple(long , Locker , Locker ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, owningLocker, destLockers, lockTableIndex);
 	}
     }
 
-    after Label787:
+    after Label787:  demote(long , Locker ) {
+	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, locker, lockTableIndex);
 	}
     }
 
-    after Label788: {
+    after Label788: isLocked(Long ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    after Label789: {
+    after Label789: isOwner(Long , Locker , LockType ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, locker, type, lockTableIndex);
 	}
     }
 
-    after Label790: {
+    after Label790: isWaiter(Long , Locker ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, locker, lockTableIndex);
 	}
     }
 
-    after Label791:  {
+    after Label791:  nWaiters(Long ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    after Label792: {
+    after Label792: nOwners(Long ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    after Label793: {
+    after Label793:  getWriteOwnerLocker(Long ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, lockTableIndex);
 	}
     }
 
-    after Label794: {
+    after Label794:  validateOwnership(Long , Locker , LockType , boolean ,	    MemoryBudget ) {
 	synchronized (lockTableLatches[lockTableIndex]) {
 	    //original(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
 	}
     }
 
-    after Label795: {
+    after Label795: dumpLockTable(LockStats ) {
 	synchronized (lockTableLatches[i]) {
 	    //original(stats, i);
 	}

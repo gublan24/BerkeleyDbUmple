@@ -148,7 +148,10 @@ public class DbTree implements LoggableObject,LogReadable
 			cursor = new CursorImpl(idDatabase, locker);
 			continue;
 		    } finally {
-			this.hook299(cursor);
+			Label299:
+cursor.releaseBINs();
+	//original(cursor);
+ //this.hook299(cursor);
 		    }
 		    break;
 		}
@@ -177,7 +180,10 @@ public class DbTree implements LoggableObject,LogReadable
 	    boolean found = (result.nameCursor.searchAndPosition(key, null, SearchMode.SET, LockType.WRITE)
 		    & CursorImpl.FOUND) != 0;
 	    if (!found) {
-		this.hook300(result);
+		Label300:
+result.nameCursor.releaseBIN();
+	//original(result);
+ //this.hook300(result);
 		result.nameCursor.close();
 		result.nameCursor = null;
 		return result;
@@ -190,11 +196,17 @@ public class DbTree implements LoggableObject,LogReadable
 			"Can't " + action + " database " + databaseName + "," + handleCount + " open Dbs exist");
 	    }
 	} catch (UnsupportedEncodingException UEE) {
-	    this.hook301(result);
+	    Label301:
+result.nameCursor.releaseBIN();
+	//original(result);
+ //this.hook301(result);
 	    result.nameCursor.close();
 	    throw new DatabaseException(UEE);
 	} catch (DatabaseException e) {
-	    this.hook302(result);
+	    Label302:
+result.nameCursor.releaseBIN();
+	//original(result);
+ //this.hook302(result);
 	    result.nameCursor.close();
 	    throw e;
 	}
@@ -269,7 +281,10 @@ nameCursor.setAllowEviction(allowEviction);
 		}
 	    } finally {
 		if (nameCursor != null) {
-		    this.hook303(nameCursor);
+		    Label303:
+nameCursor.releaseBIN();
+	//original(nameCursor);
+ //this.hook303(nameCursor);
 		    nameCursor.close();
 		}
 	    }
@@ -369,7 +384,10 @@ idCursor.setAllowEviction(allowEviction);
 
 		    continue;
 		} finally {
-		    this.hook304(idCursor);
+		    Label304:
+idCursor.releaseBIN();
+	//original(idCursor);
+ //this.hook304(idCursor);
 		    idCursor.close();
 		    locker.operationEnd(true);
 		}
@@ -440,7 +458,10 @@ idCursor.setAllowEviction(allowEviction);
 	    throw new DatabaseException(UEE);
 	} finally {
 	    if (cursor != null) {
-		this.hook305(cursor);
+		Label305:
+cursor.releaseBINs();
+	//original(cursor);
+ //this.hook305(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -664,48 +685,6 @@ idCursor.setAllowEviction(allowEviction);
 	nameDatabase.getTree().dump();
   }
 
-  // line 642 "../../../../DbTree.ump"
-   protected void hook299(CursorImpl cursor) throws DatabaseException{
-    cursor.releaseBINs();
-	original(cursor);
-  }
-
-  // line 645 "../../../../DbTree.ump"
-   protected void hook300(NameLockResult result) throws DatabaseException,UnsupportedEncodingException{
-    result.nameCursor.releaseBIN();
-	original(result);
-  }
-
-  // line 648 "../../../../DbTree.ump"
-   protected void hook301(NameLockResult result) throws DatabaseException{
-    result.nameCursor.releaseBIN();
-	original(result);
-  }
-
-  // line 651 "../../../../DbTree.ump"
-   protected void hook302(NameLockResult result) throws DatabaseException{
-    result.nameCursor.releaseBIN();
-	original(result);
-  }
-
-  // line 654 "../../../../DbTree.ump"
-   protected void hook303(CursorImpl nameCursor) throws DatabaseException,UnsupportedEncodingException{
-    nameCursor.releaseBIN();
-	original(nameCursor);
-  }
-
-  // line 657 "../../../../DbTree.ump"
-   protected void hook304(CursorImpl idCursor) throws DatabaseException{
-    idCursor.releaseBIN();
-	original(idCursor);
-  }
-
-  // line 660 "../../../../DbTree.ump"
-   protected void hook305(CursorImpl cursor) throws DatabaseException{
-    cursor.releaseBINs();
-	original(cursor);
-  }
-
 
   /**
    * 
@@ -778,16 +757,15 @@ idCursor.setAllowEviction(allowEviction);
 				}
 				DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
 				nameCursor.putCurrent(dataDbt, null, null);
-				//this.hook296(locker, result, newDb);
-        Label296:
+
+        Label296:				//this.hook296(locker, result, newDb);
 				return recordCount;
 					}
 			} catch (CloneNotSupportedException CNSE) {
 					throw new DatabaseException(CNSE);
 			} finally {
 					if (nameCursor != null) {
-						//this.hook294(nameCursor);
-				    Label294:
+				    Label294:						//this.hook294(nameCursor);
 						nameCursor.close();
 					}
 			}
@@ -799,7 +777,7 @@ idCursor.setAllowEviction(allowEviction);
    * Truncate a database named by databaseName. Return the new DatabaseImpl object that represents the truncated database. The old one is marked as deleted.
    * @deprecated This method used by Database.truncate()
    */
-  // line 64 "../../../../Truncate_DbTree.ump"
+  // line 63 "../../../../Truncate_DbTree.ump"
   public TruncateResult truncate(Locker locker, DatabaseImpl oldDatabase, boolean returnCount) throws DatabaseException{
     CursorImpl nameCursor = new CursorImpl(nameDatabase, locker);
 			try {
@@ -843,8 +821,8 @@ idCursor.setAllowEviction(allowEviction);
 					if (returnCount) {
 				count = oldDatabase.countRecords();
 					}
-					//this.hook297(locker, oldDatabase);
-          Label297:
+
+          Label297:					//this.hook297(locker, oldDatabase);
 					DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
 					nameCursor.putCurrent(dataDbt, null, null);
 					return new TruncateResult(newDb, (int) count);
@@ -853,8 +831,8 @@ idCursor.setAllowEviction(allowEviction);
 			} catch (UnsupportedEncodingException UEE) {
 					throw new DatabaseException(UEE);
 			} finally {
-					//this.hook295(nameCursor);
-					Label295:
+
+					Label295:					//this.hook295(nameCursor);
 					nameCursor.close();
 			}
   }

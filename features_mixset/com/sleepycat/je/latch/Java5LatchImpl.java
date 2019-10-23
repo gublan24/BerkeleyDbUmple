@@ -55,10 +55,10 @@ public class Java5LatchImpl implements Latch
    public void acquire() throws DatabaseException{
     try {
 	    if (lock.isHeldByCurrentThread()) {
-		this.hook417();
+		Label417:           ;  //this.hook417();
 		throw new LatchException(name + " already held");
 	    }
-	    this.hook416();
+	    Label416:           ;  //this.hook416();
 	    lock.lock();
 	    assert noteLatch();
 	} finally {
@@ -77,15 +77,15 @@ public class Java5LatchImpl implements Latch
    public boolean acquireNoWait() throws LatchException{
     try {
 	    if (lock.isHeldByCurrentThread()) {
-		this.hook418();
+		Label418:           ;  //this.hook418();
 		throw new LatchException(name + " already held");
 	    }
 	    boolean ret = lock.tryLock();
 	    if (ret) {
 		assert noteLatch();
-		this.hook419();
+		Label419:           ;  //this.hook419();
 	    } else {
-		this.hook420();
+		Label420:           ;  //this.hook420();
 	    }
 	    return ret;
 	} finally {
@@ -129,7 +129,7 @@ public class Java5LatchImpl implements Latch
 		return true;
 	    }
 	    lock.unlock();
-	    this.hook421();
+	    Label421:           ;  //this.hook421();
 	    assert unNoteLatch(checkHeld);
 	} catch (IllegalMonitorStateException IMSE) {
 	    return true;
@@ -203,36 +203,6 @@ public class Java5LatchImpl implements Latch
 	    LatchSupport.latchTable.unNoteLatch(this, name);
 	    return true;
 	}
-  }
-
-  // line 153 "../../../../Latches_Java5LatchImpl.ump"
-   protected void hook416() throws DatabaseException{
-    
-  }
-
-  // line 156 "../../../../Latches_Java5LatchImpl.ump"
-   protected void hook417() throws DatabaseException{
-    
-  }
-
-  // line 159 "../../../../Latches_Java5LatchImpl.ump"
-   protected void hook418() throws LatchException{
-    
-  }
-
-  // line 162 "../../../../Latches_Java5LatchImpl.ump"
-   protected void hook419() throws LatchException{
-    
-  }
-
-  // line 165 "../../../../Latches_Java5LatchImpl.ump"
-   protected void hook420() throws LatchException{
-    
-  }
-
-  // line 168 "../../../../Latches_Java5LatchImpl.ump"
-   protected void hook421() throws IllegalMonitorStateException{
-    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

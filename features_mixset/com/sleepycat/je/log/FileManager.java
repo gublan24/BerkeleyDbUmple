@@ -110,7 +110,7 @@ fileCache = new FileCache(configManager);
         if (stopOnWriteProp != null) {
             stopOnWriteCount = Long.parseLong(stopOnWriteProp);
         }
-        this.hook452(envImpl);
+        Label452: //this.hook452(envImpl);
   }
 
 
@@ -453,9 +453,15 @@ fileHandle = fileCache.get(fileId);
             Label464:
 fileCache.add(fileId, fileHandle);
 
-                Label453:
+                
+fileHandle.latch();
+	//original(fileHandle);
+Label453:
                 if (fileHandle.getFile() == null) {
                     Label454:
+fileHandle.release();
+//	original(fileHandle);
+ ;//
                 }
             else {
                 throw new ReturnObject(fileHandle);
@@ -929,24 +935,12 @@ data.position(0);
         return fileHandle;
   }
 
-  // line 792 "../../../../FileManager.ump"
-   protected void hook452(EnvironmentImpl envImpl) throws DatabaseException{
-    
-  }
-
 
   /**
+   * protected void hook452(EnvironmentImpl envImpl) throws DatabaseException {}
    * protected void hook453(FileHandle fileHandle) throws LogException, DatabaseException {
    * }
-   */
-  // line 797 "../../../../FileManager.ump"
-   protected void hook454(FileHandle fileHandle) throws LogException,DatabaseException{
-    fileHandle.release();
-	original(fileHandle);
-  }
-
-
-  /**
+   * protected void hook454(FileHandle fileHandle) throws LogException, DatabaseException {}
    * protected void hook456(DbConfigManager configManager) throws DatabaseException {
    * }
    */
@@ -1087,12 +1081,6 @@ data.position(0);
     while (true) {
 			  original(fileNum, fileId, fileHandle);
 			}
-  }
-
-  // line 8 "../../../../Latches_FileManager.ump"
-   protected void hook453(FileHandle fileHandle) throws LogException,DatabaseException{
-    fileHandle.latch();
-	original(fileHandle);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1253,7 +1241,6 @@ data.position(0);
   
   
   
-  @MethodObject
   // line 75 "../../../../FileManager_static.ump"
   // line 4 "../../../../IO_FileManager_inner.ump"
   // line 4 "../../../../NIO_FileManager_inner.ump"
@@ -1351,7 +1338,6 @@ data.position(0);
   
   
   
-  @MethodObject
   // line 104 "../../../../FileManager_static.ump"
   // line 35 "../../../../IO_FileManager_inner.ump"
   // line 15 "../../../../NIO_FileManager_inner.ump"
@@ -1409,11 +1395,6 @@ data.position(0);
                       readBuffer.position(pos + bytesRead2);
                  }
       // END OF UMPLE AFTER INJECTION
-    }
-  
-    // line 126 "../../../../FileManager_static.ump"
-     protected void hook446() throws IOException{
-      
     }
     
     //------------------------

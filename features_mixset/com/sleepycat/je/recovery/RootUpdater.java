@@ -44,7 +44,10 @@ public class RootUpdater implements WithRootLatched
   // line 32 "../../../../RootUpdater.ump"
    public IN doWork(ChildReference root) throws DatabaseException{
     ChildReference newRoot = tree.makeRootChildReference(inFromLog, new byte[0], lsn);
-	this.hook600();
+	Label600:
+inFromLog.releaseLatch();
+	//original();
+ //this.hook600();
 	if (root == null) {
 	    tree.setRoot(newRoot, false);
 	    inserted = true;
@@ -80,8 +83,7 @@ public class RootUpdater implements WithRootLatched
 
   // line 64 "../../../../RootUpdater.ump"
    protected void hook600() throws DatabaseException{
-    inFromLog.releaseLatch();
-	original();
+    
   }
   
   //------------------------

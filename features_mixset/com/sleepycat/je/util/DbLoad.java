@@ -249,7 +249,7 @@ public class DbLoad
 	Database db = env.openDatabase(null, dbName, dbConfig);
 	loadData(db);
 	db.close();
-	this.hook835();
+	Label835: //this.hook835();
 	if (progressInterval > 0) {
 	    System.out.println("Load end: " + new Date());
 	}
@@ -422,7 +422,6 @@ public class DbLoad
 	}
     }
 
-    protected void hook835() throws IOException, DatabaseException {
-    }
+//    protected void hook835() throws IOException, DatabaseException {}
   
 }

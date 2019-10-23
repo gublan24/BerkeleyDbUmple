@@ -237,6 +237,7 @@ class Checkpointer {
         Label553:
         //this.hook528();
         Label528:
+try {
         iter=inMemINs.iterator();
         while (iter.hasNext()) {
           in=(IN)iter.next();
@@ -272,6 +273,12 @@ class Checkpointer {
 				 else {
 						    _this.highestFlushLevel=IN.MAX_LEVEL;
 			   }
+}
+    finally {
+Label528_1: ; //;
+
+}
+//end hook528
         return newDirtyMap;
       }
       protected Checkpointer _this;

@@ -60,10 +60,16 @@ nLockTables = configMgr.getInt(EnvironmentParams.N_LOCK_TABLES);
 			//original(configMgr);
 
 			lockTables = new Map[nLockTables];
-			this.hook770();
+			Label770:
+lockTableLatches = new Latch[nLockTables];
+	//original();
+ //this.hook770();
 			for (int i = 0; i < nLockTables; i++) {
 					lockTables[i] = new HashMap();
-					this.hook771(envImpl, i);
+					Label771:
+lockTableLatches[i] = LatchSupport.makeLatch("Lock Table " + i, envImpl);
+	//original(envImpl, i);
+ //this.hook771(envImpl, i);
 			}
 			this.envImpl = envImpl;
 			memoryBudget = envImpl.getMemoryBudget();
@@ -124,7 +130,11 @@ nLockTables = configMgr.getInt(EnvironmentParams.N_LOCK_TABLES);
 	    if (result.success || result.lockGrant == LockGrantType.DENIED) {
 		return result.lockGrant;
 	    }
-	    this.hook772(nonBlockingRequest);
+	    Label772:
+assert checkNoLatchesHeld(nonBlockingRequest) : LatchSupport.countLatchesHeld()
+		+ " latches held while trying to lock, lock table =" + LatchSupport.latchesHeldToString();
+//	original(nonBlockingRequest);
+ //this.hook772(nonBlockingRequest);
 	    assert !nonBlockingRequest;
 	    try {
 		boolean doWait = true;
@@ -618,12 +628,20 @@ if (info.getLockType().isWriteLock()) {
    public String dumpToString() throws DatabaseException{
     StringBuffer sb = new StringBuffer();
 	for (int i = 0; i < nLockTables; i++) {
-	    this.hook773(sb, i);
+	    Label773:
+lockTableLatches[i].acquire();
+ //this.hook773(sb, i);	
+			try {
+					dumpToStringNoLatch(sb, i);//original(sb, i);
+			} finally {
+					Label773_1: ; //
+			}
+			//end hook773
 	}
 	return sb.toString();
   }
 
-  // line 522 "../../../../LockManager.ump"
+  // line 528 "../../../../LockManager.ump"
    private void dumpToStringNoLatch(StringBuffer sb, int whichTable){
     Map lockTable = lockTables[whichTable];
 	Iterator entries = lockTable.entrySet().iterator();
@@ -637,7 +655,7 @@ if (info.getLockType().isWriteLock()) {
 	}
   }
 
-  // line 535 "../../../../LockManager.ump"
+  // line 541 "../../../../LockManager.ump"
    private StringBuffer findDeadlock(Lock lock, Locker rootLocker){
     Set ownerSet = new HashSet();
 	ownerSet.add(rootLocker);
@@ -649,7 +667,7 @@ if (info.getLockType().isWriteLock()) {
 	}
   }
 
-  // line 546 "../../../../LockManager.ump"
+  // line 552 "../../../../LockManager.ump"
    private StringBuffer findDeadlock1(Set ownerSet, Lock lock, Locker rootLocker){
     Iterator ownerIter = lock.getOwnersClone().iterator();
 	while (ownerIter.hasNext()) {
@@ -690,52 +708,34 @@ if (info.getLockType().isWriteLock()) {
   /**
    * 
    * This is just a struct to hold a multi-value return.
-   */
-  // line 585 "../../../../LockManager.ump"
-   protected void hook770() throws DatabaseException{
-    lockTableLatches = new Latch[nLockTables];
-	original();
-  }
-
-  // line 588 "../../../../LockManager.ump"
-   protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException{
-    lockTableLatches[i] = LatchSupport.makeLatch("Lock Table " + i, envImpl);
-	original(envImpl, i);
-  }
-
-  // line 591 "../../../../LockManager.ump"
-   protected void hook772(boolean nonBlockingRequest) throws DeadlockException,DatabaseException{
-    assert checkNoLatchesHeld(nonBlockingRequest) : LatchSupport.countLatchesHeld()
-		+ " latches held while trying to lock, lock table =" + LatchSupport.latchesHeldToString();
-	original(nonBlockingRequest);
-  }
-
-  // line 594 "../../../../LockManager.ump"
-   protected void hook773(StringBuffer sb, int i) throws DatabaseException{
-    dumpToStringNoLatch(sb, i);
-  }
-
-
-  /**
+   * protected void hook770() throws DatabaseException {
+   * }
+   * protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException {
+   * }
+   * protected void hook772(boolean nonBlockingRequest) throws DeadlockException, DatabaseException {
+   * }
+   * protected void hook773(StringBuffer sb, int i) throws DatabaseException {
+   * dumpToStringNoLatch(sb, i);
+   * }
    * protected void hook774() throws DatabaseException {
    * }
    */
-  // line 601 "../../../../LockManager.ump"
+  // line 607 "../../../../LockManager.ump"
    protected void hook775() throws DatabaseException{
     
   }
 
-  // line 604 "../../../../LockManager.ump"
+  // line 610 "../../../../LockManager.ump"
    protected void hook776(LockStats stats, Map lockTable){
     
   }
 
-  // line 607 "../../../../LockManager.ump"
+  // line 613 "../../../../LockManager.ump"
    protected void hook777(LockStats stats, Lock lock){
     
   }
 
-  // line 610 "../../../../LockManager.ump"
+  // line 616 "../../../../LockManager.ump"
    protected void hook778(LockStats stats, LockInfo info){
     
   }
@@ -745,7 +745,7 @@ if (info.getLockType().isWriteLock()) {
    * protected void hook779(DbConfigManager configMgr) throws DatabaseException {
    * }
    */
-  // line 616 "../../../../LockManager.ump"
+  // line 622 "../../../../LockManager.ump"
    protected void hook780(int lockTableIndex) throws DatabaseException{
     
   }

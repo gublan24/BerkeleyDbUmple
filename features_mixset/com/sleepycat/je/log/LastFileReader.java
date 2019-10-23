@@ -96,14 +96,22 @@ public class LastFileReader extends FileReader
 		    fileLen = fileHandle.getFile().length();
 		    if (fileLen <= FileManager.firstLogEntryOffset()) {
 			lastNum = fileManager.getFollowingFileNum(lastNum.longValue(), false);
-			this.hook477(fileHandle);
+			Label477:
+fileHandle.release();
+	//original(fileHandle);
+ //this.hook477(fileHandle);
 			fileHandle = null;
 		    }
 		} catch (DatabaseException e) {
 		    lastNum = attemptToMoveBadFile(e);
 		    fileHandle = null;
 		} finally {
-		    this.hook478(fileHandle);
+		    Label478:
+if (fileHandle != null) {
+	    fileHandle.release();
+	}
+	//original(fileHandle);
+ //this.hook478(fileHandle);
 		}
 	    }
 	}
@@ -220,20 +228,6 @@ public class LastFileReader extends FileReader
 			    + DbLsn.makeLsn(readBufferFileNum, currentEntryOffset));
 	}
 	return foundEntry;
-  }
-
-  // line 179 "../../../../LastFileReader.ump"
-   protected void hook477(FileHandle fileHandle) throws IOException,DatabaseException{
-    fileHandle.release();
-	original(fileHandle);
-  }
-
-  // line 182 "../../../../LastFileReader.ump"
-   protected void hook478(FileHandle fileHandle) throws IOException,DatabaseException{
-    if (fileHandle != null) {
-	    fileHandle.release();
-	}
-	original(fileHandle);
   }
   
   //------------------------

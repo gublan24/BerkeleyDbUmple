@@ -207,7 +207,6 @@ if (setDbState) {
   
   @MethodObject
     @MethodObject
-    @MethodObject
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
   // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
   // line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
@@ -248,7 +247,10 @@ if (setDbState) {
           mb=_this.envImpl.getMemoryBudget();
           //original();
   
-          this.hook356();
+          Label356:
+  inList.latchMajor();
+          //original();
+   //this.hook356();
           try {
             this.hook357();
             iter=inList.iterator();
@@ -278,7 +280,10 @@ if (setDbState) {
             throw e;
           }
      finally {
-            this.hook358();
+            Label358:
+  inList.releaseMajorLatch();
+          //original();
+   //this.hook358();
           }
           if (foundSome) {
             iter1=foundSet.iterator();
@@ -295,24 +300,6 @@ if (setDbState) {
           // END OF UMPLE AFTER INJECTION
           return foundSome;
   
-    }
-  
-    // line 63 "../../../../SortedLSNTreeWalker_static.ump"
-     protected void hook356() throws DatabaseException{
-      inList.latchMajor();
-          original();
-    }
-  
-    // line 65 "../../../../SortedLSNTreeWalker_static.ump"
-     protected void hook357() throws DatabaseException{
-      inList.latchMinorAndDumpAddedINs();
-          original();
-    }
-  
-    // line 67 "../../../../SortedLSNTreeWalker_static.ump"
-     protected void hook358() throws DatabaseException{
-      inList.releaseMajorLatch();
-          original();
     }
     
     //------------------------

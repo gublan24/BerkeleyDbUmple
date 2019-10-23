@@ -223,16 +223,6 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
 	return new DatabaseEntry(data);
   }
 
-  // line 284 "../../../Sequence.ump"
-   protected void hook82(boolean cached, boolean wrapped, long retVal) throws DatabaseException{
-    
-  }
-
-  // line 287 "../../../Sequence.ump"
-   protected void hook83(boolean cached) throws DatabaseException{
-    
-  }
-
 
   /**
    * 
@@ -369,7 +359,7 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
 					cacheValue -= delta;
 			}
 			Label83: //this.hook83(cached);
-			this.hook82(cached, wrapped, retVal);
+			Label82: //this.hook82(cached, wrapped, retVal);
 			return retVal;
   }
 // line 5 "../../../loggingBase_Sequence.ump"

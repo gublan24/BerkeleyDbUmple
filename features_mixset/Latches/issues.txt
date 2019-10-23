@@ -1,9 +1,10 @@
-1) all methods have synchr() {original();}
+1) Latches_SyncedLockManager.ump: all methods have:
+						synchronized (lockTableLatches[lockTableIndex]) {
+							 // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+						}
 
-Latches_SyncedLockManager.ump
+2) Latches_CursorImpl_inner.ump
 
-2) all methods have Latches_LogManger.ump
-
-3)
-/home/abdulaziz/Desktop/BerkeleyDb/features_mixset/Latches/ump_inner/Latches_Checkpointer_inner.ump
-/home/abdulaziz/Desktop/BerkeleyDb/features_mixset/Latches/ump_inner/Latches_CursorImpl_inner.ump
+   while (_this.bin != null) {
+         // original();
+        }

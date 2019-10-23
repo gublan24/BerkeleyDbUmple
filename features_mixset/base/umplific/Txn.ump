@@ -3,7 +3,10 @@ namespace com.sleepycat.je.txn;
 class Txn
 {
   isA LogWritable,LogReadable;
+
   isA Locker;
+
+
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.DbLsn;
@@ -824,5 +827,5 @@ class Txn
 
     protected void hook814() {
     }
-
+*/
 }

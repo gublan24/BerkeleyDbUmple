@@ -62,13 +62,8 @@ public class LogResult
   // line 11 "../../../../LogResult.ump"
   public  LogResult(long currentLsn, boolean wakeupCheckpointer, boolean wakeupCleaner){
     this.currentLsn = currentLsn;
-	this.hook510(wakeupCheckpointer);
+	Label510: //this.hook510(wakeupCheckpointer);
 	this.wakeupCleaner = wakeupCleaner;
-  }
-
-  // line 17 "../../../../LogResult.ump"
-   protected void hook510(boolean wakeupCheckpointer){
-    
   }
 
 

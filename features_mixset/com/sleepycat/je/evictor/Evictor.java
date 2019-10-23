@@ -79,8 +79,8 @@ public class Evictor
 			nodesPerScan = configManager.getInt(EnvironmentParams.EVICTOR_NODES_PER_SCAN);
 			evictBytesSetting = configManager.getLong(EnvironmentParams.EVICTOR_EVICT_BYTES);
 			evictByLruOnly = configManager.getBoolean(EnvironmentParams.EVICTOR_LRU_ONLY);
-			//this.hook373(envImpl);
-      Label737:
+
+      Label737:			//this.hook373(envImpl);
 			evictProfile = new EvictProfile();
 			formatter = NumberFormat.getNumberInstance();
 			active = false;
@@ -156,8 +156,7 @@ public class Evictor
 				nNodesScannedThisRun++;
 				DatabaseImpl db = in.getDatabase();
 				boolean b = db == null;
-				//b = this.hook387(db, b);
-        Label387:
+        Label387:				//b = this.hook387(db, b);
 				if (b) {
 						String inInfo = " IN type=" + in.getLogType() + " id=" + in.getNodeId() + " not expected on INList";
 						String errMsg = (db == null) ? inInfo
@@ -165,8 +164,7 @@ public class Evictor
 						throw new DatabaseException(errMsg);
 				}
 				boolean b2 = false;
-				//b2 = this.hook386(db, b2);
-        Label386:
+        Label386:				//b2 = this.hook386(db, b2);
 				if (b2) {
 						continue;
 				}
@@ -218,8 +216,8 @@ public class Evictor
 				}
 					}
 			}
-			//this.hook380(target);
-      Label380:
+
+      Label380:			//this.hook380(target);
 			return target;
   }
 
@@ -228,7 +226,7 @@ public class Evictor
    * 
    * Normalize the tree level of the given IN. Is public for unit testing. A BIN containing evictable LNs is given level 0, so it will be stripped first. For non-duplicate and DBMAP trees, the high order bits are cleared to make their levels correspond; that way, all bottom level nodes (BINs and DBINs) are given the same eviction priority. Note that BINs in a duplicate tree are assigned the same level as BINs in a non-duplicate tree. This isn't always optimimal, but is the best we can do considering that BINs in duplicate trees may contain a mix of LNs and DINs.
    */
-  // line 227 "../../../../Evictor_Evictor.ump"
+  // line 225 "../../../../Evictor_Evictor.ump"
    public int normalizeLevel(IN in, int evictType){
     int level = in.getLevel() & IN.LEVEL_MASK;
 	if (level == 1 && evictType == IN.MAY_EVICT_LNS) {
@@ -243,19 +241,20 @@ public class Evictor
    * Strip or evict this node.
    * @return number of bytes evicted.
    */
-  // line 239 "../../../../Evictor_Evictor.ump"
+  // line 237 "../../../../Evictor_Evictor.ump"
    private long evict(INList inList, IN target, ScanIterator scanIter) throws DatabaseException{
-    boolean envIsReadOnly = envImpl.isReadOnly();
+    try {	
+	boolean envIsReadOnly = envImpl.isReadOnly();
 			long evictedBytes = 0;
 			if (target.latchNoWait(false)) {
 					//evictedBytes = this.hook374(inList, target, scanIter, envIsReadOnly, evictedBytes);
          Label374:
 				if (target instanceof BIN) {
-							//this.hook385(target);
-              Label385:
+
+              Label385:							//this.hook385(target);
 							evictedBytes = ((BIN) target).evictLNs();
-							//this.hook383(evictedBytes);
-              Label383:
+
+              Label383:							//this.hook383(evictedBytes);
 					}
 					if (evictedBytes == 0 && target.isEvictable()) {
 							Tree tree = target.getDatabase().getTree();
@@ -264,7 +263,10 @@ public class Evictor
 						evictedBytes = evictIN(target, result.parent, result.index, inList, scanIter, envIsReadOnly);
 							}
 					}
-		// end hook374
+} finally {
+Label374_1: ;//		// end hook374
+}
+
 			}
 			return evictedBytes;
   }
@@ -274,19 +276,17 @@ public class Evictor
    * 
    * Evict an IN. Dirty nodes are logged before they're evicted. inlist is latched with the major latch by the caller.
    */
-  // line 268 "../../../../Evictor_Evictor.ump"
+  // line 270 "../../../../Evictor_Evictor.ump"
    private long evictIN(IN child, IN parent, int index, INList inlist, ScanIterator scanIter, boolean envIsReadOnly) throws DatabaseException{
-    long evictBytes = 0;
-			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
-			Label375:
-			//this.hook378(parent);
-      Label378:
+    try{
+			long evictBytes = 0;
+			Label375:			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
+      Label378:			//this.hook378(parent);
 			long oldGenerationCount = child.getGeneration();
 			IN renewedChild = (IN) parent.getTarget(index);
 			if ((renewedChild != null) && (renewedChild.getGeneration() <= oldGenerationCount)
 				&& renewedChild.latchNoWait(false)) {
-					//evictBytes = this.hook379(parent, index, inlist, scanIter, envIsReadOnly, evictBytes, renewedChild);
-          Label379:
+          Label379:					//evictBytes = this.hook379(parent, index, inlist, scanIter, envIsReadOnly, evictBytes, renewedChild);
 					if (renewedChild.isEvictable()) {
 							long renewedChildLsn = DbLsn.NULL_LSN;
 							boolean newChildLsn = false;
@@ -304,20 +304,22 @@ public class Evictor
 						scanIter.mark();
 						inlist.removeLatchAlreadyHeld(renewedChild);
 						scanIter.resetToMark();
-						//evictBytes = this.hook389(evictBytes, renewedChild);
-            Label389:
+            Label389: 						//evictBytes = this.hook389(evictBytes, renewedChild);
 						if (newChildLsn) {
 								parent.updateEntry(index, null, renewedChildLsn);
 						} else {
 								parent.updateEntry(index, (Node) null);
 						}
-						//this.hook384();
-            Label384:
+
+            Label384:						//this.hook384();
 							}
 					}
 					// end of hook379
 			}
-			// end of hook375
+}finally {
+Label375_1: ;//		// end hook375
+}
+
 			return evictBytes;
   }
 
@@ -326,12 +328,12 @@ public class Evictor
    * 
    * Used by unit tests.
    */
-  // line 317 "../../../../Evictor_Evictor.ump"
+  // line 319 "../../../../Evictor_Evictor.ump"
   public IN getNextNode(){
     return nextNode;
   }
 
-  // line 321 "../../../../Evictor_Evictor.ump"
+  // line 323 "../../../../Evictor_Evictor.ump"
    public void setRunnableHook(TestHook hook){
     runnableHook = hook;
   }
@@ -473,7 +475,6 @@ public class Evictor
   
   
   
-  @MethodObject
   // line 51 "../../../../Evictor_Evictor_inner.ump"
   public static class Evictor_evictBatch
   {
@@ -506,16 +507,16 @@ public class Evictor
     // line 58 "../../../../Evictor_Evictor_inner.ump"
     public long execute() throws DatabaseException{
       _this.nNodesScannedThisRun=0;
-          //this.hook381();
-          Label381:
+  
+          Label381:        //this.hook381();
           assert _this.evictProfile.clear();
           nBatchSets=0;
           finished=false;
           evictBytes=0;
           evictBytes+=_this.envImpl.getUtilizationTracker().evictMemory();
           inList=_this.envImpl.getInMemoryINs();
-          //this.hook376();
-          Label376:
+  
+          Label376:        //this.hook376();
           inListStartSize=inList.getSize();
           try {
             if (inListStartSize == 0) {
@@ -543,12 +544,10 @@ public class Evictor
             finished=true;
           }
       finally {
-           // this.hook382();
-           Label382:
-           // this.hook377();
-            Label377:
-            //this.hook371();
-            Label371:
+  
+           	Label382:         // this.hook382();
+            Label377:         // this.hook377();
+            Label371:          //this.hook371();
           }
           return evictBytes;
     }
@@ -557,29 +556,29 @@ public class Evictor
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 105 "../../../../Evictor_Evictor_inner.ump"
+    // line 103 "../../../../Evictor_Evictor_inner.ump"
     protected Evictor _this ;
-  // line 106 "../../../../Evictor_Evictor_inner.ump"
+  // line 104 "../../../../Evictor_Evictor_inner.ump"
     protected String source ;
-  // line 107 "../../../../Evictor_Evictor_inner.ump"
+  // line 105 "../../../../Evictor_Evictor_inner.ump"
     protected long requiredEvictBytes ;
-  // line 108 "../../../../Evictor_Evictor_inner.ump"
+  // line 106 "../../../../Evictor_Evictor_inner.ump"
     protected int nBatchSets ;
-  // line 109 "../../../../Evictor_Evictor_inner.ump"
+  // line 107 "../../../../Evictor_Evictor_inner.ump"
     protected boolean finished ;
-  // line 110 "../../../../Evictor_Evictor_inner.ump"
+  // line 108 "../../../../Evictor_Evictor_inner.ump"
     protected long evictBytes ;
-  // line 111 "../../../../Evictor_Evictor_inner.ump"
+  // line 109 "../../../../Evictor_Evictor_inner.ump"
     protected INList inList ;
-  // line 112 "../../../../Evictor_Evictor_inner.ump"
+  // line 110 "../../../../Evictor_Evictor_inner.ump"
     protected int inListStartSize ;
-  // line 113 "../../../../Evictor_Evictor_inner.ump"
+  // line 111 "../../../../Evictor_Evictor_inner.ump"
     protected ScanIterator scanIter ;
-  // line 114 "../../../../Evictor_Evictor_inner.ump"
+  // line 112 "../../../../Evictor_Evictor_inner.ump"
     protected IN target ;
-  // line 115 "../../../../Evictor_Evictor_inner.ump"
+  // line 113 "../../../../Evictor_Evictor_inner.ump"
     protected Logger logger ;
-  // line 116 "../../../../Evictor_Evictor_inner.ump"
+  // line 114 "../../../../Evictor_Evictor_inner.ump"
     protected String msg ;
   
     
@@ -588,8 +587,7 @@ public class Evictor
   
   
   
-  @MethodObject
-  // line 128 "../../../../Evictor_Evictor_inner.ump"
+  // line 126 "../../../../Evictor_Evictor_inner.ump"
   public static class Evictor_isRunnable
   {
   
@@ -611,19 +609,18 @@ public class Evictor
     public void delete()
     {}
   
-    // line 130 "../../../../Evictor_Evictor_inner.ump"
+    // line 128 "../../../../Evictor_Evictor_inner.ump"
     public  Evictor_isRunnable(Evictor _this, String source){
       this._this=_this;
           this.source=source;
     }
   
-    // line 134 "../../../../Evictor_Evictor_inner.ump"
+    // line 132 "../../../../Evictor_Evictor_inner.ump"
     public boolean execute() throws DatabaseException{
       mb=_this.envImpl.getMemoryBudget();
-          //this.hook388();
-          Label388:
-          //this.hook372();
-          Label372:
+          Label388:        //this.hook388();
+  
+          Label372:        //this.hook372();
           result=false;
           return result;
     }
@@ -632,31 +629,31 @@ public class Evictor
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 142 "../../../../Evictor_Evictor_inner.ump"
+    // line 139 "../../../../Evictor_Evictor_inner.ump"
     protected Evictor _this ;
-  // line 143 "../../../../Evictor_Evictor_inner.ump"
+  // line 140 "../../../../Evictor_Evictor_inner.ump"
     protected String source ;
-  // line 144 "../../../../Evictor_Evictor_inner.ump"
+  // line 141 "../../../../Evictor_Evictor_inner.ump"
     protected MemoryBudget mb ;
-  // line 145 "../../../../Evictor_Evictor_inner.ump"
+  // line 142 "../../../../Evictor_Evictor_inner.ump"
     protected long currentUsage ;
-  // line 146 "../../../../Evictor_Evictor_inner.ump"
+  // line 143 "../../../../Evictor_Evictor_inner.ump"
     protected long maxMem ;
-  // line 147 "../../../../Evictor_Evictor_inner.ump"
+  // line 144 "../../../../Evictor_Evictor_inner.ump"
     protected boolean doRun ;
-  // line 148 "../../../../Evictor_Evictor_inner.ump"
+  // line 145 "../../../../Evictor_Evictor_inner.ump"
     protected Logger logger ;
-  // line 149 "../../../../Evictor_Evictor_inner.ump"
+  // line 146 "../../../../Evictor_Evictor_inner.ump"
     protected Runtime r ;
-  // line 150 "../../../../Evictor_Evictor_inner.ump"
+  // line 147 "../../../../Evictor_Evictor_inner.ump"
     protected long totalBytes ;
-  // line 151 "../../../../Evictor_Evictor_inner.ump"
+  // line 148 "../../../../Evictor_Evictor_inner.ump"
     protected long freeBytes ;
-  // line 152 "../../../../Evictor_Evictor_inner.ump"
+  // line 149 "../../../../Evictor_Evictor_inner.ump"
     protected long usedBytes ;
-  // line 153 "../../../../Evictor_Evictor_inner.ump"
+  // line 150 "../../../../Evictor_Evictor_inner.ump"
     protected StringBuffer sb ;
-  // line 154 "../../../../Evictor_Evictor_inner.ump"
+  // line 151 "../../../../Evictor_Evictor_inner.ump"
     protected boolean result ;
   
     

@@ -68,11 +68,11 @@ public class LatchImpl implements Latch
 	    LatchWaiter waitTarget = null;
 	    synchronized (this) {
 		if (thread == owner) {
-		    this.hook422();
+		    Label422:           ;  //this.hook422();
 		    throw new LatchException(getNameString() + " already held");
 		}
 		if (owner == null) {
-		    this.hook423();
+		    Label423:           ;  //this.hook423();
 		    owner = thread;
 		} else {
 		    if (waiters == null) {
@@ -80,7 +80,7 @@ public class LatchImpl implements Latch
 		    }
 		    waitTarget = new LatchWaiter(thread);
 		    waiters.add(waitTarget);
-		    this.hook424();
+		    Label424:           ;  //this.hook424();
 		}
 	    }
 	    if (waitTarget != null) {
@@ -155,7 +155,7 @@ public class LatchImpl implements Latch
 		} else {
 		    owner = null;
 		}
-		this.hook428();
+		Label428:           ;  //this.hook428();
 		assert unNoteLatch(checkHeld);
 	    }
 	} finally {
@@ -225,46 +225,6 @@ public class LatchImpl implements Latch
 	    LatchSupport.latchTable.unNoteLatch(this, name);
 	    return true;
 	}
-  }
-
-
-  /**
-   * 
-   * Simple class that encapsulates a Thread to be 'notify()ed'.
-   */
-  // line 236 "../../../../Latches_LatchImpl.ump"
-   protected void hook422() throws DatabaseException,InterruptedException{
-    
-  }
-
-  // line 239 "../../../../Latches_LatchImpl.ump"
-   protected void hook423() throws DatabaseException,InterruptedException{
-    
-  }
-
-  // line 242 "../../../../Latches_LatchImpl.ump"
-   protected void hook424() throws DatabaseException,InterruptedException{
-    
-  }
-
-  // line 245 "../../../../Latches_LatchImpl.ump"
-   protected void hook425() throws LatchException{
-    
-  }
-
-  // line 248 "../../../../Latches_LatchImpl.ump"
-   protected void hook426() throws LatchException{
-    
-  }
-
-  // line 251 "../../../../Latches_LatchImpl.ump"
-   protected void hook427() throws LatchException{
-    
-  }
-
-  // line 254 "../../../../Latches_LatchImpl.ump"
-   protected void hook428(){
-    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -365,16 +325,16 @@ public class LatchImpl implements Latch
     try {
 	    Thread thread = Thread.currentThread();
 	    if (thread == owner) {
-		this.hook425();
+		Label425:           ;  //this.hook425();
 		throw new LatchException(getNameString() + " already held");
 	    }
 	    if (owner == null) {
 		owner = thread;
-		this.hook426();
+		Label426:           ;  //this.hook426();
 		assert noteLatch();
 		return true;
 	    } else {
-		this.hook427();
+		Label427:           ;  //this.hook427();
 		return false;
 	    }
 	} finally {

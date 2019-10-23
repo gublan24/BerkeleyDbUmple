@@ -51,7 +51,13 @@ public class SyncedLockManager extends LockManager
    protected LockAttemptResult attemptLock(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest) throws DatabaseException{
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook782(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    Label782:
+synchronized (lockTableLatches[lockTableIndex]) {
+	   // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	}
+ ;  //this.hook782(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+			throw new ReturnObject(attemptLockInternal(nodeId, locker, type, nonBlockingRequest, lockTableIndex));
+      //end of hook782
 	    throw ReturnHack.returnObject;
 	} catch (ReturnObject r) {
 	    return (LockAttemptResult) r.value;
@@ -63,12 +69,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#makeTimeoutMsg
    */
-  // line 36 "../../../../SyncedLockManager.ump"
+  // line 38 "../../../../SyncedLockManager.ump"
    protected String makeTimeoutMsg(String lockOrTxn, Locker locker, long nodeId, LockType type, LockGrantType grantType, Lock useLock, long timeout, long start, long now, DatabaseImpl database){
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook783(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,
-		    lockTableIndex);
+	    Label783:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    ////original(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,  lockTableIndex);
+	}
+           ;  //this.hook783(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database, lockTableIndex);
+	throw new ReturnObject(makeTimeoutMsgInternal(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout,	start, now, database));
+		//end of hook783
 	    throw ReturnHack.returnObject;
 	} catch (ReturnObject r) {
 	    return (String) r.value;
@@ -80,7 +91,7 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#releaseAndNotifyTargets
    */
-  // line 51 "../../../../SyncedLockManager.ump"
+  // line 54 "../../../../SyncedLockManager.ump"
    protected Set releaseAndFindNotifyTargets(long nodeId, Lock lock, Locker locker, boolean removeFromLocker) throws DatabaseException{
     try {
 	    long nid = nodeId;
@@ -88,7 +99,13 @@ public class SyncedLockManager extends LockManager
 		nid = lock.getNodeId().longValue();
 	    }
 	    int lockTableIndex = getLockTableIndex(nid);
-	    this.hook784(nodeId, lock, locker, removeFromLocker, lockTableIndex);
+	    Label784:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    ////original(nodeId, lock, locker, removeFromLocker, lockTableIndex);
+	}
+           ;  //this.hook784(nodeId, lock, locker, removeFromLocker, lockTableIndex);
+	throw new ReturnObject(		releaseAndFindNotifyTargetsInternal(nodeId, lock, locker, removeFromLocker, lockTableIndex));
+	//end hook784
 	    throw ReturnHack.returnObject;
 	} catch (ReturnObject r) {
 	    return (Set) r.value;
@@ -100,10 +117,16 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#transfer
    */
-  // line 68 "../../../../SyncedLockManager.ump"
+  // line 73 "../../../../SyncedLockManager.ump"
   public void transfer(long nodeId, Locker owningLocker, Locker destLocker, boolean demoteToRead) throws DatabaseException{
     int lockTableIndex = getLockTableIndex(nodeId);
-	this.hook785(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
+	Label785:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
+	}
+           ;  //this.hook785(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
+	transferInternal(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
+//end hook785
   }
 
 
@@ -111,10 +134,16 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#transferMultiple
    */
-  // line 76 "../../../../SyncedLockManager.ump"
+  // line 83 "../../../../SyncedLockManager.ump"
   public void transferMultiple(long nodeId, Locker owningLocker, Locker [] destLockers) throws DatabaseException{
     int lockTableIndex = getLockTableIndex(nodeId);
-	this.hook786(nodeId, owningLocker, destLockers, lockTableIndex);
+	Label786:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, owningLocker, destLockers, lockTableIndex);
+	}
+           ;  //this.hook786(nodeId, owningLocker, destLockers, lockTableIndex);
+	transferMultipleInternal(nodeId, owningLocker, destLockers, lockTableIndex);
+//end hook786
   }
 
 
@@ -122,10 +151,16 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#demote
    */
-  // line 84 "../../../../SyncedLockManager.ump"
+  // line 93 "../../../../SyncedLockManager.ump"
   public void demote(long nodeId, Locker locker) throws DatabaseException{
     int lockTableIndex = getLockTableIndex(nodeId);
-	this.hook787(nodeId, locker, lockTableIndex);
+	Label787:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, locker, lockTableIndex);
+	}
+           ;  //this.hook787(nodeId, locker, lockTableIndex);
+	demoteInternal(nodeId, locker, lockTableIndex);
+	// end hook787
   }
 
 
@@ -133,11 +168,16 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#isLocked
    */
-  // line 92 "../../../../SyncedLockManager.ump"
+  // line 103 "../../../../SyncedLockManager.ump"
   public boolean isLocked(Long nodeId){
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook788(nodeId, lockTableIndex);
+	    Label788:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, lockTableIndex);
+	}
+           ;  //this.hook788(nodeId, lockTableIndex);
+	throw new ReturnBoolean(isLockedInternal(nodeId, lockTableIndex));
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
@@ -149,11 +189,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#isOwner
    */
-  // line 105 "../../../../SyncedLockManager.ump"
+  // line 117 "../../../../SyncedLockManager.ump"
   public boolean isOwner(Long nodeId, Locker locker, LockType type){
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook789(nodeId, locker, type, lockTableIndex);
+	    Label789:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, locker, type, lockTableIndex);
+	}
+           ;  //this.hook789(nodeId, locker, type, lockTableIndex);
+	throw new ReturnBoolean(isOwnerInternal(nodeId, locker, type, lockTableIndex));
+//end hook789
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
@@ -165,11 +211,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#isWaiter
    */
-  // line 118 "../../../../SyncedLockManager.ump"
+  // line 132 "../../../../SyncedLockManager.ump"
   public boolean isWaiter(Long nodeId, Locker locker){
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook790(nodeId, locker, lockTableIndex);
+	    Label790:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, locker, lockTableIndex);
+	}
+           ;  //this.hook790(nodeId, locker, lockTableIndex);
+	throw new ReturnBoolean(isWaiterInternal(nodeId, locker, lockTableIndex));
+//end hook790
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
@@ -181,11 +233,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#nWaiters
    */
-  // line 131 "../../../../SyncedLockManager.ump"
+  // line 147 "../../../../SyncedLockManager.ump"
   public int nWaiters(Long nodeId){
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook791(nodeId, lockTableIndex);
+	    Label791:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, lockTableIndex);
+	}
+           ;  //this.hook791(nodeId, lockTableIndex);
+	throw new ReturnInt(nWaitersInternal(nodeId, lockTableIndex));
+//end hook791
 	    throw ReturnHack.returnInt;
 	} catch (ReturnInt r) {
 	    return r.value;
@@ -197,11 +255,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#nOwners
    */
-  // line 144 "../../../../SyncedLockManager.ump"
+  // line 162 "../../../../SyncedLockManager.ump"
   public int nOwners(Long nodeId){
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook792(nodeId, lockTableIndex);
+	    Label792:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, lockTableIndex);
+	}
+           ;  //this.hook792(nodeId, lockTableIndex);
+	throw new ReturnInt(nOwnersInternal(nodeId, lockTableIndex));
+//end hook792
 	    throw ReturnHack.returnInt;
 	} catch (ReturnInt r) {
 	    return r.value;
@@ -213,11 +277,16 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#getWriterOwnerLocker
    */
-  // line 157 "../../../../SyncedLockManager.ump"
+  // line 177 "../../../../SyncedLockManager.ump"
   public Locker getWriteOwnerLocker(Long nodeId) throws DatabaseException{
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook793(nodeId, lockTableIndex);
+	    Label793:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, lockTableIndex);
+	}
+           ;  //this.hook793(nodeId, lockTableIndex);
+	throw new ReturnObject(getWriteOwnerLockerInternal(nodeId, lockTableIndex));
 	    throw ReturnHack.returnObject;
 	} catch (ReturnObject r) {
 	    return (Locker) r.value;
@@ -229,11 +298,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#validateOwnership
    */
-  // line 171 "../../../../SyncedLockManager.ump"
+  // line 192 "../../../../SyncedLockManager.ump"
    protected boolean validateOwnership(Long nodeId, Locker locker, LockType type, boolean flushFromWaiters, MemoryBudget mb) throws DatabaseException{
     try {
 	    int lockTableIndex = getLockTableIndex(nodeId);
-	    this.hook794(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
+	    Label794:
+synchronized (lockTableLatches[lockTableIndex]) {
+	    //original(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
+	}
+           ;  //this.hook794(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
+	throw new ReturnBoolean(validateOwnershipInternal(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex));
+//end hook794
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
@@ -245,83 +320,17 @@ public class SyncedLockManager extends LockManager
    * 
    * @see LockManager#dumpLockTable
    */
-  // line 184 "../../../../SyncedLockManager.ump"
+  // line 207 "../../../../SyncedLockManager.ump"
    protected void dumpLockTable(LockStats stats) throws DatabaseException{
     for (int i = 0; i < nLockTables; i++) {
-	    this.hook795(stats, i);
+	    Label795:
+synchronized (lockTableLatches[i]) {
+	    //original(stats, i);
 	}
-  }
-
-  // line 191 "../../../../SyncedLockManager.ump"
-   protected void hook782(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex) throws DatabaseException{
-    throw new ReturnObject(attemptLockInternal(nodeId, locker, type, nonBlockingRequest, lockTableIndex));
-  }
-
-  // line 196 "../../../../SyncedLockManager.ump"
-   protected void hook783(String lockOrTxn, Locker locker, long nodeId, LockType type, LockGrantType grantType, Lock useLock, long timeout, long start, long now, DatabaseImpl database, int lockTableIndex){
-    throw new ReturnObject(makeTimeoutMsgInternal(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout,
-		start, now, database));
-  }
-
-  // line 202 "../../../../SyncedLockManager.ump"
-   protected void hook784(long nodeId, Lock lock, Locker locker, boolean removeFromLocker, int lockTableIndex) throws DatabaseException{
-    throw new ReturnObject(
-		releaseAndFindNotifyTargetsInternal(nodeId, lock, locker, removeFromLocker, lockTableIndex));
-  }
-
-  // line 208 "../../../../SyncedLockManager.ump"
-   protected void hook785(long nodeId, Locker owningLocker, Locker destLocker, boolean demoteToRead, int lockTableIndex) throws DatabaseException{
-    transferInternal(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
-  }
-
-  // line 213 "../../../../SyncedLockManager.ump"
-   protected void hook786(long nodeId, Locker owningLocker, Locker [] destLockers, int lockTableIndex) throws DatabaseException{
-    transferMultipleInternal(nodeId, owningLocker, destLockers, lockTableIndex);
-  }
-
-  // line 217 "../../../../SyncedLockManager.ump"
-   protected void hook787(long nodeId, Locker locker, int lockTableIndex) throws DatabaseException{
-    demoteInternal(nodeId, locker, lockTableIndex);
-  }
-
-  // line 221 "../../../../SyncedLockManager.ump"
-   protected void hook788(Long nodeId, int lockTableIndex){
-    throw new ReturnBoolean(isLockedInternal(nodeId, lockTableIndex));
-  }
-
-  // line 225 "../../../../SyncedLockManager.ump"
-   protected void hook789(Long nodeId, Locker locker, LockType type, int lockTableIndex){
-    throw new ReturnBoolean(isOwnerInternal(nodeId, locker, type, lockTableIndex));
-  }
-
-  // line 229 "../../../../SyncedLockManager.ump"
-   protected void hook790(Long nodeId, Locker locker, int lockTableIndex){
-    throw new ReturnBoolean(isWaiterInternal(nodeId, locker, lockTableIndex));
-  }
-
-  // line 233 "../../../../SyncedLockManager.ump"
-   protected void hook791(Long nodeId, int lockTableIndex){
-    throw new ReturnInt(nWaitersInternal(nodeId, lockTableIndex));
-  }
-
-  // line 237 "../../../../SyncedLockManager.ump"
-   protected void hook792(Long nodeId, int lockTableIndex){
-    throw new ReturnInt(nOwnersInternal(nodeId, lockTableIndex));
-  }
-
-  // line 241 "../../../../SyncedLockManager.ump"
-   protected void hook793(Long nodeId, int lockTableIndex) throws DatabaseException{
-    throw new ReturnObject(getWriteOwnerLockerInternal(nodeId, lockTableIndex));
-  }
-
-  // line 246 "../../../../SyncedLockManager.ump"
-   protected void hook794(Long nodeId, Locker locker, LockType type, boolean flushFromWaiters, MemoryBudget mb, int lockTableIndex) throws DatabaseException{
-    throw new ReturnBoolean(validateOwnershipInternal(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex));
-  }
-
-  // line 250 "../../../../SyncedLockManager.ump"
-   protected void hook795(LockStats stats, int i) throws DatabaseException{
-    dumpLockTableInternal(stats, i);
+           ;  //this.hook795(stats, i);
+	dumpLockTableInternal(stats, i);
+//end hook795
+	}
   }
 
 }

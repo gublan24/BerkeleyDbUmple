@@ -142,7 +142,7 @@ public class Environment
    private void openDb(Transaction txn, Database newDb, String databaseName, DatabaseConfig dbConfig, boolean needWritableLockerForInit) throws DatabaseException{
     checkEnv();
 			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			this.hook58(databaseName, dbConfig);
+			Label58: //this.hook58(databaseName, dbConfig);
 			validateDbConfigAgainstEnv(dbConfig, databaseName);
 			Locker locker = null;
 			boolean operationOk = false;

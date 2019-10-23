@@ -197,7 +197,7 @@ public class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call Database.openSequence:");
 	checkWritable("openSequence");
-	this.hook45(txn, key);
+	Label45:           ;  //this.hook45(txn, key);
 	return new Sequence(this, txn, key, config);
   }
 
@@ -227,7 +227,7 @@ public class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call Database.delete:");
 	checkWritable("delete");
-	this.hook47(txn, key);
+	Label47:           ;  //this.hook47(txn, key);
 	OperationStatus commitStatus = OperationStatus.NOTFOUND;
 	Locker locker = null;
 	try {
@@ -286,7 +286,7 @@ public class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call Database.get:");
-	this.hook48(txn, key, lockMode);
+	Label48:           ;  //this.hook48(txn, key, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -310,7 +310,7 @@ public class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(data, "data", true);
 	checkRequiredDbState(OPEN, "Can't call Database.getSearchBoth:");
-	this.hook49(txn, key, data, lockMode);
+	Label49:           ;  //this.hook49(txn, key, data, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -336,7 +336,7 @@ public class Database
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.put");
 	checkWritable("put");
-	this.hook50(txn, key, data);
+	Label50:           ;  //this.hook50(txn, key, data);
 	return putInternal(txn, key, data, PutMode.OVERWRITE);
   }
 
@@ -348,7 +348,7 @@ public class Database
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.putNoOverWrite");
 	checkWritable("putNoOverwrite");
-	this.hook51(txn, key, data);
+	Label51:           ;  //this.hook51(txn, key, data);
 	return putInternal(txn, key, data, PutMode.NOOVERWRITE);
   }
 
@@ -360,7 +360,7 @@ public class Database
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.putNoDupData");
 	checkWritable("putNoDupData");
-	this.hook52(txn, key, data);
+	Label52:           ;  //this.hook52(txn, key, data);
 	return putInternal(txn, key, data, PutMode.NODUP);
   }
 
@@ -431,7 +431,7 @@ public class Database
    public void preload(long maxBytes) throws DatabaseException{
     checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
-			//this.hook55();
+			//Label:           ;  //this.hook55();
 			Label55:
 databaseImpl.checkIsDeleted("preload");
 			//original();
@@ -445,7 +445,7 @@ databaseImpl.checkIsDeleted("preload");
    public void preload(long maxBytes, long maxMillisecs) throws DatabaseException{
     checkEnv();
 	checkRequiredDbState(OPEN, "Can't call Database.preload");
-	//this.hook56();
+	//Label:           ;  //this.hook56();
   Label56:
 databaseImpl.checkIsDeleted("preload");
 			//original();
@@ -460,7 +460,7 @@ databaseImpl.checkIsDeleted("preload");
    public PreloadStats preload(PreloadConfig config) throws DatabaseException{
     checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
-			//this.hook57();
+			//Label:           ;  //this.hook57();
       Label57:
 databaseImpl.checkIsDeleted("preload");
 			//original();
@@ -517,7 +517,24 @@ databaseImpl.checkIsDeleted("preload");
     List list = new ArrayList();
 	if (hasTriggers()) {
 	    acquireTriggerListReadLock();
-	    this.hook53(list);
+	    Label53://Label:           ;  //this.hook53(list);
+			try {
+				for (int i = 0; i < triggerList.size(); i += 1) {
+						Object obj = triggerList.get(i);
+						if (obj instanceof SecondaryTrigger) {
+					list.add(((SecondaryTrigger) obj).getDb());
+						}
+				}
+			}
+		  finally {
+						Label53_1:
+//		try {
+					//original(list);
+		//	} finally {
+					releaseTriggerListReadLock();
+			//}
+   ;//
+			}
 	} else {
 	}
 	return list;
@@ -528,7 +545,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * @return true if the Database was opened read/write.
    */
-  // line 465 "../../../Database.ump"
+  // line 476 "../../../Database.ump"
   public boolean isWritable(){
     return isWritable;
   }
@@ -538,7 +555,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Return the databaseImpl object instance.
    */
-  // line 472 "../../../Database.ump"
+  // line 483 "../../../Database.ump"
   public DatabaseImpl getDatabaseImpl(){
     return databaseImpl;
   }
@@ -548,7 +565,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * @throws DatabaseException if the Database state is not this value.
    */
-  // line 494 "../../../Database.ump"
+  // line 505 "../../../Database.ump"
   public void checkRequiredDbState(DbState required, String msg) throws DatabaseException{
     if (state != required) {
 	    throw new DatabaseException(msg + " Database state can't be " + state + " must be " + required);
@@ -560,7 +577,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * @throws DatabaseException if the Database state is this value.
    */
-  // line 503 "../../../Database.ump"
+  // line 514 "../../../Database.ump"
   public void checkProhibitedDbState(DbState prohibited, String msg) throws DatabaseException{
     if (state == prohibited) {
 	    throw new DatabaseException(msg + " Database state must not be " + prohibited);
@@ -572,7 +589,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * @throws RunRecoveryException if the underlying environment isinvalid
    */
-  // line 512 "../../../Database.ump"
+  // line 523 "../../../Database.ump"
   public void checkEnv() throws RunRecoveryException{
     EnvironmentImpl env = envHandle.getEnvironmentImpl();
 	if (env != null) {
@@ -585,7 +602,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Check that write operations aren't used on a readonly Database.
    */
-  // line 533 "../../../Database.ump"
+  // line 544 "../../../Database.ump"
    private void checkWritable(String operation) throws DatabaseException{
     if (!isWritable) {
 	    throw new DatabaseException("Database is Read Only: " + operation);
@@ -597,7 +614,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Returns whether any triggers are currently associated with this primary. Note that an update of the trigger list may be in progress and this method does not wait for that update to be completed.
    */
-  // line 542 "../../../Database.ump"
+  // line 553 "../../../Database.ump"
   public boolean hasTriggers(){
     return triggerList != null;
   }
@@ -607,7 +624,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Gets a read-lock on the list of triggers.  releaseTriggerListReadLock() must be called to release the lock.  Called by all primary put and delete operations.
    */
-  // line 549 "../../../Database.ump"
+  // line 560 "../../../Database.ump"
    private void acquireTriggerListReadLock() throws DatabaseException{
     new Database_acquireTriggerListReadLock(this).execute();
   }
@@ -617,7 +634,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Gets a write lock on the list of triggers.  An empty list is created if necessary, so null is never returned.  releaseTriggerListWriteLock() must always be called to release the lock.
    */
-  // line 556 "../../../Database.ump"
+  // line 567 "../../../Database.ump"
    private void acquireTriggerListWriteLock() throws DatabaseException{
     new Database_acquireTriggerListWriteLock(this).execute();
   }
@@ -627,7 +644,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Releases a lock acquired by calling acquireTriggerListWriteLock().  If the list is now empty then it is set to null, that is, hasTriggers() will subsequently return false.
    */
-  // line 563 "../../../Database.ump"
+  // line 574 "../../../Database.ump"
    private void releaseTriggerListWriteLock() throws DatabaseException{
     new Database_releaseTriggerListWriteLock(this).execute();
   }
@@ -638,7 +655,7 @@ databaseImpl.checkIsDeleted("preload");
    * Adds a given trigger to the list of triggers.  Called while opening a SecondaryDatabase.
    * @param insertAtFront true to insert at the front, or false to append.
    */
-  // line 571 "../../../Database.ump"
+  // line 582 "../../../Database.ump"
   public void addTrigger(DatabaseTrigger trigger, boolean insertAtFront) throws DatabaseException{
     acquireTriggerListWriteLock();
 	try {
@@ -658,7 +675,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Removes a given trigger from the list of triggers.  Called by SecondaryDatabase.close().
    */
-  // line 588 "../../../Database.ump"
+  // line 599 "../../../Database.ump"
   public void removeTrigger(DatabaseTrigger trigger) throws DatabaseException{
     acquireTriggerListWriteLock();
 	try {
@@ -674,7 +691,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Clears the list of triggers.  Called by close(), this allows closing the primary before its secondaries, although we document that secondaries should be closed first.
    */
-  // line 601 "../../../Database.ump"
+  // line 612 "../../../Database.ump"
    private void removeAllTriggers() throws DatabaseException{
     acquireTriggerListWriteLock();
 	try {
@@ -697,73 +714,20 @@ databaseImpl.checkIsDeleted("preload");
    * @param oldData the primary data before the change, or null if the recorddid not previously exist.
    * @param newData the primary data after the change, or null if the recordhas been deleted.
    */
-  // line 622 "../../../Database.ump"
+  // line 633 "../../../Database.ump"
   public void notifyTriggers(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData) throws DatabaseException{
     acquireTriggerListReadLock();
-	this.hook54(locker, priKey, oldData, newData);
-  }
-
-  // line 627 "../../../Database.ump"
-   protected void hook44() throws DatabaseException{
-    
-  }
-
-  // line 630 "../../../Database.ump"
-   protected void hook45(Transaction txn, DatabaseEntry key) throws DatabaseException{
-    
-  }
-
-  // line 633 "../../../Database.ump"
-   protected void hook46(Transaction txn, CursorConfig cursorConfig) throws DatabaseException{
-    
-  }
-
-  // line 636 "../../../Database.ump"
-   protected void hook47(Transaction txn, DatabaseEntry key) throws DatabaseException{
-    
-  }
-
-  // line 639 "../../../Database.ump"
-   protected void hook48(Transaction txn, DatabaseEntry key, LockMode lockMode) throws DatabaseException{
-    
-  }
-
-  // line 643 "../../../Database.ump"
-   protected void hook49(Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
-    
-  }
-
-  // line 646 "../../../Database.ump"
-   protected void hook50(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
-    
-  }
-
-  // line 649 "../../../Database.ump"
-   protected void hook51(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
-    
-  }
-
-  // line 652 "../../../Database.ump"
-   protected void hook52(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
-    
-  }
-
-  // line 655 "../../../Database.ump"
-   protected void hook53(List list) throws DatabaseException{
-    for (int i = 0; i < triggerList.size(); i += 1) {
-	    Object obj = triggerList.get(i);
-	    if (obj instanceof SecondaryTrigger) {
-		list.add(((SecondaryTrigger) obj).getDb());
-	    }
-	}
-  }
-
-  // line 665 "../../../Database.ump"
-   protected void hook54(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData) throws DatabaseException{
-    for (int i = 0; i < triggerList.size(); i += 1) {
-	    DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
-	    trigger.databaseUpdated(this, locker, priKey, oldData, newData);
-	}
+				try {	
+						Label54: //Label:           ;  //this.hook54(locker, priKey, oldData, newData);
+						for (int i = 0; i < triggerList.size(); i += 1) {
+									DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
+									trigger.databaseUpdated(this, locker, priKey, oldData, newData);
+							}
+						}
+				finally {
+									hook54_1://releaseTriggerListReadLock();
+							}
+    //End of hook54
   }
 
 
@@ -787,8 +751,8 @@ databaseImpl.checkIsDeleted("preload");
     if (databaseImpl == null) {
 					throw new DatabaseException("couldn't find database - truncate");
 			}
-			//this.hook43();
-			Label43:
+
+			Label43:			//this.hook43();
 			if (handleLocker.isHandleLockTransferrable()) {
 					handleLocker.transferHandleLock(this, locker, false);
 			}
@@ -884,7 +848,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   @MethodObject
-    @MethodObject
   // line 13 "../../../Database_static.ump"
   // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
@@ -915,6 +878,11 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 18 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
+      // line 6 "../../../Latches_Database_inner.ump"
+      env=_this.envHandle.getEnvironmentImpl();
+              env.getTriggerLatch().acquireShared();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -936,7 +904,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   @MethodObject
-    @MethodObject
   // line 25 "../../../Database_static.ump"
   // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
@@ -967,6 +934,11 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 30 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
+      // line 20 "../../../Latches_Database_inner.ump"
+      env=_this.envHandle.getEnvironmentImpl();
+              env.getTriggerLatch().acquireExclusive();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -988,7 +960,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   @MethodObject
-    @MethodObject
   // line 37 "../../../Database_static.ump"
   // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock
@@ -1022,6 +993,11 @@ databaseImpl.checkIsDeleted("preload");
       if (_this.triggerList.size() == 0) {
             _this.triggerList=null;
           }
+      // line 13 "../../../Latches_Database_inner.ump"
+      //      original();
+              env=_this.envHandle.getEnvironmentImpl();
+              env.getTriggerLatch().release();
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -1039,7 +1015,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   
-  @MethodObject
   // line 4 "../../../Truncate_Database_inner.ump"
   public static class Database_truncate
   {
@@ -1157,7 +1132,7 @@ databaseImpl.checkIsDeleted("preload");
     StringBuffer errors = null;
 	checkEnv();
 	checkProhibitedDbState(CLOSED, "Can't close Database:");
-	this.hook44();
+	Label44:           ;  //this.hook44();
 	removeAllTriggers();
 	envHandle.removeReferringHandle(this);
 	if (cursors.size() > 0) {
@@ -1195,24 +1170,24 @@ databaseImpl.checkIsDeleted("preload");
 	if (useConfig.getReadUncommitted() && useConfig.getReadCommitted()) {
 	    throw new IllegalArgumentException("Only one may be specified: ReadCommitted or ReadUncommitted");
 	}
-	this.hook46(txn, cursorConfig);
+	Label46:           ;  //this.hook46(txn, cursorConfig);
 	Cursor ret = newDbcInstance(txn, useConfig);
 	return ret;
   }
 
-// line 482 "../../../Database.ump"
+// line 493 "../../../Database.ump"
   synchronized void removeCursor (Cursor dbc) 
   {
     cursors.remove(dbc);
   }
 
-// line 486 "../../../Database.ump"
+// line 497 "../../../Database.ump"
   synchronized void addCursor (Cursor dbc) 
   {
     cursors.add(dbc);
   }
 
-// line 521 "../../../Database.ump"
+// line 532 "../../../Database.ump"
   synchronized void invalidate () 
   {
     state = INVALID;

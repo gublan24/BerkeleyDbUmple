@@ -327,7 +327,7 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	    OperationStatus status = OperationStatus.SUCCESS;
 	    while (status == OperationStatus.SUCCESS) {
-		this.hook173();
+		Label173:           ;  //this.hook173();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -343,7 +343,10 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	} finally {
 	    if (cursor != null) {
-		this.hook178(cursor);
+		Label178:
+cursor.releaseBINs();
+//	original(cursor);
+           ;  //this.hook178(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -391,7 +394,7 @@ public class UtilizationProfile implements EnvConfigObserver
 		status = OperationStatus.NOTFOUND;
 	    }
 	    while (status == OperationStatus.SUCCESS) {
-		this.hook174();
+		Label174:           ;  //this.hook174();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -401,7 +404,7 @@ public class UtilizationProfile implements EnvConfigObserver
 		    if (offsets != null) {
 			list.add(offsets.toArray());
 		    }
-		    //this.hook187(cursor);
+		    //Label:           ;  //this.hook187(cursor);
         Label187:
 cursor.evict();
 //	original(cursor);
@@ -410,7 +413,13 @@ cursor.evict();
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
 	} finally {
-	    this.hook179(cursor);
+	    Label179:
+if (cursor != null) {
+	    cursor.releaseBINs();
+	    cursor.close();
+	}
+	//original(cursor);
+           ;  //this.hook179(cursor);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -530,7 +539,7 @@ cursor.evict();
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    this.hook175();
+		    Label175:           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());
@@ -544,7 +553,7 @@ cursor.evict();
 				}
 			    }
 			}
-			//this.hook190(cursor);
+			//Label:           ;  //this.hook190(cursor);
       Label190:
 cursor.evict();
 //	original(cursor);
@@ -581,76 +590,82 @@ cursor.evict();
 	    Label186:
 b |= db.isDeleted();
 			//return original(db, b);
- //b = this.hook186(db, b);
+ //b = Label:           ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
 	    BIN bin = null;
-	    this.hook180(lsn, entry, db, bin);
+	    Label180:           ;  //this.hook180(lsn, entry, db, bin);
+			Tree tree = db.getTree();
+			TreeLocation location = new TreeLocation();
+			boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(), false, true, false, false);
+			bin = location.bin;
+			int index = location.index;
+			if (!parentFound) {
+					throw new ReturnBoolean(true);
+			}
+			if (bin.isEntryKnownDeleted(index)) {
+					throw new ReturnBoolean(true);
+			}
+			if (bin.getLsn(index) != lsn) {
+					throw new ReturnBoolean(true);
+			}
+			System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
+			throw new ReturnBoolean(false);
+//end hook180
+
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
+	    Label180_1:
+//try {	    //original(lsn, entry, db, bin);} finally {
+	    if (bin != null) {
+		bin.releaseLatch();
+	    }
+	//}
+           ;
 	    return r.value;
 	}
   }
 
-  // line 662 "../../../../UtilizationProfile.ump"
-   protected void hook173() throws DatabaseException{
-    
-  }
-
-  // line 665 "../../../../UtilizationProfile.ump"
-   protected void hook174() throws DatabaseException{
-    
-  }
-
-  // line 668 "../../../../UtilizationProfile.ump"
-   protected void hook175() throws DatabaseException{
-    
-  }
-
-  // line 671 "../../../../UtilizationProfile.ump"
-   protected void hook177(long fileNum, int sequence, OperationStatus status) throws DatabaseException{
-    
-  }
-
-  // line 674 "../../../../UtilizationProfile.ump"
-   protected void hook178(CursorImpl cursor) throws DatabaseException{
-    cursor.releaseBINs();
-	original(cursor);
-  }
-
-  // line 677 "../../../../UtilizationProfile.ump"
-   protected void hook179(CursorImpl cursor) throws DatabaseException{
-    if (cursor != null) {
-	    cursor.releaseBINs();
-	    cursor.close();
-	}
-	original(cursor);
-  }
-
-  // line 680 "../../../../UtilizationProfile.ump"
-   protected void hook180(long lsn, LNLogEntry entry, DatabaseImpl db, BIN bin) throws DatabaseException{
-    Tree tree = db.getTree();
-	TreeLocation location = new TreeLocation();
-	boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(),
-		false, true, false, false);
-	bin = location.bin;
-	int index = location.index;
-	if (!parentFound) {
-	    throw new ReturnBoolean(true);
-	}
-	if (bin.isEntryKnownDeleted(index)) {
-	    throw new ReturnBoolean(true);
-	}
-	if (bin.getLsn(index) != lsn) {
-	    throw new ReturnBoolean(true);
-	}
-	System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
-	throw new ReturnBoolean(false);
-  }
-
 
   /**
+   * protected void hook173() throws DatabaseException {
+   * }
+   * 
+   * protected void hook174() throws DatabaseException {
+   * }
+   * 
+   * protected void hook175() throws DatabaseException {
+   * }
+   * 
+   * protected void hook177(long fileNum, int sequence, OperationStatus status) throws DatabaseException {
+   * }
+   * 
+   * protected void hook178(CursorImpl cursor) throws DatabaseException {
+   * }
+   * 
+   * protected void hook179(CursorImpl cursor) throws DatabaseException {
+   * }
+   * 
+   * protected void hook180(long lsn, LNLogEntry entry, DatabaseImpl db, BIN bin) throws DatabaseException {
+   * Tree tree = db.getTree();
+   * TreeLocation location = new TreeLocation();
+   * boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(),
+   * false, true, false, false);
+   * bin = location.bin;
+   * int index = location.index;
+   * if (!parentFound) {
+   * throw new ReturnBoolean(true);
+   * 
+   * if (bin.isEntryKnownDeleted(index)) {
+   * throw new ReturnBoolean(true);
+   * 
+   * if (bin.getLsn(index) != lsn) {
+   * throw new ReturnBoolean(true);
+   * 
+   * System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
+   * throw new ReturnBoolean(false);
+   * }
    * protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
    * return b;
    * }
@@ -659,12 +674,12 @@ b |= db.isDeleted();
    * protected void hook188(CursorImpl cursor) throws DatabaseException {
    * }
    */
-  // line 710 "../../../../UtilizationProfile.ump"
+  // line 729 "../../../../UtilizationProfile.ump"
    protected void hook189(CursorImpl cursor) throws DatabaseException{
     
   }
 
-  // line 713 "../../../../UtilizationProfile.ump"
+  // line 732 "../../../../UtilizationProfile.ump"
    protected void hook190(CursorImpl cursor) throws DatabaseException{
     
   }
@@ -776,7 +791,7 @@ b |= db.isDeleted();
       synchronized (_this) {
             assert _this.cachePopulated;
             if (_this.fileSummaryMap.remove(fileNum) != null) {
-              //this.hook192();
+              //Label:           ;  //this.hook192();
               Label192:
   mb=_this.env.getMemoryBudget();
           mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
@@ -865,7 +880,7 @@ b |= db.isDeleted();
           _this.insertFileSummary(ln,fileNum,sequence);
           summary=ln.getBaseSummary();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
-            //this.hook193();
+            //Label:           ;  //this.hook193();
             Label193:
   mb=_this.env.getMemoryBudget();
           mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
@@ -908,8 +923,6 @@ b |= db.isDeleted();
   
   @MethodObject
     @MethodObject
-    @MethodObject
-    @MethodObject
   // line 89 "../../../../UtilizationProfile_static.ump"
   // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
@@ -946,7 +959,7 @@ b |= db.isDeleted();
           if (!_this.openFileSummaryDatabase()) {
             return false;
           }
-          //this.hook194();
+          //Label:           ;  //this.hook194();
           Label194:
   oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
           //original();
@@ -965,7 +978,7 @@ b |= db.isDeleted();
                 status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
               }
               while (status == OperationStatus.SUCCESS) {
-                this.hook176();
+                Label176:           ;  //this.hook176();
                 ln=(FileSummaryLN)cursor.getCurrentLN(LockType.NONE);
                 if (ln == null) {
                   status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
@@ -979,12 +992,18 @@ b |= db.isDeleted();
                   _this.fileSummaryMap.put(fileNumLong,ln.getBaseSummary());
                   if (isOldVersion) {
                     _this.insertFileSummary(ln,fileNum,0);
-                    this.hook182();
+                    Label182:
+  cursor.latchBIN();
+          //original();
+             ;  //this.hook182();
                     cursor.delete();
-                    this.hook181();
+                    Label181:
+  cursor.releaseBIN();
+          //original();
+             ;  //this.hook181();
                   }
      else {
-                   // this.hook191();
+                   // Label:           ;  //this.hook191();
                       Label191:
   cursor.evict();
           //original();
@@ -994,9 +1013,15 @@ b |= db.isDeleted();
      else {
                   _this.fileSummaryMap.remove(fileNumLong);
                   if (isOldVersion) {
-                    this.hook184();
+                    Label184:
+  cursor.latchBIN();
+          //original();
+             ;  //this.hook184();
                     cursor.delete();
-                    this.hook183();
+                    Label183:
+  cursor.releaseBIN();
+          //original();
+             ;  //this.hook183();
                   }
      else {
                     _this.deleteFileSummary(fileNumLong);
@@ -1015,13 +1040,16 @@ b |= db.isDeleted();
           }
       finally {
             if (cursor != null) {
-              this.hook185();
+              Label185:
+  cursor.releaseBINs();
+          //original();
+             ;  //this.hook185();
               cursor.close();
             }
             if (locker != null) {
               locker.operationEnd();
             }
-            //this.hook195();
+            //Label:           ;  //this.hook195();
             Label195:
   newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
           mb=_this.env.getMemoryBudget();
@@ -1031,41 +1059,6 @@ b |= db.isDeleted();
           }
           _this.cachePopulated=true;
           return true;
-    }
-  
-    // line 189 "../../../../UtilizationProfile_static.ump"
-     protected void hook176() throws DatabaseException{
-      
-    }
-  
-    // line 191 "../../../../UtilizationProfile_static.ump"
-     protected void hook181() throws DatabaseException{
-      cursor.releaseBIN();
-          original();
-    }
-  
-    // line 193 "../../../../UtilizationProfile_static.ump"
-     protected void hook182() throws DatabaseException{
-      cursor.latchBIN();
-          original();
-    }
-  
-    // line 195 "../../../../UtilizationProfile_static.ump"
-     protected void hook183() throws DatabaseException{
-      cursor.releaseBIN();
-          original();
-    }
-  
-    // line 197 "../../../../UtilizationProfile_static.ump"
-     protected void hook184() throws DatabaseException{
-      cursor.latchBIN();
-          original();
-    }
-  
-    // line 199 "../../../../UtilizationProfile_static.ump"
-     protected void hook185() throws DatabaseException{
-      cursor.releaseBINs();
-          original();
     }
     
     //------------------------
@@ -1277,11 +1270,11 @@ b |= db.isDeleted();
 	try {
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    //this.hook189(cursor);
+	    //Label:           ;  //this.hook189(cursor);
       Label189:
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    this.hook177(fileNum, sequence, status);
-	    //this.hook188(cursor);
+	    Label177:           ;  //this.hook177(fileNum, sequence, status);
+	    //Label:           ;  //this.hook188(cursor);
       Label188:
 	} finally {
 	    if (cursor != null) {

@@ -49,10 +49,13 @@ public class DaemonThread implements DaemonRunner,Runnable
   // line 43 "../../../../DaemonThread.ump"
    protected void init(long waitTime, String name, EnvironmentImpl env){
     this.waitTime = waitTime;
-	this.name = name;
-	this.env = env;
-	workQueue = new HashSet();
-	this.hook856(name, env);
+			this.name = name;
+			this.env = env;
+			workQueue = new HashSet();
+			Label856:
+workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
+	//original(name, env);
+ //this.hook856(name, env);
   }
 
 
@@ -122,14 +125,25 @@ public class DaemonThread implements DaemonRunner,Runnable
 
   // line 105 "../../../../DaemonThread.ump"
    public void addToQueue(Object o) throws DatabaseException{
+    // line 15 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.acquire();
+    	//original(o);
+    // END OF UMPLE BEFORE INJECTION
     workQueue.add(o);
 	wakeup();
+    // line 20 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 110 "../../../../DaemonThread.ump"
    public int getQueueSize() throws DatabaseException{
+    // line 24 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
     int count = workQueue.size();
 	return count;
+
   }
 
   // line 115 "../../../../DaemonThread.ump"
@@ -153,9 +167,12 @@ public class DaemonThread implements DaemonRunner,Runnable
 		break;
 	    }
 	    try {
-		this.hook858();
+		Label858: //this.hook858();
 		boolean nothingToDo = workQueue.size() == 0;
-		this.hook857();
+		Label857:
+workQueueLatch.release();
+	//original();
+ //this.hook857();
 		if (nothingToDo) {
 		    synchronized (synchronizer) {
 			if (waitTime == 0) {
@@ -252,20 +269,7 @@ public class DaemonThread implements DaemonRunner,Runnable
 
   // line 223 "../../../../DaemonThread.ump"
    protected void hook856(String name, EnvironmentImpl env){
-    workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
-	original(name, env);
-  }
-
-  // line 226 "../../../../DaemonThread.ump"
-   protected void hook857() throws InterruptedException,Exception{
-    workQueueLatch.release();
-	original();
-  }
-
-  // line 229 "../../../../DaemonThread.ump"
-   protected void hook858() throws InterruptedException,Exception{
-    workQueueLatch.acquire();
-	original();
+    
   }
   
   //------------------------
@@ -298,6 +302,13 @@ public class DaemonThread implements DaemonRunner,Runnable
   abstract protected void onWakeup() throws DatabaseException ;
 // line 7 "../../../../Latches_DaemonThread.ump"
   protected Latch workQueueLatch ;
+
+// line 38 "../../../../Latches_DaemonThread.ump"
+  after Label858: : run () 
+  {
+    workQueueLatch.acquire();
+	//original();
+  }
 
   
 }

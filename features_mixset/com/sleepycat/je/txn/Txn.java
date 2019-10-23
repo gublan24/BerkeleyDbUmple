@@ -77,20 +77,20 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Create a transaction from Environment.txnBegin.
    */
-  // line 87 "../../../../Txn.ump"
+  // line 90 "../../../../Txn.ump"
    public  Txn(EnvironmentImpl envImpl, TransactionConfig config) throws DatabaseException{
     super(envImpl, config.getReadUncommitted(), config.getNoWait());
 	init(envImpl, config);
   }
 
-  // line 92 "../../../../Txn.ump"
+  // line 95 "../../../../Txn.ump"
    public  Txn(EnvironmentImpl envImpl, TransactionConfig config, long id) throws DatabaseException{
     super(envImpl, config.getReadUncommitted(), config.getNoWait());
 	init(envImpl, config);
 	this.id = id;
   }
 
-  // line 98 "../../../../Txn.ump"
+  // line 101 "../../../../Txn.ump"
    private void init(EnvironmentImpl envImpl, TransactionConfig config) throws DatabaseException{
     serializableIsolation = config.getSerializableIsolation();
 	readCommittedIsolation = config.getReadCommitted();
@@ -119,7 +119,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
    * 
    * Constructor for reading from log.
    */
-  // line 121 "../../../../Txn.ump"
+  // line 124 "../../../../Txn.ump"
    public  Txn(){
     lastLoggedLsn = DbLsn.NULL_LSN;
   }
@@ -129,7 +129,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
    * 
    * UserTxns get a new unique id for each instance.
    */
-  // line 128 "../../../../Txn.ump"
+  // line 131 "../../../../Txn.ump"
    protected long generateId(TxnManager txnManager){
     return txnManager.incTxnId();
   }
@@ -139,12 +139,12 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
    * 
    * Access to last LSN.
    */
-  // line 135 "../../../../Txn.ump"
+  // line 138 "../../../../Txn.ump"
   public long getLastLsn(){
     return lastLoggedLsn;
   }
 
-  // line 139 "../../../../Txn.ump"
+  // line 142 "../../../../Txn.ump"
    public void setPrepared(boolean prepared){
     if (prepared) {
 	    txnState |= IS_PREPARED;
@@ -153,7 +153,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
 	}
   }
 
-  // line 147 "../../../../Txn.ump"
+  // line 150 "../../../../Txn.ump"
    public void setSuspended(boolean suspended){
     if (suspended) {
 	    txnState |= XA_SUSPENDED;
@@ -162,7 +162,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
 	}
   }
 
-  // line 155 "../../../../Txn.ump"
+  // line 158 "../../../../Txn.ump"
    public boolean isSuspended(){
     return (txnState & XA_SUSPENDED) != 0;
   }
@@ -174,7 +174,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
    * @see Locker#lockInternal
    * @Override
    */
-  // line 165 "../../../../Txn.ump"
+  // line 168 "../../../../Txn.ump"
   public LockResult lockInternal(long nodeId, LockType lockType, boolean noWait, DatabaseImpl database) throws DatabaseException{
     long timeout = 0;
 	boolean useNoWait = noWait || defaultNoWait;
@@ -197,7 +197,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
 	return new LockResult(grant, info);
   }
 
-  // line 187 "../../../../Txn.ump"
+  // line 190 "../../../../Txn.ump"
    public int prepare(Xid xid) throws DatabaseException{
     if ((txnState & IS_PREPARED) != 0) {
 	    throw new DatabaseException("prepare() has already been called for Transaction " + id + ".");
@@ -215,14 +215,14 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
 	return XAResource.XA_OK;
   }
 
-  // line 204 "../../../../Txn.ump"
+  // line 207 "../../../../Txn.ump"
    public void commit(Xid xid) throws DatabaseException{
     commit(TXN_SYNC);
 	envImpl.getTxnManager().unRegisterXATxn(xid, true);
 	return;
   }
 
-  // line 210 "../../../../Txn.ump"
+  // line 213 "../../../../Txn.ump"
    public void abort(Xid xid) throws DatabaseException{
     abort(true);
 	envImpl.getTxnManager().unRegisterXATxn(xid, false);
@@ -234,7 +234,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
    * 
    * Call commit() with the default sync configuration property.
    */
-  // line 219 "../../../../Txn.ump"
+  // line 222 "../../../../Txn.ump"
    public long commit() throws DatabaseException{
     return commit(defaultFlushSyncBehavior);
   }
@@ -244,7 +244,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
    * 
    * Commit this transaction 1. Releases read locks 2. Writes a txn commit record into the log 3. Flushes the log to disk. 4. Add deleted LN info to IN compressor queue 5. Release all write locks  If any step of this fails, we must convert this transaction to an abort.
    */
-  // line 226 "../../../../Txn.ump"
+  // line 229 "../../../../Txn.ump"
    public long commit(byte flushSyncBehavior) throws DatabaseException{
     try {
 					long commitLsn = DbLsn.NULL_LSN;
@@ -313,7 +313,7 @@ cleanupDatabaseImpls(true);
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				this.hook800(t);
+				Label800: //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -330,12 +330,12 @@ cleanupDatabaseImpls(true);
    * 
    * Abort this transaction. Steps are: 1. Release LN read locks. 2. Write a txn abort entry to the log. This is only for log file cleaning optimization and there's no need to guarantee a flush to disk.   3. Find the last LN log entry written for this txn, and use that to traverse the log looking for nodes to undo. For each node, use the same undo logic as recovery to rollback the transaction. Note that we walk the log in order to undo in reverse order of the actual operations. For example, suppose the txn did this: delete K1/D1 (in LN 10) create K1/D1 (in LN 20) If we process LN10 before LN 20, we'd inadvertently create a  duplicate tree of "K1", which would be fatal for the mapping tree. 4. Release the write lock for this LN.
    */
-  // line 297 "../../../../Txn.ump"
+  // line 300 "../../../../Txn.ump"
    public long abort(boolean forceFlush) throws DatabaseException{
     return abortInternal(forceFlush, true);
   }
 
-  // line 301 "../../../../Txn.ump"
+  // line 304 "../../../../Txn.ump"
    private long abortInternal(boolean forceFlush, boolean writeAbortRecord) throws DatabaseException{
     try {
 	    int numReadLocks;
@@ -372,7 +372,7 @@ cleanupDatabaseImpls(false);
  //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799: //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -395,7 +395,7 @@ cleanupDatabaseImpls(false);
    * 
    * Rollback the changes to this txn's write locked nodes.
    */
-  // line 349 "../../../../Txn.ump"
+  // line 352 "../../../../Txn.ump"
    private void undo() throws DatabaseException{
     Long nodeId = null;
 	long undoLsn = lastLoggedLsn;
@@ -414,7 +414,9 @@ cleanupDatabaseImpls(false);
 		    undoLN.postFetchInit(db, undoLsn);
 		    long abortLsn = undoEntry.getAbortLsn();
 		    boolean abortKnownDeleted = undoEntry.getAbortKnownDeleted();
-		    this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
+		    Label802: //this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
+				RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn, abortLsn, abortKnownDeleted, null, false);
+		    Label802_1: //end of hook802
 		    if (!undoLN.isDeleted()) {
 			logManager.countObsoleteNode(undoLsn, null);
 		    }
@@ -424,12 +426,12 @@ cleanupDatabaseImpls(false);
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    this.hook801(nodeId, undoLsn, e);
+	    Label801: //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
   }
 
-  // line 382 "../../../../Txn.ump"
+  // line 387 "../../../../Txn.ump"
    private int clearWriteLocks() throws DatabaseException{
     int numWriteLocks = writeInfo.size();
 	Iterator iter = writeInfo.values().iterator();
@@ -441,7 +443,7 @@ cleanupDatabaseImpls(false);
 	return numWriteLocks;
   }
 
-  // line 393 "../../../../Txn.ump"
+  // line 398 "../../../../Txn.ump"
    private int clearReadLocks() throws DatabaseException{
     int numReadLocks = 0;
 	if (readLocks != null) {
@@ -461,7 +463,7 @@ cleanupDatabaseImpls(false);
    * 
    * Called by the recovery manager when logging a transaction aware object. This method is synchronized by the caller, by being called within the log latch. Record the last LSN for this transaction, to create the transaction chain, and also record the LSN in the write info for abort logic.
    */
-  // line 410 "../../../../Txn.ump"
+  // line 415 "../../../../Txn.ump"
    public void addLogInfo(long lastLsn) throws DatabaseException{
     lastLoggedLsn = lastLsn;
 	synchronized (this) {
@@ -476,7 +478,7 @@ cleanupDatabaseImpls(false);
    * 
    * @return first logged LSN, to aid recovery rollback.
    */
-  // line 422 "../../../../Txn.ump"
+  // line 427 "../../../../Txn.ump"
   public long getFirstActiveLsn() throws DatabaseException{
     synchronized (this) {
 	    return firstLoggedLsn;
@@ -488,12 +490,12 @@ cleanupDatabaseImpls(false);
    * 
    * Add lock to the appropriate queue.
    */
-  // line 431 "../../../../Txn.ump"
+  // line 436 "../../../../Txn.ump"
   public void addLock(Long nodeId, Lock lock, LockType type, LockGrantType grantStatus) throws DatabaseException{
     new Txn_addLock(this, nodeId, lock, type, grantStatus).execute();
   }
 
-  // line 435 "../../../../Txn.ump"
+  // line 440 "../../../../Txn.ump"
    private void addReadLock(Lock lock){
     int delta = 0;
 			if (readLocks == null) {
@@ -518,7 +520,7 @@ delta += READ_LOCK_OVERHEAD;
    * 
    * Remove the lock from the set owned by this transaction. If specified to LockManager.release, the lock manager will call this when its releasing a lock. Usually done because the transaction doesn't need to really keep the lock, i.e for a deleted record.
    */
-  // line 450 "../../../../Txn.ump"
+  // line 455 "../../../../Txn.ump"
   public void removeLock(long nodeId, Lock lock) throws DatabaseException{
     synchronized (this) {
 					if ((readLocks != null) && readLocks.remove(lock)) {
@@ -539,7 +541,7 @@ updateMemoryUsage(0 - READ_LOCK_OVERHEAD);
    * 
    * A lock is being demoted. Move it from the write collection into the read collection.
    */
-  // line 465 "../../../../Txn.ump"
+  // line 470 "../../../../Txn.ump"
   public void moveWriteToReadLock(long nodeId, Lock lock){
     boolean found = false;
 	synchronized (this) {
@@ -561,7 +563,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @return true if this transaction created this node. We know that thisis true if the node is write locked and has a null abort LSN.
    */
-  // line 481 "../../../../Txn.ump"
+  // line 486 "../../../../Txn.ump"
    public boolean createdNode(long nodeId) throws DatabaseException{
     boolean created = false;
 	synchronized (this) {
@@ -580,7 +582,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @return the abortLsn for this node.
    */
-  // line 497 "../../../../Txn.ump"
+  // line 502 "../../../../Txn.ump"
    public long getAbortLsn(long nodeId) throws DatabaseException{
     WriteLockInfo info = null;
 	synchronized (this) {
@@ -600,7 +602,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @return the WriteLockInfo for this node.
    */
-  // line 514 "../../../../Txn.ump"
+  // line 519 "../../../../Txn.ump"
    public WriteLockInfo getWriteLockInfo(long nodeId) throws DatabaseException{
     WriteLockInfo info = WriteLockInfo.basicWriteLockInfo;
 	synchronized (this) {
@@ -616,7 +618,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Is always transactional.
    */
-  // line 527 "../../../../Txn.ump"
+  // line 532 "../../../../Txn.ump"
    public boolean isTransactional(){
     return true;
   }
@@ -626,7 +628,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Is serializable isolation if so configured.
    */
-  // line 534 "../../../../Txn.ump"
+  // line 539 "../../../../Txn.ump"
    public boolean isSerializableIsolation(){
     return serializableIsolation;
   }
@@ -636,7 +638,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Is read-committed isolation if so configured.
    */
-  // line 541 "../../../../Txn.ump"
+  // line 546 "../../../../Txn.ump"
    public boolean isReadCommittedIsolation(){
     return readCommittedIsolation;
   }
@@ -646,7 +648,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * This is a transactional locker.
    */
-  // line 548 "../../../../Txn.ump"
+  // line 553 "../../../../Txn.ump"
    public Txn getTxnLocker(){
     return this;
   }
@@ -656,7 +658,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Returns 'this', since this locker holds no non-transactional locks.
    */
-  // line 555 "../../../../Txn.ump"
+  // line 560 "../../../../Txn.ump"
    public Locker newNonTxnLocker() throws DatabaseException{
     return this;
   }
@@ -666,7 +668,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * This locker holds no non-transactional locks.
    */
-  // line 562 "../../../../Txn.ump"
+  // line 567 "../../../../Txn.ump"
    public void releaseNonTxnLocks() throws DatabaseException{
     
   }
@@ -676,7 +678,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Created transactions do nothing at the end of the operation.
    */
-  // line 568 "../../../../Txn.ump"
+  // line 573 "../../../../Txn.ump"
    public void operationEnd() throws DatabaseException{
     
   }
@@ -686,7 +688,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Created transactions do nothing at the end of the operation.
    */
-  // line 574 "../../../../Txn.ump"
+  // line 579 "../../../../Txn.ump"
    public void operationEnd(boolean operationOK) throws DatabaseException{
     
   }
@@ -696,7 +698,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Created transactions don't transfer locks until commit.
    */
-  // line 580 "../../../../Txn.ump"
+  // line 585 "../../../../Txn.ump"
    public void setHandleLockOwner(boolean ignore, Database dbHandle, boolean dbIsClosing) throws DatabaseException{
     if (dbIsClosing) {
 	    Long handleLockId = (Long) handleToHandleLockMap.get(dbHandle);
@@ -722,7 +724,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Cursors operating under this transaction are added to the collection.
    */
-  // line 603 "../../../../Txn.ump"
+  // line 608 "../../../../Txn.ump"
    public void registerCursor(CursorImpl cursor) throws DatabaseException{
     synchronized (this) {
 	    cursor.setLockerNext(cursorSet);
@@ -738,7 +740,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Remove a cursor from the collection.
    */
-  // line 616 "../../../../Txn.ump"
+  // line 621 "../../../../Txn.ump"
    public void unRegisterCursor(CursorImpl cursor) throws DatabaseException{
     synchronized (this) {
 	    CursorImpl prev = cursor.getLockerPrev();
@@ -761,7 +763,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @return true if this txn is willing to give up the handle lock toanother txn before this txn ends.
    */
-  // line 636 "../../../../Txn.ump"
+  // line 641 "../../../../Txn.ump"
    public boolean isHandleLockTransferrable(){
     return false;
   }
@@ -772,7 +774,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * Check if all cursors associated with the txn are closed. If not, those open cursors will be forcibly closed.
    * @return true if open cursors exist
    */
-  // line 644 "../../../../Txn.ump"
+  // line 649 "../../../../Txn.ump"
    private boolean checkCursorsForClose() throws DatabaseException{
     CursorImpl c = cursorSet;
 	while (c != null) {
@@ -789,7 +791,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Set the state of a transaction to ONLY_ABORTABLE.
    */
-  // line 658 "../../../../Txn.ump"
+  // line 663 "../../../../Txn.ump"
    public void setOnlyAbortable(){
     txnState &= ~STATE_BITS;
 	txnState |= ONLY_ABORTABLE;
@@ -800,7 +802,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Get the state of a transaction's ONLY_ABORTABLE.
    */
-  // line 666 "../../../../Txn.ump"
+  // line 671 "../../../../Txn.ump"
    public boolean getOnlyAbortable(){
     return (txnState & ONLY_ABORTABLE) != 0;
   }
@@ -810,7 +812,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Throw an exception if the transaction is not open. If calledByAbort is true, it means we're being called from abort(). Caller must invoke with "this" synchronized.
    */
-  // line 673 "../../../../Txn.ump"
+  // line 678 "../../../../Txn.ump"
    protected void checkState(boolean calledByAbort) throws DatabaseException{
     boolean ok = false;
 	boolean onlyAbortable = false;
@@ -830,7 +832,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   /**
    * 
    */
-  // line 690 "../../../../Txn.ump"
+  // line 695 "../../../../Txn.ump"
    private void close(boolean isCommit) throws DatabaseException{
     synchronized (this) {
 	    txnState &= ~STATE_BITS;
@@ -844,7 +846,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @see LogWritable#getLogSize
    */
-  // line 701 "../../../../Txn.ump"
+  // line 706 "../../../../Txn.ump"
    public int getLogSize(){
     return LogUtils.LONG_BYTES + LogUtils.LONG_BYTES;
   }
@@ -854,7 +856,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @see LogWritable#writeToLog
    */
-  // line 708 "../../../../Txn.ump"
+  // line 713 "../../../../Txn.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeLong(logBuffer, id);
 	LogUtils.writeLong(logBuffer, lastLoggedLsn);
@@ -865,7 +867,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @see LogReadable#readFromLogIt's ok for FindBugs to whine about id not being synchronized.
    */
-  // line 716 "../../../../Txn.ump"
+  // line 721 "../../../../Txn.ump"
    public void readFromLog(ByteBuffer logBuffer, byte entryTypeVersion){
     id = LogUtils.readLong(logBuffer);
 	lastLoggedLsn = LogUtils.readLong(logBuffer);
@@ -876,7 +878,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @see LogReadable#dumpLog
    */
-  // line 724 "../../../../Txn.ump"
+  // line 729 "../../../../Txn.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<txn id=\"");
 	sb.append(super.toString());
@@ -890,7 +892,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 735 "../../../../Txn.ump"
+  // line 740 "../../../../Txn.ump"
    public long getTransactionId(){
     return getId();
   }
@@ -900,7 +902,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 742 "../../../../Txn.ump"
+  // line 747 "../../../../Txn.ump"
    public boolean logEntryIsTransactional(){
     return true;
   }
@@ -910,7 +912,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Transfer a single handle lock to the set of corresponding handles at commit time.
    */
-  // line 749 "../../../../Txn.ump"
+  // line 754 "../../../../Txn.ump"
    private void transferHandleLockToHandleSet(Long handleLockId, Set dbHandleSet) throws DatabaseException{
     int numHandles = dbHandleSet.size();
 	Database[] dbHandles = new Database[numHandles];
@@ -932,85 +934,14 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
    * 
    * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.  The string construction can be numerous enough to show up on a performance profile.
    */
-  // line 768 "../../../../Txn.ump"
+  // line 773 "../../../../Txn.ump"
    private void traceCommit(int numWriteLocks, int numReadLocks){
     new Txn_traceCommit(this, numWriteLocks, numReadLocks).execute();
   }
 
-  // line 772 "../../../../Txn.ump"
+  // line 777 "../../../../Txn.ump"
   public int getInMemorySize(){
     return inMemorySize;
-  }
-
-
-  /**
-   * 
-   * Store information about a DatabaseImpl that will have to be purged at transaction commit or abort. This handles cleanup after operations like Environment.truncateDatabase,  Environment.removeDatabase. Cleanup like this is done outside the usual transaction commit or node undo processing, because the mapping tree is always AutoTxn'ed to avoid deadlock and is  essentially  non-transactional
-   */
-  // line 779 "../../../../Txn.ump"
-   protected void hook799(int numReadLocks, int numWriteLocks, boolean openCursors) throws DatabaseException{
-    
-  }
-
-  // line 782 "../../../../Txn.ump"
-   protected void hook800(Throwable t) throws DatabaseException,Throwable{
-    
-  }
-
-  // line 785 "../../../../Txn.ump"
-   protected void hook801(Long nodeId, long undoLsn, DatabaseException e) throws DatabaseException{
-    
-  }
-
-  // line 789 "../../../../Txn.ump"
-   protected void hook802(long undoLsn, TreeLocation location, LNLogEntry undoEntry, LN undoLN, DatabaseImpl db, long abortLsn, boolean abortKnownDeleted) throws DatabaseException,RuntimeException{
-    RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn,
-		abortLsn, abortKnownDeleted, null, false);
-  }
-
-
-  /**
-   * protected void hook803() throws DatabaseException, RunRecoveryException, Throwable {
-   * }
-   * protected void hook804() throws DatabaseException {
-   * }
-   * protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
-   * }
-   * protected void hook806() throws DatabaseException, RunRecoveryException, Throwable {
-   * }
-   * protected void hook807() throws DatabaseException {
-   * }
-   * protected void hook808() throws DatabaseException {
-   * }
-   */
-  // line 812 "../../../../Txn.ump"
-   protected void hook809() throws DatabaseException{
-    
-  }
-
-  // line 815 "../../../../Txn.ump"
-   protected void hook810(int delta){
-    
-  }
-
-  // line 818 "../../../../Txn.ump"
-   protected int hook811(int delta){
-    return delta;
-  }
-
-  // line 822 "../../../../Txn.ump"
-   protected void hook812() throws DatabaseException{
-    
-  }
-
-  // line 825 "../../../../Txn.ump"
-   protected void hook813() throws DatabaseException{
-    
-  }
-
-  // line 828 "../../../../Txn.ump"
-   protected void hook814(){
-    
   }
 
   // line 12 "../../../../MemoryBudget_Txn.ump"
@@ -1331,7 +1262,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   
-  @MethodObject
   // line 4 "../../../../DeleteOp_Txn_inner.ump"
   public static class Txn_markDeleteAtTxnEnd
   {
@@ -1393,49 +1323,49 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 39 "../../../../Txn.ump"
+  // line 42 "../../../../Txn.ump"
   public static final byte TXN_NOSYNC = 0 ;
-// line 41 "../../../../Txn.ump"
+// line 44 "../../../../Txn.ump"
   public static final byte TXN_WRITE_NOSYNC = 1 ;
-// line 43 "../../../../Txn.ump"
+// line 46 "../../../../Txn.ump"
   public static final byte TXN_SYNC = 2 ;
-// line 45 "../../../../Txn.ump"
+// line 48 "../../../../Txn.ump"
   private static final String DEBUG_NAME = Txn.class.getName() ;
-// line 47 "../../../../Txn.ump"
+// line 50 "../../../../Txn.ump"
   private byte txnState ;
-// line 49 "../../../../Txn.ump"
+// line 52 "../../../../Txn.ump"
   private CursorImpl cursorSet ;
-// line 51 "../../../../Txn.ump"
+// line 54 "../../../../Txn.ump"
   private static final byte USABLE = 0 ;
-// line 53 "../../../../Txn.ump"
+// line 56 "../../../../Txn.ump"
   private static final byte CLOSED = 1 ;
-// line 55 "../../../../Txn.ump"
+// line 58 "../../../../Txn.ump"
   private static final byte ONLY_ABORTABLE = 2 ;
-// line 57 "../../../../Txn.ump"
+// line 60 "../../../../Txn.ump"
   private static final byte STATE_BITS = 3 ;
-// line 59 "../../../../Txn.ump"
+// line 62 "../../../../Txn.ump"
   private static final byte IS_PREPARED = 4 ;
-// line 61 "../../../../Txn.ump"
+// line 64 "../../../../Txn.ump"
   private static final byte XA_SUSPENDED = 8 ;
-// line 63 "../../../../Txn.ump"
+// line 66 "../../../../Txn.ump"
   private Set readLocks ;
-// line 65 "../../../../Txn.ump"
+// line 68 "../../../../Txn.ump"
   private Map writeInfo ;
-// line 67 "../../../../Txn.ump"
+// line 70 "../../../../Txn.ump"
   private Map undoDatabases ;
-// line 69 "../../../../Txn.ump"
+// line 72 "../../../../Txn.ump"
   private long lastLoggedLsn = DbLsn.NULL_LSN ;
-// line 71 "../../../../Txn.ump"
+// line 74 "../../../../Txn.ump"
   private long firstLoggedLsn = DbLsn.NULL_LSN ;
-// line 73 "../../../../Txn.ump"
+// line 76 "../../../../Txn.ump"
   private byte defaultFlushSyncBehavior ;
-// line 75 "../../../../Txn.ump"
+// line 78 "../../../../Txn.ump"
   private boolean serializableIsolation ;
-// line 77 "../../../../Txn.ump"
+// line 80 "../../../../Txn.ump"
   private boolean readCommittedIsolation ;
-// line 79 "../../../../Txn.ump"
+// line 82 "../../../../Txn.ump"
   private int inMemorySize ;
-// line 81 "../../../../Txn.ump"
+// line 84 "../../../../Txn.ump"
   public static int ACCUMULATED_LIMIT = 10000 ;
 // line 5 "../../../../MemoryBudget_Txn.ump"
   private final int READ_LOCK_OVERHEAD = MemoryBudget.HASHSET_ENTRY_OVERHEAD ;
@@ -1445,6 +1375,14 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   private int accumulatedDelta = 0 ;
 // line 5 "../../../../DeleteOp_Txn.ump"
   private Set deletedDatabases ;
+
+// line 5 "../../../../Latches_Txn.ump"
+  protected void hook802_1: undo () 
+  {
+    if (location.bin != null) {
+		location.bin.releaseLatchIfOwner();
+	    }
+  }
 
   
 }
