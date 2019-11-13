@@ -89,6 +89,27 @@ public class StoredClassCatalog implements ClassCatalog
     return (DbCompat.getInitializeLocking(envConfig)) ? LockMode.RMW : LockMode.DEFAULT;
   }
 
+  // line 86 "../../../../StoredClassCatalog.ump"
+   public synchronized  void close() throws DatabaseException{
+    if (db != null) {
+	    db.close();
+	}
+	db = null;
+	formatMap = null;
+	classMap = null;
+  }
+
+  // line 96 "../../../../StoredClassCatalog.ump"
+   public synchronized  byte[] getClassID(ObjectStreamClass classFormat) throws DatabaseException,ClassNotFoundException{
+    ClassInfo classInfo = getClassInfo(classFormat);
+	return classInfo.getClassID();
+  }
+
+  // line 102 "../../../../StoredClassCatalog.ump"
+   public synchronized  ObjectStreamClass getClassFormat(byte [] classID) throws DatabaseException,ClassNotFoundException{
+    return getClassFormat(classID, new DatabaseEntry());
+  }
+
 
   /**
    * 
@@ -367,32 +388,6 @@ public class StoredClassCatalog implements ClassCatalog
   private boolean cdbMode ;
 // line 46 "../../../../StoredClassCatalog.ump"
   private static byte[] ZERO_LENGTH_BYTE_ARRAY = new byte[0] ;
-
-// line 85 "../../../../StoredClassCatalog.ump"
-  public synchronized void close () throws DatabaseException 
-  {
-    if (db != null) {
-	    db.close();
-	}
-	db = null;
-	formatMap = null;
-	classMap = null;
-  }
-
-// line 94 "../../../../StoredClassCatalog.ump"
-  public synchronized byte[] getClassID (ObjectStreamClass classFormat)
-	    throws DatabaseException, ClassNotFoundException 
-  {
-    ClassInfo classInfo = getClassInfo(classFormat);
-	return classInfo.getClassID();
-  }
-
-// line 100 "../../../../StoredClassCatalog.ump"
-  public synchronized ObjectStreamClass getClassFormat (byte[] classID)
-	    throws DatabaseException, ClassNotFoundException 
-  {
-    return getClassFormat(classID, new DatabaseEntry());
-  }
 
   
 }

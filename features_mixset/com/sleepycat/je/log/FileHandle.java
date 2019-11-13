@@ -7,11 +7,8 @@ import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.DatabaseException;
 import java.io.RandomAccessFile;
 import java.io.IOException;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../FileHandle.ump"
-// line 3 "../../../../Latches_FileHandle.ump"
 public class FileHandle
 {
 
@@ -37,10 +34,7 @@ public class FileHandle
   public  FileHandle(RandomAccessFile file, String fileName, EnvironmentImpl env, boolean oldHeaderVersion){
     this.file = file;
 	this.oldHeaderVersion = oldHeaderVersion;
-	Label444:
-fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
-//	original(fileName, env);
- //this.hook444(fileName, env);
+	Label444: //this.hook444(fileName, env);
   }
 
   // line 21 "../../../../FileHandle.ump"
@@ -60,21 +54,6 @@ fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
 	    file = null;
 	}
   }
-
-  // line 10 "../../../../Latches_FileHandle.ump"
-  public void latch() throws DatabaseException{
-    fileLatch.acquire();
-  }
-
-  // line 14 "../../../../Latches_FileHandle.ump"
-  public boolean latchNoWait() throws DatabaseException{
-    return fileLatch.acquireNoWait();
-  }
-
-  // line 18 "../../../../Latches_FileHandle.ump"
-  public void release() throws DatabaseException{
-    fileLatch.release();
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -84,8 +63,6 @@ fileLatch = LatchSupport.makeLatch(fileName + "_fileHandle", env);
   private RandomAccessFile file ;
 // line 12 "../../../../FileHandle.ump"
   private boolean oldHeaderVersion ;
-// line 7 "../../../../Latches_FileHandle.ump"
-  private Latch fileLatch ;
 
   
 }

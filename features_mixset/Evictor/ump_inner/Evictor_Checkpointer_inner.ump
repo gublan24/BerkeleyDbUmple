@@ -2,9 +2,9 @@
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
    static class Checkpointer_doCheckpoint {
-      after Label547:execute() {   //  synchronized (_this.envImpl.getEvictor()) { original(); } 
+      around Label547-Label551:execute() {    
         synchronized (_this.envImpl.getEvictor()) {
-          //original();
+          around_proceed:
         }
       }
     }

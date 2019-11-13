@@ -34,12 +34,7 @@ public class CmdUtil
   public void delete()
   {}
 
-
-  /**
-   * private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-   * + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-   */
-  // line 16 "../../../../CmdUtil.ump"
+  // line 14 "../../../../CmdUtil.ump"
    public static  String getArg(String [] argv, int whichArg) throws IllegalArgumentException{
     if (whichArg < argv.length) {
 	    return argv[whichArg];
@@ -53,7 +48,7 @@ public class CmdUtil
    * 
    * Parse a string into a long. If the string starts with 0x, this is a hex number, else it's decimal.
    */
-  // line 27 "../../../../CmdUtil.ump"
+  // line 25 "../../../../CmdUtil.ump"
    public static  long readLongNumber(String longVal){
     if (longVal.startsWith("0x")) {
 	    return Long.parseLong(longVal.substring(2), 16);
@@ -62,7 +57,7 @@ public class CmdUtil
 	}
   }
 
-  // line 35 "../../../../CmdUtil.ump"
+  // line 33 "../../../../CmdUtil.ump"
    public static  void formatEntry(StringBuffer sb, byte [] entryData, boolean formatUsingPrintable){
     for (int i = 0; i < entryData.length; i++) {
 	    int b = entryData[i] & 0xff;
@@ -90,7 +85,7 @@ public class CmdUtil
 	}
   }
 
-  // line 62 "../../../../CmdUtil.ump"
+  // line 60 "../../../../CmdUtil.ump"
    private static  boolean isPrint(int b){
     return (b < 0177) && (040 < b);
   }
@@ -100,7 +95,7 @@ public class CmdUtil
    * 
    * Create an environment suitable for utilities. Utilities should in general send trace output to the console and not to the db log.
    */
-  // line 69 "../../../../CmdUtil.ump"
+  // line 67 "../../../../CmdUtil.ump"
    public static  EnvironmentImpl makeUtilityEnvironment(File envHome, boolean readOnly) throws DatabaseException{
     EnvironmentConfig config = new EnvironmentConfig();
 	config.setReadOnly(readOnly);
@@ -126,26 +121,18 @@ config.setConfigParam(EnvironmentParams.JE_LOGGING_LEVEL.getName(), "SEVERE");
    * 
    * Returns a description of the java command for running a utility, without arguments.  For utilities the last name of the class name can be specified when "-jar je.jar" is used.
    */
-  // line 83 "../../../../CmdUtil.ump"
+  // line 81 "../../../../CmdUtil.ump"
    public static  String getJavaCommand(Class cls){
     String clsName = cls.getName();
 	String lastName = clsName.substring(clsName.lastIndexOf('.') + 1);
 	return "java { " + cls.getName() + " | -jar je.jar " + lastName + " }";
   }
-
-  // line 89 "../../../../CmdUtil.ump"
-   protected static  void hook853(EnvironmentConfig config) throws DatabaseException{
-    
-  }
-
-  // line 92 "../../../../CmdUtil.ump"
-   protected static  void hook854(EnvironmentConfig config) throws DatabaseException{
-    
-  }
-
-  // line 95 "../../../../CmdUtil.ump"
-   protected static  void hook855(EnvironmentConfig config) throws DatabaseException{
-    
-  }
-
+  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 95 ../../../../CmdUtil.ump
+  private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+  
 }

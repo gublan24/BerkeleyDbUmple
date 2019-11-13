@@ -16,12 +16,6 @@ import java.io.File;
 // line 3 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
 // line 3 "../../../../LoggingFileHandler_EnvironmentParams.ump"
 // line 3 "../../../../Evictor_EnvironmentParams.ump"
-// line 3 "../../../../INCompressor_EnvironmentParams.ump"
-// line 3 "../../../../CPTime_EnvironmentParams.ump"
-// line 3 "../../../../CPBytes_EnvironmentParams.ump"
-// line 3 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
-// line 3 "../../../../Checksum_EnvironmentParams.ump"
-// line 3 "../../../../Latches_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -387,42 +381,6 @@ public class EnvironmentParams
 
     public static final BooleanConfigParam EVICTOR_LRU_ONLY = new BooleanConfigParam("je.evictor.lruOnly", true, false,
 	    "# If true (the default), use an LRU-only policy to select nodes for\n"
-		    + "# eviction.  If false, select by Btree level first, and then by LRU.");// line 5 "../../../../INCompressor_EnvironmentParams.ump"
-  public static final LongConfigParam COMPRESSOR_WAKEUP_INTERVAL = new LongConfigParam("je.compressor.wakeupInterval",
-	    new Long(1000000), new Long(4294967296L), new Long(5000000), false,
-	    "# The compressor wakeup interval in microseconds.") ;
-
-// line 5 ../../../../CPTime_EnvironmentParams.ump
-  public static final LongConfigParam CHECKPOINTER_WAKEUP_INTERVAL = new LongConfigParam(
-	    "je.checkpointer.wakeupInterval", new Long(1000000), new Long(4294967296L), new Long(0), false,
-	    "# The checkpointer wakeup interval in microseconds. By default, this\n"
-		    + "# is inactive and we wakeup the checkpointer as a function of the\n"
-		    + "# number of bytes written to the log. (je.checkpointer.bytesInterval)");
-// line 5 ../../../../CPBytes_EnvironmentParams.ump
-  public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL = new LongConfigParam(
-	    "je.checkpointer.bytesInterval", new Long(0), new Long(Long.MAX_VALUE), new Long(20000000), false,
-	    "# Ask the checkpointer to run every time we write this many bytes\n"
-		    + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n"
-		    + "# use time based checkpointing, set this to 0.");// line 5 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
-  public static final IntConfigParam CHECKPOINTER_RETRY = new IntConfigParam("je.checkpointer.deadlockRetry",
-	    new Integer(0), new Integer(Integer.MAX_VALUE), new Integer(3), false,
-	    "# The number of times to retry a checkpoint if it runs into a deadlock.") ;
-// line 5 "../../../../Checksum_EnvironmentParams.ump"
-  public static final BooleanConfigParam LOG_CHECKSUM_READ = new BooleanConfigParam("je.log.checksumRead", true,
-	    false, "# If true, perform a checksum check when reading entries from log.") ;
-
-// line 5 ../../../../Latches_EnvironmentParams.ump
-  public static final BooleanConfigParam ENV_FAIR_LATCHES = new BooleanConfigParam("je.env.fairLatches", false, false,
-	    "# If true, use latches instead of synchronized blocks to\n"
-		    + "# implement the lock table and log write mutexes. Latches require\n"
-		    + "# that threads queue to obtain the mutex in question and\n"
-		    + "# therefore guarantee that there will be no mutex starvation, but \n"
-		    + "# do incur a performance penalty. Latches should not be necessary in\n"
-		    + "# most cases, so synchronized blocks are the default. An application\n"
-		    + "# that puts heavy load on JE with threads with different thread\n"
-		    + "# priorities might find it useful to use latches.  In a Java 5 JVM,\n"
-		    + "# where java.util.concurrent.locks.ReentrantLock is used for the\n"
-		    + "# latch implementation, this parameter will determine whether they\n"
-		    + "# are 'fair' or not.  This parameter is 'static' across all\n" + "# environments.\n");
+		    + "# eviction.  If false, select by Btree level first, and then by LRU.");
   
 }

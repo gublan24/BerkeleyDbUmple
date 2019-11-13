@@ -46,9 +46,10 @@ class FileManager
 			clearFileCache(fileNum);
   }
 
-    protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
+  around Label460-Label460_1:getFileHandle(long ){
+
 			while (true) {
-			  original(fileNum, fileId, fileHandle);
+			  around_proceed: //original(fileNum, fileId, fileHandle);
 			}
 		 }
 

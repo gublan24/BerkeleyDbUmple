@@ -3,7 +3,8 @@ namespace com.sleepycat.je.config;
 class ConfigParam
 {
   depend de.ovgu.cide.jakutil.*;
- //@Abdulaziz   public static final String CONFIG_DELIM = ";";
+
+   const String CONFIG_DELIM = "\u003B"; //@Abdulaziz  CONFIG_DELIM has a semicolon.
 
     String name;
 

@@ -10,9 +10,6 @@ import com.sleepycat.je.tree.BIN;
 import com.sleepycat.je.config.EnvironmentParams;
 import com.sleepycat.je.DatabaseException;
 import java.util.Iterator;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
-import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../../MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_static.ump"
@@ -20,8 +17,6 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../../MemoryBudget_inner_inner.ump"
 // line 3 "../../../../Evictor_MemoryBudget.ump"
 // line 3 "../../../../Evictor_MemoryBudget_inner.ump"
-// line 3 "../../../../Statistics_MemoryBudget.ump"
-// line 3 "../../../../Latches_MemoryBudget.ump"
 public class MemoryBudget implements EnvConfigObserver
 {
 

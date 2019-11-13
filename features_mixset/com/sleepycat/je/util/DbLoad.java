@@ -399,7 +399,7 @@ public class DbLoad
 			if (++charIdx < maxNBytes) {
 			    char c2 = line.charAt(charIdx);
 			    int b = Character.digit(c1, 16);
-			 //@Abdulaziz   b <<= 4;
+			    b = b << 4;
 			    b += Character.digit(c2, 16);
 			    ba[actualNBytes++] = (byte) b;
 			} else {

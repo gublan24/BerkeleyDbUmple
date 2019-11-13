@@ -1,3 +1,5 @@
-updateMemorySize in BIN.java is not implemented any where ?
 
-Delete function should not be generated for the MemoryBudget_CursorImp.ump
+
+Delete function should not be generated for the MemoryBudget_CursorImp.ump:
+  public void delete()
+ public OperationStatus delete() throws DatabaseException{

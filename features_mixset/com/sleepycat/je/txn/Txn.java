@@ -44,9 +44,6 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../MemoryBudget_Txn_inner.ump"
 // line 3 "../../../../DeleteOp_Txn.ump"
 // line 3 "../../../../DeleteOp_Txn_inner.ump"
-// line 3 "../../../../INCompressor_Txn.ump"
-// line 3 "../../../../Statistics_Txn.ump"
-// line 3 "../../../../Latches_Txn.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -292,13 +289,7 @@ setDeletedDatabaseState(true);
 					}
 						}
 						writeInfo = null;
-						Label803:
-if ((deleteInfo != null) && deleteInfo.size() > 0) {
-					envImpl.addToCompressorQueue(deleteInfo.values(), false);
-					deleteInfo.clear();
-			}
-			//original();
- //this.hook803();
+						Label803: //this.hook803();
 				}
 				traceCommit(numWriteLocks, numReadLocks);
 					}
@@ -361,10 +352,7 @@ setDeletedDatabaseState(false);
 			//original();
  //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
-		Label804:
-deleteInfo = null;
-			//original();
- //this.hook804();
+		Label804: //this.hook804();
 	    }
 	    Label807:
 cleanupDatabaseImpls(false);
@@ -1006,22 +994,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
 					deletedDatabases = null;
 			}
   }
-
-
-  /**
-   * 
-   * stats
-   */
-  // line 8 "../../../../Statistics_Txn.ump"
-   public LockStats collectStats(LockStats stats) throws DatabaseException{
-    synchronized(this) {
-            int nReadLocks = (readLocks == null) ? 0 : readLocks.size();
-            stats.setNReadLocks(stats.getNReadLocks() + nReadLocks);
-            int nWriteLocks = (writeInfo == null) ? 0 : writeInfo.size();
-            stats.setNWriteLocks(stats.getNWriteLocks() + nWriteLocks);
-        }
-        return stats;
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1375,14 +1347,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   private int accumulatedDelta = 0 ;
 // line 5 "../../../../DeleteOp_Txn.ump"
   private Set deletedDatabases ;
-
-// line 5 "../../../../Latches_Txn.ump"
-  protected void hook802_1: undo () 
-  {
-    if (location.bin != null) {
-		location.bin.releaseLatchIfOwner();
-	    }
-  }
 
   
 }

@@ -165,6 +165,23 @@ public class SecondaryDatabase extends Database
 
   /**
    * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 141 "../../../SecondaryDatabase.ump"
+   public synchronized  void close() throws DatabaseException{
+    if (primaryDb != null && secondaryTrigger != null) {
+	    primaryDb.removeTrigger(secondaryTrigger);
+	}
+	Database foreignDb = secondaryConfig.getForeignKeyDatabase();
+	if (foreignDb != null && foreignKeyTrigger != null) {
+	    foreignDb.removeTrigger(foreignKeyTrigger);
+	}
+	super.close();
+  }
+
+
+  /**
+   * 
    * Should be called by the secondaryTrigger while holding a write lock on the trigger list.
    */
   // line 155 "../../../SecondaryDatabase.ump"
@@ -638,19 +655,6 @@ public class SecondaryDatabase extends Database
   private SecondaryTrigger secondaryTrigger ;
 // line 25 "../../../SecondaryDatabase.ump"
   private ForeignKeyTrigger foreignKeyTrigger ;
-
-// line 140 "../../../SecondaryDatabase.ump"
-  public synchronized void close () throws DatabaseException 
-  {
-    if (primaryDb != null && secondaryTrigger != null) {
-	    primaryDb.removeTrigger(secondaryTrigger);
-	}
-	Database foreignDb = secondaryConfig.getForeignKeyDatabase();
-	if (foreignDb != null && foreignKeyTrigger != null) {
-	    foreignDb.removeTrigger(foreignKeyTrigger);
-	}
-	super.close();
-  }
 
   
 }

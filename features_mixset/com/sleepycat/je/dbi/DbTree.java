@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
 import java.io.PrintStream;
-import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DbTree.ump"
@@ -44,8 +43,6 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../RenameOp_DbTree.ump"
 // line 3 "../../../../Truncate_DbTree.ump"
 // line 3 "../../../../DeleteOp_DbTree.ump"
-// line 3 "../../../../Verifier_DbTree.ump"
-// line 3 "../../../../Latches_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -94,6 +91,36 @@ public class DbTree implements LoggableObject,LogReadable
 	lastAllocatedDbId = 1;
   }
 
+
+  /**
+   * 
+   * Get the latest allocated id, for checkpoint info.
+   */
+  // line 84 "../../../../DbTree.ump"
+   public synchronized  int getLastDbId(){
+    return lastAllocatedDbId;
+  }
+
+
+  /**
+   * 
+   * Get the next available database id.
+   */
+  // line 91 "../../../../DbTree.ump"
+   private synchronized  int getNextDbId(){
+    return ++lastAllocatedDbId;
+  }
+
+
+  /**
+   * 
+   * Initialize the db id, from recovery.
+   */
+  // line 98 "../../../../DbTree.ump"
+   public synchronized  void setLastDbId(int maxDbId){
+    lastAllocatedDbId = maxDbId;
+  }
+
   // line 102 "../../../../DbTree.ump"
    private Locker createLocker(EnvironmentImpl envImpl) throws DatabaseException{
     if (envImpl.isNoLocking()) {
@@ -113,6 +140,72 @@ public class DbTree implements LoggableObject,LogReadable
     this.envImpl = envImpl;
 	idDatabase.setEnvironmentImpl(envImpl);
 	nameDatabase.setEnvironmentImpl(envImpl);
+  }
+
+
+  /**
+   * 
+   * Create a database.
+   */
+  // line 123 "../../../../DbTree.ump"
+   public synchronized  DatabaseImpl createDb(Locker locker, String databaseName, DatabaseConfig dbConfig, Database databaseHandle) throws DatabaseException{
+    return createDb(locker, databaseName, dbConfig, databaseHandle, true);
+  }
+
+
+  /**
+   * 
+   * Create a database.
+   * @param lockerowning locker
+   * @param databaseNameidentifier for database
+   * @param dbConfig
+   * @param allowEvictionis whether eviction is allowed during cursor operations.
+   */
+  // line 135 "../../../../DbTree.ump"
+   public synchronized  DatabaseImpl createDb(Locker locker, String databaseName, DatabaseConfig dbConfig, Database databaseHandle, boolean allowEviction) throws DatabaseException{
+    DatabaseId newId = new DatabaseId(getNextDbId());
+	DatabaseImpl newDb = new DatabaseImpl(databaseName, newId, envImpl, dbConfig);
+	CursorImpl idCursor = null;
+	CursorImpl nameCursor = null;
+	boolean operationOk = false;
+	Locker autoTxn = null;
+	try {
+	    nameCursor = new CursorImpl(nameDatabase, locker);
+	    //this.hook307(allowEviction, nameCursor);
+      Label307:
+// >>  public synchronized DatabaseImpl createDb (...)
+			nameCursor.setAllowEviction(allowEviction);
+			//original(allowEviction, nameCursor);
+
+	    LN nameLN = new NameLN(newId);
+	    nameCursor.putLN(databaseName.getBytes("UTF-8"), nameLN, false);
+	    if (databaseHandle != null) {
+		locker.addToHandleMaps(new Long(nameLN.getNodeId()), databaseHandle);
+	    }
+	    autoTxn = createLocker(envImpl);
+	    idCursor = new CursorImpl(idDatabase, autoTxn);
+	    //this.hook306(allowEviction, idCursor);
+      Label306:
+// >>  public synchronized DatabaseImpl createDb (...)
+			idCursor.setAllowEviction(allowEviction);
+			//original(allowEviction, idCursor);
+
+	    idCursor.putLN(newId.getBytes(), new MapLN(newDb), false);
+	    operationOk = true;
+	} catch (UnsupportedEncodingException UEE) {
+	    throw new DatabaseException(UEE);
+	} finally {
+	    if (idCursor != null) {
+		idCursor.close();
+	    }
+	    if (nameCursor != null) {
+		nameCursor.close();
+	    }
+	    if (autoTxn != null) {
+		autoTxn.operationEnd(operationOk);
+	    }
+	}
+	return newDb;
   }
 
 
@@ -148,10 +241,7 @@ public class DbTree implements LoggableObject,LogReadable
 			cursor = new CursorImpl(idDatabase, locker);
 			continue;
 		    } finally {
-			Label299:
-cursor.releaseBINs();
-	//original(cursor);
- //this.hook299(cursor);
+			Label299: //this.hook299(cursor);
 		    }
 		    break;
 		}
@@ -180,10 +270,7 @@ cursor.releaseBINs();
 	    boolean found = (result.nameCursor.searchAndPosition(key, null, SearchMode.SET, LockType.WRITE)
 		    & CursorImpl.FOUND) != 0;
 	    if (!found) {
-		Label300:
-result.nameCursor.releaseBIN();
-	//original(result);
- //this.hook300(result);
+		Label300: //this.hook300(result);
 		result.nameCursor.close();
 		result.nameCursor = null;
 		return result;
@@ -196,17 +283,11 @@ result.nameCursor.releaseBIN();
 			"Can't " + action + " database " + databaseName + "," + handleCount + " open Dbs exist");
 	    }
 	} catch (UnsupportedEncodingException UEE) {
-	    Label301:
-result.nameCursor.releaseBIN();
-	//original(result);
- //this.hook301(result);
+	    Label301: //this.hook301(result);
 	    result.nameCursor.close();
 	    throw new DatabaseException(UEE);
 	} catch (DatabaseException e) {
-	    Label302:
-result.nameCursor.releaseBIN();
-	//original(result);
- //this.hook302(result);
+	    Label302: //this.hook302(result);
 	    result.nameCursor.close();
 	    throw e;
 	}
@@ -281,10 +362,7 @@ nameCursor.setAllowEviction(allowEviction);
 		}
 	    } finally {
 		if (nameCursor != null) {
-		    Label303:
-nameCursor.releaseBIN();
-	//original(nameCursor);
- //this.hook303(nameCursor);
+		    Label303: //this.hook303(nameCursor);
 		    nameCursor.close();
 		}
 	    }
@@ -384,10 +462,7 @@ idCursor.setAllowEviction(allowEviction);
 
 		    continue;
 		} finally {
-		    Label304:
-idCursor.releaseBIN();
-	//original(idCursor);
- //this.hook304(idCursor);
+		    Label304: //this.hook304(idCursor);
 		    idCursor.close();
 		    locker.operationEnd(true);
 		}
@@ -458,10 +533,7 @@ idCursor.releaseBIN();
 	    throw new DatabaseException(UEE);
 	} finally {
 	    if (cursor != null) {
-		Label305:
-cursor.releaseBINs();
-	//original(cursor);
- //this.hook305(cursor);
+		Label305: //this.hook305(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -1073,72 +1145,6 @@ cursor.releaseBINs();
   private DatabaseImpl nameDatabase ;
 // line 57 "../../../../DbTree.ump"
   private EnvironmentImpl envImpl ;
-
-// line 83 "../../../../DbTree.ump"
-  public synchronized int getLastDbId () 
-  {
-    return lastAllocatedDbId;
-  }
-
-// line 90 "../../../../DbTree.ump"
-  private synchronized int getNextDbId () 
-  {
-    return ++lastAllocatedDbId;
-  }
-
-// line 97 "../../../../DbTree.ump"
-  public synchronized void setLastDbId (int maxDbId) 
-  {
-    lastAllocatedDbId = maxDbId;
-  }
-
-// line 121 "../../../../DbTree.ump"
-  public synchronized DatabaseImpl createDb (Locker locker, String databaseName, DatabaseConfig dbConfig,
-	    Database databaseHandle) throws DatabaseException 
-  {
-    return createDb(locker, databaseName, dbConfig, databaseHandle, true);
-  }
-
-// line 133 "../../../../DbTree.ump"
-  public synchronized DatabaseImpl createDb (Locker locker, String databaseName, DatabaseConfig dbConfig,
-	    Database databaseHandle, boolean allowEviction) throws DatabaseException 
-  {
-    DatabaseId newId = new DatabaseId(getNextDbId());
-	DatabaseImpl newDb = new DatabaseImpl(databaseName, newId, envImpl, dbConfig);
-	CursorImpl idCursor = null;
-	CursorImpl nameCursor = null;
-	boolean operationOk = false;
-	Locker autoTxn = null;
-	try {
-	    nameCursor = new CursorImpl(nameDatabase, locker);
-	    //this.hook307(allowEviction, nameCursor);
-      Label307:
-	    LN nameLN = new NameLN(newId);
-	    nameCursor.putLN(databaseName.getBytes("UTF-8"), nameLN, false);
-	    if (databaseHandle != null) {
-		locker.addToHandleMaps(new Long(nameLN.getNodeId()), databaseHandle);
-	    }
-	    autoTxn = createLocker(envImpl);
-	    idCursor = new CursorImpl(idDatabase, autoTxn);
-	    //this.hook306(allowEviction, idCursor);
-      Label306:
-	    idCursor.putLN(newId.getBytes(), new MapLN(newDb), false);
-	    operationOk = true;
-	} catch (UnsupportedEncodingException UEE) {
-	    throw new DatabaseException(UEE);
-	} finally {
-	    if (idCursor != null) {
-		idCursor.close();
-	    }
-	    if (nameCursor != null) {
-		nameCursor.close();
-	    }
-	    if (autoTxn != null) {
-		autoTxn.operationEnd(operationOk);
-	    }
-	}
-	return newDb;
-  }
 
   
 }

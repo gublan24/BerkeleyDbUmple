@@ -44,13 +44,11 @@ class DbRunAction {
         }
         //original();
       }
-      protected void hook846() throws Exception {
+      after Label846: execute(){
         if (action.equalsIgnoreCase("evict")) {
           doAction=EVICT;
         }
-   else {
-          original();
-        }
+  
       }
     }
 }

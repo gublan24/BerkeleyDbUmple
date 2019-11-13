@@ -218,6 +218,80 @@ public class INCompressor extends DaemonThread
     return env.getConfigManager().getInt(EnvironmentParams.COMPRESSOR_RETRY);
   }
 
+  // line 184 "../../../../INCompressor_INCompressor.ump"
+   public synchronized  void onWakeup() throws DatabaseException{
+    if (env.isClosed()) {
+					return;
+			}
+			Label403: //this.hook403();
+			doCompress();
+  }
+
+
+  /**
+   * 
+   * The real work to doing a compress. This may be called by the compressor thread or programatically.
+   */
+  // line 195 "../../../../INCompressor_INCompressor.ump"
+   public synchronized  void doCompress() throws DatabaseException{
+    if (!isRunnable()) {
+					return;
+			}
+			Map queueSnapshot = null;
+			int binQueueSize = 0;
+			synchronized (binRefQueueSync) {
+					binQueueSize = binRefQueue.size();
+					if (binQueueSize > 0) {
+				queueSnapshot = binRefQueue;
+				binRefQueue = new HashMap();
+					}
+			}
+			if (binQueueSize > 0) {
+					Label404: //this.hook404();
+					Label392: //this.hook392(binQueueSize);
+					Label393: //this.hook393();
+					UtilizationTracker tracker = new UtilizationTracker(env);
+					Map dbCache = new HashMap();
+					DbTree dbTree = env.getDbMapTree();
+					BINSearch binSearch = new BINSearch();
+					try {
+				Iterator it = queueSnapshot.values().iterator();
+				while (it.hasNext()) {
+						if (env.isClosed()) {
+					return;
+						}
+						BINReference binRef = (BINReference) it.next();
+						if (!findDBAndBIN(binSearch, binRef, dbTree, dbCache)) {
+					continue;
+						}
+						if (binRef.deletedKeysExist()) {
+					boolean requeued = compressBin(binSearch.db, binSearch.bin, binRef, tracker);
+					if (!requeued) {
+							checkForRelocatedSlots(binSearch.db, binRef, tracker);
+					}
+						} else {
+					BIN foundBin = binSearch.bin;
+					byte[] idKey = foundBin.getIdentifierKey();
+					boolean isDBIN = foundBin.containsDuplicates();
+					byte[] dupKey = null;
+					if (isDBIN) {
+							dupKey = ((DBIN) foundBin).getDupKey();
+					}
+					Label394: //this.hook394(foundBin);
+					pruneBIN(binSearch.db, binRef, idKey, isDBIN, dupKey, tracker);
+						}
+				}
+				TrackedFileSummary[] summaries = tracker.getTrackedFiles();
+				if (summaries.length > 0) {
+						env.getUtilizationProfile().countAndLogSummaries(summaries);
+				}
+					} finally {
+				Label395: //this.hook395();
+				Label405: //this.hook405();
+					}
+			}
+  }
+
 
   /**
    * 
@@ -481,77 +555,6 @@ hook397_1:
   synchronized public void clearEnv () 
   {
     env = null;
-  }
-
-// line 183 "../../../../INCompressor_INCompressor.ump"
-  public synchronized void onWakeup () throws DatabaseException 
-  {
-    if (env.isClosed()) {
-					return;
-			}
-			Label403: //this.hook403();
-			doCompress();
-  }
-
-// line 194 "../../../../INCompressor_INCompressor.ump"
-  public synchronized void doCompress () throws DatabaseException 
-  {
-    if (!isRunnable()) {
-					return;
-			}
-			Map queueSnapshot = null;
-			int binQueueSize = 0;
-			synchronized (binRefQueueSync) {
-					binQueueSize = binRefQueue.size();
-					if (binQueueSize > 0) {
-				queueSnapshot = binRefQueue;
-				binRefQueue = new HashMap();
-					}
-			}
-			if (binQueueSize > 0) {
-					Label404: //this.hook404();
-					Label392: //this.hook392(binQueueSize);
-					Label393: //this.hook393();
-					UtilizationTracker tracker = new UtilizationTracker(env);
-					Map dbCache = new HashMap();
-					DbTree dbTree = env.getDbMapTree();
-					BINSearch binSearch = new BINSearch();
-					try {
-				Iterator it = queueSnapshot.values().iterator();
-				while (it.hasNext()) {
-						if (env.isClosed()) {
-					return;
-						}
-						BINReference binRef = (BINReference) it.next();
-						if (!findDBAndBIN(binSearch, binRef, dbTree, dbCache)) {
-					continue;
-						}
-						if (binRef.deletedKeysExist()) {
-					boolean requeued = compressBin(binSearch.db, binSearch.bin, binRef, tracker);
-					if (!requeued) {
-							checkForRelocatedSlots(binSearch.db, binRef, tracker);
-					}
-						} else {
-					BIN foundBin = binSearch.bin;
-					byte[] idKey = foundBin.getIdentifierKey();
-					boolean isDBIN = foundBin.containsDuplicates();
-					byte[] dupKey = null;
-					if (isDBIN) {
-							dupKey = ((DBIN) foundBin).getDupKey();
-					}
-					Label394: //this.hook394(foundBin);
-					pruneBIN(binSearch.db, binRef, idKey, isDBIN, dupKey, tracker);
-						}
-				}
-				TrackedFileSummary[] summaries = tracker.getTrackedFiles();
-				if (summaries.length > 0) {
-						env.getUtilizationProfile().countAndLogSummaries(summaries);
-				}
-					} finally {
-				Label395: //this.hook395();
-				Label405: //this.hook405();
-					}
-			}
   }
 
   

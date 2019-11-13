@@ -9,6 +9,16 @@ public class ConfigParam
 {
 
   //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+
+  /**
+   * @Abdulaziz  CONFIG_DELIM has a semicolon.
+   */
+  public static final String CONFIG_DELIM = ";";
+
+  //------------------------
   // MEMBER VARIABLES
   //------------------------
 
@@ -36,9 +46,6 @@ public class ConfigParam
     return wasSet;
   }
 
-  /**
-   * @Abdulaziz   public static final String CONFIG_DELIM = " ";
-   */
   public String getName()
   {
     return name;
@@ -47,7 +54,7 @@ public class ConfigParam
   public void delete()
   {}
 
-  // line 18 "../../../../ConfigParam.ump"
+  // line 19 "../../../../ConfigParam.ump"
   public  ConfigParam(String configName, String configDefault, boolean mutable, String description) throws IllegalArgumentException{
     name = configName;
 	defaultValue = configDefault;
@@ -58,22 +65,22 @@ public class ConfigParam
 	EnvironmentParams.addSupportedParam(this);
   }
 
-  // line 32 "../../../../ConfigParam.ump"
+  // line 33 "../../../../ConfigParam.ump"
    public String getDescription(){
     return description;
   }
 
-  // line 36 "../../../../ConfigParam.ump"
+  // line 37 "../../../../ConfigParam.ump"
    public String getExtraDescription(){
     return null;
   }
 
-  // line 40 "../../../../ConfigParam.ump"
+  // line 41 "../../../../ConfigParam.ump"
    public String getDefault(){
     return defaultValue;
   }
 
-  // line 44 "../../../../ConfigParam.ump"
+  // line 45 "../../../../ConfigParam.ump"
    public boolean isMutable(){
     return mutable;
   }
@@ -83,25 +90,25 @@ public class ConfigParam
    * 
    * Validate yourself.
    */
-  // line 51 "../../../../ConfigParam.ump"
+  // line 52 "../../../../ConfigParam.ump"
    public void validate() throws IllegalArgumentException{
     validateName(name);
 	validateValue(defaultValue);
   }
 
-  // line 56 "../../../../ConfigParam.ump"
+  // line 57 "../../../../ConfigParam.ump"
    private void validateName(String name) throws IllegalArgumentException{
     if ((name == null) || (name.length() < 1)) {
 	    throw new IllegalArgumentException(" A configuration parameter" + " name can't be null or 0" + " length");
 	}
   }
 
-  // line 62 "../../../../ConfigParam.ump"
+  // line 63 "../../../../ConfigParam.ump"
    public void validateValue(String value) throws IllegalArgumentException{
     
   }
 
-  // line 65 "../../../../ConfigParam.ump"
+  // line 66 "../../../../ConfigParam.ump"
    public String toString(){
     return name;
   }
@@ -110,11 +117,11 @@ public class ConfigParam
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 10 "../../../../ConfigParam.ump"
+  // line 11 "../../../../ConfigParam.ump"
   private String defaultValue ;
-// line 12 "../../../../ConfigParam.ump"
+// line 13 "../../../../ConfigParam.ump"
   private String description ;
-// line 14 "../../../../ConfigParam.ump"
+// line 15 "../../../../ConfigParam.ump"
   private boolean mutable ;
 
   

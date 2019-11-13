@@ -1,7 +1,0 @@
-FileHandleCache_FileManager:
-
-    protected void hook460(long fileNum, Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
-			while (true) {
-			  original(fileNum, fileId, fileHandle);
-			}
-		 }

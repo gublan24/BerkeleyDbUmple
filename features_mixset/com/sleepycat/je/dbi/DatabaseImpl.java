@@ -43,11 +43,6 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.nio.ByteBuffer;
 import java.io.PrintStream;
-import com.sleepycat.je.VerifyConfig;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.DatabaseStats;
-import com.sleepycat.je.BtreeStats;
-import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
@@ -56,11 +51,6 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
 // line 3 "../../../../DeleteOp_DatabaseImpl.ump"
-// line 3 "../../../../Verifier_DatabaseImpl.ump"
-// line 3 "../../../../Statistics_DatabaseImpl.ump"
-// line 3 "../../../../Statistics_DatabaseImpl_inner.ump"
-// line 3 "../../../../Latches_DatabaseImpl.ump"
-// line 3 "../../../../Latches_DatabaseImpl_inner.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -341,6 +331,16 @@ deleteState = NOT_DELETED;
   // line 278 "../../../../DatabaseImpl.ump"
    public void removeReferringHandle(Database db){
     referringHandles.remove(db);
+  }
+
+
+  /**
+   * 
+   * @return the referring handle count.
+   */
+  // line 285 "../../../../DatabaseImpl.ump"
+   synchronized  int getReferringHandleCount(){
+    return referringHandles.size();
   }
 
 
@@ -688,31 +688,6 @@ deleteState = NOT_DELETED;
 	}
   }
 
-  // line 11 "../../../../Statistics_DatabaseImpl.ump"
-   public DatabaseStats stat(StatsConfig config) throws DatabaseException{
-    if (stats == null) {
-					stats = new BtreeStats();
-			}
-			if (!config.getFast()) {
-					if (tree == null) {
-				return new BtreeStats();
-					}
-					PrintStream out = config.getShowProgressStream();
-					if (out == null) {
-				out = System.err;
-					}
-					StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), getEmptyStats());
-					walkDatabaseTree(statsAcc, out, true);
-					statsAcc.copyToStats(stats);
-			}
-			return stats;
-  }
-
-  // line 30 "../../../../Statistics_DatabaseImpl.ump"
-   public DatabaseStats getEmptyStats(){
-    return new BtreeStats();
-  }
-
 
   public String toString()
   {
@@ -870,8 +845,6 @@ deleteState = NOT_DELETED;
     @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
   // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
-  // line 4 "../../../../Statistics_DatabaseImpl_inner.ump"
-  // line 4 "../../../../Latches_DatabaseImpl_inner.ump"
   public static class DatabaseImpl_preload
   {
   
@@ -925,10 +898,6 @@ deleteState = NOT_DELETED;
           walker=new PreloadLSNTreeWalker(_this,callback,config);
           //Label287:  //this.hook287();
    				execute_Latches_DatabaseImpl_preload:
-  PreloadStats result=original();
-          assert LatchSupport.countLatchesHeld() == 0;
-          //return result;
-  
           return ret;
     }
   
@@ -1004,12 +973,6 @@ deleteState = NOT_DELETED;
 // line 87 "../../../../DatabaseImpl.ump"
   static final HaltPreloadException memoryExceededPreloadException = new HaltPreloadException(
 	    PreloadStatus.FILLED_CACHE) ;
-
-// line 284 "../../../../DatabaseImpl.ump"
-  synchronized int getReferringHandleCount () 
-  {
-    return referringHandles.size();
-  }
 // line 5 "../../../../DeleteOp_DatabaseImpl.ump"
   private static final short NOT_DELETED = 1 ;
 // line 7 "../../../../DeleteOp_DatabaseImpl.ump"
@@ -1020,8 +983,6 @@ deleteState = NOT_DELETED;
   private static final short DELETED = 4 ;
 // line 13 "../../../../DeleteOp_DatabaseImpl.ump"
   private short deleteState ;
-// line 8 "../../../../Statistics_DatabaseImpl.ump"
-  private BtreeStats stats ;
 
   
 }

@@ -29,9 +29,6 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../Truncate_Database.ump"
 // line 3 "../../../Truncate_Database_inner.ump"
 // line 3 "../../../DeleteOp_Database.ump"
-// line 3 "../../../Statistics_Database.ump"
-// line 3 "../../../Latches_Database.ump"
-// line 3 "../../../Latches_Database_inner.ump"
 public class Database
 {
 
@@ -186,6 +183,40 @@ public class Database
 	}
   }
 
+  // line 119 "../../../Database.ump"
+   public synchronized  void close() throws DatabaseException{
+    StringBuffer errors = null;
+	checkEnv();
+	checkProhibitedDbState(CLOSED, "Can't close Database:");
+	Label44:           ;  //this.hook44();
+	removeAllTriggers();
+	envHandle.removeReferringHandle(this);
+	if (cursors.size() > 0) {
+	    errors = new StringBuffer("There are open cursors against the database.\n");
+	    errors.append("They will be closed.\n");
+	    Iterator iter = cursors.copy().iterator();
+	    while (iter.hasNext()) {
+		Cursor dbc = (Cursor) iter.next();
+		try {
+		    dbc.close();
+		} catch (DatabaseException DBE) {
+		    errors.append("Exception while closing cursors:\n");
+		    errors.append(DBE.toString());
+		}
+	    }
+	}
+	if (databaseImpl != null) {
+	    databaseImpl.removeReferringHandle(this);
+	    databaseImpl = null;
+	    handleLocker.setHandleLockOwner(true, this, true);
+	    handleLocker.operationEnd(true);
+	    state = CLOSED;
+	}
+	if (errors != null) {
+	    throw new DatabaseException(errors.toString());
+	}
+  }
+
 
   /**
    * 
@@ -209,6 +240,19 @@ public class Database
   // line 167 "../../../Database.ump"
    public void removeSequence(Transaction txn, DatabaseEntry key) throws DatabaseException{
     delete(txn, key);
+  }
+
+  // line 171 "../../../Database.ump"
+   public synchronized  Cursor openCursor(Transaction txn, CursorConfig cursorConfig) throws DatabaseException{
+    checkEnv();
+	checkRequiredDbState(OPEN, "Can't open a cursor");
+	CursorConfig useConfig = (cursorConfig == null) ? CursorConfig.DEFAULT : cursorConfig;
+	if (useConfig.getReadUncommitted() && useConfig.getReadCommitted()) {
+	    throw new IllegalArgumentException("Only one may be specified: ReadCommitted or ReadUncommitted");
+	}
+	Label46:           ;  //this.hook46(txn, cursorConfig);
+	Cursor ret = newDbcInstance(txn, useConfig);
+	return ret;
   }
 
 
@@ -527,13 +571,7 @@ databaseImpl.checkIsDeleted("preload");
 				}
 			}
 		  finally {
-						Label53_1:
-//		try {
-					//original(list);
-		//	} finally {
-					releaseTriggerListReadLock();
-			//}
-   ;//
+						Label53_1:   ;//
 			}
 	} else {
 	}
@@ -558,6 +596,16 @@ databaseImpl.checkIsDeleted("preload");
   // line 483 "../../../Database.ump"
   public DatabaseImpl getDatabaseImpl(){
     return databaseImpl;
+  }
+
+  // line 494 "../../../Database.ump"
+   synchronized  void removeCursor(Cursor dbc){
+    cursors.remove(dbc);
+  }
+
+  // line 498 "../../../Database.ump"
+   synchronized  void addCursor(Cursor dbc){
+    cursors.add(dbc);
   }
 
 
@@ -594,6 +642,20 @@ databaseImpl.checkIsDeleted("preload");
     EnvironmentImpl env = envHandle.getEnvironmentImpl();
 	if (env != null) {
 	    env.checkIfInvalid();
+	}
+  }
+
+
+  /**
+   * 
+   * Invalidate the handle, called by txn.abort by way of DbInternal.
+   */
+  // line 533 "../../../Database.ump"
+   synchronized  void invalidate(){
+    state = INVALID;
+	envHandle.removeReferringHandle(this);
+	if (databaseImpl != null) {
+	    databaseImpl.removeReferringHandle(this);
 	}
   }
 
@@ -767,29 +829,6 @@ databaseImpl.checkIsDeleted("preload");
 			}
   }
 
-  // line 6 "../../../Statistics_Database.ump"
-   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
-    checkEnv();
-			checkRequiredDbState(OPEN, "Can't call Database.stat");
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			if (databaseImpl != null) {
-					Label38: //this.hook38();
-					return databaseImpl.stat(useConfig);
-			}
-			return null;
-  }
-
-
-  /**
-   * 
-   * Releases a lock acquired by calling acquireTriggerListReadLock().
-   */
-  // line 9 "../../../Latches_Database.ump"
-   private void releaseTriggerListReadLock() throws DatabaseException{
-    EnvironmentImpl env = envHandle.getEnvironmentImpl();
-	env.getTriggerLatch().release();
-  }
-
 
   public String toString()
   {
@@ -849,7 +888,6 @@ databaseImpl.checkIsDeleted("preload");
   
   @MethodObject
   // line 13 "../../../Database_static.ump"
-  // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
   {
   
@@ -878,11 +916,6 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 18 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
-      // line 6 "../../../Latches_Database_inner.ump"
-      env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().acquireShared();
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -905,7 +938,6 @@ databaseImpl.checkIsDeleted("preload");
   
   @MethodObject
   // line 25 "../../../Database_static.ump"
-  // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
   {
   
@@ -934,11 +966,6 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 30 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
-      // line 20 "../../../Latches_Database_inner.ump"
-      env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().acquireExclusive();
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -961,7 +988,6 @@ databaseImpl.checkIsDeleted("preload");
   
   @MethodObject
   // line 37 "../../../Database_static.ump"
-  // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock
   {
   
@@ -993,11 +1019,6 @@ databaseImpl.checkIsDeleted("preload");
       if (_this.triggerList.size() == 0) {
             _this.triggerList=null;
           }
-      // line 13 "../../../Latches_Database_inner.ump"
-      //      original();
-              env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().release();
-      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -1125,77 +1146,6 @@ databaseImpl.checkIsDeleted("preload");
   private TinyHashSet cursors = new TinyHashSet() ;
 // line 41 "../../../Database.ump"
   private List triggerList ;
-
-// line 118 "../../../Database.ump"
-  public synchronized void close () throws DatabaseException 
-  {
-    StringBuffer errors = null;
-	checkEnv();
-	checkProhibitedDbState(CLOSED, "Can't close Database:");
-	Label44:           ;  //this.hook44();
-	removeAllTriggers();
-	envHandle.removeReferringHandle(this);
-	if (cursors.size() > 0) {
-	    errors = new StringBuffer("There are open cursors against the database.\n");
-	    errors.append("They will be closed.\n");
-	    Iterator iter = cursors.copy().iterator();
-	    while (iter.hasNext()) {
-		Cursor dbc = (Cursor) iter.next();
-		try {
-		    dbc.close();
-		} catch (DatabaseException DBE) {
-		    errors.append("Exception while closing cursors:\n");
-		    errors.append(DBE.toString());
-		}
-	    }
-	}
-	if (databaseImpl != null) {
-	    databaseImpl.removeReferringHandle(this);
-	    databaseImpl = null;
-	    handleLocker.setHandleLockOwner(true, this, true);
-	    handleLocker.operationEnd(true);
-	    state = CLOSED;
-	}
-	if (errors != null) {
-	    throw new DatabaseException(errors.toString());
-	}
-  }
-
-// line 170 "../../../Database.ump"
-  public synchronized Cursor openCursor (Transaction txn, CursorConfig cursorConfig) throws DatabaseException 
-  {
-    checkEnv();
-	checkRequiredDbState(OPEN, "Can't open a cursor");
-	CursorConfig useConfig = (cursorConfig == null) ? CursorConfig.DEFAULT : cursorConfig;
-	if (useConfig.getReadUncommitted() && useConfig.getReadCommitted()) {
-	    throw new IllegalArgumentException("Only one may be specified: ReadCommitted or ReadUncommitted");
-	}
-	Label46:           ;  //this.hook46(txn, cursorConfig);
-	Cursor ret = newDbcInstance(txn, useConfig);
-	return ret;
-  }
-
-// line 493 "../../../Database.ump"
-  synchronized void removeCursor (Cursor dbc) 
-  {
-    cursors.remove(dbc);
-  }
-
-// line 497 "../../../Database.ump"
-  synchronized void addCursor (Cursor dbc) 
-  {
-    cursors.add(dbc);
-  }
-
-// line 532 "../../../Database.ump"
-  synchronized void invalidate () 
-  {
-    state = INVALID;
-	envHandle.removeReferringHandle(this);
-	if (databaseImpl != null) {
-	    databaseImpl.removeReferringHandle(this);
-	}
-  }
 // line 5 "../../../loggingBase_Database.ump"
   private Logger logger ;
 

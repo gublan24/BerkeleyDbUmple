@@ -100,11 +100,176 @@ pendingDBs = new HashSet();
 
   /**
    * 
+   * Returns whether the file is in any stage of the cleaning process.
+   */
+  // line 92 "../../../../FileSelector.ump"
+   synchronized  boolean isFileCleaningInProgress(Long file){
+    return toBeCleanedFiles.contains(file) || beingCleanedFiles.contains(file) || cleanedFiles.contains(file)
+		|| checkpointedFiles.contains(file) || fullyProcessedFiles.contains(file)
+		|| safeToDeleteFiles.contains(file);
+  }
+
+
+  /**
+   * 
+   * When file cleaning is aborted, move the file back from the being-cleaned set to the to-be-cleaned set.
+   */
+  // line 101 "../../../../FileSelector.ump"
+   synchronized  void putBackFileForCleaning(Long fileNum){
+    toBeCleanedFiles.add(fileNum);
+	beingCleanedFiles.remove(fileNum);
+  }
+
+
+  /**
+   * 
+   * When cleaning is complete, move the file from the being-cleaned set to the cleaned set.
+   */
+  // line 109 "../../../../FileSelector.ump"
+   synchronized  void addCleanedFile(Long fileNum){
+    cleanedFiles.add(fileNum);
+	beingCleanedFiles.remove(fileNum);
+  }
+
+
+  /**
+   * 
    * Returns a read-only set of low utilization files that can be accessed without synchronization.
    */
   // line 117 "../../../../FileSelector.ump"
   public Set getLowUtilizationFiles(){
     return lowUtilizationFiles;
+  }
+
+
+  /**
+   * 
+   * Returns a read-only copy of to-be-cleaned and being-cleaned files that can be accessed without synchronization.
+   */
+  // line 124 "../../../../FileSelector.ump"
+   synchronized  Set getMustBeCleanedFiles(){
+    Set set = new HashSet(toBeCleanedFiles);
+	set.addAll(beingCleanedFiles);
+	return set;
+  }
+
+
+  /**
+   * 
+   * Returns the number of files waiting to-be-cleaned.
+   */
+  // line 133 "../../../../FileSelector.ump"
+   synchronized  int getBacklog(){
+    return toBeCleanedFiles.size();
+  }
+
+
+  /**
+   * 
+   * Returns a copy of the cleaned and fully-processed files at the time a checkpoint starts.
+   */
+  // line 140 "../../../../FileSelector.ump"
+   synchronized  Set[] getFilesAtCheckpointStart(){
+    anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
+			Label164:
+//    synchronized Set[] getFilesAtCheckpointStart() {
+			anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
+			//original();
+ //this.hook164();
+			Set[] files = new Set[2];
+			files[0] = (cleanedFiles.size() > 0) ? (new HashSet(cleanedFiles)) : null;
+			files[1] = (fullyProcessedFiles.size() > 0) ? (new HashSet(fullyProcessedFiles)) : null;
+			return (files[0] != null || files[1] != null) ? files : null;
+  }
+
+
+  /**
+   * 
+   * When a checkpoint is complete, moves the previously cleaned and fully-processed files to the checkpointed and safe-to-delete sets.
+   */
+  // line 152 "../../../../FileSelector.ump"
+   synchronized  void updateFilesAtCheckpointEnd(Set [] files){
+    if (files != null) {
+	    Set previouslyCleanedFiles = files[0];
+	    if (previouslyCleanedFiles != null) {
+		if (anyPendingDuringCheckpoint) {
+		    checkpointedFiles.addAll(previouslyCleanedFiles);
+		} else {
+		    safeToDeleteFiles.addAll(previouslyCleanedFiles);
+		}
+		cleanedFiles.removeAll(previouslyCleanedFiles);
+	    }
+	    Set previouslyProcessedFiles = files[1];
+	    if (previouslyProcessedFiles != null) {
+		safeToDeleteFiles.addAll(previouslyProcessedFiles);
+		fullyProcessedFiles.removeAll(previouslyProcessedFiles);
+	    }
+	    updateProcessedFiles();
+	}
+  }
+
+
+  /**
+   * 
+   * Adds the given LN info to the pending LN set.
+   */
+  // line 175 "../../../../FileSelector.ump"
+   synchronized  boolean addPendingLN(LN ln, DatabaseId dbId, byte [] key, byte [] dupKey){
+    assert ln != null;
+	boolean added = pendingLNs.put(new Long(ln.getNodeId()), new LNInfo(ln, dbId, key, dupKey)) != null;
+	anyPendingDuringCheckpoint = true;
+	return added;
+  }
+
+
+  /**
+   * 
+   * Returns an array of LNInfo for LNs that could not be migrated in a prior cleaning attempt, or null if no LNs are pending.
+   */
+  // line 185 "../../../../FileSelector.ump"
+   synchronized  LNInfo[] getPendingLNs(){
+    if (pendingLNs.size() > 0) {
+	    LNInfo[] lns = new LNInfo[pendingLNs.size()];
+	    pendingLNs.values().toArray(lns);
+	    return lns;
+	} else {
+	    return null;
+	}
+  }
+
+
+  /**
+   * 
+   * Removes the LN for the given node ID from the pending LN set.
+   */
+  // line 198 "../../../../FileSelector.ump"
+   synchronized  void removePendingLN(long nodeId){
+    pendingLNs.remove(new Long(nodeId));
+	updateProcessedFiles();
+  }
+
+
+  /**
+   * 
+   * Returns a copy of the safe-to-delete files.
+   */
+  // line 206 "../../../../FileSelector.ump"
+   synchronized  Set copySafeToDeleteFiles(){
+    if (safeToDeleteFiles.size() == 0) {
+	    return null;
+	} else {
+	    return new HashSet(safeToDeleteFiles);
+	}
+  }
+
+
+  /**
+   * 
+   * Removes file from the safe-to-delete set after the file itself has finally been deleted.
+   */
+  // line 217 "../../../../FileSelector.ump"
+   synchronized  void removeDeletedFile(Long fileNum){
+    safeToDeleteFiles.remove(fileNum);
   }
 
 
@@ -123,6 +288,45 @@ b &= pendingDBs.isEmpty();
 					fullyProcessedFiles.addAll(checkpointedFiles);
 					checkpointedFiles.clear();
 			}
+  }
+
+
+  /**
+   * 
+   * Adds the given DatabaseId to the pending DB set.
+   */
+  // line 11 "../../../../DeleteOp_FileSelector.ump"
+   synchronized  boolean addPendingDB(DatabaseId dbId){
+    boolean added = pendingDBs.add(dbId);
+			anyPendingDuringCheckpoint = true;
+			return added;
+  }
+
+
+  /**
+   * 
+   * Returns an array of DatabaseIds for DBs that were pending deletion in a prior cleaning attempt, or null if no DBs are pending.
+   */
+  // line 20 "../../../../DeleteOp_FileSelector.ump"
+   synchronized  DatabaseId[] getPendingDBs(){
+    if (pendingDBs.size() > 0) {
+					DatabaseId[] dbs = new DatabaseId[pendingDBs.size()];
+					pendingDBs.toArray(dbs);
+					return dbs;
+			} else {
+					return null;
+			}
+  }
+
+
+  /**
+   * 
+   * Removes the DatabaseId from the pending DB set.
+   */
+  // line 33 "../../../../DeleteOp_FileSelector.ump"
+   synchronized  void removePendingDB(DatabaseId dbId){
+    pendingDBs.remove(dbId);
+			updateProcessedFiles();
   }
   
   //------------------------
@@ -147,148 +351,8 @@ b &= pendingDBs.isEmpty();
   private boolean anyPendingDuringCheckpoint ;
 // line 32 "../../../../FileSelector.ump"
   private Set lowUtilizationFiles ;
-
-// line 91 "../../../../FileSelector.ump"
-  synchronized boolean isFileCleaningInProgress (Long file) 
-  {
-    return toBeCleanedFiles.contains(file) || beingCleanedFiles.contains(file) || cleanedFiles.contains(file)
-		|| checkpointedFiles.contains(file) || fullyProcessedFiles.contains(file)
-		|| safeToDeleteFiles.contains(file);
-  }
-
-// line 100 "../../../../FileSelector.ump"
-  synchronized void putBackFileForCleaning (Long fileNum) 
-  {
-    toBeCleanedFiles.add(fileNum);
-	beingCleanedFiles.remove(fileNum);
-  }
-
-// line 108 "../../../../FileSelector.ump"
-  synchronized void addCleanedFile (Long fileNum) 
-  {
-    cleanedFiles.add(fileNum);
-	beingCleanedFiles.remove(fileNum);
-  }
-
-// line 123 "../../../../FileSelector.ump"
-  synchronized Set getMustBeCleanedFiles () 
-  {
-    Set set = new HashSet(toBeCleanedFiles);
-	set.addAll(beingCleanedFiles);
-	return set;
-  }
-
-// line 132 "../../../../FileSelector.ump"
-  synchronized int getBacklog () 
-  {
-    return toBeCleanedFiles.size();
-  }
-
-// line 139 "../../../../FileSelector.ump"
-  synchronized Set[] getFilesAtCheckpointStart () 
-  {
-    anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
-			Label164: //this.hook164();
-			Set[] files = new Set[2];
-			files[0] = (cleanedFiles.size() > 0) ? (new HashSet(cleanedFiles)) : null;
-			files[1] = (fullyProcessedFiles.size() > 0) ? (new HashSet(fullyProcessedFiles)) : null;
-			return (files[0] != null || files[1] != null) ? files : null;
-  }
-
-// line 151 "../../../../FileSelector.ump"
-  synchronized void updateFilesAtCheckpointEnd (Set[] files) 
-  {
-    if (files != null) {
-	    Set previouslyCleanedFiles = files[0];
-	    if (previouslyCleanedFiles != null) {
-		if (anyPendingDuringCheckpoint) {
-		    checkpointedFiles.addAll(previouslyCleanedFiles);
-		} else {
-		    safeToDeleteFiles.addAll(previouslyCleanedFiles);
-		}
-		cleanedFiles.removeAll(previouslyCleanedFiles);
-	    }
-	    Set previouslyProcessedFiles = files[1];
-	    if (previouslyProcessedFiles != null) {
-		safeToDeleteFiles.addAll(previouslyProcessedFiles);
-		fullyProcessedFiles.removeAll(previouslyProcessedFiles);
-	    }
-	    updateProcessedFiles();
-	}
-  }
-
-// line 174 "../../../../FileSelector.ump"
-  synchronized boolean addPendingLN (LN ln, DatabaseId dbId, byte[] key, byte[] dupKey) 
-  {
-    assert ln != null;
-	boolean added = pendingLNs.put(new Long(ln.getNodeId()), new LNInfo(ln, dbId, key, dupKey)) != null;
-	anyPendingDuringCheckpoint = true;
-	return added;
-  }
-
-// line 184 "../../../../FileSelector.ump"
-  synchronized LNInfo[] getPendingLNs () 
-  {
-    if (pendingLNs.size() > 0) {
-	    LNInfo[] lns = new LNInfo[pendingLNs.size()];
-	    pendingLNs.values().toArray(lns);
-	    return lns;
-	} else {
-	    return null;
-	}
-  }
-
-// line 197 "../../../../FileSelector.ump"
-  synchronized void removePendingLN (long nodeId) 
-  {
-    pendingLNs.remove(new Long(nodeId));
-	updateProcessedFiles();
-  }
-
-// line 205 "../../../../FileSelector.ump"
-  synchronized Set copySafeToDeleteFiles () 
-  {
-    if (safeToDeleteFiles.size() == 0) {
-	    return null;
-	} else {
-	    return new HashSet(safeToDeleteFiles);
-	}
-  }
-
-// line 216 "../../../../FileSelector.ump"
-  synchronized void removeDeletedFile (Long fileNum) 
-  {
-    safeToDeleteFiles.remove(fileNum);
-  }
 // line 5 "../../../../DeleteOp_FileSelector.ump"
   private Set pendingDBs ;
-
-// line 10 "../../../../DeleteOp_FileSelector.ump"
-  synchronized boolean addPendingDB (DatabaseId dbId) 
-  {
-    boolean added = pendingDBs.add(dbId);
-			anyPendingDuringCheckpoint = true;
-			return added;
-  }
-
-// line 19 "../../../../DeleteOp_FileSelector.ump"
-  synchronized DatabaseId[] getPendingDBs () 
-  {
-    if (pendingDBs.size() > 0) {
-					DatabaseId[] dbs = new DatabaseId[pendingDBs.size()];
-					pendingDBs.toArray(dbs);
-					return dbs;
-			} else {
-					return null;
-			}
-  }
-
-// line 32 "../../../../DeleteOp_FileSelector.ump"
-  synchronized void removePendingDB (DatabaseId dbId) 
-  {
-    pendingDBs.remove(dbId);
-			updateProcessedFiles();
-  }
 
   
 }

@@ -29,8 +29,6 @@ import java.io.File;
 // line 3 "../../../RenameOp_Environment.ump"
 // line 3 "../../../Truncate_Environment.ump"
 // line 3 "../../../DeleteOp_Environment.ump"
-// line 3 "../../../INCompressor_Environment.ump"
-// line 3 "../../../Statistics_Environment.ump"
 public class Environment
 {
 
@@ -136,6 +134,131 @@ public class Environment
 		throw e2;
 	    }
 	}
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 120 "../../../Environment.ump"
+   public synchronized  void close() throws DatabaseException{
+    checkHandleIsValid();
+	try {
+	    checkEnv();
+	} catch (RunRecoveryException e) {
+	    if (environmentImpl != null) {
+		environmentImpl.closeAfterRunRecovery();
+	    }
+	    return;
+	}
+	StringBuffer errors = new StringBuffer();
+	try {
+	    if (referringDbs != null) {
+		int nDbs = referringDbs.size();
+		if (nDbs != 0) {
+		    errors.append("There ");
+		    if (nDbs == 1) {
+			errors.append("is 1 open Database in the Environment.\n");
+		    } else {
+			errors.append("are ");
+			errors.append(nDbs);
+			errors.append(" open Database in the Environment.\n");
+		    }
+		    errors.append("Closing the following databases:\n");
+		    Iterator iter = referringDbs.iterator();
+		    while (iter.hasNext()) {
+			Database db = (Database) iter.next();
+			String dbName = db.getDebugName();
+			errors.append(dbName).append(" ");
+			try {
+			    db.close();
+			} catch (RunRecoveryException e) {
+			    throw e;
+			} catch (DatabaseException DBE) {
+			    errors.append("\nWhile closing Database ");
+			    errors.append(dbName);
+			    errors.append(" encountered exception: ");
+			    errors.append(DBE).append("\n");
+			}
+		    }
+		}
+	    }
+	    if (referringDbTxns != null) {
+		int nTxns = referringDbTxns.size();
+		if (nTxns != 0) {
+		    Iterator iter = referringDbTxns.iterator();
+		    errors.append("There ");
+		    if (nTxns == 1) {
+			errors.append("is 1 existing transaction opened against");
+			errors.append(" the Environment.\n");
+		    } else {
+			errors.append("are ");
+			errors.append(nTxns);
+			errors.append(" existing transactions opened against");
+			errors.append(" the Environment.\n");
+		    }
+		    errors.append("Aborting open transactions ...\n");
+		    while (iter.hasNext()) {
+			Transaction txn = (Transaction) iter.next();
+			try {
+			    txn.abort();
+			} catch (RunRecoveryException e) {
+			    throw e;
+			} catch (DatabaseException DBE) {
+			    errors.append("\nWhile aborting transaction ");
+			    errors.append(txn.getId());
+			    errors.append(" encountered exception: ");
+			    errors.append(DBE).append("\n");
+			}
+		    }
+		}
+	    }
+	    try {
+		environmentImpl.close();
+	    } catch (RunRecoveryException e) {
+		throw e;
+	    } catch (DatabaseException DBE) {
+		errors.append("\nWhile closing Environment encountered exception: ");
+		errors.append(DBE).append("\n");
+	    }
+	} finally {
+	    environmentImpl = null;
+	    valid = false;
+	    if (errors.length() > 0) {
+		throw new DatabaseException(errors.toString());
+	    }
+	}
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 213 "../../../Environment.ump"
+   public synchronized  Database openDatabase(Transaction txn, String databaseName, DatabaseConfig dbConfig) throws DatabaseException{
+    if (dbConfig == null) {
+	    dbConfig = DatabaseConfig.DEFAULT;
+	}
+	Database db = new Database(this);
+	openDb(txn, db, databaseName, dbConfig, false);
+	return db;
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public class is generated via the doc templates in the doc_src directory.
+   */
+  // line 226 "../../../Environment.ump"
+   public synchronized  SecondaryDatabase openSecondaryDatabase(Transaction txn, String databaseName, Database primaryDatabase, SecondaryConfig dbConfig) throws DatabaseException{
+    if (dbConfig == null) {
+	    dbConfig = SecondaryConfig.DEFAULT;
+	}
+	SecondaryDatabase db = new SecondaryDatabase(this, dbConfig, primaryDatabase);
+	openDb(txn, db, databaseName, dbConfig, dbConfig.getAllowPopulate());
+	return db;
   }
 
   // line 236 "../../../Environment.ump"
@@ -594,59 +717,6 @@ if (database != null && !database.isDeleted())
 					}
 			}
   }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../INCompressor_Environment.ump"
-   public void compress() throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			environmentImpl.invokeCompressor();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Statistics_Environment.ump"
-   public EnvironmentStats getStats(StatsConfig config) throws DatabaseException{
-    StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			if (environmentImpl != null) {
-					return environmentImpl.loadStats(useConfig);
-			} else {
-					return new EnvironmentStats();
-			}
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 21 "../../../Statistics_Environment.ump"
-   public LockStats getLockStats(StatsConfig config) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			return environmentImpl.lockStat(useConfig);
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 31 "../../../Statistics_Environment.ump"
-   public TransactionStats getTransactionStats(StatsConfig config) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			return environmentImpl.txnStat(useConfig);
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -666,121 +736,6 @@ if (database != null && !database.isDeleted())
   private Set referringDbTxns ;
 // line 37 "../../../Environment.ump"
   private boolean valid ;
-
-// line 119 "../../../Environment.ump"
-  public synchronized void close () throws DatabaseException 
-  {
-    checkHandleIsValid();
-	try {
-	    checkEnv();
-	} catch (RunRecoveryException e) {
-	    if (environmentImpl != null) {
-		environmentImpl.closeAfterRunRecovery();
-	    }
-	    return;
-	}
-	StringBuffer errors = new StringBuffer();
-	try {
-	    if (referringDbs != null) {
-		int nDbs = referringDbs.size();
-		if (nDbs != 0) {
-		    errors.append("There ");
-		    if (nDbs == 1) {
-			errors.append("is 1 open Database in the Environment.\n");
-		    } else {
-			errors.append("are ");
-			errors.append(nDbs);
-			errors.append(" open Database in the Environment.\n");
-		    }
-		    errors.append("Closing the following databases:\n");
-		    Iterator iter = referringDbs.iterator();
-		    while (iter.hasNext()) {
-			Database db = (Database) iter.next();
-			String dbName = db.getDebugName();
-			errors.append(dbName).append(" ");
-			try {
-			    db.close();
-			} catch (RunRecoveryException e) {
-			    throw e;
-			} catch (DatabaseException DBE) {
-			    errors.append("\nWhile closing Database ");
-			    errors.append(dbName);
-			    errors.append(" encountered exception: ");
-			    errors.append(DBE).append("\n");
-			}
-		    }
-		}
-	    }
-	    if (referringDbTxns != null) {
-		int nTxns = referringDbTxns.size();
-		if (nTxns != 0) {
-		    Iterator iter = referringDbTxns.iterator();
-		    errors.append("There ");
-		    if (nTxns == 1) {
-			errors.append("is 1 existing transaction opened against");
-			errors.append(" the Environment.\n");
-		    } else {
-			errors.append("are ");
-			errors.append(nTxns);
-			errors.append(" existing transactions opened against");
-			errors.append(" the Environment.\n");
-		    }
-		    errors.append("Aborting open transactions ...\n");
-		    while (iter.hasNext()) {
-			Transaction txn = (Transaction) iter.next();
-			try {
-			    txn.abort();
-			} catch (RunRecoveryException e) {
-			    throw e;
-			} catch (DatabaseException DBE) {
-			    errors.append("\nWhile aborting transaction ");
-			    errors.append(txn.getId());
-			    errors.append(" encountered exception: ");
-			    errors.append(DBE).append("\n");
-			}
-		    }
-		}
-	    }
-	    try {
-		environmentImpl.close();
-	    } catch (RunRecoveryException e) {
-		throw e;
-	    } catch (DatabaseException DBE) {
-		errors.append("\nWhile closing Environment encountered exception: ");
-		errors.append(DBE).append("\n");
-	    }
-	} finally {
-	    environmentImpl = null;
-	    valid = false;
-	    if (errors.length() > 0) {
-		throw new DatabaseException(errors.toString());
-	    }
-	}
-  }
-
-// line 211 "../../../Environment.ump"
-  public synchronized Database openDatabase (Transaction txn, String databaseName, DatabaseConfig dbConfig)
-	    throws DatabaseException 
-  {
-    if (dbConfig == null) {
-	    dbConfig = DatabaseConfig.DEFAULT;
-	}
-	Database db = new Database(this);
-	openDb(txn, db, databaseName, dbConfig, false);
-	return db;
-  }
-
-// line 224 "../../../Environment.ump"
-  public synchronized SecondaryDatabase openSecondaryDatabase (Transaction txn, String databaseName,
-	    Database primaryDatabase, SecondaryConfig dbConfig) throws DatabaseException 
-  {
-    if (dbConfig == null) {
-	    dbConfig = SecondaryConfig.DEFAULT;
-	}
-	SecondaryDatabase db = new SecondaryDatabase(this, dbConfig, primaryDatabase);
-	openDb(txn, db, databaseName, dbConfig, dbConfig.getAllowPopulate());
-	return db;
-  }
 
   
 }

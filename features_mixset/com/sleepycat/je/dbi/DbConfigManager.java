@@ -53,6 +53,30 @@ public class DbConfigManager
    * 
    * Get this parameter from the environment wide configuration settings.
    * @param configParam
+   * @return default for param if param wasn't explicitly set
+   */
+  // line 32 "../../../../DbConfigManager.ump"
+   public synchronized  String get(ConfigParam configParam) throws IllegalArgumentException{
+    return environmentConfig.getConfigParam(configParam.getName());
+  }
+
+
+  /**
+   * 
+   * Get this parameter from the environment wide configuration settings.
+   * @param configParam
+   * @return default for param if param wasn't explicitly set
+   */
+  // line 41 "../../../../DbConfigManager.ump"
+   public synchronized  String get(String configParamName) throws IllegalArgumentException{
+    return environmentConfig.getConfigParam(configParamName);
+  }
+
+
+  /**
+   * 
+   * Get this parameter from the environment wide configuration settings.
+   * @param configParam
    * @return default for param if it wasn't explicitly set.
    */
   // line 50 "../../../../DbConfigManager.ump"
@@ -128,18 +152,6 @@ public class DbConfigManager
   
   // line 13 "../../../../DbConfigManager.ump"
   private EnvironmentConfig environmentConfig ;
-
-// line 31 "../../../../DbConfigManager.ump"
-  public synchronized String get (ConfigParam configParam) throws IllegalArgumentException 
-  {
-    return environmentConfig.getConfigParam(configParam.getName());
-  }
-
-// line 40 "../../../../DbConfigManager.ump"
-  public synchronized String get (String configParamName) throws IllegalArgumentException 
-  {
-    return environmentConfig.getConfigParam(configParamName);
-  }
 
   
 }

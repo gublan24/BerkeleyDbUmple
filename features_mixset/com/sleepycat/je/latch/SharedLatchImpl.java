@@ -44,6 +44,42 @@ public class SharedLatchImpl implements SharedLatch
 	this.env = env;
   }
 
+
+  /**
+   * 
+   * Acquire a latch for exclusive/write access.  Nesting is allowed, that is, the latch may be acquired more than once by the same thread for exclusive access.  However, if the thread already holds the latch for shared access, it cannot be upgraded and LatchException will be thrown. Wait for the latch if some other thread is holding it.  If there are threads waiting for access, they will be granted the latch on a FIFO basis.  When the method returns, the latch is held for exclusive access.
+   * @throws LatchException if the latch is already held by the currentthread for shared access.
+   * @throws RunRecoveryException if an InterruptedException exceptionoccurs.
+   */
+  // line 49 "../../../../Latches_SharedLatchImpl.ump"
+   public synchronized  void acquireExclusive() throws DatabaseException{
+    try {
+	    Thread thread = Thread.currentThread();
+	    int index = indexOf(thread);
+	    Owner owner;
+	    if (index < 0) {
+		owner = new Owner(thread, Owner.EXCLUSIVE);
+		waiters.add(owner);
+	    } else {
+		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
+	    }
+	    if (waiters.size() == 1) {
+		Label429:           ;  //this.hook429();
+	    } else {
+		Label430:           ;  //this.hook430();
+		while (waiters.get(0) != owner) {
+		    wait();
+		}
+	    }
+	    owner.nAcquires += 1;
+	    assert (noteLatch ? noteLatch() : true);
+	} catch (InterruptedException e) {
+	    throw new RunRecoveryException(env, e);
+	} finally {
+	    assert EnvironmentImpl.maybeForceYield();
+	}
+  }
+
   // line 77 "../../../../Latches_SharedLatchImpl.ump"
    public boolean acquireExclusiveNoWait() throws DatabaseException{
     try {
@@ -63,6 +99,63 @@ public class SharedLatchImpl implements SharedLatch
 	    } else {
 		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
 	    }
+	} finally {
+	    assert EnvironmentImpl.maybeForceYield();
+	}
+  }
+
+
+  /**
+   * 
+   * Acquire a latch for shared/read access.  Nesting is allowed, that is, the latch may be acquired more than once by the same thread.
+   * @throws RunRecoveryException if an InterruptedException exceptionoccurs.
+   */
+  // line 104 "../../../../Latches_SharedLatchImpl.ump"
+   public synchronized  void acquireShared() throws DatabaseException{
+    try {
+	    Thread thread = Thread.currentThread();
+	    int index = indexOf(thread);
+	    Owner owner;
+	    if (index < 0) {
+		owner = new Owner(thread, Owner.SHARED);
+		waiters.add(owner);
+	    } else {
+		owner = (Owner) waiters.get(index);
+	    }
+	    while (indexOf(thread) > firstWriter()) {
+		wait();
+	    }
+	    owner.nAcquires += 1;
+	    Label432:           ;  //this.hook432();
+	    assert (noteLatch ? noteLatch() : true);
+	} catch (InterruptedException e) {
+	    throw new RunRecoveryException(env, e);
+	} finally {
+	    assert EnvironmentImpl.maybeForceYield();
+	}
+  }
+
+
+  /**
+   * 
+   * Release an exclusive or shared latch.  If there are other thread(s) waiting for the latch, they are woken up and granted the latch.
+   */
+  // line 131 "../../../../Latches_SharedLatchImpl.ump"
+   public synchronized  void release() throws LatchNotHeldException{
+    try {
+	    Thread thread = Thread.currentThread();
+	    int index = indexOf(thread);
+	    if (index < 0 || index > firstWriter()) {
+		return;
+	    }
+	    Owner owner = (Owner) waiters.get(index);
+	    owner.nAcquires -= 1;
+	    if (owner.nAcquires == 0) {
+		waiters.remove(index);
+		assert (noteLatch ? unNoteLatch() : true);
+		notifyAll();
+	    }
+	    Label433:           ;  //this.hook433();
 	} finally {
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -130,6 +223,16 @@ public class SharedLatchImpl implements SharedLatch
   // line 196 "../../../../Latches_SharedLatchImpl.ump"
    private boolean unNoteLatch() throws LatchNotHeldException{
     return LatchSupport.latchTable.unNoteLatch(this, name);
+  }
+
+  // line 200 "../../../../Latches_SharedLatchImpl.ump"
+   public synchronized  boolean isWriteLockedByCurrentThread(){
+    if (waiters.size() > 0) {
+	    Owner curOwner = (Owner) waiters.get(0);
+	    return (curOwner.thread == Thread.currentThread() && curOwner.type == Owner.EXCLUSIVE);
+	} else {
+	    return false;
+	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -254,95 +357,6 @@ public class SharedLatchImpl implements SharedLatch
   synchronized public void setNoteLatch (boolean noteLatch) 
   {
     this.noteLatch = noteLatch;
-  }
-
-// line 48 "../../../../Latches_SharedLatchImpl.ump"
-  public synchronized void acquireExclusive () throws DatabaseException 
-  {
-    try {
-	    Thread thread = Thread.currentThread();
-	    int index = indexOf(thread);
-	    Owner owner;
-	    if (index < 0) {
-		owner = new Owner(thread, Owner.EXCLUSIVE);
-		waiters.add(owner);
-	    } else {
-		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
-	    }
-	    if (waiters.size() == 1) {
-		Label429:           ;  //this.hook429();
-	    } else {
-		Label430:           ;  //this.hook430();
-		while (waiters.get(0) != owner) {
-		    wait();
-		}
-	    }
-	    owner.nAcquires += 1;
-	    assert (noteLatch ? noteLatch() : true);
-	} catch (InterruptedException e) {
-	    throw new RunRecoveryException(env, e);
-	} finally {
-	    assert EnvironmentImpl.maybeForceYield();
-	}
-  }
-
-// line 103 "../../../../Latches_SharedLatchImpl.ump"
-  public synchronized void acquireShared () throws DatabaseException 
-  {
-    try {
-	    Thread thread = Thread.currentThread();
-	    int index = indexOf(thread);
-	    Owner owner;
-	    if (index < 0) {
-		owner = new Owner(thread, Owner.SHARED);
-		waiters.add(owner);
-	    } else {
-		owner = (Owner) waiters.get(index);
-	    }
-	    while (indexOf(thread) > firstWriter()) {
-		wait();
-	    }
-	    owner.nAcquires += 1;
-	    Label432:           ;  //this.hook432();
-	    assert (noteLatch ? noteLatch() : true);
-	} catch (InterruptedException e) {
-	    throw new RunRecoveryException(env, e);
-	} finally {
-	    assert EnvironmentImpl.maybeForceYield();
-	}
-  }
-
-// line 130 "../../../../Latches_SharedLatchImpl.ump"
-  public synchronized void release () throws LatchNotHeldException 
-  {
-    try {
-	    Thread thread = Thread.currentThread();
-	    int index = indexOf(thread);
-	    if (index < 0 || index > firstWriter()) {
-		return;
-	    }
-	    Owner owner = (Owner) waiters.get(index);
-	    owner.nAcquires -= 1;
-	    if (owner.nAcquires == 0) {
-		waiters.remove(index);
-		assert (noteLatch ? unNoteLatch() : true);
-		notifyAll();
-	    }
-	    Label433:           ;  //this.hook433();
-	} finally {
-	    assert EnvironmentImpl.maybeForceYield();
-	}
-  }
-
-// line 199 "../../../../Latches_SharedLatchImpl.ump"
-  public synchronized boolean isWriteLockedByCurrentThread () 
-  {
-    if (waiters.size() > 0) {
-	    Owner curOwner = (Owner) waiters.get(0);
-	    return (curOwner.thread == Thread.currentThread() && curOwner.type == Owner.EXCLUSIVE);
-	} else {
-	    return false;
-	}
   }
 
   

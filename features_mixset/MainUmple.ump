@@ -19,6 +19,7 @@ use CriticalEviction/umpilif/Master.ump;
 
 use MemoryBudget/umpilif/Master.ump;
 
+
 use Evictor/umpilif/Master.ump;
 
 use RenameOp/umpilif/Master.ump;
@@ -26,7 +27,7 @@ use RenameOp/umpilif/Master.ump;
 use TruncateOp/umpilif/Master.ump;
 
 use DeleteOp/umpilif/Master.ump;
-
+/*
 use CleanerDaemon/umpilif/Master.ump;
 
 use INCompressor/umpilif/Master.ump;
@@ -54,3 +55,5 @@ use Checksum/umpilif/Master.ump;
 use Latches/umpilif/Master.ump;
 
 //rename 's/^/DeleteOp_/' *
+
+*/

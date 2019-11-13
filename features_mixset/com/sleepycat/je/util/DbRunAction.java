@@ -21,22 +21,16 @@ import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CheckpointConfig;
 import java.text.DecimalFormat;
 import java.io.File;
-import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../DbRunAction.ump"
 // line 3 "../../../../DbRunAction_static.ump"
 // line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
 // line 3 "../../../../DbRunAction_inner.ump"
 // line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
 // line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
-// line 3 "../../../../INCompressor_DbRunAction.ump"
-// line 3 "../../../../INCompressor_DbRunAction_inner.ump"
-// line 3 "../../../../Statistics_DbRunAction.ump"
-// line 3 "../../../../Statistics_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -140,17 +134,10 @@ public class DbRunAction
   
   @MethodObject
     @MethodObject
-    @MethodObject
-    @MethodObject
-    @MethodObject
-    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
-  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
   // line 33 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
-  // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
-  // line 4 "../../../../Statistics_DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -205,18 +192,15 @@ public class DbRunAction
                   doAction=CLEAN;
                 }
      else {
-                 Label841:
-  if (action.equalsIgnoreCase("compress")) {
-            doAction=COMPRESS;
-          }
-   //  else {
-     //       original();
-       //   }
-  // this.hook841();
+                 Label841:// this.hook841();
   							if (action.equalsIgnoreCase("checkpoint")) {
   											doAction=CHECKPOINT;
   										}
-  											Label846: //this.hook846();
+  											Label846:
+  if (action.equalsIgnoreCase("evict")) {
+            doAction=EVICT;
+          }
+   //this.hook846();
   											Label843:
   if (action.equalsIgnoreCase("removedb")) {
             doAction=REMOVEDB;
@@ -224,11 +208,7 @@ public class DbRunAction
   			// else { usage(); System.exit(1); } or// original();
   				   //}
    //this.hook843();
-  											Label839:
-  if (action.equalsIgnoreCase("dbstats")) {
-            doAction=DBSTATS;
-          }
-  // from hook843();
+  											Label839:// from hook843();
   							 else {
   											 usage();
   											 System.exit(1);
@@ -253,12 +233,6 @@ public class DbRunAction
           //original(); //@Abdulaziz aaa
   
             Label847:
-  if (readOnly) {
-            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
-            envConfig.setReadOnly(true);
-          }
-          //original();
-  
             //this.hook845();
             Label845:
   if (doAction == EVICT) {
@@ -282,12 +256,7 @@ public class DbRunAction
               }
               env.checkpoint(forceConfig);
             }
-            Label840:
-  if (doAction == COMPRESS) {
-            env.compress();
-          }
-          //original();
-   //this.hook840();
+            Label840: //this.hook840();
             //this.hook844();
             Label844:
   if (doAction == EVICT) {
@@ -303,21 +272,7 @@ public class DbRunAction
             removeAndClean(env,dbName);}
          // original();
    //this.hook842();
-            Label838:
-  if (doAction == DBSTATS) {
-            dbConfig=new DatabaseConfig();
-            dbConfig.setReadOnly(true);
-            DbInternal.setUseExistingConfig(dbConfig,true);
-            db=env.openDatabase(null,dbName,dbConfig);
-            try {
-              System.out.println(db.getStats(new StatsConfig()));
-            }
-      finally {
-              db.close();
-            }
-          }
-          //original();
-   //this.hook838();
+            Label838: //this.hook838();
             actionEnd=System.currentTimeMillis();
             env.close();
           }
@@ -371,16 +326,6 @@ public class DbRunAction
     // line 150 "../../../../DbRunAction_static.ump"
      protected void hook847() throws Exception{
       
-    }
-  
-    // line 48 "../../../../Evictor_DbRunAction_inner.ump"
-     protected void hook846() throws Exception{
-      if (action.equalsIgnoreCase("evict")) {
-            doAction=EVICT;
-          }
-     else {
-            original();
-          }
     }
     
     //------------------------
@@ -509,10 +454,6 @@ public class DbRunAction
   private static final int EVICT = 3 ;
 // line 5 "../../../../DeleteOp_DbRunAction.ump"
   private static final int REMOVEDB = 5 ;
-// line 5 "../../../../INCompressor_DbRunAction.ump"
-  private static final int COMPRESS = 2 ;
-// line 6 "../../../../Statistics_DbRunAction.ump"
-  private static final int DBSTATS = 6 ;
 
   
 }

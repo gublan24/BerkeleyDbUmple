@@ -118,6 +118,29 @@ public class Evictor
 
   /**
    * 
+   * Allows performing eviction during shutdown, which is needed when during checkpointing and cleaner log file deletion.
+   */
+  // line 108 "../../../../Evictor_Evictor.ump"
+   private synchronized  void doEvict(String source, boolean evictDuringShutdown) throws DatabaseException{
+    if (active) {
+					return;
+			}
+			active = true;
+			try {
+					boolean progress = true;
+					while (progress && (evictDuringShutdown || !isShutdownRequested()) && isRunnable(source)) {
+				if (evictBatch(source, currentRequiredEvictBytes) == 0) {
+						progress = false;
+				}
+					}
+			} finally {
+					active = false;
+			}
+  }
+
+
+  /**
+   * 
    * Each iteration will latch and unlatch the major INList, and will attempt to evict requiredEvictBytes, but will give up after a complete pass over the major INList. Releasing the latch is important because it provides an opportunity for to add the minor INList to the major INList.
    * @return the number of bytes evicted, or zero if no progress was made.
    */
@@ -697,25 +720,6 @@ Label375_1: ;//		// end hook375
   synchronized public void clearEnv () 
   {
     envImpl = null;
-  }
-
-// line 107 "../../../../Evictor_Evictor.ump"
-  private synchronized void doEvict (String source, boolean evictDuringShutdown) throws DatabaseException 
-  {
-    if (active) {
-					return;
-			}
-			active = true;
-			try {
-					boolean progress = true;
-					while (progress && (evictDuringShutdown || !isShutdownRequested()) && isRunnable(source)) {
-				if (evictBatch(source, currentRequiredEvictBytes) == 0) {
-						progress = false;
-				}
-					}
-			} finally {
-					active = false;
-			}
   }
 
   

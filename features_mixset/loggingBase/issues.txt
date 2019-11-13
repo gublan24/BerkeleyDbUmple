@@ -1,5 +1,0 @@
-//private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-//	    + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-
-
-CmdUtil.ump =====> make the injuction fails.

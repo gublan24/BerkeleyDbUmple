@@ -29,9 +29,6 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.LatchNotHeldException;
-import com.sleepycat.je.latch.Latch;
 import com.sleepycat.bind.serial.*;
 import com.sleepycat.je.log.*;
 
@@ -40,10 +37,6 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../MemoryBudget_IN.ump"
 // line 3 "../../../../MemoryBudget_IN_inner.ump"
 // line 3 "../../../../Evictor_IN.ump"
-// line 3 "../../../../INCompressor_IN.ump"
-// line 3 "../../../../INCompressor_IN_inner.ump"
-// line 3 "../../../../Latches_IN.ump"
-// line 3 "../../../../Latches_IN_inner.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -235,10 +228,6 @@ initMemorySize();
     if (updateGeneration) {
 	    setGeneration();
 	}
-    // line 55 "../../../../Latches_IN.ump"
-    //original(updateGeneration);
-    	latch.acquire();
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -1531,10 +1520,6 @@ updateMemorySize(null, node);
 	    }
 	    entryStates[i] = entryState;
 	}
-    // line 126 "../../../../Latches_IN.ump"
-    //original(itemBuffer, entryTypeVersion);
-    	latch.setName(shortClassName() + getNodeId());
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -1985,56 +1970,6 @@ updateMemorySize(null, node);
   // line 47 "../../../../Evictor_IN.ump"
   public int getChildEvictionType(){
     return hasResidentChildren() ? MAY_NOT_EVICT : MAY_EVICT_NODE;
-  }
-
-
-  /**
-   * 
-   * Latch this node and set the generation.
-   */
-  // line 14 "../../../../Latches_IN.ump"
-   public void latch() throws DatabaseException{
-    latch(true);
-  }
-
-
-  /**
-   * 
-   * Latch this node if it is not latched by another thread, and set the generation if the latch succeeds.
-   */
-  // line 21 "../../../../Latches_IN.ump"
-   public boolean latchNoWait() throws DatabaseException{
-    return latchNoWait(true);
-  }
-
-
-  /**
-   * 
-   * Release the latch on this node.
-   */
-  // line 28 "../../../../Latches_IN.ump"
-   public void releaseLatch() throws LatchNotHeldException{
-    latch.release();
-  }
-
-
-  /**
-   * 
-   * Release the latch on this node.
-   */
-  // line 35 "../../../../Latches_IN.ump"
-   public void releaseLatchIfOwner() throws LatchNotHeldException{
-    latch.releaseIfOwner();
-  }
-
-
-  /**
-   * 
-   * @return true if this thread holds the IN's latch
-   */
-  // line 42 "../../../../Latches_IN.ump"
-   public boolean isLatchOwner(){
-    return latch.isOwner();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -2704,7 +2639,6 @@ updateMemorySize(null, node);
   
   @MethodObject
   // line 247 "../../../../IN_static.ump"
-  // line 40 "../../../../Latches_IN_inner.ump"
   public static class IN_validateSubtreeBeforeDelete
   {
   
@@ -2735,10 +2669,7 @@ updateMemorySize(null, node);
     // line 253 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-            Label628:
-  needToLatch=!_this.isLatchOwner();    
-  				//try {          //original();//      }
-   //this.hook628();
+            Label628: //this.hook628();
   	 				this.hook629();
   		      if (index >= _this.nEntries) {
   		        throw new ReturnBoolean(true);
@@ -2752,10 +2683,6 @@ updateMemorySize(null, node);
           }
      catch (      ReturnBoolean r) {
   Label628_1:
-  if (needToLatch) {
-              _this.releaseLatchIfOwner();
-            }
-  
             return r.value;
           }
     }
@@ -2783,8 +2710,6 @@ updateMemorySize(null, node);
     @MethodObject
   // line 289 "../../../../IN_static.ump"
   // line 4 "../../../../MemoryBudget_IN_inner.ump"
-  // line 4 "../../../../INCompressor_IN_inner.ump"
-  // line 5 "../../../../Latches_IN_inner.ump"
   public static class IN_splitInternal
   {
   
@@ -2829,17 +2754,10 @@ updateMemorySize(null, node);
           newSibling=null;
           if (idKeyIndearentLsn=DbLsn.NULL_LSN;
           newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
-          Label631:
-  newSibling.latch();
-          //original();
-   //this.hook631();
+          Label631: //this.hook631();
           oldMemorySize=_this.inMemorySize;
           //this.hook630();
-          Label630:
-  //     try {          //original();}//  finally {
-            newSibling.releaseLatch();
-      //    }
-  x < splitIndex) {
+          Label630:x < splitIndex) {
             low=splitIndex;
             high=_this.nEntries;
           }
@@ -2864,12 +2782,7 @@ updateMemorySize(null, node);
             newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
             _this.clearEntry(i);
           }
-          Label636:
-  if (deletedEntrySeen) {
-            _this.databaseImpl.getDbEnvironment().addToCompressorQueue(binRef,false);
-          }
-  //        original();
-   //this.hook636();
+          Label636: //this.hook636();
           newSiblingNEntries=(high - low);
           if (low == 0) {
             _this.shiftEntriesLeft(newSiblingNEntries);
@@ -2980,7 +2893,6 @@ updateMemorySize(null, node);
   
   @MethodObject
   // line 416 "../../../../IN_static.ump"
-  // line 61 "../../../../Latches_IN_inner.ump"
   public static class IN_verify
   {
   
@@ -3010,18 +2922,8 @@ updateMemorySize(null, node);
   
     // line 422 "../../../../IN_static.ump"
     public void execute() throws DatabaseException{
-      // line 63 "../../../../Latches_IN_inner.ump"
-      unlatchThis=false;
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       try {
-            Label632:
-  if (!_this.isLatchOwner()) {
-            _this.latch();
-            unlatchThis=true;
-          }
-          //original();
-   //this.hook632();
+            Label632: //this.hook632();
             userCompareToFcn=(_this.databaseImpl == null ? null : _this.getKeyComparator());
             key1=null;
             for (int i=1; i < _this.nEntries; i++) {
@@ -3046,12 +2948,7 @@ updateMemorySize(null, node);
             DE.printStackTrace(System.out);
           }
      finally {
-            Label633:
-  if (unlatchThis) {
-            _this.releaseLatch();
-          }
-          //original();
-   //this.hook633();
+            Label633: //this.hook633();
           }
     }
     
@@ -3084,7 +2981,6 @@ updateMemorySize(null, node);
   
   @MethodObject
   // line 462 "../../../../IN_static.ump"
-  // line 19 "../../../../Latches_IN_inner.ump"
   public static class IN_isValidForDelete
   {
   
@@ -3114,15 +3010,8 @@ updateMemorySize(null, node);
     // line 467 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-  				      Label634:
-  needToLatch=!_this.isLatchOwner();
-   //this.hook634();
-  							Label635:
-  if (needToLatch) {
-            _this.latch();
-          }
-          //original();
-   //this.hook635();
+  				      Label634: //this.hook634();
+  							Label635: //this.hook635();
   						  if (_this.nEntries > 1) {
   						    throw new ReturnBoolean(false);
   						  }
@@ -3139,13 +3028,7 @@ updateMemorySize(null, node);
             throw ReturnHack.returnBoolean;
           }
      catch (      ReturnBoolean r) {
-  Label634_1:
-  //        try {          //original();} finally {
-            if (needToLatch) {
-              _this.releaseLatchIfOwner();
-            }
-    //      }
-   
+  Label634_1: 
             return r.value;
           }
     }
@@ -3559,82 +3442,6 @@ updateMemorySize(null, node);
   public static final int MAY_EVICT_LNS = 1 ;
 // line 9 "../../../../Evictor_IN.ump"
   public static final int MAY_EVICT_NODE = 2 ;
-// line 8 "../../../../Latches_IN.ump"
-  private Latch latch ;
-
-// line 45 "../../../../Latches_IN.ump"
-  protected void hook618: init (DatabaseImpl , byte , int , int ) 
-  {
-    latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env);
-	//original(env);
-  }
-
-// line 59 "../../../../Latches_IN.ump"
-  protected void hook619: latchNoWait (boolean ) 
-  {
-    //if (latch.acquireNoWait()) {
-	    //original(updateGeneration);
-	//} else {
-	    if(! latch.acquireNoWait()) 
-        throw new ReturnBoolean(false);
-	//}
-  }
-
-// line 79 "../../../../Latches_IN.ump"
-  protected void hook620: findParent (Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
-
-// line 84 "../../../../Latches_IN.ump"
-  protected void hook621: findParent (Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
-
-// line 89 "../../../../Latches_IN.ump"
-  protected void hook622: findParent (Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
-
-// line 94 "../../../../Latches_IN.ump"
-  protected void hook623: findParent (Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
-
-// line 99 "../../../../Latches_IN.ump"
-  protected void hook624:  descendOnParentSearch (SearchResult , boolean , boolean , long , Node , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
-
-// line 105 "../../../../Latches_IN.ump"
-  protected void hook625:  descendOnParentSearch (SearchResult , boolean , boolean , long , Node , boolean ) 
-  {
-    ((IN) child).releaseLatch();
-	//original(child);
-  }
-
-// line 111 "../../../../Latches_IN.ump"
-  protected void hook626:  descendOnParentSearch (SearchResult , boolean , boolean , long , Node , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
-
-// line 116 "../../../../Latches_IN.ump"
-  protected void hook627: isSoughtNode (long , boolean ) 
-  {
-    releaseLatch();
-	//original();
-  }
 
   
 }

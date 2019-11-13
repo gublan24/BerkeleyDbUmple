@@ -114,6 +114,35 @@ public class LatchImpl implements Latch
 
   /**
    * 
+   * Acquire a latch for exclusive/write access, but do not block if it's not available.
+   * @return true if the latch was acquired, false if it is not available.
+   * @throws LatchException if the latch is already held by the callingthread.
+   */
+  // line 105 "../../../../Latches_LatchImpl.ump"
+   public synchronized  boolean acquireNoWait() throws LatchException{
+    try {
+	    Thread thread = Thread.currentThread();
+	    if (thread == owner) {
+		Label425:           ;  //this.hook425();
+		throw new LatchException(getNameString() + " already held");
+	    }
+	    if (owner == null) {
+		owner = thread;
+		Label426:           ;  //this.hook426();
+		assert noteLatch();
+		return true;
+	    } else {
+		Label427:           ;  //this.hook427();
+		return false;
+	    }
+	} finally {
+	    assert EnvironmentImpl.maybeForceYield();
+	}
+  }
+
+
+  /**
+   * 
    * Release the latch.  If there are other thread(s) waiting for the latch, one is woken up and granted the latch. If the latch was not owned by  the caller, just return;
    */
   // line 129 "../../../../Latches_LatchImpl.ump"
@@ -190,6 +219,27 @@ public class LatchImpl implements Latch
   // line 188 "../../../../Latches_LatchImpl.ump"
    public Thread owner(){
     return owner;
+  }
+
+
+  /**
+   * 
+   * Return the number of threads waiting.
+   * @return the number of threads waiting for the latch.
+   */
+  // line 196 "../../../../Latches_LatchImpl.ump"
+   public synchronized  int nWaiters(){
+    return (waiters != null) ? waiters.size() : 0;
+  }
+
+
+  /**
+   * 
+   * Formats a latch owner and waiters.
+   */
+  // line 203 "../../../../Latches_LatchImpl.ump"
+   public synchronized  String toString(){
+    return LatchSupport.latchTable.toString(name, owner, waiters, 0);
   }
 
 
@@ -317,41 +367,6 @@ public class LatchImpl implements Latch
   synchronized public void setName (String name) 
   {
     this.name = name;
-  }
-
-// line 104 "../../../../Latches_LatchImpl.ump"
-  public synchronized boolean acquireNoWait () throws LatchException 
-  {
-    try {
-	    Thread thread = Thread.currentThread();
-	    if (thread == owner) {
-		Label425:           ;  //this.hook425();
-		throw new LatchException(getNameString() + " already held");
-	    }
-	    if (owner == null) {
-		owner = thread;
-		Label426:           ;  //this.hook426();
-		assert noteLatch();
-		return true;
-	    } else {
-		Label427:           ;  //this.hook427();
-		return false;
-	    }
-	} finally {
-	    assert EnvironmentImpl.maybeForceYield();
-	}
-  }
-
-// line 195 "../../../../Latches_LatchImpl.ump"
-  public synchronized int nWaiters () 
-  {
-    return (waiters != null) ? waiters.size() : 0;
-  }
-
-// line 202 "../../../../Latches_LatchImpl.ump"
-  public synchronized String toString () 
-  {
-    return LatchSupport.latchTable.toString(name, owner, waiters, 0);
   }
 
   

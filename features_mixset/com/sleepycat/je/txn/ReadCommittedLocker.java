@@ -11,7 +11,6 @@ import com.sleepycat.je.dbi.CursorImpl;
 import com.sleepycat.je.DatabaseException;
 
 // line 3 "../../../../ReadCommittedLocker.ump"
-// line 3 "../../../../INCompressor_ReadCommittedLocker.ump"
 public class ReadCommittedLocker extends BuddyLocker
 {
 
@@ -155,16 +154,6 @@ public class ReadCommittedLocker extends BuddyLocker
   // line 98 "../../../../ReadCommittedLocker.ump"
    public boolean isReadCommittedIsolation(){
     return true;
-  }
-
-
-  /**
-   * 
-   * Forwards this method to the transactional buddy.  The buddy handles write locks and therefore handles delete information.
-   */
-  // line 9 "../../../../INCompressor_ReadCommittedLocker.ump"
-   public void addDeleteInfo(BIN bin, Key deletedKey) throws DatabaseException{
-    getBuddy().addDeleteInfo(bin, deletedKey);
   }
 
 }

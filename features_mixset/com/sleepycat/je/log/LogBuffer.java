@@ -7,14 +7,9 @@ import com.sleepycat.je.utilint.DbLsn;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.DatabaseException;
 import java.nio.ByteBuffer;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogBuffer.ump"
 // line 3 "../../../../DiskFullErro_LogBuffer.ump"
-// line 3 "../../../../IO_LogBuffer.ump"
-// line 3 "../../../../NIO_LogBuffer.ump"
-// line 3 "../../../../Latches_LogBuffer.ump"
 public class LogBuffer implements LogSource
 {
 
@@ -38,14 +33,8 @@ public class LogBuffer implements LogSource
 
   // line 19 "../../../../LogBuffer.ump"
   public  LogBuffer(int capacity, EnvironmentImpl env) throws DatabaseException{
-    Label481:
-buffer = ByteBuffer.allocateDirect(capacity);
-			//original(capacity);
- //this.hook481(capacity);
-        Label482:
-buffer = ByteBuffer.allocate(capacity);
-			//original(capacity);
- //this.hook482(capacity);
+    Label481: //this.hook481(capacity);
+        Label482: //this.hook482(capacity);
         Label479://    this.hook479(env);
         reinit();
   }
@@ -59,20 +48,12 @@ buffer = ByteBuffer.allocate(capacity);
 
   // line 32 "../../../../LogBuffer.ump"
   public void reinit() throws DatabaseException{
-    // line 30 "../../../../Latches_LogBuffer.ump"
-    readLatch.acquire();
-    	//original();
-    	//readLatch.release();
-    // END OF UMPLE BEFORE INJECTION
     buffer.clear();
         firstLsn = DbLsn.NULL_LSN;
         lastLsn = DbLsn.NULL_LSN;
     // line 20 "../../../../DiskFullErro_LogBuffer.ump"
     //original();
     	rewriteAllowed = false;
-    // END OF UMPLE AFTER INJECTION
-    // line 37 "../../../../Latches_LogBuffer.ump"
-    readLatch.release();
     // END OF UMPLE AFTER INJECTION
   }
 
@@ -93,9 +74,6 @@ buffer = ByteBuffer.allocate(capacity);
    */
   // line 49 "../../../../LogBuffer.ump"
   public void registerLsn(long lsn) throws DatabaseException{
-    // line 44 "../../../../Latches_LogBuffer.ump"
-    readLatch.acquire();
-    // END OF UMPLE BEFORE INJECTION
     if (lastLsn != DbLsn.NULL_LSN) {
             assert(DbLsn.compareTo(lsn, lastLsn) > 0);
         }
@@ -103,9 +81,6 @@ buffer = ByteBuffer.allocate(capacity);
         if (firstLsn == DbLsn.NULL_LSN) {
             firstLsn = lsn;
         }
-    // line 49 "../../../../Latches_LogBuffer.ump"
-    readLatch.release();
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -147,10 +122,6 @@ buffer = ByteBuffer.allocate(capacity);
    */
   // line 85 "../../../../LogBuffer.ump"
   public boolean containsLsn(long lsn) throws DatabaseException{
-    // line 59 "../../../../Latches_LogBuffer.ump"
-    readLatch.acquire();
-    	//return //original(lsn);
-    // END OF UMPLE BEFORE INJECTION
     boolean found = false;
         if ((firstLsn != DbLsn.NULL_LSN) &&
             ((DbLsn.compareTo(firstLsn, lsn) <= 0) && (DbLsn.compareTo(lastLsn, lsn) >= 0))) {
@@ -159,10 +130,7 @@ buffer = ByteBuffer.allocate(capacity);
         if (found) {
             return true;
         } else {
-            Label480:
-readLatch.release();
-	//original();
- //this.hook480();
+            Label480: //this.hook480();
             return false;
         }
   }
@@ -208,7 +176,7 @@ readLatch.release();
    */
   // line 132 "../../../../LogBuffer.ump"
    public void release() throws DatabaseException{
-    readLatch.releaseIfOwner();
+    
   }
 
   // line 8 "../../../../DiskFullErro_LogBuffer.ump"
@@ -219,16 +187,6 @@ readLatch.release();
   // line 12 "../../../../DiskFullErro_LogBuffer.ump"
   public void setRewriteAllowed(){
     rewriteAllowed = true;
-  }
-
-
-  /**
-   * 
-   * When modifying the buffer, acquire the readLatch. Call release() to release the latch. Note that containsLsn() acquires the latch for reading.
-   */
-  // line 13 "../../../../Latches_LogBuffer.ump"
-   public void latchForWrite() throws DatabaseException{
-    readLatch.acquire();
   }
   
   //------------------------
@@ -245,15 +203,6 @@ readLatch.release();
   private long lastLsn ;
 // line 5 "../../../../DiskFullErro_LogBuffer.ump"
   private boolean rewriteAllowed ;
-// line 7 "../../../../Latches_LogBuffer.ump"
-  private Latch readLatch ;
-
-// line 23 "../../../../Latches_LogBuffer.ump"
-  after Label479 :  LogBuffer (int , EnvironmentImpl ) 
-  {
-    readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
-	////original(env);
-  }
 
   
 }

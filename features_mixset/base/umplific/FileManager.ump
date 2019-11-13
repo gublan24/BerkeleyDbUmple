@@ -421,6 +421,7 @@ class FileManager {
             else {
                 throw new ReturnObject(fileHandle);
             }
+            Label460_1:
             // End of hook460
             throw ReturnHack.returnObject;
         } catch (ReturnObject r) {

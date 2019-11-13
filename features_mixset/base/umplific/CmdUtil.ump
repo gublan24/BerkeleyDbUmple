@@ -9,8 +9,6 @@ class CmdUtil
   depend com.sleepycat.je.DatabaseException;
   depend java.io.File;
  
-//   private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-//	    + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
     public static String getArg(String[] argv, int whichArg) throws IllegalArgumentException {
 	if (whichArg < argv.length) {
@@ -85,13 +83,17 @@ class CmdUtil
 	return "java { " + cls.getName() + " | -jar je.jar " + lastName + " }";
     }
 
-    protected static void hook853(EnvironmentConfig config) throws DatabaseException {
-    }
+//    protected static void hook853(EnvironmentConfig config) throws DatabaseException {
+  //  }
 
-    protected static void hook854(EnvironmentConfig config) throws DatabaseException {
-    }
+    //protected static void hook854(EnvironmentConfig config) throws DatabaseException {
+    //}
 
-    protected static void hook855(EnvironmentConfig config) throws DatabaseException {
-    }
+    //protected static void hook855(EnvironmentConfig config) throws DatabaseException {
+    //}
+
+   private static final String printableChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+
 
 }

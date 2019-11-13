@@ -22,11 +22,9 @@ import com.sleepycat.je.dbi.DatabaseImpl;
 import com.sleepycat.je.dbi.CursorImpl;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../Cursor.ump"
 // line 3 "../../../loggingBase_Cursor.ump"
-// line 3 "../../../Latches_Cursor.ump"
 public class Cursor
 {
 
@@ -195,6 +193,20 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
   // line 150 "../../../Cursor.ump"
   public void setNonCloning(boolean nonCloning){
     cursorImpl.setNonCloning(nonCloning);
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 157 "../../../Cursor.ump"
+   public synchronized  void close() throws DatabaseException{
+    checkState(false);
+        cursorImpl.close();
+        if (dbHandle != null) {
+            dbHandle.removeCursor(this);
+        }
   }
 
 
@@ -540,22 +552,11 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
         try {
             origCursor = cursorImpl;
             dup = origCursor.cloneCursor(true);
-            Label19:
-dup.latchBINs();
-			//original(dup);
- //Label:           ;  //this.hook19(dup);
+            Label19: //Label:           ;  //this.hook19(dup);
                 status = dup.delete();
             return status;
         } finally {
-            Label20:
-if (origCursor != null) {
-					origCursor.releaseBINs();
-			}
-			if (dup != null) {
-					dup.releaseBINs();
-			}
-			//original(origCursor, dup);
- //Label:           ;  //this.hook20(origCursor, dup);
+            Label20: //Label:           ;  //this.hook20(origCursor, dup);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -662,12 +663,7 @@ if (origCursor != null) {
             }
             return status;
         } finally {
-            Label21:
-if (origCursor != null) {
-					origCursor.releaseBINs();
-			}
-			//original(origCursor);
- //Label:           ;  //this.hook21(origCursor);
+            Label21: //Label:           ;  //this.hook21(origCursor);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -727,15 +723,9 @@ if (origCursor != null) {
             dup = beginRead(false);
             if (!dup.positionFirstOrLast(first, null)) {
                 status = OperationStatus.NOTFOUND;
-                Label22:
-assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
-      	//original();
- //Label:           ;  //this.hook22();
+                Label22: //Label:           ;  //this.hook22();
             } else {
-                Label23:
-assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
-				//original();
- //Label:           ;  //this.hook23();
+                Label23: //Label:           ;  //this.hook23();
                     status = dup.getCurrentAlreadyLatched(key, data, lockType, first);
                 if (status == OperationStatus.SUCCESS) {
                     if (dup.getDupBIN() != null) {
@@ -746,10 +736,7 @@ assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString()
                 }
             }
         } finally {
-            Label24:
-cursorImpl.releaseBINs();
-			//original();
- //Label:           ;  //this.hook24();
+            Label24: //Label:           ;  //this.hook24();
                 endRead(dup, status == OperationStatus.SUCCESS);
         }
         return status;
@@ -849,12 +836,7 @@ cursorImpl.releaseBINs();
         try {
             assert key != null && data != null;
         } finally {
-            Label25:
-cursorImpl.releaseBINs();
-			if (status != OperationStatus.SUCCESS && dup != cursorImpl) {
-				dup.releaseBINs();								
-			}
- //Label:           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
+            Label25: //Label:           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
             //the label has been changed into the finally block.
         }
         return new KeyChangeStatus(status, keyChange);
@@ -923,10 +905,7 @@ cursorImpl.releaseBINs();
                 continue;
             } else {
                 endRead(dup, status == OperationStatus.SUCCESS);
-                Label27:
-assert LatchSupport.countLatchesHeld() == 0;
-			//original();
- //Label:           ;  //this.hook27();
+                Label27: //Label:           ;  //this.hook27();
                     break;
             }
         }
@@ -961,20 +940,14 @@ assert LatchSupport.countLatchesHeld() == 0;
             }
             if (status != OperationStatus.SUCCESS) {
                 while (true) {
-                    Label28:
-assert LatchSupport.countLatchesHeld() == 0;
-		//original();
- //Label:           ;  //this.hook28();
+                    Label28: //Label:           ;  //this.hook28();
                         status = dup.getNext(tempKey, tempData, LockType.RANGE_READ, true, false);
                     if (checkForInsertion(GetMode.NEXT, cursorImpl, dup)) {
                         dup.close();
                         dup = cursorImpl.cloneCursor(true);
                         continue;
                     } else {
-                        Label29:
-assert LatchSupport.countLatchesHeld() == 0;
-		//original();
- //Label:           ;  //this.hook29();
+                        Label29: //Label:           ;  //this.hook29();
                             break;
                     }
                 }
@@ -1001,10 +974,7 @@ assert LatchSupport.countLatchesHeld() == 0;
     assert(key != null && data != null);
         OperationStatus status;
         while (true) {
-            Label30:
-assert LatchSupport.countLatchesHeld() == 0;
-	//original();
- //Label:           ;  //this.hook30();
+            Label30: //Label:           ;  //this.hook30();
                 CursorImpl dup = beginRead(true);
             try {
                 if (getMode == GetMode.NEXT) {
@@ -1031,10 +1001,7 @@ assert LatchSupport.countLatchesHeld() == 0;
                 continue;
             } else {
                 endRead(dup, status == OperationStatus.SUCCESS);
-                Label31:
-assert LatchSupport.countLatchesHeld() == 0;
-	//original();
- //Label:           ;  //this.hook31();
+                Label31: //Label:           ;  //this.hook31();
                     break;
             }
         }
@@ -1063,10 +1030,7 @@ assert LatchSupport.countLatchesHeld() == 0;
         }
         boolean ret = false;
         if (origBIN != dupBIN) {
-            Label33:
-origCursor.latchBINs();
-	//original(origCursor);
- //Label:           ;  //this.hook33(origCursor);
+            Label33: //Label:           ;  //this.hook33(origCursor);
             if (origDBIN == null) {
                 if (forward) {
                     if (origBIN.getNEntries() - 1 > origCursor.getIndex()) {
@@ -1100,18 +1064,12 @@ origCursor.latchBINs();
                     }
                 }
             }
-            Label32:
-origCursor.releaseBINs();
-	//original(origCursor);
- //Label:           ;  //this.hook32(origCursor);
+            Label32: //Label:           ;  //this.hook32(origCursor);
                 return ret;
         }
         if (origDBIN != dupCursor.getDupBIN() && origCursor.getIndex() == dupCursor.getIndex() &&
             getMode != GetMode.NEXT_NODUP && getMode != GetMode.PREV_NODUP) {
-            Label35:
-origCursor.latchBINs();
-	//original(origCursor);
- //Label:           ;  //this.hook35(origCursor);
+            Label35: //Label:           ;  //this.hook35(origCursor);
             if (forward) {
                 if (origDBIN.getNEntries() - 1 > origCursor.getDupIndex()) {
                     for (int i = origCursor.getDupIndex() + 1; i < origDBIN.getNEntries(); i++) {
@@ -1139,10 +1097,7 @@ origCursor.latchBINs();
                     }
                 }
             }
-            Label34:
-origCursor.releaseBINs();
-	//original(origCursor);
- //Label:           ;  //this.hook34(origCursor);
+            Label34: //Label:           ;  //this.hook34(origCursor);
             return ret;
         }
         return false;
@@ -1410,16 +1365,6 @@ origCursor.releaseBINs();
   private boolean readUncommittedDefault ;
 // line 51 "../../../Cursor.ump"
   private boolean serializableIsolationDefault ;
-
-// line 156 "../../../Cursor.ump"
-  public synchronized void close () throws DatabaseException 
-  {
-    checkState(false);
-        cursorImpl.close();
-        if (dbHandle != null) {
-            dbHandle.removeCursor(this);
-        }
-  }
 // line 5 "../../../loggingBase_Cursor.ump"
   private Logger logger ;
 

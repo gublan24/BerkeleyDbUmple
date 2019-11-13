@@ -39,7 +39,7 @@ class FileSelector
 			//original();
     }
 
-    after Label164:getFilesAtCheckpointStart() { //    synchronized Set[] getFilesAtCheckpointStart() {
+    after Label164:getFilesAtCheckpointStart() { 
 			anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
 			//original();
     }

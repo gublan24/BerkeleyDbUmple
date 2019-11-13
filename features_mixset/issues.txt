@@ -7,8 +7,8 @@ Issues encountered in Berkeley Database:
 		Software. To view the release and installation documentation, load
 		the distribution file docs/index.html into your web browser"
 
-	2) Synchro. methods. EASY
-	3) Around keyword for injection of code. 
+	2) Synchro. methods. EASY --DONE
+	3) Around keyword for injection of code. --DONE 
 	4) Extending other fragments of a method. "Cascading extention". 
 	5) Method generateded and  manually added methods.
 	6) Umple two issues:
@@ -17,9 +17,9 @@ Issues encountered in Berkeley Database:
 				class ConfigParam
 				{
 					public static final String CONFIG_DELIM = ";"; // CAUSE ERROR
-				{
+				}
 		 -------------------------------------------------------------------------------------------------
-		(B) The token "<<=". Example:  
+		(B) The token "<<=". Example:  --DONE 
 		 
 			private byte[] readPrintableLine(String line) throws DatabaseException {
 			int maxNBytes = line.length();

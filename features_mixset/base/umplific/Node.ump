@@ -23,7 +23,7 @@ class Node
 
     private long nodeId;
 
-    public synchronized static void setLastNodeId(long id) {
+    public  static synchronized void setLastNodeId(long id) {
 	if (lastAllocatedId < id) {
 	    lastAllocatedId = id;
 	}

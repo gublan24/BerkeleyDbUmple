@@ -25,8 +25,6 @@ import java.util.HashMap;
 
 // line 3 "../../../../Locker.ump"
 // line 3 "../../../../DeleteOp_Locker.ump"
-// line 3 "../../../../INCompressor_Locker.ump"
-// line 3 "../../../../Statistics_Locker.ump"
 public abstract class Locker
 {
 
@@ -110,6 +108,37 @@ public abstract class Locker
   // line 100 "../../../../Locker.ump"
    public boolean getDefaultNoWait(){
     return defaultNoWait;
+  }
+
+
+  /**
+   * 
+   * Get the lock timeout period for this transaction, in milliseconds
+   */
+  // line 107 "../../../../Locker.ump"
+   public synchronized  long getLockTimeout(){
+    return lockTimeOutMillis;
+  }
+
+
+  /**
+   * 
+   * Set the lock timeout period for any locks in this transaction, in milliseconds.
+   */
+  // line 114 "../../../../Locker.ump"
+   public synchronized  void setLockTimeout(long timeOutMillis){
+    lockTimeOutMillis = timeOutMillis;
+  }
+
+
+  /**
+   * 
+   * Set the timeout period for this transaction, in milliseconds.
+   */
+  // line 121 "../../../../Locker.ump"
+   public synchronized  void setTxnTimeout(long timeOutMillis){
+    txnTimeOutMillis = timeOutMillis;
+	txnStartMillis = System.currentTimeMillis();
   }
 
 
@@ -492,34 +521,6 @@ public abstract class Locker
    * Database operations like remove and truncate leave behind residual DatabaseImpls that must be purged at transaction commit or abort.
    */
    public abstract void markDeleteAtTxnEnd(DatabaseImpl db, boolean deleteAtCommit) throws DatabaseException;
-
-
-  /**
-   * 
-   * Add delete information, to be added to the inCompressor queue when the transaction ends.
-   */
-  // line 11 "../../../../INCompressor_Locker.ump"
-   public void addDeleteInfo(BIN bin, Key deletedKey) throws DatabaseException{
-    synchronized (this) {
-					if (deleteInfo == null) {
-				deleteInfo = new HashMap();
-					}
-					Long nodeId = new Long(bin.getNodeId());
-					BINReference binRef = (BINReference) deleteInfo.get(nodeId);
-					if (binRef == null) {
-				binRef = bin.createReference();
-				deleteInfo.put(nodeId, binRef);
-					}
-					binRef.addDeletedKey(deletedKey);
-			}
-  }
-
-
-  /**
-   * 
-   * Get lock count, for per transaction lock stats, for internal debugging.
-   */
-   public abstract LockStats collectStats(LockStats stats) throws DatabaseException;
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -551,27 +552,6 @@ public abstract class Locker
   protected Map handleToHandleLockMap ;
 // line 52 "../../../../Locker.ump"
   protected Thread thread ;
-
-// line 106 "../../../../Locker.ump"
-  public synchronized long getLockTimeout () 
-  {
-    return lockTimeOutMillis;
-  }
-
-// line 113 "../../../../Locker.ump"
-  public synchronized void setLockTimeout (long timeOutMillis) 
-  {
-    lockTimeOutMillis = timeOutMillis;
-  }
-
-// line 120 "../../../../Locker.ump"
-  public synchronized void setTxnTimeout (long timeOutMillis) 
-  {
-    txnTimeOutMillis = timeOutMillis;
-	txnStartMillis = System.currentTimeMillis();
-  }
-// line 5 "../../../../INCompressor_Locker.ump"
-  protected Map deleteInfo ;
 
   
 }

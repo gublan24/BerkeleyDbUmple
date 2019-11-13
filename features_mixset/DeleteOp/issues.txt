@@ -1,6 +1,0 @@
-1) DeleteOp_FileSelector.ump
-
-  after Label164:getFilesAtCheckpointStart() { //    synchronized Set[] getFilesAtCheckpointStart() {
-			anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
-			//original();
-    }

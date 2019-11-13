@@ -71,6 +71,46 @@ public class DbEnvPool
 
   /**
    * 
+   * Find a single environment, used by Environment handles and by command line utilities.
+   */
+  // line 46 "../../../../DbEnvPool.ump"
+   private synchronized  EnvironmentImplInfo getEnvironment(File envHome, EnvironmentConfig config, boolean openIfNeeded) throws DatabaseException{
+    boolean found;
+	boolean firstHandle = false;
+	EnvironmentImpl environmentImpl = null;
+	String environmentKey = getEnvironmentMapKey(envHome);
+	if (envs.containsKey(environmentKey)) {
+	    environmentImpl = (EnvironmentImpl) envs.get(environmentKey);
+	    if (!environmentImpl.isOpen()) {
+		if (openIfNeeded) {
+		    environmentImpl.open();
+		    found = true;
+		} else {
+		    found = false;
+		}
+	    } else {
+		found = true;
+	    }
+	} else {
+	    if (openIfNeeded) {
+		environmentImpl = new EnvironmentImpl(envHome, config);
+		envs.put(environmentKey, environmentImpl);
+		firstHandle = true;
+		found = true;
+	    } else {
+		found = false;
+	    }
+	}
+	if (found) {
+	    return new EnvironmentImplInfo(environmentImpl, firstHandle);
+	} else {
+	    return new EnvironmentImplInfo(null, false);
+	}
+  }
+
+
+  /**
+   * 
    * Remove a EnvironmentImpl from the pool because it's been closed.
    */
   // line 83 "../../../../DbEnvPool.ump"
@@ -143,43 +183,6 @@ public class DbEnvPool
   private static DbEnvPool pool = new DbEnvPool() ;
 // line 14 "../../../../DbEnvPool.ump"
   private Map envs ;
-
-// line 44 "../../../../DbEnvPool.ump"
-  private synchronized EnvironmentImplInfo getEnvironment (File envHome, EnvironmentConfig config,
-	    boolean openIfNeeded) throws DatabaseException 
-  {
-    boolean found;
-	boolean firstHandle = false;
-	EnvironmentImpl environmentImpl = null;
-	String environmentKey = getEnvironmentMapKey(envHome);
-	if (envs.containsKey(environmentKey)) {
-	    environmentImpl = (EnvironmentImpl) envs.get(environmentKey);
-	    if (!environmentImpl.isOpen()) {
-		if (openIfNeeded) {
-		    environmentImpl.open();
-		    found = true;
-		} else {
-		    found = false;
-		}
-	    } else {
-		found = true;
-	    }
-	} else {
-	    if (openIfNeeded) {
-		environmentImpl = new EnvironmentImpl(envHome, config);
-		envs.put(environmentKey, environmentImpl);
-		firstHandle = true;
-		found = true;
-	    } else {
-		found = false;
-	    }
-	}
-	if (found) {
-	    return new EnvironmentImplInfo(environmentImpl, firstHandle);
-	} else {
-	    return new EnvironmentImplInfo(null, false);
-	}
-  }
 
   
 }

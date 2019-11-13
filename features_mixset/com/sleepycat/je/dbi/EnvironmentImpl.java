@@ -48,15 +48,6 @@ import java.io.IOException;
 import java.io.File;
 import com.sleepycat.je.log.TraceLogHandler;
 import com.sleepycat.je.evictor.Evictor;
-import com.sleepycat.je.incomp.INCompressor;
-import com.sleepycat.je.VerifyConfig;
-import com.sleepycat.je.TransactionStats;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
-import com.sleepycat.je.log.LatchedLogManager;
-import com.sleepycat.je.latch.SharedLatch;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
@@ -69,17 +60,6 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../RenameOp_EnvironmentImpl.ump"
 // line 3 "../../../../Truncate_EnvironmentImpl.ump"
 // line 3 "../../../../DeleteOp_EnvironmentImpl.ump"
-// line 3 "../../../../CleanerDaemon_EnvironmentImpl.ump"
-// line 3 "../../../../INCompressor_EnvironmentImpl.ump"
-// line 3 "../../../../INCompressor_EnvironmentImpl_inner.ump"
-// line 3 "../../../../CPTime_EnvironmentImpl.ump"
-// line 3 "../../../../CPTime_EnvironmentImpl_inner.ump"
-// line 3 "../../../../CheckpointerDaemon_EnvironmentImpl.ump"
-// line 3 "../../../../Verifier_EnvironmentImpl.ump"
-// line 3 "../../../../CheckLeaks_EnvironmentImpl.ump"
-// line 3 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-// line 3 "../../../../Statistics_EnvironmentImpl.ump"
-// line 3 "../../../../Latches_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -114,10 +94,7 @@ public class EnvironmentImpl implements EnvConfigObserver
     try {
 	    this.envHome = envHome;
 	    envState = DbEnvState.INIT;
-	    Label323:
-mapTreeRootLatch = LatchSupport.makeLatch("MapTreeRoot", this);
-	//original();
- //this.hook323();
+	    Label323: //this.hook323();
 	    configManager = new DbConfigManager(envConfig);
 	    configObservers = new ArrayList();
 	    addConfigObserver(this);
@@ -138,30 +115,20 @@ envLogger = initLogger(envHome);
 			    "Can't set 'je.env.isNoLocking' and " + "'je.env.isTransactional';");
 		}
 	    }
-	    Label322:
-fairLatches = configManager.getBoolean(EnvironmentParams.ENV_FAIR_LATCHES);
-	//original();
- //this.hook322();
+	    Label322: //this.hook322();
 	    isReadOnly = configManager.getBoolean(EnvironmentParams.ENV_RDONLY);
 	    fileManager = new FileManager(this, envHome, isReadOnly);
 	    if (!envConfig.getAllowCreate() && !fileManager.filesExist()) {
 		throw new DatabaseException("Enviroment creation isn't allowed, " + " but there is no pre-existing "
 			+ " environment in " + envHome);
 	    }
-	    Label321:
-if (fairLatches) {
-					logManager = new LatchedLogManager(this, isReadOnly);
-			} else
- 	logManager = new SyncedLogManager(this, isReadOnly); //this.hook321();
+	    Label321: 	logManager = new SyncedLogManager(this, isReadOnly); //this.hook321();
 	    inMemoryINs = new INList(this);
 	    txnManager = new TxnManager(this);
 	    createDaemons();
 	    dbMapTree = new DbTree(this);
 	    referenceCount = 0;
-	    Label320:
-triggerLatch = LatchSupport.makeSharedLatch("TriggerLatch", this);
-	//original();
- //this.hook320();
+	    Label320: //this.hook320();
 	    if (configManager.getBoolean(EnvironmentParams.ENV_RECOVERY)) {
 		try {
 		    RecoveryManager recoveryManager = new RecoveryManager(this);
@@ -226,19 +193,9 @@ memoryBudget.initCacheMemoryUsage();
   // line 202 "../../../../EnvironmentImpl.ump"
    private void runOrPauseDaemons(DbConfigManager mgr) throws DatabaseException{
     if (!isReadOnly) {
-	    Label330:
-inCompressor.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_INCOMPRESSOR));
-			//original(mgr);
- //this.hook330(mgr);
-	    Label333:
-cleaner.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CLEANER)
-				&& !mgr.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY));
-			//original(mgr);
- //this.hook333(mgr);
-	    Label326:
-checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
-	//original(mgr);
- //this.hook326(mgr);
+	    Label330: //this.hook330(mgr);
+	    Label333: //this.hook333(mgr);
+	    Label326: //this.hook326(mgr);
 	}
 	Label317: //this.hook317(mgr);
   }
@@ -270,17 +227,10 @@ checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
    */
   // line 228 "../../../../EnvironmentImpl.ump"
    public void logMapTreeRoot() throws DatabaseException{
-    // line 52 "../../../../Latches_EnvironmentImpl.ump"
-    mapTreeRootLatch.acquire();
-    // END OF UMPLE BEFORE INJECTION
     try {
 				mapTreeRootLsn = logManager.log(dbMapTree);
 				} finally {
-						logMapTreeRoot_1:
-//try {original();} finally {
-					mapTreeRootLatch.release();
-			//}
- //mapTreeRootLatch.release();
+						logMapTreeRoot_1: //mapTreeRootLatch.release();
 				}
   }
 
@@ -291,9 +241,6 @@ checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
    */
   // line 239 "../../../../EnvironmentImpl.ump"
    public void rewriteMapTreeRoot(long cleanerTargetLsn) throws DatabaseException{
-    // line 66 "../../../../Latches_EnvironmentImpl.ump"
-    mapTreeRootLatch.acquire();
-    // END OF UMPLE BEFORE INJECTION
     try{
 			if (DbLsn.compareTo(cleanerTargetLsn, mapTreeRootLsn) == 0) {
 					mapTreeRootLsn = logManager.log(dbMapTree);
@@ -301,9 +248,7 @@ checkpointer.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CHECKPOINTER));
 		  }
 		  finally
 			{
-		   Label_rewriteMapTreeRoot_1:
-mapTreeRootLatch.release();
- ;//
+		   Label_rewriteMapTreeRoot_1: ;//
 			}
   }
 
@@ -326,17 +271,13 @@ mapTreeRootLatch.release();
    public void readMapTreeFromLog(long rootLsn) throws DatabaseException{
     dbMapTree = (DbTree) logManager.get(rootLsn);
 			dbMapTree.setEnvironmentImpl(this);
-			Label324:
-mapTreeRootLatch.acquire();
-	//this.hook324(rootLsn);
+			Label324:	//this.hook324(rootLsn);
 			try{
 				mapTreeRootLsn = rootLsn;
 			}
 			finally
 			{
-			Label324_1:
-mapTreeRootLatch.release();
- ;//
+			Label324_1: ;//
 			}
   }
 
@@ -412,6 +353,20 @@ mapTreeRootLatch.release();
 	}
   }
 
+  // line 328 "../../../../EnvironmentImpl.ump"
+   public synchronized  void close() throws DatabaseException{
+    if (--referenceCount <= 0) {
+	    doClose(true);
+	}
+  }
+
+  // line 334 "../../../../EnvironmentImpl.ump"
+   public synchronized  void close(boolean doCheckpoint) throws DatabaseException{
+    if (--referenceCount <= 0) {
+	    doClose(doCheckpoint);
+	}
+  }
+
   // line 340 "../../../../EnvironmentImpl.ump"
    private void doClose(boolean doCheckpoint) throws DatabaseException{
     StringBuffer errors = new StringBuffer();
@@ -478,16 +433,7 @@ closeLogger();
 //	original();
 
 					DbEnvPool.getInstance().remove(envHome);
-					Label325:
-try {
-					checkLeaks();
-					Label311: //this.hook311();
-			} catch (DatabaseException DBE) {
-					errors.append("\nException performing validity checks: ");
-					errors.append(DBE.toString()).append("\n");
-			}
-			//original(errors);
- //this.hook325(errors);
+					Label325: //this.hook325(errors);
 			} finally {
 					envState = DbEnvState.CLOSED;
 			}
@@ -496,9 +442,47 @@ try {
 			}
   }
 
+  // line 411 "../../../../EnvironmentImpl.ump"
+   public synchronized  void closeAfterRunRecovery() throws DatabaseException{
+    try {
+	    shutdownDaemons();
+	} catch (InterruptedException IE) {
+	}
+	try {
+	    fileManager.clear();
+	} catch (Exception e) {
+	}
+	try {
+	    fileManager.close();
+	} catch (Exception e) {
+	}
+	DbEnvPool.getInstance().remove(envHome);
+  }
+
+  // line 427 "../../../../EnvironmentImpl.ump"
+   public synchronized  void forceClose() throws DatabaseException{
+    referenceCount = 1;
+	close();
+  }
+
+  // line 432 "../../../../EnvironmentImpl.ump"
+   public synchronized  void incReferenceCount(){
+    referenceCount++;
+  }
+
   // line 436 "../../../../EnvironmentImpl.ump"
    public static  int getThreadLocalReferenceCount(){
     return threadLocalReferenceCount;
+  }
+
+  // line 440 "../../../../EnvironmentImpl.ump"
+   public static  synchronized  void incThreadLocalReferenceCount(){
+    threadLocalReferenceCount++;
+  }
+
+  // line 444 "../../../../EnvironmentImpl.ump"
+   public static  synchronized  void decThreadLocalReferenceCount(){
+    threadLocalReferenceCount--;
   }
 
   // line 448 "../../../../EnvironmentImpl.ump"
@@ -533,12 +517,7 @@ try {
   // line 473 "../../../../EnvironmentImpl.ump"
    private void requestShutdownDaemons(){
     closing = true;
-			Label331:
-if (inCompressor != null) {
-					inCompressor.requestShutdown();
-			}
-			//original();
- //this.hook331();
+			Label331: //this.hook331();
 			//this.hook334();
 			Label334:
 if (evictor != null) {
@@ -546,18 +525,7 @@ if (evictor != null) {
 			}
 //			original();
 
-			Label327:
-if (checkpointer != null) {
-					checkpointer.requestShutdown();
-			}
-			//original();
- //this.hook327();
-    // line 22 "../../../../CleanerDaemon_EnvironmentImpl.ump"
-    //original();
-    	if (cleaner != null) {
-    	    cleaner.requestShutdown();
-    	}
-    // END OF UMPLE AFTER INJECTION
+			Label327: //this.hook327();
   }
 
 
@@ -567,14 +535,6 @@ if (checkpointer != null) {
    */
   // line 484 "../../../../EnvironmentImpl.ump"
    private void shutdownDaemons() throws InterruptedException{
-    // line 32 "../../../../CleanerDaemon_EnvironmentImpl.ump"
-    shutdownCleaner();
-    //	original();
-    // END OF UMPLE BEFORE INJECTION
-    // line 95 "../../../../INCompressor_EnvironmentImpl.ump"
-    shutdownINCompressor();
-    			//original();
-    // END OF UMPLE BEFORE INJECTION
     shutdownCheckpointer();
     // line 44 "../../../../Evictor_EnvironmentImpl.ump"
     //original();
@@ -585,11 +545,7 @@ if (checkpointer != null) {
   // line 488 "../../../../EnvironmentImpl.ump"
   public void shutdownCheckpointer() throws InterruptedException{
     if (checkpointer != null) {
-	    Label328:
-checkpointer.shutdown();
-			checkpointer.clearEnv();
-			//original();
- //this.hook328();
+	    Label328: //this.hook328();
 	    checkpointer = null;
 	}
 	return;
@@ -709,6 +665,42 @@ checkpointer.shutdown();
   // line 580 "../../../../EnvironmentImpl.ump"
    public void checkImmutablePropsForEquality(EnvironmentConfig config) throws IllegalArgumentException{
     DbInternal.checkImmutablePropsForEquality(configManager.getEnvironmentConfig(), config);
+  }
+
+
+  /**
+   * 
+   * Changes the mutable config properties that are present in the given config, and notifies all config observer.
+   */
+  // line 587 "../../../../EnvironmentImpl.ump"
+   public synchronized  void setMutableConfig(EnvironmentMutableConfig config) throws DatabaseException{
+    EnvironmentConfig newConfig = DbInternal.cloneConfig(configManager.getEnvironmentConfig());
+	DbInternal.copyMutablePropsTo(config, newConfig);
+	configManager = new DbConfigManager(newConfig);
+	for (int i = configObservers.size() - 1; i >= 0; i -= 1) {
+	    EnvConfigObserver o = (EnvConfigObserver) configObservers.get(i);
+	    o.envConfigUpdate(configManager);
+	}
+  }
+
+
+  /**
+   * 
+   * Adds an observer of mutable config changes.
+   */
+  // line 600 "../../../../EnvironmentImpl.ump"
+   public synchronized  void addConfigObserver(EnvConfigObserver o){
+    configObservers.add(o);
+  }
+
+
+  /**
+   * 
+   * Removes an observer of mutable config changes.
+   */
+  // line 607 "../../../../EnvironmentImpl.ump"
+   public synchronized  void removeConfigObserver(EnvConfigObserver o){
+    configObservers.remove(o);
   }
 
   // line 611 "../../../../EnvironmentImpl.ump"
@@ -962,137 +954,6 @@ checkpointer.shutdown();
    public void dbRemove(Locker locker, String databaseName) throws DatabaseException{
     dbMapTree.dbRemove(locker, databaseName);
   }
-
-
-  /**
-   * 
-   * public for unit tests.
-   */
-  // line 9 "../../../../CleanerDaemon_EnvironmentImpl.ump"
-   public void shutdownCleaner() throws InterruptedException{
-    if (cleaner != null) {
-					cleaner.shutdown();
-			}
-			return;
-  }
-
-
-  /**
-   * 
-   * Return the incompressor. In general, don't use this directly because it's easy to forget that the incompressor can be null at times (i.e during the shutdown procedure. Instead, wrap the functionality within this class, like lazyCompress.
-   */
-  // line 12 "../../../../INCompressor_EnvironmentImpl.ump"
-   public INCompressor getINCompressor(){
-    return inCompressor;
-  }
-
-
-  /**
-   * 
-   * Tells the asynchronous IN compressor thread about a BIN with a deleted entry.
-   */
-  // line 19 "../../../../INCompressor_EnvironmentImpl.ump"
-   public void addToCompressorQueue(BIN bin, Key deletedKey, boolean doWakeup) throws DatabaseException{
-    if (inCompressor != null) {
-					inCompressor.addBinKeyToQueue(bin, deletedKey, doWakeup);
-			}
-  }
-
-
-  /**
-   * 
-   * Tells the asynchronous IN compressor thread about a BINReference with a deleted entry.
-   */
-  // line 28 "../../../../INCompressor_EnvironmentImpl.ump"
-   public void addToCompressorQueue(BINReference binRef, boolean doWakeup) throws DatabaseException{
-    if (inCompressor != null) {
-					inCompressor.addBinRefToQueue(binRef, doWakeup);
-			}
-  }
-
-
-  /**
-   * 
-   * Tells the asynchronous IN compressor thread about a collections of BINReferences with deleted entries.
-   */
-  // line 37 "../../../../INCompressor_EnvironmentImpl.ump"
-   public void addToCompressorQueue(Collection binRefs, boolean doWakeup) throws DatabaseException{
-    if (inCompressor != null) {
-					inCompressor.addMultipleBinRefsToQueue(binRefs, doWakeup);
-			}
-  }
-
-
-  /**
-   * 
-   * Do lazy compression at opportune moments.
-   */
-  // line 46 "../../../../INCompressor_EnvironmentImpl.ump"
-   public void lazyCompress(IN in) throws DatabaseException{
-    if (inCompressor != null) {
-			  inCompressor.lazyCompress(in);
-			}
-  }
-
-
-  /**
-   * 
-   * Invoke a compress programatically. Note that only one compress may run at a time.
-   */
-  // line 55 "../../../../INCompressor_EnvironmentImpl.ump"
-   public boolean invokeCompressor() throws DatabaseException{
-    if (inCompressor != null) {
-					inCompressor.doCompress();
-					return true;
-			} else {
-					return false;
-			}
-  }
-
-
-  /**
-   * 
-   * Available for the unit tests.
-   */
-  // line 67 "../../../../INCompressor_EnvironmentImpl.ump"
-   public void shutdownINCompressor() throws InterruptedException{
-    if (inCompressor != null) {
-					inCompressor.shutdown();
-					inCompressor.clearEnv();
-					inCompressor = null;
-			}
-			return;
-  }
-
-  // line 76 "../../../../INCompressor_EnvironmentImpl.ump"
-   public int getINCompressorQueueSize() throws DatabaseException{
-    return inCompressor.getBinRefQueueSize();
-  }
-
-
-  /**
-   * 
-   * Debugging support. Check for leaked locks and transactions.
-   */
-  // line 9 "../../../../CheckLeaks_EnvironmentImpl.ump"
-   private void checkLeaks() throws DatabaseException{
-    new EnvironmentImpl_checkLeaks(this).execute();
-  }
-
-  // line 16 "../../../../Latches_EnvironmentImpl.ump"
-   public static  boolean getFairLatches(){
-    return fairLatches;
-  }
-
-
-  /**
-   * 
-   * Returns the shared trigger latch.
-   */
-  // line 23 "../../../../Latches_EnvironmentImpl.ump"
-   public SharedLatch getTriggerLatch(){
-    return triggerLatch;
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1100,11 +961,8 @@ checkpointer.shutdown();
   
   @MethodObject
     @MethodObject
-    @MethodObject
   // line 4 "../../../../EnvironmentImpl_static.ump"
   // line 4 "../../../../Evictor_EnvironmentImpl_inner.ump"
-  // line 4 "../../../../INCompressor_EnvironmentImpl_inner.ump"
-  // line 4 "../../../../CPTime_EnvironmentImpl_inner.ump"
   public static class EnvironmentImpl_createDaemons
   {
   
@@ -1138,16 +996,9 @@ checkpointer.shutdown();
               //original();
       // END OF UMPLE BEFORE INJECTION
       checkpointerWakeupTime=0;
-          Label329:
-  checkpointerWakeupTime=Checkpointer.getWakeupPeriod(_this.configManager);
-          //original();
-   //this.hook329();
+          Label329: //this.hook329();
           _this.checkpointer=new Checkpointer(_this,checkpointerWakeupTime,"Checkpointer");
-          Label332:
-  compressorWakeupInterval=PropUtil.microsToMillis(_this.configManager.getLong(EnvironmentParams.COMPRESSOR_WAKEUP_INTERVAL));
-          _this.inCompressor=new INCompressor(_this,compressorWakeupInterval,"INCompressor");
-         // original();
-   //this.hook332();
+          Label332: //this.hook332();
           _this.cleaner=new Cleaner(_this,"Cleaner");
     }
     
@@ -1231,67 +1082,6 @@ checkpointer.shutdown();
     protected String logFilePattern ;
   
     
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-  public static class EnvironmentImpl_checkLeaks
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public EnvironmentImpl_checkLeaks()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    public  EnvironmentImpl_checkLeaks(EnvironmentImpl _this){
-      this._this=_this;
-    }
-  
-    // line 9 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    public void execute() throws DatabaseException{
-      if (!_this.configManager.getBoolean(EnvironmentParams.ENV_CHECK_LEAKS)) {
-            return;
-          }
-          clean=true;
-          Label313: //this.hook313();
-          Label312: //this.hook312();
-          assert clean : "Lock, transaction, or latch left behind at environment close";
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 18 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    protected EnvironmentImpl _this ;
-  // line 19 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    protected boolean clean ;
-  // line 20 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    protected StatsConfig statsConfig ;
-  // line 21 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    protected LockStats lockStat ;
-  // line 22 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    protected TransactionStats txnStat ;
-  // line 23 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
-    protected TransactionStats.Active[] active ;
-  
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -1353,126 +1143,10 @@ checkpointer.shutdown();
   public static final boolean JAVA5_AVAILABLE ;
 // line 107 "../../../../EnvironmentImpl.ump"
   private static final String DISABLE_JAVA_ADLER32 = "je.disable.java.adler32" ;
-
-// line 327 "../../../../EnvironmentImpl.ump"
-  public synchronized void close () throws DatabaseException 
-  {
-    if (--referenceCount <= 0) {
-	    doClose(true);
-	}
-  }
-
-// line 333 "../../../../EnvironmentImpl.ump"
-  public synchronized void close (boolean doCheckpoint) throws DatabaseException 
-  {
-    if (--referenceCount <= 0) {
-	    doClose(doCheckpoint);
-	}
-  }
-
-// line 410 "../../../../EnvironmentImpl.ump"
-  public synchronized void closeAfterRunRecovery () throws DatabaseException 
-  {
-    try {
-	    shutdownDaemons();
-	} catch (InterruptedException IE) {
-	}
-	try {
-	    fileManager.clear();
-	} catch (Exception e) {
-	}
-	try {
-	    fileManager.close();
-	} catch (Exception e) {
-	}
-	DbEnvPool.getInstance().remove(envHome);
-  }
-
-// line 426 "../../../../EnvironmentImpl.ump"
-  public synchronized void forceClose () throws DatabaseException 
-  {
-    referenceCount = 1;
-	close();
-  }
-
-// line 431 "../../../../EnvironmentImpl.ump"
-  public synchronized void incReferenceCount () 
-  {
-    referenceCount++;
-  }
-
-// line 439 "../../../../EnvironmentImpl.ump"
-  public static synchronized void incThreadLocalReferenceCount () 
-  {
-    threadLocalReferenceCount++;
-  }
-
-// line 443 "../../../../EnvironmentImpl.ump"
-  public static synchronized void decThreadLocalReferenceCount () 
-  {
-    threadLocalReferenceCount--;
-  }
-
-// line 586 "../../../../EnvironmentImpl.ump"
-  public synchronized void setMutableConfig (EnvironmentMutableConfig config) throws DatabaseException 
-  {
-    EnvironmentConfig newConfig = DbInternal.cloneConfig(configManager.getEnvironmentConfig());
-	DbInternal.copyMutablePropsTo(config, newConfig);
-	configManager = new DbConfigManager(newConfig);
-	for (int i = configObservers.size() - 1; i >= 0; i -= 1) {
-	    EnvConfigObserver o = (EnvConfigObserver) configObservers.get(i);
-	    o.envConfigUpdate(configManager);
-	}
-  }
-
-// line 599 "../../../../EnvironmentImpl.ump"
-  public synchronized void addConfigObserver (EnvConfigObserver o) 
-  {
-    configObservers.add(o);
-  }
-
-// line 606 "../../../../EnvironmentImpl.ump"
-  public synchronized void removeConfigObserver (EnvConfigObserver o) 
-  {
-    configObservers.remove(o);
-  }
 // line 5 "../../../../loggingBase_EnvironmentImpl.ump"
   private Logger envLogger ;
 // line 6 "../../../../Evictor_EnvironmentImpl.ump"
   private Evictor evictor ;
-// line 6 "../../../../INCompressor_EnvironmentImpl.ump"
-  private INCompressor inCompressor ;
-
-// line 11 "../../../../Statistics_EnvironmentImpl.ump"
-  synchronized public EnvironmentStats loadStats (StatsConfig config) throws DatabaseException 
-  {
-    EnvironmentStats stats = new EnvironmentStats();
-			Label314: //this.hook314(config, stats);
-			Label315: //this.hook315(config, stats);
-			checkpointer.loadStats(config, stats);
-			cleaner.loadStats(config, stats);
-			logManager.loadStats(config, stats);
-			Label316: //this.hook316(config, stats);
-			return stats;
-  }
-
-// line 25 "../../../../Statistics_EnvironmentImpl.ump"
-  synchronized public LockStats lockStat (StatsConfig config) throws DatabaseException 
-  {
-    return txnManager.lockStat(config);
-  }
-
-// line 32 "../../../../Statistics_EnvironmentImpl.ump"
-  synchronized public TransactionStats txnStat (StatsConfig config) throws DatabaseException 
-  {
-    return txnManager.txnStat(config);
-  }
-// line 9 "../../../../Latches_EnvironmentImpl.ump"
-  private static boolean fairLatches ;
-// line 11 "../../../../Latches_EnvironmentImpl.ump"
-  private Latch mapTreeRootLatch ;
-// line 13 "../../../../Latches_EnvironmentImpl.ump"
-  private SharedLatch triggerLatch ;
 
   
 }

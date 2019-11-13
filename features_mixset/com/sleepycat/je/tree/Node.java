@@ -38,6 +38,13 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
   public void delete()
   {}
 
+  // line 27 "../../../../Node.ump"
+   public static  synchronized  void setLastNodeId(long id){
+    if (lastAllocatedId < id) {
+	    lastAllocatedId = id;
+	}
+  }
+
 
   /**
    * 
@@ -58,6 +65,26 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
     if (init) {
 	    nodeId = getNextNodeId();
 	}
+  }
+
+
+  /**
+   * 
+   * Increment and return the next usable id. Must be synchronized.
+   */
+  // line 51 "../../../../Node.ump"
+   public static  synchronized  long getNextNodeId(){
+    return ++lastAllocatedId;
+  }
+
+
+  /**
+   * 
+   * Get the latest id, for checkpointing.
+   */
+  // line 58 "../../../../Node.ump"
+   public static  synchronized  long getLastId(){
+    return lastAllocatedId;
   }
 
 
@@ -281,26 +308,6 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
   private static final String END_TAG = "</node>" ;
 // line 24 "../../../../Node.ump"
   private long nodeId ;
-
-// line 26 "../../../../Node.ump"
-  public synchronized static void setLastNodeId (long id) 
-  {
-    if (lastAllocatedId < id) {
-	    lastAllocatedId = id;
-	}
-  }
-
-// line 50 "../../../../Node.ump"
-  public static synchronized long getNextNodeId () 
-  {
-    return ++lastAllocatedId;
-  }
-
-// line 57 "../../../../Node.ump"
-  public static synchronized long getLastId () 
-  {
-    return lastAllocatedId;
-  }
 // line 114 "../../../../Node.ump"
   abstract protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException ;
 // line 119 "../../../../Node.ump"
