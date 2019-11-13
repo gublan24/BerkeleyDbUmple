@@ -26,6 +26,9 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../BIN.ump"
 // line 3 "../../../../MemoryBudget_BIN.ump"
 // line 3 "../../../../Evictor_BIN.ump"
+// line 3 "../../../../INCompressor_BIN.ump"
+// line 3 "../../../../Verifier_BIN.ump"
+// line 3 "../../../../Latches_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -132,7 +135,10 @@ public class BIN extends IN implements LoggableObject
     if (child.canBeAncestor(targetContainsDuplicates)) {
 	    if (targetContainsDuplicates && targetIsRoot) {
 		long childNid = child.getNodeId();
-		Label603: //this.hook603(child);
+		Label603:
+((IN) child).releaseLatch();
+        //original(child);
+ //this.hook603(child);
 		result.keepSearching = false;
 		if (childNid == targetNodeId) {
 		    result.exactParentFound = true;
@@ -141,12 +147,18 @@ public class BIN extends IN implements LoggableObject
 		}
 		if (requireExactMatch && !result.exactParentFound) {
 		    result.parent = null;
-		    Label604: //this.hook604();
+		    Label604:
+releaseLatch();
+        //original();
+ //this.hook604();
 		} else {
 		    result.parent = this;
 		}
 	    } else {
-		Label605: //this.hook605();
+		Label605:
+releaseLatch();
+        //original();
+ //this.hook605();
 		result.parent = (IN) child;
 	    }
 	} else {
@@ -155,7 +167,10 @@ public class BIN extends IN implements LoggableObject
 	    if (!requireExactMatch && targetContainsDuplicates) {
 		result.parent = this;
 	    } else {
-		Label606: //this.hook606();
+		Label606:
+releaseLatch();
+        //original();
+ //this.hook606();
 		result.parent = null;
 	    }
 	}
@@ -261,6 +276,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 202 "../../../../BIN.ump"
    public void addCursor(CursorImpl cursor){
+    // line 31 "../../../../Latches_BIN.ump"
+    assert isLatchOwner();
+            //original(cursor);
+    // END OF UMPLE BEFORE INJECTION
     cursorSet.add(cursor);
   }
 
@@ -272,6 +291,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 210 "../../../../BIN.ump"
    public void removeCursor(CursorImpl cursor){
+    // line 40 "../../../../Latches_BIN.ump"
+    assert isLatchOwner();
+            //original(cursor);
+    // END OF UMPLE BEFORE INJECTION
     cursorSet.remove(cursor);
   }
 
@@ -344,6 +367,11 @@ updateMemorySize(getTarget(index), null);
    */
   // line 267 "../../../../BIN.ump"
   public void adjustCursors(IN newSibling, int newSiblingLow, int newSiblingHigh){
+    // line 50 "../../../../Latches_BIN.ump"
+    assert newSibling.isLatchOwner();
+            assert this.isLatchOwner();
+            //original(newSibling, newSiblingLow, newSiblingHigh);
+    // END OF UMPLE BEFORE INJECTION
     int adjustmentDelta = (newSiblingHigh - newSiblingLow);
 	Iterator iter = cursorSet.iterator();
 	while (iter.hasNext()) {
@@ -383,6 +411,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 303 "../../../../BIN.ump"
   public void adjustCursorsForInsert(int insertIndex){
+    // line 60 "../../../../Latches_BIN.ump"
+    assert this.isLatchOwner();
+            //original(insertIndex);
+    // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
 	    Iterator iter = cursorSet.iterator();
 	    while (iter.hasNext()) {
@@ -408,6 +440,10 @@ updateMemorySize(getTarget(index), null);
    */
   // line 325 "../../../../BIN.ump"
   public void adjustCursorsForMutation(int binIndex, DBIN dupBin, int dupBinIndex, CursorImpl excludeCursor){
+    // line 72 "../../../../Latches_BIN.ump"
+    assert this.isLatchOwner();
+            //original(binIndex, dupBin, dupBinIndex, excludeCursor);
+    // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
 	    Iterator iter = cursorSet.iterator();
 	    while (iter.hasNext()) {
@@ -494,7 +530,10 @@ updateMemorySize(getTarget(index), null);
 					}
 			}
 			if (anyLocksDenied && binRef != null) {
-					Label609: //this.hook609(binRef, db);
+					Label609:
+db.getDbEnvironment().addToCompressorQueue(binRef, false);
+			//original(binRef, db);
+ //this.hook609(binRef, db);
 					ret = true;
 			}
 			if (getNEntries() != 0 && setNewIdKey) {
@@ -527,7 +566,9 @@ updateMemorySize(getTarget(index), null);
 	    int validIndex = 0;
 	    int numValidEntries = 0;
 	    boolean needToLatch = false;
-	    Label607: //this.hook607(validIndex, numValidEntries, needToLatch);
+	    Label607:
+needToLatch = !isLatchOwner();
+ //this.hook607(validIndex, numValidEntries, needToLatch);
       label608: //this.hook608(needToLatch);
 				for (int i = 0; i < getNEntries(); i++) {
 					if (!isEntryKnownDeleted(i)) {
@@ -552,6 +593,10 @@ updateMemorySize(getTarget(index), null);
 				}
 //End hook607
 Label607_1:
+if (needToLatch && isLatchOwner()) {
+            releaseLatch();
+        }
+
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
 	    return r.value;
@@ -786,6 +831,25 @@ Label607_1:
 					return n.getMemorySizeIncludedByParent();
 			} else {
 					return 0;
+			}
+  }
+
+
+  /**
+   * 
+   * For each cursor in this BIN's cursor set, ensure that the cursor is actually referring to this BIN.
+   */
+  // line 9 "../../../../Verifier_BIN.ump"
+   public void verifyCursors(){
+    if (cursorSet != null) {
+					Iterator iter = cursorSet.iterator();
+					while (iter.hasNext()) {
+				CursorImpl cursor = (CursorImpl) iter.next();
+				if (getCursorBINToBeRemoved(cursor) != this) {
+						BIN cBin = getCursorBIN(cursor);
+						assert cBin == this;
+				}
+					}
 			}
   }
   

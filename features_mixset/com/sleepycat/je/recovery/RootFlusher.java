@@ -12,6 +12,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.tree.*;
 
 // line 3 "../../../../RootFlusher.ump"
+// line 3 "../../../../Latches_RootFlusher.ump"
 public class RootFlusher implements WithRootLatched
 {
 
@@ -53,7 +54,9 @@ public class RootFlusher implements WithRootLatched
 					return null;
 			}
 			IN rootIN = (IN) root.fetchTarget(db, null);
-			Label599: //this.hook599(root, rootIN);
+			Label599:
+rootIN.latch(false);
+ //this.hook599(root, rootIN);
 			if (rootIN.getNodeId() == targetNodeId) {
 							stillRoot = true;
 							if (rootIN.getDirty()) {
@@ -64,6 +67,10 @@ public class RootFlusher implements WithRootLatched
 					}
 		//hook599
     Label599_1:
+//			try {original(root, rootIN);} finally {
+					rootIN.releaseLatch();
+	//		}
+
 		return null;
   }
 

@@ -9,9 +9,12 @@ import com.sleepycat.je.DatabaseException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../DaemonThread.ump"
+// line 3 "../../../../Latches_DaemonThread.ump"
 public class DaemonThread implements DaemonRunner,Runnable
 {
 
@@ -49,7 +52,10 @@ public class DaemonThread implements DaemonRunner,Runnable
 			this.name = name;
 			this.env = env;
 			workQueue = new HashSet();
-			Label856: //this.hook856(name, env);
+			Label856:
+workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
+	//original(name, env);
+ //this.hook856(name, env);
   }
 
 
@@ -119,14 +125,25 @@ public class DaemonThread implements DaemonRunner,Runnable
 
   // line 105 "../../../../DaemonThread.ump"
    public void addToQueue(Object o) throws DatabaseException{
+    // line 15 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.acquire();
+    	//original(o);
+    // END OF UMPLE BEFORE INJECTION
     workQueue.add(o);
 	wakeup();
+    // line 20 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 110 "../../../../DaemonThread.ump"
    public int getQueueSize() throws DatabaseException{
+    // line 24 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
     int count = workQueue.size();
 	return count;
+
   }
 
   // line 115 "../../../../DaemonThread.ump"
@@ -152,7 +169,10 @@ public class DaemonThread implements DaemonRunner,Runnable
 	    try {
 		Label858: //this.hook858();
 		boolean nothingToDo = workQueue.size() == 0;
-		Label857: //this.hook857();
+		Label857:
+workQueueLatch.release();
+	//original();
+ //this.hook857();
 		if (nothingToDo) {
 		    synchronized (synchronizer) {
 			if (waitTime == 0) {
@@ -280,6 +300,15 @@ public class DaemonThread implements DaemonRunner,Runnable
   private boolean running = false ;
 // line 199 "../../../../DaemonThread.ump"
   abstract protected void onWakeup() throws DatabaseException ;
+// line 7 "../../../../Latches_DaemonThread.ump"
+  protected Latch workQueueLatch ;
+
+// line 38 "../../../../Latches_DaemonThread.ump"
+  after Label858: : run () 
+  {
+    workQueueLatch.acquire();
+	//original();
+  }
 
   
 }

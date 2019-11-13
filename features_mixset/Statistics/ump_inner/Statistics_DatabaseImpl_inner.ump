@@ -2,9 +2,9 @@
 namespace com.sleepycat.je.dbi;
 class DatabaseImpl {
   static class DatabaseImpl_preload {
-      after Label287:execute() {
+      around Label287-Label287_1:execute() {
         try {
-          //original();
+              around_proceed:
         }
    catch (   HaltPreloadException HPE) {
           ret.status=HPE.getStatus();

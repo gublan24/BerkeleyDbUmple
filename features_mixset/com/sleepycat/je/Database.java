@@ -29,6 +29,9 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../Truncate_Database.ump"
 // line 3 "../../../Truncate_Database_inner.ump"
 // line 3 "../../../DeleteOp_Database.ump"
+// line 3 "../../../Statistics_Database.ump"
+// line 3 "../../../Latches_Database.ump"
+// line 3 "../../../Latches_Database_inner.ump"
 public class Database
 {
 
@@ -571,7 +574,13 @@ databaseImpl.checkIsDeleted("preload");
 				}
 			}
 		  finally {
-						Label53_1:   ;//
+						Label53_1:
+//		try {
+					//original(list);
+		//	} finally {
+					releaseTriggerListReadLock();
+			//}
+   ;//
 			}
 	} else {
 	}
@@ -829,6 +838,29 @@ databaseImpl.checkIsDeleted("preload");
 			}
   }
 
+  // line 6 "../../../Statistics_Database.ump"
+   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
+    checkEnv();
+			checkRequiredDbState(OPEN, "Can't call Database.stat");
+			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
+			if (databaseImpl != null) {
+					Label38: //this.hook38();
+					return databaseImpl.stat(useConfig);
+			}
+			return null;
+  }
+
+
+  /**
+   * 
+   * Releases a lock acquired by calling acquireTriggerListReadLock().
+   */
+  // line 9 "../../../Latches_Database.ump"
+   private void releaseTriggerListReadLock() throws DatabaseException{
+    EnvironmentImpl env = envHandle.getEnvironmentImpl();
+	env.getTriggerLatch().release();
+  }
+
 
   public String toString()
   {
@@ -888,6 +920,7 @@ databaseImpl.checkIsDeleted("preload");
   
   @MethodObject
   // line 13 "../../../Database_static.ump"
+  // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
   {
   
@@ -916,6 +949,11 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 18 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
+      // line 6 "../../../Latches_Database_inner.ump"
+      env=_this.envHandle.getEnvironmentImpl();
+              env.getTriggerLatch().acquireShared();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -938,6 +976,7 @@ databaseImpl.checkIsDeleted("preload");
   
   @MethodObject
   // line 25 "../../../Database_static.ump"
+  // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
   {
   
@@ -966,6 +1005,11 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 30 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
+      // line 20 "../../../Latches_Database_inner.ump"
+      env=_this.envHandle.getEnvironmentImpl();
+              env.getTriggerLatch().acquireExclusive();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -988,6 +1032,7 @@ databaseImpl.checkIsDeleted("preload");
   
   @MethodObject
   // line 37 "../../../Database_static.ump"
+  // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock
   {
   
@@ -1019,6 +1064,11 @@ databaseImpl.checkIsDeleted("preload");
       if (_this.triggerList.size() == 0) {
             _this.triggerList=null;
           }
+      // line 13 "../../../Latches_Database_inner.ump"
+      //      original();
+              env=_this.envHandle.getEnvironmentImpl();
+              env.getTriggerLatch().release();
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------

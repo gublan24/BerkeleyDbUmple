@@ -30,7 +30,7 @@ class Sequence
 			return stats;
     }
 
-    after Label83: get(Transaction, int ){ //    public synchronized long get(Transaction txn, int delta) throws DatabaseException {
+    after Label83: get(Transaction, int ){
 			nGets += 1;
 			if (cached) {
 					nCachedGets += 1;

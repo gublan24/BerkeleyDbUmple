@@ -30,12 +30,23 @@ import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.File;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../FileManager.ump"
 // line 3 "../../../../FileManager_static.ump"
 // line 3 "../../../../EnvironmentLocking_FileManager.ump"
 // line 3 "../../../../DiskFullErro_FileManager.ump"
 // line 3 "../../../../FileHandleCache_FileManager.ump"
+// line 3 "../../../../Statistics_FileManager.ump"
+// line 3 "../../../../IO_FileManager.ump"
+// line 3 "../../../../IO_FileManager_inner.ump"
+// line 3 "../../../../ChunckedNIO_FileManager.ump"
+// line 3 "../../../../NIO_FileManager.ump"
+// line 3 "../../../../NIO_FileManager_inner.ump"
+// line 3 "../../../../Latches_FileManager.ump"
 public class FileManager
 {
 
@@ -71,7 +82,10 @@ public class FileManager
         this.readOnly = readOnly;
         DbConfigManager configManager = envImpl.getConfigManager();
         maxFileSize = configManager.getLong(EnvironmentParams.LOG_FILE_MAX);
-        Label456: //this.hook456(configManager);
+        Label456:
+chunkedNIOSize = configManager.getLong(EnvironmentParams.LOG_CHUNKED_NIO);
+			//original(configManager);
+ //this.hook456(configManager);
         Label467:
 lockEnvironment(readOnly, false);
 //	original(readOnly);
@@ -442,9 +456,15 @@ fileHandle = fileCache.get(fileId);
             Label464:
 fileCache.add(fileId, fileHandle);
 
-                Label453:
+                
+fileHandle.latch();
+	//original(fileHandle);
+Label453:
                 if (fileHandle.getFile() == null) {
-                    Label454: ;//
+                    Label454:
+fileHandle.release();
+//	original(fileHandle);
+ ;//
                 }
             else {
                 throw new ReturnObject(fileHandle);
@@ -1222,6 +1242,8 @@ data.position(0);
   
   
   // line 75 "../../../../FileManager_static.ump"
+  // line 4 "../../../../IO_FileManager_inner.ump"
+  // line 4 "../../../../NIO_FileManager_inner.ump"
   public static class FileManager_writeToFile
   {
   
@@ -1254,9 +1276,33 @@ data.position(0);
     // line 83 "../../../../FileManager_static.ump"
     public int execute() throws IOException,DatabaseException{
       totalBytesWritten=0;
-          Label455: //this.hook455();
-          Label445: //this.hook445();
+          Label455:
+  channel=file.getChannel();
+          //original();
+   //this.hook455();
+          Label445:
+  totalBytesWritten=channel.write(data,destOffset);
+          //original();
+   //this.hook445();        
+          // line 18 "../../../../IO_FileManager_inner.ump"
+          //            int result = original(); 
+          //{
+                        //  this.hook447();
+                      //}
+                      Label447:
+                      assert data.hasArray();
+                      assert data.arrayOffset() == 0;
+                      pos = data.position();
+                      size = data.limit() - pos;
+                      file.seek(destOffset);
+                      file.write(data.array(), pos, size);
+                      data.position(pos + size);
+                      totalBytesWritten = size;
+                      //end 
+                      return result;
+          // END OF UMPLE AFTER INJECTION
           return totalBytesWritten;
+  
     }
     
     //------------------------
@@ -1293,6 +1339,8 @@ data.position(0);
   
   
   // line 104 "../../../../FileManager_static.ump"
+  // line 35 "../../../../IO_FileManager_inner.ump"
+  // line 15 "../../../../NIO_FileManager_inner.ump"
   public static class FileManager_readFromFile
   {
   
@@ -1324,7 +1372,29 @@ data.position(0);
   
     // line 112 "../../../../FileManager_static.ump"
     public void execute() throws IOException{
-      Label446: //this.hook446();
+      // line 17 "../../../../NIO_FileManager_inner.ump"
+      channel=file.getChannel();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      Label446:
+  channel.read(readBuffer,offset);
+          //original();
+   //this.hook446();
+      // line 48 "../../../../IO_FileManager_inner.ump"
+      //original(); {
+                  //    this.hook448();
+                  //}
+                 Label448:
+                 assert readBuffer.hasArray();
+                 assert readBuffer.arrayOffset() == 0;
+                 pos = readBuffer.position();
+                 size = readBuffer.limit() - pos;
+                 file.seek(offset);
+                 bytesRead2 = file.read(readBuffer.array(), pos, size);
+                 if (bytesRead2 > 0) {
+                      readBuffer.position(pos + bytesRead2);
+                 }
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -1441,6 +1511,8 @@ data.position(0);
   private FileLock exclLock ;
 // line 5 "../../../../FileHandleCache_FileManager.ump"
   private FileCache fileCache ;
+// line 5 "../../../../ChunckedNIO_FileManager.ump"
+  private long chunkedNIOSize = 0 ;
 
   
 }

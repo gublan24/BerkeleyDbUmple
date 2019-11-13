@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 
 // line 3 "../../../../DupCountLN.ump"
 // line 3 "../../../../MemoryBudget_DupCountLN.ump"
+// line 3 "../../../../Statistics_DupCountLN.ump"
 public class DupCountLN extends LN
 {
 
@@ -201,6 +202,11 @@ public class DupCountLN extends LN
   // line 9 "../../../../MemoryBudget_DupCountLN.ump"
    public long getMemorySizeIncludedByParent(){
     return MemoryBudget.DUPCOUNTLN_OVERHEAD;
+  }
+
+  // line 6 "../../../../Statistics_DupCountLN.ump"
+   public void accumulateStats(TreeWalkerStatsAccumulator acc){
+    acc.processDupCountLN(this, new Long(getNodeId()));
   }
   
   //------------------------

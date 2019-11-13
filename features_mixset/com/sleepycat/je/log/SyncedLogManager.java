@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.io.IOException;
 
 // line 3 "../../../../SyncedLogManager.ump"
+// line 3 "../../../../Latches_SyncedLogManager.ump"
 public class SyncedLogManager extends LogManager
 {
 

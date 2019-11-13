@@ -47,7 +47,7 @@ class CursorImpl {
         //original();
     }
 
-    after Label208:  addCursor(BIN bin) {
+    after Label208:  addCursor(BIN ) {
 
         assert bin.isLatchOwner();
         //original(bin);
@@ -63,7 +63,7 @@ class CursorImpl {
         //original(abin);
     }
 
-    after Label211: clearDupBIN(boolean alreadyLatched) {
+    after Label211: clearDupBIN(boolean ) {
         dupBin.releaseLatch();
         //original();
     }
@@ -138,8 +138,7 @@ class CursorImpl {
         //original();
     }
 
-    after Label221: getCurrentAlreadyLatched(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType,
-        boolean first){
+    after Label221: getCurrentAlreadyLatched(DatabaseEntry , DatabaseEntry , LockType ,        boolean ){
         assert checkAlreadyLatched(true): dumpToString(true);
         try {
                     throw new ReturnObject(fetchCurrent(foundKey, foundData, lockType, first));
@@ -149,7 +148,7 @@ class CursorImpl {
         }
     }
 
-    after Label222:getCurrentLN(LockType lockType){
+    after Label222:getCurrentLN(LockType ){
         latchBIN();
         //original();
     }

@@ -46,12 +46,16 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.IOException;
+import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../../RecoveryManager.ump"
 // line 3 "../../../../RecoveryManager_static.ump"
 // line 3 "../../../../loggingBase_RecoveryManager.ump"
 // line 3 "../../../../loggingBase_RecoveryManager_inner.ump"
 // line 3 "../../../../Evictor_RecoveryManager.ump"
+// line 3 "../../../../INCompressor_RecoveryManager.ump"
+// line 3 "../../../../Checksum_RecoveryManager.ump"
+// line 3 "../../../../Latches_RecoveryManager.ump"
 public class RecoveryManager
 {
 
@@ -400,7 +404,10 @@ env.invokeEvictor();
 	    IN in = reader.getIN();
 	    long inLsn = reader.getLsnOfIN();
 	    in.postRecoveryInit(db, inLsn);
-	    Label585: ;  //this.hook585(in);
+	    Label585:
+in.latch();
+	//original(in);
+ ;  //this.hook585(in);
 	    replaceOrInsert(db, in, reader.getLastLsn(), inLsn, requireExactMatch);
 	}
 	if ((++inListClearCounter % CLEAR_INCREMENT) == 0) {
@@ -451,6 +458,12 @@ env.invokeEvictor();
 			    Label586:           ;  //this.hook586(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);
 					undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,		abortKnownDeleted, info, true);
 					Label586_1:
+//	try {	    //original(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);	} finally {
+	    if (location.bin != null) {
+		location.bin.releaseLatchIfOwner();
+	    }
+	//}
+
 			    TxnNodeId txnNodeId = new TxnNodeId(reader.getNodeId(), txnId.longValue());
 			    undoUtilizationInfo(ln, logLsn, abortLsn, abortKnownDeleted, txnNodeId,
 				    countedFileSummaries, countedAbortLsnNodes);
@@ -606,7 +619,12 @@ env.invokeEvictor();
 	    Label576:           ;  //this.hook576(db, logLsn, e, trace);
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(logLsn), e);
 	} finally {
-	    Label587:           ;  //this.hook587(inFromLog, logLsn);
+	    Label587:
+inFromLog.releaseLatchIfOwner();
+	assert (LatchSupport.countLatchesHeld() == 0) : LatchSupport.latchesHeldToString() + "LSN = "
+		+ DbLsn.toString(logLsn) + " inFromLog = " + inFromLog.getNodeId();
+	//original(inFromLog, logLsn);
+           ;  //this.hook587(inFromLog, logLsn);
 	}
   }
 
@@ -657,7 +675,12 @@ env.invokeEvictor();
 		deleted = result.parent.deleteEntry(result.index, false);
 	    }
 	} finally {
-	    Label588:           ;  //this.hook588(result);
+	    Label588:
+if (result.parent != null) {
+	    result.parent.releaseLatch();
+	}
+	//original(result);
+           ;  //this.hook588(result);
 	    Label579:           ;  //this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
 	}
   }
@@ -723,7 +746,12 @@ env.invokeEvictor();
 	    }
 	    success = true;
 	} finally {
-	    Label589:           ;  //this.hook589(parent);
+	    Label589:
+if (parent != null) {
+	    parent.releaseLatch();
+	}
+	//original(parent);
+           ;  //this.hook589(parent);
 	    Label581:           ;  //this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
 	}
   }
@@ -754,7 +782,12 @@ env.invokeEvictor();
 	    }
 	    success = true;
 	} finally {
-	    Label590:           ;  //this.hook590(result);
+	    Label590:
+if (result.parent != null) {
+	    result.parent.releaseLatch();
+	}
+	//original(result);
+           ;  //this.hook590(result);
 	    Label582:           ;  //this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
 	}
   }
@@ -802,7 +835,12 @@ env.invokeEvictor();
 		    if (DbLsn.compareTo(logLsn, location.childLsn) >= 0 && lnFromLog.isDeleted()) {
 			location.bin.setKnownDeletedLeaveTarget(location.index);
 			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			Label594: //Label:           ;  //this.hook594(db, location, deletedKey);
+			Label594:
+if (deletedKey != null) {
+					db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
+			}
+			//original(db, location, deletedKey);
+ //Label:           ;  //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;
@@ -817,7 +855,12 @@ env.invokeEvictor();
 	    success = true;
 	    return found ? location.childLsn : DbLsn.NULL_LSN;
 	} finally {
-	    Label591:           ;  //this.hook591(location);
+	    Label591:
+if (location.bin != null) {
+	    location.bin.releaseLatchIfOwner();
+	}
+	//original(location);
+           ;  //this.hook591(location);
 	    Label583:           ;  //this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
 	}
   }
@@ -852,6 +895,9 @@ env.invokeEvictor();
 							replaced = true;
 					}
 			Label592_1:
+//try {replaced = //original(location, logLsn, abortLsn, replaced, duplicateRoot);} finally {
+	    duplicateRoot.releaseLatch();//}return replaced;
+
 			//end hook592
 			  }
 		} else {
@@ -864,7 +910,10 @@ env.invokeEvictor();
 				  if (abortLsn == DbLsn.NULL_LSN) {
 				location.bin.setKnownDeletedLeaveTarget(location.index);
 				byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-				Label595: //hook595(db, location, deletedKey);
+				Label595:
+db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
+			//original(db, location, deletedKey);
+ //hook595(db, location, deletedKey);
 				  } else {
 				if (info != null) {
 					  info.lnReplaced++;
@@ -1363,6 +1412,13 @@ env.invokeEvictor();
   private Map fileSummaryLsns ;
 // line 85 "../../../../RecoveryManager.ump"
   private int inListClearCounter ;
+
+// line 55 "../../../../Latches_RecoveryManager.ump"
+  after Label592 : undo (Level , DatabaseImpl , TreeLocation , LN , byte ,byte , long , long , boolean , RecoveryInfo ,  boolean ) 
+  {
+    //(TreeLocation location, long logLsn, long abortLsn, boolean replaced,    DIN duplicateRoot) throws DatabaseException {
+	duplicateRoot.latch();
+  }
 
   
 }

@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
 import java.io.PrintStream;
+import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DbTree.ump"
@@ -43,6 +44,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../RenameOp_DbTree.ump"
 // line 3 "../../../../Truncate_DbTree.ump"
 // line 3 "../../../../DeleteOp_DbTree.ump"
+// line 3 "../../../../Verifier_DbTree.ump"
+// line 3 "../../../../Latches_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -241,7 +244,10 @@ public class DbTree implements LoggableObject,LogReadable
 			cursor = new CursorImpl(idDatabase, locker);
 			continue;
 		    } finally {
-			Label299: //this.hook299(cursor);
+			Label299:
+cursor.releaseBINs();
+	//original(cursor);
+ //this.hook299(cursor);
 		    }
 		    break;
 		}
@@ -270,7 +276,10 @@ public class DbTree implements LoggableObject,LogReadable
 	    boolean found = (result.nameCursor.searchAndPosition(key, null, SearchMode.SET, LockType.WRITE)
 		    & CursorImpl.FOUND) != 0;
 	    if (!found) {
-		Label300: //this.hook300(result);
+		Label300:
+result.nameCursor.releaseBIN();
+	//original(result);
+ //this.hook300(result);
 		result.nameCursor.close();
 		result.nameCursor = null;
 		return result;
@@ -283,11 +292,17 @@ public class DbTree implements LoggableObject,LogReadable
 			"Can't " + action + " database " + databaseName + "," + handleCount + " open Dbs exist");
 	    }
 	} catch (UnsupportedEncodingException UEE) {
-	    Label301: //this.hook301(result);
+	    Label301:
+result.nameCursor.releaseBIN();
+	//original(result);
+ //this.hook301(result);
 	    result.nameCursor.close();
 	    throw new DatabaseException(UEE);
 	} catch (DatabaseException e) {
-	    Label302: //this.hook302(result);
+	    Label302:
+result.nameCursor.releaseBIN();
+	//original(result);
+ //this.hook302(result);
 	    result.nameCursor.close();
 	    throw e;
 	}
@@ -362,7 +377,10 @@ nameCursor.setAllowEviction(allowEviction);
 		}
 	    } finally {
 		if (nameCursor != null) {
-		    Label303: //this.hook303(nameCursor);
+		    Label303:
+nameCursor.releaseBIN();
+	//original(nameCursor);
+ //this.hook303(nameCursor);
 		    nameCursor.close();
 		}
 	    }
@@ -462,7 +480,10 @@ idCursor.setAllowEviction(allowEviction);
 
 		    continue;
 		} finally {
-		    Label304: //this.hook304(idCursor);
+		    Label304:
+idCursor.releaseBIN();
+	//original(idCursor);
+ //this.hook304(idCursor);
 		    idCursor.close();
 		    locker.operationEnd(true);
 		}
@@ -533,7 +554,10 @@ idCursor.setAllowEviction(allowEviction);
 	    throw new DatabaseException(UEE);
 	} finally {
 	    if (cursor != null) {
-		Label305: //this.hook305(cursor);
+		Label305:
+cursor.releaseBINs();
+	//original(cursor);
+ //this.hook305(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {

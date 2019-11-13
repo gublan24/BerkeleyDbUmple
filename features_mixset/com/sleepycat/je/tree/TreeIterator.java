@@ -6,9 +6,11 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.DatabaseException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import com.sleepycat.je.latch.LatchNotHeldException;
 import com.sleepycat.je.cleaner.*;
 
 // line 3 "../../../../TreeIterator.ump"
+// line 3 "../../../../Latches_TreeIterator.ump"
 public class TreeIterator extends Iterator
 {
 
@@ -37,7 +39,12 @@ public class TreeIterator extends Iterator
   // line 17 "../../../../TreeIterator.ump"
    public  TreeIterator(Tree tree) throws DatabaseException{
     nextBin = (BIN) tree.getFirstNode();
-	Label755:           ;  //this.hook755();
+	Label755:
+if (nextBin != null) {
+	    nextBin.releaseLatch();
+	}
+	//original();
+           ;  //this.hook755();
 	index = -1;
 	this.tree = tree;
   }
@@ -46,12 +53,25 @@ public class TreeIterator extends Iterator
    public boolean hasNext(){
     boolean ret = false;
 	try {
-	    Label756:           ;  //this.hook756();
+	    Label756:
+if (nextBin != null) {
+	    nextBin.latch();
+	}
+	//original();
+           ;  //this.hook756();
 	    advance();
 	    ret = (nextBin != null) && (index < nextBin.getNEntries());
 	} catch (DatabaseException e) {
 	} finally {
-	    Label757:           ;  //this.hook757();
+	    Label757:
+try {
+	    if (nextBin != null) {
+		nextBin.releaseLatch();
+	    }
+	} catch (LatchNotHeldException e) {
+	}
+	//original();
+           ;  //this.hook757();
 	}
 	return ret;
   }
@@ -63,11 +83,22 @@ public class TreeIterator extends Iterator
 	    if (nextBin == null) {
 		throw new NoSuchElementException();
 	    }
-	    Label758:           ;  //this.hook758();
+	    Label758:
+nextBin.latch();
+	//original();
+           ;  //this.hook758();
 	    ret = nextBin.getKey(index);
 	} catch (DatabaseException e) {
 	} finally {
-	    Label759:           ;  //this.hook759();
+	    Label759:
+try {
+	    if (nextBin != null) {
+		nextBin.releaseLatch();
+	    }
+	} catch (LatchNotHeldException e) {
+	}
+	//original();
+           ;  //this.hook759();
 	}
 	return ret;
   }

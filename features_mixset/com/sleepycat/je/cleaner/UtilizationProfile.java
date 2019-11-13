@@ -50,6 +50,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Evictor_UtilizationProfile.ump"
 // line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
 // line 3 "../../../../DeleteOp_UtilizationProfile.ump"
+// line 3 "../../../../Latches_UtilizationProfile.ump"
+// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -505,7 +507,10 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	} finally {
 	    if (cursor != null) {
-		Label178:           ;  //this.hook178(cursor);
+		Label178:
+cursor.releaseBINs();
+//	original(cursor);
+           ;  //this.hook178(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -582,7 +587,13 @@ cursor.evict();
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
 	} finally {
-	    Label179:           ;  //this.hook179(cursor);
+	    Label179:
+if (cursor != null) {
+	    cursor.releaseBINs();
+	    cursor.close();
+	}
+	//original(cursor);
+           ;  //this.hook179(cursor);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -816,7 +827,13 @@ b |= db.isDeleted();
 
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
-	    Label180_1:           ;
+	    Label180_1:
+//try {	    //original(lsn, entry, db, bin);} finally {
+	    if (bin != null) {
+		bin.releaseLatch();
+	    }
+	//}
+           ;
 	    return r.value;
 	}
   }
@@ -1120,6 +1137,7 @@ b |= db.isDeleted();
   // line 89 "../../../../UtilizationProfile_static.ump"
   // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
+  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1185,9 +1203,15 @@ b |= db.isDeleted();
                   _this.fileSummaryMap.put(fileNumLong,ln.getBaseSummary());
                   if (isOldVersion) {
                     _this.insertFileSummary(ln,fileNum,0);
-                    Label182:           ;  //this.hook182();
+                    Label182:
+  cursor.latchBIN();
+          //original();
+             ;  //this.hook182();
                     cursor.delete();
-                    Label181:           ;  //this.hook181();
+                    Label181:
+  cursor.releaseBIN();
+          //original();
+             ;  //this.hook181();
                   }
      else {
                    // Label:           ;  //this.hook191();
@@ -1200,9 +1224,15 @@ b |= db.isDeleted();
      else {
                   _this.fileSummaryMap.remove(fileNumLong);
                   if (isOldVersion) {
-                    Label184:           ;  //this.hook184();
+                    Label184:
+  cursor.latchBIN();
+          //original();
+             ;  //this.hook184();
                     cursor.delete();
-                    Label183:           ;  //this.hook183();
+                    Label183:
+  cursor.releaseBIN();
+          //original();
+             ;  //this.hook183();
                   }
      else {
                     _this.deleteFileSummary(fileNumLong);
@@ -1221,7 +1251,10 @@ b |= db.isDeleted();
           }
       finally {
             if (cursor != null) {
-              Label185:           ;  //this.hook185();
+              Label185:
+  cursor.releaseBINs();
+          //original();
+             ;  //this.hook185();
               cursor.close();
             }
             if (locker != null) {

@@ -13,6 +13,7 @@ import java.math.BigInteger;
 
 // line 3 "../../../Sequence.ump"
 // line 3 "../../../loggingBase_Sequence.ump"
+// line 3 "../../../Statistics_Sequence.ump"
 public class Sequence
 {
 
@@ -194,7 +195,13 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
 			} else {
 					cacheValue -= delta;
 			}
-			Label83: //this.hook83(cached);
+			Label83:
+nGets += 1;
+			if (cached) {
+					nCachedGets += 1;
+			}
+			//original(cached);
+ //this.hook83(cached);
 			Label82: //this.hook82(cached, wrapped, retVal);
 			return retVal;
   }
@@ -299,6 +306,33 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
 	}
 	return new DatabaseEntry(data);
   }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 13 "../../../Statistics_Sequence.ump"
+   public SequenceStats getStats(StatsConfig config) throws DatabaseException{
+    if (config == null) {
+					config = StatsConfig.DEFAULT;
+			}
+			if (!config.getFast()) {
+					Cursor cursor = db.openCursor(null, null);
+					try {
+				readDataRequired(cursor, LockMode.READ_UNCOMMITTED);
+					} finally {
+				cursor.close();
+	    }
+	}
+	SequenceStats stats = new SequenceStats(nGets, nCachedGets, storedValue, cacheValue, cacheLast, rangeMin,
+		rangeMax, cacheSize);
+			if (config.getClear()) {
+					nGets = 0;
+					nCachedGets = 0;
+			}
+			return stats;
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -340,6 +374,10 @@ logger = db.getEnvironment().getEnvironmentImpl().getLogger();
   private TransactionConfig autoCommitConfig ;
 // line 5 "../../../loggingBase_Sequence.ump"
   private Logger logger ;
+// line 5 "../../../Statistics_Sequence.ump"
+  private int nGets ;
+// line 7 "../../../Statistics_Sequence.ump"
+  private int nCachedGets ;
 
   
 }

@@ -2,89 +2,93 @@ namespace com.sleepycat.je.txn;
 
 class SyncedLockManager
 {
-    after Label782:attemptLock(Long , Locker , LockType , boolean ){
-
-	synchronized (lockTableLatches[lockTableIndex]) {
-	   // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
-	}
+    around Label782-Label782_1:attemptLock(Long , Locker , LockType , boolean ){
+	    synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
 
-    after Label783: makeTimeoutMsg(String , Locker , long , LockType , LockGrantType , Lock , long , long , long , DatabaseImpl ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    ////original(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now, database,  lockTableIndex);
-	}
+    around Label783-Label783_1: makeTimeoutMsg(String , Locker , long , LockType , LockGrantType , Lock , long , long , long , DatabaseImpl ) {
+     synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
 
-    after Label784: releaseAndFindNotifyTargets(long , Lock , Locker , boolean ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    ////original(nodeId, lock, locker, removeFromLocker, lockTableIndex);
-	}
+    around Label784-Label784_1: releaseAndFindNotifyTargets(long , Lock , Locker , boolean ) {
+     synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
 
-    after Label785: transfer(long , Locker , Locker , boolean )  {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, owningLocker, destLocker, demoteToRead, lockTableIndex);
-	}
+    around Label785-Label785_1: transfer(long , Locker , Locker , boolean )  {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
 
-    after Label786:  	transferMultiple(long , Locker , Locker ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, owningLocker, destLockers, lockTableIndex);
-	}
+    around Label786-Label786_1:  	transferMultiple(long , Locker , Locker ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
 
-    after Label787:  demote(long , Locker ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, locker, lockTableIndex);
-	}
+    around Label787-Label787_1:  demote(long , Locker ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label788: isLocked(Long ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, lockTableIndex);
-	}
+    around Label788-Label788_1: isLocked(Long ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label789: isOwner(Long , Locker , LockType ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, locker, type, lockTableIndex);
-	}
+    around Label789-Label789_1: isOwner(Long , Locker , LockType ) { //isOwner(Long nodeId, Locker locker, LockType type){
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label790: isWaiter(Long , Locker ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, locker, lockTableIndex);
-	}
+    around Label790-Label790_1: isWaiter(Long , Locker ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label791:  nWaiters(Long ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, lockTableIndex);
-	}
+    around Label791-Label791_1:  nWaiters(Long ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label792: nOwners(Long ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, lockTableIndex);
-	}
+    around Label792-Label792_1: nOwners(Long ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label793:  getWriteOwnerLocker(Long ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, lockTableIndex);
-	}
+    around Label793-Label793_1:  getWriteOwnerLocker(Long ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label794:  validateOwnership(Long , Locker , LockType , boolean ,	    MemoryBudget ) {
-	synchronized (lockTableLatches[lockTableIndex]) {
-	    //original(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
-	}
+    around Label794-Label794_1:  validateOwnership(Long , Locker , LockType , boolean ,	    MemoryBudget ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
-    after Label795: dumpLockTable(LockStats ) {
-	synchronized (lockTableLatches[i]) {
-	    //original(stats, i);
-	}
+    around Label795-Label795_1: dumpLockTable(LockStats ) {
+	   synchronized (lockTableLatches[lockTableIndex]) { 
+        around_proceed:
+	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+	    }
     }
-
 }

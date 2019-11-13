@@ -172,8 +172,7 @@ pendingDBs = new HashSet();
    synchronized  Set[] getFilesAtCheckpointStart(){
     anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
 			Label164:
-//    synchronized Set[] getFilesAtCheckpointStart() {
-			anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
+anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
 			//original();
  //this.hook164();
 			Set[] files = new Set[2];
