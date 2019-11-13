@@ -47,6 +47,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../INCompressor_Txn.ump"
 // line 3 "../../../../Statistics_Txn.ump"
 // line 3 "../../../../Latches_Txn.ump"
+// line 3 "../../../../LoggingSevere_Txn.ump"
+// line 3 "../../../../LoggingFine_Txn.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -313,7 +315,10 @@ cleanupDatabaseImpls(true);
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				Label800: //this.hook800(t);
+				Label800:
+Tracer.trace(envImpl, "Txn", "commit", "Commit of transaction " + id + " failed", t);
+	//original(t);
+ //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -372,7 +377,11 @@ cleanupDatabaseImpls(false);
  //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		Label799: //this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799:
+Tracer.trace(Level.FINE, envImpl, "Abort:id = " + id + " numWriteLocks= " + numWriteLocks + " numReadLocks= "
+		+ numReadLocks + " openCursors= " + openCursors);
+	//original(numReadLocks, numWriteLocks, openCursors);
+ //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -426,7 +435,10 @@ cleanupDatabaseImpls(false);
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    Label801: //this.hook801(nodeId, undoLsn, e);
+	    Label801:
+Tracer.trace(envImpl, "Txn", "undo", "for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
+	//original(nodeId, undoLsn, e);
+ //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
   }

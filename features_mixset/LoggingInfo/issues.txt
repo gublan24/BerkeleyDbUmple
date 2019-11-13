@@ -1,2 +1,0 @@
-1) FileProcessor :     after Label121: doClean(boolean , boolean , boolean ) { 
-has synch method.

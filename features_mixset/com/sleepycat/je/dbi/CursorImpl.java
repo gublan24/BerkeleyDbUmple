@@ -48,6 +48,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../Statistics_CursorImpl_inner.ump"
 // line 3 "../../../../Latches_CursorImpl.ump"
 // line 3 "../../../../Latches_CursorImpl_inner.ump"
+// line 3 "../../../../LoggingFiner_CursorImpl.ump"
+// line 3 "../../../../LoggingFiner_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -960,7 +962,10 @@ releaseBINs();
 releaseBINs();
     //original();
 //this.hook269();
-				    Label205: //this.hook205(ln, oldLsn, newLsn);
+				    Label205:
+trace(Level.FINER, TRACE_MOD, targetBin, ln, targetIndex, oldLsn, newLsn);
+//	original(ln, oldLsn, newLsn);
+ //this.hook205(ln, oldLsn, newLsn);
 				    status = CURSOR_INITIALIZED;
 				    //throw new ReturnObject(OperationStatus.SUCCESS);
 //End of hook218(            
@@ -2090,6 +2095,16 @@ LabelEvict_1: ;//
   }
 
 
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 9 "../../../../LoggingFiner_CursorImpl.ump"
+   private void trace(Level level, String changeType, BIN theBin, LN ln, int lnIndex, long oldLsn, long newLsn){
+    new CursorImpl_trace(this, level, changeType, theBin, ln, lnIndex, oldLsn, newLsn).execute();
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
@@ -2847,6 +2862,76 @@ LabelEvict_1: ;//
     protected LockResult lockResult ;
   // line 380 "../../../../CursorImpl_static.ump"
     protected byte[] lnData ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingFiner_CursorImpl_inner.ump"
+  public static class CursorImpl_trace
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public CursorImpl_trace()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    public  CursorImpl_trace(CursorImpl _this, Level level, String changeType, BIN theBin, LN ln, int lnIndex, long oldLsn, long newLsn){
+      this._this=_this;
+          this.level=level;
+          this.changeType=changeType;
+          this.theBin=theBin;
+          this.ln=ln;
+          this.lnIndex=lnIndex;
+          this.oldLsn=oldLsn;
+          this.newLsn=newLsn;
+    }
+  
+    // line 16 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 17 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected CursorImpl _this ;
+  // line 18 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected Level level ;
+  // line 19 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected String changeType ;
+  // line 20 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected BIN theBin ;
+  // line 21 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected LN ln ;
+  // line 22 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected int lnIndex ;
+  // line 23 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected long oldLsn ;
+  // line 24 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected long newLsn ;
+  // line 25 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected Logger logger ;
+  // line 26 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected StringBuffer sb ;
   
     
   }  

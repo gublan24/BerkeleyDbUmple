@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.BufferedReader;
 
 // line 3 "../../../../DbLoad.ump"
+// line 3 "../../../../LoggingInfo_DbLoad.ump"
 public class DbLoad
 {
 
@@ -423,5 +424,12 @@ public class DbLoad
     }
 
 //    protected void hook835() throws IOException, DatabaseException {}
+// line 11 "../../../../LoggingInfo_DbLoad.ump"
+  protected void hook835: load () 
+  {
+    Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbLoad.load of " + dbName + " ending.");
+	//original();
+  }
+
   
 }

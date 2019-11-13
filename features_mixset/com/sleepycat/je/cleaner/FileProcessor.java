@@ -49,6 +49,12 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Checksum_FileProcessor_inner.ump"
 // line 3 "../../../../Latches_FileProcessor.ump"
 // line 3 "../../../../Latches_FileProcessor_inner.ump"
+// line 3 "../../../../LookAHEADCache_FileProcessor.ump"
+// line 3 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+// line 3 "../../../../LoggingCleaner_FileProcessor.ump"
+// line 3 "../../../../LoggingCleaner_FileProcessor_inner.ump"
+// line 3 "../../../../LoggingSevere_FileProcessor.ump"
+// line 3 "../../../../LoggingInfo_FileProcessor.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -166,7 +172,10 @@ resetPerRunCounters();
 traceMsg += " begins backlog=" + cleaner.nBacklogFiles;
 			//return original(traceMsg);
  //traceMsg = this.hook139(traceMsg);
-                Label121: //this.hook121(traceMsg);
+                Label121:
+Tracer.trace(Level.INFO, env, traceMsg);
+//	original(traceMsg);
+ //this.hook121(traceMsg);
                 if (DEBUG_TRACING) {
                     System.out.println("\n" + traceMsg);
                 }
@@ -180,7 +189,10 @@ accumulatePerRunCounters();
                         finished = true;
                 }
             } catch (IOException IOE) {
-                Label122: //this.hook122(IOE);
+                Label122:
+Tracer.trace(env, "Cleaner", "doClean", "", IOE);
+	//original(IOE);
+ //this.hook122(IOE);
                 throw new DatabaseException(IOE);
             } finally {
                 if (!finished) {
@@ -196,7 +208,10 @@ traceMsg += " nEntriesRead=" + nEntriesReadThisRun + " nINsObsolete=" + nINsObso
 				+ " nLNQueueHits=" + nLNQueueHitsThisRun + " nLNsLocked=" + nLNsLockedThisRun;
 			//return original(traceMsg);
  //traceMsg = this.hook141(traceMsg);
-                Label123:    //this.hook123(traceMsg);
+                Label123:
+Tracer.trace(Level.SEVERE, env, traceMsg);
+	//original(traceMsg);
+    //this.hook123(traceMsg);
                 if (DEBUG_TRACING) {
                     System.out.println("\n" + traceMsg);
                 }
@@ -311,7 +326,10 @@ nLNsMarkedThisRun++;
             if (completed && lockDenied) {
                 fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
             }
-            Label124: //this.hook124(logLsn, ln, obsolete, migrated, completed);
+            Label124:
+cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln, logLsn, completed, obsolete, migrated);
+			//original(logLsn, ln, obsolete, migrated, completed);
+ //this.hook124(logLsn, ln, obsolete, migrated, completed);
         }
   }
 
@@ -648,6 +666,7 @@ if ((result != null) && (result.exactParentFound)) {
   // line 16 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 23 "../../../../Statistics_FileProcessor_inner.ump"
   // line 4 "../../../../Checksum_FileProcessor_inner.ump"
+  // line 37 "../../../../LookAHEADCache_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -682,7 +701,10 @@ if ((result != null) && (result.exactParentFound)) {
           obsoleteIter=obsoleteOffsets.iterator();
           nextObsolete=-1;
           readBufferSize=_this.cleaner.readBufferSize;
-          Label128: //this.hook128();
+          Label128:
+  lookAheadCacheSize=_this.cleaner.lookAheadCacheSize;
+          //original();
+   //this.hook128();
           //this.hook161();
           Label161:
   adjustMem=(2 * readBufferSize) + obsoleteOffsets.getLogSize();
@@ -695,7 +717,10 @@ if ((result != null) && (result.exactParentFound)) {
           //original();
   
           Label119: //this.hook119();
-          Label127: //this.hook127();
+          Label127:
+  lookAheadCache=new LookAheadCache(lookAheadCacheSize);
+  //        original();
+   //this.hook127();
           Label154:
   checkPendingDbSet=new HashSet();
           //original();
@@ -765,9 +790,17 @@ if ((result != null) && (result.exactParentFound)) {
                 dupKey=reader.getDupTreeKey();
                 aLsn=new Long(DbLsn.getFileOffset(lsn));
                 aLninfo=new LNInfo(targetLN,dbId2,key,dupKey);
-                Label130: //this.hook130();
+                Label130:
+  lookAheadCache.add(aLsn,aLninfo);
+          if (lookAheadCache.isFull()) {
+            //original();
+          }
+   //this.hook130();
     						p=null;
-          			Label131: //this.hook131();
+          			Label131:
+  p=lookAheadCache;
+          //original();
+   //this.hook131();
           			_this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
   //end hook130
                 nProcessedLNs+=1;
@@ -789,7 +822,13 @@ if ((result != null) && (result.exactParentFound)) {
                 assert false;
               }
             }
-            Label129: //this.hook129();
+            Label129:
+  while (!lookAheadCache.isEmpty()) {
+            Label116: //this.hook116();
+            _this.processLN(fileNum,location,null,null,lookAheadCache,dbCache);
+          }
+          //original();
+   //this.hook129();
             Label155:
   for (Iterator i=checkPendingDbSet.iterator(); i.hasNext(); ) {
             dbId=(DatabaseId)i.next();
@@ -959,6 +998,8 @@ if ((result != null) && (result.exactParentFound)) {
   // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 5 "../../../../Statistics_FileProcessor_inner.ump"
   // line 4 "../../../../Latches_FileProcessor_inner.ump"
+  // line 4 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+  // line 4 "../../../../LoggingCleaner_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
   {
   
@@ -997,7 +1038,15 @@ if ((result != null) && (result.exactParentFound)) {
       _this.nLNsCleanedThisRun++;
                   //original();
       // END OF UMPLE BEFORE INJECTION
-      Label132: //this.hook132();
+      // line 9 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+      lookAheadCache=(LookAheadCache)lookAheadCachep;
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      Label132:
+  offset=lookAheadCache.nextOffset();
+          info=lookAheadCache.remove(offset);
+         // original();
+   //this.hook132();
           ln=info.getLN();
           key=info.getKey();
           dupKey=info.getDupKey();
@@ -1065,7 +1114,22 @@ if ((result != null) && (result.exactParentFound)) {
             processedHere=false;
             _this.processFoundLN(info,logLsn,treeLsn,bin,index,parentDIN);
             completed=true;
-            Label133: //this.hook133();
+            Label133:
+  if (!isDupCountLN) {
+            for (int i=0; i < bin.getNEntries(); i+=1) {
+              lsn=bin.getLsn(i);
+              if (i != index && !bin.isEntryKnownDeleted(i) && !bin.isEntryPendingDeleted(i) && DbLsn.getFileNumber(lsn) == fileNum.longValue()) {
+                myOffset=new Long(DbLsn.getFileOffset(lsn));
+                myInfo=lookAheadCache.remove(myOffset);
+                if (myInfo != null) {
+                  Label117: //this.hook117();
+                  _this.processFoundLN(myInfo,lsn,lsn,bin,i,null);
+                }
+              }
+            }
+          }
+          //original();
+   //this.hook133();
             return;
           }
       finally {
@@ -1078,7 +1142,12 @@ if ((result != null) && (result.exactParentFound)) {
           }
           //original();
    //this.hook135();
-            Label126: //this.hook126();
+            Label126:
+  if (processedHere) {
+            _this.cleaner.trace(_this.cleaner.detailedTraceLevel,Cleaner.CLEAN_LN,ln,logLsn,completed,obsolete,false);
+          }
+         // original();
+   //this.hook126();
           }
     }
     
@@ -1140,6 +1209,8 @@ if ((result != null) && (result.exactParentFound)) {
     protected Long myOffset ;
   // line 296 "../../../../FileProcessor_static.ump"
     protected LNInfo myInfo ;
+  // line 5 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+    protected LookAheadCache lookAheadCache ;
   
     
   }  

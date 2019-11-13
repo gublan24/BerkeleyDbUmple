@@ -80,6 +80,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
 // line 3 "../../../../Statistics_EnvironmentImpl.ump"
 // line 3 "../../../../Latches_EnvironmentImpl.ump"
+// line 3 "../../../../LoggingFine_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -430,7 +431,10 @@ mapTreeRootLatch.release();
    private void doClose(boolean doCheckpoint) throws DatabaseException{
     StringBuffer errors = new StringBuffer();
 			try {
-					Label319: //this.hook319();
+					Label319:
+Tracer.trace(Level.FINE, this, "Close of environment " + envHome + " started");
+	//original();
+ //this.hook319();
 					try {
 				envState.checkState(DbEnvState.VALID_FOR_CLOSE, DbEnvState.CLOSED);
 					} catch (DatabaseException DBE) {
@@ -455,7 +459,10 @@ mapTreeRootLatch.release();
 				errors.append("\nException shutting down daemon threads: ");
 				errors.append(IE.toString()).append("\n");
 					}
-					Label318: //this.hook318();
+					Label318:
+Tracer.trace(Level.FINE, this, "Env " + envHome + " daemons shutdown");
+	//original();
+ //this.hook318();
 					try {
 				logManager.flush();
 					} catch (DatabaseException DBE) {

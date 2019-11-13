@@ -1,8 +1,0 @@
-use EnvironmentParams.ump;
-use Tree.ump;
-use IN.ump;
-use EnvironmentImpl.ump;
-use Txn.ump;
-use RecoveryManager.ump;
-
-use ../ump_inner/Master.ump;

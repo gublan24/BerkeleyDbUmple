@@ -54,6 +54,27 @@ use Checksum/umpilif/Master.ump;
 
 use Latches/umpilif/Master.ump;
 
+use LookAHEADCache/umpilif/LookAHEADCache_Master.ump;
+
+use FSync/umpilif/FSync_Master.ump;
+
+use LoggingCleaner/umpilif/LoggingCleaner_Master.ump;
+
+use LoggingEvictor/umpilif/LoggingEvictor_Master.ump;
+
+use LoggingRecovery/umpilif/LoggingRecovery_Master.ump;
+
+use LoggingSevere/umpilif/LoggingSevere_Master.ump;
+
+use LoggingInfo/umpilif/LoggingInfo_Master.ump;
+
+use LoggingConfig/umpilif/LoggingConfig_Master.ump;
+
+use LoggingFine/umpilif/LoggingFine_Master.ump;
+
+use LoggingFiner/umpilif/LoggingFiner_Master.ump;
+
+use LoggingFinest/umpilif/LoggingFinest_Master.ump;
 
 //rename 's/^/DeleteOp_/' *
 

@@ -21,6 +21,7 @@ import com.sleepycat.je.log.*;
 // line 2 "../../../../Tracer.ump"
 // line 3 "../../../../loggingBase_Tracer.ump"
 // line 3 "../../../../LoggingDbLogHandler_Tracer.ump"
+// line 3 "../../../../LoggingSevere_Tracer.ump"
 public class Tracer implements LoggableObject,LogReadable
 {
 
@@ -262,6 +263,16 @@ public class Tracer implements LoggableObject,LogReadable
 	    return false;
 	}
 	return (toString().equals(obj.toString()));
+  }
+
+
+  /**
+   * 
+   * Logger method for recording an exception and stacktrace.
+   */
+  // line 10 "../../../../LoggingSevere_Tracer.ump"
+   public static  void trace(EnvironmentImpl envImpl, String sourceClass, String sourceMethod, String msg, Throwable t){
+    
   }
   
   //------------------------

@@ -1,0 +1,5 @@
+use LoggingConfig_Checkpointer.ump;
+use LoggingConfig_RecoveryManager.ump;
+
+ // adding inner elements ; 
+use ../ump_inner/LoggingConfig_Master_inner.ump ; 

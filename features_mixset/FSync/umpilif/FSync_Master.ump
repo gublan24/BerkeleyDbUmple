@@ -1,0 +1,8 @@
+use FSync_EnvironmentParams.ump;
+use FSync_FileManager.ump;
+use FSync_LogManager.ump;
+use FSync_FSyncManager.ump;
+
+ // adding inner elements ; 
+use ../ump_inner/FSync_Master.ump ; 
+

@@ -54,6 +54,10 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../CleanerDaemon_Cleaner.ump"
 // line 3 "../../../../Statistics_Cleaner.ump"
 // line 3 "../../../../Latches_Cleaner.ump"
+// line 3 "../../../../LookAHEADCache_Cleaner.ump"
+// line 3 "../../../../LoggingCleaner_Cleaner.ump"
+// line 3 "../../../../LoggingCleaner_Cleaner_inner.ump"
+// line 3 "../../../../LoggingSevere_Cleaner.ump"
 public class Cleaner implements EnvConfigObserver,DaemonRunner
 {
 
@@ -94,12 +98,14 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
   private int nPendingLNsLocked;
   private int nEntriesRead;
   private long nRepeatIteratorReads;
+  private int lookAheadCacheSize;
+  private Level detailedTraceLevel;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Cleaner(long aLockTimeout, int aReadBufferSize, int aNDeadlockRetries, boolean aExpunge, boolean aClusterResident, boolean aClusterAll, int aMaxBatchFiles, long aCleanerBytesInterval, boolean aTrackDetail)
+  public Cleaner(long aLockTimeout, int aReadBufferSize, int aNDeadlockRetries, boolean aExpunge, boolean aClusterResident, boolean aClusterAll, int aMaxBatchFiles, long aCleanerBytesInterval, boolean aTrackDetail, int aLookAheadCacheSize, Level aDetailedTraceLevel)
   {
     nCleanerRuns = 0;
     lockTimeout = aLockTimeout;
@@ -133,6 +139,8 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
     nPendingLNsLocked = 0;
     nEntriesRead = 0;
     nRepeatIteratorReads = 0;
+    lookAheadCacheSize = aLookAheadCacheSize;
+    detailedTraceLevel = aDetailedTraceLevel;
   }
 
   //------------------------
@@ -395,6 +403,22 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
     return wasSet;
   }
 
+  public boolean setLookAheadCacheSize(int aLookAheadCacheSize)
+  {
+    boolean wasSet = false;
+    lookAheadCacheSize = aLookAheadCacheSize;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setDetailedTraceLevel(Level aDetailedTraceLevel)
+  {
+    boolean wasSet = false;
+    detailedTraceLevel = aDetailedTraceLevel;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getNCleanerRuns()
   {
     return nCleanerRuns;
@@ -563,6 +587,19 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
     return nRepeatIteratorReads;
   }
 
+  public int getLookAheadCacheSize()
+  {
+    return lookAheadCacheSize;
+  }
+
+  /**
+   * adding inner elements ;
+   */
+  public Level getDetailedTraceLevel()
+  {
+    return detailedTraceLevel;
+  }
+
   public void delete()
   {}
 
@@ -592,13 +629,19 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
 	if (readBufferSize <= 0) {
 	    readBufferSize = cm.getInt(EnvironmentParams.LOG_ITERATOR_READ_SIZE);
 	}
-	Label94: //this.hook94(cm);
+	Label94:
+lookAheadCacheSize = cm.getInt(EnvironmentParams.CLEANER_LOOK_AHEAD_CACHE_SIZE);
+//	original(cm);
+ //this.hook94(cm);
 	nDeadlockRetries = cm.getInt(EnvironmentParams.CLEANER_DEADLOCK_RETRY);
 	expunge = cm.getBoolean(EnvironmentParams.CLEANER_REMOVE);
 	clusterResident = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER);
 	clusterAll = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER_ALL);
 	maxBatchFiles = cm.getInt(EnvironmentParams.CLEANER_MAX_BATCH_FILES);
-	Label90: //this.hook90();
+	Label90:
+detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_CLEANER);
+	//original();
+ //this.hook90();
 	if (clusterResident && clusterAll) {
 	    throw new IllegalArgumentException("Both " + EnvironmentParams.CLEANER_CLUSTER + " and "
 		    + EnvironmentParams.CLEANER_CLUSTER_ALL + " may not be set to true.");
@@ -738,7 +781,11 @@ env.getFileManager().releaseExclusiveLock();
 
   // line 247 "../../../../Cleaner.ump"
    private void traceFileNotDeleted(Exception e, long fileNum){
-    
+    Tracer.trace(env, "Cleaner", "deleteSafeToDeleteFiles",
+		"Log file 0x" + Long.toHexString(fileNum) + " could not be " + (expunge ? "deleted" : "renamed")
+			+ ".  This operation will be retried at the next checkpoint.",
+		e);
+	original(e, fileNum);
   }
 
 
@@ -877,7 +924,10 @@ nLNsDead++;
 		if (completed && !lockDenied) {
 		    fileSelector.removePendingLN(ln.getNodeId());
 		}
-		Label91: //this.hook91(ln, obsolete, completed);
+		Label91:
+trace(detailedTraceLevel, CLEAN_PENDING_LN, ln, DbLsn.NULL_LSN, completed, obsolete, false);
+	//original(ln, obsolete, completed);
+ //this.hook91(ln, obsolete, completed);
 	    }
 	}
   }
@@ -1049,7 +1099,10 @@ nLNsMigrated++;
 					if (locker != null) {
 				locker.operationEnd();
 					}
-					Label92: //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
+					Label92:
+trace(detailedTraceLevel, cleanAction, ln, lsn, completed, obsolete, migrated);
+	//original(lsn, cleanAction, obsolete, migrated, completed, ln);
+ //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
 			}
   }
 
@@ -1171,12 +1224,14 @@ nLNsMigrated++;
 
   // line 626 "../../../../Cleaner.ump"
    protected void hook88(long fileNumValue) throws DatabaseException{
-    
+    Tracer.trace(Level.SEVERE, env, "Cleaner deleted file 0x" + Long.toHexString(fileNumValue));
+	original(fileNumValue);
   }
 
   // line 629 "../../../../Cleaner.ump"
    protected void hook89(DatabaseException DBE) throws DatabaseException{
-    
+    Tracer.trace(env, "com.sleepycat.je.cleaner.Cleaner", "processLN", "Exception thrown: ", DBE);
+	original(DBE);
   }
 
 
@@ -1313,6 +1368,16 @@ nLNsMigrated++;
   }
 
 
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 12 "../../../../LoggingCleaner_Cleaner.ump"
+  public void trace(Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete, boolean dirtiedMigrated){
+    new Cleaner_trace(this, level, action, node, logLsn, completed, obsolete, dirtiedMigrated).execute();
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+
@@ -1345,9 +1410,11 @@ nLNsMigrated++;
             "nClusterLNsProcessed" + ":" + getNClusterLNsProcessed()+ "," +
             "nPendingLNsLocked" + ":" + getNPendingLNsLocked()+ "," +
             "nEntriesRead" + ":" + getNEntriesRead()+ "," +
-            "nRepeatIteratorReads" + ":" + getNRepeatIteratorReads()+ "]" + System.getProperties().getProperty("line.separator") +
+            "nRepeatIteratorReads" + ":" + getNRepeatIteratorReads()+ "," +
+            "lookAheadCacheSize" + ":" + getLookAheadCacheSize()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "mustBeCleanedFiles" + "=" + (getMustBeCleanedFiles() != null ? !getMustBeCleanedFiles().equals(this)  ? getMustBeCleanedFiles().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "lowUtilizationFiles" + "=" + (getLowUtilizationFiles() != null ? !getLowUtilizationFiles().equals(this)  ? getLowUtilizationFiles().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "lowUtilizationFiles" + "=" + (getLowUtilizationFiles() != null ? !getLowUtilizationFiles().equals(this)  ? getLowUtilizationFiles().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "detailedTraceLevel" + "=" + (getDetailedTraceLevel() != null ? !getDetailedTraceLevel().equals(this)  ? getDetailedTraceLevel().toString().replaceAll("  ","    ") : "this" : "null");
   }  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1451,6 +1518,76 @@ nLNsMigrated++;
     protected DatabaseId dbId2 ;
   // line 38 "../../../../Cleaner_static.ump"
     protected DatabaseImpl db2 ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingCleaner_Cleaner_inner.ump"
+  public static class Cleaner_trace
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cleaner_trace()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    public  Cleaner_trace(Cleaner _this, Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete, boolean dirtiedMigrated){
+      this._this=_this;
+          this.level=level;
+          this.action=action;
+          this.node=node;
+          this.logLsn=logLsn;
+          this.completed=completed;
+          this.obsolete=obsolete;
+          this.dirtiedMigrated=dirtiedMigrated;
+    }
+  
+    // line 16 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 17 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Cleaner _this ;
+  // line 18 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Level level ;
+  // line 19 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected String action ;
+  // line 20 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Node node ;
+  // line 21 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected long logLsn ;
+  // line 22 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected boolean completed ;
+  // line 23 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected boolean obsolete ;
+  // line 24 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected boolean dirtiedMigrated ;
+  // line 25 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Logger logger ;
+  // line 26 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected StringBuffer sb ;
   
     
   }  

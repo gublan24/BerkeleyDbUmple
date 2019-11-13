@@ -18,6 +18,8 @@ import java.io.IOException;
 // line 3 "../../../../Checksum_FileReader.ump"
 // line 3 "../../../../Checksum_FileReader_inner.ump"
 // line 3 "../../../../Latches_FileReader.ump"
+// line 3 "../../../../LoggingSevere_FileReader.ump"
+// line 3 "../../../../LoggingSevere_FileReader_inner.ump"
 public abstract class FileReader
 {
 
@@ -483,8 +485,10 @@ if (fileHandle != null) {
   
   
   @MethodObject
+    @MethodObject
   // line 6 "../../../../FileReader_static.ump"
   // line 4 "../../../../Checksum_FileReader_inner.ump"
+  // line 4 "../../../../LoggingSevere_FileReader_inner.ump"
   public static class FileReader_readNextEntry
   {
   
@@ -562,6 +566,14 @@ if (fileHandle != null) {
             throw e;
           }
           return foundEntry;
+    }
+  
+    // line 6 "../../../../LoggingSevere_FileReader_inner.ump"
+     protected void hook468() throws DatabaseException,IOException{
+      _this.eof=true;
+          problemType=LogEntryType.findType(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
+          Tracer.trace(_this.env,"FileReader","readNextEntry","Halted log file reading at file 0x" + Long.toHexString(_this.readBufferFileNum) + " offset 0x"+ Long.toHexString(_this.nextEntryOffset)+ " offset(decimal)="+ _this.nextEntryOffset+ ":\nentry="+ problemType+ "(typeNum="+ _this.currentEntryTypeNum+ ",version="+ _this.currentEntryTypeVersion+ ")\nprev=0x"+ Long.toHexString(_this.currentEntryPrevOffset)+ "\nsize="+ _this.currentEntrySize+ "\nNext entry should be at 0x"+ Long.toHexString((_this.nextEntryOffset + LogManager.HEADER_BYTES + _this.currentEntrySize))+ "\n:",e);
+          original();
     }
     
     //------------------------

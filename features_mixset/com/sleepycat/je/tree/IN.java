@@ -44,6 +44,10 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../INCompressor_IN_inner.ump"
 // line 3 "../../../../Latches_IN.ump"
 // line 3 "../../../../Latches_IN_inner.ump"
+// line 3 "../../../../LoggingFine_IN.ump"
+// line 3 "../../../../LoggingFine_IN_inner.ump"
+// line 3 "../../../../LoggingFinest_IN.ump"
+// line 3 "../../../../LoggingFinest_IN_inner.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -2036,6 +2040,27 @@ updateMemorySize(null, node);
    public boolean isLatchOwner(){
     return latch.isOwner();
   }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 10 "../../../../LoggingFine_IN.ump"
+   private void traceSplit(Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn, int splitIndex, int idKeyIndex, int childIndex){
+    new IN_traceSplit(this, level, parent, newSibling, parentLsn, myNewLsn, newSiblingLsn, splitIndex, idKeyIndex,
+		childIndex).execute();
+  }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 9 "../../../../LoggingFinest_IN.ump"
+   private void traceDelete(Level level, int index){
+    new IN_traceDelete(this, level, index).execute();
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -2622,6 +2647,7 @@ updateMemorySize(null, node);
     @MethodObject
   // line 207 "../../../../IN_static.ump"
   // line 11 "../../../../MemoryBudget_IN_inner.ump"
+  // line 18 "../../../../LoggingFinest_IN_inner.ump"
   public static class IN_deleteEntry
   {
   
@@ -2695,6 +2721,13 @@ updateMemorySize(null, node);
     protected boolean maybeValidate ;
   // line 240 "../../../../IN_static.ump"
     protected int oldLSNArraySize ;
+  
+  // line 20 "../../../../LoggingFinest_IN_inner.ump"
+    protected void hook616: execute () 
+    {
+      _this.traceDelete(Level.FINEST,index);
+          //original();
+    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/
@@ -2785,6 +2818,7 @@ updateMemorySize(null, node);
   // line 4 "../../../../MemoryBudget_IN_inner.ump"
   // line 4 "../../../../INCompressor_IN_inner.ump"
   // line 5 "../../../../Latches_IN_inner.ump"
+  // line 32 "../../../../LoggingFine_IN_inner.ump"
   public static class IN_splitInternal
   {
   
@@ -2914,7 +2948,10 @@ updateMemorySize(null, node);
           //original();
   
           inMemoryINs.add(newSibling);
-          Label617: ;//this.hook617();
+          Label617:
+  _this.traceSplit(Level.FINE,parent,newSibling,parentLsn,myNewLsn,newSiblingLsn,splitIndex,idKeyIndex,childIndex);
+         // original();
+   ;//this.hook617();
     }
     
     //------------------------
@@ -3359,6 +3396,137 @@ updateMemorySize(null, node);
     protected LogManager logManager ;
   // line 582 "../../../../IN_static.ump"
     protected int memDelta ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingFine_IN_inner.ump"
+  public static class IN_traceSplit
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_traceSplit()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingFine_IN_inner.ump"
+    public  IN_traceSplit(IN _this, Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn, int splitIndex, int idKeyIndex, int childIndex){
+      this._this=_this;
+          this.level=level;
+          this.parent=parent;
+          this.newSibling=newSibling;
+          this.parentLsn=parentLsn;
+          this.myNewLsn=myNewLsn;
+          this.newSiblingLsn=newSiblingLsn;
+          this.splitIndex=splitIndex;
+          this.idKeyIndex=idKeyIndex;
+          this.childIndex=childIndex;
+    }
+  
+    // line 18 "../../../../LoggingFine_IN_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 19 "../../../../LoggingFine_IN_inner.ump"
+    protected IN _this ;
+  // line 20 "../../../../LoggingFine_IN_inner.ump"
+    protected Level level ;
+  // line 21 "../../../../LoggingFine_IN_inner.ump"
+    protected IN parent ;
+  // line 22 "../../../../LoggingFine_IN_inner.ump"
+    protected IN newSibling ;
+  // line 23 "../../../../LoggingFine_IN_inner.ump"
+    protected long parentLsn ;
+  // line 24 "../../../../LoggingFine_IN_inner.ump"
+    protected long myNewLsn ;
+  // line 25 "../../../../LoggingFine_IN_inner.ump"
+    protected long newSiblingLsn ;
+  // line 26 "../../../../LoggingFine_IN_inner.ump"
+    protected int splitIndex ;
+  // line 27 "../../../../LoggingFine_IN_inner.ump"
+    protected int idKeyIndex ;
+  // line 28 "../../../../LoggingFine_IN_inner.ump"
+    protected int childIndex ;
+  // line 29 "../../../../LoggingFine_IN_inner.ump"
+    protected Logger logger ;
+  // line 30 "../../../../LoggingFine_IN_inner.ump"
+    protected StringBuffer sb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingFinest_IN_inner.ump"
+  public static class IN_traceDelete
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_traceDelete()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingFinest_IN_inner.ump"
+    public  IN_traceDelete(IN _this, Level level, int index){
+      this._this=_this;
+          this.level=level;
+          this.index=index;
+    }
+  
+    // line 11 "../../../../LoggingFinest_IN_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 12 "../../../../LoggingFinest_IN_inner.ump"
+    protected IN _this ;
+  // line 13 "../../../../LoggingFinest_IN_inner.ump"
+    protected Level level ;
+  // line 14 "../../../../LoggingFinest_IN_inner.ump"
+    protected int index ;
+  // line 15 "../../../../LoggingFinest_IN_inner.ump"
+    protected Logger logger ;
+  // line 16 "../../../../LoggingFinest_IN_inner.ump"
+    protected StringBuffer sb ;
   
     
   }  

@@ -27,6 +27,8 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../Cursor.ump"
 // line 3 "../../../loggingBase_Cursor.ump"
 // line 3 "../../../Latches_Cursor.ump"
+// line 3 "../../../LoggingFinest_Cursor.ump"
+// line 3 "../../../LoggingFinest_Cursor_inner.ump"
 public class Cursor
 {
 
@@ -219,7 +221,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
   // line 168 "../../../Cursor.ump"
    public int count() throws DatabaseException{
     checkState(true);
-        Label0: //Label:           ;  //this.hook0();
+        Label0:
+trace(Level.FINEST, "Cursor.count: ", null);
+	//original();
+ //Label:           ;  //this.hook0();
         return countInternal(null);
   }
 
@@ -243,7 +248,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus delete() throws DatabaseException{
     checkState(true);
         checkUpdatesAllowed("delete");
-        Label1: //Label:           ;  //this.hook1();
+        Label1:
+trace(Level.FINEST, "Cursor.delete: ", null);
+	//original();
+ //Label:           ;  //this.hook1();
         return deleteInternal();
   }
 
@@ -259,7 +267,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("put");
-        Label2: //Label:           ;  //this.hook2(key, data);
+        Label2:
+trace(Level.FINEST, "Cursor.put: ", key, data, null);
+	//original(key, data);
+ //Label:           ;  //this.hook2(key, data);
         return putInternal(key, data, PutMode.OVERWRITE);
   }
 
@@ -275,7 +286,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("putNoOverwrite");
-        Label3: //Label:           ;  //this.hook3(key, data);
+        Label3:
+trace(Level.FINEST, "Cursor.putNoOverwrite: ", key, data, null);
+	//original(key, data);
+ //Label:           ;  //this.hook3(key, data);
         return putInternal(key, data, PutMode.NOOVERWRITE);
   }
 
@@ -291,7 +305,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("putNoDupData");
-        Label4:           ;  //this.hook4(key, data);
+        Label4:
+trace(Level.FINEST, "Cursor.putNoDupData: ", key, data, null);
+	//original(key, data);
+           ;  //this.hook4(key, data);
         return putInternal(key, data, PutMode.NODUP);
   }
 
@@ -305,7 +322,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
     checkState(true);
         DatabaseUtil.checkForNullDbt(data, "data", true);
         checkUpdatesAllowed("putCurrent");
-        Label5:           ;  //this.hook5(data);
+        Label5:
+trace(Level.FINEST, "Cursor.putCurrent: ", null, data, null);
+	//original(data);
+           ;  //this.hook5(data);
         return putInternal(null, data, PutMode.CURRENT);
   }
 
@@ -318,7 +338,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getCurrent(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
         checkArgsNoValRequired(key, data);
-        Label6:           ;  //this.hook6(lockMode);
+        Label6:
+trace(Level.FINEST, "Cursor.getCurrent: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook6(lockMode);
         return getCurrentInternal(key, data, lockMode);
   }
 
@@ -331,7 +354,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getFirst(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label7:           ;  //this.hook7(lockMode);
+        Label7:
+trace(Level.FINEST, "Cursor.getFirst: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook7(lockMode);
         return position(key, data, lockMode, true);
   }
 
@@ -344,7 +370,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getLast(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label8:           ;  //this.hook8(lockMode);
+        Label8:
+trace(Level.FINEST, "Cursor.getLast: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook8(lockMode);
         return position(key, data, lockMode, false);
   }
 
@@ -357,7 +386,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getNext(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label9:           ;  //this.hook9(lockMode);
+        Label9:
+trace(Level.FINEST, "Cursor.getNext: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook9(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, true);
         } else {
@@ -374,7 +406,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getNextDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
         checkArgsNoValRequired(key, data);
-        Label10:           ;  //this.hook10(lockMode);
+        Label10:
+trace(Level.FINEST, "Cursor.getNextDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook10(lockMode);
         return retrieveNext(key, data, lockMode, GetMode.NEXT_DUP);
   }
 
@@ -387,7 +422,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getNextNoDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label11:           ;  //this.hook11(lockMode);
+        Label11:
+trace(Level.FINEST, "Cursor.getNextNoDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook11(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, true);
         } else {
@@ -404,7 +442,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getPrev(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label12:           ;  //this.hook12(lockMode);
+        Label12:
+trace(Level.FINEST, "Cursor.getPrev: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook12(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, false);
         } else {
@@ -421,7 +462,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getPrevDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
         checkArgsNoValRequired(key, data);
-        Label13:           ;  //this.hook13(lockMode);
+        Label13:
+trace(Level.FINEST, "Cursor.getPrevDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook13(lockMode);
         return retrieveNext(key, data, lockMode, GetMode.PREV_DUP);
   }
 
@@ -434,7 +478,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getPrevNoDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label14:           ;  //this.hook14(lockMode);
+        Label14:
+trace(Level.FINEST, "Cursor.getPrevNoDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook14(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, false);
         } else {
@@ -452,7 +499,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", false);
-        Label15:           ;  //this.hook15(key, lockMode);
+        Label15:
+trace(Level.FINEST, "Cursor.getSearchKey: ", key, null, lockMode);
+	//original(key, lockMode);
+           ;  //this.hook15(key, lockMode);
         return search(key, data, lockMode, SearchMode.SET);
   }
 
@@ -466,7 +516,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", false);
-        Label16:           ;  //this.hook16(key, lockMode);
+        Label16:
+trace(Level.FINEST, "Cursor.getSearchKeyRange: ", key, null, lockMode);
+	//original(key, lockMode);
+           ;  //this.hook16(key, lockMode);
         return search(key, data, lockMode, SearchMode.SET_RANGE);
   }
 
@@ -479,7 +532,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getSearchBoth(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsValRequired(key, data);
-        Label17:           ;  //this.hook17(key, data, lockMode);
+        Label17:
+trace(Level.FINEST, "Cursor.getSearchBoth: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook17(key, data, lockMode);
         return search(key, data, lockMode, SearchMode.BOTH);
   }
 
@@ -492,7 +548,10 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
    public OperationStatus getSearchBothRange(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsValRequired(key, data);
-        Label18:           ;  //this.hook18(key, data, lockMode);
+        Label18:
+trace(Level.FINEST, "Cursor.getSearchBothRange: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook18(key, data, lockMode);
         return search(key, data, lockMode, SearchMode.BOTH_RANGE);
   }
 
@@ -1401,11 +1460,149 @@ origCursor.releaseBINs();
   }
 
 
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 9 "../../../LoggingFinest_Cursor.ump"
+  public void trace(Level level, String methodName, DatabaseEntry key, DatabaseEntry data, LockMode lockMode){
+    new Cursor_trace(this, level, methodName, key, data, lockMode).execute();
+  }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 16 "../../../LoggingFinest_Cursor.ump"
+  public void trace(Level level, String methodName, LockMode lockMode){
+    new Cursor_trace2(this, level, methodName, lockMode).execute();
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "cursorImpl" + "=" + (getCursorImpl() != null ? !getCursorImpl().equals(this)  ? getCursorImpl().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "config" + "=" + (getConfig() != null ? !getConfig().equals(this)  ? getConfig().toString().replaceAll("  ","    ") : "this" : "null");
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../LoggingFinest_Cursor_inner.ump"
+  public static class Cursor_trace2
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cursor_trace2()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../LoggingFinest_Cursor_inner.ump"
+    public  Cursor_trace2(Cursor _this, Level level, String methodName, LockMode lockMode){
+      this._this=_this;
+          this.level=level;
+          this.methodName=methodName;
+          this.lockMode=lockMode;
+    }
+  
+    // line 12 "../../../LoggingFinest_Cursor_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 13 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Cursor _this ;
+  // line 14 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Level level ;
+  // line 15 "../../../LoggingFinest_Cursor_inner.ump"
+    protected String methodName ;
+  // line 16 "../../../LoggingFinest_Cursor_inner.ump"
+    protected LockMode lockMode ;
+  // line 17 "../../../LoggingFinest_Cursor_inner.ump"
+    protected StringBuffer sb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 19 "../../../LoggingFinest_Cursor_inner.ump"
+  public static class Cursor_trace
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cursor_trace()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 21 "../../../LoggingFinest_Cursor_inner.ump"
+    public  Cursor_trace(Cursor _this, Level level, String methodName, DatabaseEntry key, DatabaseEntry data, LockMode lockMode){
+      this._this=_this;
+          this.level=level;
+          this.methodName=methodName;
+          this.key=key;
+          this.data=data;
+          this.lockMode=lockMode;
+    }
+  
+    // line 29 "../../../LoggingFinest_Cursor_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 30 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Cursor _this ;
+  // line 31 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Level level ;
+  // line 32 "../../../LoggingFinest_Cursor_inner.ump"
+    protected String methodName ;
+  // line 33 "../../../LoggingFinest_Cursor_inner.ump"
+    protected DatabaseEntry key ;
+  // line 34 "../../../LoggingFinest_Cursor_inner.ump"
+    protected DatabaseEntry data ;
+  // line 35 "../../../LoggingFinest_Cursor_inner.ump"
+    protected LockMode lockMode ;
+  // line 36 "../../../LoggingFinest_Cursor_inner.ump"
+    protected StringBuffer sb ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

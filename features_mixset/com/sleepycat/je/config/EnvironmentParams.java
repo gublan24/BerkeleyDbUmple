@@ -22,6 +22,12 @@ import java.io.File;
 // line 3 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
 // line 3 "../../../../Checksum_EnvironmentParams.ump"
 // line 3 "../../../../Latches_EnvironmentParams.ump"
+// line 3 "../../../../LookAHEADCache_EnvironmentParams.ump"
+// line 3 "../../../../FSync_EnvironmentParams.ump"
+// line 3 "../../../../LoggingCleaner_EnvironmentParams.ump"
+// line 3 "../../../../LoggingEvictor_EnvironmentParams.ump"
+// line 3 "../../../../LoggingRecovery_EnvironmentParams.ump"
+// line 3 "../../../../LoggingFine_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -424,5 +430,29 @@ public class EnvironmentParams
 		    + "# where java.util.concurrent.locks.ReentrantLock is used for the\n"
 		    + "# latch implementation, this parameter will determine whether they\n"
 		    + "# are 'fair' or not.  This parameter is 'static' across all\n" + "# environments.\n");
+// line 5 ../../../../LookAHEADCache_EnvironmentParams.ump
+  public static final IntConfigParam CLEANER_LOOK_AHEAD_CACHE_SIZE = new IntConfigParam(
+	    "je.cleaner.lookAheadCacheSize", new Integer(0), null, new Integer(8192), true,
+	    "# The look ahead cache size for cleaning in bytes.  Increasing this\n"
+		    + "# value can reduce the number of Btree lookups.");// line 5 "../../../../FSync_EnvironmentParams.ump"
+  public static final LongConfigParam LOG_FSYNC_TIMEOUT = new LongConfigParam("je.log.fsyncTimeout", new Long(10000L),
+	    null, new Long(500000L), false, "# Timeout limit for group file sync, in microseconds.") ;
+
+// line 5 ../../../../LoggingCleaner_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_CLEANER = new ConfigParam("java.util.logging.level.cleaner",
+	    "FINE", true, "# Cleaner specific detailed trace messages will be issued at this\n"
+		    + "# level. The Value should be one of the predefined \n" + "# java.util.logging.Level values");
+// line 5 ../../../../LoggingEvictor_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_EVICTOR = new ConfigParam("java.util.logging.level.evictor",
+	    "FINE", false, "# Evictor specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");
+// line 5 ../../../../LoggingRecovery_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_RECOVERY = new ConfigParam("java.util.logging.level.recovery",
+	    "FINE", false, "# Recovery specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");
+// line 5 ../../../../LoggingFine_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_LOCKMGR = new ConfigParam("java.util.logging.level.lockMgr",
+	    "FINE", false, "# Lock manager specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");
   
 }

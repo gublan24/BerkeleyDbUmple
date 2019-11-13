@@ -1,0 +1,5 @@
+use LoggingFiner_Tree.ump;
+use LoggingFiner_CursorImpl.ump;
+
+ // adding inner elements ; 
+use ../ump_inner/LoggingFiner_Master_inner.ump ; 

@@ -31,6 +31,7 @@ import java.io.File;
 // line 3 "../../../DeleteOp_Environment.ump"
 // line 3 "../../../INCompressor_Environment.ump"
 // line 3 "../../../Statistics_Environment.ump"
+// line 3 "../../../LoggingFinest_Environment.ump"
 public class Environment
 {
 
@@ -791,6 +792,13 @@ if (database != null && !database.isDeleted())
   private Set referringDbTxns ;
 // line 37 "../../../Environment.ump"
   private boolean valid ;
+
+// line 5 "../../../LoggingFinest_Environment.ump"
+  protected void hook58: openDb (Transaction , Database , String , DatabaseConfig , boolean ) 
+  {
+    Tracer.trace(Level.FINEST, environmentImpl,		"Environment.open: " + " name=" + databaseName + " dbConfig=" + dbConfig);
+	//original(databaseName, dbConfig);
+  }
 
   
 }

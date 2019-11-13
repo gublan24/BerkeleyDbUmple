@@ -47,6 +47,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../NIO_FileManager.ump"
 // line 3 "../../../../NIO_FileManager_inner.ump"
 // line 3 "../../../../Latches_FileManager.ump"
+// line 3 "../../../../FSync_FileManager.ump"
 public class FileManager
 {
 
@@ -110,7 +111,10 @@ fileCache = new FileCache(configManager);
         if (stopOnWriteProp != null) {
             stopOnWriteCount = Long.parseLong(stopOnWriteProp);
         }
-        Label452: //this.hook452(envImpl);
+        Label452:
+syncManager = new FSyncManager(envImpl);
+	//original(envImpl);
+ //this.hook452(envImpl);
   }
 
 
@@ -1082,6 +1086,16 @@ data.position(0);
    private void clearFileCache(long fileNum) throws IOException,DatabaseException{
     fileCache.remove(fileNum);
   }
+
+
+  /**
+   * 
+   * Flush a file using the group sync mechanism, trying to amortize off other syncs.
+   */
+  // line 11 "../../../../FSync_FileManager.ump"
+  public void groupSync() throws DatabaseException{
+    syncManager.fsync();
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1513,6 +1527,8 @@ data.position(0);
   private FileCache fileCache ;
 // line 5 "../../../../ChunckedNIO_FileManager.ump"
   private long chunkedNIOSize = 0 ;
+// line 5 "../../../../FSync_FileManager.ump"
+  private FSyncManager syncManager ;
 
   
 }

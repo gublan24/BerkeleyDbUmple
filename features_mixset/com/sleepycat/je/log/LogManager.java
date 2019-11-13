@@ -34,6 +34,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../Checksum_LogManager.ump"
 // line 3 "../../../../Checksum_LogManager_inner.ump"
 // line 3 "../../../../Latches_LogManager.ump"
+// line 3 "../../../../FSync_LogManager.ump"
 public class LogManager
 {
 
@@ -499,6 +500,14 @@ nTempBufferWrites++;
   // line 12 "../../../../Checksum_LogManager.ump"
    public boolean getChecksumOnRead(){
     return doChecksumOnRead;
+  }
+
+  // line 6 "../../../../FSync_LogManager.ump"
+  public After Label501:log(String LoggableObject, String boolean, String boolean, String boolean, String boolean, String long){
+    if (fsyncRequired) {
+	    fileManager.groupSync();
+	}
+	//original(fsyncRequired);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
