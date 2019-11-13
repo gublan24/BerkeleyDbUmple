@@ -52,6 +52,7 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../DeleteOp_UtilizationProfile.ump"
 // line 3 "../../../../Latches_UtilizationProfile.ump"
 // line 3 "../../../../Latches_UtilizationProfile_inner.ump"
+// line 3 "../../../../Derivative_LoggingSevere_LoggingBase_UtilizationProfile.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -138,7 +139,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Creates an empty UP.
    */
-  // line 81 "../../../../UtilizationProfile.ump"
+  // line 82 "../../../../UtilizationProfile.ump"
    public  UtilizationProfile(EnvironmentImpl env, UtilizationTracker tracker) throws DatabaseException{
     this.env = env;
 	this.tracker = tracker;
@@ -154,7 +155,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Process notifications of mutable property changes.
    */
-  // line 94 "../../../../UtilizationProfile.ump"
+  // line 95 "../../../../UtilizationProfile.ump"
    public void envConfigUpdate(DbConfigManager cm) throws DatabaseException{
     minAge = cm.getInt(EnvironmentParams.CLEANER_MIN_AGE);
 	minUtilization = cm.getInt(EnvironmentParams.CLEANER_MIN_UTILIZATION);
@@ -167,7 +168,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * @see EnvironmentParams#CLEANER_RMW_FIX
    * @see FileSummaryLN#postFetchInit
    */
-  // line 104 "../../../../UtilizationProfile.ump"
+  // line 105 "../../../../UtilizationProfile.ump"
    public boolean isRMWFixEnabled(){
     return rmwFixEnabled;
   }
@@ -177,7 +178,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Returns the number of files in the profile.
    */
-  // line 111 "../../../../UtilizationProfile.ump"
+  // line 112 "../../../../UtilizationProfile.ump"
    synchronized  int getNumberOfFiles() throws DatabaseException{
     assert cachePopulated;
 	return fileSummaryMap.size();
@@ -188,7 +189,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Returns the cheapest file to clean from the given list of files.  This method is used to select the first file to be cleaned in the batch of to-be-cleaned files.
    */
-  // line 119 "../../../../UtilizationProfile.ump"
+  // line 120 "../../../../UtilizationProfile.ump"
    synchronized  Long getCheapestFileToClean(SortedSet files) throws DatabaseException{
     if (files.size() == 1) {
 	    return (Long) files.first();
@@ -216,7 +217,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * @param forceCleaning is true to always select a file, even if itsutilization is above the minimum utilization threshold.
    * @param lowUtilizationFiles is a returned set of files that are below theminimum utilization threshold.
    */
-  // line 145 "../../../../UtilizationProfile.ump"
+  // line 146 "../../../../UtilizationProfile.ump"
    synchronized  Long getBestFileForCleaning(FileSelector fileSelector, boolean forceCleaning, Set lowUtilizationFiles) throws DatabaseException{
     if (lowUtilizationFiles != null) {
 	    lowUtilizationFiles.clear();
@@ -274,7 +275,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Calculate the utilization percentage.
    */
-  // line 200 "../../../../UtilizationProfile.ump"
+  // line 201 "../../../../UtilizationProfile.ump"
    public static  int utilization(long obsoleteSize, long totalSize){
     if (totalSize != 0) {
 	    return (int) (((totalSize - obsoleteSize) * 100) / totalSize);
@@ -288,7 +289,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Estimate the log size that will be made obsolete when a log file is deleted and we delete its UP records. Note that we do not count the space taken by the deleted FileSummaryLN records written during log file deletion.  These add the same amount to the total log size and the obsolete log size, and therefore have a small impact on total utilization.
    */
-  // line 211 "../../../../UtilizationProfile.ump"
+  // line 212 "../../../../UtilizationProfile.ump"
    private int estimateUPObsoleteSize(FileSummary summary){
     if (true)
 	    return 0;
@@ -305,7 +306,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Gets the base summary from the cached map.  Add the tracked summary, if one exists, to the base summary.  Sets all entries obsolete, if the file is in the forceCleanFiles set.
    */
-  // line 225 "../../../../UtilizationProfile.ump"
+  // line 226 "../../../../UtilizationProfile.ump"
    private synchronized  FileSummary getFileSummary(Long file){
     FileSummary summary = (FileSummary) fileSummaryMap.get(file);
 	long fileNum = file.longValue();
@@ -331,7 +332,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Returns whether the given file is in the forceCleanFiles set.
    */
-  // line 248 "../../../../UtilizationProfile.ump"
+  // line 249 "../../../../UtilizationProfile.ump"
    private boolean isForceCleanFile(long file){
     if (forceCleanFiles != null) {
 	    for (int i = 0; i < forceCleanFiles.length; i += 2) {
@@ -350,7 +351,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Parses the je.cleaner.forceCleanFiles property value.
    */
-  // line 264 "../../../../UtilizationProfile.ump"
+  // line 265 "../../../../UtilizationProfile.ump"
    private void parseForceCleanFiles(String propValue){
     if (propValue == null || propValue.length() == 0) {
 	    forceCleanFiles = null;
@@ -405,7 +406,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Count the given tracked info as obsolete and then log the summaries.
    */
-  // line 316 "../../../../UtilizationProfile.ump"
+  // line 317 "../../../../UtilizationProfile.ump"
    public void countAndLogSummaries(TrackedFileSummary [] summaries) throws DatabaseException{
     env.getLogManager().countObsoleteNodes(summaries);
 	if (!DbInternal.getCheckpointUP(env.getConfigManager().getEnvironmentConfig())) {
@@ -425,7 +426,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Returns a copy of the current file summary map, optionally including tracked summary information, for use by the DbSpace utility and by unit tests.  The returned map's key is a Long file number and its value is a FileSummary.
    */
-  // line 333 "../../../../UtilizationProfile.ump"
+  // line 334 "../../../../UtilizationProfile.ump"
    public synchronized  SortedMap getFileSummaryMap(boolean includeTrackedFiles) throws DatabaseException{
     assert cachePopulated;
 	if (includeTrackedFiles) {
@@ -456,7 +457,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Clears the cache of file summary info.  The cache starts out unpopulated and is populated on the first call to getBestFileForCleaning.
    */
-  // line 361 "../../../../UtilizationProfile.ump"
+  // line 362 "../../../../UtilizationProfile.ump"
    public synchronized  void clearCache(){
     new UtilizationProfile_clearCache(this).execute();
   }
@@ -466,7 +467,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Removes a file from the utilization database and the profile, after it has been deleted by the cleaner.
    */
-  // line 368 "../../../../UtilizationProfile.ump"
+  // line 369 "../../../../UtilizationProfile.ump"
   public void removeFile(Long fileNum) throws DatabaseException{
     new UtilizationProfile_removeFile(this, fileNum).execute();
   }
@@ -476,7 +477,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * For the LN at the cursor position deletes all LNs for the file.  This method performs eviction and is not synchronized.
    */
-  // line 375 "../../../../UtilizationProfile.ump"
+  // line 376 "../../../../UtilizationProfile.ump"
    private void deleteFileSummary(Long fileNum) throws DatabaseException{
     Locker locker = null;
 	CursorImpl cursor = null;
@@ -524,7 +525,7 @@ cursor.releaseBINs();
    * 
    * Updates and stores the FileSummary for a given tracked file, if flushing of the summary is allowed.
    */
-  // line 417 "../../../../UtilizationProfile.ump"
+  // line 418 "../../../../UtilizationProfile.ump"
    public void flushFileSummary(TrackedFileSummary tfs) throws DatabaseException{
     if (tfs.getAllowFlush()) {
 	    putFileSummary(tfs);
@@ -536,7 +537,7 @@ cursor.releaseBINs();
    * 
    * Updates and stores the FileSummary for a given tracked file.  This method is synchronized and may not perform eviction.
    */
-  // line 426 "../../../../UtilizationProfile.ump"
+  // line 427 "../../../../UtilizationProfile.ump"
    private synchronized  PackedOffsets putFileSummary(TrackedFileSummary tfs) throws DatabaseException{
     return new UtilizationProfile_putFileSummary(this, tfs).execute();
   }
@@ -547,7 +548,7 @@ cursor.releaseBINs();
    * Returns the stored/packed obsolete offsets and the tracked obsolete offsets for the given file.  The tracked summary object returned can be used to test for obsolete offsets that are being added during cleaning by other threads participating in lazy migration.  The caller must call TrackedFileSummary.setAllowFlush(true) when cleaning is complete. This method performs eviction and is not synchronized.
    * @param logUpdate if true, log any updates to the utilization profile. Iffalse, only retrieve the new information.
    */
-  // line 435 "../../../../UtilizationProfile.ump"
+  // line 436 "../../../../UtilizationProfile.ump"
   public TrackedFileSummary getObsoleteDetail(Long fileNum, PackedOffsets packedOffsets, boolean logUpdate) throws DatabaseException{
     if (!env.getCleaner().trackDetail) {
 	    return null;
@@ -634,7 +635,7 @@ if (cursor != null) {
    * 
    * Populate the profile for file selection.  This method performs eviction and is not synchronized.  It must be called before recovery is complete so that synchronization is unnecessary.  It must be called before the recovery checkpoint so that the checkpoint can flush file summary information.
    */
-  // line 510 "../../../../UtilizationProfile.ump"
+  // line 511 "../../../../UtilizationProfile.ump"
    public boolean populateCache() throws DatabaseException{
     return new UtilizationProfile_populateCache(this).execute();
   }
@@ -644,7 +645,7 @@ if (cursor != null) {
    * 
    * Positions at the most recent LN for the given file number.
    */
-  // line 518 "../../../../UtilizationProfile.ump"
+  // line 519 "../../../../UtilizationProfile.ump"
    private boolean getFirstFSLN(CursorImpl cursor, long fileNum, DatabaseEntry keyEntry, DatabaseEntry dataEntry, LockType lockType) throws DatabaseException{
     byte[] keyBytes = FileSummaryLN.makePartialKey(fileNum);
 	keyEntry.setData(keyBytes);
@@ -666,7 +667,7 @@ if (cursor != null) {
    * 
    * If the file summary db is already open, return, otherwise attempt to open it.  If the environment is read-only and the database doesn't exist, return false.  If the environment is read-write the database will be created if it doesn't exist.
    */
-  // line 537 "../../../../UtilizationProfile.ump"
+  // line 538 "../../../../UtilizationProfile.ump"
    private boolean openFileSummaryDatabase() throws DatabaseException{
     if (fileSummaryDb != null) {
 	    return true;
@@ -698,7 +699,7 @@ if (cursor != null) {
    * 
    * Insert the given LN with the given key values.  This method is synchronized and may not perform eviction.
    */
-  // line 566 "../../../../UtilizationProfile.ump"
+  // line 567 "../../../../UtilizationProfile.ump"
    private synchronized  void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence) throws DatabaseException{
     byte[] keyBytes = FileSummaryLN.makeFullKey(fileNum, sequence);
 	Locker locker = null;
@@ -713,7 +714,11 @@ if (cursor != null) {
 //	original(cursor);
 
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    Label177:           ;  //this.hook177(fileNum, sequence, status);
+	    Label177:
+//synchronized void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence)
+	    env.getLogger().log(Level.SEVERE, "Cleaner duplicate key sequence file=0x" + Long.toHexString(fileNum)
+		    + " sequence=0x" + Long.toHexString(sequence));
+           ;  //this.hook177(fileNum, sequence, status);
 	    //Label:           ;  //this.hook188(cursor);
       Label188:
 // <<     private synchronized void insertFileSummary(...)
@@ -736,7 +741,7 @@ if (cursor != null) {
    * Checks that all FSLN offsets are indeed obsolete.  Assumes that the system is quiesent (does not lock LNs).  This method is not synchronized (because it doesn't access fileSummaryMap) and eviction is allowed.
    * @return true if no verification failures.
    */
-  // line 593 "../../../../UtilizationProfile.ump"
+  // line 594 "../../../../UtilizationProfile.ump"
    public boolean verifyFileSummaryDatabase() throws DatabaseException{
     DatabaseEntry key = new DatabaseEntry();
 	DatabaseEntry data = new DatabaseEntry();
@@ -784,7 +789,7 @@ cursor.evict();
 	return ok;
   }
 
-  // line 637 "../../../../UtilizationProfile.ump"
+  // line 638 "../../../../UtilizationProfile.ump"
    private boolean verifyLsnIsObsolete(long lsn) throws DatabaseException{
     try {
 	    Object o = env.getLogManager().getLogEntry(lsn);
@@ -885,12 +890,12 @@ b |= db.isDeleted();
    * protected void hook188(CursorImpl cursor) throws DatabaseException {
    * }
    */
-  // line 729 "../../../../UtilizationProfile.ump"
+  // line 730 "../../../../UtilizationProfile.ump"
    protected void hook189(CursorImpl cursor) throws DatabaseException{
     
   }
 
-  // line 732 "../../../../UtilizationProfile.ump"
+  // line 733 "../../../../UtilizationProfile.ump"
    protected void hook190(CursorImpl cursor) throws DatabaseException{
     
   }
@@ -1313,19 +1318,19 @@ b |= db.isDeleted();
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 45 "../../../../UtilizationProfile.ump"
+  // line 46 "../../../../UtilizationProfile.ump"
   private EnvironmentImpl env ;
-// line 47 "../../../../UtilizationProfile.ump"
+// line 48 "../../../../UtilizationProfile.ump"
   private UtilizationTracker tracker ;
-// line 49 "../../../../UtilizationProfile.ump"
+// line 50 "../../../../UtilizationProfile.ump"
   private DatabaseImpl fileSummaryDb ;
-// line 51 "../../../../UtilizationProfile.ump"
+// line 52 "../../../../UtilizationProfile.ump"
   private SortedMap fileSummaryMap ;
-// line 53 "../../../../UtilizationProfile.ump"
+// line 54 "../../../../UtilizationProfile.ump"
   private boolean cachePopulated ;
-// line 55 "../../../../UtilizationProfile.ump"
+// line 56 "../../../../UtilizationProfile.ump"
   private boolean rmwFixEnabled ;
-// line 75 "../../../../UtilizationProfile.ump"
+// line 76 "../../../../UtilizationProfile.ump"
   private long[] forceCleanFiles ;
 
   

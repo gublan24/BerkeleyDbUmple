@@ -81,6 +81,10 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../Statistics_EnvironmentImpl.ump"
 // line 3 "../../../../Latches_EnvironmentImpl.ump"
 // line 3 "../../../../LoggingFine_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_LoggingConsoleHandler_LoggingBase_EnvironmentImpl_inner.ump"
+// line 3 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -1188,6 +1192,32 @@ checkpointer.shutdown();
    public SharedLatch getTriggerLatch(){
     return triggerLatch;
   }
+
+
+  /**
+   * 
+   * Add the database log as one of the debug logging destinations when the logging system is sufficiently initialized.
+   */
+  // line 9 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_EnvironmentImpl.ump"
+   public void enableDebugLoggingToDbLog() throws DatabaseException{
+    if (configManager.getBoolean(EnvironmentParams.JE_LOGGING_DBLOG)) {
+	    Handler dbLogHandler = new TraceLogHandler(this);
+	    Level level = Level.parse(configManager.get(EnvironmentParams.JE_LOGGING_LEVEL));
+	    dbLogHandler.setLevel(level);
+	    envLogger.addHandler(dbLogHandler);
+	}
+  }
+
+
+  /**
+   * 
+   * Flip the log to a new file, forcing an fsync. Return the LSN of the trace record in the new file.
+   */
+  // line 9 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl.ump"
+   public long forceLogFileFlip() throws DatabaseException{
+    Tracer newRec = new Tracer("File Flip");
+	return logManager.logForceFlip(newRec);
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1265,6 +1295,8 @@ checkpointer.shutdown();
   
   @MethodObject
   // line 4 "../../../../loggingBase_EnvironmentImpl_inner.ump"
+  // line 4 "../../../../Derivative_LoggingConsoleHandler_LoggingBase_EnvironmentImpl_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump"
   public static class EnvironmentImpl_initLogger
   {
   
@@ -1299,7 +1331,35 @@ checkpointer.shutdown();
           level=Tracer.parseLevel(_this,EnvironmentParams.JE_LOGGING_LEVEL);
           logger.setLevel(level);
           LabelExecute_loggingBase:
+  //Logger result=original();
+          if (_this.configManager.getBoolean(EnvironmentParams.JE_LOGGING_CONSOLE)) {
+            consoleHandler=new ConsoleHandler();
+            consoleHandler.setLevel(level);
+            logger.addHandler(consoleHandler);
+          }
+          //return result;        
+          // line 5 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump"
+          // Original method: loggingBase_EnvironmentImpl_inner.ump
+                  //Logger result=original();
+                  fileHandler=null;
+                  try {
+                    if (_this.configManager.getBoolean(EnvironmentParams.JE_LOGGING_FILE)) {
+                      limit=_this.configManager.getInt(EnvironmentParams.JE_LOGGING_FILE_LIMIT);
+                      count=_this.configManager.getInt(EnvironmentParams.JE_LOGGING_FILE_COUNT);
+                      logFilePattern=envHome + "/" + Tracer.INFO_FILES;
+                      fileHandler=new FileHandler(logFilePattern,limit,count,true);
+                      fileHandler.setFormatter(new SimpleFormatter());
+                      fileHandler.setLevel(level);
+                      logger.addHandler(fileHandler);
+                    }
+                  }
+             catch (      IOException e) {
+                    throw new DatabaseException(e.getMessage());
+                  }
+          //        return result;
+          // END OF UMPLE AFTER INJECTION
           return logger;
+  
     }
     
     //------------------------

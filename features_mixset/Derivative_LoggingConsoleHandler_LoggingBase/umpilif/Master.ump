@@ -1,3 +1,0 @@
-use EnvironmentImpl.ump;
-
-use ../ump_inner/Master.ump;

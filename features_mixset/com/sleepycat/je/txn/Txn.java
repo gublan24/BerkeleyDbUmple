@@ -49,6 +49,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Latches_Txn.ump"
 // line 3 "../../../../LoggingSevere_Txn.ump"
 // line 3 "../../../../LoggingFine_Txn.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -1217,6 +1219,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     @MethodObject
   // line 66 "../../../../Txn_static.ump"
   // line 4 "../../../../loggingBase_Txn_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
   public static class Txn_traceCommit
   {
   
@@ -1251,6 +1254,16 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
       logger=envImpl.getLogger();
       // END OF UMPLE BEFORE INJECTION
       
+      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
+      //original();
+              if (logger.isLoggable(Level.FINE)) {
+                sb=new StringBuffer();
+                sb.append(" Commit:id = ").append(id);
+                sb.append(" numWriteLocks=").append(numWriteLocks);
+                sb.append(" numReadLocks = ").append(numReadLocks);
+                Tracer.trace(Level.FINE,envImpl,sb.toString());
+              }
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------

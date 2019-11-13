@@ -3,6 +3,7 @@ namespace com.sleepycat.je.cleaner;
 class UtilizationProfile
 {
   isA EnvConfigObserver;
+
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.txn.Locker;

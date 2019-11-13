@@ -39,7 +39,7 @@
         <feature name="LoggingFinest"/>
         <feature name="Derivative_LoggingConsoleHandler_LoggingBase"/>
         <feature name="Derivative_LoggingDbLogHandler_LoggingBase"/>
-        <feature name="Derivative_LoggingFileHandler_LoggingBase"/>
+        <feature name="Derivative_LoggingFileHandler_LoggingBase"/> 
         <feature name="Derivative_LoggingCleaner_LoggingBase"/>
         <feature name="Derivative_LoggingRecovery_LoggingBase"/>
         <feature name="Derivative_LoggingSevere_LoggingBase"/>

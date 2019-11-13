@@ -22,6 +22,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../loggingBase_Tracer.ump"
 // line 3 "../../../../LoggingDbLogHandler_Tracer.ump"
 // line 3 "../../../../LoggingSevere_Tracer.ump"
+// line 3 "../../../../Derivative_LoggingSevere_LoggingBase_Tracer.ump"
 public class Tracer implements LoggableObject,LogReadable
 {
 
@@ -272,6 +273,10 @@ public class Tracer implements LoggableObject,LogReadable
    */
   // line 10 "../../../../LoggingSevere_Tracer.ump"
    public static  void trace(EnvironmentImpl envImpl, String sourceClass, String sourceMethod, String msg, Throwable t){
+    // line 9 "../../../../Derivative_LoggingSevere_LoggingBase_Tracer.ump"
+    envImpl.getLogger().logp(Level.SEVERE, sourceClass, sourceMethod, msg + "\n" + Tracer.getStackTrace(t));
+    	//original(envImpl, sourceClass, sourceMethod, msg, t);
+    // END OF UMPLE BEFORE INJECTION
     
   }
   

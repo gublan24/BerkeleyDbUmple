@@ -34,6 +34,8 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../Latches_Database_inner.ump"
 // line 3 "../../../LoggingFinest_Database.ump"
 // line 3 "../../../LoggingFinest_Database_inner.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Database.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
 public class Database
 {
 
@@ -1231,6 +1233,7 @@ databaseImpl.checkIsDeleted("preload");
   
   
   // line 4 "../../../LoggingFinest_Database_inner.ump"
+  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
   public static class Database_trace2
   {
   
@@ -1263,6 +1266,21 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 13 "../../../LoggingFinest_Database_inner.ump"
     public void execute() throws DatabaseException{
+      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
+      if (_this.logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                sb.append(" name=" + _this.getDebugName());
+                if (txn != null) {
+                  sb.append(" txnId=").append(txn.getId());
+                }
+                if (config != null) {
+                  sb.append(" config=").append(config);
+                }
+                _this.logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -1290,6 +1308,7 @@ databaseImpl.checkIsDeleted("preload");
   
   
   // line 21 "../../../LoggingFinest_Database_inner.ump"
+  // line 21 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
   public static class Database_trace
   {
   
@@ -1324,6 +1343,24 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 32 "../../../LoggingFinest_Database_inner.ump"
     public void execute() throws DatabaseException{
+      // line 24 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
+      if (_this.logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                if (txn != null) {
+                  sb.append(" txnId=").append(txn.getId());
+                }
+                sb.append(" key=").append(key.dumpData());
+                if (data != null) {
+                  sb.append(" data=").append(data.dumpData());
+                }
+                if (lockMode != null) {
+                  sb.append(" lockMode=").append(lockMode);
+                }
+                _this.logger.log(level,sb.toString());
+              }
+             // original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

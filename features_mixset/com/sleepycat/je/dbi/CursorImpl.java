@@ -50,6 +50,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../Latches_CursorImpl_inner.ump"
 // line 3 "../../../../LoggingFiner_CursorImpl.ump"
 // line 3 "../../../../LoggingFiner_CursorImpl_inner.ump"
+// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl.ump"
+// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -2870,6 +2872,7 @@ LabelEvict_1: ;//
   
   
   // line 4 "../../../../LoggingFiner_CursorImpl_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
   public static class CursorImpl_trace
   {
   
@@ -2905,6 +2908,25 @@ LabelEvict_1: ;//
   
     // line 16 "../../../../LoggingFiner_CursorImpl_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
+      logger=_this.database.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(changeType);
+                sb.append(" bin=");
+                sb.append(theBin.getNodeId());
+                sb.append(" ln=");
+                sb.append(ln.getNodeId());
+                sb.append(" lnIdx=");
+                sb.append(lnIndex);
+                sb.append(" oldLnLsn=");
+                sb.append(DbLsn.getNoFormatString(oldLsn));
+                sb.append(" newLnLsn=");
+                sb.append(DbLsn.getNoFormatString(newLsn));
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

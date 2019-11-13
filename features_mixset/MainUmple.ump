@@ -76,6 +76,24 @@ use LoggingFiner/umpilif/LoggingFiner_Master.ump;
 
 use LoggingFinest/umpilif/LoggingFinest_Master.ump;
 
+use Derivative_LoggingConsoleHandler_LoggingBase/umpilif/Derivative_LoggingConsoleHandler_LoggingBase_Master.ump;
+
+use Derivative_LoggingDbLogHandler_LoggingBase/umpilif/Derivative_LoggingDbLogHandler_LoggingBase_Master.ump;
+
+use Derivative_LoggingFileHandler_LoggingBase/umpilif/Derivative_LoggingFileHandler_LoggingBase_Master.ump;
+
+use Derivative_LoggingRecovery_LoggingBase/umpilif/Derivative_LoggingRecovery_LoggingBase_Master.ump;
+
+use Derivative_LoggingSevere_LoggingBase/umpilif/Derivative_LoggingSevere_LoggingBase_Master.ump;
+
+use Derivative_LoggingFine_LoggingBase/umpilif/Derivative_LoggingFine_LoggingBase_Master.ump;
+
+use Derivative_LoggingFiner_LoggingBase/umpilif/Derivative_LoggingFiner_LoggingBase_Master.ump;
+
+use Derivative_LoggingFinest_LoggingBase/umpilif/Derivative_LoggingFinest_LoggingBase_Master.ump; 
+
+use Derivative_LoggingSevere_EnvironmentLocking/umpilif/Derivative_LoggingSevere_EnvironmentLocking_Master.ump;
+
 //rename 's/^/DeleteOp_/' *
 
 

@@ -14,6 +14,7 @@ import java.math.BigInteger;
 // line 3 "../../../Sequence.ump"
 // line 3 "../../../loggingBase_Sequence.ump"
 // line 3 "../../../Statistics_Sequence.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Sequence.ump"
 public class Sequence
 {
 
@@ -202,7 +203,12 @@ nGets += 1;
 			}
 			//original(cached);
  //this.hook83(cached);
-			Label82: //this.hook82(cached, wrapped, retVal);
+			Label82:
+if (logger.isLoggable(Level.FINEST)) {
+	    logger.log(Level.FINEST, "Sequence.get" + " value=" + retVal + " cached=" + cached + " wrapped=" + wrapped);
+	}
+	//original(cached, wrapped, retVal);
+ //this.hook82(cached, wrapped, retVal);
 			return retVal;
   }
 

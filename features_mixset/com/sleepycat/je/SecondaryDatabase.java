@@ -19,6 +19,8 @@ import java.util.Collections;
 // line 3 "../../../SecondaryDatabase.ump"
 // line 3 "../../../LoggingFinest_SecondaryDatabase.ump"
 // line 3 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
 public class SecondaryDatabase extends Database
 {
 
@@ -673,6 +675,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
   
   
   // line 4 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
   public static class SecondaryDatabase_trace
   {
   
@@ -703,6 +706,17 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
   
     // line 11 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
     public void execute() throws DatabaseException{
+      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
+      logger=envHandle.getEnvironmentImpl().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                sb.append(" name=").append(_this.getDebugName());
+                sb.append(" primary=").append(_this.primaryDb.getDebugName());
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

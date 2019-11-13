@@ -48,6 +48,10 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../LoggingFine_IN_inner.ump"
 // line 3 "../../../../LoggingFinest_IN.ump"
 // line 3 "../../../../LoggingFinest_IN_inner.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
+// line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN.ump"
+// line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -3404,6 +3408,7 @@ updateMemorySize(null, node);
   
   
   // line 4 "../../../../LoggingFine_IN_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
   public static class IN_traceSplit
   {
   
@@ -3441,6 +3446,33 @@ updateMemorySize(null, node);
   
     // line 18 "../../../../LoggingFine_IN_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
+      logger=_this.databaseImpl.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_SPLIT);
+                sb.append(" parent=");
+                sb.append(parent.getNodeId());
+                sb.append(" child=");
+                sb.append(_this.getNodeId());
+                sb.append(" newSibling=");
+                sb.append(newSibling.getNodeId());
+                sb.append(" parentLsn = ");
+                sb.append(DbLsn.getNoFormatString(parentLsn));
+                sb.append(" childLsn = ");
+                sb.append(DbLsn.getNoFormatString(myNewLsn));
+                sb.append(" newSiblingLsn = ");
+                sb.append(DbLsn.getNoFormatString(newSiblingLsn));
+                sb.append(" splitIdx=");
+                sb.append(splitIndex);
+                sb.append(" idKeyIdx=");
+                sb.append(idKeyIndex);
+                sb.append(" childIdx=");
+                sb.append(childIndex);
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -3480,6 +3512,7 @@ updateMemorySize(null, node);
   
   
   // line 4 "../../../../LoggingFinest_IN_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
   public static class IN_traceDelete
   {
   
@@ -3510,6 +3543,18 @@ updateMemorySize(null, node);
   
     // line 11 "../../../../LoggingFinest_IN_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
+      logger=_this.databaseImpl.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_DELETE);
+                sb.append(" in=").append(_this.getNodeId());
+                sb.append(" index=");
+                sb.append(index);
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

@@ -63,6 +63,11 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../../LoggingConfig_RecoveryManager.ump"
 // line 3 "../../../../LoggingFine_RecoveryManager.ump"
 // line 3 "../../../../LoggingFine_RecoveryManager_inner.ump"
+// line 3 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_RecoveryManager.ump"
+// line 3 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager.ump"
+// line 3 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager_inner.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager_inner.ump"
 public class RecoveryManager
 {
 
@@ -198,6 +203,10 @@ Tracer.trace(env, "RecoveryManager", "recover", "Couldn't recover", e);
 			info.nextAvailableLsn = reader.getEndOfLog();
 			info.nRepeatIteratorReads += reader.getNRepeatIteratorReads();
 			env.getFileManager().setLastPosition(info.nextAvailableLsn, info.lastUsedLsn, reader.getPrevOffset());
+    // line 16 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_RecoveryManager.ump"
+    //original(readOnly);
+    	env.enableDebugLoggingToDbLog();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -981,7 +990,12 @@ trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, locatio
 try {
 	    //original(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
 	} finally {
-	    Label555: //hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+	    Label555:
+//>>> reuse LoggingRecovery_RecoveryManager.ump
+
+	trace(traceLevel, db, TRACE_LN_UNDO, success, lnFromLog, logLsn, location.bin, found, replaced, false,	location.childLsn, abortLsn, location.index);
+	//original(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+ //hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
 	}
  //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
 	location.reset();
@@ -1496,6 +1510,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
   
   // line 4 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+  // line 4 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager_inner.ump"
   public static class RecoveryManager_traceINDeleteReplay
   {
   
@@ -1530,6 +1545,20 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
     // line 15 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager_inner.ump"
+      logger=_this.env.getLogger();
+              if (logger.isLoggable(_this.detailedTraceLevel)) {
+                sb=new StringBuffer();
+                sb.append((isDuplicate) ? _this.TRACE_IN_DUPDEL_REPLAY : _this.TRACE_IN_DEL_REPLAY);
+                sb.append(" node=").append(nodeId);
+                sb.append(" lsn=").append(DbLsn.getNoFormatString(logLsn));
+                sb.append(" found=").append(found);
+                sb.append(" deleted=").append(deleted);
+                sb.append(" index=").append(index);
+                logger.log(_this.detailedTraceLevel,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -1563,6 +1592,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
   
   // line 4 "../../../../LoggingFine_RecoveryManager_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager_inner.ump"
   public static class RecoveryManager_traceRootDeletion
   {
   
@@ -1592,6 +1622,16 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
     // line 10 "../../../../LoggingFine_RecoveryManager_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager_inner.ump"
+      logger=database.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(TRACE_ROOT_DELETE);
+                sb.append(" Dbid=").append(database.getId());
+                logger.log(level,sb.toString());
+              }
+             // original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

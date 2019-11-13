@@ -29,6 +29,8 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../Latches_Cursor.ump"
 // line 3 "../../../LoggingFinest_Cursor.ump"
 // line 3 "../../../LoggingFinest_Cursor_inner.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Cursor.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
 public class Cursor
 {
 
@@ -1491,6 +1493,7 @@ origCursor.releaseBINs();
   
   
   // line 4 "../../../LoggingFinest_Cursor_inner.ump"
+  // line 24 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
   public static class Cursor_trace2
   {
   
@@ -1522,6 +1525,18 @@ origCursor.releaseBINs();
   
     // line 12 "../../../LoggingFinest_Cursor_inner.ump"
     public void execute(){
+      // line 26 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
+      if (_this.logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                _this.traceCursorImpl(sb);
+                if (lockMode != null) {
+                  sb.append(" lockMode=").append(lockMode);
+                }
+                _this.logger.log(level,sb.toString());
+              }
+             // original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -1547,6 +1562,7 @@ origCursor.releaseBINs();
   
   
   // line 19 "../../../LoggingFinest_Cursor_inner.ump"
+  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
   public static class Cursor_trace
   {
   
@@ -1580,6 +1596,24 @@ origCursor.releaseBINs();
   
     // line 29 "../../../LoggingFinest_Cursor_inner.ump"
     public void execute(){
+      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
+      if (_this.logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                _this.traceCursorImpl(sb);
+                if (key != null) {
+                  sb.append(" key=").append(key.dumpData());
+                }
+                if (data != null) {
+                  sb.append(" data=").append(data.dumpData());
+                }
+                if (lockMode != null) {
+                  sb.append(" lockMode=").append(lockMode);
+                }
+                _this.logger.log(level,sb.toString());
+              }
+             // original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

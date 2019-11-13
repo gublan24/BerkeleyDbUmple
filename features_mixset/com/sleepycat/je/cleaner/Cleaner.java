@@ -58,6 +58,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../LoggingCleaner_Cleaner.ump"
 // line 3 "../../../../LoggingCleaner_Cleaner_inner.ump"
 // line 3 "../../../../LoggingSevere_Cleaner.ump"
+// line 3 "../../../../Derivative_LoggingSevere_EnvironmentLocking_Cleaner.ump"
 public class Cleaner implements EnvConfigObserver,DaemonRunner
 {
 
@@ -737,6 +738,10 @@ detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_C
 if (!env.getFileManager().lockEnvironment(false, true)) {
 	    //bellow label introduced in EnvironmentLocking_Cleaner.ump
       Label87:
+//>> Label87 introduced by EnviromentLocking_Cleaner.ump
+	Tracer.trace(Level.SEVERE, env,	"Cleaner has " + safeFiles.size() + " files not deleted because of read-only processes.");
+	//original(safeFiles);
+
 	    throw new ReturnVoid();
 	    }
 

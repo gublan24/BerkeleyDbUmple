@@ -46,6 +46,10 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../LoggingFine_Tree_inner.ump"
 // line 3 "../../../../LoggingFiner_Tree.ump"
 // line 3 "../../../../LoggingFiner_Tree_inner.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Tree.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
+// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_Tree.ump"
+// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
 public class Tree implements LogWritable,LogReadable
 {
 
@@ -2618,6 +2622,7 @@ inList.releaseMajorLatch();
   
   
   // line 4 "../../../../LoggingFine_Tree_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
   public static class Tree_traceMutate
   {
   
@@ -2657,6 +2662,35 @@ inList.releaseMajorLatch();
   
     // line 20 "../../../../LoggingFine_Tree_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
+      logger=_this.database.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_MUTATE);
+                sb.append(" existingLn=");
+                sb.append(existingLn.getNodeId());
+                sb.append(" newLn=");
+                sb.append(newLn.getNodeId());
+                sb.append(" newLnLsn=");
+                sb.append(DbLsn.getNoFormatString(newLsn));
+                sb.append(" dupCountLN=");
+                sb.append(dupCountLN.getNodeId());
+                sb.append(" dupRootLsn=");
+                sb.append(DbLsn.getNoFormatString(dupRootLsn));
+                sb.append(" rootdin=");
+                sb.append(dupRoot.getNodeId());
+                sb.append(" ddinLsn=");
+                sb.append(DbLsn.getNoFormatString(ddinLsn));
+                sb.append(" dbin=");
+                sb.append(dupBin.getNodeId());
+                sb.append(" dbinLsn=");
+                sb.append(DbLsn.getNoFormatString(dbinLsn));
+                sb.append(" bin=");
+                sb.append(theBin.getNodeId());
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -2700,6 +2734,7 @@ inList.releaseMajorLatch();
   
   
   // line 36 "../../../../LoggingFine_Tree_inner.ump"
+  // line 35 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
   public static class Tree_traceSplitRoot
   {
   
@@ -2734,6 +2769,19 @@ inList.releaseMajorLatch();
   
     // line 47 "../../../../LoggingFine_Tree_inner.ump"
     public void execute(){
+      // line 37 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
+      logger=_this.database.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(splitType);
+                sb.append(" newRoot=").append(newRoot.getNodeId());
+                sb.append(" newRootLsn=").append(DbLsn.getNoFormatString(newRootLsn));
+                sb.append(" oldRoot=").append(oldRoot.getNodeId());
+                sb.append(" oldRootLsn=").append(DbLsn.getNoFormatString(oldRootLsn));
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -2767,6 +2815,7 @@ inList.releaseMajorLatch();
   
   
   // line 4 "../../../../LoggingFiner_Tree_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
   public static class Tree_traceInsertDuplicate
   {
   
@@ -2801,6 +2850,23 @@ inList.releaseMajorLatch();
   
     // line 15 "../../../../LoggingFiner_Tree_inner.ump"
     public void execute(){
+      // line 6 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
+      logger=env.getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_INSERT_DUPLICATE);
+                sb.append(" dbin=");
+                sb.append(insertingDBin.getNodeId());
+                sb.append(" bin=");
+                sb.append(binNid);
+                sb.append(" ln=");
+                sb.append(ln.getNodeId());
+                sb.append(" lnLsn=");
+                sb.append(DbLsn.getNoFormatString(lnLsn));
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -2834,6 +2900,7 @@ inList.releaseMajorLatch();
   
   
   // line 26 "../../../../LoggingFiner_Tree_inner.ump"
+  // line 23 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
   public static class Tree_traceInsert
   {
   
@@ -2868,6 +2935,23 @@ inList.releaseMajorLatch();
   
     // line 37 "../../../../LoggingFiner_Tree_inner.ump"
     public void execute(){
+      // line 25 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
+      logger=env.getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_INSERT);
+                sb.append(" bin=");
+                sb.append(insertingBin.getNodeId());
+                sb.append(" ln=");
+                sb.append(ln.getNodeId());
+                sb.append(" lnLsn=");
+                sb.append(DbLsn.getNoFormatString(lnLsn));
+                sb.append(" index=");
+                sb.append(index);
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     
