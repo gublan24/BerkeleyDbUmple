@@ -59,6 +59,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../LoggingCleaner_Cleaner_inner.ump"
 // line 3 "../../../../LoggingSevere_Cleaner.ump"
 // line 3 "../../../../Derivative_LoggingSevere_EnvironmentLocking_Cleaner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_Cleaner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_Cleaner_inner.ump"
 public class Cleaner implements EnvConfigObserver,DaemonRunner
 {
 
@@ -1429,6 +1431,7 @@ nLNsMigrated++;
     @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
   // line 4 "../../../../DeleteOp_Cleaner_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_CriticalEviction_Cleaner_inner.ump"
   public static class Cleaner_processPending
   {
   

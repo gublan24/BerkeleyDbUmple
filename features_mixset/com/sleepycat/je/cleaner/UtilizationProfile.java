@@ -53,6 +53,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Latches_UtilizationProfile.ump"
 // line 3 "../../../../Latches_UtilizationProfile_inner.ump"
 // line 3 "../../../../Derivative_LoggingSevere_LoggingBase_UtilizationProfile.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -492,7 +494,10 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	    OperationStatus status = OperationStatus.SUCCESS;
 	    while (status == OperationStatus.SUCCESS) {
-		Label173:           ;  //this.hook173();
+		Label173:
+env.getEvictor().doCriticalEviction();
+	//original();
+           ;  //this.hook173();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -569,7 +574,10 @@ cursor.releaseBINs();
 		status = OperationStatus.NOTFOUND;
 	    }
 	    while (status == OperationStatus.SUCCESS) {
-		Label174:           ;  //this.hook174();
+		Label174:
+env.getEvictor().doCriticalEviction();
+	//original();
+           ;  //this.hook174();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -755,7 +763,10 @@ if (cursor != null) {
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    Label175:           ;  //this.hook175();
+		    Label175:
+env.getEvictor().doCriticalEviction();
+	//original();
+           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());
@@ -1143,6 +1154,7 @@ b |= db.isDeleted();
   // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
   // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1194,7 +1206,10 @@ b |= db.isDeleted();
                 status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
               }
               while (status == OperationStatus.SUCCESS) {
-                Label176:           ;  //this.hook176();
+                Label176:
+  _this.env.getEvictor().doCriticalEviction();
+         // original();
+             ;  //this.hook176();
                 ln=(FileSummaryLN)cursor.getCurrentLN(LockType.NONE);
                 if (ln == null) {
                   status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);

@@ -1,6 +1,0 @@
-use DbCacheSize.ump;
-use EnvironmentImpl.ump;
-use MemoryBudget.ump;
-
- // adding inner elements ; 
-use ../ump_inner/Master.ump ; 

@@ -1,6 +1,0 @@
-namespace com.sleepycat.je.txn;
-
-class Txn
-{
-
-}

@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.SortedMap;
 
 // line 3 "../../../../LookAHEADCache_LookAheadCache.ump"
+// line 3 "../../../../Derivative_LookAHEADCache_MemoryBudget_LookAheadCache.ump"
 public class LookAheadCache
 {
 
@@ -54,14 +55,23 @@ public class LookAheadCache
   public void add(Long lsnOffset, LNInfo info){
     map.put(lsnOffset, info);
 	usedMem++;
-	Label166: //this.hook166(info);
+	Label166:
+usedMem += info.getMemorySize();
+	usedMem += MemoryBudget.TREEMAP_ENTRY_OVERHEAD - 1;
+	//original(info);
+ //this.hook166(info);
   }
 
   // line 39 "../../../../LookAHEADCache_LookAheadCache.ump"
   public LNInfo remove(Long offset){
     LNInfo info = (LNInfo) map.remove(offset);
 	if (info != null) {
-	    Label167: //this.hook167(info);
+	    Label167:
+usedMem--;
+	usedMem -= info.getMemorySize();
+	usedMem -= MemoryBudget.TREEMAP_ENTRY_OVERHEAD + 1;
+	//original(info);
+ //this.hook167(info);
 	}
 	return info;
   }

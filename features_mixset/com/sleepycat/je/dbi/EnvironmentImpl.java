@@ -85,6 +85,9 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_EnvironmentImpl.ump"
 // line 3 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl.ump"
 // line 3 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump"
+// line 3 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_MemoryBudget_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_Evictor_EnvironmentImpl.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -1218,6 +1221,12 @@ checkpointer.shutdown();
     Tracer newRec = new Tracer("File Flip");
 	return logManager.logForceFlip(newRec);
   }
+
+  // line 6 "../../../../Derivative_Statistics_MemoryBudget_EnvironmentImpl.ump"
+   protected void hook316(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
+    memoryBudget.loadStats(config, stats);
+	original(config, stats);
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1545,6 +1554,13 @@ checkpointer.shutdown();
   private Latch mapTreeRootLatch ;
 // line 13 "../../../../Latches_EnvironmentImpl.ump"
   private SharedLatch triggerLatch ;
+
+// line 5 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentImpl.ump"
+  protected void hook317: runOrPauseDaemons (DbConfigManager ) 
+  {
+    evictor.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_EVICTOR));
+	//original(mgr);
+  }
 
   
 }

@@ -51,6 +51,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../LoggingFine_Txn.ump"
 // line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn.ump"
 // line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
+// line 3 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -1288,6 +1289,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   // line 4 "../../../../DeleteOp_Txn_inner.ump"
+  // line 4 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
   public static class Txn_markDeleteAtTxnEnd
   {
   
@@ -1325,7 +1327,11 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   						      Label789: //this.hook798();
   						    }
   						    _this.deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,deleteAtCommit));
-  						    Label796: //this.hook796();
+  						    Label796:
+  delta+=MemoryBudget.HASHSET_ENTRY_OVERHEAD + MemoryBudget.OBJECT_OVERHEAD;
+          _this.updateMemoryUsage(delta);
+          //original();
+   //this.hook796();
   						  }
     }
     
@@ -1341,6 +1347,13 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     protected boolean deleteAtCommit ;
   // line 24 "../../../../DeleteOp_Txn_inner.ump"
     protected int delta ;
+  
+  // line 11 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
+    after Label797 : execute () 
+    {
+      delta=0;
+          //original();
+    }
   
     
   }  

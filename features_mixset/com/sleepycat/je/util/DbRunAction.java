@@ -37,6 +37,8 @@ import com.sleepycat.je.StatsConfig;
 // line 3 "../../../../INCompressor_DbRunAction_inner.ump"
 // line 3 "../../../../Statistics_DbRunAction.ump"
 // line 3 "../../../../Statistics_DbRunAction_inner.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -428,6 +430,7 @@ public class DbRunAction
   
   
   // line 4 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
   public static class DbRunAction_doEvict
   {
   
@@ -457,9 +460,15 @@ public class DbRunAction
     // line 9 "../../../../Evictor_DbRunAction_inner.ump"
     public void execute() throws DatabaseException{
       envImpl=DbInternal.envGetEnvironmentImpl(env);
-          Label837:        //this.hook837();
+          Label837:
+  cacheUsage=envImpl.getMemoryBudget().getCacheMemoryUsage();
+          //original();
+          //this.hook837();
           c=new EnvironmentMutableConfig();
-          Label836:        //this.hook836();
+          Label836:
+  c.setCacheSize(cacheUsage / 2);
+          //original();
+          //this.hook836();
           env.setMutableConfig(c);
           start=System.currentTimeMillis();
           env.evictMemory();

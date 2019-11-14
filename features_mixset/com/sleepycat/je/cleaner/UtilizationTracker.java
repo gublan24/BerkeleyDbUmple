@@ -14,6 +14,8 @@ import java.util.ArrayList;
 // line 3 "../../../../UtilizationTracker.ump"
 // line 3 "../../../../Evictor_UtilizationTracker.ump"
 // line 3 "../../../../Evictor_UtilizationTracker_inner.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_UtilizationTracker.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_UtilizationTracker_inner.ump"
 public class UtilizationTracker
 {
 
@@ -267,6 +269,7 @@ public class UtilizationTracker
   
   @MethodObject
   // line 4 "../../../../Evictor_UtilizationTracker_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_UtilizationTracker_inner.ump"
   public static class UtilizationTracker_evictMemory
   {
   
@@ -310,19 +313,32 @@ public class UtilizationTracker
           for (int i=0; i < a.length; i+=1) {
             tfs=a[i];
   
-            Label198:          //this.hook198();
+            Label198:
+  mem=tfs.getMemorySize();
+          totalBytes+=mem;
+          //original();
+            //this.hook198();
             b1=tfs.getAllowFlush();
   
-            Label197:          //this.hook197();
+            Label197:
+  b1&=mem > largestBytes;
+          //original();
+            //this.hook197();
             if (b1) {
   
-               Label199:           // this.hook199();
+               Label199:
+  largestBytes=mem;
+          //original();
+             // this.hook199();
               bestFile=tfs;
             }
           }
           b2=bestFile != null;
   
-            Label196:        //this.hook196();
+            Label196:
+  b2&=totalBytes > mb.getTrackerBudget();
+          //original();
+          //this.hook196();
           if (b2) {
             _this.env.getUtilizationProfile().flushFileSummary(bestFile);
             totalEvicted+=largestBytes;

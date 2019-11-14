@@ -22,6 +22,11 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../../Evictor_MemoryBudget_inner.ump"
 // line 3 "../../../../Statistics_MemoryBudget.ump"
 // line 3 "../../../../Latches_MemoryBudget.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget_inner.ump"
+// line 3 "../../../../Derivative_Statistics_MemoryBudget_MemoryBudget.ump"
+// line 3 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget.ump"
+// line 3 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget_inner.ump"
 public class MemoryBudget implements EnvConfigObserver
 {
 
@@ -123,6 +128,10 @@ inOverhead = IN.computeOverhead(configManager);
     synchronized (memoryUsageSynchronizer) {
 					treeMemoryUsage = calcTreeCacheUsage();
 			}
+    // line 9 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget.ump"
+    //original();
+    	assert LatchSupport.countLatchesHeld() == 0;
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -134,7 +143,9 @@ inOverhead = IN.computeOverhead(configManager);
    public long calcTreeCacheUsage() throws DatabaseException{
     long totalSize = 0;
 			INList inList = envImpl.getInMemoryINs();
-			Label347:			//	totalSize = this.hook347(totalSize, inList);
+			Label347:
+inList.latchMajor();
+			//	totalSize = this.hook347(totalSize, inList);
 try {
 			Iterator iter = inList.iterator();
 			while (iter.hasNext()) {
@@ -146,6 +157,12 @@ try {
 
 finally {
 Label347_1:
+//try {
+	  //  totalSize = original(totalSize, inList);} finally {
+	    inList.releaseMajorLatch();
+	//}
+	//return totalSize;
+
 	}
 		//end of 347
 		return totalSize;
@@ -162,6 +179,12 @@ Label347_1:
     synchronized (memoryUsageSynchronizer) {
 					treeMemoryUsage += increment;
 			}
+    // line 16 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+    //original(increment);
+    				if (getCacheMemoryUsage() > cacheBudget) {
+    						envImpl.alertEvictor();
+    				}
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -175,11 +198,23 @@ Label347_1:
     synchronized (memoryUsageSynchronizer) {
 					miscMemoryUsage += increment;
 			}
+    // line 27 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+    //original(increment);
+    			if (getCacheMemoryUsage() > cacheBudget) {
+    					envImpl.alertEvictor();
+    			}
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 258 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateLockMemoryUsage(long increment, int lockTableIndex){
     lockMemoryUsage[lockTableIndex] += increment;
+    // line 34 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+    //original(increment, lockTableIndex);
+    			if (getCacheMemoryUsage() > cacheBudget) {
+    					envImpl.alertEvictor();
+    			}
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 262 "../../../../MemoryBudget_MemoryBudget.ump"
@@ -260,6 +295,16 @@ Label347_1:
 		}
 		return size;
   }
+
+  // line 8 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+   public long getCriticalThreshold(){
+    return criticalThreshold;
+  }
+
+  // line 6 "../../../../Derivative_Statistics_MemoryBudget_MemoryBudget.ump"
+  public void loadStats(StatsConfig config, EnvironmentStats stats){
+    stats.setCacheDataBytes(getCacheMemoryUsage());
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -268,6 +313,7 @@ Label347_1:
   @MethodObject
   // line 4 "../../../../MemoryBudget_static.ump"
   // line 4 "../../../../MemoryBudget_inner_inner.ump"
+  // line 4 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget_inner.ump"
   public static class MemoryBudget_sinit
   {
   
@@ -295,7 +341,10 @@ Label347_1:
       is64=false;
               isJVM14=true;
       // END OF UMPLE BEFORE INJECTION
-      Label348: //this.hook348();
+      Label348:
+  isJVM14=(LatchSupport.getJava5LatchClass() == null);
+          //original();
+   //this.hook348();
       // line 12 "../../../../MemoryBudget_inner_inner.ump"
       //  original();
               overrideArch=System.getProperty(FORCE_JVM_ARCH);
@@ -415,6 +464,7 @@ Label347_1:
   // line 15 "../../../../MemoryBudget_static.ump"
   // line 103 "../../../../MemoryBudget_inner_inner.ump"
   // line 4 "../../../../Evictor_MemoryBudget_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget_inner.ump"
   public static class MemoryBudget_reset
   {
   
@@ -486,7 +536,10 @@ Label347_1:
           //this.hook350();
           newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
           _this.maxMemory=newMaxMemory;
-          Label349: //this.hook349();
+          Label349:
+  _this.criticalThreshold=newCriticalThreshold;
+          //original();
+   //this.hook349();
           _this.logBufferBudget=newLogBufferBudget;
       // line 105 "../../../../MemoryBudget_inner_inner.ump"
       //original();
@@ -742,6 +795,8 @@ Label347_1:
   private long dinOverhead ;
 // line 203 "../../../../MemoryBudget_MemoryBudget.ump"
   private long dbinOverhead ;
+// line 5 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+  private long criticalThreshold ;
 
   
 }

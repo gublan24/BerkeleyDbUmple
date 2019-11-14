@@ -28,20 +28,36 @@ class FileCache
 			return (FileHandle) fileMap.get(fileId);
     }
 
-    void add(Long fileId, FileHandle fileHandle) throws DatabaseException {
-		if (fileList.size() >= fileCacheSize) {
-			  Iterator iter = fileList.iterator();
-			  boolean done = false;
-			  while (!done && iter.hasNext()) {
-			Long evictId = (Long) iter.next();
-			FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
+    void add(Long fileId, FileHandle fileHandle) throws DatabaseException 
+		{
+			if (fileList.size() >= fileCacheSize) {
+					Iterator iter = fileList.iterator();
+					boolean done = false;
+					while (!done && iter.hasNext()) {
+						Long evictId = (Long) iter.next();
+						FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
 
-		    Label438: 		//	this.hook438(iter, done, evictId, evictTarget);
-			  }
+						Label438: 		;//	this.hook438(iter, done, evictId, evictTarget);
+						try {
+							fileMap.remove(evictId);
+							iter.remove();
+							evictTarget.close();
+							} 
+						catch (IOException e) 
+						{
+								throw new DatabaseException(e);
+						} 
+						finally {
+							Label441:
+							//this.hook441(evictTarget);
+						}
+						done = true;
+						Label438_1: ;		     
+					}
+			}
+			fileList.add(fileId);
+			fileMap.put(fileId, fileHandle);
 		}
-		fileList.add(fileId);
-		fileMap.put(fileId, fileHandle);
-		  }
 
     /** 
      * Take any file handles corresponding to this file name out of the cache. A file handle could be there twice, in rd only and in r/w mode.
@@ -89,7 +105,7 @@ class FileCache
 
     
 //protected void hook438(Iterator iter, boolean done, Long evictId, FileHandle evictTarget) throws DatabaseException {
-  after Label438: add(Long, FileHandle )
+/* after Label438: add(Long, FileHandle )
   {	
       try {
 	      fileMap.remove(evictId);
@@ -105,6 +121,7 @@ class FileCache
 	  }
 	done = true;
   }
+*/
 /*
   after Label439: remove(long ) {
 	  //this.hook442(evictTarget);

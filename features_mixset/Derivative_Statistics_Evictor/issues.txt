@@ -1,1 +1,16 @@
+
+
+
  synchronized public EnvironmentStats loadStats(StatsConfig config) throws DatabaseException {
+
+In the follow:
+ingnamespace com.sleepycat.je.dbi;
+
+class EnvironmentImpl
+{
+    after Label315: loadStats(StatsConfig ){
+	evictor.loadStats(config, stats);
+	//original(config, stats);
+    }
+
+}

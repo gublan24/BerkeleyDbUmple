@@ -14,6 +14,7 @@ import java.util.Hashtable;
 import java.io.IOException;
 
 // line 3 "../../../../FileHandleCache_FileCache.ump"
+// line 3 "../../../../Derivative_Latches_FileHandleCache_FileCache.ump"
 public class FileCache
 {
 
@@ -47,34 +48,44 @@ public class FileCache
     return (FileHandle) fileMap.get(fileId);
   }
 
-  // line 32 "../../../../FileHandleCache_FileCache.ump"
+  // line 33 "../../../../FileHandleCache_FileCache.ump"
   public void add(Long fileId, FileHandle fileHandle) throws DatabaseException{
     if (fileList.size() >= fileCacheSize) {
-			  Iterator iter = fileList.iterator();
-			  boolean done = false;
-			  while (!done && iter.hasNext()) {
-			Long evictId = (Long) iter.next();
-			FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
+					Iterator iter = fileList.iterator();
+					boolean done = false;
+					while (!done && iter.hasNext()) {
+						Long evictId = (Long) iter.next();
+						FileHandle evictTarget = (FileHandle) fileMap.get(evictId);
 
-		    Label438:
-try {
-	      fileMap.remove(evictId);
-	      iter.remove();
-	      evictTarget.close();
-	      } 
-       catch (IOException e) 
-       {
-	    throw new DatabaseException(e);
-	    } finally {
-      Label441:
-	    //this.hook441(evictTarget);
-	  }
-	done = true;
- 		//	this.hook438(iter, done, evictId, evictTarget);
-			  }
-		}
-		fileList.add(fileId);
-		fileMap.put(fileId, fileHandle);
+						Label438:
+if (evictTarget.latchNoWait()) {
+					
+ 		;//	this.hook438(iter, done, evictId, evictTarget);
+						try {
+							fileMap.remove(evictId);
+							iter.remove();
+							evictTarget.close();
+							} 
+						catch (IOException e) 
+						{
+								throw new DatabaseException(e);
+						} 
+						finally {
+							Label441:
+evictTarget.release();
+	//original(evictTarget);
+
+							//this.hook441(evictTarget);
+						}
+						done = true;
+						
+ //original(iter, done, evictId, evictTarget);
+			}
+Label438_1: ;		     
+					}
+			}
+			fileList.add(fileId);
+			fileMap.put(fileId, fileHandle);
   }
 
 
@@ -82,7 +93,7 @@ try {
    * 
    * Take any file handles corresponding to this file name out of the cache. A file handle could be there twice, in rd only and in r/w mode.
    */
-  // line 50 "../../../../FileHandleCache_FileCache.ump"
+  // line 66 "../../../../FileHandleCache_FileCache.ump"
   public void remove(long fileNum) throws IOException,DatabaseException{
     Iterator iter = fileList.iterator();
 			while (iter.hasNext()) {
@@ -93,19 +104,24 @@ try {
 						try { 
                 Label439: 						//this.hook439(iter, evictId, evictTarget);
 								//this.hook442(evictTarget);
-									Label442: //remove(long fileNum)
+									Label442:
+evictTarget.latch();
+	//original(evictTarget);
+ //remove(long fileNum)
 									fileMap.remove(evictId);
 									iter.remove();
 									evictTarget.close();
 															}
 						finally {
-								Label439_1: //end of hook439
+								Label439_1:
+evictTarget.release();
+ //end of hook439
 						}
 					}
 			}
   }
 
-  // line 72 "../../../../FileHandleCache_FileCache.ump"
+  // line 88 "../../../../FileHandleCache_FileCache.ump"
   public void clear() throws IOException,DatabaseException{
     Iterator iter = fileMap.values().iterator();
 			while (iter.hasNext()) {
@@ -118,6 +134,9 @@ try {
 	  iter.remove();
 	 // this.hook443(fileHandle);
 					Label443:
+fileHandle.latch();
+	//original(fileHandle);
+
 					fileHandle.close();
 					iter.remove();
 					Label440_1: // end of hook440
@@ -126,9 +145,16 @@ try {
 			fileList.clear();
   }
 
-  // line 87 "../../../../FileHandleCache_FileCache.ump"
+  // line 103 "../../../../FileHandleCache_FileCache.ump"
   public Set getCacheKeys(){
     return fileMap.keySet();
+  }
+
+  // line 19 "../../../../Derivative_Latches_FileHandleCache_FileCache.ump"
+   protected void Label440_1:clear(){
+    //	try {	    original(iter, fileHandle);} finally {
+	    fileHandle.release();
+//	}
   }
   
   //------------------------

@@ -1,0 +1,5 @@
+use Derivative_Latches_TruncateOp_DbTree.ump;
+
+
+ // adding inner elements ; 
+use ../ump_inner/Derivative_Latches_TruncateOp_Master_inner.ump ; 

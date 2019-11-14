@@ -28,6 +28,7 @@ import java.io.File;
 // line 3 "../../../../LoggingEvictor_EnvironmentParams.ump"
 // line 3 "../../../../LoggingRecovery_EnvironmentParams.ump"
 // line 3 "../../../../LoggingFine_EnvironmentParams.ump"
+// line 3 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -453,6 +454,10 @@ public class EnvironmentParams
 // line 5 ../../../../LoggingFine_EnvironmentParams.ump
   public static final ConfigParam JE_LOGGING_LEVEL_LOCKMGR = new ConfigParam("java.util.logging.level.lockMgr",
 	    "FINE", false, "# Lock manager specific trace messages will be issued at this level.\n"
-		    + "# Value should be one of the predefined java.util.logging.Level values");
+		    + "# Value should be one of the predefined java.util.logging.Level values");// line 5 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentParams.ump"
+  public static final IntConfigParam EVICTOR_RETRY = new IntConfigParam("je.evictor.deadlockRetry", new Integer(0),
+	    new Integer(Integer.MAX_VALUE), new Integer(3), false,
+	    "# The number of times to retry the evictor if it runs into a deadlock.") ;
+
   
 }

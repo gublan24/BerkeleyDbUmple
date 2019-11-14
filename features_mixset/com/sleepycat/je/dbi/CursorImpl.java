@@ -52,6 +52,7 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../LoggingFiner_CursorImpl_inner.ump"
 // line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl.ump"
 // line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -610,6 +611,12 @@ dupBin.releaseLatch();
         dupBin = null;
         dupIndex = -1;
         status = CURSOR_NOT_INITIALIZED;
+    // line 15 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
+    //original();
+    	if (allowEviction) {
+    	    database.getDbEnvironment().getEvictor().doCriticalEviction();
+    	}
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -627,6 +634,12 @@ dupBin.releaseLatch();
             locker.releaseNonTxnLocks();
         }
         status = CURSOR_CLOSED;
+    // line 26 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
+    //original();
+    	if (allowEviction) {
+    	    database.getDbEnvironment().getEvictor().doCriticalEviction();
+    	}
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 412 "../../../../CursorImpl.ump"

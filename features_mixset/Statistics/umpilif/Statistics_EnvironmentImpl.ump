@@ -8,7 +8,7 @@ class EnvironmentImpl
     /** 
      * Retrieve and return stat information.
      */
-    synchronized public EnvironmentStats loadStats(StatsConfig config) throws DatabaseException {
+    public synchronized  EnvironmentStats loadStats(StatsConfig config) throws DatabaseException {
 			EnvironmentStats stats = new EnvironmentStats();
 			Label314: //this.hook314(config, stats);
 			Label315: //this.hook315(config, stats);

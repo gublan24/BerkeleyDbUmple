@@ -55,6 +55,9 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../LoggingCleaner_FileProcessor_inner.ump"
 // line 3 "../../../../LoggingSevere_FileProcessor.ump"
 // line 3 "../../../../LoggingInfo_FileProcessor.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
+// line 3 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -667,6 +670,8 @@ if ((result != null) && (result.exactParentFound)) {
   // line 23 "../../../../Statistics_FileProcessor_inner.ump"
   // line 4 "../../../../Checksum_FileProcessor_inner.ump"
   // line 37 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
+  // line 4 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -716,7 +721,12 @@ if ((result != null) && (result.exactParentFound)) {
           }
           //original();
   
-          Label119: //this.hook119();
+          Label119:
+  if (Cleaner.DO_CRITICAL_EVICTION) {
+            _this.env.getEvictor().doCriticalEviction();
+          }
+          //original();
+   //this.hook119();
           Label127:
   lookAheadCache=new LookAheadCache(lookAheadCacheSize);
   //        original();
@@ -782,7 +792,12 @@ if ((result != null) && (result.exactParentFound)) {
    //this.hook156();
                 continue;
               }
-              Label120: //this.hook120();
+              Label120:
+  if (Cleaner.DO_CRITICAL_EVICTION) {
+            _this.env.getEvictor().doCriticalEviction();
+          }
+          //original();
+   //this.hook120();
               if (isLN) {
                 targetLN=reader.getLN();
                 dbId2=reader.getDatabaseId();
@@ -985,6 +1000,14 @@ if ((result != null) && (result.exactParentFound)) {
     protected DatabaseId dbId ;
   // line 162 "../../../../FileProcessor_static.ump"
     protected DatabaseImpl db ;
+  
+  // line 5 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
+    protected void hook118: execute () 
+    {
+      // Label118 introduced in MemoryBudget_FileProcessor.ump.
+          adjustMem+=lookAheadCacheSize;
+          //original();
+    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/

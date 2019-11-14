@@ -48,6 +48,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../NIO_FileManager_inner.ump"
 // line 3 "../../../../Latches_FileManager.ump"
 // line 3 "../../../../FSync_FileManager.ump"
+// line 3 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
 public class FileManager
 {
 
@@ -937,7 +938,8 @@ data.position(0);
 
   // line 785 "../../../../FileManager.ump"
    protected void hook449(EnvironmentImpl envImpl) throws DatabaseException{
-    
+    fileCacheLatch = LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
+	original(envImpl);
   }
 
   // line 789 "../../../../FileManager.ump"
@@ -1095,6 +1097,15 @@ data.position(0);
   // line 11 "../../../../FSync_FileManager.ump"
   public void groupSync() throws DatabaseException{
     syncManager.fsync();
+  }
+
+  // line 32 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+   protected void hook451() throws IOException,DatabaseException{
+    try {
+	    original();
+	} finally {
+	    fileCacheLatch.release();
+	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1529,6 +1540,8 @@ data.position(0);
   private long chunkedNIOSize = 0 ;
 // line 5 "../../../../FSync_FileManager.ump"
   private FSyncManager syncManager ;
+// line 5 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+  private Latch fileCacheLatch ;
 
   
 }

@@ -60,6 +60,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../LoggingConfig_Checkpointer_inner.ump"
 // line 3 "../../../../LoggingFinest_Checkpointer.ump"
 // line 3 "../../../../LoggingFinest_Checkpointer_inner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_Checkpointer.ump"
 public class Checkpointer extends DaemonThread
 {
 
@@ -199,7 +200,10 @@ timeInterval = waitTime;
             Iterator iter = nodeSet.iterator();
             while (iter.hasNext()) {
                 CheckpointReference targetRef = (CheckpointReference) iter.next();
-                Label520: //this.hook520();
+                Label520:
+envImpl.getEvictor().doCriticalEviction();
+	//original();
+ //this.hook520();
                 //this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
                 Label546:
 if (!(targetRef.db.isDeleted())) {
