@@ -10,7 +10,7 @@ class FileManager {
         }
       }
     }
-  @MethodObject static class FileManager_readFromFile {
+   static class FileManager_readFromFile {
       protected void hook448() throws IOException {
   synchronized (file) {
       //    original();

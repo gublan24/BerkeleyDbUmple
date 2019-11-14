@@ -1,4 +1,4 @@
-znamespace com.sleepycat.je.log;
+namespace com.sleepycat.je.log;
 
 class LogManager
 {

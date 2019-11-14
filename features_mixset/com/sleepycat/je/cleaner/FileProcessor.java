@@ -58,6 +58,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor.ump"
 // line 3 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
 // line 3 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
+// line 3 "../../../../Derivative_LookAHEADCache_Statistics_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -1023,6 +1024,7 @@ if ((result != null) && (result.exactParentFound)) {
   // line 4 "../../../../Latches_FileProcessor_inner.ump"
   // line 4 "../../../../LookAHEADCache_FileProcessor_inner.ump"
   // line 4 "../../../../LoggingCleaner_FileProcessor_inner.ump"
+  // line 4 "../../../../Derivative_LookAHEADCache_Statistics_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
   {
   
@@ -1145,7 +1147,12 @@ if ((result != null) && (result.exactParentFound)) {
                 myOffset=new Long(DbLsn.getFileOffset(lsn));
                 myInfo=lookAheadCache.remove(myOffset);
                 if (myInfo != null) {
-                  Label117: //this.hook117();
+                  Label117:
+  Label117 introduced in LookAHEADCache FilePocessor.ump
+          _this.nLNQueueHitsThisRun++;
+          _this.nLNsCleanedThisRun++;
+       //   original();
+   //this.hook117();
                   _this.processFoundLN(myInfo,lsn,lsn,bin,i,null);
                 }
               }

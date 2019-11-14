@@ -36,6 +36,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../Latches_LogManager.ump"
 // line 3 "../../../../FSync_LogManager.ump"
 // line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
+// line 3 "../../../../Derivative_FSync_Statistics_LogManager.ump"
 public class LogManager
 {
 
@@ -506,7 +507,10 @@ wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
 					nTempBufferWrites = 0;
 			}
 			logBufferPool.loadStats(config, stats);
-			Label497: //this.hook497(config, stats);
+			Label497:
+fileManager.loadStats(config, stats);
+//	original(config, stats);
+ //this.hook497(config, stats);
   }
 
   // line 12 "../../../../Checksum_LogManager.ump"

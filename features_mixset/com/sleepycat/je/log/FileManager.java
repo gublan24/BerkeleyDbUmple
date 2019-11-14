@@ -49,6 +49,9 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../Latches_FileManager.ump"
 // line 3 "../../../../FSync_FileManager.ump"
 // line 3 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+// line 3 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+// line 2 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+// line 3 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
 public class FileManager
 {
 
@@ -1107,6 +1110,26 @@ data.position(0);
 	    fileCacheLatch.release();
 	}
   }
+
+  // line 6 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+   public long getNFSyncs(){
+    return syncManager.getNFSyncs();
+  }
+
+  // line 10 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+   public long getNFSyncRequests(){
+    return syncManager.getNFSyncRequests();
+  }
+
+  // line 14 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+   public long getNFSyncTimeouts(){
+    return syncManager.getNTimeouts();
+  }
+
+  // line 18 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+  public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
+    syncManager.loadStats(config, stats);
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1269,6 +1292,8 @@ data.position(0);
   // line 75 "../../../../FileManager_static.ump"
   // line 4 "../../../../IO_FileManager_inner.ump"
   // line 4 "../../../../NIO_FileManager_inner.ump"
+  // line 3 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+  // line 4 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
   public static class FileManager_writeToFile
   {
   
@@ -1304,57 +1329,78 @@ data.position(0);
           Label455:
   channel=file.getChannel();
           //original();
-   //this.hook455();
+   ;//this.hook455();
           Label445:
+  if (_this.chunkedNIOSize > 0) {
+            useData=data.duplicate();
+            origLimit=useData.limit();
+            useData.limit(useData.position());
+            while (useData.limit() < origLimit) {
+              useData.limit((int)(Math.min(useData.limit() + _this.chunkedNIOSize,origLimit)));
+              bytesWritten=channel.write(useData,destOffset);
+              destOffset+=bytesWritten;
+              totalBytesWritten+=bytesWritten;
+            }
+          }
+  //   else {
+   //         original();
+    //      }
+  
   totalBytesWritten=channel.write(data,destOffset);
           //original();
-   //this.hook445();        
-          // line 18 "../../../../IO_FileManager_inner.ump"
-          //            int result = original(); 
-          //{
-                        //  this.hook447();
-                      //}
-                      Label447:
-                      assert data.hasArray();
-                      assert data.arrayOffset() == 0;
-                      pos = data.position();
-                      size = data.limit() - pos;
-                      file.seek(destOffset);
-                      file.write(data.array(), pos, size);
-                      data.position(pos + size);
-                      totalBytesWritten = size;
-                      //end 
-                      return result;
-          // END OF UMPLE AFTER INJECTION
-          return totalBytesWritten;
+   ;//this.hook445();
+          Label445_1:
+  //            int result = original(); 
+  //{
+                //  this.hook447();
+              //}
+              Label447:
+  synchronized (file) {
+  				
   
+              assert data.hasArray();
+              assert data.arrayOffset() == 0;
+              pos = data.position();
+              size = data.limit() - pos;
+              file.seek(destOffset);
+              file.write(data.array(), pos, size);
+              data.position(pos + size);
+              totalBytesWritten = size;
+              
+  
+          }
+  Label447_1: ;//
+              //end 
+             // return result;
+   ;//
+          return totalBytesWritten;
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 88 "../../../../FileManager_static.ump"
+    // line 89 "../../../../FileManager_static.ump"
     protected FileManager _this ;
-  // line 89 "../../../../FileManager_static.ump"
-    protected RandomAccessFile file ;
   // line 90 "../../../../FileManager_static.ump"
-    protected ByteBuffer data ;
+    protected RandomAccessFile file ;
   // line 91 "../../../../FileManager_static.ump"
-    protected long destOffset ;
+    protected ByteBuffer data ;
   // line 92 "../../../../FileManager_static.ump"
-    protected int totalBytesWritten ;
+    protected long destOffset ;
   // line 93 "../../../../FileManager_static.ump"
-    protected FileChannel channel ;
+    protected int totalBytesWritten ;
   // line 94 "../../../../FileManager_static.ump"
-    protected ByteBuffer useData ;
+    protected FileChannel channel ;
   // line 95 "../../../../FileManager_static.ump"
-    protected int origLimit ;
+    protected ByteBuffer useData ;
   // line 96 "../../../../FileManager_static.ump"
-    protected int bytesWritten ;
+    protected int origLimit ;
   // line 97 "../../../../FileManager_static.ump"
-    protected int pos ;
+    protected int bytesWritten ;
   // line 98 "../../../../FileManager_static.ump"
+    protected int pos ;
+  // line 99 "../../../../FileManager_static.ump"
     protected int size ;
   
     
@@ -1363,9 +1409,11 @@ data.position(0);
   
   
   
-  // line 104 "../../../../FileManager_static.ump"
-  // line 35 "../../../../IO_FileManager_inner.ump"
+  // line 105 "../../../../FileManager_static.ump"
+  // line 36 "../../../../IO_FileManager_inner.ump"
   // line 15 "../../../../NIO_FileManager_inner.ump"
+  // line 10 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+  // line 23 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
   public static class FileManager_readFromFile
   {
   
@@ -1387,7 +1435,7 @@ data.position(0);
     public void delete()
     {}
   
-    // line 106 "../../../../FileManager_static.ump"
+    // line 107 "../../../../FileManager_static.ump"
     public  FileManager_readFromFile(FileManager _this, RandomAccessFile file, ByteBuffer readBuffer, long offset){
       this._this=_this;
           this.file=file;
@@ -1395,58 +1443,81 @@ data.position(0);
           this.offset=offset;
     }
   
-    // line 112 "../../../../FileManager_static.ump"
+    // line 113 "../../../../FileManager_static.ump"
     public void execute() throws IOException{
       // line 17 "../../../../NIO_FileManager_inner.ump"
       channel=file.getChannel();
               //original();
       // END OF UMPLE BEFORE INJECTION
       Label446:
+  if (_this.chunkedNIOSize > 0) {
+            readLength=readBuffer.limit();
+            currentPosition=offset;
+            while (readBuffer.position() < readLength) {
+              readBuffer.limit((int)(Math.min(readBuffer.limit() + _this.chunkedNIOSize,readLength)));
+              bytesRead1=channel.read(readBuffer,currentPosition);
+              if (bytesRead1 < 1)           break;
+              currentPosition+=bytesRead1;
+            }
+          }
+     else {
+            
+  
   channel.read(readBuffer,offset);
           //original();
-   //this.hook446();
-      // line 48 "../../../../IO_FileManager_inner.ump"
-      //original(); {
-                  //    this.hook448();
-                  //}
-                 Label448:
-                 assert readBuffer.hasArray();
-                 assert readBuffer.arrayOffset() == 0;
-                 pos = readBuffer.position();
-                 size = readBuffer.limit() - pos;
-                 file.seek(offset);
-                 bytesRead2 = file.read(readBuffer.array(), pos, size);
-                 if (bytesRead2 > 0) {
-                      readBuffer.position(pos + bytesRead2);
-                 }
-      // END OF UMPLE AFTER INJECTION
+   ;//this.hook446();
+          
+   //original();
+          }
+  Label446_1:
+  //original(); {
+              //    this.hook448();
+              //}
+             Label448:
+  synchronized (file) {
+  					
+  
+             assert readBuffer.hasArray();
+             assert readBuffer.arrayOffset() == 0;
+             pos = readBuffer.position();
+             size = readBuffer.limit() - pos;
+             file.seek(offset);
+             bytesRead2 = file.read(readBuffer.array(), pos, size);
+             if (bytesRead2 > 0) {
+                  readBuffer.position(pos + bytesRead2);
+             }
+             
+  
+          }
+  Label448_1: ;//
+   ; //
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 114 "../../../../FileManager_static.ump"
+    // line 116 "../../../../FileManager_static.ump"
     protected FileManager _this ;
-  // line 115 "../../../../FileManager_static.ump"
-    protected RandomAccessFile file ;
-  // line 116 "../../../../FileManager_static.ump"
-    protected ByteBuffer readBuffer ;
   // line 117 "../../../../FileManager_static.ump"
-    protected long offset ;
+    protected RandomAccessFile file ;
   // line 118 "../../../../FileManager_static.ump"
-    protected FileChannel channel ;
+    protected ByteBuffer readBuffer ;
   // line 119 "../../../../FileManager_static.ump"
-    protected int readLength ;
+    protected long offset ;
   // line 120 "../../../../FileManager_static.ump"
-    protected long currentPosition ;
+    protected FileChannel channel ;
   // line 121 "../../../../FileManager_static.ump"
-    protected int bytesRead1 ;
+    protected int readLength ;
   // line 122 "../../../../FileManager_static.ump"
-    protected int pos ;
+    protected long currentPosition ;
   // line 123 "../../../../FileManager_static.ump"
-    protected int size ;
+    protected int bytesRead1 ;
   // line 124 "../../../../FileManager_static.ump"
+    protected int pos ;
+  // line 125 "../../../../FileManager_static.ump"
+    protected int size ;
+  // line 126 "../../../../FileManager_static.ump"
     protected int bytesRead2 ;
   
     

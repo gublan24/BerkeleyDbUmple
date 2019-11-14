@@ -64,6 +64,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_CPBytes_CPTime_Checkpointer_inner.ump"
 // line 3 "../../../../Derivative_LoggingFinest_CPTime_Checkpointer_inner.ump"
 // line 3 "../../../../Derivative_LoggingFinest_CPBytes_Checkpointer_inner.ump"
+// line 3 "../../../../Derivative_LoggingConfig_Statistics_Checkpointer.ump"
 public class Checkpointer extends DaemonThread
 {
 
@@ -525,7 +526,11 @@ nFullINFlushThisRun++;
 			sb.append("Checkpoint ").append(checkpointId);
 			sb.append(": source=").append(invokingSource);
 			sb.append(" success=").append(success);
-			Label516: //this.hook516(sb);
+			Label516:
+sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
+	sb.append(" nDeltaINFlushThisRun=").append(nDeltaINFlushThisRun);
+//	original(sb);
+ //this.hook516(sb);
 			Tracer.trace(Level.CONFIG, envImpl, sb.toString());
   }
   /*PLEASE DO NOT EDIT THIS CODE*/

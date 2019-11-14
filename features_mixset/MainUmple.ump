@@ -168,9 +168,23 @@ use Derivative_FSync_Statistics/umpilif/Derivative_FSync_Statistics_Master.ump;
 
 use Derivative_LoggingConfig_Statistics/umpilif/Derivative_LoggingConfig_Statistics_Master.ump;
 
-use Derivative_IO_SynchronizedIO/ump_inner/Derivative_IO_SynchronizedIO_Master_inner.ump;
+use Derivative_IO_SynchronizedIO/ump_inner/Derivative_IO_SynchronizedIO_Master_inner.ump; // Also, there is after execute() should be change to after LabelXX:execute()
 
-use Derivative_NIO_ChunkedNIO/umpilif/Derivative_NIO_ChunkedNIO_Master.ump;
+use Derivative_NIO_ChunkedNIO/umpilif/Derivative_NIO_ChunkedNIO_Master.ump; //       after Label445: execute(){ REQUIRES Revision
+
+use Derivative_FSync_Latches/umpilif/Derivative_FSync_Latches_Master.ump;
+
+use Derivative_FSync_Latches/umpilif/Derivative_FSync_Latches_FSyncManager.ump;
+
+use Derivative_LoggingEvictor_Evictor_LoggingBase/umpilif/Derivative_LoggingEvictor_Evictor_LoggingBase_Master.ump;
+
+use Derivative_Evictor_MemoryBudget_CriticalEviction/umpilif/Derivative_Evictor_MemoryBudget_CriticalEviction_Master.ump;
+
+use Derivative_INCompressor_Evictor_CriticalEviction/umpilif/Derivative_INCompressor_Evictor_CriticalEviction_Master.ump;
+
+use Derivative_LookAHEADCache_Evictor_CriticalEviction/umpilif/Derivative_LookAHEADCache_Evictor_CriticalEviction_Master.ump;
+
+use Derivative_Statistics_Verifier_DeleteOp/umpilif/Derivative_Statistics_Verifier_DeleteOp_Master.ump;
 //-
 
 //rename 's/^/DeleteOp_/' *
