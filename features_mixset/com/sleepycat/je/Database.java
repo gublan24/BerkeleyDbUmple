@@ -41,6 +41,7 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../Derivative_LoggingFinest_TruncateOp_Database_inner.ump"
 // line 3 "../../../Derivative_Statistics_DeleteOp_Database.ump"
 // line 3 "../../../Derivative_Statistics_Verifier_Database.ump"
+// line 3 "../../../Derivative_Statistics_Verifier_DeleteOp_Database.ump"
 public class Database
 {
 
@@ -1444,6 +1445,13 @@ databaseImpl.checkIsDeleted("stat");
   private List triggerList ;
 // line 5 "../../../loggingBase_Database.ump"
   private Logger logger ;
+
+// line 5 "../../../Derivative_Statistics_Verifier_DeleteOp_Database.ump"
+  protected void hook37:  verify (VerifyConfig ) 
+  {
+    databaseImpl.checkIsDeleted("verify");
+//	original();
+  }
 
   
 }

@@ -46,6 +46,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_Latches_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
 // line 3 "../../../../Derivative_LoggingEvictor_Evictor_Evictor.ump"
+// line 3 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
 public class Evictor extends DaemonThread
 {
 
@@ -614,6 +616,7 @@ parent.releaseLatch();
   // line 51 "../../../../Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
   public static class Evictor_evictBatch
   {
   
@@ -708,7 +711,18 @@ parent.releaseLatch();
   inList.releaseMajorLatch();
           //original();
            // this.hook377();
-            Label371:          //this.hook371();
+            Label371:
+  logger=_this.envImpl.getLogger();
+          if (logger.isLoggable(_this.detailedTraceLevel)) {
+            msg="Evictor: ";
+            Label369:           ;  //this.hook369();
+            msg+=" finished=" + finished + " source="+ source+ " requiredEvictBytes="+ _this.formatter.format(requiredEvictBytes)+ " evictBytes="+ _this.formatter.format(evictBytes)+ " inListSize="+ inListStartSize+ " nNodesScanned="+ _this.nNodesScannedThisRun;
+            Label368:           ;  //this.hook368();
+            msg+=" nBatchSets=" + nBatchSets;
+            Tracer.trace(_this.detailedTraceLevel,_this.envImpl,msg);
+          }
+          //original();
+            //this.hook371();
           }        
           // line 6 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
           //long result=//original();
@@ -756,6 +770,7 @@ parent.releaseLatch();
   
   // line 126 "../../../../Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
+  // line 22 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
   public static class Evictor_isRunnable
   {
   
@@ -806,7 +821,24 @@ parent.releaseLatch();
           //original();
           //this.hook388();
   
-          Label372:        //this.hook372();
+          Label372:
+  logger=_this.envImpl.getLogger();
+          if (logger.isLoggable(_this.detailedTraceLevel)) {
+            r=Runtime.getRuntime();
+            totalBytes=r.totalMemory();
+            freeBytes=r.freeMemory();
+            usedBytes=r.totalMemory() - r.freeMemory();
+            sb=new StringBuffer();
+            sb.append(" source=").append(source);
+            Label370:           ;  //this.hook370();
+            sb.append(" requiredEvict=").append(_this.formatter.format(_this.currentRequiredEvictBytes));
+            sb.append(" JVMtotalBytes= ").append(_this.formatter.format(totalBytes));
+            sb.append(" JVMfreeBytes= ").append(_this.formatter.format(freeBytes));
+            sb.append(" JVMusedBytes= ").append(_this.formatter.format(usedBytes));
+            logger.log(_this.detailedTraceLevel,sb.toString());
+          }
+          //original();
+          //this.hook372();
           result=false;        
           // line 6 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
           // boolean result=original();
@@ -855,6 +887,7 @@ parent.releaseLatch();
   
   
   // line 4 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
   public static class Evictor_doCriticalEviction
   {
   
@@ -883,6 +916,19 @@ parent.releaseLatch();
   
     // line 9 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
     public void execute() throws DatabaseException{
+      // line 6 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
+      mb=_this.envImpl.getMemoryBudget();
+              currentUsage=mb.getCacheMemoryUsage();
+              maxMem=mb.getCacheBudget();
+              over=currentUsage - maxMem;
+              if (over > mb.getCriticalThreshold()) {
+                if (_this.DEBUG) {
+                  System.out.println("***critical detected:" + over);
+                }
+                _this.doEvict(_this.SOURCE_CRITICAL,true);
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       
     }
     

@@ -59,6 +59,7 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
 // line 3 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
 // line 3 "../../../../Derivative_LookAHEADCache_Statistics_FileProcessor_inner.ump"
+// line 3 "../../../../Derivative_LookAHEADCache_Evictor_CriticalEviction_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -673,6 +674,7 @@ if ((result != null) && (result.exactParentFound)) {
   // line 37 "../../../../LookAHEADCache_FileProcessor_inner.ump"
   // line 4 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
   // line 4 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
+  // line 4 "../../../../Derivative_LookAHEADCache_Evictor_CriticalEviction_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
   {
   
@@ -1008,6 +1010,16 @@ if ((result != null) && (result.exactParentFound)) {
       // Label118 introduced in MemoryBudget_FileProcessor.ump.
           adjustMem+=lookAheadCacheSize;
           //original();
+    }
+  
+  // line 5 "../../../../Derivative_LookAHEADCache_Evictor_CriticalEviction_FileProcessor_inner.ump"
+    protected void hook116: execute () 
+    {
+      //  Label129 introduced in LookAHEADCache FileProcessor_inner.ump ; after Label129: execute() {
+          if (Cleaner.DO_CRITICAL_EVICTION) {
+            _this.env.getEvictor().doCriticalEviction();
+          }
+         // original();
     }
   
     

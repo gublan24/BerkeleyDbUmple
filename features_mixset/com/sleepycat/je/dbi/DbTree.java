@@ -51,6 +51,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Derivative_Latches_TruncateOp_DbTree.ump"
 // line 3 "../../../../Derivative_Latches_DeleteOp_DbTree.ump"
 // line 3 "../../../../Derivative_Statistics_Verifier_DbTree.ump"
+// line 3 "../../../../Derivative_Statistics_Verifier_INCompressor_DbTree.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_Verifier_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -974,7 +976,10 @@ nameCursor.releaseBIN();
 
   // line 6 "../../../../Derivative_Statistics_Verifier_DbTree.ump"
    public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
-    boolean ret = true;
+    Label292_1:
+synchronized (envImpl.getINCompressor()) {
+  	    
+ boolean ret = true;
 	try {
 	    boolean ok = idDatabase.verify(config, idDatabase.getEmptyStats());
 	    if (!ok) {
@@ -987,7 +992,10 @@ nameCursor.releaseBIN();
 	} catch (DatabaseException DE) {
 	    ret = false;
 	}
-	Label292: //ret = this.hook292(config, out, ret);
+	
+ //ret = original(config, out, ret);
+			}
+Label292: //ret = this.hook292(config, out, ret);
 	Locker locker = null;
 	CursorImpl cursor = null;
 	LockType lockType = LockType.NONE;
@@ -1018,7 +1026,10 @@ nameCursor.releaseBIN();
 	    ret = false;
 	} finally {
 	    if (cursor != null) {
-		Label291: //this.hook291(cursor);
+		Label291:
+cursor.releaseBINs();
+//	original(cursor);
+ //this.hook291(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {

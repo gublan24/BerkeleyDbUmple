@@ -1,0 +1,9 @@
+namespace com.sleepycat.je.incomp;
+
+class INCompressor
+{
+  after Label390: verifyCursors() {
+	bin.releaseLatch();
+    }
+
+}

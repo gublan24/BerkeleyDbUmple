@@ -43,6 +43,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
 // line 3 "../../../../Derivative_Latches_INCompressor_INCompressor.ump"
 // line 3 "../../../../Derivative_LoggingFine_INCompressor_INCompressor.ump"
+// line 3 "../../../../Derivative_INCompressor_Evictor_CriticalEviction_INCompressor.ump"
+// line 3 "../../../../Derivative_Latches_Verifier_INCompressor_INCompressor.ump"
 public class INCompressor extends DaemonThread
 {
 
@@ -558,7 +560,10 @@ dbClosedBinsThisRun++;
  //this.hook412();
 					return false;
 			}
-			Label391: //this.hook391();
+			Label391:
+env.getEvictor().doCriticalEviction();
+	//original();
+ //this.hook391();
 			binSearch.bin = searchForBIN(binSearch.db, binRef);
 			if ((binSearch.bin == null) || binSearch.bin.getNodeId() != binRef.getNodeId()) {
 					Label399:
@@ -593,7 +598,9 @@ splitBinsThisRun++;
 	    BIN bin = searchForBIN(db, binRef);
 	    if (bin != null) {
 		bin.verifyCursors();
-		Label390: //this.hook390(bin);
+		Label390:
+bin.releaseLatch();
+ ;//this.hook390(bin);
 	    }
 	}
   }

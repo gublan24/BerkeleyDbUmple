@@ -19,7 +19,6 @@ use CriticalEviction/umpilif/Master.ump;
 
 use MemoryBudget/umpilif/Master.ump;
 
-
 use Evictor/umpilif/Master.ump;
 
 use RenameOp/umpilif/Master.ump;
@@ -185,6 +184,19 @@ use Derivative_INCompressor_Evictor_CriticalEviction/umpilif/Derivative_INCompre
 use Derivative_LookAHEADCache_Evictor_CriticalEviction/umpilif/Derivative_LookAHEADCache_Evictor_CriticalEviction_Master.ump;
 
 use Derivative_Statistics_Verifier_DeleteOp/umpilif/Derivative_Statistics_Verifier_DeleteOp_Master.ump;
+
+use Derivative_Statistics_Verifier_INCompressor/umpilif/Derivative_Statistics_Verifier_INCompressor_Master.ump;
+
+use Derivative_Latches_Verifier_INCompressor/umpilif/Derivative_Latches_Verifier_INCompressor_Master.ump;
+
+use Derivative_Latches_Statistics_Verifier/umpilif/Derivative_Latches_Statistics_Verifier_Master.ump;
+
+use Derivative_LoggingInfo_Statistics_Verifier/umpilif/Derivative_LoggingInfo_Statistics_Verifier_Master.ump;
+
+use Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase/umpilif/Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase_Master.ump;
+
+use Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase/umpilif/Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Master.ump;
+
 //-
 
 //rename 's/^/DeleteOp_/' *

@@ -3,7 +3,7 @@ namespace com.sleepycat.je.dbi;
 class DbTree
 {
     public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException {
-	boolean ret = true;
+	Label292_1: boolean ret = true;
 	try {
 	    boolean ok = idDatabase.verify(config, idDatabase.getEmptyStats());
 	    if (!ok) {
