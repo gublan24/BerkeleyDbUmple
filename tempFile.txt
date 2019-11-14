@@ -1,21 +1,4 @@
-Match 
+//-
 
+//rename 's/^/DeleteOp_/' *
 
-Change 
-; into $_UMPLE_SEMICOLON_REFERENCE_$
-
-
-
-  Pattern patternToMatch = Pattern.compile(\"(.+)?\;\");
-    Matcher matcher = patternToMatch.matcher(codeToLockAt);
-    int lastMatchedIndex=0;
-    while (matcher.find()) {
-int indexofSemicolon = matcher.group().indexOf("/;");
-codeToLockAt.replaceAt(indexofSemicolon,"$_UMPLE_SEMICOLON_REFERENCE_$");
-      String codeBeforeLabel = codeToLockAt.substring(lastMatchedIndex, matcher.start());
-     
-    }
-
-
-try: \"(\s+)?(\S+)?\;(\S+)?\"
-match any quoted values: \"[^\"]+\" 

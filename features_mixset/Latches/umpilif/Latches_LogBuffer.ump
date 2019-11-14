@@ -20,7 +20,7 @@ class LogBuffer
 	readLatch.releaseIfOwner();
     }
 
-    after Label479 :  LogBuffer(int , EnvironmentImpl ) {
+    after Label479:  LogBuffer(int , EnvironmentImpl ) {
 
 	readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
 	////original(env);

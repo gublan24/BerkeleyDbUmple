@@ -2,7 +2,7 @@
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
    static class CursorImpl_getNextDuplicate {
-      after Label200 : execute() {
+      after Label200: execute() {
         _this.latchBIN();
         try {
           //original();
@@ -11,7 +11,7 @@ class CursorImpl {
           _this.releaseBIN();
         }
       }
-      after Label201 : execute() {
+      after Label201: execute() {
         duplicateRoot.latch();
         try {
           //original();

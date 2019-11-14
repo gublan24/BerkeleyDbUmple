@@ -46,7 +46,10 @@ buffer = ByteBuffer.allocateDirect(capacity);
 buffer = ByteBuffer.allocate(capacity);
 			//original(capacity);
  //this.hook482(capacity);
-        Label479://    this.hook479(env);
+        Label479:
+readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
+	////original(env);
+//    this.hook479(env);
         reinit();
   }
 
@@ -247,13 +250,6 @@ readLatch.release();
   private boolean rewriteAllowed ;
 // line 7 "../../../../Latches_LogBuffer.ump"
   private Latch readLatch ;
-
-// line 23 "../../../../Latches_LogBuffer.ump"
-  after Label479 :  LogBuffer (int , EnvironmentImpl ) 
-  {
-    readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
-	////original(env);
-  }
 
   
 }

@@ -925,7 +925,15 @@ nLNsDead++;
 	    this.hook89(DBE);
 	    throw DBE;
 	} finally {
-	    Label95: //this.hook95(bin, parentDIN);
+	    Label95:
+if (parentDIN != null) {
+					parentDIN.releaseLatchIfOwner();
+			}
+			if (bin != null) {
+					bin.releaseLatchIfOwner();
+			}
+			//original(bin, parentDIN);
+ //this.hook95(bin, parentDIN);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -1692,18 +1700,6 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
   }
 // line 8 "../../../../CriticalEviction_Cleaner.ump"
   static final boolean DO_CRITICAL_EVICTION = true ;
-
-// line 5 "../../../../Latches_Cleaner.ump"
-  after Label95 : processPendingLN (LN , DatabaseImpl , byte , byte , TreeLocation ) 
-  {
-    if (parentDIN != null) {
-					parentDIN.releaseLatchIfOwner();
-			}
-			if (bin != null) {
-					bin.releaseLatchIfOwner();
-			}
-			//original(bin, parentDIN);
-  }
 
   
 }

@@ -20,7 +20,7 @@ class DbCacheSize
 //	original(out, env);
     }
 
-    after Label832: : measure(PrintStream , File , long , int , int , int ,	    boolean ){
+    after Label832: measure(PrintStream , File , long , int , int , int ,	    boolean ){
 	printStats(out, env, "Stats for internal and leaf nodes (after insert)");
 //	original(out, env);/
     }

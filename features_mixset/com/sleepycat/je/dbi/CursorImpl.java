@@ -2604,12 +2604,28 @@ releaseBINs();
           Label275:
   treeStatsAccumulator=_this.getTreeStatsAccumulator();
           if (treeStatsAccumulator != null) {
-            Label200: //this.hook200();
+            Label200:
+  _this.latchBIN();
+          try {
+            //original();
+          }
+      finally {
+            _this.releaseBIN();
+          }
+   //this.hook200();
             if (_this.index < 0) {
             throw new ReturnObject(OperationStatus.NOTFOUND);
           }
           duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
-          Label201: //this.hook201();
+          Label201:
+  duplicateRoot.latch();
+          try {
+            //original();
+          }
+      finally {
+            duplicateRoot.releaseLatch();
+          }
+   //this.hook201();
           dcl=duplicateRoot.getDupCountLN();
           	if (dcl != null) {
           	  dcl.accumulateStats(treeStatsAccumulator);
@@ -2692,30 +2708,6 @@ releaseBINs();
     protected DupCountLN dcl ;
   // line 259 "../../../../CursorImpl_static.ump"
     protected DBIN newDupBin ;
-  
-  // line 5 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
-    after Label200 : execute () 
-    {
-      _this.latchBIN();
-          try {
-            //original();
-          }
-      finally {
-            _this.releaseBIN();
-          }
-    }
-  
-  // line 14 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
-    after Label201 : execute () 
-    {
-      duplicateRoot.latch();
-          try {
-            //original();
-          }
-      finally {
-            duplicateRoot.releaseLatch();
-          }
-    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/

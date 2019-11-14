@@ -1321,7 +1321,10 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     // line 11 "../../../../DeleteOp_Txn_inner.ump"
     public void execute() throws DatabaseException{
       synchronized (_this) {
-  						    Label797: //this.hook797();
+  						    Label797:
+  delta=0;
+          //original();
+   //this.hook797();
   						    if (_this.deletedDatabases == null) {
   						      _this.deletedDatabases=new HashSet();
   						      Label789: //this.hook798();
@@ -1347,13 +1350,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     protected boolean deleteAtCommit ;
   // line 24 "../../../../DeleteOp_Txn_inner.ump"
     protected int delta ;
-  
-  // line 11 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
-    after Label797 : execute () 
-    {
-      delta=0;
-          //original();
-    }
   
     
   }  

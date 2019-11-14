@@ -167,7 +167,10 @@ workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
 		break;
 	    }
 	    try {
-		Label858: //this.hook858();
+		Label858:
+workQueueLatch.acquire();
+	//original();
+ //this.hook858();
 		boolean nothingToDo = workQueue.size() == 0;
 		Label857:
 workQueueLatch.release();
@@ -302,13 +305,6 @@ workQueueLatch.release();
   abstract protected void onWakeup() throws DatabaseException ;
 // line 7 "../../../../Latches_DaemonThread.ump"
   protected Latch workQueueLatch ;
-
-// line 38 "../../../../Latches_DaemonThread.ump"
-  after Label858: : run () 
-  {
-    workQueueLatch.acquire();
-	//original();
-  }
 
   
 }

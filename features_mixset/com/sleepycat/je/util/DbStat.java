@@ -18,6 +18,7 @@ import java.io.PrintStream;
 import java.io.File;
 
 // line 3 "../../../../Derivative_Statistics_Verifier_DbStat.ump"
+// line 3 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbStat.ump"
 public class DbStat extends DbVerify
 {
 

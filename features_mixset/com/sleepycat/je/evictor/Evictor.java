@@ -48,6 +48,8 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_LoggingEvictor_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
 // line 3 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
+// line 3 "../../../../Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase_Evictor_inner.ump"
+// line 3 "../../../../Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Evictor_inner.ump"
 public class Evictor extends DaemonThread
 {
 
@@ -617,6 +619,7 @@ parent.releaseLatch();
   // line 4 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Evictor_inner.ump"
   public static class Evictor_evictBatch
   {
   
@@ -715,9 +718,17 @@ parent.releaseLatch();
   logger=_this.envImpl.getLogger();
           if (logger.isLoggable(_this.detailedTraceLevel)) {
             msg="Evictor: ";
-            Label369:           ;  //this.hook369();
+            Label369:
+  //     after Label371: execute(){
+          msg+="pass=" + _this.nEvictPasses;
+         // original();
+             ;  //this.hook369();
             msg+=" finished=" + finished + " source="+ source+ " requiredEvictBytes="+ _this.formatter.format(requiredEvictBytes)+ " evictBytes="+ _this.formatter.format(evictBytes)+ " inListSize="+ inListStartSize+ " nNodesScanned="+ _this.nNodesScannedThisRun;
-            Label368:           ;  //this.hook368();
+            Label368:
+  //     after Label371: execute(){
+          msg+=" nNodesSelected=" + _this.nNodesSelectedThisRun + " nEvicted="+ _this.nNodesEvictedThisRun+ " nBINsStripped="+ _this.nBINsStrippedThisRun;
+          //original();
+             ;  //this.hook368();
             msg+=" nBatchSets=" + nBatchSets;
             Tracer.trace(_this.detailedTraceLevel,_this.envImpl,msg);
           }
@@ -771,6 +782,7 @@ parent.releaseLatch();
   // line 126 "../../../../Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
   // line 22 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase_Evictor_inner.ump"
   public static class Evictor_isRunnable
   {
   
@@ -830,7 +842,12 @@ parent.releaseLatch();
             usedBytes=r.totalMemory() - r.freeMemory();
             sb=new StringBuffer();
             sb.append(" source=").append(source);
-            Label370:           ;  //this.hook370();
+            Label370:
+  //      Label370 introduced in Evictor_ump >> after Label372: execute(){
+          sb.append(" doRun=").append(doRun);
+          sb.append(" JEusedBytes=").append(_this.formatter.format(currentUsage));
+    //      original();
+             ;  //this.hook370();
             sb.append(" requiredEvict=").append(_this.formatter.format(_this.currentRequiredEvictBytes));
             sb.append(" JVMtotalBytes= ").append(_this.formatter.format(totalBytes));
             sb.append(" JVMfreeBytes= ").append(_this.formatter.format(freeBytes));

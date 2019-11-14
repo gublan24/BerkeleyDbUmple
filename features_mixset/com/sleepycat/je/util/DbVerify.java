@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.io.File;
 
 // line 3 "../../../../Derivative_Statistics_Verifier_DbVerify.ump"
+// line 3 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbVerify.ump"
 public class DbVerify
 {
 
@@ -42,6 +43,18 @@ public class DbVerify
 
   public void delete()
   {}
+
+  // line 6 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbVerify.ump"
+   protected void hook851(EnvironmentImpl envImpl) throws DatabaseException{
+    Tracer.trace(Level.INFO, envImpl, "DbVerify.verify of " + dbName + " starting");
+	//original(envImpl);
+  }
+
+  // line 11 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbVerify.ump"
+   protected void hook852(EnvironmentImpl envImpl) throws DatabaseException{
+    Tracer.trace(Level.INFO, envImpl, "DbVerify.verify of " + dbName + " ending");
+	//original(envImpl);
+  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

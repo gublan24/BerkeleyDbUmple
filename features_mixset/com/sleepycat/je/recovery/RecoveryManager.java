@@ -797,7 +797,11 @@ traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplic
 	    success = false;
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(lsn), e);
 	} finally {
-	    Label580:           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
+	    Label580:
+trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
+		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getoriginalLsn(), DbLsn.NULL_LSN, -1);
+	//original(db, inFromLog, lsn, success, rootUpdater);
+           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
 	}
   }
 
@@ -1004,7 +1008,10 @@ try {
 		if (lnFromLog.containsDuplicates()) {
 			  if (found) {
 			DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
-			Label592: //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			Label592:
+//(TreeLocation location, long logLsn, long abortLsn, boolean replaced,    DIN duplicateRoot) throws DatabaseException {
+	duplicateRoot.latch();
+ //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
 			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
 							duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
 							replaced = true;
@@ -1692,21 +1699,6 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   private Map fileSummaryLsns ;
 // line 85 "../../../../RecoveryManager.ump"
   private int inListClearCounter ;
-
-// line 55 "../../../../Latches_RecoveryManager.ump"
-  after Label592 : undo (Level , DatabaseImpl , TreeLocation , LN , byte ,byte , long , long , boolean , RecoveryInfo ,  boolean ) 
-  {
-    //(TreeLocation location, long logLsn, long abortLsn, boolean replaced,    DIN duplicateRoot) throws DatabaseException {
-	duplicateRoot.latch();
-  }
-
-// line 29 "../../../../LoggingRecovery_RecoveryManager.ump"
-  after Label580 : replaceOrInsertRoot (DatabaseImpl , IN , long ) 
-  {
-    trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
-		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getoriginalLsn(), DbLsn.NULL_LSN, -1);
-	//original(db, inFromLog, lsn, success, rootUpdater);
-  }
 
   
 }

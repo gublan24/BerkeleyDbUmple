@@ -52,7 +52,7 @@ class RecoveryManager
 	//original(location);
     }
 
-    after Label592 : undo(Level , DatabaseImpl , TreeLocation , LN , byte ,byte , long , long , boolean , RecoveryInfo ,  boolean ) {
+    after Label592: undo(Level , DatabaseImpl , TreeLocation , LN , byte ,byte , long , long , boolean , RecoveryInfo ,  boolean ) {
 //(TreeLocation location, long logLsn, long abortLsn, boolean replaced,    DIN duplicateRoot) throws DatabaseException {
 	duplicateRoot.latch();
   }

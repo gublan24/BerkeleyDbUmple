@@ -490,12 +490,5 @@ public class DbCacheSize
 
   //  protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
   //  }
-// line 23 "../../../../Derivative_Statistics_MemoryBudget_DbCacheSize.ump"
-  after Label832: : measure (PrintStream , File , long , int , int , int ,	    boolean ) 
-  {
-    printStats(out, env, "Stats for internal and leaf nodes (after insert)");
-//	original(out, env);/
-  }
-
   
 }

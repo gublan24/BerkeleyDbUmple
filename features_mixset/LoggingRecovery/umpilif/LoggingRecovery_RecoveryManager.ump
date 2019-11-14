@@ -26,7 +26,7 @@ class RecoveryManager
 	//original(nodeId, containsDuplicates, logLsn, found, deleted, result);
     }
 
-    after Label580 : replaceOrInsertRoot(DatabaseImpl , IN , long ){
+    after Label580: replaceOrInsertRoot(DatabaseImpl , IN , long ){
 	trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
 		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getoriginalLsn(), DbLsn.NULL_LSN, -1);
 	//original(db, inFromLog, lsn, success, rootUpdater);
