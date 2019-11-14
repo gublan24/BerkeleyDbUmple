@@ -241,43 +241,44 @@ public class DbRecover
     public UmpleSourceData ForeignKeyTrigger_triggerRemoved(){ return new UmpleSourceData().setFileNames("ForeignKeyTrigger.ump").setUmpleLines(17).setJavaLines(40).setLengths(1);}
     public UmpleSourceData OperationStatus_OperationStatus(){ return new UmpleSourceData().setFileNames("OperationStatus.ump").setUmpleLines(28).setJavaLines(29).setLengths(1);}
     public UmpleSourceData OperationStatus_toString(){ return new UmpleSourceData().setFileNames("OperationStatus.ump").setUmpleLines(32).setJavaLines(34).setLengths(1);}
-    public UmpleSourceData Environment_checkpoint(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(385).setJavaLines(436).setLengths(4);}
-    public UmpleSourceData Environment_addReferringHandle(){ return new UmpleSourceData().setFileNames("Environment.ump","Environment.ump").setUmpleLines(472, 479).setJavaLines(552, 562).setLengths(1, 1);}
-    public UmpleSourceData Environment_removeDatabase(){ return new UmpleSourceData().setFileNames("DeleteOp_Environment.ump").setUmpleLines(8).setJavaLines(706).setLengths(14);}
-    public UmpleSourceData Environment_getDatabaseNames(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(452).setJavaLines(525).setLengths(3);}
-    public UmpleSourceData Environment_getStats(){ return new UmpleSourceData().setFileNames("Statistics_Environment.ump").setUmpleLines(8).setJavaLines(741).setLengths(6);}
-    public UmpleSourceData Environment_validateDbConfigAgainstEnv(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(283).setJavaLines(320).setLengths(8);}
-    public UmpleSourceData Environment_removeReferringHandle(){ return new UmpleSourceData().setFileNames("Environment.ump","Environment.ump").setUmpleLines(486, 493).setJavaLines(572, 582).setLengths(1, 1);}
-    public UmpleSourceData Environment_getThreadTransaction(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(461).setJavaLines(537).setLengths(1);}
-    public UmpleSourceData Environment_applyFileConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(89).setJavaLines(114).setLengths(24);}
-    public UmpleSourceData Environment_hook58(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(521).setJavaLines(618).setLengths(1);}
-    public UmpleSourceData Environment_hook59(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(524).setJavaLines(623).setLengths(1);}
-    public UmpleSourceData Environment_getTransactionStats(){ return new UmpleSourceData().setFileNames("Statistics_Environment.ump").setUmpleLines(30).setJavaLines(769).setLengths(4);}
-    public UmpleSourceData Environment_getHome(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(297).setJavaLines(337).setLengths(2);}
-    public UmpleSourceData Environment_getEnvironmentImpl(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(500).setJavaLines(592).setLengths(1);}
-    public UmpleSourceData Environment_setMutableConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(426).setJavaLines(489).setLengths(4);}
-    public UmpleSourceData Environment_openDatabase(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(212).setJavaLines(242).setLengths(6);}
-    public UmpleSourceData Environment_close(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(119).setJavaLines(147).setLengths(86);}
-    public UmpleSourceData Environment_truncateDatabase(){ return new UmpleSourceData().setFileNames("Truncate_Environment.ump").setUmpleLines(8).setJavaLines(681).setLengths(16);}
-    public UmpleSourceData Environment_checkEnv(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(513).setJavaLines(609).setLengths(5);}
-    public UmpleSourceData Environment_evictMemory(){ return new UmpleSourceData().setFileNames("Evictor_Environment.ump").setUmpleLines(8).setJavaLines(645).setLengths(3);}
-    public UmpleSourceData Environment_cleanLog(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(406).setJavaLines(463).setLengths(3);}
-    public UmpleSourceData Environment_renameDatabase(){ return new UmpleSourceData().setFileNames("RenameOp_Environment.ump").setUmpleLines(8).setJavaLines(657).setLengths(15);}
-    public UmpleSourceData Environment_upgrade(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(446).setJavaLines(515).setLengths(1);}
-    public UmpleSourceData Environment_compress(){ return new UmpleSourceData().setFileNames("INCompressor_Environment.ump").setUmpleLines(8).setJavaLines(729).setLengths(3);}
-    public UmpleSourceData Environment_getMutableConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(436).setJavaLines(502).setLengths(4);}
-    public UmpleSourceData Environment_getLockStats(){ return new UmpleSourceData().setFileNames("Statistics_Environment.ump").setUmpleLines(20).setJavaLines(756).setLengths(4);}
-    public UmpleSourceData Environment_checkHandleIsValid(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(504).setJavaLines(597).setLengths(3);}
-    public UmpleSourceData Environment_openDb(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(235).setJavaLines(267).setLengths(49);}
-    public UmpleSourceData Environment_sync(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(395).setJavaLines(449).setLengths(5);}
-    public UmpleSourceData Environment_getConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(415).setJavaLines(475).setLengths(5);}
-    public UmpleSourceData Environment_getDefaultTxnConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(305).setJavaLines(348).setLengths(1);}
-    public UmpleSourceData Environment_openSecondaryDatabase(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(225).setJavaLines(257).setLengths(6);}
-    public UmpleSourceData Environment_getMemoryUsage(){ return new UmpleSourceData().setFileNames("MemoryBudget_Environment.ump").setUmpleLines(8).setJavaLines(633).setLengths(3);}
-    public UmpleSourceData Environment_copyToHandleConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(313).setJavaLines(358).setLengths(14);}
-    public UmpleSourceData Environment_beginTransaction(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(333).setJavaLines(381).setLengths(46);}
-    public UmpleSourceData Environment_Environment(){ return new UmpleSourceData().setFileNames("Environment.ump","Environment.ump").setUmpleLines(42, 69).setJavaLines(61, 91).setLengths(21, 14);}
-    public UmpleSourceData Environment_setThreadTransaction(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(468).setJavaLines(547).setLengths(1);}
+    public UmpleSourceData Environment_checkpoint(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(385).setJavaLines(437).setLengths(4);}
+    public UmpleSourceData Environment_addReferringHandle(){ return new UmpleSourceData().setFileNames("Environment.ump","Environment.ump").setUmpleLines(472, 479).setJavaLines(553, 563).setLengths(1, 1);}
+    public UmpleSourceData Environment_removeDatabase(){ return new UmpleSourceData().setFileNames("DeleteOp_Environment.ump").setUmpleLines(8).setJavaLines(707).setLengths(14);}
+    public UmpleSourceData Environment_getDatabaseNames(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(452).setJavaLines(526).setLengths(3);}
+    public UmpleSourceData Environment_getStats(){ return new UmpleSourceData().setFileNames("Statistics_Environment.ump").setUmpleLines(8).setJavaLines(742).setLengths(6);}
+    public UmpleSourceData Environment_validateDbConfigAgainstEnv(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(283).setJavaLines(321).setLengths(8);}
+    public UmpleSourceData Environment_removeReferringHandle(){ return new UmpleSourceData().setFileNames("Environment.ump","Environment.ump").setUmpleLines(486, 493).setJavaLines(573, 583).setLengths(1, 1);}
+    public UmpleSourceData Environment_getThreadTransaction(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(461).setJavaLines(538).setLengths(1);}
+    public UmpleSourceData Environment_applyFileConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(89).setJavaLines(115).setLengths(24);}
+    public UmpleSourceData Environment_hook58(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(521).setJavaLines(619).setLengths(1);}
+    public UmpleSourceData Environment_hook59(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(524).setJavaLines(624).setLengths(1);}
+    public UmpleSourceData Environment_getTransactionStats(){ return new UmpleSourceData().setFileNames("Statistics_Environment.ump").setUmpleLines(30).setJavaLines(770).setLengths(4);}
+    public UmpleSourceData Environment_getHome(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(297).setJavaLines(338).setLengths(2);}
+    public UmpleSourceData Environment_getEnvironmentImpl(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(500).setJavaLines(593).setLengths(1);}
+    public UmpleSourceData Environment_setMutableConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(426).setJavaLines(490).setLengths(4);}
+    public UmpleSourceData Environment_verify(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Verifier_Environment.ump").setUmpleLines(8).setJavaLines(783).setLengths(4);}
+    public UmpleSourceData Environment_openDatabase(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(212).setJavaLines(243).setLengths(6);}
+    public UmpleSourceData Environment_close(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(119).setJavaLines(148).setLengths(86);}
+    public UmpleSourceData Environment_truncateDatabase(){ return new UmpleSourceData().setFileNames("Truncate_Environment.ump").setUmpleLines(8).setJavaLines(682).setLengths(16);}
+    public UmpleSourceData Environment_checkEnv(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(513).setJavaLines(610).setLengths(5);}
+    public UmpleSourceData Environment_evictMemory(){ return new UmpleSourceData().setFileNames("Evictor_Environment.ump").setUmpleLines(8).setJavaLines(646).setLengths(3);}
+    public UmpleSourceData Environment_cleanLog(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(406).setJavaLines(464).setLengths(3);}
+    public UmpleSourceData Environment_renameDatabase(){ return new UmpleSourceData().setFileNames("RenameOp_Environment.ump").setUmpleLines(8).setJavaLines(658).setLengths(15);}
+    public UmpleSourceData Environment_upgrade(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(446).setJavaLines(516).setLengths(1);}
+    public UmpleSourceData Environment_compress(){ return new UmpleSourceData().setFileNames("INCompressor_Environment.ump").setUmpleLines(8).setJavaLines(730).setLengths(3);}
+    public UmpleSourceData Environment_getMutableConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(436).setJavaLines(503).setLengths(4);}
+    public UmpleSourceData Environment_getLockStats(){ return new UmpleSourceData().setFileNames("Statistics_Environment.ump").setUmpleLines(20).setJavaLines(757).setLengths(4);}
+    public UmpleSourceData Environment_checkHandleIsValid(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(504).setJavaLines(598).setLengths(3);}
+    public UmpleSourceData Environment_openDb(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(235).setJavaLines(268).setLengths(49);}
+    public UmpleSourceData Environment_sync(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(395).setJavaLines(450).setLengths(5);}
+    public UmpleSourceData Environment_getConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(415).setJavaLines(476).setLengths(5);}
+    public UmpleSourceData Environment_getDefaultTxnConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(305).setJavaLines(349).setLengths(1);}
+    public UmpleSourceData Environment_openSecondaryDatabase(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(225).setJavaLines(258).setLengths(6);}
+    public UmpleSourceData Environment_getMemoryUsage(){ return new UmpleSourceData().setFileNames("MemoryBudget_Environment.ump").setUmpleLines(8).setJavaLines(634).setLengths(3);}
+    public UmpleSourceData Environment_copyToHandleConfig(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(313).setJavaLines(359).setLengths(14);}
+    public UmpleSourceData Environment_beginTransaction(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(333).setJavaLines(382).setLengths(46);}
+    public UmpleSourceData Environment_Environment(){ return new UmpleSourceData().setFileNames("Environment.ump","Environment.ump").setUmpleLines(42, 69).setJavaLines(62, 92).setLengths(21, 14);}
+    public UmpleSourceData Environment_setThreadTransaction(){ return new UmpleSourceData().setFileNames("Environment.ump").setUmpleLines(468).setJavaLines(548).setLengths(1);}
     public UmpleSourceData JoinCursor_getSortedCursors(){ return new UmpleSourceData().setFileNames("JoinCursor.ump").setUmpleLines(113).setJavaLines(89).setLengths(1);}
     public UmpleSourceData JoinCursor_getDatabase(){ return new UmpleSourceData().setFileNames("JoinCursor.ump").setUmpleLines(120).setJavaLines(99).setLengths(1);}
     public UmpleSourceData JoinCursor_retrieveNext(){ return new UmpleSourceData().setFileNames("JoinCursor.ump").setUmpleLines(156).setJavaLines(152).setLengths(38);}
@@ -429,40 +430,41 @@ public class DbRecover
     public UmpleSourceData UtilizationProfile_clearCache_UtilizationProfile_clearCache(){ return new UmpleSourceData().setFileNames("UtilizationProfile_static.ump").setUmpleLines(5).setJavaLines(31).setLengths(1);}
     public UmpleSourceData UtilizationProfile_UtilizationProfile(){ return new UmpleSourceData().setFileNames("UtilizationProfile.ump").setUmpleLines(81).setJavaLines(144).setLengths(7);}
     public UmpleSourceData UtilizationProfile_putFileSummary(){ return new UmpleSourceData().setFileNames("UtilizationProfile.ump").setUmpleLines(426).setJavaLines(545).setLengths(1);}
-    public UmpleSourceData Cleaner_shouldMigrateLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(425).setJavaLines(973).setLengths(25);}
-    public UmpleSourceData Cleaner_doClean(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(191).setJavaLines(715).setLengths(2);}
-    public UmpleSourceData Cleaner_updateReadOnlyFileCollections(){ return new UmpleSourceData().setFileNames("Statistics_Cleaner.ump","Cleaner.ump").setUmpleLines(106, 268).setJavaLines(829, 825).setLengths(2, 2);}
-    public UmpleSourceData Cleaner_getLNMainKey(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(603).setJavaLines(1206).setLengths(5);}
-    public UmpleSourceData Cleaner_updateFilesAtCheckpointEnd(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(260).setJavaLines(814).setLengths(2);}
-    public UmpleSourceData Cleaner_getUtilizationTracker(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(160).setJavaLines(678).setLengths(1);}
-    public UmpleSourceData Cleaner_getUtilizationProfile(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(164).setJavaLines(683).setLengths(1);}
-    public UmpleSourceData Cleaner_traceFileNotDeleted(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(246).setJavaLines(789).setLengths(5);}
-    public UmpleSourceData Cleaner_trace(){ return new UmpleSourceData().setFileNames("LoggingCleaner_Cleaner.ump").setUmpleLines(11).setJavaLines(1382).setLengths(1);}
-    public UmpleSourceData Cleaner_processPendingLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(284).setJavaLines(850).setLengths(88);}
-    public UmpleSourceData Cleaner_migrateLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(448).setJavaLines(1007).setLengths(105);}
-    public UmpleSourceData Cleaner_areThreadsRunning(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(176).setJavaLines(697).setLengths(6);}
-    public UmpleSourceData Cleaner_Cleaner(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(101).setJavaLines(609).setLengths(10);}
+    public UmpleSourceData Cleaner_shouldMigrateLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(425).setJavaLines(975).setLengths(25);}
+    public UmpleSourceData Cleaner_doClean(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(191).setJavaLines(717).setLengths(2);}
+    public UmpleSourceData Cleaner_updateReadOnlyFileCollections(){ return new UmpleSourceData().setFileNames("Statistics_Cleaner.ump","Cleaner.ump").setUmpleLines(106, 268).setJavaLines(831, 827).setLengths(2, 2);}
+    public UmpleSourceData Cleaner_getLNMainKey(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(603).setJavaLines(1208).setLengths(5);}
+    public UmpleSourceData Cleaner_updateFilesAtCheckpointEnd(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(260).setJavaLines(816).setLengths(2);}
+    public UmpleSourceData Cleaner_getUtilizationTracker(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(160).setJavaLines(680).setLengths(1);}
+    public UmpleSourceData Cleaner_getUtilizationProfile(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(164).setJavaLines(685).setLengths(1);}
+    public UmpleSourceData Cleaner_traceFileNotDeleted(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(246).setJavaLines(791).setLengths(5);}
+    public UmpleSourceData Cleaner_trace(){ return new UmpleSourceData().setFileNames("LoggingCleaner_Cleaner.ump").setUmpleLines(11).setJavaLines(1387).setLengths(1);}
+    public UmpleSourceData Cleaner_processPendingLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(284).setJavaLines(852).setLengths(88);}
+    public UmpleSourceData Cleaner_migrateLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(448).setJavaLines(1009).setLengths(105);}
+    public UmpleSourceData Cleaner_areThreadsRunning(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(176).setJavaLines(699).setLengths(6);}
+    public UmpleSourceData Cleaner_Cleaner(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(101).setJavaLines(611).setLengths(10);}
     public UmpleSourceData Cleaner_trace_Cleaner_trace(){ return new UmpleSourceData().setFileNames("LoggingCleaner_Cleaner_inner.ump").setUmpleLines(5).setJavaLines(28).setLengths(8);}
-    public UmpleSourceData Cleaner_getFilesAtCheckpointStart(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(252).setJavaLines(803).setLengths(2);}
-    public UmpleSourceData Cleaner_wakeup(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(168).setJavaLines(688).setLengths(5);}
-    public UmpleSourceData Cleaner_envConfigUpdate(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(117).setJavaLines(628).setLengths(46);}
-    public UmpleSourceData Cleaner_processPending(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(276).setJavaLines(840).setLengths(1);}
-    public UmpleSourceData Cleaner_addPendingDB(){ return new UmpleSourceData().setFileNames("DeleteOp_Cleaner.ump").setUmpleLines(8).setJavaLines(1272).setLengths(7);}
-    public UmpleSourceData Cleaner_hook88(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(625).setJavaLines(1232).setLengths(2);}
-    public UmpleSourceData Cleaner_hook89(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(628).setJavaLines(1238).setLengths(2);}
-    public UmpleSourceData Cleaner_processPending_execute(){ return new UmpleSourceData().setFileNames("DeleteOp_Cleaner_inner.ump","Cleaner_static.ump","LoggingCleaner_Cleaner_inner.ump").setUmpleLines(6, 8, 15).setJavaLines(55, 37, 40).setLengths(11, 16, 1);}
-    public UmpleSourceData Cleaner_runOrPause(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(6).setJavaLines(1283).setLengths(7);}
-    public UmpleSourceData Cleaner_processPending_hook114(){ return new UmpleSourceData().setFileNames("Cleaner_static.ump").setUmpleLines(39).setJavaLines(70).setLengths(1);}
-    public UmpleSourceData Cleaner_deleteSafeToDeleteFiles(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(199).setJavaLines(726).setLengths(59);}
-    public UmpleSourceData Cleaner_isEvictable(){ return new UmpleSourceData().setFileNames("Evictor_Cleaner.ump").setUmpleLines(8).setJavaLines(1249).setLengths(14);}
-    public UmpleSourceData Cleaner_getNWakeupRequests(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(34).setJavaLines(1314).setLengths(7);}
-    public UmpleSourceData Cleaner_migrateDupCountLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(534).setJavaLines(1121).setLengths(76);}
-    public UmpleSourceData Cleaner_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_Cleaner.ump").setUmpleLines(50).setJavaLines(1330).setLengths(43);}
-    public UmpleSourceData Cleaner_processPending_Cleaner_processPending(){ return new UmpleSourceData().setFileNames("Cleaner_static.ump").setUmpleLines(5).setJavaLines(32).setLengths(1);}
-    public UmpleSourceData Cleaner_getLNDupKey(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(614).setJavaLines(1220).setLengths(8);}
-    public UmpleSourceData Cleaner_lazyMigrateDupCountLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(404).setJavaLines(950).setLengths(8);}
-    public UmpleSourceData Cleaner_requestShutdown(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(16).setJavaLines(1294).setLengths(5);}
-    public UmpleSourceData Cleaner_shutdown(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(24).setJavaLines(1303).setLengths(7);}
+    public UmpleSourceData Cleaner_getFilesAtCheckpointStart(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(252).setJavaLines(805).setLengths(2);}
+    public UmpleSourceData Cleaner_wakeup(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(168).setJavaLines(690).setLengths(5);}
+    public UmpleSourceData Cleaner_envConfigUpdate(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(117).setJavaLines(630).setLengths(46);}
+    public UmpleSourceData Cleaner_processPending(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(276).setJavaLines(842).setLengths(1);}
+    public UmpleSourceData Cleaner_addPendingDB(){ return new UmpleSourceData().setFileNames("DeleteOp_Cleaner.ump").setUmpleLines(8).setJavaLines(1274).setLengths(10);}
+    public UmpleSourceData Cleaner_processPending_hook86(){ return new UmpleSourceData().setFileNames("CriticalEviction_Cleaner_inner.ump").setUmpleLines(5).setJavaLines(86).setLengths(1);}
+    public UmpleSourceData Cleaner_hook88(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(625).setJavaLines(1234).setLengths(2);}
+    public UmpleSourceData Cleaner_hook89(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(628).setJavaLines(1240).setLengths(2);}
+    public UmpleSourceData Cleaner_processPending_execute(){ return new UmpleSourceData().setFileNames("DeleteOp_Cleaner_inner.ump","Cleaner_static.ump","LoggingCleaner_Cleaner_inner.ump").setUmpleLines(6, 8, 15).setJavaLines(66, 39, 40).setLengths(11, 25, 1);}
+    public UmpleSourceData Cleaner_runOrPause(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(6).setJavaLines(1288).setLengths(7);}
+    public UmpleSourceData Cleaner_processPending_hook114(){ return new UmpleSourceData().setFileNames("Cleaner_static.ump").setUmpleLines(39).setJavaLines(81).setLengths(1);}
+    public UmpleSourceData Cleaner_deleteSafeToDeleteFiles(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(199).setJavaLines(728).setLengths(59);}
+    public UmpleSourceData Cleaner_isEvictable(){ return new UmpleSourceData().setFileNames("Evictor_Cleaner.ump").setUmpleLines(8).setJavaLines(1251).setLengths(14);}
+    public UmpleSourceData Cleaner_getNWakeupRequests(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(34).setJavaLines(1319).setLengths(7);}
+    public UmpleSourceData Cleaner_migrateDupCountLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(534).setJavaLines(1123).setLengths(76);}
+    public UmpleSourceData Cleaner_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_Cleaner.ump").setUmpleLines(50).setJavaLines(1335).setLengths(43);}
+    public UmpleSourceData Cleaner_processPending_Cleaner_processPending(){ return new UmpleSourceData().setFileNames("Cleaner_static.ump").setUmpleLines(5).setJavaLines(34).setLengths(1);}
+    public UmpleSourceData Cleaner_getLNDupKey(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(614).setJavaLines(1222).setLengths(8);}
+    public UmpleSourceData Cleaner_lazyMigrateDupCountLN(){ return new UmpleSourceData().setFileNames("Cleaner.ump").setUmpleLines(404).setJavaLines(952).setLengths(8);}
+    public UmpleSourceData Cleaner_requestShutdown(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(16).setJavaLines(1299).setLengths(5);}
+    public UmpleSourceData Cleaner_shutdown(){ return new UmpleSourceData().setFileNames("CleanerDaemon_Cleaner.ump").setUmpleLines(24).setJavaLines(1308).setLengths(7);}
     public UmpleSourceData TrackedFileSummary_TrackedFileSummary(){ return new UmpleSourceData().setFileNames("TrackedFileSummary.ump").setUmpleLines(21).setJavaLines(42).setLengths(3);}
     public UmpleSourceData TrackedFileSummary_getMemorySize(){ return new UmpleSourceData().setFileNames("MemoryBudget_TrackedFileSummary.ump").setUmpleLines(10).setJavaLines(164).setLengths(1);}
     public UmpleSourceData TrackedFileSummary_trackObsolete(){ return new UmpleSourceData().setFileNames("TrackedFileSummary.ump").setUmpleLines(62).setJavaLines(103).setLengths(1);}
@@ -1036,58 +1038,58 @@ public class DbRecover
     public UmpleSourceData ChildReference_setMigrate(){ return new UmpleSourceData().setFileNames("ChildReference.ump").setUmpleLines(184).setJavaLines(242).setLengths(5);}
     public UmpleSourceData ChildReference_dumpLog(){ return new UmpleSourceData().setFileNames("ChildReference.ump").setUmpleLines(223).setJavaLines(293).setLengths(6);}
     public UmpleSourceData ChildReference_toString(){ return new UmpleSourceData().setFileNames("ChildReference.ump").setUmpleLines(278).setJavaLines(356).setLengths(1);}
-    public UmpleSourceData BIN_evictInternal(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(56).setJavaLines(835).setLengths(7);}
-    public UmpleSourceData BIN_evictLNs(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(29).setJavaLines(794).setLengths(15);}
-    public UmpleSourceData BIN_hook608(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(575).setJavaLines(740).setLengths(1);}
-    public UmpleSourceData BIN_hook606(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(547).setJavaLines(708).setLengths(1);}
-    public UmpleSourceData BIN_accumulateStats(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(467).setJavaLines(607).setLengths(1);}
-    public UmpleSourceData BIN_hook605(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(544).setJavaLines(703).setLengths(1);}
-    public UmpleSourceData BIN_hook604(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(541).setJavaLines(698).setLengths(1);}
-    public UmpleSourceData BIN_setKnownDeleted(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(165).setJavaLines(229).setLengths(9);}
-    public UmpleSourceData BIN_getCursorSet(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(193).setJavaLines(267).setLengths(1);}
-    public UmpleSourceData BIN_getKeyComparator(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(474).setJavaLines(617).setLengths(1);}
-    public UmpleSourceData BIN_getCursorBINToBeRemoved(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(227).setJavaLines(322).setLengths(1);}
-    public UmpleSourceData BIN_logInternal(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(501).setJavaLines(652).setLengths(21);}
-    public UmpleSourceData BIN_removeCursor(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(40, 209).setJavaLines(295, 293).setLengths(2, 1);}
-    public UmpleSourceData BIN_addCursor(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(31, 201).setJavaLines(280, 278).setLengths(2, 1);}
-    public UmpleSourceData BIN_isEvictionProhibited(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(135).setJavaLines(190).setLengths(1);}
-    public UmpleSourceData BIN_entryZeroKeyComparesLow(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(157).setJavaLines(218).setLengths(1);}
-    public UmpleSourceData BIN_hasNonLNChildren(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(142).setJavaLines(200).setLengths(9);}
-    public UmpleSourceData BIN_getChildEvictionType(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(8).setJavaLines(770).setLengths(14);}
-    public UmpleSourceData BIN_createNewInstance(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(61).setJavaLines(88).setLengths(1);}
-    public UmpleSourceData BIN_compress(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(345).setJavaLines(470).setLengths(75);}
-    public UmpleSourceData BIN_isValidForDelete(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(431).setJavaLines(564).setLengths(39);}
-    public UmpleSourceData BIN_createReference(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(54).setJavaLines(78).setLengths(1);}
-    public UmpleSourceData BIN_setCursorIndex(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(239).setJavaLines(337).setLengths(1);}
-    public UmpleSourceData BIN_nCursors(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(216).setJavaLines(307).setLengths(1);}
-    public UmpleSourceData BIN_endTag(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(482).setJavaLines(627).setLengths(1);}
-    public UmpleSourceData BIN_evictLN(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(46).setJavaLines(818).setLengths(8);}
-    public UmpleSourceData BIN_verifyCursors(){ return new UmpleSourceData().setFileNames("Verifier_BIN.ump").setUmpleLines(8).setJavaLines(851).setLengths(10);}
-    public UmpleSourceData BIN_validateSubtreeBeforeDelete(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(424).setJavaLines(554).setLengths(1);}
-    public UmpleSourceData BIN_getMemoryOverhead(){ return new UmpleSourceData().setFileNames("MemoryBudget_BIN.ump").setUmpleLines(9).setJavaLines(760).setLengths(1);}
-    public UmpleSourceData BIN_setProhibitNextDelta(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(90).setJavaLines(129).setLengths(1);}
-    public UmpleSourceData BIN_setCursorBIN(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(235).setJavaLines(332).setLengths(1);}
-    public UmpleSourceData BIN_adjustCursors(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(50, 266).setJavaLines(371, 369).setLengths(3, 29);}
-    public UmpleSourceData BIN_descendOnParentSearch(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(95).setJavaLines(134).setLengths(42);}
-    public UmpleSourceData BIN_getLastDeltaVersion(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(82).setJavaLines(118).setLengths(1);}
-    public UmpleSourceData BIN_getLogType(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(489).setJavaLines(637).setLengths(1);}
-    public UmpleSourceData BIN_adjustCursorsForInsert(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(60, 302).setJavaLines(415, 413).setLengths(2, 12);}
-    public UmpleSourceData BIN_clearKnownDeleted(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(188).setJavaLines(261).setLengths(2);}
-    public UmpleSourceData BIN_doDeltaLog(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(529).setJavaLines(683).setLengths(6);}
-    public UmpleSourceData BIN_computeOverhead(){ return new UmpleSourceData().setFileNames("MemoryBudget_BIN.ump").setUmpleLines(5).setJavaLines(755).setLengths(1);}
-    public UmpleSourceData BIN_splitSpecial(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(247).setJavaLines(347).setLengths(11);}
-    public UmpleSourceData BIN_setKnownDeletedLeaveTarget(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(178).setJavaLines(248).setLengths(3);}
-    public UmpleSourceData BIN_shortClassName(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(493).setJavaLines(642).setLengths(1);}
-    public UmpleSourceData BIN_canBeAncestor(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(128).setJavaLines(180).setLengths(1);}
-    public UmpleSourceData BIN_getChildKey(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(68).setJavaLines(98).setLengths(1);}
-    public UmpleSourceData BIN_getBINDeltaType(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(75).setJavaLines(108).setLengths(1);}
-    public UmpleSourceData BIN_BIN(){ return new UmpleSourceData().setFileNames("BIN.ump","BIN.ump").setUmpleLines(38, 44).setJavaLines(58, 65).setLengths(3, 4);}
-    public UmpleSourceData BIN_getCursorIndex(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(231).setJavaLines(327).setLengths(1);}
-    public UmpleSourceData BIN_hook610(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(581).setJavaLines(750).setLengths(1);}
-    public UmpleSourceData BIN_isCompressible(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(420).setJavaLines(549).setLengths(1);}
-    public UmpleSourceData BIN_beginTag(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(478).setJavaLines(622).setLengths(1);}
-    public UmpleSourceData BIN_getCursorBIN(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(223).setJavaLines(317).setLengths(1);}
-    public UmpleSourceData BIN_adjustCursorsForMutation(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(72, 324).setJavaLines(444, 442).setLengths(2, 12);}
+    public UmpleSourceData BIN_evictInternal(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(56).setJavaLines(840).setLengths(7);}
+    public UmpleSourceData BIN_evictLNs(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Evictor_BIN.ump","Evictor_BIN.ump").setUmpleLines(10, 29).setJavaLines(797, 795).setLengths(2, 15);}
+    public UmpleSourceData BIN_hook608(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(575).setJavaLines(741).setLengths(1);}
+    public UmpleSourceData BIN_hook606(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(547).setJavaLines(709).setLengths(1);}
+    public UmpleSourceData BIN_accumulateStats(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(467).setJavaLines(608).setLengths(1);}
+    public UmpleSourceData BIN_hook605(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(544).setJavaLines(704).setLengths(1);}
+    public UmpleSourceData BIN_hook604(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(541).setJavaLines(699).setLengths(1);}
+    public UmpleSourceData BIN_setKnownDeleted(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(165).setJavaLines(230).setLengths(9);}
+    public UmpleSourceData BIN_getCursorSet(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(193).setJavaLines(268).setLengths(1);}
+    public UmpleSourceData BIN_getKeyComparator(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(474).setJavaLines(618).setLengths(1);}
+    public UmpleSourceData BIN_getCursorBINToBeRemoved(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(227).setJavaLines(323).setLengths(1);}
+    public UmpleSourceData BIN_logInternal(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(501).setJavaLines(653).setLengths(21);}
+    public UmpleSourceData BIN_removeCursor(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(40, 209).setJavaLines(296, 294).setLengths(2, 1);}
+    public UmpleSourceData BIN_addCursor(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(31, 201).setJavaLines(281, 279).setLengths(2, 1);}
+    public UmpleSourceData BIN_isEvictionProhibited(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(135).setJavaLines(191).setLengths(1);}
+    public UmpleSourceData BIN_entryZeroKeyComparesLow(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(157).setJavaLines(219).setLengths(1);}
+    public UmpleSourceData BIN_hasNonLNChildren(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(142).setJavaLines(201).setLengths(9);}
+    public UmpleSourceData BIN_getChildEvictionType(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(8).setJavaLines(771).setLengths(14);}
+    public UmpleSourceData BIN_createNewInstance(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(61).setJavaLines(89).setLengths(1);}
+    public UmpleSourceData BIN_compress(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(345).setJavaLines(471).setLengths(75);}
+    public UmpleSourceData BIN_isValidForDelete(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(431).setJavaLines(565).setLengths(39);}
+    public UmpleSourceData BIN_createReference(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(54).setJavaLines(79).setLengths(1);}
+    public UmpleSourceData BIN_setCursorIndex(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(239).setJavaLines(338).setLengths(1);}
+    public UmpleSourceData BIN_nCursors(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(216).setJavaLines(308).setLengths(1);}
+    public UmpleSourceData BIN_endTag(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(482).setJavaLines(628).setLengths(1);}
+    public UmpleSourceData BIN_evictLN(){ return new UmpleSourceData().setFileNames("Evictor_BIN.ump").setUmpleLines(46).setJavaLines(823).setLengths(8);}
+    public UmpleSourceData BIN_verifyCursors(){ return new UmpleSourceData().setFileNames("Verifier_BIN.ump").setUmpleLines(8).setJavaLines(856).setLengths(10);}
+    public UmpleSourceData BIN_validateSubtreeBeforeDelete(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(424).setJavaLines(555).setLengths(1);}
+    public UmpleSourceData BIN_getMemoryOverhead(){ return new UmpleSourceData().setFileNames("MemoryBudget_BIN.ump").setUmpleLines(9).setJavaLines(761).setLengths(1);}
+    public UmpleSourceData BIN_setProhibitNextDelta(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(90).setJavaLines(130).setLengths(1);}
+    public UmpleSourceData BIN_setCursorBIN(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(235).setJavaLines(333).setLengths(1);}
+    public UmpleSourceData BIN_adjustCursors(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(50, 266).setJavaLines(372, 370).setLengths(3, 29);}
+    public UmpleSourceData BIN_descendOnParentSearch(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(95).setJavaLines(135).setLengths(42);}
+    public UmpleSourceData BIN_getLastDeltaVersion(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(82).setJavaLines(119).setLengths(1);}
+    public UmpleSourceData BIN_getLogType(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(489).setJavaLines(638).setLengths(1);}
+    public UmpleSourceData BIN_adjustCursorsForInsert(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(60, 302).setJavaLines(416, 414).setLengths(2, 12);}
+    public UmpleSourceData BIN_clearKnownDeleted(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(188).setJavaLines(262).setLengths(2);}
+    public UmpleSourceData BIN_doDeltaLog(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(529).setJavaLines(684).setLengths(6);}
+    public UmpleSourceData BIN_computeOverhead(){ return new UmpleSourceData().setFileNames("MemoryBudget_BIN.ump").setUmpleLines(5).setJavaLines(756).setLengths(1);}
+    public UmpleSourceData BIN_splitSpecial(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(247).setJavaLines(348).setLengths(11);}
+    public UmpleSourceData BIN_setKnownDeletedLeaveTarget(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(178).setJavaLines(249).setLengths(3);}
+    public UmpleSourceData BIN_shortClassName(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(493).setJavaLines(643).setLengths(1);}
+    public UmpleSourceData BIN_canBeAncestor(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(128).setJavaLines(181).setLengths(1);}
+    public UmpleSourceData BIN_getChildKey(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(68).setJavaLines(99).setLengths(1);}
+    public UmpleSourceData BIN_getBINDeltaType(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(75).setJavaLines(109).setLengths(1);}
+    public UmpleSourceData BIN_BIN(){ return new UmpleSourceData().setFileNames("BIN.ump","BIN.ump").setUmpleLines(38, 44).setJavaLines(59, 66).setLengths(3, 4);}
+    public UmpleSourceData BIN_getCursorIndex(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(231).setJavaLines(328).setLengths(1);}
+    public UmpleSourceData BIN_hook610(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(581).setJavaLines(751).setLengths(1);}
+    public UmpleSourceData BIN_isCompressible(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(420).setJavaLines(550).setLengths(1);}
+    public UmpleSourceData BIN_beginTag(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(478).setJavaLines(623).setLengths(1);}
+    public UmpleSourceData BIN_getCursorBIN(){ return new UmpleSourceData().setFileNames("BIN.ump").setUmpleLines(223).setJavaLines(318).setLengths(1);}
+    public UmpleSourceData BIN_adjustCursorsForMutation(){ return new UmpleSourceData().setFileNames("Latches_BIN.ump","BIN.ump").setUmpleLines(72, 324).setJavaLines(445, 443).setLengths(2, 12);}
     public UmpleSourceData DBIN_getLogType(){ return new UmpleSourceData().setFileNames("DBIN.ump").setUmpleLines(191).setJavaLines(248).setLengths(1);}
     public UmpleSourceData DBIN_readFromLog(){ return new UmpleSourceData().setFileNames("DBIN.ump").setUmpleLines(215).setJavaLines(281).setLengths(2);}
     public UmpleSourceData DBIN_getLogSize(){ return new UmpleSourceData().setFileNames("DBIN.ump").setUmpleLines(198).setJavaLines(258).setLengths(3);}
@@ -1327,17 +1329,17 @@ public class DbRecover
     public UmpleSourceData TransactionConfig_getDirtyRead(){ return new UmpleSourceData().setFileNames("TransactionConfig.ump").setUmpleLines(114).setJavaLines(157).setLengths(1);}
     public UmpleSourceData DbRecover_usage(){ return new UmpleSourceData().setFileNames("DbRecover.ump").setUmpleLines(50).setJavaLines(76).setLengths(7);}
     public UmpleSourceData DbRecover_main(){ return new UmpleSourceData().setFileNames("DbRecover.ump").setUmpleLines(9).setJavaLines(32).setLengths(38);}
-    public UmpleSourceData DbRunAction_doEvict(){ return new UmpleSourceData().setFileNames("Evictor_DbRunAction.ump").setUmpleLines(7).setJavaLines(106).setLengths(1);}
-    public UmpleSourceData DbRunAction_usage(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(57).setJavaLines(97).setLengths(5);}
-    public UmpleSourceData DbRunAction_main_hook847(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump").setUmpleLines(149).setJavaLines(239).setLengths(1);}
-    public UmpleSourceData DbRunAction_main(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(28).setJavaLines(63).setLengths(1);}
-    public UmpleSourceData DbRunAction_removeAndClean(){ return new UmpleSourceData().setFileNames("DeleteOp_DbRunAction.ump").setUmpleLines(7).setJavaLines(111).setLengths(24);}
+    public UmpleSourceData DbRunAction_doEvict(){ return new UmpleSourceData().setFileNames("Evictor_DbRunAction.ump").setUmpleLines(7).setJavaLines(105).setLengths(1);}
+    public UmpleSourceData DbRunAction_usage(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(57).setJavaLines(96).setLengths(5);}
+    public UmpleSourceData DbRunAction_main_hook847(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump").setUmpleLines(149).setJavaLines(231).setLengths(1);}
+    public UmpleSourceData DbRunAction_main(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(28).setJavaLines(62).setLengths(1);}
+    public UmpleSourceData DbRunAction_removeAndClean(){ return new UmpleSourceData().setFileNames("DeleteOp_DbRunAction.ump").setUmpleLines(7).setJavaLines(110).setLengths(24);}
     public UmpleSourceData DbRunAction_doEvict_DbRunAction_doEvict(){ return new UmpleSourceData().setFileNames("Evictor_DbRunAction_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(1);}
-    public UmpleSourceData DbRunAction_getSecs(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(32).setJavaLines(70).setLengths(1);}
-    public UmpleSourceData DbRunAction_preload(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(36).setJavaLines(75).setLengths(18);}
-    public UmpleSourceData DbRunAction_main_execute(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump","Evictor_DbRunAction_inner.ump").setUmpleLines(8, 8).setJavaLines(44, 34).setLengths(160, 17);}
-    public UmpleSourceData DbRunAction_main_hook841(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump").setUmpleLines(135).setJavaLines(219).setLengths(1);}
-    public UmpleSourceData DbRunAction_main_DbRunAction_main(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump").setUmpleLines(5).setJavaLines(39).setLengths(1);}
+    public UmpleSourceData DbRunAction_getSecs(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(32).setJavaLines(69).setLengths(1);}
+    public UmpleSourceData DbRunAction_preload(){ return new UmpleSourceData().setFileNames("DbRunAction.ump").setUmpleLines(36).setJavaLines(74).setLengths(18);}
+    public UmpleSourceData DbRunAction_main_execute(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump","Evictor_DbRunAction_inner.ump").setUmpleLines(8, 8).setJavaLines(42, 34).setLengths(154, 17);}
+    public UmpleSourceData DbRunAction_main_hook841(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump").setUmpleLines(135).setJavaLines(211).setLengths(1);}
+    public UmpleSourceData DbRunAction_main_DbRunAction_main(){ return new UmpleSourceData().setFileNames("DbRunAction_static.ump").setUmpleLines(5).setJavaLines(37).setLengths(1);}
     public UmpleSourceData DbPrintLog_usage(){ return new UmpleSourceData().setFileNames("DbPrintLog.ump").setUmpleLines(103).setJavaLines(133).setLengths(11);}
     public UmpleSourceData DbPrintLog_main(){ return new UmpleSourceData().setFileNames("DbPrintLog.ump").setUmpleLines(44).setJavaLines(71).setLengths(56);}
     public UmpleSourceData DbPrintLog_dump(){ return new UmpleSourceData().setFileNames("DbPrintLog.ump").setUmpleLines(22).setJavaLines(46).setLengths(16);}
@@ -1431,106 +1433,109 @@ public class DbRecover
     public UmpleSourceData SecondaryDatabase_updateSecondary(){ return new UmpleSourceData().setFileNames("SecondaryDatabase.ump").setUmpleLines(348).setJavaLines(442).setLengths(81);}
     public UmpleSourceData SecondaryDatabase_secondaryCorruptException(){ return new UmpleSourceData().setFileNames("SecondaryDatabase.ump").setUmpleLines(549).setJavaLines(652).setLengths(2);}
     public UmpleSourceData SecondaryDatabase_clearForeignKeyTrigger(){ return new UmpleSourceData().setFileNames("SecondaryDatabase.ump").setUmpleLines(162).setJavaLines(206).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_addToCompressorQueue(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump","INCompressor_EnvironmentImpl.ump","INCompressor_EnvironmentImpl.ump").setUmpleLines(18, 27, 36).setJavaLines(1096, 1108, 1120).setLengths(3, 3, 3);}
-    public UmpleSourceData EnvironmentImpl_rewriteMapTreeRoot(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(66, 238).setJavaLines(302, 300).setLengths(1, 11);}
-    public UmpleSourceData EnvironmentImpl_shutdownDaemons(){ return new UmpleSourceData().setFileNames("CleanerDaemon_EnvironmentImpl.ump","Evictor_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(32, 44, 483).setJavaLines(636, 645, 634).setLengths(6, 2, 1);}
-    public UmpleSourceData EnvironmentImpl_getMemoryBudget(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(626).setJavaLines(836).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_EnvironmentImpl(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(115).setJavaLines(120).setLengths(85);}
-    public UmpleSourceData EnvironmentImpl_getUtilizationProfile(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(220).setJavaLines(269).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_invokeCleaner(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(464).setJavaLines(590).setLengths(5);}
-    public UmpleSourceData EnvironmentImpl_doClose(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(339).setJavaLines(437).setLengths(86);}
-    public UmpleSourceData EnvironmentImpl_getConfigManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(558).setJavaLines(745).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_truncate(){ return new UmpleSourceData().setFileNames("Truncate_EnvironmentImpl.ump","Truncate_EnvironmentImpl.ump").setUmpleLines(9, 16).setJavaLines(1043, 1053).setLengths(1, 1);}
-    public UmpleSourceData EnvironmentImpl_shutdownINCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(66).setJavaLines(1159).setLengths(6);}
-    public UmpleSourceData EnvironmentImpl_createDb(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(508).setJavaLines(679).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_dumpMapTree(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(528).setJavaLines(706).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_txnBegin(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(535).setJavaLines(716).setLengths(5);}
-    public UmpleSourceData EnvironmentImpl_getLockTimeout(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(648).setJavaLines(866).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_envConfigUpdate(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(187).setJavaLines(214).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_checkImmutablePropsForEquality(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(579).setJavaLines(775).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl.ump").setUmpleLines(27).setJavaLines(993).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_createDaemons_execute(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl_inner.ump","EnvironmentImpl_static.ump","Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump","loggingBase_EnvironmentImpl_inner.ump","CheckLeaks_EnvironmentImpl_inner.ump").setUmpleLines(6, 8, 5, 9, 8).setJavaLines(41, 39, 51, 37, 33).setLengths(2, 12, 18, 14, 7);}
-    public UmpleSourceData EnvironmentImpl_invokeCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(54).setJavaLines(1144).setLengths(6);}
-    public UmpleSourceData EnvironmentImpl_isOpen(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(292).setJavaLines(378).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_isClosing(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(299).setJavaLines(388).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getLogManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(543).setJavaLines(725).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getRootLsn(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(253).setJavaLines(323).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_checkLeaks(){ return new UmpleSourceData().setFileNames("CheckLeaks_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1179).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(23).setJavaLines(1015).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getDbNames(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(521).setJavaLines(696).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getINCompressorQueueSize(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(75).setJavaLines(1169).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getThreadLocalReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(435).setJavaLines(555).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getUtilizationTracker(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(213).setJavaLines(259).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_isReadOnly(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(503).setJavaLines(674).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_alertEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(27).setJavaLines(1020).setLengths(3);}
-    public UmpleSourceData EnvironmentImpl_invokeCheckpoint(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(455).setJavaLines(580).setLengths(6);}
+    public UmpleSourceData EnvironmentImpl_addToCompressorQueue(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump","INCompressor_EnvironmentImpl.ump","INCompressor_EnvironmentImpl.ump").setUmpleLines(18, 27, 36).setJavaLines(1100, 1112, 1124).setLengths(3, 3, 3);}
+    public UmpleSourceData EnvironmentImpl_rewriteMapTreeRoot(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(66, 238).setJavaLines(306, 304).setLengths(1, 11);}
+    public UmpleSourceData EnvironmentImpl_shutdownDaemons(){ return new UmpleSourceData().setFileNames("CleanerDaemon_EnvironmentImpl.ump","Evictor_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(32, 44, 483).setJavaLines(640, 649, 638).setLengths(6, 2, 1);}
+    public UmpleSourceData EnvironmentImpl_getMemoryBudget(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(626).setJavaLines(840).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_EnvironmentImpl(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(115).setJavaLines(124).setLengths(85);}
+    public UmpleSourceData EnvironmentImpl_getUtilizationProfile(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(220).setJavaLines(273).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_invokeCleaner(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(464).setJavaLines(594).setLengths(5);}
+    public UmpleSourceData EnvironmentImpl_doClose(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(339).setJavaLines(441).setLengths(86);}
+    public UmpleSourceData EnvironmentImpl_getConfigManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(558).setJavaLines(749).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_truncate(){ return new UmpleSourceData().setFileNames("Truncate_EnvironmentImpl.ump","Truncate_EnvironmentImpl.ump").setUmpleLines(9, 16).setJavaLines(1047, 1057).setLengths(1, 1);}
+    public UmpleSourceData EnvironmentImpl_shutdownINCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(66).setJavaLines(1163).setLengths(6);}
+    public UmpleSourceData EnvironmentImpl_createDb(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(508).setJavaLines(683).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_dumpMapTree(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(528).setJavaLines(710).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_txnBegin(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(535).setJavaLines(720).setLengths(5);}
+    public UmpleSourceData EnvironmentImpl_getLockTimeout(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(648).setJavaLines(870).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_envConfigUpdate(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(187).setJavaLines(218).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_checkImmutablePropsForEquality(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(579).setJavaLines(779).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl.ump").setUmpleLines(27).setJavaLines(997).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_createDaemons_execute(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl_inner.ump","EnvironmentImpl_static.ump","Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump","loggingBase_EnvironmentImpl_inner.ump","CheckLeaks_EnvironmentImpl_inner.ump").setUmpleLines(6, 8, 5, 9, 8).setJavaLines(41, 39, 51, 37, 34).setLengths(2, 12, 18, 14, 29);}
+    public UmpleSourceData EnvironmentImpl_invokeCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(54).setJavaLines(1148).setLengths(6);}
+    public UmpleSourceData EnvironmentImpl_isOpen(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(292).setJavaLines(382).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_isClosing(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(299).setJavaLines(392).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getLogManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(543).setJavaLines(729).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getRootLsn(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(253).setJavaLines(327).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_checkLeaks(){ return new UmpleSourceData().setFileNames("CheckLeaks_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1183).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(23).setJavaLines(1019).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getDbNames(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(521).setJavaLines(700).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getINCompressorQueueSize(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(75).setJavaLines(1173).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getThreadLocalReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(435).setJavaLines(559).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getUtilizationTracker(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(213).setJavaLines(263).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_isReadOnly(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(503).setJavaLines(678).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_alertEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(27).setJavaLines(1024).setLengths(3);}
+    public UmpleSourceData EnvironmentImpl_verify(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Verifier_EnvironmentImpl.ump").setUmpleLines(5).setJavaLines(1263).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_invokeCheckpoint(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(455).setJavaLines(584).setLengths(6);}
     public UmpleSourceData EnvironmentImpl_createDaemons_EnvironmentImpl_createDaemons(){ return new UmpleSourceData().setFileNames("EnvironmentImpl_static.ump").setUmpleLines(5).setJavaLines(34).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_close(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(327, 333).setJavaLines(423, 430).setLengths(3, 3);}
-    public UmpleSourceData EnvironmentImpl_requestShutdownDaemons(){ return new UmpleSourceData().setFileNames("CleanerDaemon_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(22, 472).setJavaLines(621, 599).setLengths(4, 20);}
-    public UmpleSourceData EnvironmentImpl_getCleaner(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(622).setJavaLines(831).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getFairLatches(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump").setUmpleLines(15).setJavaLines(1184).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_dbRemove(){ return new UmpleSourceData().setFileNames("DeleteOp_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1063).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getINCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(11).setJavaLines(1086).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getDbMapTree(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(551).setJavaLines(735).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_invokeEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(998).setLengths(3);}
-    public UmpleSourceData EnvironmentImpl_isClosed(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(303).setJavaLines(393).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_checkNotClosed(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(321).setJavaLines(416).setLengths(3);}
-    public UmpleSourceData EnvironmentImpl_getNoComparators(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(447).setJavaLines(570).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_enableDebugLoggingToDbLog(){ return new UmpleSourceData().setFileNames("Derivative_LoggingDbLogHandler_LoggingBase_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1204).setLengths(6);}
-    public UmpleSourceData EnvironmentImpl_isNoLocking(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(495).setJavaLines(664).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_checkLeaks_EnvironmentImpl_checkLeaks(){ return new UmpleSourceData().setFileNames("CheckLeaks_EnvironmentImpl_inner.ump").setUmpleLines(5).setJavaLines(28).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_open(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(276).setJavaLines(356).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_cloneMutableConfig(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(572).setJavaLines(765).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_decThreadLocalReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(443).setJavaLines(565).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getTxnManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(614).setJavaLines(821).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_isTransactional(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(499).setJavaLines(669).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook328(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(694).setJavaLines(925).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook327(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(691).setJavaLines(920).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook326(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(688).setJavaLines(915).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_forceLogFileFlip(){ return new UmpleSourceData().setFileNames("Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1219).setLengths(2);}
-    public UmpleSourceData EnvironmentImpl_shutdownCheckpointer(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(487).setJavaLines(651).setLengths(9);}
-    public UmpleSourceData EnvironmentImpl_hook324(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(681).setJavaLines(905).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook323(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(678).setJavaLines(900).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_checkIfInvalid(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(314).setJavaLines(408).setLengths(4);}
-    public UmpleSourceData EnvironmentImpl_hook322(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(675).setJavaLines(895).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getCheckpointer(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(618).setJavaLines(826).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_dbRename(){ return new UmpleSourceData().setFileNames("RenameOp_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1032).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_shutdownCleaner(){ return new UmpleSourceData().setFileNames("CleanerDaemon_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1073).setLengths(4);}
-    public UmpleSourceData EnvironmentImpl_setMutableConfig(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(586).setJavaLines(785).setLengths(7);}
-    public UmpleSourceData EnvironmentImpl_getFileManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(547).setJavaLines(730).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_readMapTreeFromLog(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(260).setJavaLines(333).setLengths(14);}
-    public UmpleSourceData EnvironmentImpl_shutdownEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(14).setJavaLines(1005).setLengths(6);}
+    public UmpleSourceData EnvironmentImpl_close(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(327, 333).setJavaLines(427, 434).setLengths(3, 3);}
+    public UmpleSourceData EnvironmentImpl_requestShutdownDaemons(){ return new UmpleSourceData().setFileNames("CleanerDaemon_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(22, 472).setJavaLines(625, 603).setLengths(4, 20);}
+    public UmpleSourceData EnvironmentImpl_getCleaner(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(622).setJavaLines(835).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getFairLatches(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump").setUmpleLines(15).setJavaLines(1211).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_dbRemove(){ return new UmpleSourceData().setFileNames("DeleteOp_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1067).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getINCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(11).setJavaLines(1090).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getDbMapTree(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(551).setJavaLines(739).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_invokeEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1002).setLengths(3);}
+    public UmpleSourceData EnvironmentImpl_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_EnvironmentImpl.ump").setUmpleLines(11).setJavaLines(1193).setLengths(14);}
+    public UmpleSourceData EnvironmentImpl_isClosed(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(303).setJavaLines(397).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_checkNotClosed(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(321).setJavaLines(420).setLengths(3);}
+    public UmpleSourceData EnvironmentImpl_getNoComparators(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(447).setJavaLines(574).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_enableDebugLoggingToDbLog(){ return new UmpleSourceData().setFileNames("Derivative_LoggingDbLogHandler_LoggingBase_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1231).setLengths(6);}
+    public UmpleSourceData EnvironmentImpl_isNoLocking(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(495).setJavaLines(668).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_checkLeaks_EnvironmentImpl_checkLeaks(){ return new UmpleSourceData().setFileNames("CheckLeaks_EnvironmentImpl_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_open(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(276).setJavaLines(360).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_cloneMutableConfig(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(572).setJavaLines(769).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_decThreadLocalReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(443).setJavaLines(569).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getTxnManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(614).setJavaLines(825).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_isTransactional(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(499).setJavaLines(673).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook328(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(694).setJavaLines(929).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook327(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(691).setJavaLines(924).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook326(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(688).setJavaLines(919).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_forceLogFileFlip(){ return new UmpleSourceData().setFileNames("Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1246).setLengths(2);}
+    public UmpleSourceData EnvironmentImpl_shutdownCheckpointer(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(487).setJavaLines(655).setLengths(9);}
+    public UmpleSourceData EnvironmentImpl_hook324(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(681).setJavaLines(909).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook323(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(678).setJavaLines(904).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_checkIfInvalid(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(314).setJavaLines(412).setLengths(4);}
+    public UmpleSourceData EnvironmentImpl_hook322(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(675).setJavaLines(899).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getCheckpointer(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(618).setJavaLines(830).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_dbRename(){ return new UmpleSourceData().setFileNames("RenameOp_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1036).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_shutdownCleaner(){ return new UmpleSourceData().setFileNames("CleanerDaemon_EnvironmentImpl.ump").setUmpleLines(8).setJavaLines(1077).setLengths(4);}
+    public UmpleSourceData EnvironmentImpl_setMutableConfig(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(586).setJavaLines(789).setLengths(7);}
+    public UmpleSourceData EnvironmentImpl_getFileManager(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(547).setJavaLines(734).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_readMapTreeFromLog(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(260).setJavaLines(337).setLengths(14);}
+    public UmpleSourceData EnvironmentImpl_shutdownEvictor(){ return new UmpleSourceData().setFileNames("Evictor_EnvironmentImpl.ump").setUmpleLines(14).setJavaLines(1009).setLengths(6);}
     public UmpleSourceData EnvironmentImpl_initLogger_EnvironmentImpl_initLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl_inner.ump").setUmpleLines(5).setJavaLines(31).setLengths(2);}
-    public UmpleSourceData EnvironmentImpl_addConfigObserver(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(599).setJavaLines(801).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getLastRecoveryInfo(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(633).setJavaLines(846).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_runOrPauseDaemons(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(201).setJavaLines(234).setLengths(16);}
-    public UmpleSourceData EnvironmentImpl_getTriggerLatch(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump").setUmpleLines(22).setJavaLines(1194).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_removeConfigObserver(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(606).setJavaLines(811).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook316(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_MemoryBudget_EnvironmentImpl.ump").setUmpleLines(5).setJavaLines(1225).setLengths(2);}
-    public UmpleSourceData EnvironmentImpl_cloneConfig(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(565).setJavaLines(755).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_incReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(431).setJavaLines(550).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getDb(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(517).setJavaLines(691).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_forceClose(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(426).setJavaLines(544).setLengths(2);}
-    public UmpleSourceData EnvironmentImpl_closeLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl.ump").setUmpleLines(17).setJavaLines(980).setLengths(4);}
-    public UmpleSourceData EnvironmentImpl_mayNotWrite(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(310).setJavaLines(403).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getTxnTimeout(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(644).setJavaLines(861).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_maybeForceYield(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(655).setJavaLines(876).setLengths(4);}
-    public UmpleSourceData EnvironmentImpl_createDaemons(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(194).setJavaLines(224).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_closeAfterRunRecovery(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(410).setJavaLines(527).setLengths(13);}
-    public UmpleSourceData EnvironmentImpl_incThreadLocalReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(439).setJavaLines(560).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getEnvironmentHome(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(640).setJavaLines(856).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_logMapTreeRoot(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(52, 227).setJavaLines(281, 279).setLengths(1, 9);}
-    public UmpleSourceData EnvironmentImpl_lazyCompress(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(45).setJavaLines(1132).setLengths(3);}
-    public UmpleSourceData EnvironmentImpl_invalidate(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(283).setJavaLines(366).setLengths(3);}
-    public UmpleSourceData EnvironmentImpl_hook337(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(715).setJavaLines(960).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook336(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(712).setJavaLines(955).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook335(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(709).setJavaLines(950).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook334(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(706).setJavaLines(945).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook333(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(703).setJavaLines(940).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook331(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(700).setJavaLines(935).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_hook330(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(697).setJavaLines(930).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_initLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl.ump").setUmpleLines(10).setJavaLines(970).setLengths(1);}
-    public UmpleSourceData EnvironmentImpl_getInMemoryINs(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(610).setJavaLines(816).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_addConfigObserver(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(599).setJavaLines(805).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getLastRecoveryInfo(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(633).setJavaLines(850).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_runOrPauseDaemons(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(201).setJavaLines(238).setLengths(16);}
+    public UmpleSourceData EnvironmentImpl_getTriggerLatch(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump").setUmpleLines(22).setJavaLines(1221).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_removeConfigObserver(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(606).setJavaLines(815).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook316(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_MemoryBudget_EnvironmentImpl.ump").setUmpleLines(5).setJavaLines(1252).setLengths(2);}
+    public UmpleSourceData EnvironmentImpl_cloneConfig(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(565).setJavaLines(759).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_incReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(431).setJavaLines(554).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_verifyCursors(){ return new UmpleSourceData().setFileNames("Derivative_Verifier_INCompressor_EnvironmentImpl.ump").setUmpleLines(5).setJavaLines(1258).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getDb(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(517).setJavaLines(695).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_forceClose(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(426).setJavaLines(548).setLengths(2);}
+    public UmpleSourceData EnvironmentImpl_closeLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl.ump").setUmpleLines(17).setJavaLines(984).setLengths(4);}
+    public UmpleSourceData EnvironmentImpl_mayNotWrite(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(310).setJavaLines(407).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getTxnTimeout(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(644).setJavaLines(865).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_maybeForceYield(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(655).setJavaLines(880).setLengths(4);}
+    public UmpleSourceData EnvironmentImpl_createDaemons(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(194).setJavaLines(228).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_closeAfterRunRecovery(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(410).setJavaLines(531).setLengths(13);}
+    public UmpleSourceData EnvironmentImpl_incThreadLocalReferenceCount(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(439).setJavaLines(564).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getEnvironmentHome(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(640).setJavaLines(860).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_logMapTreeRoot(){ return new UmpleSourceData().setFileNames("Latches_EnvironmentImpl.ump","EnvironmentImpl.ump").setUmpleLines(52, 227).setJavaLines(285, 283).setLengths(1, 9);}
+    public UmpleSourceData EnvironmentImpl_lazyCompress(){ return new UmpleSourceData().setFileNames("INCompressor_EnvironmentImpl.ump").setUmpleLines(45).setJavaLines(1136).setLengths(3);}
+    public UmpleSourceData EnvironmentImpl_invalidate(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(283).setJavaLines(370).setLengths(3);}
+    public UmpleSourceData EnvironmentImpl_hook337(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(715).setJavaLines(964).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook336(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(712).setJavaLines(959).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook335(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(709).setJavaLines(954).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook334(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(706).setJavaLines(949).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook333(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(703).setJavaLines(944).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook331(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(700).setJavaLines(939).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_hook330(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(697).setJavaLines(934).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_initLogger(){ return new UmpleSourceData().setFileNames("loggingBase_EnvironmentImpl.ump").setUmpleLines(10).setJavaLines(974).setLengths(1);}
+    public UmpleSourceData EnvironmentImpl_getInMemoryINs(){ return new UmpleSourceData().setFileNames("EnvironmentImpl.ump").setUmpleLines(610).setJavaLines(820).setLengths(1);}
     public UmpleSourceData SortedLSNTreeWalker_extractINsForDb(){ return new UmpleSourceData().setFileNames("SortedLSNTreeWalker.ump").setUmpleLines(59).setJavaLines(64).setLengths(1);}
     public UmpleSourceData SortedLSNTreeWalker_releaseRootIN(){ return new UmpleSourceData().setFileNames("SortedLSNTreeWalker.ump").setUmpleLines(163).setJavaLines(184).setLengths(1);}
     public UmpleSourceData SortedLSNTreeWalker_SortedLSNTreeWalker(){ return new UmpleSourceData().setFileNames("SortedLSNTreeWalker.ump").setUmpleLines(44).setJavaLines(48).setLengths(12);}
@@ -1607,112 +1612,112 @@ public class DbRecover
     public UmpleSourceData MemoryBudget_getBINOverhead(){ return new UmpleSourceData().setFileNames("MemoryBudget_MemoryBudget.ump").setUmpleLines(302).setJavaLines(270).setLengths(1);}
     public UmpleSourceData PreloadProcessor_processLSN(){ return new UmpleSourceData().setFileNames("PreloadProcessor.ump").setUmpleLines(27).setJavaLines(52).setLengths(28);}
     public UmpleSourceData PreloadProcessor_PreloadProcessor(){ return new UmpleSourceData().setFileNames("PreloadProcessor.ump").setUmpleLines(17).setJavaLines(36).setLengths(7);}
-    public UmpleSourceData CursorImpl_releaseDBIN(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(22).setJavaLines(2093).setLengths(3);}
-    public UmpleSourceData CursorImpl_setLockerNext(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1262).setJavaLines(1756).setLengths(1);}
-    public UmpleSourceData CursorImpl_put(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(558).setJavaLines(823).setLengths(7);}
-    public UmpleSourceData CursorImpl_getCurrentLNAlreadyLatched(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(748).setJavaLines(1070).setLengths(37);}
-    public UmpleSourceData CursorImpl_releaseBIN(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(6).setJavaLines(2074).setLengths(3);}
-    public UmpleSourceData CursorImpl_removeCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(327).setJavaLines(521).setLengths(2);}
+    public UmpleSourceData CursorImpl_releaseDBIN(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(22).setJavaLines(2102).setLengths(3);}
+    public UmpleSourceData CursorImpl_setLockerNext(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1262).setJavaLines(1759).setLengths(1);}
+    public UmpleSourceData CursorImpl_put(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(558).setJavaLines(826).setLengths(7);}
+    public UmpleSourceData CursorImpl_getCurrentLNAlreadyLatched(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(748).setJavaLines(1073).setLengths(37);}
+    public UmpleSourceData CursorImpl_releaseBIN(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(6).setJavaLines(2083).setLengths(3);}
+    public UmpleSourceData CursorImpl_removeCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(327).setJavaLines(524).setLengths(2);}
     public UmpleSourceData CursorImpl_latchBIN_CursorImpl_latchBIN(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(50).setJavaLines(29).setLengths(1);}
-    public UmpleSourceData CursorImpl_lockDupCountLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1126).setJavaLines(1557).setLengths(28);}
+    public UmpleSourceData CursorImpl_lockDupCountLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1126).setJavaLines(1560).setLengths(28);}
     public UmpleSourceData CursorImpl_trace_CursorImpl_trace(){ return new UmpleSourceData().setFileNames("LoggingFiner_CursorImpl_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(8);}
-    public UmpleSourceData CursorImpl_getDupBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(218).setJavaLines(390).setLengths(1);}
-    public UmpleSourceData CursorImpl_setDupBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(222).setJavaLines(395).setLengths(1);}
+    public UmpleSourceData CursorImpl_getDupBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(218).setJavaLines(393).setLengths(1);}
+    public UmpleSourceData CursorImpl_setDupBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(222).setJavaLines(398).setLengths(1);}
     public UmpleSourceData CursorImpl_latchDBIN_CursorImpl_latchDBIN(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(77).setJavaLines(29).setLengths(1);}
     public UmpleSourceData CursorImpl_lockNextKeyForInsert_CursorImpl_lockNextKeyForInsert(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(102).setJavaLines(29).setLengths(3);}
-    public UmpleSourceData CursorImpl_getLockStats(){ return new UmpleSourceData().setFileNames("Statistics_CursorImpl.ump").setUmpleLines(5).setJavaLines(2069).setLengths(1);}
-    public UmpleSourceData CursorImpl_latchDBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(285).setJavaLines(468).setLengths(1);}
-    public UmpleSourceData CursorImpl_latchBIN_execute(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump","CursorImpl_static.ump","CursorImpl_static.ump","CursorImpl_static.ump","CursorImpl_static.ump","Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump","LoggingFiner_CursorImpl_inner.ump").setUmpleLines(53, 80, 107, 175, 289, 6, 15).setJavaLines(34, 34, 36, 41, 40, 43, 41).setLengths(26, 26, 41, 122, 120, 17, 1);}
-    public UmpleSourceData CursorImpl_hook235(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1593).setJavaLines(1983).setLengths(46);}
-    public UmpleSourceData CursorImpl_incrementLNCount(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(112).setJavaLines(240).setLengths(4);}
-    public UmpleSourceData CursorImpl_hook233(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1534).setJavaLines(1922).setLengths(1);}
-    public UmpleSourceData CursorImpl_hook232(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1532).setJavaLines(1917).setLengths(1);}
-    public UmpleSourceData CursorImpl_hook231(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1530).setJavaLines(1912).setLengths(1);}
-    public UmpleSourceData CursorImpl_dumpTree(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(364).setJavaLines(573).setLengths(1);}
-    public UmpleSourceData CursorImpl_hook230(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1528).setJavaLines(1907).setLengths(1);}
-    public UmpleSourceData CursorImpl_checkAlreadyLatched(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(28).setJavaLines(2100).setLengths(8);}
-    public UmpleSourceData CursorImpl_updateDBin(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(321).setJavaLines(514).setLengths(3);}
-    public UmpleSourceData CursorImpl_reset(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_CursorImpl.ump","CursorImpl.ump").setUmpleLines(15, 385).setJavaLines(614, 603).setLengths(4, 9);}
-    public UmpleSourceData CursorImpl_searchAndPosition(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(983).setJavaLines(1385).setLengths(26);}
-    public UmpleSourceData CursorImpl_lockLNDeletedAllowed(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1087).setJavaLines(1509).setLengths(36);}
-    public UmpleSourceData CursorImpl_setBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(202).setJavaLines(370).setLengths(1);}
-    public UmpleSourceData CursorImpl_verifyCursor(){ return new UmpleSourceData().setFileNames("Verifier_CursorImpl.ump").setUmpleLines(7).setJavaLines(2062).setLengths(3);}
-    public UmpleSourceData CursorImpl_assertCursorState(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1190).setJavaLines(1655).setLengths(6);}
-    public UmpleSourceData CursorImpl_positionFirstOrLast(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(913).setJavaLines(1300).setLengths(76);}
-    public UmpleSourceData CursorImpl_revertLock(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(1221, 1228).setJavaLines(1702, 1712).setLengths(1, 5);}
-    public UmpleSourceData CursorImpl_statusToString(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1280).setJavaLines(1781).setLengths(10);}
-    public UmpleSourceData CursorImpl_setLockerPrev(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1258).setJavaLines(1751).setLengths(1);}
-    public UmpleSourceData CursorImpl_setTargetBin(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(237).setJavaLines(415).setLengths(13);}
-    public UmpleSourceData CursorImpl_lockEofNode(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1239).setJavaLines(1726).setLengths(1);}
+    public UmpleSourceData CursorImpl_getLockStats(){ return new UmpleSourceData().setFileNames("Statistics_CursorImpl.ump").setUmpleLines(5).setJavaLines(2078).setLengths(1);}
+    public UmpleSourceData CursorImpl_latchDBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(285).setJavaLines(471).setLengths(1);}
+    public UmpleSourceData CursorImpl_latchBIN_execute(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump","CursorImpl_static.ump","CursorImpl_static.ump","CursorImpl_static.ump","CursorImpl_static.ump","Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump","LoggingFiner_CursorImpl_inner.ump").setUmpleLines(53, 80, 107, 175, 289, 6, 15).setJavaLines(34, 34, 36, 42, 40, 43, 41).setLengths(26, 26, 41, 122, 120, 17, 1);}
+    public UmpleSourceData CursorImpl_hook235(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1593).setJavaLines(1986).setLengths(46);}
+    public UmpleSourceData CursorImpl_incrementLNCount(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(112).setJavaLines(243).setLengths(4);}
+    public UmpleSourceData CursorImpl_hook233(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1534).setJavaLines(1925).setLengths(1);}
+    public UmpleSourceData CursorImpl_hook232(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1532).setJavaLines(1920).setLengths(1);}
+    public UmpleSourceData CursorImpl_hook231(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1530).setJavaLines(1915).setLengths(1);}
+    public UmpleSourceData CursorImpl_dumpTree(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(364).setJavaLines(576).setLengths(1);}
+    public UmpleSourceData CursorImpl_hook230(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1528).setJavaLines(1910).setLengths(1);}
+    public UmpleSourceData CursorImpl_checkAlreadyLatched(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(28).setJavaLines(2109).setLengths(8);}
+    public UmpleSourceData CursorImpl_updateDBin(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(321).setJavaLines(517).setLengths(3);}
+    public UmpleSourceData CursorImpl_reset(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_CursorImpl.ump","CursorImpl.ump").setUmpleLines(15, 385).setJavaLines(617, 606).setLengths(4, 9);}
+    public UmpleSourceData CursorImpl_searchAndPosition(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(983).setJavaLines(1388).setLengths(26);}
+    public UmpleSourceData CursorImpl_lockLNDeletedAllowed(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1087).setJavaLines(1512).setLengths(36);}
+    public UmpleSourceData CursorImpl_setBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(202).setJavaLines(373).setLengths(1);}
+    public UmpleSourceData CursorImpl_verifyCursor(){ return new UmpleSourceData().setFileNames("Verifier_CursorImpl.ump").setUmpleLines(7).setJavaLines(2071).setLengths(3);}
+    public UmpleSourceData CursorImpl_assertCursorState(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1190).setJavaLines(1658).setLengths(6);}
+    public UmpleSourceData CursorImpl_positionFirstOrLast(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(913).setJavaLines(1303).setLengths(76);}
+    public UmpleSourceData CursorImpl_revertLock(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(1221, 1228).setJavaLines(1705, 1715).setLengths(1, 5);}
+    public UmpleSourceData CursorImpl_statusToString(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1280).setJavaLines(1784).setLengths(10);}
+    public UmpleSourceData CursorImpl_setLockerPrev(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1258).setJavaLines(1754).setLengths(1);}
+    public UmpleSourceData CursorImpl_setTargetBin(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(237).setJavaLines(418).setLengths(13);}
+    public UmpleSourceData CursorImpl_lockEofNode(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1239).setJavaLines(1729).setLengths(1);}
     public UmpleSourceData CursorImpl_fetchCurrent_CursorImpl_fetchCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(282).setJavaLines(31).setLengths(5);}
-    public UmpleSourceData CursorImpl_getBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(198).setJavaLines(365).setLengths(1);}
+    public UmpleSourceData CursorImpl_getBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(198).setJavaLines(368).setLengths(1);}
     public UmpleSourceData KeyChangeStatus_KeyChangeStatus(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(44).setJavaLines(28).setLengths(2);}
-    public UmpleSourceData CursorImpl_close(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_CursorImpl.ump","CursorImpl.ump").setUmpleLines(26, 401).setJavaLines(637, 628).setLengths(4, 7);}
-    public UmpleSourceData CursorImpl_releaseBINs(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(17).setJavaLines(2087).setLengths(2);}
-    public UmpleSourceData CursorImpl_checkEnv(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1246).setJavaLines(1736).setLengths(1);}
-    public UmpleSourceData CursorImpl_setTestHook(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1309).setJavaLines(1812).setLengths(1);}
-    public UmpleSourceData CursorImpl_setNonCloning(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(119).setJavaLines(248).setLengths(1);}
-    public UmpleSourceData CursorImpl_isClosed(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(371).setJavaLines(583).setLengths(1);}
-    public UmpleSourceData CursorImpl_getBINToBeRemoved(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(206).setJavaLines(375).setLengths(1);}
+    public UmpleSourceData CursorImpl_close(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_CursorImpl.ump","CursorImpl.ump").setUmpleLines(26, 401).setJavaLines(640, 631).setLengths(4, 7);}
+    public UmpleSourceData CursorImpl_releaseBINs(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(17).setJavaLines(2096).setLengths(2);}
+    public UmpleSourceData CursorImpl_checkEnv(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1246).setJavaLines(1739).setLengths(1);}
+    public UmpleSourceData CursorImpl_setTestHook(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1309).setJavaLines(1815).setLengths(1);}
+    public UmpleSourceData CursorImpl_setNonCloning(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(119).setJavaLines(251).setLengths(1);}
+    public UmpleSourceData CursorImpl_isClosed(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(371).setJavaLines(586).setLengths(1);}
+    public UmpleSourceData CursorImpl_getBINToBeRemoved(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(206).setJavaLines(378).setLengths(1);}
     public UmpleSourceData SearchMode_toString(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(31).setJavaLines(35).setLengths(1);}
-    public UmpleSourceData CursorImpl_lockLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1068).setJavaLines(1487).setLengths(10);}
-    public UmpleSourceData CursorImpl_flushDBINToBeRemoved(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump","CursorImpl.ump").setUmpleLines(222, 903).setJavaLines(1282, 1280).setLengths(2, 6);}
-    public UmpleSourceData CursorImpl_getIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(190).setJavaLines(355).setLengths(1);}
-    public UmpleSourceData CursorImpl_getDupBINToBeRemoved(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(226).setJavaLines(400).setLengths(1);}
-    public UmpleSourceData CursorImpl_setDupIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(214).setJavaLines(385).setLengths(1);}
-    public UmpleSourceData CursorImpl_evict(){ return new UmpleSourceData().setFileNames("Evictor_CursorImpl.ump").setUmpleLines(18).setJavaLines(2048).setLengths(10);}
-    public UmpleSourceData CursorImpl_dumpToString(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1293).setJavaLines(1795).setLengths(13);}
-    public UmpleSourceData CursorImpl_getCurrentAlreadyLatched(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(722).setJavaLines(1027).setLengths(15);}
-    public UmpleSourceData CursorImpl_addCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(293, 303).setJavaLines(478, 494).setLengths(7, 6);}
-    public UmpleSourceData CursorImpl_getCurrentLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(735).setJavaLines(1051).setLengths(10);}
-    public UmpleSourceData CursorImpl_checkCursorState(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1202).setJavaLines(1670).setLengths(23);}
-    public UmpleSourceData CursorImpl_getLockerPrev(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1250).setJavaLines(1741).setLengths(1);}
-    public UmpleSourceData CursorImpl_getNextNoDup(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(872).setJavaLines(1244).setLengths(6);}
-    public UmpleSourceData CursorImpl_getLocker(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(289).setJavaLines(473).setLengths(1);}
-    public UmpleSourceData CursorImpl_count(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump","CursorImpl.ump").setUmpleLines(73, 411).setJavaLines(647, 645).setLengths(1, 36);}
-    public UmpleSourceData CursorImpl_updateBin(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(312).setJavaLines(504).setLengths(6);}
-    public UmpleSourceData CursorImpl_getNextCursorId(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(96).setJavaLines(221).setLengths(1);}
-    public UmpleSourceData CursorImpl_putLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(538).setJavaLines(798).setLengths(13);}
-    public UmpleSourceData CursorImpl_CursorImpl(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(126, 134).setJavaLines(258, 269).setLengths(1, 12);}
-    public UmpleSourceData CursorImpl_setIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(194).setJavaLines(360).setLengths(1);}
-    public UmpleSourceData CursorImpl_cloneCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","Evictor_CursorImpl.ump","Evictor_CursorImpl.ump","CursorImpl.ump").setUmpleLines(152, 41, 41, 159).setJavaLines(290, 327, 343, 300).setLengths(1, 6, 6, 34);}
-    public UmpleSourceData CursorImpl_lockNextKeyForInsert(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(531).setJavaLines(788).setLengths(1);}
-    public UmpleSourceData CursorImpl_getCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(709).setJavaLines(1005).setLengths(13);}
-    public UmpleSourceData CursorImpl_getTreeStatsAccumulator(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(104).setJavaLines(231).setLengths(5);}
-    public UmpleSourceData CursorImpl_getLatchedDupRoot(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1150).setJavaLines(1595).setLengths(20);}
-    public UmpleSourceData CursorImpl_putCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(596).setJavaLines(869).setLengths(127);}
-    public UmpleSourceData CursorImpl_fetchCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1058).setJavaLines(1474).setLengths(1);}
-    public UmpleSourceData CursorImpl_putNoOverwrite(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(574).setJavaLines(842).setLengths(2);}
-    public UmpleSourceData CursorImpl_clearDupBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(351).setJavaLines(556).setLengths(13);}
-    public UmpleSourceData CursorImpl_hook229(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1526).setJavaLines(1902).setLengths(1);}
-    public UmpleSourceData CursorImpl_hook228(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1524).setJavaLines(1897).setLengths(1);}
-    public UmpleSourceData CursorImpl_hook227(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1522).setJavaLines(1892).setLengths(1);}
-    public UmpleSourceData CursorImpl_delete(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(447).setJavaLines(694).setLengths(66);}
-    public UmpleSourceData CursorImpl_getNextDuplicate_CursorImpl_getNextDuplicate(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(167).setJavaLines(31).setLengths(6);}
-    public UmpleSourceData CursorImpl_setAllowEviction(){ return new UmpleSourceData().setFileNames("Evictor_CursorImpl.ump").setUmpleLines(10).setJavaLines(2038).setLengths(1);}
-    public UmpleSourceData CursorImpl_trace(){ return new UmpleSourceData().setFileNames("LoggingFiner_CursorImpl.ump").setUmpleLines(8).setJavaLines(2117).setLengths(1);}
-    public UmpleSourceData CursorImpl_getFirstDuplicate(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(885).setJavaLines(1259).setLengths(7);}
-    public UmpleSourceData CursorImpl_hashCode(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(100).setJavaLines(226).setLengths(1);}
-    public UmpleSourceData CursorImpl_getDupIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(210).setJavaLines(380).setLengths(1);}
-    public UmpleSourceData CursorImpl_dump(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(1269, 1276).setJavaLines(1766, 1776).setLengths(1, 1);}
-    public UmpleSourceData CursorImpl_getLockerNext(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1254).setJavaLines(1746).setLengths(1);}
-    public UmpleSourceData CursorImpl_setTreeStatsAccumulator(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(230).setJavaLines(405).setLengths(1);}
-    public UmpleSourceData CursorImpl_putNoDupData(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(582).setJavaLines(853).setLengths(6);}
-    public UmpleSourceData CursorImpl_getNext(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(777).setJavaLines(1111).setLengths(1);}
-    public UmpleSourceData CursorImpl_advanceCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(258).setJavaLines(439).setLengths(20);}
-    public UmpleSourceData CursorImpl_hook213(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1350).setJavaLines(1853).setLengths(31);}
-    public UmpleSourceData CursorImpl_flushBINToBeRemoved(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump","CursorImpl.ump").setUmpleLines(212, 865).setJavaLines(1232, 1230).setLengths(2, 6);}
-    public UmpleSourceData CursorImpl_getNextDuplicate(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(899).setJavaLines(1275).setLengths(1);}
-    public UmpleSourceData CursorImpl_latchBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(281).setJavaLines(463).setLengths(1);}
-    public UmpleSourceData CursorImpl_isNotInitialized(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(378).setJavaLines(593).setLengths(1);}
-    public UmpleSourceData CursorImpl_setDbt(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1162).setJavaLines(1624).setLengths(22);}
-    public UmpleSourceData CursorImpl_removeCursorBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(332).setJavaLines(527).setLengths(8);}
-    public UmpleSourceData CursorImpl_latchBINs(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(12).setJavaLines(2081).setLengths(2);}
-    public UmpleSourceData CursorImpl_searchAndPositionBoth(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1008).setJavaLines(1420).setLengths(50);}
-    public UmpleSourceData CursorImpl_removeCursorDBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(340).setJavaLines(539).setLengths(8);}
-    public UmpleSourceData CursorImpl_dup(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(515).setJavaLines(769).setLengths(10);}
+    public UmpleSourceData CursorImpl_lockLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1068).setJavaLines(1490).setLengths(10);}
+    public UmpleSourceData CursorImpl_flushDBINToBeRemoved(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump","CursorImpl.ump").setUmpleLines(222, 903).setJavaLines(1285, 1283).setLengths(2, 6);}
+    public UmpleSourceData CursorImpl_getIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(190).setJavaLines(358).setLengths(1);}
+    public UmpleSourceData CursorImpl_getDupBINToBeRemoved(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(226).setJavaLines(403).setLengths(1);}
+    public UmpleSourceData CursorImpl_setDupIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(214).setJavaLines(388).setLengths(1);}
+    public UmpleSourceData CursorImpl_evict(){ return new UmpleSourceData().setFileNames("Evictor_CursorImpl.ump").setUmpleLines(18).setJavaLines(2051).setLengths(16);}
+    public UmpleSourceData CursorImpl_dumpToString(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1293).setJavaLines(1798).setLengths(13);}
+    public UmpleSourceData CursorImpl_getCurrentAlreadyLatched(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(722).setJavaLines(1030).setLengths(15);}
+    public UmpleSourceData CursorImpl_addCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(293, 303).setJavaLines(481, 497).setLengths(7, 6);}
+    public UmpleSourceData CursorImpl_getCurrentLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(735).setJavaLines(1054).setLengths(10);}
+    public UmpleSourceData CursorImpl_checkCursorState(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1202).setJavaLines(1673).setLengths(23);}
+    public UmpleSourceData CursorImpl_getLockerPrev(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1250).setJavaLines(1744).setLengths(1);}
+    public UmpleSourceData CursorImpl_getNextNoDup(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(872).setJavaLines(1247).setLengths(6);}
+    public UmpleSourceData CursorImpl_getLocker(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(289).setJavaLines(476).setLengths(1);}
+    public UmpleSourceData CursorImpl_count(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump","CursorImpl.ump").setUmpleLines(73, 411).setJavaLines(650, 648).setLengths(1, 36);}
+    public UmpleSourceData CursorImpl_updateBin(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(312).setJavaLines(507).setLengths(6);}
+    public UmpleSourceData CursorImpl_getNextCursorId(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(96).setJavaLines(224).setLengths(1);}
+    public UmpleSourceData CursorImpl_putLN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(538).setJavaLines(801).setLengths(13);}
+    public UmpleSourceData CursorImpl_CursorImpl(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(126, 134).setJavaLines(261, 272).setLengths(1, 12);}
+    public UmpleSourceData CursorImpl_setIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(194).setJavaLines(363).setLengths(1);}
+    public UmpleSourceData CursorImpl_cloneCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","Evictor_CursorImpl.ump","Evictor_CursorImpl.ump","CursorImpl.ump").setUmpleLines(152, 41, 41, 159).setJavaLines(293, 330, 346, 303).setLengths(1, 6, 6, 34);}
+    public UmpleSourceData CursorImpl_lockNextKeyForInsert(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(531).setJavaLines(791).setLengths(1);}
+    public UmpleSourceData CursorImpl_getCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(709).setJavaLines(1008).setLengths(13);}
+    public UmpleSourceData CursorImpl_getTreeStatsAccumulator(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(104).setJavaLines(234).setLengths(5);}
+    public UmpleSourceData CursorImpl_getLatchedDupRoot(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1150).setJavaLines(1598).setLengths(20);}
+    public UmpleSourceData CursorImpl_putCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(596).setJavaLines(872).setLengths(127);}
+    public UmpleSourceData CursorImpl_fetchCurrent(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1058).setJavaLines(1477).setLengths(1);}
+    public UmpleSourceData CursorImpl_putNoOverwrite(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(574).setJavaLines(845).setLengths(2);}
+    public UmpleSourceData CursorImpl_clearDupBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(351).setJavaLines(559).setLengths(13);}
+    public UmpleSourceData CursorImpl_hook229(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1526).setJavaLines(1905).setLengths(1);}
+    public UmpleSourceData CursorImpl_hook228(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1524).setJavaLines(1900).setLengths(1);}
+    public UmpleSourceData CursorImpl_hook227(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1522).setJavaLines(1895).setLengths(1);}
+    public UmpleSourceData CursorImpl_delete(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(447).setJavaLines(697).setLengths(66);}
+    public UmpleSourceData CursorImpl_getNextDuplicate_CursorImpl_getNextDuplicate(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(167).setJavaLines(32).setLengths(6);}
+    public UmpleSourceData CursorImpl_setAllowEviction(){ return new UmpleSourceData().setFileNames("Evictor_CursorImpl.ump").setUmpleLines(10).setJavaLines(2041).setLengths(1);}
+    public UmpleSourceData CursorImpl_trace(){ return new UmpleSourceData().setFileNames("LoggingFiner_CursorImpl.ump").setUmpleLines(8).setJavaLines(2126).setLengths(1);}
+    public UmpleSourceData CursorImpl_getFirstDuplicate(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(885).setJavaLines(1262).setLengths(7);}
+    public UmpleSourceData CursorImpl_hashCode(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(100).setJavaLines(229).setLengths(1);}
+    public UmpleSourceData CursorImpl_getDupIndex(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(210).setJavaLines(383).setLengths(1);}
+    public UmpleSourceData CursorImpl_dump(){ return new UmpleSourceData().setFileNames("CursorImpl.ump","CursorImpl.ump").setUmpleLines(1269, 1276).setJavaLines(1769, 1779).setLengths(1, 1);}
+    public UmpleSourceData CursorImpl_getLockerNext(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1254).setJavaLines(1749).setLengths(1);}
+    public UmpleSourceData CursorImpl_setTreeStatsAccumulator(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(230).setJavaLines(408).setLengths(1);}
+    public UmpleSourceData CursorImpl_putNoDupData(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(582).setJavaLines(856).setLengths(6);}
+    public UmpleSourceData CursorImpl_getNext(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(777).setJavaLines(1114).setLengths(1);}
+    public UmpleSourceData CursorImpl_advanceCursor(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(258).setJavaLines(442).setLengths(20);}
+    public UmpleSourceData CursorImpl_hook213(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1350).setJavaLines(1856).setLengths(31);}
+    public UmpleSourceData CursorImpl_flushBINToBeRemoved(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump","CursorImpl.ump").setUmpleLines(212, 865).setJavaLines(1235, 1233).setLengths(2, 6);}
+    public UmpleSourceData CursorImpl_getNextDuplicate(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(899).setJavaLines(1278).setLengths(1);}
+    public UmpleSourceData CursorImpl_latchBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(281).setJavaLines(466).setLengths(1);}
+    public UmpleSourceData CursorImpl_isNotInitialized(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(378).setJavaLines(596).setLengths(1);}
+    public UmpleSourceData CursorImpl_setDbt(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1162).setJavaLines(1627).setLengths(22);}
+    public UmpleSourceData CursorImpl_removeCursorBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(332).setJavaLines(530).setLengths(8);}
+    public UmpleSourceData CursorImpl_latchBINs(){ return new UmpleSourceData().setFileNames("Latches_CursorImpl.ump").setUmpleLines(12).setJavaLines(2090).setLengths(2);}
+    public UmpleSourceData CursorImpl_searchAndPositionBoth(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(1008).setJavaLines(1423).setLengths(50);}
+    public UmpleSourceData CursorImpl_removeCursorDBIN(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(340).setJavaLines(542).setLengths(8);}
+    public UmpleSourceData CursorImpl_dup(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(515).setJavaLines(772).setLengths(10);}
     public UmpleSourceData SearchMode_SearchMode(){ return new UmpleSourceData().setFileNames("CursorImpl_static.ump").setUmpleLines(12).setJavaLines(28).setLengths(3);}
-    public UmpleSourceData CursorImpl_getNextWithKeyChangeStatus(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(790).setJavaLines(1126).setLengths(100);}
+    public UmpleSourceData CursorImpl_getNextWithKeyChangeStatus(){ return new UmpleSourceData().setFileNames("CursorImpl.ump").setUmpleLines(790).setJavaLines(1129).setLengths(100);}
     public UmpleSourceData RangeRestartException_RangeRestartException(){ return new UmpleSourceData().setFileNames("RangeRestartException.ump").setUmpleLines(8).setJavaLines(35).setLengths(1);}
     public UmpleSourceData DbEnvPool_getExistingEnvironment(){ return new UmpleSourceData().setFileNames("DbEnvPool.ump").setUmpleLines(37).setJavaLines(66).setLengths(1);}
     public UmpleSourceData DbEnvPool_DbEnvPool(){ return new UmpleSourceData().setFileNames("DbEnvPool.ump").setUmpleLines(19).setJavaLines(41).setLengths(1);}
@@ -1747,115 +1752,118 @@ public class DbRecover
     public UmpleSourceData INList_first(){ return new UmpleSourceData().setFileNames("Latches_INList.ump","INList.ump").setUmpleLines(114, 80).setJavaLines(152, 150).setLengths(2, 1);}
     public UmpleSourceData GetMode_GetMode(){ return new UmpleSourceData().setFileNames("GetMode.ump").setUmpleLines(22).setJavaLines(29).setLengths(2);}
     public UmpleSourceData GetMode_toString(){ return new UmpleSourceData().setFileNames("GetMode.ump").setUmpleLines(31).setJavaLines(35).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_addReferringHandle(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(270).setJavaLines(331).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getBinMaxDeltas(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(526).setJavaLines(633).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getName(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(301).setJavaLines(372).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getLogSize(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(415).setJavaLines(499).setLengths(3);}
-    public UmpleSourceData DatabaseImpl_isTransactional(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(188).setJavaLines(217).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_serializeComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(498).setJavaLines(600).setLengths(5);}
+    public UmpleSourceData DatabaseImpl_addReferringHandle(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(270).setJavaLines(332).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getBinMaxDeltas(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(526).setJavaLines(634).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getName(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(301).setJavaLines(373).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getLogSize(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(415).setJavaLines(500).setLengths(3);}
+    public UmpleSourceData DatabaseImpl_isTransactional(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(188).setJavaLines(218).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_serializeComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(498).setJavaLines(601).setLengths(5);}
     public UmpleSourceData HaltPreloadException_getStatus(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump").setUmpleLines(35).setJavaLines(35).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_preload(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(388).setJavaLines(468).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_preload(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(388).setJavaLines(469).setLengths(1);}
     public UmpleSourceData HaltPreloadException_HaltPreloadException(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump").setUmpleLines(31).setJavaLines(29).setLengths(2);}
-    public UmpleSourceData DatabaseImpl_logEntryIsTransactional(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(484).setJavaLines(580).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getEofNodeId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(181).setJavaLines(207).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_walkDatabaseTree(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(316).setJavaLines(390).setLengths(40);}
-    public UmpleSourceData DatabaseImpl_getSortedDuplicates(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(202).setJavaLines(237).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_setId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(177).setJavaLines(202).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_logEntryIsTransactional(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(484).setJavaLines(581).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getEofNodeId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(181).setJavaLines(208).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_walkDatabaseTree(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(316).setJavaLines(391).setLengths(40);}
+    public UmpleSourceData DatabaseImpl_getSortedDuplicates(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(202).setJavaLines(238).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_setId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(177).setJavaLines(203).setLengths(1);}
     public UmpleSourceData LNCounter_getCount(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump").setUmpleLines(24).setJavaLines(37).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_hasOpenHandles(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(263).setJavaLines(321).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_isDeleteFinished(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(19).setJavaLines(643).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getDbEnvironment(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(256).setJavaLines(311).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getNodeMaxDupTreeEntries(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(210).setJavaLines(247).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_setTransactional(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(195).setJavaLines(227).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_hasOpenHandles(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(263).setJavaLines(322).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_isDeleteFinished(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(19).setJavaLines(644).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getDbEnvironment(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(256).setJavaLines(312).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getNodeMaxDupTreeEntries(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(210).setJavaLines(248).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_setTransactional(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(195).setJavaLines(228).setLengths(1);}
     public UmpleSourceData DatabaseImpl_preload_execute(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump").setUmpleLines(44).setJavaLines(39).setLengths(41);}
-    public UmpleSourceData DatabaseImpl_countRecords(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(308).setJavaLines(382).setLengths(4);}
-    public UmpleSourceData DatabaseImpl_DatabaseImpl(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump","DatabaseImpl.ump").setUmpleLines(94, 115).setJavaLines(108, 135).setLengths(18, 10);}
-    public UmpleSourceData DatabaseImpl_findPrimaryDatabase(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(291).setJavaLines(361).setLengths(7);}
-    public UmpleSourceData DatabaseImpl_getEmptyStats(){ return new UmpleSourceData().setFileNames("Statistics_DatabaseImpl.ump").setUmpleLines(29).setJavaLines(721).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_deleteAndReleaseINs(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(36).setJavaLines(665).setLengths(2);}
-    public UmpleSourceData DatabaseImpl_getBtreeComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(233).setJavaLines(279).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_removeReferringHandle(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(277).setJavaLines(341).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_readFromLog(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(437).setJavaLines(527).setLengths(23);}
+    public UmpleSourceData DatabaseImpl_countRecords(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(308).setJavaLines(383).setLengths(4);}
+    public UmpleSourceData DatabaseImpl_DatabaseImpl(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump","DatabaseImpl.ump").setUmpleLines(94, 115).setJavaLines(109, 136).setLengths(18, 10);}
+    public UmpleSourceData DatabaseImpl_findPrimaryDatabase(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(291).setJavaLines(362).setLengths(7);}
+    public UmpleSourceData DatabaseImpl_getEmptyStats(){ return new UmpleSourceData().setFileNames("Statistics_DatabaseImpl.ump").setUmpleLines(29).setJavaLines(722).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_deleteAndReleaseINs(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(36).setJavaLines(666).setLengths(2);}
+    public UmpleSourceData DatabaseImpl_getBtreeComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(233).setJavaLines(280).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_removeReferringHandle(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(277).setJavaLines(342).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_readFromLog(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(437).setJavaLines(528).setLengths(23);}
     public UmpleSourceData DatabaseImpl_preload_DatabaseImpl_preload(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump").setUmpleLines(40).setJavaLines(33).setLengths(2);}
-    public UmpleSourceData DatabaseImpl_getId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(173).setJavaLines(197).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_setEnvironmentImpl(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(247).setJavaLines(299).setLengths(3);}
-    public UmpleSourceData DatabaseImpl_getDebugName(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(129).setJavaLines(154).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_instantiateComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(509).setJavaLines(614).setLengths(10);}
-    public UmpleSourceData DatabaseImpl_writeToLog(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(424).setJavaLines(511).setLengths(7);}
-    public UmpleSourceData DatabaseImpl_isDeleted(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(15).setJavaLines(638).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_initDefaultSettings(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(140).setJavaLines(169).setLengths(9);}
-    public UmpleSourceData DatabaseImpl_setDuplicateComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(218).setJavaLines(258).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_checkIsDeleted(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(63).setJavaLines(694).setLengths(3);}
-    public UmpleSourceData DatabaseImpl_stat(){ return new UmpleSourceData().setFileNames("Statistics_DatabaseImpl.ump").setUmpleLines(10).setJavaLines(701).setLengths(16);}
-    public UmpleSourceData DatabaseImpl_printErrorRecord(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(362).setJavaLines(439).setLengths(20);}
-    public UmpleSourceData DatabaseImpl_setDebugDatabaseName(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(125).setJavaLines(149).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getNodeMaxEntries(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(206).setJavaLines(242).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_getReferringHandleCount(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(284).setJavaLines(351).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_releaseDeletedINs(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(41).setJavaLines(671).setLengths(19);}
-    public UmpleSourceData DatabaseImpl_getDuplicateComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(240).setJavaLines(289).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_setBtreeComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(226).setJavaLines(269).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_dumpString(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(392).setJavaLines(473).setLengths(17);}
-    public UmpleSourceData DatabaseImpl_startDeleteProcessing(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(23).setJavaLines(648).setLengths(2);}
+    public UmpleSourceData DatabaseImpl_getId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(173).setJavaLines(198).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_setEnvironmentImpl(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(247).setJavaLines(300).setLengths(3);}
+    public UmpleSourceData DatabaseImpl_getDebugName(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(129).setJavaLines(155).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_instantiateComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(509).setJavaLines(615).setLengths(10);}
+    public UmpleSourceData DatabaseImpl_writeToLog(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(424).setJavaLines(512).setLengths(7);}
+    public UmpleSourceData DatabaseImpl_isDeleted(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(15).setJavaLines(639).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_initDefaultSettings(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(140).setJavaLines(170).setLengths(9);}
+    public UmpleSourceData DatabaseImpl_verify(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Verifier_DatabaseImpl.ump").setUmpleLines(5).setJavaLines(727).setLengths(19);}
+    public UmpleSourceData DatabaseImpl_setDuplicateComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(218).setJavaLines(259).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_checkIsDeleted(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(63).setJavaLines(695).setLengths(3);}
+    public UmpleSourceData DatabaseImpl_stat(){ return new UmpleSourceData().setFileNames("Statistics_DatabaseImpl.ump").setUmpleLines(10).setJavaLines(702).setLengths(16);}
+    public UmpleSourceData DatabaseImpl_printErrorRecord(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(362).setJavaLines(440).setLengths(20);}
+    public UmpleSourceData DatabaseImpl_setDebugDatabaseName(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(125).setJavaLines(150).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getNodeMaxEntries(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(206).setJavaLines(243).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getReferringHandleCount(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(284).setJavaLines(352).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_releaseDeletedINs(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(41).setJavaLines(672).setLengths(19);}
+    public UmpleSourceData DatabaseImpl_getDuplicateComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(240).setJavaLines(290).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_setBtreeComparator(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(226).setJavaLines(270).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_dumpString(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(392).setJavaLines(474).setLengths(17);}
+    public UmpleSourceData DatabaseImpl_startDeleteProcessing(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(23).setJavaLines(649).setLengths(2);}
     public UmpleSourceData ObsoleteProcessor_processLSN(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump","DatabaseImpl_static.ump").setUmpleLines(10, 18).setJavaLines(34, 29).setLengths(2, 4);}
-    public UmpleSourceData DatabaseImpl_getTransactionId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(491).setJavaLines(590).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_clone(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(155).setJavaLines(187).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_setPendingDeletedHook(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(133).setJavaLines(159).setLengths(1);}
-    public UmpleSourceData DatabaseImpl_dumpLog(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(466).setJavaLines(559).setLengths(12);}
-    public UmpleSourceData DatabaseImpl_finishedINListHarvest(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(28).setJavaLines(654).setLengths(2);}
-    public UmpleSourceData DatabaseImpl_getBinDeltaPercent(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(522).setJavaLines(628).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_getTransactionId(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(491).setJavaLines(591).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_clone(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(155).setJavaLines(188).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_setPendingDeletedHook(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(133).setJavaLines(160).setLengths(1);}
+    public UmpleSourceData DatabaseImpl_dumpLog(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(466).setJavaLines(560).setLengths(12);}
+    public UmpleSourceData DatabaseImpl_finishedINListHarvest(){ return new UmpleSourceData().setFileNames("DeleteOp_DatabaseImpl.ump").setUmpleLines(28).setJavaLines(655).setLengths(2);}
+    public UmpleSourceData DatabaseImpl_getBinDeltaPercent(){ return new UmpleSourceData().setFileNames("DatabaseImpl.ump").setUmpleLines(522).setJavaLines(629).setLengths(1);}
     public UmpleSourceData ObsoleteProcessor_ObsoleteProcessor(){ return new UmpleSourceData().setFileNames("DatabaseImpl_static.ump").setUmpleLines(7).setJavaLines(29).setLengths(1);}
-    public UmpleSourceData DbTree_lockNameLN(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(218).setJavaLines(266).setLengths(42);}
-    public UmpleSourceData DbTree_getLogType(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(536).setJavaLines(645).setLengths(1);}
-    public UmpleSourceData DbTree_getDbNames(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(474).setJavaLines(574).setLengths(31);}
-    public UmpleSourceData DbTree_readFromLog(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(579).setJavaLines(707).setLengths(3);}
-    public UmpleSourceData DbTree_getLogSize(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(557).setJavaLines(675).setLengths(1);}
-    public UmpleSourceData DbTree_DbTree(){ return new UmpleSourceData().setFileNames("DbTree.ump","DbTree.ump").setUmpleLines(62, 73).setJavaLines(75, 89).setLengths(5, 4);}
-    public UmpleSourceData DbTree_setEnvironmentImpl(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(112).setJavaLines(141).setLengths(3);}
+    public UmpleSourceData DbTree_lockNameLN(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(218).setJavaLines(271).setLengths(42);}
+    public UmpleSourceData DbTree_getLogType(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(536).setJavaLines(650).setLengths(1);}
+    public UmpleSourceData DbTree_getDbNames(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(474).setJavaLines(579).setLengths(31);}
+    public UmpleSourceData DbTree_readFromLog(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(579).setJavaLines(712).setLengths(3);}
+    public UmpleSourceData DbTree_getLogSize(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(557).setJavaLines(680).setLengths(1);}
+    public UmpleSourceData DbTree_DbTree(){ return new UmpleSourceData().setFileNames("DbTree.ump","DbTree.ump").setUmpleLines(62, 73).setJavaLines(80, 94).setLengths(5, 4);}
+    public UmpleSourceData DbTree_setEnvironmentImpl(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(112).setJavaLines(146).setLengths(3);}
     public UmpleSourceData RootLevel_RootLevel(){ return new UmpleSourceData().setFileNames("DbTree_static.ump").setUmpleLines(25).setJavaLines(29).setLengths(2);}
-    public UmpleSourceData DbTree_writeToLog(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(564).setJavaLines(685).setLengths(3);}
-    public UmpleSourceData DbTree_logEntryIsTransactional(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(603).setJavaLines(737).setLengths(1);}
-    public UmpleSourceData DbTree_dbRename(){ return new UmpleSourceData().setFileNames("RenameOp_DbTree.ump").setUmpleLines(8).setJavaLines(789).setLengths(21);}
-    public UmpleSourceData DbTree_truncate(){ return new UmpleSourceData().setFileNames("Truncate_DbTree.ump","Truncate_DbTree.ump").setUmpleLines(9, 62).setJavaLines(820, 876).setLengths(46, 56);}
-    public UmpleSourceData DbTree_rebuildINListMapDb(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(423).setJavaLines(514).setLengths(1);}
+    public UmpleSourceData DbTree_writeToLog(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(564).setJavaLines(690).setLengths(3);}
+    public UmpleSourceData DbTree_logEntryIsTransactional(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(603).setJavaLines(742).setLengths(1);}
+    public UmpleSourceData DbTree_dbRename(){ return new UmpleSourceData().setFileNames("RenameOp_DbTree.ump").setUmpleLines(8).setJavaLines(794).setLengths(24);}
+    public UmpleSourceData DbTree_truncate(){ return new UmpleSourceData().setFileNames("Truncate_DbTree.ump","Truncate_DbTree.ump").setUmpleLines(9, 62).setJavaLines(828, 887).setLengths(49, 59);}
+    public UmpleSourceData DbTree_rebuildINListMapDb(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(423).setJavaLines(519).setLengths(1);}
     public UmpleSourceData RewriteMapLN_doWork(){ return new UmpleSourceData().setFileNames("DbTree_static.ump","DbTree_static.ump").setUmpleLines(10, 29).setJavaLines(34, 35).setLengths(3, 3);}
-    public UmpleSourceData DbTree_getDbName(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(430).setJavaLines(524).setLengths(41);}
-    public UmpleSourceData DbTree_createDb(){ return new UmpleSourceData().setFileNames("DbTree.ump","DbTree.ump").setUmpleLines(122, 134).setJavaLines(153, 167).setLengths(1, 43);}
-    public UmpleSourceData DbTree_dump(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(636).setJavaLines(778).setLengths(2);}
+    public UmpleSourceData DbTree_verify(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Verifier_DbTree.ump").setUmpleLines(5).setJavaLines(975).setLengths(53);}
+    public UmpleSourceData DbTree_getDbName(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(430).setJavaLines(529).setLengths(41);}
+    public UmpleSourceData DbTree_createDb(){ return new UmpleSourceData().setFileNames("DbTree.ump","DbTree.ump").setUmpleLines(122, 134).setJavaLines(158, 172).setLengths(1, 43);}
+    public UmpleSourceData DbTree_dump(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(636).setJavaLines(783).setLengths(2);}
     public UmpleSourceData RootLevel_getRootLevel(){ return new UmpleSourceData().setFileNames("DbTree_static.ump").setUmpleLines(34).setJavaLines(42).setLengths(1);}
     public UmpleSourceData RewriteMapLN_RewriteMapLN(){ return new UmpleSourceData().setFileNames("DbTree_static.ump").setUmpleLines(7).setJavaLines(29).setLengths(1);}
-    public UmpleSourceData DbTree_dbRemove(){ return new UmpleSourceData().setFileNames("DeleteOp_DbTree.ump").setUmpleLines(8).setJavaLines(941).setLengths(16);}
-    public UmpleSourceData DbTree_getHighestLevel(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(523).setJavaLines(629).setLengths(7);}
-    public UmpleSourceData DbTree_dumpString(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(614).setJavaLines(752).setLengths(12);}
-    public UmpleSourceData DbTree_deleteMapLN(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(254).setJavaLines(312).setLengths(20);}
-    public UmpleSourceData DbTree_getDb(){ return new UmpleSourceData().setFileNames("DbTree.ump","DbTree.ump","DbTree.ump","DbTree.ump","DbTree.ump","DbTree.ump").setUmpleLines(281, 293, 331, 338, 345, 360).setJavaLines(341, 355, 402, 412, 422, 439).setLengths(1, 38, 1, 1, 7, 55);}
-    public UmpleSourceData DbTree_getLastDbId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(83).setJavaLines(102).setLengths(1);}
-    public UmpleSourceData DbTree_postLogWork(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(573).setJavaLines(697).setLengths(1);}
-    public UmpleSourceData DbTree_modifyDbRoot(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(176).setJavaLines(220).setLengths(42);}
-    public UmpleSourceData DbTree_setDebugNameForDatabaseImpl(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(410).setJavaLines(498).setLengths(7);}
-    public UmpleSourceData DbTree_getTransactionId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(610).setJavaLines(747).setLengths(1);}
-    public UmpleSourceData DbTree_countAsObsoleteWhenLogged(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(550).setJavaLines(665).setLengths(1);}
-    public UmpleSourceData DbTree_isReservedDbName(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(511).setJavaLines(614).setLengths(6);}
-    public UmpleSourceData DbTree_dumpLog(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(588).setJavaLines(719).setLengths(9);}
-    public UmpleSourceData DbTree_toString(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(629).setJavaLines(768).setLengths(1);}
-    public UmpleSourceData DbTree_getNextDbId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(90).setJavaLines(112).setLengths(1);}
-    public UmpleSourceData DbTree_marshallOutsideWriteLatch(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(543).setJavaLines(655).setLengths(1);}
-    public UmpleSourceData DbTree_setLastDbId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(97).setJavaLines(122).setLengths(1);}
-    public UmpleSourceData DbTree_createLocker(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(101).setJavaLines(127).setLengths(5);}
-    public UmpleSourceData LockStats_getNRequests(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(78).setJavaLines(87).setLengths(1);}
-    public UmpleSourceData LockStats_setNRequests(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(127).setJavaLines(157).setLengths(1);}
-    public UmpleSourceData LockStats_getNWaiters(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(64).setJavaLines(67).setLengths(1);}
-    public UmpleSourceData LockStats_getNWaits(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(85).setJavaLines(97).setLengths(1);}
-    public UmpleSourceData LockStats_setNWaits(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(134).setJavaLines(167).setLengths(1);}
-    public UmpleSourceData LockStats_getNReadLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(50).setJavaLines(47).setLengths(1);}
-    public UmpleSourceData LockStats_getNTotalLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(57).setJavaLines(57).setLengths(1);}
-    public UmpleSourceData LockStats_setNWriteLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(120).setJavaLines(147).setLengths(1);}
-    public UmpleSourceData LockStats_getNOwners(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(43).setJavaLines(37).setLengths(1);}
-    public UmpleSourceData LockStats_setNWaiters(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(113).setJavaLines(137).setLengths(1);}
-    public UmpleSourceData LockStats_getNWriteLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(71).setJavaLines(77).setLengths(1);}
-    public UmpleSourceData LockStats_setNOwners(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(92).setJavaLines(107).setLengths(1);}
-    public UmpleSourceData LockStats_toString(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(141).setJavaLines(177).setLengths(10);}
-    public UmpleSourceData LockStats_setNReadLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(99).setJavaLines(117).setLengths(1);}
-    public UmpleSourceData LockStats_accumulateNTotalLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(106).setJavaLines(127).setLengths(1);}
+    public UmpleSourceData DbTree_dbRemove(){ return new UmpleSourceData().setFileNames("DeleteOp_DbTree.ump").setUmpleLines(8).setJavaLines(955).setLengths(16);}
+    public UmpleSourceData DbTree_getHighestLevel(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(523).setJavaLines(634).setLengths(7);}
+    public UmpleSourceData DbTree_dumpString(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(614).setJavaLines(757).setLengths(12);}
+    public UmpleSourceData DbTree_deleteMapLN(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(254).setJavaLines(317).setLengths(20);}
+    public UmpleSourceData DbTree_getDb(){ return new UmpleSourceData().setFileNames("DbTree.ump","DbTree.ump","DbTree.ump","DbTree.ump","DbTree.ump","DbTree.ump").setUmpleLines(281, 293, 331, 338, 345, 360).setJavaLines(346, 360, 407, 417, 427, 444).setLengths(1, 38, 1, 1, 7, 55);}
+    public UmpleSourceData DbTree_getLastDbId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(83).setJavaLines(107).setLengths(1);}
+    public UmpleSourceData DbTree_postLogWork(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(573).setJavaLines(702).setLengths(1);}
+    public UmpleSourceData DbTree_modifyDbRoot(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(176).setJavaLines(225).setLengths(42);}
+    public UmpleSourceData DbTree_setDebugNameForDatabaseImpl(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(410).setJavaLines(503).setLengths(7);}
+    public UmpleSourceData DbTree_getTransactionId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(610).setJavaLines(752).setLengths(1);}
+    public UmpleSourceData DbTree_countAsObsoleteWhenLogged(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(550).setJavaLines(670).setLengths(1);}
+    public UmpleSourceData DbTree_isReservedDbName(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(511).setJavaLines(619).setLengths(6);}
+    public UmpleSourceData DbTree_dumpLog(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(588).setJavaLines(724).setLengths(9);}
+    public UmpleSourceData DbTree_toString(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(629).setJavaLines(773).setLengths(1);}
+    public UmpleSourceData DbTree_getNextDbId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(90).setJavaLines(117).setLengths(1);}
+    public UmpleSourceData DbTree_marshallOutsideWriteLatch(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(543).setJavaLines(660).setLengths(1);}
+    public UmpleSourceData DbTree_setLastDbId(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(97).setJavaLines(127).setLengths(1);}
+    public UmpleSourceData DbTree_createLocker(){ return new UmpleSourceData().setFileNames("DbTree.ump").setUmpleLines(101).setJavaLines(132).setLengths(5);}
+    public UmpleSourceData LockStats_getNRequests(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(78).setJavaLines(89).setLengths(1);}
+    public UmpleSourceData LockStats_setNRequests(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(127).setJavaLines(159).setLengths(1);}
+    public UmpleSourceData LockStats_getNWaiters(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(64).setJavaLines(69).setLengths(1);}
+    public UmpleSourceData LockStats_accumulateLockTableLatchStats(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Statistics_LockStats.ump").setUmpleLines(14).setJavaLines(201).setLengths(11);}
+    public UmpleSourceData LockStats_getNWaits(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(85).setJavaLines(99).setLengths(1);}
+    public UmpleSourceData LockStats_setNWaits(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(134).setJavaLines(169).setLengths(1);}
+    public UmpleSourceData LockStats_getNReadLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(50).setJavaLines(49).setLengths(1);}
+    public UmpleSourceData LockStats_getNTotalLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(57).setJavaLines(59).setLengths(1);}
+    public UmpleSourceData LockStats_setNWriteLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(120).setJavaLines(149).setLengths(1);}
+    public UmpleSourceData LockStats_getNOwners(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(43).setJavaLines(39).setLengths(1);}
+    public UmpleSourceData LockStats_setNWaiters(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(113).setJavaLines(139).setLengths(1);}
+    public UmpleSourceData LockStats_getNWriteLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(71).setJavaLines(79).setLengths(1);}
+    public UmpleSourceData LockStats_setNOwners(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(92).setJavaLines(109).setLengths(1);}
+    public UmpleSourceData LockStats_toString(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(141).setJavaLines(179).setLengths(13);}
+    public UmpleSourceData LockStats_setNReadLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(99).setJavaLines(119).setLengths(1);}
+    public UmpleSourceData LockStats_accumulateNTotalLocks(){ return new UmpleSourceData().setFileNames("Statistics_LockStats.ump").setUmpleLines(106).setJavaLines(129).setLengths(1);}
     public UmpleSourceData TxnEnd_postLogWork(){ return new UmpleSourceData().setFileNames("TxnEnd.ump").setUmpleLines(65).setJavaLines(98).setLengths(1);}
     public UmpleSourceData TxnEnd_writeToLog(){ return new UmpleSourceData().setFileNames("TxnEnd.ump").setUmpleLines(78).setJavaLines(118).setLengths(3);}
     public UmpleSourceData TxnEnd_logEntryIsTransactional(){ return new UmpleSourceData().setFileNames("TxnEnd.ump").setUmpleLines(108).setJavaLines(157).setLengths(1);}
@@ -1999,29 +2007,29 @@ public class DbRecover
     public UmpleSourceData ReadCommittedLocker_isReadCommittedIsolation(){ return new UmpleSourceData().setFileNames("ReadCommittedLocker.ump").setUmpleLines(97).setJavaLines(155).setLengths(1);}
     public UmpleSourceData ReadCommittedLocker_lockInternal(){ return new UmpleSourceData().setFileNames("ReadCommittedLocker.ump").setUmpleLines(35).setJavaLines(69).setLengths(5);}
     public UmpleSourceData ReadCommittedLocker_unRegisterCursor(){ return new UmpleSourceData().setFileNames("ReadCommittedLocker.ump").setUmpleLines(83).setJavaLines(135).setLengths(1);}
-    public UmpleSourceData TxnManager_unsetTxnForThread(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(161).setJavaLines(253).setLengths(2);}
-    public UmpleSourceData TxnManager_hook829(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(250).setJavaLines(369).setLengths(1);}
-    public UmpleSourceData TxnManager_txnBegin(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(82).setJavaLines(106).setLengths(4);}
-    public UmpleSourceData TxnManager_unRegisterXATxn(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(134).setJavaLines(207).setLengths(16);}
-    public UmpleSourceData TxnManager_hook827(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(245).setJavaLines(359).setLengths(1);}
-    public UmpleSourceData TxnManager_getTxnForThread(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(169).setJavaLines(264).setLengths(1);}
-    public UmpleSourceData TxnManager_hook826(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(243).setJavaLines(354).setLengths(1);}
-    public UmpleSourceData TxnManager_hook825(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(241).setJavaLines(349).setLengths(1);}
-    public UmpleSourceData TxnManager_setTxnForThread(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(153).setJavaLines(242).setLengths(2);}
-    public UmpleSourceData TxnManager_XARecover(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(173).setJavaLines(269).setLengths(4);}
-    public UmpleSourceData TxnManager_getLockManager(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(92).setJavaLines(119).setLengths(1);}
-    public UmpleSourceData TxnManager_getLastTxnId(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(65).setJavaLines(83).setLengths(1);}
-    public UmpleSourceData TxnManager_hook830(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(252).setJavaLines(374).setLengths(1);}
-    public UmpleSourceData TxnManager_getFirstActiveLsn(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(191).setJavaLines(293).setLengths(24);}
-    public UmpleSourceData TxnManager_lockStat(){ return new UmpleSourceData().setFileNames("Statistics_TxnManager.ump").setUmpleLines(58).setJavaLines(424).setLengths(1);}
-    public UmpleSourceData TxnManager_TxnManager(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(39).setJavaLines(50).setLengths(24);}
-    public UmpleSourceData TxnManager_registerXATxn(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(122).setJavaLines(184).setLengths(14);}
-    public UmpleSourceData TxnManager_txnStat(){ return new UmpleSourceData().setFileNames("Statistics_TxnManager.ump").setUmpleLines(21).setJavaLines(384).setLengths(31);}
-    public UmpleSourceData TxnManager_areOtherSerializableTransactionsActive(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(183).setJavaLines(282).setLengths(2);}
-    public UmpleSourceData TxnManager_incTxnId(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(72).setJavaLines(93).setLengths(1);}
-    public UmpleSourceData TxnManager_unRegisterTxn(){ return new UmpleSourceData().setFileNames("Latches_TxnManager.ump","Latches_TxnManager.ump","TxnManager.ump").setUmpleLines(42, 46, 109).setJavaLines(152, 172, 150).setLengths(1, 3, 17);}
-    public UmpleSourceData TxnManager_getTxnFromXid(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(146).setJavaLines(232).setLengths(1);}
-    public UmpleSourceData TxnManager_registerTxn(){ return new UmpleSourceData().setFileNames("Latches_TxnManager.ump","Latches_TxnManager.ump","TxnManager.ump").setUmpleLines(27, 33, 99).setJavaLines(131, 139, 129).setLengths(2, 2, 4);}
+    public UmpleSourceData TxnManager_unsetTxnForThread(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(161).setJavaLines(254).setLengths(2);}
+    public UmpleSourceData TxnManager_hook829(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(250).setJavaLines(370).setLengths(1);}
+    public UmpleSourceData TxnManager_txnBegin(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(82).setJavaLines(107).setLengths(4);}
+    public UmpleSourceData TxnManager_unRegisterXATxn(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(134).setJavaLines(208).setLengths(16);}
+    public UmpleSourceData TxnManager_hook827(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(245).setJavaLines(360).setLengths(1);}
+    public UmpleSourceData TxnManager_getTxnForThread(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(169).setJavaLines(265).setLengths(1);}
+    public UmpleSourceData TxnManager_hook826(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(243).setJavaLines(355).setLengths(1);}
+    public UmpleSourceData TxnManager_hook825(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(241).setJavaLines(350).setLengths(1);}
+    public UmpleSourceData TxnManager_setTxnForThread(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(153).setJavaLines(243).setLengths(2);}
+    public UmpleSourceData TxnManager_XARecover(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(173).setJavaLines(270).setLengths(4);}
+    public UmpleSourceData TxnManager_getLockManager(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(92).setJavaLines(120).setLengths(1);}
+    public UmpleSourceData TxnManager_getLastTxnId(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(65).setJavaLines(84).setLengths(1);}
+    public UmpleSourceData TxnManager_hook830(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(252).setJavaLines(375).setLengths(1);}
+    public UmpleSourceData TxnManager_getFirstActiveLsn(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(191).setJavaLines(294).setLengths(24);}
+    public UmpleSourceData TxnManager_lockStat(){ return new UmpleSourceData().setFileNames("Statistics_TxnManager.ump").setUmpleLines(58).setJavaLines(427).setLengths(1);}
+    public UmpleSourceData TxnManager_TxnManager(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(39).setJavaLines(51).setLengths(24);}
+    public UmpleSourceData TxnManager_registerXATxn(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(122).setJavaLines(185).setLengths(14);}
+    public UmpleSourceData TxnManager_txnStat(){ return new UmpleSourceData().setFileNames("Statistics_TxnManager.ump").setUmpleLines(21).setJavaLines(385).setLengths(33);}
+    public UmpleSourceData TxnManager_areOtherSerializableTransactionsActive(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(183).setJavaLines(283).setLengths(2);}
+    public UmpleSourceData TxnManager_incTxnId(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(72).setJavaLines(94).setLengths(1);}
+    public UmpleSourceData TxnManager_unRegisterTxn(){ return new UmpleSourceData().setFileNames("Latches_TxnManager.ump","Latches_TxnManager.ump","TxnManager.ump").setUmpleLines(42, 46, 109).setJavaLines(153, 173, 151).setLengths(1, 3, 17);}
+    public UmpleSourceData TxnManager_getTxnFromXid(){ return new UmpleSourceData().setFileNames("TxnManager.ump").setUmpleLines(146).setJavaLines(233).setLengths(1);}
+    public UmpleSourceData TxnManager_registerTxn(){ return new UmpleSourceData().setFileNames("Latches_TxnManager.ump","Latches_TxnManager.ump","TxnManager.ump").setUmpleLines(27, 33, 99).setJavaLines(132, 140, 130).setLengths(2, 2, 4);}
     public UmpleSourceData DummyLockManager_nWaiters(){ return new UmpleSourceData().setFileNames("DummyLockManager.ump").setUmpleLines(83).setJavaLines(139).setLengths(1);}
     public UmpleSourceData DummyLockManager_releaseAndFindNotifyTargets(){ return new UmpleSourceData().setFileNames("DummyLockManager.ump").setUmpleLines(37).setJavaLines(69).setLengths(1);}
     public UmpleSourceData DummyLockManager_isWaiter(){ return new UmpleSourceData().setFileNames("DummyLockManager.ump").setUmpleLines(76).setJavaLines(129).setLengths(1);}
@@ -2056,41 +2064,41 @@ public class DbRecover
     public UmpleSourceData TxnAbort_TxnAbort(){ return new UmpleSourceData().setFileNames("TxnAbort.ump","TxnAbort.ump").setUmpleLines(8, 15).setJavaLines(34, 44).setLengths(1, 1);}
     public UmpleSourceData TxnAbort_getLogType(){ return new UmpleSourceData().setFileNames("TxnAbort.ump").setUmpleLines(21).setJavaLines(54).setLengths(1);}
     public UmpleSourceData TxnAbort_getTagName(){ return new UmpleSourceData().setFileNames("TxnAbort.ump").setUmpleLines(25).setJavaLines(59).setLengths(1);}
-    public UmpleSourceData LockManager_dumpToStringNoLatch(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(527).setJavaLines(644).setLengths(10);}
-    public UmpleSourceData LockManager_release(){ return new UmpleSourceData().setFileNames("LockManager.ump","LockManager.ump","LockManager.ump").setUmpleLines(226, 235, 247).setJavaLines(273, 285, 300).setLengths(1, 1, 17);}
-    public UmpleSourceData LockManager_getLockTableIndex(){ return new UmpleSourceData().setFileNames("LockManager.ump","LockManager.ump").setUmpleLines(67, 71).setJavaLines(102, 107).setLengths(1, 1);}
-    public UmpleSourceData LockManager_dumpToString(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(513).setJavaLines(627).setLengths(13);}
-    public UmpleSourceData LockManager_lockStat(){ return new UmpleSourceData().setFileNames("Statistics_LockManager.ump").setUmpleLines(13).setJavaLines(758).setLengths(1);}
-    public UmpleSourceData LockManager_dumpLockTableInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(491).setJavaLines(587).setLengths(26);}
-    public UmpleSourceData LockManager_hook780(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(621).setJavaLines(748).setLengths(1);}
-    public UmpleSourceData LockManager_isLockedInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(369).setJavaLines(445).setLengths(6);}
-    public UmpleSourceData LockManager_transferInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(313).setJavaLines(375).setLengths(8);}
-    public UmpleSourceData LockManager_releaseAndFindNotifyTargetsInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(278).setJavaLines(334).setLengths(25);}
-    public UmpleSourceData LockManager_findDeadlock(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(540).setJavaLines(658).setLengths(8);}
-    public UmpleSourceData LockManager_findDeadlock1(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(551).setJavaLines(670).setLengths(33);}
-    public UmpleSourceData LockManager_lock(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(86).setJavaLines(124).setLengths(66);}
-    public UmpleSourceData LockManager_dump(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(509).setJavaLines(622).setLengths(1);}
-    public UmpleSourceData LockManager_getWriteOwnerLockerInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(454).setJavaLines(555).setLengths(9);}
-    public UmpleSourceData LockManager_makeTimeoutMsgInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(189).setJavaLines(233).setLengths(29);}
-    public UmpleSourceData LockManager_validateOwnershipInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(470).setJavaLines(568).setLengths(10);}
-    public UmpleSourceData LockManager_envConfigUpdate(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(55).setJavaLines(86).setLengths(2);}
-    public UmpleSourceData LockManager_transferMultipleInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(333).setJavaLines(399).setLengths(6);}
-    public UmpleSourceData LockManager_hook778(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(615).setJavaLines(738).setLengths(1);}
-    public UmpleSourceData LockManager_nWaitersInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(420).setJavaLines(511).setLengths(6);}
-    public UmpleSourceData LockManager_hook777(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(612).setJavaLines(733).setLengths(1);}
-    public UmpleSourceData LockManager_hook776(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(609).setJavaLines(728).setLengths(1);}
-    public UmpleSourceData LockManager_hook775(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(606).setJavaLines(723).setLengths(1);}
-    public UmpleSourceData LockManager_lockStat_execute(){ return new UmpleSourceData().setFileNames("Statistics_LockManager_inner.ump").setUmpleLines(9).setJavaLines(34).setLengths(12);}
-    public UmpleSourceData LockManager_LockManager(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(35).setJavaLines(54).setLengths(23);}
-    public UmpleSourceData LockManager_demoteInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(352).setJavaLines(423).setLengths(4);}
-    public UmpleSourceData LockManager_isOwnerInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(386).setJavaLines(467).setLengths(6);}
-    public UmpleSourceData LockManager_attemptLockInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(155).setJavaLines(194).setLengths(23);}
-    public UmpleSourceData LockManager_nOwnersInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(437).setJavaLines(533).setLengths(6);}
+    public UmpleSourceData LockManager_dumpToStringNoLatch(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(527).setJavaLines(647).setLengths(10);}
+    public UmpleSourceData LockManager_release(){ return new UmpleSourceData().setFileNames("LockManager.ump","LockManager.ump","LockManager.ump").setUmpleLines(226, 235, 247).setJavaLines(276, 288, 303).setLengths(1, 1, 17);}
+    public UmpleSourceData LockManager_getLockTableIndex(){ return new UmpleSourceData().setFileNames("LockManager.ump","LockManager.ump").setUmpleLines(67, 71).setJavaLines(105, 110).setLengths(1, 1);}
+    public UmpleSourceData LockManager_dumpToString(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(513).setJavaLines(630).setLengths(13);}
+    public UmpleSourceData LockManager_lockStat(){ return new UmpleSourceData().setFileNames("Statistics_LockManager.ump").setUmpleLines(13).setJavaLines(761).setLengths(1);}
+    public UmpleSourceData LockManager_dumpLockTableInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(491).setJavaLines(590).setLengths(26);}
+    public UmpleSourceData LockManager_hook780(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(621).setJavaLines(751).setLengths(1);}
+    public UmpleSourceData LockManager_isLockedInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(369).setJavaLines(448).setLengths(6);}
+    public UmpleSourceData LockManager_transferInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(313).setJavaLines(378).setLengths(8);}
+    public UmpleSourceData LockManager_releaseAndFindNotifyTargetsInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(278).setJavaLines(337).setLengths(25);}
+    public UmpleSourceData LockManager_findDeadlock(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(540).setJavaLines(661).setLengths(8);}
+    public UmpleSourceData LockManager_findDeadlock1(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(551).setJavaLines(673).setLengths(33);}
+    public UmpleSourceData LockManager_lock(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(86).setJavaLines(127).setLengths(66);}
+    public UmpleSourceData LockManager_dump(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(509).setJavaLines(625).setLengths(1);}
+    public UmpleSourceData LockManager_getWriteOwnerLockerInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(454).setJavaLines(558).setLengths(9);}
+    public UmpleSourceData LockManager_makeTimeoutMsgInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(189).setJavaLines(236).setLengths(29);}
+    public UmpleSourceData LockManager_validateOwnershipInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(470).setJavaLines(571).setLengths(10);}
+    public UmpleSourceData LockManager_envConfigUpdate(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(55).setJavaLines(89).setLengths(2);}
+    public UmpleSourceData LockManager_transferMultipleInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(333).setJavaLines(402).setLengths(6);}
+    public UmpleSourceData LockManager_hook778(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(615).setJavaLines(741).setLengths(1);}
+    public UmpleSourceData LockManager_nWaitersInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(420).setJavaLines(514).setLengths(6);}
+    public UmpleSourceData LockManager_hook777(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(612).setJavaLines(736).setLengths(1);}
+    public UmpleSourceData LockManager_hook776(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(609).setJavaLines(731).setLengths(1);}
+    public UmpleSourceData LockManager_hook775(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(606).setJavaLines(726).setLengths(1);}
+    public UmpleSourceData LockManager_lockStat_execute(){ return new UmpleSourceData().setFileNames("Statistics_LockManager_inner.ump").setUmpleLines(9).setJavaLines(35).setLengths(18);}
+    public UmpleSourceData LockManager_LockManager(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(35).setJavaLines(57).setLengths(23);}
+    public UmpleSourceData LockManager_demoteInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(352).setJavaLines(426).setLengths(4);}
+    public UmpleSourceData LockManager_isOwnerInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(386).setJavaLines(470).setLengths(6);}
+    public UmpleSourceData LockManager_attemptLockInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(155).setJavaLines(197).setLengths(23);}
+    public UmpleSourceData LockManager_nOwnersInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(437).setJavaLines(536).setLengths(6);}
     public UmpleSourceData LockAttemptResult_LockAttemptResult(){ return new UmpleSourceData().setFileNames("LockManager_static.ump").setUmpleLines(8).setJavaLines(76).setLengths(3);}
-    public UmpleSourceData LockManager_lockStat_LockManager_lockStat(){ return new UmpleSourceData().setFileNames("Statistics_LockManager_inner.ump").setUmpleLines(5).setJavaLines(28).setLengths(2);}
-    public UmpleSourceData LockManager_isWaiterInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(403).setJavaLines(489).setLengths(6);}
-    public UmpleSourceData LockManager_setLockTableDump(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(63).setJavaLines(97).setLengths(1);}
-    public UmpleSourceData LockManager_checkNoLatchesHeld(){ return new UmpleSourceData().setFileNames("Latches_LockManager.ump").setUmpleLines(9).setJavaLines(763).setLengths(5);}
+    public UmpleSourceData LockManager_lockStat_LockManager_lockStat(){ return new UmpleSourceData().setFileNames("Statistics_LockManager_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(2);}
+    public UmpleSourceData LockManager_isWaiterInternal(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(403).setJavaLines(492).setLengths(6);}
+    public UmpleSourceData LockManager_setLockTableDump(){ return new UmpleSourceData().setFileNames("LockManager.ump").setUmpleLines(63).setJavaLines(100).setLengths(1);}
+    public UmpleSourceData LockManager_checkNoLatchesHeld(){ return new UmpleSourceData().setFileNames("Latches_LockManager.ump").setUmpleLines(9).setJavaLines(766).setLengths(5);}
     public UmpleSourceData WriteLockInfo_WriteLockInfo(){ return new UmpleSourceData().setFileNames("WriteLockInfo.ump","WriteLockInfo.ump").setUmpleLines(19, 27).setJavaLines(108, 117).setLengths(5, 5);}
     public UmpleSourceData BasicLocker_BasicLocker(){ return new UmpleSourceData().setFileNames("BasicLocker.ump").setUmpleLines(24).setJavaLines(51).setLengths(1);}
     public UmpleSourceData BasicLocker_releaseNonTxnLocks(){ return new UmpleSourceData().setFileNames("BasicLocker.ump").setUmpleLines(114).setJavaLines(172).setLengths(1);}
@@ -2332,16 +2340,16 @@ public class DbRecover
     public UmpleSourceData LNFileReader_isLN(){ return new UmpleSourceData().setFileNames("LNFileReader.ump").setUmpleLines(68).setJavaLines(101).setLengths(1);}
     public UmpleSourceData LNFileReader_addTargetType(){ return new UmpleSourceData().setFileNames("LNFileReader.ump").setUmpleLines(40).setJavaLines(64).setLengths(1);}
     public UmpleSourceData LogException_LogException(){ return new UmpleSourceData().setFileNames("LogException.ump","LogException.ump").setUmpleLines(8, 12).setJavaLines(35, 40).setLengths(1, 1);}
-    public UmpleSourceData LogBufferPool_getWriteBuffer(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(64).setJavaLines(90).setLengths(9);}
-    public UmpleSourceData LogBufferPool_writeCompleted(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(126).setJavaLines(186).setLengths(4);}
-    public UmpleSourceData LogBufferPool_hook486(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(166).setJavaLines(235).setLengths(1);}
-    public UmpleSourceData LogBufferPool_hook485(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(163).setJavaLines(230).setLengths(1);}
-    public UmpleSourceData LogBufferPool_writeBufferToFile(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(80).setJavaLines(109).setLengths(68);}
-    public UmpleSourceData LogBufferPool_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_LogBufferPool.ump","Statistics_LogBufferPool.ump").setUmpleLines(46, 11).setJavaLines(277, 275).setLengths(2, 25);}
-    public UmpleSourceData LogBufferPool_reset(){ return new UmpleSourceData().setFileNames("Latches_LogBufferPool.ump","LogBufferPool.ump").setUmpleLines(18, 41).setJavaLines(77, 59).setLengths(2, 16);}
-    public UmpleSourceData LogBufferPool_getReadBuffer(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(137).setJavaLines(200).setLengths(26);}
-    public UmpleSourceData LogBufferPool_hook488(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(198).setJavaLines(270).setLengths(1);}
-    public UmpleSourceData LogBufferPool_LogBufferPool(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(28).setJavaLines(43).setLengths(7);}
+    public UmpleSourceData LogBufferPool_getWriteBuffer(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(64).setJavaLines(91).setLengths(9);}
+    public UmpleSourceData LogBufferPool_writeCompleted(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(126).setJavaLines(187).setLengths(4);}
+    public UmpleSourceData LogBufferPool_hook486(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(166).setJavaLines(236).setLengths(1);}
+    public UmpleSourceData LogBufferPool_hook485(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(163).setJavaLines(231).setLengths(1);}
+    public UmpleSourceData LogBufferPool_writeBufferToFile(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(80).setJavaLines(110).setLengths(68);}
+    public UmpleSourceData LogBufferPool_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_LogBufferPool.ump","Statistics_LogBufferPool.ump").setUmpleLines(46, 11).setJavaLines(278, 276).setLengths(2, 30);}
+    public UmpleSourceData LogBufferPool_reset(){ return new UmpleSourceData().setFileNames("Latches_LogBufferPool.ump","LogBufferPool.ump").setUmpleLines(18, 41).setJavaLines(78, 60).setLengths(2, 16);}
+    public UmpleSourceData LogBufferPool_getReadBuffer(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(137).setJavaLines(201).setLengths(26);}
+    public UmpleSourceData LogBufferPool_hook488(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(198).setJavaLines(271).setLengths(1);}
+    public UmpleSourceData LogBufferPool_LogBufferPool(){ return new UmpleSourceData().setFileNames("LogBufferPool.ump").setUmpleLines(28).setJavaLines(44).setLengths(7);}
     public UmpleSourceData StatsFileReader_pad(){ return new UmpleSourceData().setFileNames("StatsFileReader.ump").setUmpleLines(140).setJavaLines(161).setLengths(7);}
     public UmpleSourceData LogEntryTypeComparator_compare(){ return new UmpleSourceData().setFileNames("StatsFileReader_static.ump").setUmpleLines(20).setJavaLines(29).setLengths(14);}
     public UmpleSourceData StatsFileReader_StatsFileReader(){ return new UmpleSourceData().setFileNames("StatsFileReader.ump").setUmpleLines(35).setJavaLines(51).setLengths(9);}
@@ -2350,7 +2358,7 @@ public class DbRecover
     public UmpleSourceData StatsFileReader_summarize(){ return new UmpleSourceData().setFileNames("StatsFileReader.ump").setUmpleLines(87).setJavaLines(107).setLengths(50);}
     public UmpleSourceData EntryInfo_EntryInfo(){ return new UmpleSourceData().setFileNames("CleanerFileReader_static.ump","StatsFileReader_static.ump").setUmpleLines(7, 10).setJavaLines(29, 35).setLengths(2, 5);}
     public UmpleSourceData StatsFileReader_processEntry(){ return new UmpleSourceData().setFileNames("StatsFileReader.ump").setUmpleLines(50).setJavaLines(69).setLengths(34);}
-    public UmpleSourceData LogResult_LogResult(){ return new UmpleSourceData().setFileNames("LogResult.ump").setUmpleLines(10).setJavaLines(62).setLengths(3);}
+    public UmpleSourceData LogResult_LogResult(){ return new UmpleSourceData().setFileNames("LogResult.ump").setUmpleLines(10).setJavaLines(78).setLengths(6);}
     public UmpleSourceData DeletedDupLNLogEntry_writeToLog(){ return new UmpleSourceData().setFileNames("DeletedDupLNLogEntry.ump").setUmpleLines(68).setJavaLines(107).setLengths(2);}
     public UmpleSourceData DeletedDupLNLogEntry_DeletedDupLNLogEntry(){ return new UmpleSourceData().setFileNames("DeletedDupLNLogEntry.ump","DeletedDupLNLogEntry.ump").setUmpleLines(20, 28).setJavaLines(46, 56).setLengths(1, 2);}
     public UmpleSourceData DeletedDupLNLogEntry_dumpEntry(){ return new UmpleSourceData().setFileNames("DeletedDupLNLogEntry.ump").setUmpleLines(51).setJavaLines(84).setLengths(3);}
@@ -2601,36 +2609,36 @@ public class DbRecover
     public UmpleSourceData FileHandle_close(){ return new UmpleSourceData().setFileNames("FileHandle.ump").setUmpleLines(28).setJavaLines(56).setLengths(4);}
     public UmpleSourceData FileHandleSource_release(){ return new UmpleSourceData().setFileNames("Latches_FileHandleSource.ump").setUmpleLines(8).setJavaLines(46).setLengths(1);}
     public UmpleSourceData FileHandleSource_FileHandleSource(){ return new UmpleSourceData().setFileNames("FileHandleSource.ump").setUmpleLines(10).setJavaLines(35).setLengths(2);}
-    public UmpleSourceData LogManager_writeHeader(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(279).setJavaLines(329).setLengths(8);}
-    public UmpleSourceData LogManager_countObsoleteNodeInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(369).setJavaLines(424).setLengths(1);}
-    public UmpleSourceData LogManager_log(){ return new UmpleSourceData().setFileNames("LogManager.ump","LogManager.ump","LogManager.ump").setUmpleLines(115, 123, 137).setJavaLines(145, 156, 172).setLengths(1, 1, 26);}
-    public UmpleSourceData LogManager_hook505(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(433).setJavaLines(483).setLengths(1);}
-    public UmpleSourceData LogManager_hook502(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(412).setJavaLines(459).setLengths(1);}
-    public UmpleSourceData LogManager_getLogSource(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(327).setJavaLines(390).setLengths(11);}
-    public UmpleSourceData LogManager_setReadHook(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(399).setJavaLines(446).setLengths(1);}
+    public UmpleSourceData LogManager_writeHeader(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(279).setJavaLines(341).setLengths(8);}
+    public UmpleSourceData LogManager_countObsoleteNodeInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(369).setJavaLines(436).setLengths(1);}
+    public UmpleSourceData LogManager_log(){ return new UmpleSourceData().setFileNames("LogManager.ump","LogManager.ump","LogManager.ump").setUmpleLines(115, 123, 137).setJavaLines(149, 160, 176).setLengths(1, 1, 31);}
+    public UmpleSourceData LogManager_hook505(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(433).setJavaLines(495).setLengths(1);}
+    public UmpleSourceData LogManager_hook502(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(412).setJavaLines(471).setLengths(1);}
+    public UmpleSourceData LogManager_getLogSource(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(327).setJavaLines(402).setLengths(11);}
+    public UmpleSourceData LogManager_setReadHook(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(399).setJavaLines(458).setLengths(1);}
     public UmpleSourceData LogManager_getLogEntryFromLogSource_LogManager_getLogEntryFromLogSource(){ return new UmpleSourceData().setFileNames("LogManager_static.ump").setUmpleLines(5).setJavaLines(30).setLengths(3);}
-    public UmpleSourceData LogManager_Label501:log(){ return new UmpleSourceData().setFileNames("FSync_LogManager.ump").setUmpleLines(5).setJavaLines(505).setLengths(4);}
-    public UmpleSourceData LogManager_marshallIntoBuffer(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(244).setJavaLines(288).setLengths(6);}
-    public UmpleSourceData LogManager_flush(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(344).setJavaLines(410).setLengths(5);}
-    public UmpleSourceData LogManager_HEADER_CONTENT_BYTES(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(55).setJavaLines(59).setLengths(6);}
-    public UmpleSourceData LogManager_resetPool(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(87).setJavaLines(108).setLengths(1);}
-    public UmpleSourceData LogManager_logInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(175).setJavaLines(207).setLengths(72);}
-    public UmpleSourceData LogManager_getLogEntryFromLogSource(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(310).setJavaLines(367).setLengths(1);}
-    public UmpleSourceData LogManager_get(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(319).setJavaLines(379).setLengths(2);}
-    public UmpleSourceData LogManager_getUnflushableTrackedSummaryInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(359).setJavaLines(419).setLengths(1);}
-    public UmpleSourceData LogManager_countObsoleteNodesInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(379).setJavaLines(429).setLengths(4);}
-    public UmpleSourceData LogManager_getChecksumOnRead(){ return new UmpleSourceData().setFileNames("Checksum_LogManager.ump").setUmpleLines(11).setJavaLines(500).setLengths(1);}
+    public UmpleSourceData LogManager_Label501:log(){ return new UmpleSourceData().setFileNames("FSync_LogManager.ump").setUmpleLines(5).setJavaLines(517).setLengths(4);}
+    public UmpleSourceData LogManager_marshallIntoBuffer(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(244).setJavaLines(300).setLengths(6);}
+    public UmpleSourceData LogManager_flush(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(344).setJavaLines(422).setLengths(5);}
+    public UmpleSourceData LogManager_HEADER_CONTENT_BYTES(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(55).setJavaLines(60).setLengths(6);}
+    public UmpleSourceData LogManager_resetPool(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(87).setJavaLines(112).setLengths(1);}
+    public UmpleSourceData LogManager_logInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(175).setJavaLines(216).setLengths(75);}
+    public UmpleSourceData LogManager_getLogEntryFromLogSource(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(310).setJavaLines(379).setLengths(1);}
+    public UmpleSourceData LogManager_get(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(319).setJavaLines(391).setLengths(2);}
+    public UmpleSourceData LogManager_getUnflushableTrackedSummaryInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(359).setJavaLines(431).setLengths(1);}
+    public UmpleSourceData LogManager_countObsoleteNodesInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(379).setJavaLines(441).setLengths(4);}
+    public UmpleSourceData LogManager_getChecksumOnRead(){ return new UmpleSourceData().setFileNames("Checksum_LogManager.ump").setUmpleLines(11).setJavaLines(512).setLengths(1);}
     public UmpleSourceData LogManager_getLogEntryFromLogSource_execute(){ return new UmpleSourceData().setFileNames("LogManager_static.ump").setUmpleLines(10).setJavaLines(37).setLengths(52);}
-    public UmpleSourceData LogManager_getLastLsnAtRecovery(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(76).setJavaLines(93).setLengths(1);}
-    public UmpleSourceData LogManager_addPrevOffsetAndChecksum(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(253).setJavaLines(298).setLengths(8);}
-    public UmpleSourceData LogManager_logForceFlip(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(107).setJavaLines(134).setLengths(1);}
-    public UmpleSourceData LogManager_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_LogManager.ump").setUmpleLines(11).setJavaLines(488).setLengths(8);}
-    public UmpleSourceData LogManager_getLogEntry(){ return new UmpleSourceData().setFileNames("LogManager.ump","LogManager.ump").setUmpleLines(295, 301).setJavaLines(348, 355).setLengths(3, 1);}
-    public UmpleSourceData LogManager_setLastLsnAtRecovery(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(80).setJavaLines(98).setLengths(1);}
-    public UmpleSourceData LogManager_logForceFlush(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(97).setJavaLines(121).setLengths(1);}
-    public UmpleSourceData LogManager_putIntoBuffer(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(268).setJavaLines(315).setLengths(2);}
-    public UmpleSourceData LogManager_countObsoleteINsInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(391).setJavaLines(437).setLengths(5);}
-    public UmpleSourceData LogManager_LogManager(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(64).setJavaLines(74).setLengths(15);}
+    public UmpleSourceData LogManager_getLastLsnAtRecovery(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(76).setJavaLines(97).setLengths(1);}
+    public UmpleSourceData LogManager_addPrevOffsetAndChecksum(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(253).setJavaLines(310).setLengths(8);}
+    public UmpleSourceData LogManager_logForceFlip(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(107).setJavaLines(138).setLengths(1);}
+    public UmpleSourceData LogManager_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_LogManager.ump").setUmpleLines(11).setJavaLines(500).setLengths(8);}
+    public UmpleSourceData LogManager_getLogEntry(){ return new UmpleSourceData().setFileNames("LogManager.ump","LogManager.ump").setUmpleLines(295, 301).setJavaLines(360, 367).setLengths(3, 1);}
+    public UmpleSourceData LogManager_setLastLsnAtRecovery(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(80).setJavaLines(102).setLengths(1);}
+    public UmpleSourceData LogManager_logForceFlush(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(97).setJavaLines(125).setLengths(1);}
+    public UmpleSourceData LogManager_putIntoBuffer(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(268).setJavaLines(327).setLengths(2);}
+    public UmpleSourceData LogManager_countObsoleteINsInternal(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(391).setJavaLines(449).setLengths(5);}
+    public UmpleSourceData LogManager_LogManager(){ return new UmpleSourceData().setFileNames("LogManager.ump").setUmpleLines(64).setJavaLines(75).setLengths(18);}
     public UmpleSourceData LogUtils_getBooleanLogSize(){ return new UmpleSourceData().setFileNames("LogUtils.ump").setUmpleLines(253).setJavaLines(336).setLengths(1);}
     public UmpleSourceData LogUtils_writeIntMSB(){ return new UmpleSourceData().setFileNames("LogUtils.ump").setUmpleLines(94).setJavaLines(129).setLengths(8);}
     public UmpleSourceData LogUtils_writeXid(){ return new UmpleSourceData().setFileNames("LogUtils.ump").setUmpleLines(280).setJavaLines(368).setLengths(15);}
@@ -2756,46 +2764,46 @@ public class DbRecover
     public UmpleSourceData CheckpointStart_CheckpointStart(){ return new UmpleSourceData().setFileNames("CheckpointStart.ump","CheckpointStart.ump").setUmpleLines(21, 32).setJavaLines(38, 50).setLengths(8, 1);}
     public UmpleSourceData CheckpointStart_dumpLog(){ return new UmpleSourceData().setFileNames("CheckpointStart.ump").setUmpleLines(90).setJavaLines(134).setLengths(4);}
     public UmpleSourceData CheckpointStart_marshallOutsideWriteLatch(){ return new UmpleSourceData().setFileNames("CheckpointStart.ump").setUmpleLines(45).setJavaLines(70).setLengths(1);}
-    public UmpleSourceData Checkpointer_isRunnable(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(99).setJavaLines(154).setLengths(1);}
-    public UmpleSourceData Checkpointer_addToDirtyMap(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(280).setJavaLines(383).setLengths(7);}
-    public UmpleSourceData Checkpointer_Checkpointer(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(51).setJavaLines(89).setLengths(21);}
-    public UmpleSourceData Checkpointer_getHighestFlushLevel(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(63).setJavaLines(114).setLengths(1);}
-    public UmpleSourceData Checkpointer_flushIN(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(163).setJavaLines(238).setLengths(51);}
-    public UmpleSourceData Checkpointer_hook527(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(320).setJavaLines(422).setLengths(1);}
+    public UmpleSourceData Checkpointer_isRunnable(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(99).setJavaLines(157).setLengths(1);}
+    public UmpleSourceData Checkpointer_addToDirtyMap(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(280).setJavaLines(386).setLengths(7);}
+    public UmpleSourceData Checkpointer_Checkpointer(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(51).setJavaLines(92).setLengths(21);}
+    public UmpleSourceData Checkpointer_getHighestFlushLevel(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(63).setJavaLines(117).setLengths(1);}
+    public UmpleSourceData Checkpointer_flushIN(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(163).setJavaLines(241).setLengths(51);}
+    public UmpleSourceData Checkpointer_hook527(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(320).setJavaLines(425).setLengths(1);}
     public UmpleSourceData Checkpointer_doCheckpoint_hook525(){ return new UmpleSourceData().setFileNames("LoggingSevere_Checkpointer_inner.ump").setUmpleLines(5).setJavaLines(186).setLengths(7);}
-    public UmpleSourceData Checkpointer_hook545(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(337).setJavaLines(451).setLengths(1);}
-    public UmpleSourceData Checkpointer_resetPerRunCounters(){ return new UmpleSourceData().setFileNames("Statistics_Checkpointer.ump").setUmpleLines(43).setJavaLines(513).setLengths(2);}
-    public UmpleSourceData Checkpointer_isRunnable_Checkpointer_isRunnable(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(53).setJavaLines(32).setLengths(2);}
+    public UmpleSourceData Checkpointer_hook545(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(337).setJavaLines(454).setLengths(1);}
+    public UmpleSourceData Checkpointer_resetPerRunCounters(){ return new UmpleSourceData().setFileNames("Statistics_Checkpointer.ump").setUmpleLines(43).setJavaLines(516).setLengths(2);}
+    public UmpleSourceData Checkpointer_isRunnable_Checkpointer_isRunnable(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(53).setJavaLines(34).setLengths(2);}
     public UmpleSourceData CheckpointReference_CheckpointReference(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(11).setJavaLines(184).setLengths(6);}
-    public UmpleSourceData Checkpointer_getWakeupPeriod_hook541(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(49).setJavaLines(68).setLengths(1);}
-    public UmpleSourceData Checkpointer_trace(){ return new UmpleSourceData().setFileNames("LoggingConfig_Checkpointer.ump").setUmpleLines(5).setJavaLines(519).setLengths(6);}
+    public UmpleSourceData Checkpointer_getWakeupPeriod_hook541(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(49).setJavaLines(74).setLengths(1);}
+    public UmpleSourceData Checkpointer_trace(){ return new UmpleSourceData().setFileNames("LoggingConfig_Checkpointer.ump").setUmpleLines(5).setJavaLines(522).setLengths(6);}
     public UmpleSourceData CheckpointReference_hashCode(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(26).setJavaLines(203).setLengths(1);}
-    public UmpleSourceData Checkpointer_flushDirtyNodes(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(132).setJavaLines(194).setLengths(25);}
-    public UmpleSourceData Checkpointer_getWakeupPeriod(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(71).setJavaLines(124).setLengths(1);}
-    public UmpleSourceData Checkpointer_doCheckpoint(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(110).setJavaLines(167).setLengths(1);}
-    public UmpleSourceData Checkpointer_flushUtilizationInfo(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(117).setJavaLines(177).setLengths(8);}
-    public UmpleSourceData Checkpointer_logTargetAndUpdateParent(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(253).setJavaLines(337).setLengths(37);}
-    public UmpleSourceData Checkpointer_getWakeupPeriod_hook519(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(45).setJavaLines(58).setLengths(1);}
+    public UmpleSourceData Checkpointer_flushDirtyNodes(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(132).setJavaLines(197).setLengths(25);}
+    public UmpleSourceData Checkpointer_getWakeupPeriod(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(71).setJavaLines(127).setLengths(1);}
+    public UmpleSourceData Checkpointer_doCheckpoint(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(110).setJavaLines(170).setLengths(1);}
+    public UmpleSourceData Checkpointer_flushUtilizationInfo(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(117).setJavaLines(180).setLengths(8);}
+    public UmpleSourceData Checkpointer_logTargetAndUpdateParent(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(253).setJavaLines(340).setLengths(37);}
+    public UmpleSourceData Checkpointer_getWakeupPeriod_hook519(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(45).setJavaLines(64).setLengths(1);}
     public UmpleSourceData Checkpointer_doCheckpoint_hook536(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(210).setJavaLines(181).setLengths(1);}
     public UmpleSourceData Checkpointer_doCheckpoint_hook535(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(208).setJavaLines(176).setLengths(1);}
-    public UmpleSourceData Checkpointer_getWakeupPeriod_Checkpointer_getWakeupPeriod(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(31).setJavaLines(30).setLengths(1);}
+    public UmpleSourceData Checkpointer_getWakeupPeriod_Checkpointer_getWakeupPeriod(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(31).setJavaLines(31).setLengths(1);}
     public UmpleSourceData Checkpointer_doCheckpoint_hook534(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(206).setJavaLines(171).setLengths(1);}
-    public UmpleSourceData Checkpointer_checkParentChildRelationship(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(214).setJavaLines(298).setLengths(23);}
-    public UmpleSourceData Checkpointer_hook533(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(326).setJavaLines(437).setLengths(1);}
-    public UmpleSourceData Checkpointer_getWakeupPeriod_execute(){ return new UmpleSourceData().setFileNames("CPTime_Checkpointer_inner.ump","Checkpointer_static.ump","Checkpointer_static.ump","Checkpointer_static.ump","Checkpointer_static.ump").setUmpleLines(6, 34, 57, 107, 232).setJavaLines(37, 35, 38, 44, 39).setLengths(2, 15, 90, 115, 65);}
-    public UmpleSourceData Checkpointer_hook532(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(324).setJavaLines(432).setLengths(1);}
+    public UmpleSourceData Checkpointer_checkParentChildRelationship(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(214).setJavaLines(301).setLengths(23);}
+    public UmpleSourceData Checkpointer_hook533(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(326).setJavaLines(440).setLengths(1);}
+    public UmpleSourceData Checkpointer_getWakeupPeriod_execute(){ return new UmpleSourceData().setFileNames("CPTime_Checkpointer_inner.ump","Checkpointer_static.ump","Checkpointer_static.ump","Checkpointer_static.ump","Checkpointer_static.ump").setUmpleLines(6, 34, 57, 107, 232).setJavaLines(38, 36, 40, 44, 39).setLengths(2, 20, 98, 115, 65);}
+    public UmpleSourceData Checkpointer_hook532(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(324).setJavaLines(435).setLengths(1);}
     public UmpleSourceData Checkpointer_doCheckpoint_Checkpointer_doCheckpoint(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(101).setJavaLines(36).setLengths(4);}
-    public UmpleSourceData Checkpointer_hook531(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(322).setJavaLines(427).setLengths(1);}
-    public UmpleSourceData Checkpointer_onWakeup(){ return new UmpleSourceData().setFileNames("CheckpointerDaemon_Checkpointer.ump").setUmpleLines(26).setJavaLines(478).setLengths(4);}
-    public UmpleSourceData Checkpointer_selectDirtyINs(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(155).setJavaLines(228).setLengths(1);}
-    public UmpleSourceData Checkpointer_nDeadlockRetries(){ return new UmpleSourceData().setFileNames("CheckpointerDaemon_Checkpointer.ump").setUmpleLines(19).setJavaLines(468).setLengths(1);}
-    public UmpleSourceData Checkpointer_getFirstActiveLsn(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(85).setJavaLines(134).setLengths(1);}
-    public UmpleSourceData Checkpointer_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_Checkpointer.ump").setUmpleLines(24).setJavaLines(491).setLengths(13);}
+    public UmpleSourceData Checkpointer_hook531(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(322).setJavaLines(430).setLengths(1);}
+    public UmpleSourceData Checkpointer_onWakeup(){ return new UmpleSourceData().setFileNames("CheckpointerDaemon_Checkpointer.ump").setUmpleLines(26).setJavaLines(481).setLengths(4);}
+    public UmpleSourceData Checkpointer_selectDirtyINs(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(155).setJavaLines(231).setLengths(1);}
+    public UmpleSourceData Checkpointer_nDeadlockRetries(){ return new UmpleSourceData().setFileNames("CheckpointerDaemon_Checkpointer.ump").setUmpleLines(19).setJavaLines(471).setLengths(1);}
+    public UmpleSourceData Checkpointer_getFirstActiveLsn(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(85).setJavaLines(137).setLengths(1);}
+    public UmpleSourceData Checkpointer_loadStats(){ return new UmpleSourceData().setFileNames("Statistics_Checkpointer.ump").setUmpleLines(24).setJavaLines(494).setLengths(13);}
     public UmpleSourceData CheckpointReference_equals(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(19).setJavaLines(194).setLengths(5);}
-    public UmpleSourceData Checkpointer_setFirstActiveLsn(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(92).setJavaLines(144).setLengths(1);}
+    public UmpleSourceData Checkpointer_setFirstActiveLsn(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(92).setJavaLines(147).setLengths(1);}
     public UmpleSourceData Checkpointer_selectDirtyINs_Checkpointer_selectDirtyINs(){ return new UmpleSourceData().setFileNames("Checkpointer_static.ump").setUmpleLines(227).setJavaLines(32).setLengths(3);}
-    public UmpleSourceData Checkpointer_dumpParentChildInfo(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(241).setJavaLines(325).setLengths(8);}
-    public UmpleSourceData Checkpointer_toString(){ return new UmpleSourceData().setFileNames("CheckpointerDaemon_Checkpointer.ump").setUmpleLines(6).setJavaLines(456).setLengths(3);}
+    public UmpleSourceData Checkpointer_dumpParentChildInfo(){ return new UmpleSourceData().setFileNames("Checkpointer.ump").setUmpleLines(241).setJavaLines(328).setLengths(8);}
+    public UmpleSourceData Checkpointer_toString(){ return new UmpleSourceData().setFileNames("CheckpointerDaemon_Checkpointer.ump").setUmpleLines(6).setJavaLines(459).setLengths(3);}
     public UmpleSourceData RecoveryManager_findEndOfLog(){ return new UmpleSourceData().setFileNames("Derivative_LoggingDbLogHandler_LoggingBase_RecoveryManager.ump","RecoveryManager.ump").setUmpleLines(16, 151).setJavaLines(206, 182).setLengths(2, 22);}
     public UmpleSourceData RecoveryManager_passStartHeader(){ return new UmpleSourceData().setFileNames("RecoveryManager.ump").setUmpleLines(954).setJavaLines(1169).setLengths(1);}
     public UmpleSourceData RecoveryManager_traceINDeleteReplay_RecoveryManager_traceINDeleteReplay(){ return new UmpleSourceData().setFileNames("LoggingRecovery_RecoveryManager_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(7);}
@@ -2864,61 +2872,62 @@ public class DbRecover
     public UmpleSourceData RootUpdater_getOriginalLsn(){ return new UmpleSourceData().setFileNames("RootUpdater.ump").setUmpleLines(59).setJavaLines(79).setLengths(1);}
     public UmpleSourceData RootUpdater_hook600(){ return new UmpleSourceData().setFileNames("RootUpdater.ump").setUmpleLines(63).setJavaLines(84).setLengths(1);}
     public UmpleSourceData RootUpdater_updateDone(){ return new UmpleSourceData().setFileNames("RootUpdater.ump").setUmpleLines(47).setJavaLines(64).setLengths(1);}
-    public UmpleSourceData Database_removeTrigger(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(598).setJavaLines(781).setLengths(7);}
-    public UmpleSourceData Database_removeSequence(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(166).setJavaLines(254).setLengths(1);}
-    public UmpleSourceData Database_getSecondaryDatabases(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(451).setJavaLines(594).setLengths(24);}
-    public UmpleSourceData Database_getDatabaseName(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(414).setJavaLines(550).setLengths(6);}
-    public UmpleSourceData Database_isTransactional(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(443).setJavaLines(584).setLengths(1);}
-    public UmpleSourceData Database_preload(){ return new UmpleSourceData().setFileNames("Database.ump","Database.ump","Database.ump").setUmpleLines(385, 395, 406).setJavaLines(509, 523, 538).setLengths(10, 11, 8);}
-    public UmpleSourceData Database_put(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(292).setJavaLines(401).setLengths(11);}
-    public UmpleSourceData Database_checkWritable(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(543).setJavaLines(708).setLengths(3);}
-    public UmpleSourceData Database_truncate(){ return new UmpleSourceData().setFileNames("Truncate_Database.ump").setUmpleLines(9).setJavaLines(841).setLengths(1);}
-    public UmpleSourceData Database_putInternal(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(331).setJavaLines(451).setLengths(17);}
-    public UmpleSourceData Database_Database(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(46).setJavaLines(113).setLengths(2);}
-    public UmpleSourceData Database_removeCursor(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(493).setJavaLines(642).setLengths(1);}
-    public UmpleSourceData Database_checkRequiredDbState(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(504).setJavaLines(657).setLengths(3);}
-    public UmpleSourceData Database_hasTriggers(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(552).setJavaLines(720).setLengths(1);}
-    public UmpleSourceData Database_addCursor(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(497).setJavaLines(647).setLengths(1);}
-    public UmpleSourceData Database_join(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(353).setJavaLines(476).setLengths(29);}
-    public UmpleSourceData Database_init(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(79).setJavaLines(151).setLengths(5);}
-    public UmpleSourceData Database_checkProhibitedDbState(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(513).setJavaLines(669).setLengths(3);}
-    public UmpleSourceData Database_getDatabaseImpl(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(482).setJavaLines(637).setLengths(1);}
-    public UmpleSourceData Database_releaseTriggerListReadLock(){ return new UmpleSourceData().setFileNames("Latches_Database.ump").setUmpleLines(8).setJavaLines(890).setLengths(2);}
-    public UmpleSourceData Database_deleteInternal(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(211).setJavaLines(313).setLengths(30);}
+    public UmpleSourceData Database_removeTrigger(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(598).setJavaLines(786).setLengths(7);}
+    public UmpleSourceData Database_removeSequence(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(166).setJavaLines(259).setLengths(1);}
+    public UmpleSourceData Database_getSecondaryDatabases(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(451).setJavaLines(599).setLengths(24);}
+    public UmpleSourceData Database_getDatabaseName(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(414).setJavaLines(555).setLengths(6);}
+    public UmpleSourceData Database_isTransactional(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(443).setJavaLines(589).setLengths(1);}
+    public UmpleSourceData Database_preload(){ return new UmpleSourceData().setFileNames("Database.ump","Database.ump","Database.ump").setUmpleLines(385, 395, 406).setJavaLines(514, 528, 543).setLengths(10, 11, 8);}
+    public UmpleSourceData Database_put(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(292).setJavaLines(406).setLengths(11);}
+    public UmpleSourceData Database_checkWritable(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(543).setJavaLines(713).setLengths(3);}
+    public UmpleSourceData Database_truncate(){ return new UmpleSourceData().setFileNames("Truncate_Database.ump").setUmpleLines(9).setJavaLines(846).setLengths(1);}
+    public UmpleSourceData Database_putInternal(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(331).setJavaLines(456).setLengths(17);}
+    public UmpleSourceData Database_Database(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(46).setJavaLines(118).setLengths(2);}
+    public UmpleSourceData Database_removeCursor(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(493).setJavaLines(647).setLengths(1);}
+    public UmpleSourceData Database_checkRequiredDbState(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(504).setJavaLines(662).setLengths(3);}
+    public UmpleSourceData Database_hasTriggers(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(552).setJavaLines(725).setLengths(1);}
+    public UmpleSourceData Database_addCursor(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(497).setJavaLines(652).setLengths(1);}
+    public UmpleSourceData Database_join(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(353).setJavaLines(481).setLengths(29);}
+    public UmpleSourceData Database_init(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(79).setJavaLines(156).setLengths(5);}
+    public UmpleSourceData Database_checkProhibitedDbState(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(513).setJavaLines(674).setLengths(3);}
+    public UmpleSourceData Database_getDatabaseImpl(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(482).setJavaLines(642).setLengths(1);}
+    public UmpleSourceData Database_releaseTriggerListReadLock(){ return new UmpleSourceData().setFileNames("Latches_Database.ump").setUmpleLines(8).setJavaLines(898).setLengths(2);}
+    public UmpleSourceData Database_deleteInternal(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(211).setJavaLines(318).setLengths(30);}
     public UmpleSourceData Database_releaseTriggerListWriteLock_Database_releaseTriggerListWriteLock(){ return new UmpleSourceData().setFileNames("Database_static.ump").setUmpleLines(38).setJavaLines(30).setLengths(1);}
-    public UmpleSourceData Database_initExisting(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(70).setJavaLines(141).setLengths(6);}
-    public UmpleSourceData Database_acquireTriggerListReadLock_execute(){ return new UmpleSourceData().setFileNames("Latches_Database_inner.ump","Database_static.ump","Latches_Database_inner.ump","Database_static.ump","Latches_Database_inner.ump","Database_static.ump","Truncate_Database_inner.ump","Derivative_LoggingFinest_LoggingBase_Database_inner.ump","LoggingFinest_Database_inner.ump","Derivative_LoggingFinest_LoggingBase_Database_inner.ump","LoggingFinest_Database_inner.ump").setUmpleLines(6, 17, 20, 29, 13, 41, 10, 6, 12, 24, 31).setJavaLines(37, 35, 37, 35, 40, 35, 35, 40, 38, 42, 40).setLengths(3, 3, 3, 3, 3, 3, 32, 13, 1, 16, 1);}
-    public UmpleSourceData Database_truncateInternal(){ return new UmpleSourceData().setFileNames("Truncate_Database.ump").setUmpleLines(17).setJavaLines(852).setLengths(17);}
+    public UmpleSourceData Database_initExisting(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(70).setJavaLines(146).setLengths(6);}
+    public UmpleSourceData Database_acquireTriggerListReadLock_execute(){ return new UmpleSourceData().setFileNames("Latches_Database_inner.ump","Database_static.ump","Latches_Database_inner.ump","Database_static.ump","Latches_Database_inner.ump","Database_static.ump","Truncate_Database_inner.ump","Derivative_LoggingFinest_LoggingBase_Database_inner.ump","LoggingFinest_Database_inner.ump","Derivative_LoggingFinest_LoggingBase_Database_inner.ump","LoggingFinest_Database_inner.ump").setUmpleLines(6, 17, 20, 29, 13, 41, 10, 6, 12, 24, 31).setJavaLines(37, 35, 37, 35, 40, 35, 37, 40, 38, 42, 40).setLengths(3, 3, 3, 3, 3, 3, 46, 13, 1, 16, 1);}
+    public UmpleSourceData Database_truncateInternal(){ return new UmpleSourceData().setFileNames("Truncate_Database.ump").setUmpleLines(17).setJavaLines(857).setLengths(17);}
     public UmpleSourceData DbState_DbState(){ return new UmpleSourceData().setFileNames("Database_static.ump").setUmpleLines(6).setJavaLines(28).setLengths(1);}
     public UmpleSourceData Database_acquireTriggerListReadLock_Database_acquireTriggerListReadLock(){ return new UmpleSourceData().setFileNames("Database_static.ump").setUmpleLines(14).setJavaLines(30).setLengths(1);}
-    public UmpleSourceData Database_getStats(){ return new UmpleSourceData().setFileNames("Statistics_Database.ump").setUmpleLines(5).setJavaLines(873).setLengths(8);}
-    public UmpleSourceData Database_putNoOverwrite(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(304).setJavaLines(416).setLengths(11);}
-    public UmpleSourceData Database_openCursor(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(170).setJavaLines(259).setLengths(12);}
-    public UmpleSourceData Database_addTrigger(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(581).setJavaLines(761).setLengths(11);}
-    public UmpleSourceData Database_newDbcInstance(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(185).setJavaLines(280).setLengths(1);}
-    public UmpleSourceData Database_isWritable(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(475).setJavaLines(627).setLengths(1);}
-    public UmpleSourceData Database_delete(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(189).setJavaLines(285).setLengths(19);}
-    public UmpleSourceData Database_initNew(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(55).setJavaLines(124).setLengths(8);}
+    public UmpleSourceData Database_getStats(){ return new UmpleSourceData().setFileNames("Statistics_Database.ump").setUmpleLines(5).setJavaLines(878).setLengths(11);}
+    public UmpleSourceData Database_putNoOverwrite(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(304).setJavaLines(421).setLengths(11);}
+    public UmpleSourceData Database_openCursor(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(170).setJavaLines(264).setLengths(12);}
+    public UmpleSourceData Database_addTrigger(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(581).setJavaLines(766).setLengths(11);}
+    public UmpleSourceData Database_newDbcInstance(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(185).setJavaLines(285).setLengths(1);}
+    public UmpleSourceData Database_isWritable(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(475).setJavaLines(632).setLengths(1);}
+    public UmpleSourceData Database_delete(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(189).setJavaLines(290).setLengths(19);}
+    public UmpleSourceData Database_initNew(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(55).setJavaLines(129).setLengths(8);}
     public UmpleSourceData Database_trace_Database_trace(){ return new UmpleSourceData().setFileNames("LoggingFinest_Database_inner.ump").setUmpleLines(22).setJavaLines(29).setLengths(7);}
-    public UmpleSourceData Database_getDebugName(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(423).setJavaLines(560).setLengths(5);}
-    public UmpleSourceData Database_notifyTriggers(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(632).setJavaLines(820).setLengths(12);}
-    public UmpleSourceData Database_trace(){ return new UmpleSourceData().setFileNames("LoggingFinest_Database.ump","LoggingFinest_Database.ump").setUmpleLines(9, 16).setJavaLines(901, 911).setLengths(1, 1);}
-    public UmpleSourceData Database_truncate_Database_truncate(){ return new UmpleSourceData().setFileNames("Truncate_Database_inner.ump").setUmpleLines(5).setJavaLines(28).setLengths(3);}
-    public UmpleSourceData Database_get(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(245).setJavaLines(347).setLengths(23);}
-    public UmpleSourceData Database_validateConfigAgainstExistingDb(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(91).setJavaLines(165).setLengths(24);}
+    public UmpleSourceData Database_getDebugName(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(423).setJavaLines(565).setLengths(5);}
+    public UmpleSourceData Database_notifyTriggers(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(632).setJavaLines(825).setLengths(12);}
+    public UmpleSourceData Database_trace(){ return new UmpleSourceData().setFileNames("LoggingFinest_Database.ump","LoggingFinest_Database.ump").setUmpleLines(9, 16).setJavaLines(909, 919).setLengths(1, 1);}
+    public UmpleSourceData Database_truncate_Database_truncate(){ return new UmpleSourceData().setFileNames("Truncate_Database_inner.ump").setUmpleLines(5).setJavaLines(30).setLengths(3);}
+    public UmpleSourceData Database_get(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(245).setJavaLines(352).setLengths(23);}
+    public UmpleSourceData Database_verify(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Verifier_Database.ump").setUmpleLines(5).setJavaLines(924).setLengths(7);}
+    public UmpleSourceData Database_validateConfigAgainstExistingDb(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(91).setJavaLines(170).setLengths(24);}
     public UmpleSourceData Database_acquireTriggerListWriteLock_Database_acquireTriggerListWriteLock(){ return new UmpleSourceData().setFileNames("Database_static.ump").setUmpleLines(26).setJavaLines(30).setLengths(1);}
-    public UmpleSourceData Database_close(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(118).setJavaLines(193).setLengths(34);}
-    public UmpleSourceData Database_acquireTriggerListWriteLock(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(566).setJavaLines(740).setLengths(1);}
-    public UmpleSourceData Database_checkEnv(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(522).setJavaLines(681).setLengths(4);}
-    public UmpleSourceData Database_getSearchBoth(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(269).setJavaLines(374).setLengths(23);}
-    public UmpleSourceData Database_releaseTriggerListWriteLock(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(573).setJavaLines(750).setLengths(1);}
-    public UmpleSourceData Database_putNoDupData(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(316).setJavaLines(431).setLengths(11);}
-    public UmpleSourceData Database_openSequence(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(154).setJavaLines(236).setLengths(9);}
-    public UmpleSourceData Database_getEnvironment(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(447).setJavaLines(589).setLengths(1);}
-    public UmpleSourceData Database_invalidate(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(532).setJavaLines(694).setLengths(5);}
-    public UmpleSourceData Database_getConfig(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(431).setJavaLines(569).setLengths(6);}
-    public UmpleSourceData Database_acquireTriggerListReadLock(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(559).setJavaLines(730).setLengths(1);}
-    public UmpleSourceData Database_removeAllTriggers(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(611).setJavaLines(797).setLengths(10);}
+    public UmpleSourceData Database_close(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(118).setJavaLines(198).setLengths(34);}
+    public UmpleSourceData Database_acquireTriggerListWriteLock(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(566).setJavaLines(745).setLengths(1);}
+    public UmpleSourceData Database_checkEnv(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(522).setJavaLines(686).setLengths(4);}
+    public UmpleSourceData Database_getSearchBoth(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(269).setJavaLines(379).setLengths(23);}
+    public UmpleSourceData Database_releaseTriggerListWriteLock(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(573).setJavaLines(755).setLengths(1);}
+    public UmpleSourceData Database_putNoDupData(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(316).setJavaLines(436).setLengths(11);}
+    public UmpleSourceData Database_openSequence(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(154).setJavaLines(241).setLengths(9);}
+    public UmpleSourceData Database_getEnvironment(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(447).setJavaLines(594).setLengths(1);}
+    public UmpleSourceData Database_invalidate(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(532).setJavaLines(699).setLengths(5);}
+    public UmpleSourceData Database_getConfig(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(431).setJavaLines(574).setLengths(6);}
+    public UmpleSourceData Database_acquireTriggerListReadLock(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(559).setJavaLines(735).setLengths(1);}
+    public UmpleSourceData Database_removeAllTriggers(){ return new UmpleSourceData().setFileNames("Database.ump").setUmpleLines(611).setJavaLines(802).setLengths(10);}
     public UmpleSourceData DbState_toString(){ return new UmpleSourceData().setFileNames("Database_static.ump").setUmpleLines(9).setJavaLines(33).setLengths(1);}
     public UmpleSourceData Database_trace2_Database_trace2(){ return new UmpleSourceData().setFileNames("LoggingFinest_Database_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(5);}
     public UmpleSourceData DeadlockException_DeadlockException(){ return new UmpleSourceData().setFileNames("DeadlockException.ump","DeadlockException.ump","DeadlockException.ump","DeadlockException.ump").setUmpleLines(7, 11, 15, 19).setJavaLines(33, 38, 43, 48).setLengths(1, 1, 1, 1);}
@@ -3145,61 +3154,65 @@ public class DbRecover
     public UmpleSourceData DbCacheSize_insertRecords_DbCacheSize_insertRecords(){ return new UmpleSourceData().setFileNames("MemoryBudget_DbCacheSize_inner.ump").setUmpleLines(5).setJavaLines(29).setLengths(7);}
     public UmpleSourceData DbCacheSize_insertRecords_execute(){ return new UmpleSourceData().setFileNames("MemoryBudget_DbCacheSize_inner.ump").setUmpleLines(14).setJavaLines(40).setLengths(52);}
     public UmpleSourceData DbCacheSize_printStats(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_MemoryBudget_DbCacheSize.ump").setUmpleLines(7).setJavaLines(47).setLengths(8);}
-    public UmpleSourceData Evictor_isRunnable(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(135).setJavaLines(172).setLengths(1);}
+    public UmpleSourceData Evictor_isRunnable(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(135).setJavaLines(176).setLengths(1);}
     public UmpleSourceData ScanIterator_next(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(44).setJavaLines(60).setLengths(1);}
-    public UmpleSourceData Evictor_evictBatch_Evictor_evictBatch(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(52).setJavaLines(29).setLengths(3);}
+    public UmpleSourceData Evictor_evictBatch_Evictor_evictBatch(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(52).setJavaLines(30).setLengths(3);}
     public UmpleSourceData ScanIterator_resetToMark(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(38).setJavaLines(50).setLengths(1);}
     public UmpleSourceData Evictor_isRunnable_Evictor_isRunnable(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(127).setJavaLines(29).setLengths(2);}
-    public UmpleSourceData Evictor_evictIN(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(269).setJavaLines(332).setLengths(47);}
-    public UmpleSourceData Evictor_doCriticalEviction(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_Evictor.ump").setUmpleLines(8).setJavaLines(436).setLengths(1);}
+    public UmpleSourceData Evictor_evictIN(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(269).setJavaLines(338).setLengths(55);}
+    public UmpleSourceData Evictor_doCriticalEviction(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_Evictor.ump").setUmpleLines(8).setJavaLines(450).setLengths(1);}
     public UmpleSourceData ScanIterator_remove(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(47).setJavaLines(65).setLengths(1);}
-    public UmpleSourceData Evictor_evict(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(236).setJavaLines(288).setLengths(35);}
-    public UmpleSourceData Evictor_addToQueue(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_EvictorDaemon_Evictor.ump").setUmpleLines(9).setJavaLines(403).setLengths(1);}
-    public UmpleSourceData Evictor_alert(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(91).setJavaLines(116).setLengths(3);}
-    public UmpleSourceData Evictor_evictBatch(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(128).setJavaLines(162).setLengths(1);}
-    public UmpleSourceData Evictor_normalizeLevel(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(224).setJavaLines(273).setLengths(5);}
-    public UmpleSourceData Evictor_doEvict(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump","Evictor_Evictor.ump").setUmpleLines(100, 107).setJavaLines(128, 138).setLengths(1, 14);}
-    public UmpleSourceData Evictor_selectIN(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(142).setJavaLines(182).setLengths(82);}
-    public UmpleSourceData Evictor_setRunnableHook(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(322).setJavaLines(393).setLengths(1);}
+    public UmpleSourceData Evictor_evict(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(236).setJavaLines(292).setLengths(37);}
+    public UmpleSourceData Evictor_addToQueue(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_EvictorDaemon_Evictor.ump").setUmpleLines(9).setJavaLines(417).setLengths(1);}
+    public UmpleSourceData Evictor_alert(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(91).setJavaLines(120).setLengths(3);}
+    public UmpleSourceData Evictor_evictBatch(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(128).setJavaLines(166).setLengths(1);}
+    public UmpleSourceData Evictor_normalizeLevel(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(224).setJavaLines(277).setLengths(5);}
+    public UmpleSourceData Evictor_doEvict(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump","Evictor_Evictor.ump").setUmpleLines(100, 107).setJavaLines(132, 142).setLengths(1, 14);}
+    public UmpleSourceData Evictor_selectIN(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(142).setJavaLines(186).setLengths(82);}
+    public UmpleSourceData Evictor_setRunnableHook(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(322).setJavaLines(407).setLengths(1);}
     public UmpleSourceData EvictProfile_getCandidates(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(10).setJavaLines(34).setLengths(1);}
     public UmpleSourceData EvictProfile_count(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(6).setJavaLines(28).setLengths(2);}
     public UmpleSourceData EvictProfile_clear(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(13).setJavaLines(39).setLengths(2);}
     public UmpleSourceData ScanIterator_hasNext(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(41).setJavaLines(55).setLengths(1);}
-    public UmpleSourceData Evictor_Evictor(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(62).setJavaLines(87).setLengths(13);}
-    public UmpleSourceData Evictor_evictBatch_execute(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Evictor_Evictor_inner.ump","Evictor_Evictor_inner.ump","Derivative_Evictor_MemoryBudget_Evictor_inner.ump","Evictor_Evictor_inner.ump","Derivative_Evictor_CriticalEviction_Evictor_inner.ump").setUmpleLines(6, 57, 6, 131, 8).setJavaLines(38, 36, 60, 35, 33).setLengths(3, 51, 3, 24, 1);}
-    public UmpleSourceData Evictor_onWakeup(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_EvictorDaemon_Evictor.ump").setUmpleLines(23).setJavaLines(423).setLengths(4);}
+    public UmpleSourceData Evictor_Evictor(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(62).setJavaLines(91).setLengths(13);}
+    public UmpleSourceData Evictor_evictBatch_execute(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Evictor_Evictor_inner.ump","Derivative_Latches_Evictor_Evictor_inner.ump","Derivative_Latches_Evictor_Evictor_inner.ump","Evictor_Evictor_inner.ump","Derivative_Evictor_MemoryBudget_Evictor_inner.ump","Evictor_Evictor_inner.ump","Derivative_Evictor_CriticalEviction_Evictor_inner.ump").setUmpleLines(6, 6, 6, 57, 6, 131, 8).setJavaLines(39, 66, 105, 37, 60, 35, 33).setLengths(3, 3, 3, 57, 3, 24, 1);}
+    public UmpleSourceData Evictor_onWakeup(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_EvictorDaemon_Evictor.ump").setUmpleLines(23).setJavaLines(437).setLengths(4);}
     public UmpleSourceData ScanIterator_ScanIterator(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(22).setJavaLines(28).setLengths(2);}
-    public UmpleSourceData Evictor_nDeadlockRetries(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_EvictorDaemon_Evictor.ump").setUmpleLines(16).setJavaLines(413).setLengths(1);}
-    public UmpleSourceData Evictor_loadStats(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Evictor_Evictor.ump").setUmpleLines(26).setJavaLines(446).setLengths(13);}
-    public UmpleSourceData Evictor_getNextNode(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(318).setJavaLines(388).setLengths(1);}
+    public UmpleSourceData Evictor_nDeadlockRetries(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_EvictorDaemon_Evictor.ump").setUmpleLines(16).setJavaLines(427).setLengths(1);}
+    public UmpleSourceData Evictor_loadStats(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Evictor_Evictor.ump").setUmpleLines(26).setJavaLines(460).setLengths(13);}
+    public UmpleSourceData Evictor_getNextNode(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(318).setJavaLines(402).setLengths(1);}
     public UmpleSourceData ScanIterator_reset(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(26).setJavaLines(34).setLengths(1);}
-    public UmpleSourceData Evictor_toString(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(78).setJavaLines(104).setLengths(3);}
+    public UmpleSourceData Evictor_toString(){ return new UmpleSourceData().setFileNames("Evictor_Evictor.ump").setUmpleLines(78).setJavaLines(108).setLengths(3);}
     public UmpleSourceData ScanIterator_mark(){ return new UmpleSourceData().setFileNames("Evictor_Evictor_inner.ump").setUmpleLines(29).setJavaLines(39).setLengths(7);}
     public UmpleSourceData Evictor_doCriticalEviction_Evictor_doCriticalEviction(){ return new UmpleSourceData().setFileNames("Derivative_Evictor_CriticalEviction_Evictor_inner.ump").setUmpleLines(5).setJavaLines(28).setLengths(1);}
     public UmpleSourceData TruncateResult_getDatabase(){ return new UmpleSourceData().setFileNames("Truncate_TruncateResult.ump").setUmpleLines(15).setJavaLines(35).setLengths(1);}
     public UmpleSourceData TruncateResult_getRecordCount(){ return new UmpleSourceData().setFileNames("Truncate_TruncateResult.ump").setUmpleLines(19).setJavaLines(40).setLengths(1);}
     public UmpleSourceData TruncateResult_TruncateResult(){ return new UmpleSourceData().setFileNames("Truncate_TruncateResult.ump").setUmpleLines(10).setJavaLines(29).setLengths(2);}
-    public UmpleSourceData INCompressor_removeCompressibleBinReference(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(160).setJavaLines(194).setLengths(13);}
-    public UmpleSourceData INCompressor_isRunnable(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(337).setJavaLines(383).setLengths(1);}
-    public UmpleSourceData INCompressor_lazyCompress(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(398).setJavaLines(451).setLengths(26);}
-    public UmpleSourceData INCompressor_addBinKeyToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(84).setJavaLines(104).setLengths(6);}
-    public UmpleSourceData INCompressor_INCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(47).setJavaLines(63).setLengths(6);}
-    public UmpleSourceData INCompressor_addMultipleBinRefsToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(108).setJavaLines(134).setLengths(10);}
-    public UmpleSourceData INCompressor_addBinRefToQueueAlreadyLatched(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(124).setJavaLines(153).setLengths(7);}
-    public UmpleSourceData INCompressor_addBinRefToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(96).setJavaLines(119).setLengths(6);}
-    public UmpleSourceData INCompressor_onWakeup(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(183).setJavaLines(221).setLengths(5);}
-    public UmpleSourceData INCompressor_nDeadlockRetries(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(179).setJavaLines(216).setLengths(1);}
-    public UmpleSourceData INCompressor_addToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(69).setJavaLines(85).setLengths(1);}
-    public UmpleSourceData INCompressor_doCompress(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(194).setJavaLines(235).setLengths(56);}
-    public UmpleSourceData INCompressor_pruneBIN(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(299).setJavaLines(344).setLengths(17);}
-    public UmpleSourceData INCompressor_searchForBIN(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump","INCompressor_INCompressor.ump").setUmpleLines(346, 350).setJavaLines(395, 400).setLengths(1, 42);}
-    public UmpleSourceData INCompressor_addBinKeyToQueueAlreadyLatched(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(137).setJavaLines(169).setLengths(13);}
-    public UmpleSourceData INCompressor_findDBAndBIN(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(428).setJavaLines(481).setLengths(15);}
-    public UmpleSourceData INCompressor_exists(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(153).setJavaLines(186).setLengths(4);}
-    public UmpleSourceData INCompressor_toString(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(56).setJavaLines(73).setLengths(3);}
-    public UmpleSourceData INCompressor_compressBin(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(259).setJavaLines(302).setLengths(32);}
-    public UmpleSourceData INCompressor_checkForRelocatedSlots(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(320).setJavaLines(365).setLengths(14);}
-    public UmpleSourceData INCompressor_getBinRefQueueSize(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(73).setJavaLines(90).setLengths(5);}
+    public UmpleSourceData INCompressor_removeCompressibleBinReference(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(160).setJavaLines(202).setLengths(13);}
+    public UmpleSourceData INCompressor_isRunnable(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(337).setJavaLines(426).setLengths(1);}
+    public UmpleSourceData INCompressor_accumulatePerRunCounters(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_INCompressor_INCompressor.ump").setUmpleLines(75).setJavaLines(647).setLengths(5);}
+    public UmpleSourceData INCompressor_resetPerRunCounters(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_INCompressor_INCompressor.ump").setUmpleLines(67).setJavaLines(638).setLengths(5);}
+    public UmpleSourceData INCompressor_addMultipleBinRefsToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(108).setJavaLines(142).setLengths(10);}
+    public UmpleSourceData INCompressor_addToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(69).setJavaLines(93).setLengths(1);}
+    public UmpleSourceData INCompressor_pruneBIN(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(299).setJavaLines(378).setLengths(26);}
+    public UmpleSourceData INCompressor_addBinKeyToQueueAlreadyLatched(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(137).setJavaLines(177).setLengths(13);}
+    public UmpleSourceData INCompressor_compressBin(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(259).setJavaLines(331).setLengths(37);}
+    public UmpleSourceData INCompressor_checkForRelocatedSlots(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(320).setJavaLines(408).setLengths(14);}
+    public UmpleSourceData INCompressor_getBinRefQueueSize(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(73).setJavaLines(98).setLengths(5);}
+    public UmpleSourceData INCompressor_lazyCompress(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(398).setJavaLines(504).setLengths(38);}
+    public UmpleSourceData INCompressor_addBinKeyToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(84).setJavaLines(112).setLengths(6);}
+    public UmpleSourceData INCompressor_INCompressor(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(47).setJavaLines(71).setLengths(6);}
+    public UmpleSourceData INCompressor_verifyCursors(){ return new UmpleSourceData().setFileNames("Derivative_Verifier_INCompressor_INCompressor.ump").setUmpleLines(5).setJavaLines(579).setLengths(18);}
+    public UmpleSourceData INCompressor_addBinRefToQueueAlreadyLatched(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(124).setJavaLines(161).setLengths(7);}
+    public UmpleSourceData INCompressor_addBinRefToQueue(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(96).setJavaLines(127).setLengths(6);}
+    public UmpleSourceData INCompressor_onWakeup(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(183).setJavaLines(229).setLengths(5);}
+    public UmpleSourceData INCompressor_nDeadlockRetries(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(179).setJavaLines(224).setLengths(1);}
+    public UmpleSourceData INCompressor_doCompress(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(194).setJavaLines(243).setLengths(77);}
+    public UmpleSourceData INCompressor_searchForBIN(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump","INCompressor_INCompressor.ump").setUmpleLines(346, 350).setJavaLines(438, 443).setLengths(1, 52);}
+    public UmpleSourceData INCompressor_loadStats(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_INCompressor_INCompressor.ump").setUmpleLines(38).setJavaLines(606).setLengths(23);}
+    public UmpleSourceData INCompressor_findDBAndBIN(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(428).setJavaLines(546).setLengths(29);}
+    public UmpleSourceData INCompressor_exists(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(153).setJavaLines(194).setLengths(4);}
+    public UmpleSourceData INCompressor_toString(){ return new UmpleSourceData().setFileNames("INCompressor_INCompressor.ump").setUmpleLines(56).setJavaLines(81).setLengths(3);}
     public UmpleSourceData GatherLSNs_getLsns(){ return new UmpleSourceData().setFileNames("Verifier_VerifyUtils_inner.ump").setUmpleLines(13).setJavaLines(34).setLengths(1);}
     public UmpleSourceData GatherLSNs_processLSN(){ return new UmpleSourceData().setFileNames("Verifier_VerifyUtils_inner.ump").setUmpleLines(10).setJavaLines(29).setLengths(1);}
     public UmpleSourceData VerifyUtils_checkLsns(){ return new UmpleSourceData().setFileNames("Verifier_VerifyUtils.ump").setUmpleLines(22).setJavaLines(46).setLengths(50);}
@@ -3226,29 +3239,30 @@ public class DbRecover
     public UmpleSourceData SequenceStats_getCurrent(){ return new UmpleSourceData().setFileNames("Statistics_SequenceStats.ump").setUmpleLines(51).setJavaLines(66).setLengths(1);}
     public UmpleSourceData SequenceStats_getNCachedGets(){ return new UmpleSourceData().setFileNames("Statistics_SequenceStats.ump").setUmpleLines(44).setJavaLines(56).setLengths(1);}
     public UmpleSourceData SequenceStats_SequenceStats(){ return new UmpleSourceData().setFileNames("Statistics_SequenceStats.ump").setUmpleLines(23).setJavaLines(29).setLengths(8);}
-    public UmpleSourceData StatsAccumulator_getINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(144).setJavaLines(179).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getDBINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(156).setJavaLines(194).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getDupCountLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(164).setJavaLines(204).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getBINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(148).setJavaLines(184).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_processDupCountLN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(91).setJavaLines(118).setLengths(2);}
-    public UmpleSourceData StatsAccumulator_getDeletedLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(168).setJavaLines(209).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getDINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(136).setJavaLines(169).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_copyToStats(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(180).setJavaLines(224).setLengths(14);}
-    public UmpleSourceData StatsAccumulator_processIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(63).setJavaLines(86).setLengths(4);}
-    public UmpleSourceData StatsAccumulator_getINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(128).setJavaLines(159).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getMainTreeMaxDepth(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(172).setJavaLines(214).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_incrementLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(114).setJavaLines(143).setLengths(7);}
-    public UmpleSourceData StatsAccumulator_processBIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(70).setJavaLines(94).setLengths(4);}
-    public UmpleSourceData StatsAccumulator_processDIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(77).setJavaLines(102).setLengths(4);}
-    public UmpleSourceData StatsAccumulator_StatsAccumulator(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(53).setJavaLines(75).setLengths(7);}
-    public UmpleSourceData StatsAccumulator_incrementDeletedLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(124).setJavaLines(154).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getDuplicateTreeMaxDepth(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(176).setJavaLines(219).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_tallyLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(96).setJavaLines(124).setLengths(15);}
-    public UmpleSourceData StatsAccumulator_processDBIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(84).setJavaLines(110).setLengths(4);}
-    public UmpleSourceData StatsAccumulator_getDBINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(140).setJavaLines(174).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(160).setJavaLines(199).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getBINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(132).setJavaLines(164).setLengths(1);}
-    public UmpleSourceData StatsAccumulator_getDINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(152).setJavaLines(189).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(144).setJavaLines(192).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getDBINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(156).setJavaLines(207).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getDupCountLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(164).setJavaLines(217).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getBINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(148).setJavaLines(197).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_processDupCountLN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(91).setJavaLines(131).setLengths(2);}
+    public UmpleSourceData StatsAccumulator_getDeletedLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(168).setJavaLines(222).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getDINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(136).setJavaLines(182).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_copyToStats(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(180).setJavaLines(237).setLengths(14);}
+    public UmpleSourceData StatsAccumulator_processIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(63).setJavaLines(87).setLengths(7);}
+    public UmpleSourceData StatsAccumulator_getINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(128).setJavaLines(172).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getMainTreeMaxDepth(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(172).setJavaLines(227).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_incrementLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(114).setJavaLines(156).setLengths(7);}
+    public UmpleSourceData StatsAccumulator_processBIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(70).setJavaLines(98).setLengths(7);}
+    public UmpleSourceData StatsAccumulator_verifyNode(){ return new UmpleSourceData().setFileNames("Derivative_Statistics_Verifier_StatsAccumulator.ump").setUmpleLines(5).setJavaLines(255).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_processDIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(77).setJavaLines(109).setLengths(7);}
+    public UmpleSourceData StatsAccumulator_StatsAccumulator(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(53).setJavaLines(76).setLengths(7);}
+    public UmpleSourceData StatsAccumulator_incrementDeletedLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(124).setJavaLines(167).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getDuplicateTreeMaxDepth(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(176).setJavaLines(232).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_tallyLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(96).setJavaLines(137).setLengths(15);}
+    public UmpleSourceData StatsAccumulator_processDBIN(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(84).setJavaLines(120).setLengths(7);}
+    public UmpleSourceData StatsAccumulator_getDBINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(140).setJavaLines(187).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getLNCount(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(160).setJavaLines(212).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getBINNodeIdsSeen(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(132).setJavaLines(177).setLengths(1);}
+    public UmpleSourceData StatsAccumulator_getDINsByLevel(){ return new UmpleSourceData().setFileNames("Statistics_StatsAccumulator.ump").setUmpleLines(152).setJavaLines(202).setLengths(1);}
     public UmpleSourceData StatsConfig_getShowProgressInterval(){ return new UmpleSourceData().setFileNames("Statistics_StatsConfig.ump").setUmpleLines(73).setJavaLines(115).setLengths(1);}
     public UmpleSourceData StatsConfig_setFast(){ return new UmpleSourceData().setFileNames("Statistics_StatsConfig.ump").setUmpleLines(24).setJavaLines(45).setLengths(1);}
     public UmpleSourceData StatsConfig_getClear(){ return new UmpleSourceData().setFileNames("Statistics_StatsConfig.ump").setUmpleLines(45).setJavaLines(75).setLengths(1);}
@@ -3442,35 +3456,37 @@ public class DbRecover
     public UmpleSourceData LatchSupport_makeLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchSupport.ump","Latches_LatchSupport.ump").setUmpleLines(19, 35).setJavaLines(35, 52).setLengths(13, 11);}
     public UmpleSourceData LatchSupport_makeSharedLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchSupport.ump").setUmpleLines(49).setJavaLines(67).setLengths(13);}
     public UmpleSourceData LatchSupport_getJava5LatchClass(){ return new UmpleSourceData().setFileNames("Latches_LatchSupport.ump").setUmpleLines(15).setJavaLines(30).setLengths(1);}
-    public UmpleSourceData LatchImpl_owner(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(187).setJavaLines(219).setLengths(1);}
-    public UmpleSourceData LatchImpl_nWaiters(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(195).setJavaLines(230).setLengths(1);}
-    public UmpleSourceData LatchImpl_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(223).setJavaLines(270).setLengths(6);}
-    public UmpleSourceData LatchImpl_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(216).setJavaLines(260).setLengths(1);}
-    public UmpleSourceData LatchImpl_acquireNoWait(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(104).setJavaLines(121).setLengths(18);}
-    public UmpleSourceData LatchImpl_LatchImpl(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump","Latches_LatchImpl.ump").setUmpleLines(25, 33).setJavaLines(40, 51).setLengths(2, 2);}
-    public UmpleSourceData LatchImpl_release(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(136).setJavaLines(159).setLengths(3);}
-    public UmpleSourceData LatchImpl_doRelease(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(146).setJavaLines(172).setLengths(26);}
-    public UmpleSourceData LatchImpl_acquire(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(50).setJavaLines(64).setLengths(46);}
+    public UmpleSourceData LatchImpl_owner(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(187).setJavaLines(241).setLengths(1);}
+    public UmpleSourceData LatchImpl_nWaiters(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(195).setJavaLines(252).setLengths(1);}
+    public UmpleSourceData LatchImpl_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(223).setJavaLines(292).setLengths(6);}
+    public UmpleSourceData LatchImpl_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(216).setJavaLines(282).setLengths(1);}
+    public UmpleSourceData LatchImpl_acquireNoWait(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(104).setJavaLines(131).setLengths(30);}
+    public UmpleSourceData LatchImpl_LatchImpl(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump","Latches_LatchImpl.ump").setUmpleLines(25, 33).setJavaLines(41, 52).setLengths(2, 2);}
+    public UmpleSourceData LatchImpl_release(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(136).setJavaLines(181).setLengths(3);}
+    public UmpleSourceData LatchImpl_getLatchStats(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Statistics_LatchImpl.ump").setUmpleLines(10).setJavaLines(307).setLengths(6);}
+    public UmpleSourceData LatchImpl_doRelease(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(146).setJavaLines(194).setLengths(26);}
+    public UmpleSourceData LatchImpl_acquire(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(50).setJavaLines(65).setLengths(55);}
     public UmpleSourceData LatchWaiter_LatchWaiter(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl_inner.ump").setUmpleLines(7).setJavaLines(61).setLengths(2);}
-    public UmpleSourceData LatchImpl_isOwner(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(179).setJavaLines(208).setLengths(1);}
-    public UmpleSourceData LatchImpl_toString(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump","Latches_LatchImpl_inner.ump").setUmpleLines(202, 11).setJavaLines(240, 67).setLengths(1, 1);}
-    public UmpleSourceData LatchImpl_releaseIfOwner(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(128).setJavaLines(148).setLengths(1);}
-    public UmpleSourceData LatchImpl_getNameString(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(209).setJavaLines(250).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_setName(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(21).setJavaLines(43).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_owner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(114).setJavaLines(157).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_nWaiters(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(122).setJavaLines(168).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(143).setJavaLines(198).setLengths(6);}
-    public UmpleSourceData Java5LatchImpl_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(136).setJavaLines(188).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_acquireNoWait(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(48).setJavaLines(76).setLengths(16);}
-    public UmpleSourceData Java5LatchImpl_release(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(78).setJavaLines(112).setLengths(3);}
-    public UmpleSourceData Java5LatchImpl_doRelease(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(88).setJavaLines(125).setLengths(11);}
+    public UmpleSourceData LatchImpl_isOwner(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(179).setJavaLines(230).setLengths(1);}
+    public UmpleSourceData LatchImpl_toString(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump","Latches_LatchImpl_inner.ump").setUmpleLines(202, 11).setJavaLines(262, 67).setLengths(1, 1);}
+    public UmpleSourceData LatchImpl_releaseIfOwner(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(128).setJavaLines(170).setLengths(1);}
+    public UmpleSourceData LatchImpl_getNameString(){ return new UmpleSourceData().setFileNames("Latches_LatchImpl.ump").setUmpleLines(209).setJavaLines(272).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_setName(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(21).setJavaLines(44).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_owner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(114).setJavaLines(180).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_nWaiters(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(122).setJavaLines(191).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(143).setJavaLines(221).setLengths(6);}
+    public UmpleSourceData Java5LatchImpl_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(136).setJavaLines(211).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_acquireNoWait(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(48).setJavaLines(87).setLengths(25);}
+    public UmpleSourceData Java5LatchImpl_release(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(78).setJavaLines(132).setLengths(3);}
+    public UmpleSourceData Java5LatchImpl_getLatchStats(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Statistics_Java5LatchImpl.ump").setUmpleLines(10).setJavaLines(236).setLengths(6);}
+    public UmpleSourceData Java5LatchImpl_doRelease(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(88).setJavaLines(145).setLengths(14);}
     public UmpleSourceData JEReentrantLock_getOwner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl_inner.ump").setUmpleLines(11).setJavaLines(33).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_acquire(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(29).setJavaLines(54).setLengths(11);}
+    public UmpleSourceData Java5LatchImpl_acquire(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(29).setJavaLines(55).setLengths(21);}
     public UmpleSourceData JEReentrantLock_JEReentrantLock(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl_inner.ump").setUmpleLines(8).setJavaLines(28).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_Java5LatchImpl(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(14).setJavaLines(33).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_isOwner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(106).setJavaLines(146).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_toString(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(129).setJavaLines(178).setLengths(1);}
-    public UmpleSourceData Java5LatchImpl_releaseIfOwner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(70).setJavaLines(101).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_Java5LatchImpl(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(14).setJavaLines(34).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_isOwner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(106).setJavaLines(169).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_toString(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(129).setJavaLines(201).setLengths(1);}
+    public UmpleSourceData Java5LatchImpl_releaseIfOwner(){ return new UmpleSourceData().setFileNames("Latches_Java5LatchImpl.ump").setUmpleLines(70).setJavaLines(121).setLengths(1);}
     public UmpleSourceData LatchTable_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchTable.ump").setUmpleLines(40).setJavaLines(65).setLengths(7);}
     public UmpleSourceData LatchTable_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_LatchTable.ump").setUmpleLines(25).setJavaLines(47).setLengths(8);}
     public UmpleSourceData LatchTable_latchesHeldToString(){ return new UmpleSourceData().setFileNames("Latches_LatchTable.ump").setUmpleLines(63).setJavaLines(92).setLengths(10);}
@@ -3480,18 +3496,19 @@ public class DbRecover
     public UmpleSourceData LatchTable_toString(){ return new UmpleSourceData().setFileNames("Latches_LatchTable.ump").setUmpleLines(94).setJavaLines(130).setLengths(15);}
     public UmpleSourceData LatchTable_getNameString(){ return new UmpleSourceData().setFileNames("Latches_LatchTable.ump").setUmpleLines(83).setJavaLines(116).setLengths(5);}
     public UmpleSourceData LatchNotHeldException_LatchNotHeldException(){ return new UmpleSourceData().setFileNames("Latches_LatchNotHeldException.ump","Latches_LatchNotHeldException.ump").setUmpleLines(7, 11).setJavaLines(33, 38).setLengths(1, 1);}
-    public UmpleSourceData SharedLatchImpl_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(195).setJavaLines(223).setLengths(1);}
-    public UmpleSourceData SharedLatchImpl_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(188).setJavaLines(213).setLengths(1);}
-    public UmpleSourceData SharedLatchImpl_isWriteLockedByCurrentThread(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(199).setJavaLines(228).setLengths(6);}
+    public UmpleSourceData SharedLatchImpl_unNoteLatch(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(195).setJavaLines(240).setLengths(1);}
+    public UmpleSourceData SharedLatchImpl_noteLatch(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(188).setJavaLines(230).setLengths(1);}
     public UmpleSourceData Owner_Owner(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl_inner.ump").setUmpleLines(10).setJavaLines(76).setLengths(2);}
-    public UmpleSourceData SharedLatchImpl_SharedLatchImpl(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(24).setJavaLines(41).setLengths(2);}
-    public UmpleSourceData SharedLatchImpl_release(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(130).setJavaLines(143).setLengths(17);}
-    public UmpleSourceData SharedLatchImpl_acquireExclusive(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(48).setJavaLines(54).setLengths(25);}
-    public UmpleSourceData SharedLatchImpl_acquireShared(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(103).setJavaLines(113).setLengths(21);}
-    public UmpleSourceData SharedLatchImpl_firstWriter(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(167).setJavaLines(186).setLengths(8);}
-    public UmpleSourceData SharedLatchImpl_acquireExclusiveNoWait(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(76).setJavaLines(83).setLengths(20);}
-    public UmpleSourceData SharedLatchImpl_indexOf(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(153).setJavaLines(169).setLengths(8);}
-    public UmpleSourceData SharedLatchImpl_getNameString(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(181).setJavaLines(203).setLengths(1);}
+    public UmpleSourceData SharedLatchImpl_release(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(130).setJavaLines(156).setLengths(21);}
+    public UmpleSourceData SharedLatchImpl_acquireExclusive(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(48).setJavaLines(55).setLengths(34);}
+    public UmpleSourceData SharedLatchImpl_acquireShared(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(103).setJavaLines(126).setLengths(21);}
+    public UmpleSourceData SharedLatchImpl_acquireExclusiveNoWait(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(76).setJavaLines(93).setLengths(23);}
+    public UmpleSourceData SharedLatchImpl_Label432(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Statistics_SharedLatchImpl.ump").setUmpleLines(23).setJavaLines(255).setLengths(2);}
+    public UmpleSourceData SharedLatchImpl_isWriteLockedByCurrentThread(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(199).setJavaLines(245).setLengths(6);}
+    public UmpleSourceData SharedLatchImpl_SharedLatchImpl(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(24).setJavaLines(42).setLengths(2);}
+    public UmpleSourceData SharedLatchImpl_firstWriter(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(167).setJavaLines(203).setLengths(8);}
+    public UmpleSourceData SharedLatchImpl_indexOf(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(153).setJavaLines(186).setLengths(8);}
+    public UmpleSourceData SharedLatchImpl_getNameString(){ return new UmpleSourceData().setFileNames("Latches_SharedLatchImpl.ump").setUmpleLines(181).setJavaLines(220).setLengths(1);}
     public UmpleSourceData LatchedLogManager_flushInternal(){ return new UmpleSourceData().setFileNames("Latches_LatchedLogManager.ump").setUmpleLines(33).setJavaLines(61).setLengths(8);}
     public UmpleSourceData LatchedLogManager_countObsoleteNodes(){ return new UmpleSourceData().setFileNames("Latches_LatchedLogManager.ump").setUmpleLines(72).setJavaLines(109).setLengths(7);}
     public UmpleSourceData LatchedLogManager_LatchedLogManager(){ return new UmpleSourceData().setFileNames("Latches_LatchedLogManager.ump").setUmpleLines(17).setJavaLines(45).setLengths(1);}
@@ -3513,6 +3530,11 @@ public class DbRecover
     public UmpleSourceData FSyncGroup_wakeupAll(){ return new UmpleSourceData().setFileNames("FSync_FSyncManager_inner.ump").setUmpleLines(72).setJavaLines(96).setLengths(2);}
     public UmpleSourceData FSyncGroup_wakeupOne(){ return new UmpleSourceData().setFileNames("FSync_FSyncManager_inner.ump").setUmpleLines(76).setJavaLines(102).setLengths(1);}
     public UmpleSourceData FSyncManager_executeFSync(){ return new UmpleSourceData().setFileNames("FSync_FSyncManager.ump").setUmpleLines(82).setJavaLines(104).setLengths(1);}
+    public UmpleSourceData CheckpointMonitor_activate(){ return new UmpleSourceData().setFileNames("Derivative_CheckpointerDaemon_CPBytes_CheckpointMonitor.ump").setUmpleLines(34).setJavaLines(57).setLengths(2);}
+    public UmpleSourceData CheckpointMonitor_CheckpointMonitor(){ return new UmpleSourceData().setFileNames("Derivative_CheckpointerDaemon_CPBytes_CheckpointMonitor.ump").setUmpleLines(15).setJavaLines(32).setLengths(4);}
+    public UmpleSourceData CheckpointMonitor_recordLogWrite(){ return new UmpleSourceData().setFileNames("Derivative_CheckpointerDaemon_CPBytes_CheckpointMonitor.ump").setUmpleLines(26).setJavaLines(46).setLengths(2);}
+    public UmpleSourceData LatchStats_clone(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Statistics_LatchStats.ump").setUmpleLines(57).setJavaLines(45).setLengths(1);}
+    public UmpleSourceData LatchStats_toString(){ return new UmpleSourceData().setFileNames("Derivative_Latches_Statistics_LatchStats.ump").setUmpleLines(45).setJavaLines(32).setLengths(9);}
 
   }
   public static class UmpleSourceData

@@ -50,7 +50,6 @@
         <feature name="Derivative_Latches_FileHandleCache"/>
         <feature name="Derivative_Evictor_EvictorDaemon"/>
         <feature name="Derivative_Evictor_CriticalEviction"/>
-
         <feature name="Derivative_Evictor_MemoryBudget"/>
         <feature name="Derivative_DeleteOp_MemoryBudget"/>
         <feature name="Derivative_Statistics_MemoryBudget"/>
@@ -72,20 +71,40 @@
         <feature name="Derivative_LoggingCleaner_DeleteOp"/>
         <feature name="Derivative_Verifier_INCompressor"/>
         <feature name="Derivative_Statistics_INCompressor"/>
+
+
+
+
+
+
         <feature name="Derivative_Latches_INCompressor"/>
+
         <feature name="Derivative_LoggingFine_INCompressor"/>
+
         <feature name="Derivative_CPBytes_CPTime"/>
+
         <feature name="Derivative_LoggingFinest_CPTime"/>
+
         <feature name="Derivative_CheckpointerDaemon_CPBytes"/>
+
         <feature name="Derivative_LoggingFinest_CPBytes"/>
+
         <feature name="Derivative_Statistics_Verifier"/>
+
         <feature name="Derivative_Statistics_CheckLeaks"/>
+
         <feature name="Derivative_Latches_CheckLeaks"/>
+
         <feature name="Derivative_Latches_Statistics"/>
+
         <feature name="Derivative_LookAHEADCache_Statistics"/>
+
         <feature name="Derivative_FSync_Statistics"/>
+
         <feature name="Derivative_LoggingConfig_Statistics"/>
+
         <feature name="Derivative_IO_SynchronizedIO"/>
+
         <feature name="Derivative_NIO_ChunkedNIO"/>
         <feature name="Derivative_FSync_Latches"/>
         <feature name="Derivative_LoggingEvictor_Evictor_LoggingBase"/>

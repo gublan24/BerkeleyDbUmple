@@ -14,7 +14,7 @@ class FileManager {
 //            totalBytesWritten = size;
 //        }
 
-        after execute() {
+        after Label445_1: execute() {
 //            int result = original(); 
 //{
               //  this.hook447();
@@ -28,8 +28,9 @@ class FileManager {
             file.write(data.array(), pos, size);
             data.position(pos + size);
             totalBytesWritten = size;
+            Label447_1: ;//
             //end 
-            return result;
+           // return result;
         }
     }
      static class FileManager_readFromFile {
@@ -44,7 +45,7 @@ class FileManager {
         //        readBuffer.position(pos + bytesRead2);
         //    }
        // }
-        after execute() {
+        after Label446_1: execute() {
             //original(); {
             //    this.hook448();
             //}
@@ -58,6 +59,7 @@ class FileManager {
            if (bytesRead2 > 0) {
                 readBuffer.position(pos + bytesRead2);
            }
+           Label448_1: ;//
         }
     }
 }

@@ -5,6 +5,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.RunRecoveryException;
 import com.sleepycat.je.DatabaseException;
 // line 3 "../../../../Latches_Latch.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_Latch.ump"
 public interface Latch
 {
   
@@ -25,5 +26,7 @@ public interface Latch
   public int nWaiters() ;
 
   public String toString() ;
+
+  public LatchStats getLatchStats() ;
 
 }

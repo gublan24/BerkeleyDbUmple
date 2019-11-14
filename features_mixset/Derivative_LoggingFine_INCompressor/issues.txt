@@ -1,1 +1,0 @@
-synchronized void doCompress()

@@ -1,0 +1,17 @@
+
+class FileManager {
+   static class FileManager_writeToFile {
+     around Label447-Label447_1: execute() {
+			synchronized (file) {
+				around_proceed:
+        }
+      }
+    }
+   static class FileManager_readFromFile {
+      around Label448-Label448_1: execute() {
+				synchronized (file) {
+					around_proceed:
+        }
+      }
+    }
+}

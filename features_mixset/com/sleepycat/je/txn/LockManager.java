@@ -22,6 +22,7 @@ import java.util.HashMap;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.Latch;
+import com.sleepycat.je.latch.LatchStats;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../LockManager.ump"
@@ -30,6 +31,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Statistics_LockManager.ump"
 // line 3 "../../../../Statistics_LockManager_inner.ump"
 // line 3 "../../../../Latches_LockManager.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_LockManager.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_LockManager_inner.ump"
 public abstract class LockManager implements EnvConfigObserver
 {
 
@@ -864,6 +867,7 @@ lockTableLatches[i].acquire();
   
   
   // line 4 "../../../../Statistics_LockManager_inner.ump"
+  // line 4 "../../../../Derivative_Latches_Statistics_LockManager_inner.ump"
   public static class LockManager_lockStat
   {
   
@@ -900,7 +904,13 @@ lockTableLatches[i].acquire();
             _this.nWaits=0;
             _this.nRequests=0;
           }
-          Label769: //this.hook769();
+          Label769:
+  for (int i=0; i < _this.nLockTables; i++) {
+            latchStats=(LatchStats)_this.lockTableLatches[i].getLatchStats();
+            stats.accumulateLockTableLatchStats(latchStats);
+          }
+          //original();
+   //this.hook769();
           if (!config.getFast()) {
             _this.dumpLockTable(stats);
           }

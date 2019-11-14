@@ -5,6 +5,7 @@ package com.sleepycat.je.log;
 import de.ovgu.cide.jakutil.*;
 
 // line 3 "../../../../LogResult.ump"
+// line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
 public class LogResult
 {
 
@@ -15,15 +16,17 @@ public class LogResult
   //LogResult Attributes
   private long currentLsn;
   private boolean wakeupCleaner;
+  private boolean wakeupCheckpointer;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public LogResult(long aCurrentLsn, boolean aWakeupCleaner)
+  public LogResult(long aCurrentLsn, boolean aWakeupCleaner, boolean aWakeupCheckpointer)
   {
     currentLsn = aCurrentLsn;
     wakeupCleaner = aWakeupCleaner;
+    wakeupCheckpointer = aWakeupCheckpointer;
   }
 
   //------------------------
@@ -46,6 +49,14 @@ public class LogResult
     return wasSet;
   }
 
+  public boolean setWakeupCheckpointer(boolean aWakeupCheckpointer)
+  {
+    boolean wasSet = false;
+    wakeupCheckpointer = aWakeupCheckpointer;
+    wasSet = true;
+    return wasSet;
+  }
+
   public long getCurrentLsn()
   {
     return currentLsn;
@@ -56,13 +67,21 @@ public class LogResult
     return wakeupCleaner;
   }
 
+  public boolean getWakeupCheckpointer()
+  {
+    return wakeupCheckpointer;
+  }
+
   public void delete()
   {}
 
   // line 11 "../../../../LogResult.ump"
   public  LogResult(long currentLsn, boolean wakeupCheckpointer, boolean wakeupCleaner){
     this.currentLsn = currentLsn;
-	Label510: //this.hook510(wakeupCheckpointer);
+	Label510:
+this.wakeupCheckpointer = wakeupCheckpointer;
+	//original(wakeupCheckpointer);
+ //this.hook510(wakeupCheckpointer);
 	this.wakeupCleaner = wakeupCleaner;
   }
 
@@ -71,6 +90,7 @@ public class LogResult
   {
     return super.toString() + "["+
             "currentLsn" + ":" + getCurrentLsn()+ "," +
-            "wakeupCleaner" + ":" + getWakeupCleaner()+ "]";
+            "wakeupCleaner" + ":" + getWakeupCleaner()+ "," +
+            "wakeupCheckpointer" + ":" + getWakeupCheckpointer()+ "]";
   }
 }

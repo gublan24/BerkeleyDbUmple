@@ -53,6 +53,9 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl.ump"
 // line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
 // line 3 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_CursorImpl.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_CursorImpl.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -2048,13 +2051,19 @@ if (DEBUG) {
   // line 19 "../../../../Evictor_CursorImpl.ump"
    public void evict() throws DatabaseException{
     try {
-      Label202:			//this.hook202();
+      Label202:
+latchBINs();
+	//original();
+			//this.hook202();
 			setTargetBin();
 			targetBin.evictLN(targetIndex);
 
 	} finally {
 
-LabelEvict_1: ;//
+LabelEvict_1:
+releaseBINs();
+	//}
+ ;//
 
 }
   }
@@ -2499,6 +2508,7 @@ LabelEvict_1: ;//
   // line 5 "../../../../Verifier_CursorImpl_inner.ump"
   // line 4 "../../../../Statistics_CursorImpl_inner.ump"
   // line 24 "../../../../Latches_CursorImpl_inner.ump"
+  // line 4 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
   public static class CursorImpl_getNextDuplicate
   {
   
@@ -2682,6 +2692,30 @@ LabelEvict_1: ;//
     protected DupCountLN dcl ;
   // line 259 "../../../../CursorImpl_static.ump"
     protected DBIN newDupBin ;
+  
+  // line 5 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
+    after Label200 : execute () 
+    {
+      _this.latchBIN();
+          try {
+            //original();
+          }
+      finally {
+            _this.releaseBIN();
+          }
+    }
+  
+  // line 14 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
+    after Label201 : execute () 
+    {
+      duplicateRoot.latch();
+          try {
+            //original();
+          }
+      finally {
+            duplicateRoot.releaseLatch();
+          }
+    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/

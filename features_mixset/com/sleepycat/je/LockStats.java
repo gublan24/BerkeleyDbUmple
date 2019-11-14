@@ -4,10 +4,12 @@
 package com.sleepycat.je;
 import de.ovgu.cide.jakutil.*;
 import java.io.Serializable;
+import com.sleepycat.je.latch.LatchStats;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../LockStats.ump"
 // line 3 "../../../Statistics_LockStats.ump"
+// line 3 "../../../Derivative_Latches_Statistics_LockStats.ump"
 public class LockStats implements Serializable
 {
 
@@ -184,8 +186,31 @@ public class LockStats implements Serializable
 			sb.append("nOwners=").append(nOwners).append('\n');
 			sb.append("nRequests=").append(nRequests).append('\n');
 			sb.append("nWaits=").append(nWaits).append('\n');
-			Label64: //this.hook64(sb);
+			Label64:
+sb.append("lockTableLatch:\n").append(lockTableLatchStats);
+	//original(sb);
+ //this.hook64(sb);
 			return sb.toString();
+  }
+
+
+  /**
+   * 
+   * Internal use only.
+   */
+  // line 15 "../../../Derivative_Latches_Statistics_LockStats.ump"
+   public void accumulateLockTableLatchStats(LatchStats latchStats){
+    if (lockTableLatchStats == null) {
+	    lockTableLatchStats = latchStats;
+	    return;
+	}
+	lockTableLatchStats.nAcquiresNoWaiters += latchStats.nAcquiresNoWaiters;
+	lockTableLatchStats.nAcquiresSelfOwned += latchStats.nAcquiresSelfOwned;
+	lockTableLatchStats.nAcquiresUpgrade += latchStats.nAcquiresUpgrade;
+	lockTableLatchStats.nAcquiresWithContention += latchStats.nAcquiresWithContention;
+	lockTableLatchStats.nAcquireNoWaitSuccessful += latchStats.nAcquireNoWaitSuccessful;
+	lockTableLatchStats.nAcquireNoWaitUnsuccessful += latchStats.nAcquireNoWaitUnsuccessful;
+	lockTableLatchStats.nAcquireSharedSuccessful += latchStats.nAcquireSharedSuccessful;
   }
   
   //------------------------
@@ -206,6 +231,8 @@ public class LockStats implements Serializable
   private long nRequests ;
 // line 38 "../../../Statistics_LockStats.ump"
   private long nWaits ;
+// line 9 "../../../Derivative_Latches_Statistics_LockStats.ump"
+  private LatchStats lockTableLatchStats ;
 
   
 }

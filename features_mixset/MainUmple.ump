@@ -128,9 +128,50 @@ use Derivative_DeleteOp_TruncateOp/umpilif/Derivative_DeleteOp_TruncateOp_Master
 
 use Derivative_Latches_TruncateOp/umpilif/Derivative_Latches_TruncateOp_Master.ump;
 
-use Derivative_LoggingFinest_TruncateOp_Master.ump;
+use Derivative_LoggingFinest_TruncateOp/umpilif/Derivative_LoggingFinest_TruncateOp_Master.ump;
 
 use Derivative_INCompressor_DeleteOp/umpilif/Derivative_INCompressor_DeleteOp_Master.ump;
+
+use Derivative_Statistics_DeleteOp/umpilif/Derivative_Statistics_DeleteOp_Master.ump;
+
+use Derivative_Latches_DeleteOp/umpilif/Derivative_Latches_DeleteOpMaster.ump;
+
+use Derivative_LoggingCleaner_DeleteOp/umpilif/Derivative_LoggingCleaner_DeleteOp_Master.ump;
+
+use Derivative_Verifier_INCompressor/umpilif/Derivative_Verifier_INCompressor_Master.ump;
+
+use Derivative_Statistics_INCompressor/umpilif/Derivative_Statistics_INCompressor_Master.ump;
+
+use Derivative_Latches_INCompressor/umpilif/Derivative_Latches_INCompressor_Master.ump;
+
+use Derivative_LoggingFine_INCompressor/umpilif/Derivative_LoggingFine_INCompressor_Master.ump;
+
+use Derivative_CPBytes_CPTime/umpilif/Derivative_CPBytes_CPTime_Master.ump;
+
+use Derivative_LoggingFinest_CPTime/umpilif/Derivative_LoggingFinest_CPTime_Master.ump;
+
+use Derivative_CheckpointerDaemon_CPBytes/umpilif/Derivative_CheckpointerDaemon_CPBytes_Master.ump;
+
+use Derivative_LoggingFinest_CPBytes/umpilif/Derivative_LoggingFinest_CPBytes_Master.ump;
+
+use Derivative_Statistics_Verifier/umpilif/Derivative_Statistics_Verifier_Master.ump;
+
+use Derivative_Statistics_CheckLeaks/umpilif/Derivative_Statistics_CheckLeaks_Master.ump;
+
+use Derivative_Statistics_CheckLeaks/umpilif/Derivative_Statistics_CheckLeaks_Master.ump;
+
+use Derivative_Latches_Statistics/umpilif/Derivative_Latches_Statistics_Master.ump;
+
+use Derivative_LookAHEADCache_Statistics/umpilif/Derivative_LookAHEADCache_Statistics_Master.ump;
+
+use Derivative_FSync_Statistics/umpilif/Derivative_FSync_Statistics_Master.ump;
+
+use Derivative_LoggingConfig_Statistics/umpilif/Derivative_LoggingConfig_Statistics_Master.ump;
+
+use Derivative_IO_SynchronizedIO/ump_inner/Derivative_IO_SynchronizedIO_Master_inner.ump;
+
+use Derivative_NIO_ChunkedNIO/umpilif/Derivative_NIO_ChunkedNIO_Master.ump;
+//-
 
 //rename 's/^/DeleteOp_/' *
 

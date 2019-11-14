@@ -19,6 +19,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../LogBufferPool.ump"
 // line 3 "../../../../Statistics_LogBufferPool.ump"
 // line 3 "../../../../Latches_LogBufferPool.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_LogBufferPool.ump"
 public class LogBufferPool
 {
 
@@ -284,7 +285,10 @@ Label489_1:
 					nCacheMiss = 0;
 					nNotResident = 0;
 			}
-			Label484: //this.hook484();
+			Label484:
+bufferPoolLatch.acquire();
+	//original();
+ //this.hook484();
 			long bufferBytes = 0;
 			int nLogBuffers = 0;
 			Label483: //this.hook483(bufferBytes, nLogBuffers);
@@ -301,7 +305,9 @@ finally {
 
 			stats.setNLogBuffers(nLogBuffers);
 			stats.setBufferBytes(bufferBytes);
-Label483_1: ;;//
+Label483_1:
+bufferPoolLatch.release();
+ ;;//
 }
   }
   

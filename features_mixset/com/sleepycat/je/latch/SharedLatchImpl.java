@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 // line 3 "../../../../Latches_SharedLatchImpl.ump"
 // line 3 "../../../../Latches_SharedLatchImpl_inner.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_SharedLatchImpl.ump"
 public class SharedLatchImpl implements SharedLatch
 {
 
@@ -64,9 +65,18 @@ public class SharedLatchImpl implements SharedLatch
 		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
 	    }
 	    if (waiters.size() == 1) {
-		Label429:           ;  //this.hook429();
+		Label429:
+//synchronized void acquireExclusive()
+
+	stats.nAcquiresNoWaiters++;
+	//original();
+           ;  //this.hook429();
 	    } else {
-		Label430:           ;  //this.hook430();
+		Label430:
+//synchronized void acquireExclusive()
+	stats.nAcquiresWithContention++;
+	//original();
+           ;  //this.hook430();
 		while (waiters.get(0) != owner) {
 		    wait();
 		}
@@ -90,7 +100,10 @@ public class SharedLatchImpl implements SharedLatch
 		    Owner owner = new Owner(thread, Owner.EXCLUSIVE);
 		    waiters.add(owner);
 		    owner.nAcquires += 1;
-		    Label431:           ;  //this.hook431();
+		    Label431:
+stats.nAcquiresNoWaiters++;
+	//original();
+           ;  //this.hook431();
 		    assert (noteLatch ? noteLatch() : true);
 		    return true;
 		} else {
@@ -155,7 +168,11 @@ public class SharedLatchImpl implements SharedLatch
 		assert (noteLatch ? unNoteLatch() : true);
 		notifyAll();
 	    }
-	    Label433:           ;  //this.hook433();
+	    Label433:
+// synchronized void release() 
+	stats.nReleases++;
+	//original();
+           ;  //this.hook433();
 	} finally {
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -233,6 +250,12 @@ public class SharedLatchImpl implements SharedLatch
 	} else {
 	    return false;
 	}
+  }
+
+  // line 24 "../../../../Derivative_Latches_Statistics_SharedLatchImpl.ump"
+  public after Label432() throws DatabaseException,InterruptedException{
+    stats.nAcquireSharedSuccessful++;
+	//original();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -358,6 +381,8 @@ public class SharedLatchImpl implements SharedLatch
   {
     this.noteLatch = noteLatch;
   }
+// line 5 "../../../../Derivative_Latches_Statistics_SharedLatchImpl.ump"
+  private LatchStats stats = new LatchStats() ;
 
   
 }

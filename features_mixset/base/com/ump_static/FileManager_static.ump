@@ -81,8 +81,9 @@ class FileManager {
       }
       int execute() throws IOException, DatabaseException {
         totalBytesWritten=0;
-        Label455: //this.hook455();
-        Label445: //this.hook445();
+        Label455: ;//this.hook455();
+        Label445: ;//this.hook445();
+        Label445_1: ;//
         return totalBytesWritten;
       }
       protected FileManager _this;
@@ -109,7 +110,8 @@ class FileManager {
         this.offset=offset;
       }
       void execute() throws IOException {
-        Label446: //this.hook446();
+        Label446: ;//this.hook446();
+        Label446_1: ; //
       }
       protected FileManager _this;
       protected RandomAccessFile file;

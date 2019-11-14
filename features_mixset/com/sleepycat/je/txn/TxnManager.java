@@ -26,6 +26,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../MemoryBudget_TxnManager.ump"
 // line 3 "../../../../Statistics_TxnManager.ump"
 // line 3 "../../../../Latches_TxnManager.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_TxnManager.ump"
 public class TxnManager
 {
 
@@ -411,7 +412,9 @@ allTxnLatch.release();
       //End hook820
 	} 
 finally {
-Label820_1: ; //
+Label820_1:
+allTxnLatch.release();
+ ; //
 }
         return stats;
   }

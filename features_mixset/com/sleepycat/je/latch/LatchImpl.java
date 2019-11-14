@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 // line 3 "../../../../Latches_LatchImpl.ump"
 // line 3 "../../../../Latches_LatchImpl_inner.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
 public class LatchImpl implements Latch
 {
 
@@ -68,11 +69,17 @@ public class LatchImpl implements Latch
 	    LatchWaiter waitTarget = null;
 	    synchronized (this) {
 		if (thread == owner) {
-		    Label422:           ;  //this.hook422();
+		    Label422:
+stats.nAcquiresSelfOwned++;
+	//original();
+           ;  //this.hook422();
 		    throw new LatchException(getNameString() + " already held");
 		}
 		if (owner == null) {
-		    Label423:           ;  //this.hook423();
+		    Label423:
+stats.nAcquiresNoWaiters++;
+	//original();
+           ;  //this.hook423();
 		    owner = thread;
 		} else {
 		    if (waiters == null) {
@@ -80,7 +87,10 @@ public class LatchImpl implements Latch
 		    }
 		    waitTarget = new LatchWaiter(thread);
 		    waiters.add(waitTarget);
-		    Label424:           ;  //this.hook424();
+		    Label424:
+stats.nAcquiresWithContention++;
+	//original();
+           ;  //this.hook424();
 		}
 	    }
 	    if (waitTarget != null) {
@@ -123,16 +133,28 @@ public class LatchImpl implements Latch
     try {
 	    Thread thread = Thread.currentThread();
 	    if (thread == owner) {
-		Label425:           ;  //this.hook425();
+		Label425:
+//synchronized boolean acquireNoWait()
+	stats.nAcquiresSelfOwned++;
+	//original();
+           ;  //this.hook425();
 		throw new LatchException(getNameString() + " already held");
 	    }
 	    if (owner == null) {
 		owner = thread;
-		Label426:           ;  //this.hook426();
+		Label426:
+//synchronized boolean acquireNoWait()
+	stats.nAcquireNoWaitSuccessful++;
+	//original();
+           ;  //this.hook426();
 		assert noteLatch();
 		return true;
 	    } else {
-		Label427:           ;  //this.hook427();
+		Label427:
+//synchronized boolean acquireNoWait()
+	stats.nAcquireNoWaitUnsuccessful++;
+	//original();
+           ;  //this.hook427();
 		return false;
 	    }
 	} finally {
@@ -276,6 +298,21 @@ public class LatchImpl implements Latch
 	    return true;
 	}
   }
+
+
+  /**
+   * 
+   * @return a LatchStats object with information about this latch.
+   */
+  // line 11 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
+   public LatchStats getLatchStats(){
+    LatchStats s = null;
+	try {
+	    s = (LatchStats) stats.clone();
+	} catch (CloneNotSupportedException e) {
+	}
+	return s;
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -367,6 +404,15 @@ public class LatchImpl implements Latch
   synchronized public void setName (String name) 
   {
     this.name = name;
+  }
+// line 5 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
+  private LatchStats stats = new LatchStats() ;
+
+// line 49 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
+  after Label428: doRelease (boolean checkHeld) 
+  {
+    stats.nReleases++;
+	//original();
   }
 
   

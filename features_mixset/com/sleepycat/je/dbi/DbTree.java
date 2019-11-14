@@ -46,6 +46,11 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../DeleteOp_DbTree.ump"
 // line 3 "../../../../Verifier_DbTree.ump"
 // line 3 "../../../../Latches_DbTree.ump"
+// line 3 "../../../../Derivative_Latches_RenameOp_DbTree.ump"
+// line 3 "../../../../Derivative_DeleteOp_TruncateOp_DbTree.ump"
+// line 3 "../../../../Derivative_Latches_TruncateOp_DbTree.ump"
+// line 3 "../../../../Derivative_Latches_DeleteOp_DbTree.ump"
+// line 3 "../../../../Derivative_Statistics_Verifier_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -806,6 +811,9 @@ cursor.releaseBINs();
 					if (nameCursor != null) {
 				//this.hook298(nameCursor);
         Label298:
+nameCursor.releaseBIN();
+//	original(nameCursor);
+
 				nameCursor.close();
 					}
 			}
@@ -861,7 +869,10 @@ cursor.releaseBINs();
 					throw new DatabaseException(CNSE);
 			} finally {
 					if (nameCursor != null) {
-				    Label294:						//this.hook294(nameCursor);
+				    Label294:
+nameCursor.releaseBIN();
+//	original(nameCursor);
+						//this.hook294(nameCursor);
 						nameCursor.close();
 					}
 			}
@@ -928,7 +939,10 @@ cursor.releaseBINs();
 					throw new DatabaseException(UEE);
 			} finally {
 
-					Label295:					//this.hook295(nameCursor);
+					Label295:
+nameCursor.releaseBIN();
+//	original(nameCursor);
+					//this.hook295(nameCursor);
 					nameCursor.close();
 			}
   }
@@ -956,6 +970,63 @@ cursor.releaseBINs();
 							nameCursor.close();
 					}
 			}
+  }
+
+  // line 6 "../../../../Derivative_Statistics_Verifier_DbTree.ump"
+   public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
+    boolean ret = true;
+	try {
+	    boolean ok = idDatabase.verify(config, idDatabase.getEmptyStats());
+	    if (!ok) {
+		ret = false;
+	    }
+	    ok = nameDatabase.verify(config, nameDatabase.getEmptyStats());
+	    if (!ok) {
+		ret = false;
+	    }
+	} catch (DatabaseException DE) {
+	    ret = false;
+	}
+	Label292: //ret = this.hook292(config, out, ret);
+	Locker locker = null;
+	CursorImpl cursor = null;
+	LockType lockType = LockType.NONE;
+	try {
+	    locker = new BasicLocker(envImpl);
+	    cursor = new CursorImpl(idDatabase, locker);
+	    if (cursor.positionFirstOrLast(true, null)) {
+		MapLN mapLN = (MapLN) cursor.getCurrentLNAlreadyLatched(lockType);
+		DatabaseEntry keyDbt = new DatabaseEntry();
+		DatabaseEntry dataDbt = new DatabaseEntry();
+		while (true) {
+		    if (mapLN != null && !mapLN.isDeleted()) {
+			DatabaseImpl dbImpl = mapLN.getDatabase();
+			boolean ok = dbImpl.verify(config, dbImpl.getEmptyStats());
+			if (!ok) {
+			    ret = false;
+			}
+		    }
+		    OperationStatus status = cursor.getNext(keyDbt, dataDbt, lockType, true, false);
+		    if (status != OperationStatus.SUCCESS) {
+			break;
+		    }
+		    mapLN = (MapLN) cursor.getCurrentLN(lockType);
+		}
+	    }
+	} catch (DatabaseException e) {
+	    e.printStackTrace(out);
+	    ret = false;
+	} finally {
+	    if (cursor != null) {
+		Label291: //this.hook291(cursor);
+		cursor.close();
+	    }
+	    if (locker != null) {
+		locker.operationEnd();
+	    }
+	}
+	//end of hook292
+	return ret;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1169,6 +1240,28 @@ cursor.releaseBINs();
   private DatabaseImpl nameDatabase ;
 // line 57 "../../../../DbTree.ump"
   private EnvironmentImpl envImpl ;
+
+// line 5 "../../../../Derivative_DeleteOp_TruncateOp_DbTree.ump"
+  protected void hook296: truncate (Locker , String , boolean ) 
+  {
+    locker.markDeleteAtTxnEnd(result.dbImpl, true);
+	locker.markDeleteAtTxnEnd(newDb, false);
+//	original(locker, result, newDb);
+  }
+
+// line 11 "../../../../Derivative_DeleteOp_TruncateOp_DbTree.ump"
+  protected void hook297: truncate (Locker , String , boolean ) 
+  {
+    locker.markDeleteAtTxnEnd(oldDatabase, true);
+	//original(locker, oldDatabase);
+  }
+
+// line 5 "../../../../Derivative_Latches_DeleteOp_DbTree.ump"
+  protected void hook293: bRemove (Locker , String 
+  {
+    nameCursor.releaseBIN();
+	//original(nameCursor);
+  }
 
   
 }

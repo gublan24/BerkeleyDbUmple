@@ -1,0 +1,13 @@
+use Derivative_Latches_Statistics_CursorImpl.ump;
+use Derivative_Latches_Statistics_LockStats.ump;
+use Derivative_Latches_Statistics_TxnManager.ump;
+use Derivative_Latches_Statistics_LockManager.ump;
+use Derivative_Latches_Statistics_LatchStats.ump;
+use Derivative_Latches_Statistics_LatchImpl.ump;
+use Derivative_Latches_Statistics_Java5LatchImpl.ump;
+use Derivative_Latches_Statistics_Latch.ump;
+use Derivative_Latches_Statistics_SharedLatchImpl.ump;
+use Derivative_Latches_Statistics_LogBufferPool.ump;
+
+ // adding inner elements ; 
+use ../ump_inner/Derivative_Latches_Statistics_Master_inner.ump ; 

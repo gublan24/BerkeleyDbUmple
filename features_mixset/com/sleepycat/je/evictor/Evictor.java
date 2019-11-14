@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.text.NumberFormat;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../Evictor_Evictor.ump"
@@ -42,6 +43,9 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Derivative_INCompressor_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_Evictor.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
+// line 3 "../../../../Derivative_LoggingEvictor_Evictor_Evictor.ump"
 public class Evictor extends DaemonThread
 {
 
@@ -317,7 +321,9 @@ if (evictedBytes > 0) {
 							}
 					}
 } finally {
-Label374_1: ;//		// end hook374
+Label374_1:
+target.releaseLatchIfOwner();
+ ;//		// end hook374
 }
 
 			}
@@ -334,7 +340,10 @@ Label374_1: ;//		// end hook374
     try{
 			long evictBytes = 0;
 			Label375:			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
-      Label378:			//this.hook378(parent);
+      Label378:
+assert parent.isLatchOwner();
+//	original(parent);
+			//this.hook378(parent);
 			long oldGenerationCount = child.getGeneration();
 			IN renewedChild = (IN) parent.getTarget(index);
 			if ((renewedChild != null) && (renewedChild.getGeneration() <= oldGenerationCount)
@@ -374,7 +383,12 @@ nNodesEvictedThisRun++;
 					// end of hook379
 			}
 }finally {
-Label375_1: ;//		// end hook375
+Label375_1:
+// Label379_1 reuses Label375_1
+	    renewedChild.releaseLatch();
+
+parent.releaseLatch();
+ ;//		// end hook375
 }
 
 			return evictBytes;
@@ -599,6 +613,7 @@ Label375_1: ;//		// end hook375
   
   // line 51 "../../../../Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
   public static class Evictor_evictBatch
   {
   
@@ -648,11 +663,19 @@ Label375_1: ;//		// end hook375
           evictBytes+=_this.envImpl.getUtilizationTracker().evictMemory();
           inList=_this.envImpl.getInMemoryINs();
   
-          Label376:        //this.hook376();
+          Label376:
+  inList.latchMajor();
+          //original();
+          //this.hook376();
           inListStartSize=inList.getSize();
           try {
             if (inListStartSize == 0) {
-              _this.nextNode=null;
+              _this.nextNode=null;            
+              // line 6 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
+              //long result=//original();
+                      assert LatchSupport.countLatchesHeld() == 0 : "latches held = " + LatchSupport.countLatchesHeld();
+                    //  return result;
+              // END OF UMPLE AFTER INJECTION
               return 0;
             }
      else {
@@ -681,10 +704,19 @@ Label375_1: ;//		// end hook375
   _this.nNodesScanned+=_this.nNodesScannedThisRun;
           //original();
            // this.hook382();
-            Label377:         // this.hook377();
+            Label377:
+  inList.releaseMajorLatch();
+          //original();
+           // this.hook377();
             Label371:          //this.hook371();
-          }
+          }        
+          // line 6 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
+          //long result=//original();
+                  assert LatchSupport.countLatchesHeld() == 0 : "latches held = " + LatchSupport.countLatchesHeld();
+                //  return result;
+          // END OF UMPLE AFTER INJECTION
           return evictBytes;
+  
     }
     
     //------------------------
@@ -948,6 +980,8 @@ Label375_1: ;//		// end hook375
   private long nBINsStripped = 0 ;
 // line 21 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
   private long nBINsStrippedThisRun ;
+// line 5 "../../../../Derivative_LoggingEvictor_Evictor_Evictor.ump"
+  private Level detailedTraceLevel ;
 
   
 }

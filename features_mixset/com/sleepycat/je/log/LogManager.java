@@ -35,6 +35,7 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../Checksum_LogManager_inner.ump"
 // line 3 "../../../../Latches_LogManager.ump"
 // line 3 "../../../../FSync_LogManager.ump"
+// line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
 public class LogManager
 {
 
@@ -87,7 +88,10 @@ logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
 	//original(envImpl);
  //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-			Label498: //this.hook498(envImpl);
+			Label498:
+checkpointMonitor = new CheckpointMonitor(envImpl);
+	//original(envImpl);
+ //this.hook498(envImpl);
   }
 
   // line 77 "../../../../LogManager.ump"
@@ -192,7 +196,12 @@ logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
 	Label501: //this.hook501(fsyncRequired);
-	Label499: //this.hook499(logResult);
+	Label499:
+if (logResult.wakeupCheckpointer) {
+	    checkpointMonitor.activate();
+	}
+	//original(logResult);
+ //this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -276,7 +285,10 @@ nTempBufferWrites++;
 			}
 			item.postLogWork(currentLsn);
 			boolean wakeupCheckpointer = false;
-			Label500: //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			Label500:
+wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
+	//return //original(item, entrySize, wakeupCheckpointer);
+ //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
 			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
   }
 
@@ -688,6 +700,8 @@ nTempBufferWrites++;
   protected static ChecksumValidator validator ;
 // line 7 "../../../../Latches_LogManager.ump"
   protected Latch logWriteLatch ;
+// line 5 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
+  private CheckpointMonitor checkpointMonitor ;
 
   
 }
