@@ -1,1 +1,0 @@
-synchronized long get(Transaction txn, int delta) >> Sequence.ump
