@@ -46,7 +46,7 @@ class LatchImpl
 	//original();
     }
 
-    after Label428: doRelease(boolean checkHeld) {
+    after Label428: doRelease(boolean ) {
 	stats.nReleases++;
 	//original();
     }

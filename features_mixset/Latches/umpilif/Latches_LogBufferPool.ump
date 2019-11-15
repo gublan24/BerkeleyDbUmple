@@ -6,7 +6,7 @@ class LogBufferPool
   depend com.sleepycat.je.latch.Latch;
     private Latch bufferPoolLatch;
 
-    after Label485: LogBufferPool(FileManager fileManager, EnvironmentImpl envImpl) {
+    after Label485: LogBufferPool(FileManager , EnvironmentImpl ) {
 	bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
 	//original(envImpl);
     }
@@ -19,7 +19,7 @@ class LogBufferPool
 	bufferPoolLatch.release();
     }
 
-    after Label486: void reset(DbConfigManager ) {
+    after Label486: reset(DbConfigManager ) {
 	bufferPoolLatch.acquire();
 	//original();
     }

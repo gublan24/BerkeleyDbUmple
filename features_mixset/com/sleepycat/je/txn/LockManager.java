@@ -196,6 +196,10 @@ assert checkNoLatchesHeld(nonBlockingRequest) : LatchSupport.countLatchesHeld()
 
   // line 156 "../../../../LockManager.ump"
    protected LockAttemptResult attemptLockInternal(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex) throws DatabaseException{
+    // line 25 "../../../../Statistics_LockManager.ump"
+    nRequests++;
+    			//return original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+    // END OF UMPLE BEFORE INJECTION
     Map lockTable = lockTables[lockTableIndex];
 			Lock useLock = (Lock) lockTable.get(nodeId);
 			if (useLock == null) {
@@ -216,7 +220,10 @@ memoryBudget.updateLockMemoryUsage(TOTAL_LOCK_OVERHEAD, lockTableIndex);
 					success = true;
 			} else if (lockGrant == LockGrantType.DENIED) {
 			} else {
-					Label775: //this.hook775();
+					Label775:
+nWaits++;
+			//original();
+ //this.hook775();
 			}
 			return new LockAttemptResult(useLock, lockGrant, success);
   }
@@ -758,7 +765,7 @@ lockTableLatches[i].acquire();
    * 
    * Statistics
    */
-  // line 14 "../../../../Statistics_LockManager.ump"
+  // line 15 "../../../../Statistics_LockManager.ump"
    public LockStats lockStat(StatsConfig config) throws DatabaseException{
     return new LockManager_lockStat(this, config).execute();
   }
@@ -961,17 +968,10 @@ lockTableLatches[i].acquire();
 	    + MemoryBudget.LONG_OVERHEAD ;
 // line 8 "../../../../MemoryBudget_LockManager.ump"
   private static final long REMOVE_TOTAL_LOCK_OVERHEAD = 0 - TOTAL_LOCK_OVERHEAD ;
-// line 6 "../../../../Statistics_LockManager.ump"
+// line 7 "../../../../Statistics_LockManager.ump"
   private long nRequests ;
-// line 8 "../../../../Statistics_LockManager.ump"
+// line 9 "../../../../Statistics_LockManager.ump"
   private long nWaits ;
-
-// line 29 "../../../../Statistics_LockManager.ump"
-  after Label775: attemptLockInternal (Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex) 
-  {
-    nWaits++;
-			//original();
-  }
 // line 7 "../../../../Latches_LockManager.ump"
   protected Latch[] lockTableLatches ;
 

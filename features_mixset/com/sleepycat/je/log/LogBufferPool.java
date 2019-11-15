@@ -45,7 +45,10 @@ public class LogBufferPool
   public  LogBufferPool(FileManager fileManager, EnvironmentImpl envImpl) throws DatabaseException{
     this.fileManager = fileManager;
 	this.envImpl = envImpl;
-	Label485: //this.hook485(envImpl);
+	Label485:
+bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
+	//original(envImpl);
+ //this.hook485(envImpl);
 	DbConfigManager configManager = envImpl.getConfigManager();
 	runInMemory = configManager.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY);
 	reset(configManager);
@@ -72,7 +75,10 @@ public class LogBufferPool
 	for (int i = 0; i < numBuffers; i++) {
 	    newPool.add(new LogBuffer(newBufferSize, envImpl));
 	}
-	Label486: //this.hook486();
+	Label486:
+bufferPoolLatch.acquire();
+	//original();
+ //this.hook486();
 	bufferPool = newPool;
 	logBufferSize = newBufferSize;
     
@@ -335,20 +341,6 @@ bufferPoolLatch.release();
   private long nCacheMiss = 0 ;
 // line 7 "../../../../Latches_LogBufferPool.ump"
   private Latch bufferPoolLatch ;
-
-// line 9 "../../../../Latches_LogBufferPool.ump"
-  after Label485: LogBufferPool (FileManager fileManager, EnvironmentImpl envImpl) 
-  {
-    bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
-	//original(envImpl);
-  }
-
-// line 22 "../../../../Latches_LogBufferPool.ump"
-  after Label486: void reset (DbConfigManager ) 
-  {
-    bufferPoolLatch.acquire();
-	//original();
-  }
 
 // line 42 "../../../../Latches_LogBufferPool.ump"
   protected LogBuffer hook489: getReadBuffer (long ) 

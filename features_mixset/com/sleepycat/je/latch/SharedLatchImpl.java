@@ -139,7 +139,10 @@ stats.nAcquiresNoWaiters++;
 		wait();
 	    }
 	    owner.nAcquires += 1;
-	    Label432:           ;  //this.hook432();
+	    Label432:
+stats.nAcquireSharedSuccessful++;
+	//original();
+           ;  //this.hook432();
 	    assert (noteLatch ? noteLatch() : true);
 	} catch (InterruptedException e) {
 	    throw new RunRecoveryException(env, e);
@@ -250,12 +253,6 @@ stats.nAcquiresNoWaiters++;
 	} else {
 	    return false;
 	}
-  }
-
-  // line 24 "../../../../Derivative_Latches_Statistics_SharedLatchImpl.ump"
-  public after Label432() throws DatabaseException,InterruptedException{
-    stats.nAcquireSharedSuccessful++;
-	//original();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

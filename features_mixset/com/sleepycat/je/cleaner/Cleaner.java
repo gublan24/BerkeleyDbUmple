@@ -48,7 +48,6 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Cleaner_static.ump"
 // line 3 "../../../../EnvironmentLocking_Cleaner.ump"
 // line 3 "../../../../CriticalEviction_Cleaner.ump"
-// line 3 "../../../../CriticalEviction_Cleaner_inner.ump"
 // line 3 "../../../../Evictor_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner_inner.ump"
@@ -1442,9 +1441,7 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
   
   @MethodObject
     @MethodObject
-    @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
-  // line 4 "../../../../CriticalEviction_Cleaner_inner.ump"
   // line 4 "../../../../DeleteOp_Cleaner_inner.ump"
   // line 4 "../../../../Derivative_Evictor_CriticalEviction_Cleaner_inner.ump"
   public static class Cleaner_processPending
@@ -1487,15 +1484,6 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
               dupKey=info.getDupKey();
               ln=info.getLN();
               Label114:
-  if (_this.DO_CRITICAL_EVICTION) {
-            Label86:
-  // Label86 introduced by CriticalEviction_Cleaner_inner.ump
-          _this.env.getEvictor().doCriticalEviction();
-          //original();
-          
-            //this.hook86();
-          }
-  
   //            this.hook114();
               _this.processPendingLN(ln,db1,key,dupKey,location);
             }
@@ -1518,11 +1506,6 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
     // line 40 "../../../../Cleaner_static.ump"
      protected void hook114() throws DatabaseException{
       
-    }
-  
-    // line 6 "../../../../CriticalEviction_Cleaner_inner.ump"
-     protected void hook86() throws DatabaseException{
-      // Label86 is introduced by CriticalEviction_Cleaner_inner.ump
     }
     
     //------------------------

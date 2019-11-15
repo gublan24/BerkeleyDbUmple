@@ -20,7 +20,8 @@ class SharedLatchImpl
 	//original();
     }
 
-    after Label432() throws DatabaseException, InterruptedException {
+    after Label432:acquireShared() {
+
 	stats.nAcquireSharedSuccessful++;
 	//original();
     }

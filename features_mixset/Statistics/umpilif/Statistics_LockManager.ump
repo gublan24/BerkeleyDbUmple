@@ -3,6 +3,7 @@ namespace com.sleepycat.je.txn;
 class LockManager
 {
   depend com.sleepycat.je.StatsConfig;
+
     private long nRequests;
 
     private long nWaits;
@@ -20,13 +21,12 @@ class LockManager
 			//original();
     }
 
-    protected LockAttemptResult attemptLockInternal(Long nodeId, Locker locker, LockType type,
-	    boolean nonBlockingRequest, int lockTableIndex) throws DatabaseException {
+    before attemptLockInternal(Long , Locker , LockType , boolean , int ) {
 			nRequests++;
-			return original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+			//return original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
     }
 
-    after Label775: attemptLockInternal(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest, int lockTableIndex) {
+    after Label775: attemptLockInternal(Long , Locker , LockType , boolean , int ) {
 			nWaits++;
 			//original();
     }

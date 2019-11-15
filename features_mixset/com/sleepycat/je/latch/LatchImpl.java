@@ -206,7 +206,10 @@ stats.nAcquiresWithContention++;
 		} else {
 		    owner = null;
 		}
-		Label428:           ;  //this.hook428();
+		Label428:
+stats.nReleases++;
+	//original();
+           ;  //this.hook428();
 		assert unNoteLatch(checkHeld);
 	    }
 	} finally {
@@ -407,13 +410,6 @@ stats.nAcquiresWithContention++;
   }
 // line 5 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
   private LatchStats stats = new LatchStats() ;
-
-// line 49 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
-  after Label428: doRelease (boolean checkHeld) 
-  {
-    stats.nReleases++;
-	//original();
-  }
 
   
 }
