@@ -2,7 +2,7 @@ namespace com.sleepycat.je.log;
 
 class LogManager
 {
-  After Label501:log(LoggableObject , boolean , boolean , boolean , boolean , long ){
+  after Label501:log(LoggableObject , boolean , boolean , boolean , boolean , long ){
 	if (fsyncRequired) {
 	    fileManager.groupSync();
 	}

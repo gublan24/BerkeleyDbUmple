@@ -15,7 +15,7 @@ class FileCache
 
     }
 
-    protected void Label440_1:clear(){
+    after Label440_1:clear(){
 //	try {	    original(iter, fileHandle);} finally {
 	    fileHandle.release();
 //	}
@@ -32,7 +32,7 @@ class FileCache
 	//original(evictTarget);
     }
 
-    after Label443:clear(){
+    after Label443: clear(){
 	fileHandle.latch();
 	//original(fileHandle);
     }

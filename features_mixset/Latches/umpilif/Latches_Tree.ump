@@ -32,13 +32,13 @@ private SharedLatch rootLatch;
         ////original(newRoot, notLatched);
     }
 
-    after Label670_1: withRootLatchedExclusive(WithRootLatched) {
+    after Label670_1: withRootLatchedExclusive(WithRootLatched ) {
         //	try {	    //original(wrl);} finally {
         rootLatch.release();
         //	}
     }
 
-    protected void Label671_1: withRootLatchedExclusive(WithRootLatched) {
+    after Label671_1: withRootLatchedExclusive(WithRootLatched ) {
         //	try {   //original(wrl);	} finally {
         rootLatch.release();
         //}
