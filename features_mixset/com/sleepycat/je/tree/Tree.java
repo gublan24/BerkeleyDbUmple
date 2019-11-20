@@ -3019,14 +3019,6 @@ inList.releaseMajorLatch();
 // line 8 "../../../../Latches_Tree.ump"
   private SharedLatch rootLatch ;
 
-// line 41 "../../../../Latches_Tree.ump"
-  protected void Label671_1: withRootLatchedExclusive (WithRootLatched) 
-  {
-    //	try {   //original(wrl);	} finally {
-        rootLatch.release();
-        //}
-  }
-
 // line 22 "../../../../LoggingFine_Tree.ump"
   protected void hook661: delete (byte , UtilizationTracker ) 
   {

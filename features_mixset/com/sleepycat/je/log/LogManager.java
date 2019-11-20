@@ -196,7 +196,12 @@ checkpointMonitor = new CheckpointMonitor(envImpl);
 	} catch (IOException e) {
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
-	Label501: //this.hook501(fsyncRequired);
+	Label501:
+if (fsyncRequired) {
+	    fileManager.groupSync();
+	}
+	//original(fsyncRequired);
+ //this.hook501(fsyncRequired);
 	Label499:
 if (logResult.wakeupCheckpointer) {
 	    checkpointMonitor.activate();
@@ -516,14 +521,6 @@ fileManager.loadStats(config, stats);
   // line 12 "../../../../Checksum_LogManager.ump"
    public boolean getChecksumOnRead(){
     return doChecksumOnRead;
-  }
-
-  // line 6 "../../../../FSync_LogManager.ump"
-  public After Label501:log(String LoggableObject, String boolean, String boolean, String boolean, String boolean, String long){
-    if (fsyncRequired) {
-	    fileManager.groupSync();
-	}
-	//original(fsyncRequired);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

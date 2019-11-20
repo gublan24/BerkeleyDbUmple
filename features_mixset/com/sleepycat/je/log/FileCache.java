@@ -139,7 +139,11 @@ fileHandle.latch();
 
 					fileHandle.close();
 					iter.remove();
-					Label440_1: // end of hook440
+					Label440_1:
+//	try {	    original(iter, fileHandle);} finally {
+	    fileHandle.release();
+//	}
+ // end of hook440
 			}
 			fileMap.clear();
 			fileList.clear();
@@ -148,13 +152,6 @@ fileHandle.latch();
   // line 103 "../../../../FileHandleCache_FileCache.ump"
   public Set getCacheKeys(){
     return fileMap.keySet();
-  }
-
-  // line 19 "../../../../Derivative_Latches_FileHandleCache_FileCache.ump"
-   protected void Label440_1:clear(){
-    //	try {	    original(iter, fileHandle);} finally {
-	    fileHandle.release();
-//	}
   }
   
   //------------------------
