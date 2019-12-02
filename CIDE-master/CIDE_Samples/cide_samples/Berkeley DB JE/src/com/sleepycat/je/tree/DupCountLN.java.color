@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
+<annotations><key name="//CompilationUnit[com.sleepycat.je.tree.DupCountLN]:types/TypeDeclaration:DupCountLN:bodyDeclarations/MethodDeclaration:void:accumulateStats:[TreeWalkerStatsAccumulator]" features="20"/><key name="//CompilationUnit[com.sleepycat.je.tree.DupCountLN]:types/TypeDeclaration:DupCountLN:bodyDeclarations/MethodDeclaration:long:getMemorySizeIncludedByParent:[]" features="33"/></annotations>

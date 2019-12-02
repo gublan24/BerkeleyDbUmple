@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
+<annotations><key name="//CompilationUnit[com.sleepycat.je.log.CleanerFileReader]:types/TypeDeclaration:CleanerFileReader:bodyDeclarations/MethodDeclaration:void:CleanerFileReader:[EnvironmentImpl;int;long;Long]:body/Block[12]:statements/ExpressionStatement" features="39"/></annotations>

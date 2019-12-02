@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
+<annotations><key name="MST.hs" features="27"/><key name="GVD.hs" features="26"/><key name="MaxFlow.hs" features="23"/><key name="Monad.hs" features="7"/><key name="BCC.hs" features="14"/><key name="MaxFlow2.hs" features="20"/><key name="Indep.hs" features="21"/><key name="SP.hs" features="15"/><key name="DFS.hs" features="22"/><key name="Dominators.hs" features="24"/><key name="BFS.hs" features="17"/><key name="TransClos.hs" features="25"/></annotations>

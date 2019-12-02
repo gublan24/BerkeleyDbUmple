@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension-point id="evaluationStrategy"
+		name="CIDE Type Evaluation Strategy" schema="schema/evaluationStrategy.exsd" />
+	<extension-point id="typingProvider"
+		name="CIDE Typing Provider" schema="schema/typingProvider.exsd" />
+	<extension id="de.ovgu.cide.core.typing.problem" name="Annotation Typing Problem"
+		point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.core.resources.problemmarker" />
+		<super type="org.eclipse.core.resources.textmarker" />
+		<persistent value="false" />
+		<attribute name="de.ovgu.cide.core.typing.problem.problemtype" />
+		<attribute name="de.ovgu.cide.core.typing.problem.problemdata" />
+	</extension>
+
+
+
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="false"
+			id="coloredide.projectContributions" objectClass="org.eclipse.core.resources.IProject">
+
+			<action class="de.ovgu.cide.typing.internal.ForceValidationAction"
+				id="forceValidation" label="Force Full Type Check" menubarPath="de.ovgu.cide.projectmenu/main" />
+ <visibility>
+      <and>
+         <objectState
+               name="nature"
+               value="de.ovgu.cide.core.CIDEProjectNature">
+         </objectState>
+         <objectState
+               name="open"
+               value="true">
+         </objectState>
+      </and>
+   </visibility>
+		</objectContribution>
+
+
+	</extension>
+
+ <extension
+       point="org.eclipse.ui.ide.markerResolution">
+    <markerResolutionGenerator
+          class="de.ovgu.cide.typing.internal.resolution.ResolutionGenerator"
+          markerType="de.ovgu.cide.core.typing.problem">
+    </markerResolutionGenerator>
+ </extension>
+
+
+</plugin>

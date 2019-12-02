@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
+<annotations><key name="//CompilationUnit[com.sleepycat.je.recovery.RecoveryInfo]:types/TypeDeclaration:RecoveryInfo:bodyDeclarations/FieldDeclaration:useMaxTxnId" features="1"/><key name="//CompilationUnit[com.sleepycat.je.recovery.RecoveryInfo]:types/TypeDeclaration:RecoveryInfo:bodyDeclarations/MethodDeclaration:String:toString:[]:body/Block[11]:statements/ExpressionStatement" features="1"/></annotations>

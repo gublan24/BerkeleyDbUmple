@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
+<annotations><key name="//CompilationUnit[com.sleepycat.je.DbInternal]:types/TypeDeclaration:DbInternal:bodyDeclarations/MethodDeclaration:TransactionConfig:getDefaultTxnConfig:[Environment]" features="1"/><key name="//CompilationUnit[com.sleepycat.je.DbInternal]:types/TypeDeclaration:DbInternal:bodyDeclarations/MethodDeclaration:Locker:getLocker:[Transaction]" features="1"/></annotations>

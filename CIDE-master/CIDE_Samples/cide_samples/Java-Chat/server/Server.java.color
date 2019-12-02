@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
+<annotations><key name="//CompilationUnit[server.Server]:types/TypeDeclaration:Server:bodyDeclarations/MethodDeclaration:void:Server:[int]:body/Block[1]:statements/VariableDeclarationStatement" features="8"/><key name="//CompilationUnit[server.Server]:imports/ImportDeclaration:common.LogWriter" features="8"/></annotations>

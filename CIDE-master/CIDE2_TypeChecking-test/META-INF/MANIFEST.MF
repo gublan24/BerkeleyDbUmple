@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CIDE Typing Test Fragment
+Bundle-SymbolicName: de.ovgu.cide.typeing-test
+Bundle-Version: 2.1.0.qualifier
+Fragment-Host: de.ovgu.cide.typing;bundle-version="2.1.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: de.ovgu.cide.typing.model
+Require-Bundle: org.junit4;bundle-version="4.5.0";resolution:=optional
