@@ -246,7 +246,7 @@ public class Tree implements LogWritable,LogReadable
 rootLatch.acquireExclusive();
  ; //this.hook672(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
             if (root == null) {
-                throw new ReturnVoid();
+                return; //throw new ReturnVoid();
             }
             rootIN = (IN) root.fetchTarget(database, null);
             rootIN.latch(false);
@@ -265,13 +265,15 @@ rootLatch.acquireExclusive();
                 rootNeedsUpdating = cascadeUpdates(nodeLadder, null, -1);
                 subtreeRootIN = detachPoint.child;
             }
-            Label672_1:
-//finally {
-        releaseNodeLadderLatches(nodeLadder);
+            finally {
+              Label672_1:
+releaseNodeLadderLatches(nodeLadder);
         if (rootIN != null) {
             rootIN.releaseLatch();
         }
         rootLatch.release();
+  ;
+				    }
 
                 //End hook672
                 if (subtreeRootIN != null) {
@@ -284,8 +286,6 @@ rootLatch.acquireExclusive();
                     INList inList = envImpl.getInMemoryINs();
                     accountForSubtreeRemoval(inList, subtreeRootIN, tracker);
                 }
-        } catch (ReturnVoid r) {
-            return;
         }
   }
 
@@ -295,7 +295,7 @@ rootLatch.acquireExclusive();
    * This entire tree is empty, clear the root and log a new MapLN
    * @return the rootIN that has been detached, or null if there hasn't beenany removal.
    */
-  // line 241 "../../../../Tree.ump"
+  // line 242 "../../../../Tree.ump"
    private IN logTreeRemoval(IN rootIN, UtilizationTracker tracker) throws DatabaseException{
     // line 66 "../../../../Latches_Tree.ump"
     assert rootLatch.isWriteLockedByCurrentThread();
@@ -321,7 +321,7 @@ rootLatch.acquireExclusive();
    * @param indexslot occupied by this din tree.
    * @return whether the DB root needs updating.
    */
-  // line 260 "../../../../Tree.ump"
+  // line 261 "../../../../Tree.ump"
    private boolean cascadeUpdates(ArrayList nodeLadder, BIN binRoot, int index) throws DatabaseException{
     ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
         EnvironmentImpl envImpl = database.getDbEnvironment();
@@ -363,7 +363,7 @@ assert rootLatch.isWriteLockedByCurrentThread();
    * @param trackeris used for tracking obsolete node info.
    * @return true if the delete succeeded, false if there were still cursorspresent on the leaf DBIN of the subtree that was located.
    */
-  // line 297 "../../../../Tree.ump"
+  // line 298 "../../../../Tree.ump"
    public void deleteDup(byte [] idKey, byte [] mainKey, UtilizationTracker tracker) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     IN in = search(mainKey, SearchType.NORMAL, -1, null, false);
         IN deletedSubtreeRoot = null;
@@ -393,7 +393,7 @@ assert in .isLatchOwner();
    * We enter and leave this method with 'bin' latched.
    * @return the root of the subtree we have deleted, so it can be properlyaccounted for. May be null if nothing was deleted.
    */
-  // line 322 "../../../../Tree.ump"
+  // line 323 "../../../../Tree.ump"
    private IN deleteDupSubtree(byte [] idKey, BIN bin, int index) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     EnvironmentImpl envImpl = database.getDbEnvironment();
         boolean dupCountLNLocked = false;
@@ -453,7 +453,7 @@ if (bin.getNEntries() == 0) {
    * Find the leftmost node (IN or BIN) in the tree. Do not descend into a duplicate tree if the leftmost entry of the first BIN refers to one.
    * @return the leftmost node in the tree, null if the tree is empty. Thereturned node is latched and the caller must release it.
    */
-  // line 374 "../../../../Tree.ump"
+  // line 375 "../../../../Tree.ump"
    public IN getFirstNode() throws DatabaseException{
     return search(null, SearchType.LEFT, -1, null, true);
   }
@@ -464,7 +464,7 @@ if (bin.getNEntries() == 0) {
    * Find the rightmost node (IN or BIN) in the tree. Do not descend into a duplicate tree if the rightmost entry of the last BIN refers to one.
    * @return the rightmost node in the tree, null if the tree is empty. Thereturned node is latched and the caller must release it.
    */
-  // line 382 "../../../../Tree.ump"
+  // line 383 "../../../../Tree.ump"
    public IN getLastNode() throws DatabaseException{
     return search(null, SearchType.RIGHT, -1, null, true);
   }
@@ -475,7 +475,7 @@ if (bin.getNEntries() == 0) {
    * Find the leftmost node (DBIN) in a duplicate tree.
    * @return the leftmost node in the tree, null if the tree is empty. Thereturned node is latched and the caller must release it.
    */
-  // line 390 "../../../../Tree.ump"
+  // line 391 "../../../../Tree.ump"
    public DBIN getFirstNode(DIN dupRoot) throws DatabaseException{
     if (dupRoot == null) {
             throw new IllegalArgumentException("getFirstNode passed null root");
@@ -494,7 +494,7 @@ assert dupRoot.isLatchOwner();
    * Find the rightmost node (DBIN) in a duplicate tree.
    * @return the rightmost node in the tree, null if the tree is empty. Thereturned node is latched and the caller must release it.
    */
-  // line 403 "../../../../Tree.ump"
+  // line 404 "../../../../Tree.ump"
    public DBIN getLastNode(DIN dupRoot) throws DatabaseException{
     if (dupRoot == null) {
             throw new IllegalArgumentException("getLastNode passed null root");
@@ -512,7 +512,7 @@ assert dupRoot.isLatchOwner();
    * 
    * GetParentNode without optional tracking.
    */
-  // line 416 "../../../../Tree.ump"
+  // line 417 "../../../../Tree.ump"
    public SearchResult getParentINForChildIN(IN child, boolean requireExactMatch, boolean updateGeneration) throws DatabaseException{
     return getParentINForChildIN(child, requireExactMatch, updateGeneration, -1, null);
   }
@@ -527,7 +527,7 @@ assert dupRoot.isLatchOwner();
    * @param trackingListif not null, add the LSNs of the parents visited along theway, as a debug tracing mechanism. This is meant to stay in production, to add information to the log.
    * @return a SearchResult object. If the parent has been found,result.foundExactMatch is true. If any parent, exact or potential has been found, result.parent refers to that node.
    */
-  // line 429 "../../../../Tree.ump"
+  // line 430 "../../../../Tree.ump"
    public SearchResult getParentINForChildIN(IN child, boolean requireExactMatch, boolean updateGeneration, int targetLevel, List trackingList) throws DatabaseException{
     if (child == null) {
             throw new IllegalArgumentException("getParentNode passed null");
@@ -558,7 +558,7 @@ child.releaseLatch();
    * @param childThe child node for which to find the parent. This node islatched by the caller and is released by this function before returning to the caller.
    * @return a SearchResult object. If the parent has been found,result.foundExactMatch is true. If any parent, exact or potential has been found, result.parent refers to that node.
    */
-  // line 453 "../../../../Tree.ump"
+  // line 454 "../../../../Tree.ump"
    public SearchResult getParentINForChildIN(long targetNodeId, boolean targetContainsDuplicates, boolean targetIsRoot, byte [] targetMainTreeKey, byte [] targetDupTreeKey, boolean requireExactMatch, boolean updateGeneration, int targetLevel, List trackingList, boolean doFetch) throws DatabaseException{
     IN rootIN = getRootIN(updateGeneration);
         SearchResult result = new SearchResult();
@@ -599,7 +599,7 @@ potentialParent.releaseLatchIfOwner();
    * @param updateGenerationif true, set the generation count during latching. Pass falsewhen the LRU should not be impacted, such as during eviction and checkpointing.
    * @return true if node found in tree. If false is returned and there is thepossibility that we can insert the record into a plausible parent we must also set - location.bin (may be null if no possible parent found) - location.lnKey (don't need to set if no possible parent).
    */
-  // line 490 "../../../../Tree.ump"
+  // line 491 "../../../../Tree.ump"
    public boolean getParentBINForChildLN(TreeLocation location, byte [] mainKey, byte [] dupKey, LN ln, boolean splitsAllowed, boolean findDeletedEntries, boolean searchDupTree, boolean updateGeneration) throws DatabaseException{
     try {
             IN searchResult = null;
@@ -686,7 +686,7 @@ searchResult.releaseLatchIfOwner();
    * 
    * For SR [#8984]: our prospective child is a deleted LN, and we're facing a dup tree. Alas, the deleted LN has no data, and therefore nothing to guide the search in the dup tree. Instead, we search by node id. This is very expensive, but this situation is a very rare case.
    */
-  // line 565 "../../../../Tree.ump"
+  // line 566 "../../../../Tree.ump"
    private boolean searchDupTreeByNodeId(TreeLocation location, Node childNode, LN ln, boolean searchDupTree, boolean updateGeneration) throws DatabaseException{
     if (searchDupTree) {
             BIN oldBIN = location.bin;
@@ -713,7 +713,7 @@ if (oldBIN != null) {
    * 
    * @return true if childNode is the DIN parent of this DupCountLN
    */
-  // line 585 "../../../../Tree.ump"
+  // line 586 "../../../../Tree.ump"
    private boolean searchDupTreeForDupCountLNParent(TreeLocation location, byte [] mainKey, Node childNode) throws DatabaseException{
     location.lnKey = mainKey;
         if (childNode instanceof DIN) {
@@ -730,7 +730,7 @@ if (oldBIN != null) {
    * 
    * Search the dup tree for the DBIN parent of this ln.
    */
-  // line 601 "../../../../Tree.ump"
+  // line 602 "../../../../Tree.ump"
    private boolean searchDupTreeForDBIN(TreeLocation location, byte [] dupKey, DIN dupRoot, LN ln, boolean findDeletedEntries, boolean indicateIfExact, boolean exactSearch, boolean splitsAllowed, boolean updateGeneration) throws DatabaseException{
     try {
             assert dupKey != null;
@@ -792,7 +792,7 @@ location.bin.releaseLatch();
    * @param traverseWithinDupTreeif true, only search within the dup tree and return null whenthe traversal runs out of duplicates.
    * @return The next BIN, or null if there are no more. The returned node islatched and the caller must release it. If null is returned, the argument BIN remains latched.
    */
-  // line 649 "../../../../Tree.ump"
+  // line 650 "../../../../Tree.ump"
    public BIN getNextBin(BIN bin, boolean traverseWithinDupTree) throws DatabaseException{
     return getNextBinInternal(traverseWithinDupTree, bin, true);
   }
@@ -805,7 +805,7 @@ location.bin.releaseLatch();
    * @param traverseWithinDupTreeif true, only search within the dup tree and return null whenthe traversal runs out of duplicates.
    * @return The previous BIN, or null if there are no more. The returned nodeis latched and the caller must release it. If null is returned, the argument bin remains latched.
    */
-  // line 659 "../../../../Tree.ump"
+  // line 660 "../../../../Tree.ump"
    public BIN getPrevBin(BIN bin, boolean traverseWithinDupTree) throws DatabaseException{
     return getNextBinInternal(traverseWithinDupTree, bin, false);
   }
@@ -815,7 +815,7 @@ location.bin.releaseLatch();
    * 
    * Helper routine for above two routines to iterate through BIN's.
    */
-  // line 666 "../../../../Tree.ump"
+  // line 667 "../../../../Tree.ump"
    private BIN getNextBinInternal(boolean traverseWithinDupTree, BIN bin, boolean forward) throws DatabaseException{
     try {
             byte[] idKey = null;
@@ -939,7 +939,7 @@ parent.releaseLatch();
    * 
    * Split the root of the tree.
    */
-  // line 755 "../../../../Tree.ump"
+  // line 756 "../../../../Tree.ump"
    private void splitRoot() throws DatabaseException{
     EnvironmentImpl env = database.getDbEnvironment();
         LogManager logManager = env.getLogManager();
@@ -990,7 +990,7 @@ curRoot.releaseLatch();
    * @param binBoundary -If non-null, information is returned about whether the BIN found is the first or last BIN in the database.
    * @return - the Node that matches the criteria, if any. This is the nodethat is farthest down the tree with a match. Returns null if the root is null. Node is latched (unless it's null) and must be unlatched by the caller. Only IN's and BIN's are returned, not LN's. In a NORMAL search, It is the caller's responsibility to do the findEntry() call on the key and BIN to locate the entry that matches key. The return value node is latched upon return and it is the caller's responsibility to unlatch it.
    */
-  // line 799 "../../../../Tree.ump"
+  // line 800 "../../../../Tree.ump"
    public IN search(byte [] key, SearchType searchType, long nid, BINBoundary binBoundary, boolean updateGeneration) throws DatabaseException{
     IN rootIN = getRootIN(true);
         if (rootIN != null) {
@@ -1005,7 +1005,7 @@ curRoot.releaseLatch();
    * 
    * Do a key based search, permitting pre-emptive splits. Returns the target node's parent.
    */
-  // line 811 "../../../../Tree.ump"
+  // line 812 "../../../../Tree.ump"
    public IN searchSplitsAllowed(byte [] key, long nid, boolean updateGeneration) throws DatabaseException{
     return new Tree_searchSplitsAllowed(this, key, nid, updateGeneration).execute();
   }
@@ -1020,7 +1020,7 @@ curRoot.releaseLatch();
    * @param nid -The nodeid to search for in the tree. If found, returns its parent. If the nodeid of the root is passed, null is returned. Pass -1 if no nodeid based search is desired.
    * @return - the node matching the argument criteria, or null. The node islatched and must be unlatched by the caller. The parent argument and any other nodes that are latched during the search are unlatched prior to return.
    */
-  // line 824 "../../../../Tree.ump"
+  // line 825 "../../../../Tree.ump"
    public IN searchSubTree(IN parent, byte [] key, SearchType searchType, long nid, BINBoundary binBoundary, boolean updateGeneration) throws DatabaseException{
     if (parent == null) {
             return null;
@@ -1111,7 +1111,7 @@ if (child != null) {
    * 
    * Search down the tree using a key, but instead of returning the BIN that houses that key, find the point where we can detach a deletable subtree. A deletable subtree is a branch where each IN has one child, and the bottom BIN has no entries and no resident cursors. That point can be found by saving a pointer to the lowest node in the path with more than one entry. INa / \ INb INc | | INd .. / \ INe .. | BINx (suspected of being empty) In this case, we'd like to prune off the subtree headed by INe. INd is the parent of this deletable subtree. As we descend, we must keep latches for all the nodes that will be logged. In this case, we will need to keep INa, INb and INd latched when we return from this method. The method returns a list of parent/child/index structures. In this example, the list will hold: INa/INb/index INb/INd/index INd/INe/index Every node is latched, and every node except for the bottom most child (INe) must be logged.
    */
-  // line 895 "../../../../Tree.ump"
+  // line 896 "../../../../Tree.ump"
    public void searchDeletableSubTree(IN parent, byte [] key, ArrayList nodeLadder) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     assert(parent != null);
         assert(key != null);
@@ -1172,7 +1172,7 @@ releaseNodeLadderLatches(nodeLadder);
    * 
    * Search the portion of the tree starting at the parent, permitting preemptive splits.
    */
-  // line 945 "../../../../Tree.ump"
+  // line 946 "../../../../Tree.ump"
    private IN searchSubTreeSplitsAllowed(IN parent, byte [] key, long nid, boolean updateGeneration) throws DatabaseException,SplitRequiredException{
     if (parent != null) {
             while (true) {
@@ -1195,7 +1195,7 @@ releaseNodeLadderLatches(nodeLadder);
    * 
    * Search the subtree, but throw an exception when we see a node that has to be split.
    */
-  // line 966 "../../../../Tree.ump"
+  // line 967 "../../../../Tree.ump"
    private IN searchSubTreeUntilSplit(IN parent, byte [] key, long nid, boolean updateGeneration) throws DatabaseException,SplitRequiredException{
     try {
             if (parent == null) {
@@ -1267,7 +1267,7 @@ catch (DatabaseException e) {
    * 
    * Do pre-emptive splitting in the subtree topped by the "parent" node. Search down the tree until we get to the BIN level, and split any nodes that fit the splittable requirement. Note that more than one node in the path may be splittable. For example, a tree might have a level2 IN and a BIN that are both splittable, and would be encountered by the same insert operation.
    */
-  // line 1011 "../../../../Tree.ump"
+  // line 1012 "../../../../Tree.ump"
    private void forceSplit(IN parent, byte [] key) throws DatabaseException,SplitRequiredException{
     new Tree_forceSplit(this, parent, key).execute();
   }
@@ -1277,7 +1277,7 @@ catch (DatabaseException e) {
    * 
    * Helper to obtain the root IN with proper root latching. Optionally updates the generation of the root when latching it.
    */
-  // line 1018 "../../../../Tree.ump"
+  // line 1019 "../../../../Tree.ump"
    public IN getRootIN(boolean updateGeneration) throws DatabaseException{
     try {
             Label702:
@@ -1312,7 +1312,7 @@ rootLatch.release();
    * @param cursorthe cursor to update to point to the newly inserted key/datapair, or null if no cursor should be updated.
    * @return true if LN was inserted, false if it was a duplicate duplicate orif an attempt was made to insert a duplicate when allowDuplicates was false.
    */
-  // line 1046 "../../../../Tree.ump"
+  // line 1047 "../../../../Tree.ump"
    public boolean insert(LN ln, byte [] key, boolean allowDuplicates, CursorImpl cursor, LockResult lnLock) throws DatabaseException{
     try {
             validateInsertArgs(allowDuplicates);
@@ -1411,7 +1411,7 @@ cursor.releaseBIN();
    * Attempts to insert a duplicate at the current cursor BIN position. If an existing dup tree exists, insert into it; otherwise, create a new dup tree and place the new LN and the existing LN into it. If the current BIN entry contains an LN, the caller guarantees that it is not deleted.
    * @return true if duplicate inserted successfully, false if it was aduplicate duplicate, false if a there is an existing LN and allowDuplicates is false.
    */
-  // line 1138 "../../../../Tree.ump"
+  // line 1139 "../../../../Tree.ump"
    private boolean insertDuplicate(byte [] key, BIN bin, LN newLN, LogManager logManager, INList inMemoryINs, CursorImpl cursor, LockResult lnLock, boolean allowDuplicates) throws DatabaseException{
     try {
             EnvironmentImpl env = database.getDbEnvironment();
@@ -1573,7 +1573,7 @@ dupRoot.releaseLatch();
    * @param indexthe index of the duplicate root in bin.
    * @return true if the duplicate root was split.
    */
-  // line 1272 "../../../../Tree.ump"
+  // line 1273 "../../../../Tree.ump"
    private boolean maybeSplitDuplicateRoot(BIN bin, int index) throws DatabaseException{
     DIN curRoot = (DIN) bin.fetchTarget(index);
         if (curRoot.needsSplitting()) {
@@ -1611,7 +1611,7 @@ curRoot.releaseLatch();
    * @param cursorpoints to the target position for this new dup tree.
    * @return the new duplicate subtree root (a DIN). It is latched when it isreturned and the caller should unlatch it. If new entry to be inserted is a duplicate of the existing LN, null is returned.
    */
-  // line 1303 "../../../../Tree.ump"
+  // line 1304 "../../../../Tree.ump"
    private DIN createDuplicateTree(byte [] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor) throws DatabaseException{
     try {
             EnvironmentImpl env = database.getDbEnvironment();
@@ -1692,7 +1692,7 @@ catch (DatabaseException e) {
    * 
    * Validate args passed to insert. Presently this just means making sure that if they say duplicates are allowed that the database supports duplicates.
    */
-  // line 1366 "../../../../Tree.ump"
+  // line 1367 "../../../../Tree.ump"
    private void validateInsertArgs(boolean allowDuplicates) throws DatabaseException{
     if (allowDuplicates && !database.getSortedDuplicates()) {
             throw new DatabaseException(
@@ -1706,7 +1706,7 @@ catch (DatabaseException e) {
    * Find the BIN that is relevant to the insert. If the tree doesn't exist yet, then create the first IN and BIN.
    * @return the BIN that was found or created and return it latched.
    */
-  // line 1378 "../../../../Tree.ump"
+  // line 1379 "../../../../Tree.ump"
    private BIN findBinForInsert(byte [] key, LogManager logManager, INList inMemoryINs, CursorImpl cursor) throws DatabaseException{
     BIN bin;
         bin = cursor.latchBIN();
@@ -1792,7 +1792,7 @@ if (rootLatchIsHeld) {
         return bin;
   }
 
-  // line 1439 "../../../../Tree.ump"
+  // line 1440 "../../../../Tree.ump"
    private void accountForSubtreeRemoval(INList inList, IN subtreeRoot, UtilizationTracker tracker) throws DatabaseException{
     try {
             Label713:
@@ -1817,7 +1817,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogWritable#getLogSize
    */
-  // line 1457 "../../../../Tree.ump"
+  // line 1458 "../../../../Tree.ump"
    public int getLogSize(){
     int size = LogUtils.getBooleanLogSize();
         if (root != null) {
@@ -1831,7 +1831,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogWritable#writeToLog
    */
-  // line 1468 "../../../../Tree.ump"
+  // line 1469 "../../../../Tree.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeBoolean(logBuffer, (root != null));
         if (root != null) {
@@ -1844,7 +1844,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#readFromLog
    */
-  // line 1478 "../../../../Tree.ump"
+  // line 1479 "../../../../Tree.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion){
     boolean rootExists = LogUtils.readBoolean(itemBuffer);
         if (rootExists) {
@@ -1858,7 +1858,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#dumpLog
    */
-  // line 1489 "../../../../Tree.ump"
+  // line 1490 "../../../../Tree.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<root>");
         if (root != null) {
@@ -1872,7 +1872,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#isTransactional
    */
-  // line 1500 "../../../../Tree.ump"
+  // line 1501 "../../../../Tree.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -1882,7 +1882,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 1507 "../../../../Tree.ump"
+  // line 1508 "../../../../Tree.ump"
    public long getTransactionId(){
     return 0;
   }
@@ -1892,7 +1892,7 @@ inList.releaseMajorLatch();
    * 
    * rebuildINList is used by recovery to add all the resident nodes to the IN list.
    */
-  // line 1514 "../../../../Tree.ump"
+  // line 1515 "../../../../Tree.ump"
    public void rebuildINList() throws DatabaseException{
     INList inMemoryList = database.getDbEnvironment().getInMemoryINs();
         if (root != null) {
@@ -1904,12 +1904,12 @@ inList.releaseMajorLatch();
         }
   }
 
-  // line 1525 "../../../../Tree.ump"
+  // line 1526 "../../../../Tree.ump"
    public void dump() throws DatabaseException{
     System.out.println(dumpString(0));
   }
 
-  // line 1529 "../../../../Tree.ump"
+  // line 1530 "../../../../Tree.ump"
    public String dumpString(int nSpaces) throws DatabaseException{
     StringBuffer sb = new StringBuffer();
         sb.append(TreeUtils.indent(nSpaces));
@@ -1936,7 +1936,7 @@ inList.releaseMajorLatch();
    * 
    * Unit test support to validate subtree pruning. Didn't want to make root access public.
    */
-  // line 1553 "../../../../Tree.ump"
+  // line 1554 "../../../../Tree.ump"
   public boolean validateDelete(int index) throws DatabaseException{
     try {
             Label715:; //this.hook715(index);
@@ -1955,7 +1955,7 @@ inList.releaseMajorLatch();
    * 
    * Debugging check that all resident nodes are on the INList and no stray nodes are present in the unused portion of the IN arrays.
    */
-  // line 1569 "../../../../Tree.ump"
+  // line 1570 "../../../../Tree.ump"
    public void validateINList(IN parent) throws DatabaseException{
     if (parent == null) {
             parent = (IN) root.getTarget();
@@ -1989,17 +1989,17 @@ inList.releaseMajorLatch();
         }
   }
 
-  // line 1602 "../../../../Tree.ump"
+  // line 1603 "../../../../Tree.ump"
    public void setWaitHook(TestHook hook){
     waitHook = hook;
   }
 
-  // line 1606 "../../../../Tree.ump"
+  // line 1607 "../../../../Tree.ump"
    public void setSearchHook(TestHook hook){
     searchHook = hook;
   }
 
-  // line 1610 "../../../../Tree.ump"
+  // line 1611 "../../../../Tree.ump"
    public void setCkptHook(TestHook hook){
     ckptHook = hook;
   }
@@ -2414,7 +2414,6 @@ inList.releaseMajorLatch();
   
   
   
-  @MethodObject
   // line 146 "../../../../Tree_static.ump"
   // line 5 "../../../../Latches_Tree_inner.ump"
   public static class Tree_forceSplit

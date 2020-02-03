@@ -62,7 +62,10 @@ if (EnvironmentImpl.getFairLatches()) {
         }
         this.env = env;
         allTxns = new HashSet();
-        Label821:           ;  //this.hook821(env);
+        
+allTxnLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
+	//original(env);
+Label821:           ;  //this.hook821(env);
         allXATxns = Collections.synchronizedMap(new HashMap());
         thread2Txn = Collections.synchronizedMap(new HashMap());
         Label824:
@@ -154,7 +157,7 @@ numCommits = 0;
     allTxnLatch.acquire();
     // END OF UMPLE BEFORE INJECTION
     allTxns.remove(txn);
-        //	Label:           ;  //this.hook828(txn);
+        //	           ;  //this.hook828(txn);
         Label828:
 env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
 //      original(txn);
@@ -166,7 +169,7 @@ if (isCommit) {
             numAborts++;
         }
         //original(isCommit);
- //Label:           ;  //this.hook825(isCommit);
+ //           ;  //this.hook825(isCommit);
         if (txn.isSerializableIsolation()) {
             nActiveSerializable--;
         }
@@ -186,7 +189,7 @@ if (isCommit) {
    public void registerXATxn(Xid xid, Txn txn, boolean isPrepare) throws DatabaseException{
     if (!allXATxns.containsKey(xid)) {
             allXATxns.put(xid, txn);
-            //	    Label:           ;  //this.hook829();
+            //	               ;  //this.hook829();
             Label829:
 env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
       //original();
@@ -197,7 +200,7 @@ if (isPrepare) {
             numXAPrepares++;
         }
         //original(isPrepare);
- //Label:           ;  //this.hook826(isPrepare);
+ //           ;  //this.hook826(isPrepare);
   }
 
 
@@ -210,7 +213,7 @@ if (isPrepare) {
     if (allXATxns.remove(xid) == null) {
             throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
         }
-        //	Label:           ;  //this.hook830();
+        //	           ;  //this.hook830();
         Label830:
 env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
       //original();
@@ -222,7 +225,7 @@ if (isCommit) {
             numXAAborts++;
         }
          //        original(isCommit);
- //Label:           ;  //this.hook827(isCommit);
+ //           ;  //this.hook827(isCommit);
   }
 
 

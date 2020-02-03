@@ -2,7 +2,7 @@ namespace com.sleepycat.je.recovery;
 
 class RecoveryManager
 {
-    after hook556: recover(boolean ){
+    after Label556: recover(boolean ){
 
 	env.enableDebugLoggingToDbLog();
 	//original();

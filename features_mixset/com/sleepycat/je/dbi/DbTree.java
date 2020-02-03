@@ -39,7 +39,7 @@ import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DbTree.ump"
-// line 3 "../../../../DbTree_static.ump"
+// line 4 "../../../../DbTree_static.ump"
 // line 3 "../../../../Evictor_DbTree.ump"
 // line 3 "../../../../RenameOp_DbTree.ump"
 // line 3 "../../../../Truncate_DbTree.ump"
@@ -1045,7 +1045,7 @@ cursor.releaseBINs();
   
   import com.sleepycat.je.tree.*;
   
-  // line 4 "../../../../DbTree_static.ump"
+  // line 5 "../../../../DbTree_static.ump"
   public static class RewriteMapLN implements WithRootLatched
   {
   
@@ -1067,12 +1067,12 @@ cursor.releaseBINs();
     public void delete()
     {}
   
-    // line 8 "../../../../DbTree_static.ump"
+    // line 9 "../../../../DbTree_static.ump"
     public  RewriteMapLN(CursorImpl cursor){
       this.cursor=cursor;
     }
   
-    // line 11 "../../../../DbTree_static.ump"
+    // line 12 "../../../../DbTree_static.ump"
      public IN doWork(ChildReference root) throws DatabaseException{
       DatabaseEntry dataDbt=new DatabaseEntry(new byte[0]);
           cursor.putCurrent(dataDbt,null,null);
@@ -1083,7 +1083,7 @@ cursor.releaseBINs();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 6 "../../../../DbTree_static.ump"
+    // line 7 "../../../../DbTree_static.ump"
     private CursorImpl cursor ;
   
     
@@ -1092,7 +1092,7 @@ cursor.releaseBINs();
   
   
   
-  // line 16 "../../../../DbTree_static.ump"
+  // line 17 "../../../../DbTree_static.ump"
   public static class NameLockResult
   {
   
@@ -1176,7 +1176,7 @@ cursor.releaseBINs();
   
   import com.sleepycat.je.tree.*;
   
-  // line 21 "../../../../DbTree_static.ump"
+  // line 22 "../../../../DbTree_static.ump"
   public static class RootLevel implements WithRootLatched
   {
   
@@ -1198,20 +1198,20 @@ cursor.releaseBINs();
     public void delete()
     {}
   
-    // line 26 "../../../../DbTree_static.ump"
+    // line 27 "../../../../DbTree_static.ump"
     public  RootLevel(DatabaseImpl db){
       this.db=db;
           rootLevel=0;
     }
   
-    // line 30 "../../../../DbTree_static.ump"
+    // line 31 "../../../../DbTree_static.ump"
      public IN doWork(ChildReference root) throws DatabaseException{
       IN rootIN=(IN)root.fetchTarget(db,null);
           rootLevel=rootIN.getLevel();
           return null;
     }
   
-    // line 35 "../../../../DbTree_static.ump"
+    // line 36 "../../../../DbTree_static.ump"
     public int getRootLevel(){
       return rootLevel;
     }
@@ -1220,9 +1220,9 @@ cursor.releaseBINs();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 23 "../../../../DbTree_static.ump"
+    // line 24 "../../../../DbTree_static.ump"
     private DatabaseImpl db ;
-  // line 24 "../../../../DbTree_static.ump"
+  // line 25 "../../../../DbTree_static.ump"
     private int rootLevel ;
   
     

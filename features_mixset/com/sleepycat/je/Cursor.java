@@ -150,7 +150,7 @@ public class Cursor
             dbHandle.addCursor(this);
         }
         this.config = cursorConfig;
-        //Label:           ;  //this.hook36(dbImpl);
+        //           ;  //this.hook36(dbImpl);
         Label36:
 this.logger = dbImpl.getDbEnvironment().getLogger();
 	//original(dbImpl);
@@ -226,7 +226,7 @@ this.logger = dbImpl.getDbEnvironment().getLogger();
         Label0:
 trace(Level.FINEST, "Cursor.count: ", null);
 	//original();
- //Label:           ;  //this.hook0();
+ //           ;  //this.hook0();
         return countInternal(null);
   }
 
@@ -253,7 +253,7 @@ trace(Level.FINEST, "Cursor.count: ", null);
         Label1:
 trace(Level.FINEST, "Cursor.delete: ", null);
 	//original();
- //Label:           ;  //this.hook1();
+ //           ;  //this.hook1();
         return deleteInternal();
   }
 
@@ -272,7 +272,7 @@ trace(Level.FINEST, "Cursor.delete: ", null);
         Label2:
 trace(Level.FINEST, "Cursor.put: ", key, data, null);
 	//original(key, data);
- //Label:           ;  //this.hook2(key, data);
+ //           ;  //this.hook2(key, data);
         return putInternal(key, data, PutMode.OVERWRITE);
   }
 
@@ -291,7 +291,7 @@ trace(Level.FINEST, "Cursor.put: ", key, data, null);
         Label3:
 trace(Level.FINEST, "Cursor.putNoOverwrite: ", key, data, null);
 	//original(key, data);
- //Label:           ;  //this.hook3(key, data);
+ //           ;  //this.hook3(key, data);
         return putInternal(key, data, PutMode.NOOVERWRITE);
   }
 
@@ -618,7 +618,7 @@ trace(Level.FINEST, "Cursor.getSearchBothRange: ", key, data, lockMode);
             Label19:
 dup.latchBINs();
 			//original(dup);
- //Label:           ;  //this.hook19(dup);
+ //           ;  //this.hook19(dup);
                 status = dup.delete();
             return status;
         } finally {
@@ -630,7 +630,7 @@ if (origCursor != null) {
 					dup.releaseBINs();
 			}
 			//original(origCursor, dup);
- //Label:           ;  //this.hook20(origCursor, dup);
+ //           ;  //this.hook20(origCursor, dup);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -742,7 +742,7 @@ if (origCursor != null) {
 					origCursor.releaseBINs();
 			}
 			//original(origCursor);
- //Label:           ;  //this.hook21(origCursor);
+ //           ;  //this.hook21(origCursor);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -805,12 +805,12 @@ if (origCursor != null) {
                 Label22:
 assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
       	//original();
- //Label:           ;  //this.hook22();
+ //           ;  //this.hook22();
             } else {
                 Label23:
 assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
 				//original();
- //Label:           ;  //this.hook23();
+ //           ;  //this.hook23();
                     status = dup.getCurrentAlreadyLatched(key, data, lockType, first);
                 if (status == OperationStatus.SUCCESS) {
                     if (dup.getDupBIN() != null) {
@@ -824,7 +824,7 @@ assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString()
             Label24:
 cursorImpl.releaseBINs();
 			//original();
- //Label:           ;  //this.hook24();
+ //           ;  //this.hook24();
                 endRead(dup, status == OperationStatus.SUCCESS);
         }
         return status;
@@ -929,7 +929,7 @@ cursorImpl.releaseBINs();
 			if (status != OperationStatus.SUCCESS && dup != cursorImpl) {
 				dup.releaseBINs();								
 			}
- //Label:           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
+ //           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
             //the label has been changed into the finally block.
         }
         return new KeyChangeStatus(status, keyChange);
@@ -980,7 +980,7 @@ cursorImpl.releaseBINs();
         OperationStatus status;
         boolean noNextKeyFound;
         while (true) {
-            label26: //Label:           ;  //this.hook26();
+            label26: //           ;  //this.hook26();
                 CursorImpl dup = beginRead(true);
             try {
                 KeyChangeStatus result = dup.getNextWithKeyChangeStatus(tryKey, tryData, lockType, true, false);
@@ -998,7 +998,7 @@ cursorImpl.releaseBINs();
                 continue;
             } else {
                 endRead(dup, status == OperationStatus.SUCCESS);
-                Label27: //Label:           ;  //this.hook27();
+                Label27: //           ;  //this.hook27();
                     break;
             }
         }
@@ -1036,7 +1036,7 @@ cursorImpl.releaseBINs();
                     Label28:
 assert LatchSupport.countLatchesHeld() == 0;
 		//original();
- //Label:           ;  //this.hook28();
+ //           ;  //this.hook28();
                         status = dup.getNext(tempKey, tempData, LockType.RANGE_READ, true, false);
                     if (checkForInsertion(GetMode.NEXT, cursorImpl, dup)) {
                         dup.close();
@@ -1046,7 +1046,7 @@ assert LatchSupport.countLatchesHeld() == 0;
                         Label29:
 assert LatchSupport.countLatchesHeld() == 0;
 		//original();
- //Label:           ;  //this.hook29();
+ //           ;  //this.hook29();
                             break;
                     }
                 }
@@ -1076,7 +1076,7 @@ assert LatchSupport.countLatchesHeld() == 0;
             Label30:
 assert LatchSupport.countLatchesHeld() == 0;
 	//original();
- //Label:           ;  //this.hook30();
+ //           ;  //this.hook30();
                 CursorImpl dup = beginRead(true);
             try {
                 if (getMode == GetMode.NEXT) {
@@ -1106,7 +1106,7 @@ assert LatchSupport.countLatchesHeld() == 0;
                 Label31:
 assert LatchSupport.countLatchesHeld() == 0;
 	//original();
- //Label:           ;  //this.hook31();
+ //           ;  //this.hook31();
                     break;
             }
         }
@@ -1138,7 +1138,7 @@ assert LatchSupport.countLatchesHeld() == 0;
             Label33:
 origCursor.latchBINs();
 	//original(origCursor);
- //Label:           ;  //this.hook33(origCursor);
+ //           ;  //this.hook33(origCursor);
             if (origDBIN == null) {
                 if (forward) {
                     if (origBIN.getNEntries() - 1 > origCursor.getIndex()) {
@@ -1175,7 +1175,7 @@ origCursor.latchBINs();
             Label32:
 origCursor.releaseBINs();
 	//original(origCursor);
- //Label:           ;  //this.hook32(origCursor);
+ //           ;  //this.hook32(origCursor);
                 return ret;
         }
         if (origDBIN != dupCursor.getDupBIN() && origCursor.getIndex() == dupCursor.getIndex() &&
@@ -1183,7 +1183,7 @@ origCursor.releaseBINs();
             Label35:
 origCursor.latchBINs();
 	//original(origCursor);
- //Label:           ;  //this.hook35(origCursor);
+ //           ;  //this.hook35(origCursor);
             if (forward) {
                 if (origDBIN.getNEntries() - 1 > origCursor.getDupIndex()) {
                     for (int i = origCursor.getDupIndex() + 1; i < origDBIN.getNEntries(); i++) {
@@ -1214,7 +1214,7 @@ origCursor.latchBINs();
             Label34:
 origCursor.releaseBINs();
 	//original(origCursor);
- //Label:           ;  //this.hook34(origCursor);
+ //           ;  //this.hook34(origCursor);
             return ret;
         }
         return false;

@@ -6,7 +6,7 @@ class TxnManager
   depend com.sleepycat.je.latch.Latch;
     private Latch allTxnLatch;
 
-  before hook821: TxnManager(EnvironmentImpl )
+  before Label821: TxnManager(EnvironmentImpl )
 {
 	allTxnLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
 	//original(env);

@@ -161,7 +161,7 @@ class Tree {
         try {
             Label670:; //this.hook670(wrl);
             Label728:; //this.hook728();
-            throw new ReturnObject(wrl.doWork(root));
+            return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root));
             Label670_1:;
             //throw ReturnHack.returnObject;
         }
@@ -174,7 +174,7 @@ class Tree {
         try {
             Label671:; //this.hook671(wrl);
             Label729:; //this.hook729();
-            throw new ReturnObject(wrl.doWork(root))
+            return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root))
             Label671_1:
             //throw ReturnHack.returnObject;
         }
@@ -197,7 +197,7 @@ class Tree {
             boolean rootNeedsUpdating = false;
             Label672: ; //this.hook672(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
             if (root == null) {
-                throw new ReturnVoid();
+                return; //throw new ReturnVoid();
             }
             rootIN = (IN) root.fetchTarget(database, null);
             rootIN.latch(false);
@@ -216,7 +216,10 @@ class Tree {
                 rootNeedsUpdating = cascadeUpdates(nodeLadder, null, -1);
                 subtreeRootIN = detachPoint.child;
             }
-            Label672_1:
+            finally {
+              Label672_1:  ;
+				    }
+
                 //End hook672
                 if (subtreeRootIN != null) {
                     EnvironmentImpl envImpl = database.getDbEnvironment();
@@ -228,9 +231,7 @@ class Tree {
                     INList inList = envImpl.getInMemoryINs();
                     accountForSubtreeRemoval(inList, subtreeRootIN, tracker);
                 }
-        } catch (ReturnVoid r) {
-            return;
-        }
+        } 
     }
 
     /** 
@@ -685,19 +686,19 @@ class Tree {
                         parent = result.parent;
                     } else {
                         Label733:; //this.hook733();
-                        throw new ReturnObject(null);
+                        return null; //throw new ReturnObject(null);
                     }
                 } else {
                     if (next.isRoot()) {
                         Label734:; //this.hook734(next);
-                        throw new ReturnObject(null);
+                        return null; //throw new ReturnObject(null);
                     }
                     else {
                         result = getParentINForChildIN(next, true, true);
                         if (result.exactParentFound) {
                             parent = result.parent;
                         } else {
-                            throw new ReturnObject(null);
+                            return null; //throw new ReturnObject(null);
                         }
                     }
                 }
@@ -724,14 +725,14 @@ class Tree {
                         if (treeStatsAccumulator != null) {
                             nextIN.accumulateStats(treeStatsAccumulator);
                         }
-                        throw new ReturnObject((BIN) nextIN);
+                        return (BIN) nextIN; //throw new ReturnObject((BIN) nextIN);
                     }
                     else {
                         IN ret = searchSubTree(nextIN, null, (forward ? SearchType.LEFT : SearchType.RIGHT), -1, null,
                             true);
                         Label737: ; //this.hook737(parent);
                         if (ret instanceof BIN) {
-                            throw new ReturnObject((BIN) ret);
+                            return (BIN) ret; //throw new ReturnObject((BIN) ret);
                         } else {
                             throw new InconsistentNodeException("subtree did not have a BIN for leaf");
                         }
@@ -963,7 +964,7 @@ class Tree {
      */
     private IN searchSubTreeUntilSplit(IN parent, byte[] key, long nid, boolean updateGeneration)
     throws DatabaseException, SplitRequiredException {
-        try {
+      //  try {
             if (parent == null) {
                 return null;
             }
@@ -977,7 +978,7 @@ class Tree {
             Label698: ; //this.hook698(parent, key, nid, updateGeneration, index, child);
             do {
                 if (parent.getNEntries() == 0) {
-                    throw new ReturnObject(parent);
+                    return parent; //throw new ReturnObject(parent);
                 } else {
                     index = parent.findEntry(key, false, false);
                 }
@@ -990,18 +991,20 @@ class Tree {
                 }
                 if (child.getNodeId() == nid) {
                     Label740:; //this.hook740(child);
-                    throw new ReturnObject(parent);
+                    return parent; //throw new ReturnObject(parent);
                 }
                 Label738: ; //this.hook738(parent);
                 parent = child;
             } while (!(parent instanceof BIN));
-            throw new ReturnObject(parent);
+
             //hook698
-            Label698_1:
-                throw ReturnHack.returnObject;
-        } catch (ReturnObject r) {
-            return (IN) r.value;
-        }
+            Label698_1:            
+            return parent; //throw new ReturnObject(parent);
+               
+// throw ReturnHack.returnObject;
+//        } catch (ReturnObject r) {
+  //          return (IN) r.value;
+  //      }
     }
 
     /** 
@@ -1015,7 +1018,7 @@ class Tree {
      * Helper to obtain the root IN with proper root latching. Optionally updates the generation of the root when latching it.
      */
     public IN getRootIN(boolean updateGeneration) throws DatabaseException {
-        try {
+  //      try {
             Label702:; //this.hook702();
             IN rootIN = null;
             Label701:; //this.hook701(updateGeneration, rootIN);
@@ -1023,14 +1026,14 @@ class Tree {
                 rootIN = (IN) root.fetchTarget(database, null);
                 rootIN.latch(updateGeneration);
             }
-            throw new ReturnObject(rootIN);
+
             Label701_1:
                 //end hook 701
                 throw ReturnHack.returnObject;
-        }
-        catch (ReturnObject r) {
-            return (IN) r.value;
-        }
+//        }        catch (ReturnObject r) {
+//            return (IN) r.value;
+//        }
+            return rootIN;
     }
 
     /** 
@@ -1609,683 +1612,6 @@ class Tree {
     public void setCkptHook(TestHook hook) {
         ckptHook = hook;
     }
-/*
-    protected void hook657(LN ln, EnvironmentImpl env, BIN bin, int index, long newLsn) throws DatabaseException {}
-
-    protected void hook658(LN ln, EnvironmentImpl env, BIN bin, int index, long newLsn) throws DatabaseException {}
-
-    protected void hook659(LN newLN, long binNid, DBIN dupBin, long newLsn) throws DatabaseException {}
-
-    protected void hook660(LN newLN, long binNid, DBIN dupBin, long newLsn) throws DatabaseException {}
-*/
-   // protected void hook661() throws DatabaseException, NodeNotEmptyException, CursorsExistException {}
-
-    //protected void hook662(IN curRoot, long curRootLsn, long logLsn, IN newRoot) throws DatabaseException {}
-
-  //  protected void hook663(DIN curRoot, DIN newRoot, long curRootLsn, long logLsn) throws DatabaseException {}
-
-    //protected void hook664(LN newLN, DIN dupRoot, DBIN dupBin, BIN bin, LN existingLN, DupCountLN dupCountLN,
-      //  long dbinLsn, long dinLsn, long dupCountLsn, long newLsn) throws DatabaseException {}
-
-  //  protected void hook665(IN subtreeRoot) throws DatabaseException {}
-
-    /*  protected void hook670(WithRootLatched wrl) throws DatabaseException {
-	Label:           ;  //this.hook728();
-	throw new ReturnObject(wrl.doWork(root));
-    }
-
-    protected void hook671(WithRootLatched wrl) throws DatabaseException {
-	Label:           ;  //this.hook729();
-	throw new ReturnObject(wrl.doWork(root));
-    }
-
-    protected void hook672(byte[] idKey, UtilizationTracker tracker, IN subtreeRootIN, ArrayList nodeLadder, IN rootIN,
-	    boolean rootNeedsUpdating) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	if (root == null) {
-	    throw new ReturnVoid();
-	}
-	rootIN = (IN) root.fetchTarget(database, null);
-	rootIN.latch(false);
-	searchDeletableSubTree(rootIN, idKey, nodeLadder);
-	if (nodeLadder.size() == 0) {
-	    if (purgeRoot) {
-		subtreeRootIN = logTreeRemoval(rootIN, tracker);
-		if (subtreeRootIN != null) {
-		    rootNeedsUpdating = true;
-		}
-	    }
-	} else {
-	    SplitInfo detachPoint = (SplitInfo) nodeLadder.get(nodeLadder.size() - 1);
-	    boolean deleteOk = detachPoint.parent.deleteEntry(detachPoint.index, true);
-	    assert deleteOk;
-	    rootNeedsUpdating = cascadeUpdates(nodeLadder, null, -1);
-	    subtreeRootIN = detachPoint.child;
-	}
-    }
-
-
-    protected void hook673() throws DatabaseException {
-    }
-
-    protected IN hook674(byte[] idKey, byte[] mainKey, IN in, IN deletedSubtreeRoot)
-	    throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-	Label730:           ;  //this.hook730(in);
-	assert in instanceof BIN;
-	assert in.getNEntries() > 0;
-	int index = in.findEntry(mainKey, false, true);
-	if (index >= 0) {
-	    deletedSubtreeRoot = deleteDupSubtree(idKey, (BIN) in, index);
-	}
-	return deletedSubtreeRoot;
-    }
-
-*/
-    /*
-        protected void hook675(DIN duplicateRoot) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-        }
-
-        protected void hook676(ArrayList nodeLadder)
-    	    throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-        }
-
-        protected void hook677(DIN dupRoot) throws DatabaseException {
-        }
-
-        protected void hook678(DIN dupRoot) throws DatabaseException {
-        }
-
-        protected void hook679(IN child) throws DatabaseException {
-        }
-
-        protected void hook680(IN child) throws DatabaseException {
-        }
-
-        protected void hook681(IN potentialParent) throws DatabaseException {
-        }
-
-        protected void hook682(IN searchResult) throws DatabaseException {
-        }
-
-        protected void hook683(TreeLocation location, byte[] mainKey, byte[] dupKey, LN ln, boolean splitsAllowed,
-    	    boolean findDeletedEntries, boolean searchDupTree, boolean updateGeneration, boolean exactSearch,
-    	    boolean indicateIfExact, Node childNode) throws DatabaseException {
-    	if (childNode == null) {
-    	} else if (ln.containsDuplicates()) {
-    	    throw new ReturnBoolean(searchDupTreeForDupCountLNParent(location, mainKey, childNode));
-    	} else {
-    	    if (childNode.containsDuplicates()) {
-    		if (dupKey == null) {
-    		    throw new ReturnBoolean(
-    			    searchDupTreeByNodeId(location, childNode, ln, searchDupTree, updateGeneration));
-    		} else {
-    		    throw new ReturnBoolean(searchDupTreeForDBIN(location, dupKey, (DIN) childNode, ln,
-    			    findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed, updateGeneration));
-    		}
-    	    }
-    	}
-        }
-
-     //   protected void hook684(BIN oldBIN) throws DatabaseException {
-       // }
-    /*
-        protected void hook685(TreeLocation location, byte[] dupKey, DIN dupRoot, LN ln, boolean findDeletedEntries,
-    	    boolean indicateIfExact, boolean exactSearch, boolean splitsAllowed, boolean updateGeneration)
-    	    throws DatabaseException {
-    	if (maybeSplitDuplicateRoot(location.bin, location.index)) {
-    	    dupRoot = (DIN) location.bin.fetchTarget(location.index);
-    	}
-    	Label731:           ;  //this.hook731(location);
-    	location.lnKey = dupKey;
-    	if (splitsAllowed) {
-    	    try {
-    		location.bin = (BIN) searchSubTreeSplitsAllowed(dupRoot, location.lnKey, ln.getNodeId(),
-    			updateGeneration);
-    	    } catch (SplitRequiredException e) {
-    		throw new DatabaseException(e);
-    	    }
-    	} else {
-    	    location.bin = (BIN) searchSubTree(dupRoot, location.lnKey, SearchType.NORMAL, ln.getNodeId(), null,
-    		    updateGeneration);
-    	}
-    	location.index = location.bin.findEntry(location.lnKey, indicateIfExact, exactSearch);
-    	boolean match;
-    	if (findDeletedEntries) {
-    	    match = (location.index >= 0 && (location.index & IN.EXACT_MATCH) != 0);
-    	    location.index &= ~IN.EXACT_MATCH;
-    	} else {
-    	    match = (location.index >= 0);
-    	}
-    	if (match) {
-    	    location.childLsn = location.bin.getLsn(location.index);
-    	    throw new ReturnBoolean(true);
-    	} else {
-    	    throw new ReturnBoolean(false);
-    	}
-        }
-    /*
-        protected void hook686(boolean traverseWithinDupTree, boolean forward, byte[] idKey, IN next, IN parent, IN nextIN)
-    	    throws DatabaseException {
-    	while (true) {
-    	    SearchResult result = null;
-    	    if (!traverseWithinDupTree) {
-    		result = getParentINForChildIN(next, true, true);
-    		if (result.exactParentFound) {
-    		    parent = result.parent;
-    		} else {
-    		    Label733:           ;  //this.hook733();
-    		    throw new ReturnObject(null);
-    		}
-    	    } else {
-    		if (next.isRoot()) {
-    		    Label734:           ;  //this.hook734(next);
-    		    throw new ReturnObject(null);
-    		} else {
-    		    result = getParentINForChildIN(next, true, true);
-    		    if (result.exactParentFound) {
-    			parent = result.parent;
-    		    } else {
-    			throw new ReturnObject(null);
-    		    }
-    		}
-    	    }
-    	    Label732:           ;  //this.hook732();
-    	    int index = parent.findEntry(idKey, false, false);
-    	    boolean moreEntriesThisBin = false;
-    	    if (forward) {
-    		index++;
-    		if (index < parent.getNEntries()) {
-    		    moreEntriesThisBin = true;
-    		}
-    	    } else {
-    		if (index > 0) {
-    		    moreEntriesThisBin = true;
-    		}
-    		index--;
-    	    }
-    	    if (moreEntriesThisBin) {
-    		nextIN = (IN) parent.fetchTarget(index);
-    		Label735:           ;  //this.hook735(nextIN);
-    		if (nextIN instanceof BIN) {
-    		    Label736:           ;  //this.hook736(parent);
-    		    TreeWalkerStatsAccumulator treeStatsAccumulator = getTreeStatsAccumulator();
-    		    if (treeStatsAccumulator != null) {
-    			nextIN.accumulateStats(treeStatsAccumulator);
-    		    }
-    		    throw new ReturnObject((BIN) nextIN);
-    		} else {
-    		    IN ret = searchSubTree(nextIN, null, (forward ? SearchType.LEFT : SearchType.RIGHT), -1, null,
-    			    true);
-    		    Label737:           ;  //this.hook737(parent);
-    		    if (ret instanceof BIN) {
-    			throw new ReturnObject((BIN) ret);
-    		    } else {
-    			throw new InconsistentNodeException("subtree did not have a BIN for leaf");
-    		    }
-    		}
-    	    }
-    	    next = parent;
-    	}
-        }
-
-        protected void hook687() throws DatabaseException {
-        }
-
-        protected void hook688(LogManager logManager, INList inMemoryINs, IN curRoot, long curRootLsn, long logLsn,
-    	    IN newRoot) throws DatabaseException {
-    	byte[] rootIdKey = curRoot.getKey(0);
-    	newRoot = new IN(database, rootIdKey, maxMainTreeEntriesPerNode, curRoot.getLevel() + 1);
-    	newRoot.setIsRoot(true);
-    	curRoot.setIsRoot(false);
-    	try {
-    	    curRootLsn = curRoot.logProvisional(logManager, newRoot);
-    	    boolean insertOk = newRoot.insertEntry(new ChildReference(curRoot, rootIdKey, curRootLsn));
-    	    assert insertOk;
-    	    logLsn = newRoot.log(logManager);
-    	} catch (DatabaseException e) {
-    	    curRoot.setIsRoot(true);
-    	    throw e;
-    	}
-    	inMemoryINs.add(newRoot);
-    	root.setTarget(newRoot);
-    	root.setLsn(logLsn);
-    	curRoot.split(newRoot, 0, maxMainTreeEntriesPerNode);
-    	root.setLsn(newRoot.getLastFullVersion());
-        }
-    /*
-        protected void hook689(IN curRoot) throws DatabaseException {
-        }
-
-        protected void hook690(IN parent) throws DatabaseException {
-        }
-
-        protected void hook691(IN parent) throws DatabaseException {
-        }
-
-        protected void hook692(IN parent) throws DatabaseException, Throwable {
-        }
-
-        protected void hook693(IN child) throws DatabaseException, Throwable {
-        }
-
-        protected void hook694(IN parent, IN child) throws DatabaseException {
-        }
-
-        protected void hook695(IN parent) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-        }
-
-        protected void hook696(SplitInfo info5) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-        }
-
-        protected void hook697(ArrayList nodeLadder)
-    	    throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-        }
-
-        protected void hook698(IN parent, byte[] key, long nid, boolean updateGeneration, int index, IN child)
-    	    throws DatabaseException, SplitRequiredException {
-    	do {
-    	    if (parent.getNEntries() == 0) {
-    		throw new ReturnObject(parent);
-    	    } else {
-    		index = parent.findEntry(key, false, false);
-    	    }
-    	    assert index >= 0;
-    	    child = (IN) parent.fetchTarget(index);
-    	    child.latch(updateGeneration);
-    	    if (child.needsSplitting()) {
-    		Label739:           ;  //this.hook739(parent, child);
-    		throw splitRequiredException;
-    	    }
-    	    if (child.getNodeId() == nid) {
-    		Label740:           ;  //this.hook740(child);
-    		throw new ReturnObject(parent);
-    	    }
-    	    Label738:           ;  //this.hook738(parent);
-    	    parent = child;
-    	} while (!(parent instanceof BIN));
-    	throw new ReturnObject(parent);
-        }
-
-        protected void hook699(IN parent) throws DatabaseException, SplitRequiredException {
-        }
-
-        protected void hook700(IN parent) throws DatabaseException, SplitRequiredException {
-        }
-
-        protected void hook701(boolean updateGeneration, IN rootIN) throws DatabaseException {
-    	if (root != null) {
-    	    rootIN = (IN) root.fetchTarget(database, null);
-    	    rootIN.latch(updateGeneration);
-    	}
-    	throw new ReturnObject(rootIN);
-        }
-
-        protected void hook702() throws DatabaseException {
-        }
-    
-    protected void hook703(LN ln, byte[] key, boolean allowDuplicates, CursorImpl cursor, LockResult lnLock,
-        EnvironmentImpl env, LogManager logManager, INList inMemoryINs, BIN bin) throws DatabaseException {
-        bin = findBinForInsert(key, logManager, inMemoryINs, cursor);
-        Label741: ; //this.hook741(bin);
-        ChildReference newLNRef = new ChildReference(ln, key, DbLsn.NULL_LSN);
-        cursor.setBIN(bin);
-        int index = bin.insertEntry1(newLNRef);
-        if ((index & IN.INSERT_SUCCESS) != 0) {
-            index &= ~IN.INSERT_SUCCESS;
-            cursor.updateBin(bin, index);
-            long newLsn = DbLsn.NULL_LSN;
-            try {
-                newLsn = ln.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-            } finally {
-                if (newLsn == DbLsn.NULL_LSN) {
-                    bin.setKnownDeleted(index);
-                }
-            }
-            lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
-            bin.updateEntry(index, newLsn);
-            Label: ; //this.hook657(ln, env, bin, index, newLsn);
-            throw new ReturnBoolean(true);
-        } else {
-            index &= ~IN.EXACT_MATCH;
-            cursor.updateBin(bin, index);
-            LN currentLN = null;
-            boolean isDup = false;
-            Node n = bin.fetchTarget(index);
-            if (n == null || n instanceof LN) {
-                currentLN = (LN) n;
-            } else {
-                isDup = true;
-            }
-            boolean isDeleted = false;
-            LockResult currentLock = null;
-            if (!isDup) {
-                if (currentLN == null) {
-                    isDeleted = true;
-                } else {
-                    currentLock = cursor.lockLNDeletedAllowed(currentLN, LockType.WRITE);
-                    currentLN = currentLock.getLN();
-                    bin = cursor.getBIN();
-                    index = cursor.getIndex();
-                    if (cursor.getDupBIN() != null) {
-                        cursor.clearDupBIN(true);
-                        isDup = true;
-                    } else if (bin.isEntryKnownDeleted(index) || currentLN == null || currentLN.isDeleted()) {
-                        isDeleted = true;
-                    }
-                }
-            }
-            if (isDeleted) {
-                long abortLsn = bin.getLsn(index);
-                boolean abortKnownDeleted = true;
-                if (currentLN != null && currentLock.getLockGrant() == LockGrantType.EXISTING) {
-                    long nodeId = currentLN.getNodeId();
-                    Locker locker = cursor.getLocker();
-                    WriteLockInfo info6 = locker.getWriteLockInfo(nodeId);
-                    abortLsn = info6.getAbortLsn();
-                    abortKnownDeleted = info6.getAbortKnownDeleted();
-                }
-                lnLock.setAbortLsn(abortLsn, abortKnownDeleted);
-                long newLsn = ln.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-                bin.updateEntry(index, ln, newLsn, key);
-                bin.clearKnownDeleted(index);
-                bin.clearPendingDeleted(index);
-                Label: ; //this.hook658(ln, env, bin, index, newLsn);
-                throw new ReturnBoolean(true);
-            } else {
-                throw new ReturnBoolean(
-                    insertDuplicate(key, bin, ln, logManager, inMemoryINs, cursor, lnLock, allowDuplicates));
-            }
-        }
-    }
-
-    protected void hook704(byte[] key, BIN bin, LN newLN, CursorImpl cursor, LockResult lnLock, boolean allowDuplicates,
-        EnvironmentImpl env, int index, boolean successfulInsert, DIN dupRoot, Node n, long binNid, DBIN dupBin)
-    throws DatabaseException {
-        dupRoot = (DIN) n;
-        Label744: ; //this.hook744(dupRoot);
-        LockResult dclLockResult = cursor.lockDupCountLN(dupRoot, LockType.WRITE);
-        bin = cursor.getBIN();
-        index = cursor.getIndex();
-        if (!allowDuplicates) {
-            DupCountLN dcl = (DupCountLN) dclLockResult.getLN();
-            if (dcl.getDupCount() > 0) {
-                throw new ReturnBoolean(false);
-            }
-        }
-        maybeSplitDuplicateRoot(bin, index);
-        dupRoot = (DIN) bin.fetchTarget(index);
-        byte[] newLNKey = newLN.getData();
-        long previousLsn = dupRoot.getLastFullVersion();
-        try {
-            dupBin = (DBIN) searchSubTreeSplitsAllowed(dupRoot, newLNKey, -1, true);
-        } catch (SplitRequiredException e) {
-            throw new DatabaseException(e);
-        }
-        long currentLsn = dupRoot.getLastFullVersion();
-        if (currentLsn != previousLsn) {
-            bin.updateEntry(index, currentLsn);
-        }
-        Label743: ; //this.hook743(cursor);
-        bin = null;
-        dupRoot = null;
-        ChildReference newLNRef = new ChildReference(newLN, newLNKey, DbLsn.NULL_LSN);
-        int dupIndex = dupBin.insertEntry1(newLNRef);
-        if ((dupIndex & IN.INSERT_SUCCESS) != 0) {
-            dupIndex &= ~IN.INSERT_SUCCESS;
-            cursor.updateDBin(dupBin, dupIndex);
-            long newLsn = DbLsn.NULL_LSN;
-            try {
-                newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-            } finally {
-                if (newLsn == DbLsn.NULL_LSN) {
-                    dupBin.setKnownDeleted(dupIndex);
-                }
-            }
-            lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
-            dupBin.setLsn(dupIndex, newLsn);
-            Label659: ; //this.hook659(newLN, binNid, dupBin, newLsn);
-            successfulInsert = true;
-        } else {
-            dupIndex &= ~IN.EXACT_MATCH;
-            cursor.updateDBin(dupBin, dupIndex);
-            LN currentLN = (LN) dupBin.fetchTarget(dupIndex);
-            boolean isDeleted = false;
-            LockResult currentLock = null;
-            if (currentLN == null) {
-                isDeleted = true;
-            } else {
-                currentLock = cursor.lockLNDeletedAllowed(currentLN, LockType.WRITE);
-                currentLN = currentLock.getLN();
-                dupBin = cursor.getDupBIN();
-                dupIndex = cursor.getDupIndex();
-                if (dupBin.isEntryKnownDeleted(dupIndex) || currentLN == null || currentLN.isDeleted()) {
-                    isDeleted = true;
-                }
-            }
-            if (isDeleted) {
-                long abortLsn = dupBin.getLsn(dupIndex);
-                boolean abortKnownDeleted = true;
-                if (currentLN != null && currentLock.getLockGrant() == LockGrantType.EXISTING) {
-                    long nodeId = currentLN.getNodeId();
-                    Locker locker = cursor.getLocker();
-                    WriteLockInfo info7 = locker.getWriteLockInfo(nodeId);
-                    abortLsn = info7.getAbortLsn();
-                    abortKnownDeleted = info7.getAbortKnownDeleted();
-                }
-                lnLock.setAbortLsn(abortLsn, abortKnownDeleted);
-                long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-                dupBin.updateEntry(dupIndex, newLN, newLsn, newLNKey);
-                dupBin.clearKnownDeleted(dupIndex);
-                dupBin.clearPendingDeleted(dupIndex);
-                Label: ; //this.hook660(newLN, binNid, dupBin, newLsn);
-                successfulInsert = true;
-            } else {
-                successfulInsert = false;
-            }
-        }
-        Label: ; //this.hook742(dupBin);
-        dupBin = null;
-        if (successfulInsert) {
-            Label746:; //this.hook746(cursor);
-            dupRoot = cursor.getLatchedDupRoot(false);
-            Label745:; //this.hook745(cursor);
-            dupRoot.incrementDuplicateCount(dclLockResult, key, cursor.getLocker(), true);
-        }
-    }
-
-    protected void hook705(DIN dupRoot) throws DatabaseException {}
-
-    protected void hook706(BIN bin, int index, DIN curRoot, LogManager logManager, INList inMemoryINs, byte[] rootIdKey,
-        DIN newRoot, long curRootLsn, long logLsn) throws DatabaseException {
-        newRoot.setIsRoot(true);
-        curRoot.setDupCountLN(null);
-        curRoot.setIsRoot(false);
-        try {
-            curRootLsn = curRoot.logProvisional(logManager, newRoot);
-            boolean insertOk = newRoot.insertEntry(new ChildReference(curRoot, rootIdKey, bin.getLsn(index)));
-            assert insertOk;
-            logLsn = newRoot.log(logManager);
-        } catch (DatabaseException e) {
-            curRoot.setIsRoot(true);
-            throw e;
-        }
-        inMemoryINs.add(newRoot);
-        bin.updateEntry(index, newRoot, logLsn);
-        curRoot.split(newRoot, 0, maxDupTreeEntriesPerNode);
-    }
-
-    protected void hook707(DIN newRoot) throws DatabaseException {}
-
-        protected void hook708(byte[] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor,
-    	    EnvironmentImpl env, DIN dupRoot, DBIN dupBin, BIN bin, int index, LN existingLN, byte[] newLNKey,
-    	    Locker locker, DupCountLN dupCountLN, long firstDupCountLNLsn) throws DatabaseException {
-    	long dbinLsn = dupBin.logProvisional(logManager, dupRoot);
-    	inMemoryINs.add(dupBin);
-    	dupRoot.setEntry(0, dupBin, dupBin.getKey(0), dbinLsn, dupBin.getState(0));
-    	long dinLsn = dupRoot.log(logManager);
-    	inMemoryINs.add(dupRoot);
-    	LockResult lockResult = locker.lock(dupCountLN.getNodeId(), LockType.WRITE, false, database);
-    	lockResult.setAbortLsn(firstDupCountLNLsn, false);
-    	dupCountLN.setDupCount(2);
-    	long dupCountLsn = dupCountLN.log(env, database.getId(), key, firstDupCountLNLsn, locker);
-    	dupRoot.updateDupCountLNRef(dupCountLsn);
-    	long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, locker);
-    	int dupIndex = dupBin.insertEntry1(new ChildReference(newLN, newLNKey, newLsn));
-    	dupIndex &= ~IN.INSERT_SUCCESS;
-    	cursor.updateDBin(dupBin, dupIndex);
-    	bin.adjustCursorsForMutation(index, dupBin, dupIndex ^ 1, cursor);
-    	Label747:           ;  //this.hook747(dupBin);
-    	bin.updateEntry(index, dupRoot, dinLsn);
-    	bin.setMigrate(index, false);
-    	Label664:           ;  //this.hook664(newLN, dupRoot, dupBin, bin, existingLN, dupCountLN, dbinLsn, dinLsn, dupCountLsn, newLsn);
-        }
-
-        protected void hook709(DBIN dupBin) throws DatabaseException {
-        }
-
-        protected void hook710(DIN dupRoot) throws DatabaseException {
-        }
-
-        protected BIN hook711(byte[] key, LogManager logManager, INList inMemoryINs, BIN bin, boolean rootLatchIsHeld)
-    	    throws DatabaseException {
-    	long logLsn;
-    	while (true) {
-    	    rootLatchIsHeld = true;
-    	    Label:           ;  //this.hook748();
-    	    if (root == null) {
-    		Label:           ;  //this.hook751();
-    		if (root != null) {
-    		    Label:           ;  //this.hook752();
-    		    rootLatchIsHeld = false;
-    		    continue;
-    		}
-    		bin = new BIN(database, key, maxMainTreeEntriesPerNode, 1);
-    		Label:           ;  //this.hook750(bin);
-    		logLsn = bin.logProvisional(logManager, null);
-    		IN rootIN = new IN(database, key, maxMainTreeEntriesPerNode, 2);
-    		rootIN.setIsRoot(true);
-    		boolean insertOk = rootIN.insertEntry(new ChildReference(bin, key, logLsn));
-    		assert insertOk;
-    		logLsn = rootIN.log(logManager);
-    		rootIN.setDirty(true);
-    		root = new ChildReference(rootIN, new byte[0], logLsn);
-    		inMemoryINs.add(bin);
-    		inMemoryINs.add(rootIN);
-    		Label749:           ;  //this.hook749();
-    		rootLatchIsHeld = false;
-    		break;
-    	    } else {
-    		Label753:           ;  //this.hook753();
-    		rootLatchIsHeld = false;
-    		IN in = searchSplitsAllowed(key, -1, true);
-    		if (in == null) {
-    		    continue;
-    		} else {
-    		    bin = (BIN) in;
-    		    break;
-    		}
-    	    }
-    	}
-    	return bin;
-        }
-    */
-    //  protected void hook712(BIN bin) throws DatabaseException {
-    //}
-
-    //  protected void hook713(INList inList, IN subtreeRoot, UtilizationTracker tracker) throws DatabaseException {
-    //subtreeRoot.accountForSubtreeRemoval(inList, tracker);
-    // }
-/*
-    protected void hook714(INList inMemoryList) throws DatabaseException {
-	Node rootIN = root.getTarget();
-	if (rootIN != null) {
-	    rootIN.rebuildINList(inMemoryList);
-	}
-    }
-
-    protected void hook715(int index) throws DatabaseException {
-	IN rootIN = (IN) root.fetchTarget(database, null);
-	throw new ReturnBoolean(rootIN.validateSubtreeBeforeDelete(index));
-    }
-
-    protected void hook728() throws DatabaseException {
-    }
-
-    protected void hook729() throws DatabaseException {
-    }
-
-    protected void hook730(IN in) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-    }
-
-    protected void hook731(TreeLocation location) throws DatabaseException {
-    }
-
-    protected void hook732() throws DatabaseException {
-    }
-
-    protected void hook733() throws DatabaseException {
-    }
-
-    protected void hook734(IN next) throws DatabaseException {
-    }
-
-    protected void hook735(IN nextIN) throws DatabaseException {
-    }
-
-    protected void hook736(IN parent) throws DatabaseException {
-    }
-
-    protected void hook737(IN parent) throws DatabaseException {
-    }
-
-    protected void hook738(IN parent) throws DatabaseException, SplitRequiredException {
-    }
-
-    protected void hook739(IN parent, IN child) throws DatabaseException, SplitRequiredException {
-    }
-
-    protected void hook740(IN child) throws DatabaseException, SplitRequiredException {
-    }
-
-    protected void hook741(BIN bin) throws DatabaseException {
-    }
-
-    protected void hook742(DBIN dupBin) throws DatabaseException {
-    }
-
-    protected void hook743(CursorImpl cursor) throws DatabaseException {
-    }
-
-    protected void hook744(DIN dupRoot) throws DatabaseException {
-    }
-
-    protected void hook745(CursorImpl cursor) throws DatabaseException {
-    }
-
-    protected void hook746(CursorImpl cursor) throws DatabaseException {
-    }
-
-    protected void hook747(DBIN dupBin) throws DatabaseException {
-    }
-
-    protected void hook748() throws DatabaseException {
-    }
-
-    protected void hook749() throws DatabaseException {
-    }
-
-    protected void hook750(BIN bin) throws DatabaseException {
-    }
-
-    protected void hook751() throws DatabaseException {
-    }
-
-    protected void hook752() throws DatabaseException {
-    }
-
-    protected void hook753() throws DatabaseException {
-    }
-*/
-    // protected void hook754(BIN bin) throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-    // }
-
 }
+
+

@@ -65,24 +65,21 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 
   // line 37 "../../../../PreloadLSNTreeWalker.ump"
    protected Node fetchLSN(long lsn) throws DatabaseException{
-    try {
+    //try {
 	    INEntry inEntry = (INEntry) lsnINMap.remove(new Long(lsn));
 	    assert (inEntry != null);
 	    IN in = inEntry.in;
-	    Label532: //this.hook352(lsn, inEntry, in);
+	    Label352:
+in.latch();
+ //this.hook352(lsn, inEntry, in);
 			int index = inEntry.index;
 			if (in.isEntryKnownDeleted(inEntry.index) || in.getLsn(inEntry.index) != lsn) {
-					throw new ReturnObject(null);
-			}
-			throw new ReturnObject(in.fetchTarget(inEntry.index));
-			}
-	    //throw ReturnHack.returnObject;
-  }
-
-  // line 50 "../../../../PreloadLSNTreeWalker.ump"
-  public void catch(ReturnObject r){
-    Label532_1: 
-	    return (Node) r.value;
+					return null; //throw new ReturnObject(null);
+			}	    
+      Label352_1:
+in.releaseLatch();
+ ;// 
+			return in.fetchTarget(inEntry.index);
   }
 
   // line 7 "../../../../Latches_PreloadLSNTreeWalker.ump"

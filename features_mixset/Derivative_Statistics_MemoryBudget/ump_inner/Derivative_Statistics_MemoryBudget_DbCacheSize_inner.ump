@@ -6,7 +6,7 @@ class DbCacheSize {
         stats=env.getStats(null);
         if (stats.getNNodesScanned() > 0) {
           out.println("*** Ran out of cache memory at record " + i + " -- try increasing the Java heap size ***");
-          throw new ReturnVoid();
+          return; //throw new ReturnVoid();
         }
        // original();
       }

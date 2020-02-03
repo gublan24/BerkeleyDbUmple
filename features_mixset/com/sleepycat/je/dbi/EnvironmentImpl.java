@@ -1271,7 +1271,6 @@ evictor.loadStats(config, stats);
   
   @MethodObject
     @MethodObject
-    @MethodObject
   // line 4 "../../../../EnvironmentImpl_static.ump"
   // line 4 "../../../../Evictor_EnvironmentImpl_inner.ump"
   // line 4 "../../../../INCompressor_EnvironmentImpl_inner.ump"

@@ -50,7 +50,7 @@ private SharedLatch rootLatch;
 
 
     after Label672_1: delete(byte , UtilizationTracker  ){
-        //finally {
+
         releaseNodeLadderLatches(nodeLadder);
         if (rootIN != null) {
             rootIN.releaseLatch();

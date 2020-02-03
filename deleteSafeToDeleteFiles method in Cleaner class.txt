@@ -1,0 +1,150 @@
+    void deleteSafeToDeleteFiles() throws DatabaseException {
+        synchronized(deleteFileLock) {
+            if (deleteProhibited) {
+                return; /* deletion disabled. */
+            }
+            Set safeFiles = fileSelector.copySafeToDeleteFiles();
+            if (safeFiles == null) {
+                return; /* Nothing to do. */
+            }
+            env.checkIfInvalid();
+            if (env.mayNotWrite()) {
+                return;
+            }
+            if (!env.getFileManager().lockEnvironment(false, true)) {
+                Tracer.trace(Level.SEVERE, env, "Cleaner has " + safeFiles.size() + " files not deleted because of read-only processes.");
+                return;
+            }
+            try {
+                for (Iterator i = safeFiles.iterator(); i.hasNext();) {
+                    Long fileNum = (Long) i.next();
+                    long fileNumValue = fileNum.longValue();
+                    boolean deleted = false;
+                    try {
+                        if (expunge) {
+                            env.getFileManager().deleteFile(fileNumValue);
+                        } else {
+                            env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
+                        }
+                        deleted = true;
+                    } catch (DatabaseException e) {
+                        traceFileNotDeleted(e, fileNumValue);
+                    } catch (IOException e) {
+                        traceFileNotDeleted(e, fileNumValue);
+                    }
+
+                    if (deleted) {
+                        Tracer.trace(Level.SEVERE, env,
+                            "Cleaner deleted file 0x" +
+                            Long.toHexString(fileNumValue));
+
+                        try {
+                            profile.removeFile(fileNum);
+                        } finally {
+                            fileSelector.removeDeletedFile(fileNum);
+                        }
+                    }
+                    nCleanerDeletions++;
+                }
+            } finally {
+                env.getFileManager().releaseExclusiveLock();
+            }
+        }
+    }
+========================================================================================================
+
+void deleteSafeToDeleteFiles() throws DatabaseException {
+    try {
+        synchronized(deleteFileLock) {
+            Set safeFiles = fileSelector.copySafeToDeleteFiles();
+            if (safeFiles == null) {
+                return;
+            }
+            env.checkIfInvalid();
+            if (env.mayNotWrite()) {
+                return;
+            }
+            this.hook115(safeFiles);
+        }
+    } catch (ReturnVoid r) {
+        return;
+    }
+}
+
+  protected void hook115(Set safeFiles) throws DatabaseException {
+      for (Iterator i = safeFiles.iterator(); i.hasNext();) {
+          Long fileNum = (Long) i.next();
+          long fileNumValue = fileNum.longValue();
+          boolean deleted = false;
+          try {
+              if (expunge) {
+                  env.getFileManager().deleteFile(fileNumValue);
+              } else {
+                  env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
+              }
+              deleted = true;
+          } catch (DatabaseException e) {
+              traceFileNotDeleted(e, fileNumValue);
+          } catch (IOException e) {
+              traceFileNotDeleted(e, fileNumValue);
+          }
+          if (deleted) {
+              this.hook88(fileNumValue);
+              try {
+                  profile.removeFile(fileNum);
+              } finally {
+                  fileSelector.removeDeletedFile(fileNum);
+              }
+          }
+          this.hook96();
+      }
+  }
+
+  protected void hook96() throws DatabaseException { }
+==============================================================================================
+    void deleteSafeToDeleteFiles() throws DatabaseException {
+        synchronized(deleteFileLock) {
+            Set safeFiles = fileSelector.copySafeToDeleteFiles();
+            if (safeFiles == null) {
+                return;
+            }
+            env.checkIfInvalid();
+            if (env.mayNotWrite()) {
+                return;
+            }
+            Label115:
+                try {
+                    for (Iterator i = safeFiles.iterator(); i.hasNext();) {
+                        Long fileNum = (Long) i.next();
+                        long fileNumValue = fileNum.longValue();
+                        boolean deleted = false;
+                        try {
+                            if (expunge) {
+                                env.getFileManager().deleteFile(fileNumValue);
+                            } else {
+                                env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
+                            }
+                            deleted = true;
+                        } catch (DatabaseException e) {
+                            traceFileNotDeleted(e, fileNumValue);
+                        } catch (IOException e) {
+                            traceFileNotDeleted(e, fileNumValue);
+                        }
+                        if (deleted) {
+                            this.hook88(fileNumValue);
+                            try {
+                                profile.removeFile(fileNum);
+                            } finally {
+                                fileSelector.removeDeletedFile(fileNum);
+                            }
+                        }
+                        Label96: ;
+                    }
+                }
+            finally {
+                Label_115_1: ;
+            }
+        }
+    
+    }
+

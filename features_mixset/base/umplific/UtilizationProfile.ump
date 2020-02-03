@@ -462,7 +462,7 @@ class UtilizationProfile
 		    if (offsets != null) {
 			list.add(offsets.toArray());
 		    }
-		    //Label:           ;  //this.hook187(cursor);
+		    //           ;  //this.hook187(cursor);
         Label187:
 		}
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
@@ -570,11 +570,11 @@ class UtilizationProfile
 	try {
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    //Label:           ;  //this.hook189(cursor);
+	    //           ;  //this.hook189(cursor);
       Label189:
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
 	    Label177:           ;  //this.hook177(fileNum, sequence, status);
-	    //Label:           ;  //this.hook188(cursor);
+	    //           ;  //this.hook188(cursor);
       Label188:
 	} finally {
 	    if (cursor != null) {
@@ -617,7 +617,7 @@ class UtilizationProfile
 				}
 			    }
 			}
-			//Label:           ;  //this.hook190(cursor);
+			//           ;  //this.hook190(cursor);
       Label190:
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
@@ -647,7 +647,7 @@ class UtilizationProfile
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    Label186: //b = Label:           ;  //this.hook186(db, b);
+	    Label186: //b =            ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }

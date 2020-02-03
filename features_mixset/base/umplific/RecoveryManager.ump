@@ -264,7 +264,7 @@ class RecoveryManager
 	end = System.currentTimeMillis();
 	Label564:           ;  //this.hook564(start, end);
 	rebuildINList();
-//	Label:           ;  //this.hook596();
+
   Label596:
 	Label563:           ;  //this.hook563();
 	start = System.currentTimeMillis();
@@ -293,7 +293,7 @@ class RecoveryManager
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	Label593://Label:           ;  //this.hook593(reader);
+	Label593://          ;  //this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();
@@ -501,7 +501,6 @@ class RecoveryManager
 			}
 		    }
 		    if (processThisLN) {
-			//Label:           ;  //this.hook598();
       Label598:
 			LN ln = reader.getLN();
 			DatabaseId dbId = reader.getDatabaseId();
@@ -760,7 +759,7 @@ class RecoveryManager
 		    if (DbLsn.compareTo(logLsn, location.childLsn) >= 0 && lnFromLog.isDeleted()) {
 			location.bin.setKnownDeletedLeaveTarget(location.index);
 			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			Label594: //Label:           ;  //this.hook594(db, location, deletedKey);
+			Label594:           ;  //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;

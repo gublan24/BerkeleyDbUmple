@@ -1,0 +1,39 @@
+
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/DbTree.java
+namespace com.sleepycat.je.dbi;
+class DbTree {
+  static class RewriteMapLN {
+      isA WithRootLatched;
+      private CursorImpl cursor;
+      RewriteMapLN(    CursorImpl cursor){
+        this.cursor=cursor;
+      }
+      public IN doWork(    ChildReference root) throws DatabaseException {
+        DatabaseEntry dataDbt=new DatabaseEntry(new byte[0]);
+        cursor.putCurrent(dataDbt,null,null);
+        return null;
+      }
+    }
+  static class NameLockResult {
+      CursorImpl nameCursor;
+      DatabaseImpl dbImpl;
+      NameLN nameLN;
+    }
+  static class RootLevel  {
+      isA WithRootLatched;
+      private DatabaseImpl db;
+      private int rootLevel;
+      RootLevel(    DatabaseImpl db){
+        this.db=db;
+        rootLevel=0;
+      }
+      public IN doWork(    ChildReference root) throws DatabaseException {
+        IN rootIN=(IN)root.fetchTarget(db,null);
+        rootLevel=rootIN.getLevel();
+        return null;
+      }
+      int getRootLevel(){
+        return rootLevel;
+      }
+    }
+}

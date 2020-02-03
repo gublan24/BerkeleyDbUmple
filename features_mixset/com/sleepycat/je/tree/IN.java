@@ -2075,7 +2075,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 4 "../../../../IN_static.ump"
   // line 83 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_setLsn
@@ -2146,7 +2145,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 23 "../../../../IN_static.ump"
   // line 125 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_setEntry
@@ -2243,7 +2241,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 61 "../../../../IN_static.ump"
   // line 72 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry
@@ -2309,7 +2306,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 76 "../../../../IN_static.ump"
   // line 93 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry2
@@ -2387,7 +2383,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 99 "../../../../IN_static.ump"
   // line 114 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry3
@@ -2469,7 +2464,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 125 "../../../../IN_static.ump"
   // line 61 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntryCompareKey
@@ -2554,7 +2548,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 157 "../../../../IN_static.ump"
   // line 47 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_insertEntry1
@@ -2652,7 +2645,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 207 "../../../../IN_static.ump"
   // line 11 "../../../../MemoryBudget_IN_inner.ump"
   // line 18 "../../../../LoggingFinest_IN_inner.ump"
@@ -2743,7 +2735,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   
-  @MethodObject
   // line 247 "../../../../IN_static.ump"
   // line 40 "../../../../Latches_IN_inner.ump"
   public static class IN_validateSubtreeBeforeDelete
@@ -2821,7 +2812,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 289 "../../../../IN_static.ump"
   // line 4 "../../../../MemoryBudget_IN_inner.ump"
   // line 4 "../../../../INCompressor_IN_inner.ump"
@@ -3023,7 +3013,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   
-  @MethodObject
   // line 416 "../../../../IN_static.ump"
   // line 61 "../../../../Latches_IN_inner.ump"
   public static class IN_verify
@@ -3127,7 +3116,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   
-  @MethodObject
   // line 462 "../../../../IN_static.ump"
   // line 19 "../../../../Latches_IN_inner.ump"
   public static class IN_isValidForDelete
@@ -3213,7 +3201,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 512 "../../../../IN_static.ump"
   // line 22 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_trackProvisionalObsolete
@@ -3336,7 +3323,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   
   @MethodObject
-    @MethodObject
   // line 565 "../../../../IN_static.ump"
   // line 104 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_flushProvisionalObsolete

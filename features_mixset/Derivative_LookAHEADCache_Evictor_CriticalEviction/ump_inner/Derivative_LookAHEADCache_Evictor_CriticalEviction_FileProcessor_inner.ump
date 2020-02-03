@@ -2,7 +2,7 @@
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
    static class FileProcessor_processFile {
-      protected void hook116: execute() { //  Label129 introduced in LookAHEADCache FileProcessor_inner.ump ; after Label129: execute() {
+      after Label116: execute() { //  Label129 introduced in LookAHEADCache FileProcessor_inner.ump ; after Label129: execute() {
         if (Cleaner.DO_CRITICAL_EVICTION) {
           _this.env.getEvictor().doCriticalEviction();
         }

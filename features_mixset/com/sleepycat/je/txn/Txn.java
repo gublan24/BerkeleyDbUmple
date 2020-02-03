@@ -1116,7 +1116,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   @MethodObject
-    @MethodObject
   // line 12 "../../../../Txn_static.ump"
   // line 4 "../../../../MemoryBudget_Txn_inner.ump"
   public static class Txn_addLock
@@ -1217,7 +1216,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   @MethodObject
-    @MethodObject
   // line 66 "../../../../Txn_static.ump"
   // line 4 "../../../../loggingBase_Txn_inner.ump"
   // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"

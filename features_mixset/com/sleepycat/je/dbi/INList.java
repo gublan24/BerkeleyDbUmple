@@ -286,7 +286,6 @@ releaseMajorLatch();
   
   
   
-  @MethodObject
   // line 4 "../../../../INList_static.ump"
   // line 4 "../../../../Latches_INList_inner.ump"
   public static class INList_add
@@ -388,7 +387,6 @@ releaseMajorLatch();
   
   
   @MethodObject
-    @MethodObject
   // line 36 "../../../../INList_static.ump"
   // line 4 "../../../../MemoryBudget_INList_inner.ump"
   public static class INList_addAndSetMemory

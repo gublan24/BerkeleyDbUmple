@@ -88,18 +88,18 @@ public class FileProcessor extends DaemonThread
   // line 60 "../../../../FileProcessor.ump"
   public  FileProcessor(String name, EnvironmentImpl env, Cleaner cleaner, UtilizationProfile profile, FileSelector fileSelector){
     super(0, name, env);
-        this.env = env;
-        this.cleaner = cleaner;
-        this.fileSelector = fileSelector;
-        this.profile = profile;
+  this.env = env;
+  this.cleaner = cleaner;
+  this.fileSelector = fileSelector;
+  this.profile = profile;
   }
 
   // line 68 "../../../../FileProcessor.ump"
    public void clearEnv(){
     env = null;
-        cleaner = null;
-        fileSelector = null;
-        profile = null;
+  cleaner = null;
+  fileSelector = null;
+  profile = null;
   }
 
 
@@ -144,68 +144,69 @@ public class FileProcessor extends DaemonThread
   // line 104 "../../../../FileProcessor.ump"
    public synchronized  int doClean(boolean invokedFromDaemon, boolean cleanMultipleFiles, boolean forceCleaning) throws DatabaseException{
     if (env.isClosed()) {
-            return 0;
-        }
-        int nOriginalLogFiles = profile.getNumberOfFiles();
-        int nFilesCleaned = 0;
-        while (true) {
-            if (nFilesCleaned >= nOriginalLogFiles) {
-                break;
-            }
-            if (env.isClosing()) {
-                break;
-            }
-            cleaner.processPending();
-            cleaner.deleteSafeToDeleteFiles();
-            boolean needLowUtilizationSet = cleaner.clusterResident || cleaner.clusterAll;
-            Long fileNum = fileSelector.selectFileForCleaning(profile, forceCleaning, needLowUtilizationSet,
-                cleaner.maxBatchFiles);
-            cleaner.updateReadOnlyFileCollections();
-            if (fileNum == null) {
-                break;
-            }
-            Label138:
+   return 0;
+  }
+  int nOriginalLogFiles = profile.getNumberOfFiles();
+  int nFilesCleaned = 0;
+  while (true) {
+   if (nFilesCleaned >= nOriginalLogFiles) {
+    break;
+   }
+   if (env.isClosing()) {
+    break;
+   }
+   cleaner.processPending();
+   cleaner.deleteSafeToDeleteFiles();
+   boolean needLowUtilizationSet = cleaner.clusterResident || cleaner.clusterAll;
+   Long fileNum = fileSelector.selectFileForCleaning(profile, forceCleaning, needLowUtilizationSet,
+    cleaner.maxBatchFiles);
+   cleaner.updateReadOnlyFileCollections();
+   if (fileNum == null) {
+    break;
+   }
+   Label138:
 resetPerRunCounters();
 			//original();
  //this.hook138();
-                boolean finished = false;
-            long fileNumValue = fileNum.longValue();
-            int runId = ++cleaner.nCleanerRuns;
-            try {
-                String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
-                Label139:
+    boolean finished = false;
+   long fileNumValue = fileNum.longValue();
+   int runId = ++cleaner.nCleanerRuns;
+   try {
+    String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
+    Label139:
 traceMsg += " begins backlog=" + cleaner.nBacklogFiles;
 			//return original(traceMsg);
  //traceMsg = this.hook139(traceMsg);
-                Label121:
+     Label121:
 Tracer.trace(Level.INFO, env, traceMsg);
 //	original(traceMsg);
  //this.hook121(traceMsg);
-                if (DEBUG_TRACING) {
-                    System.out.println("\n" + traceMsg);
-                }
-                if (processFile(fileNum)) {
-                    fileSelector.addCleanedFile(fileNum);
-                    nFilesCleaned += 1;
-                    Label140:
+     if (DEBUG_TRACING) {
+      System.out.println("\n" + traceMsg);
+     }
+    if (processFile(fileNum)) {
+     fileSelector.addCleanedFile(fileNum);
+     nFilesCleaned += 1;
+     Label140:
 accumulatePerRunCounters();
 			//original();
  //this.hook140();
-                        finished = true;
-                }
-            } catch (IOException IOE) {
-                Label122:
+      finished = true;
+    }
+   } catch (IOException IOE) {
+    Label122:
 Tracer.trace(env, "Cleaner", "doClean", "", IOE);
 	//original(IOE);
  //this.hook122(IOE);
-                throw new DatabaseException(IOE);
-            } finally {
-                if (!finished) {
-                    fileSelector.putBackFileForCleaning(fileNum);
-                }
-                String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue) +
-                    " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
-                Label141:
+     throw new DatabaseException(IOE);
+   }
+   finally {
+    if (!finished) {
+     fileSelector.putBackFileForCleaning(fileNum);
+    }
+    String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue) +
+     " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
+    Label141:
 traceMsg += " nEntriesRead=" + nEntriesReadThisRun + " nINsObsolete=" + nINsObsoleteThisRun + " nINsCleaned="
 				+ nINsCleanedThisRun + " nINsDead=" + nINsDeadThisRun + " nINsMigrated=" + nINsMigratedThisRun
 				+ " nLNsObsolete=" + nLNsObsoleteThisRun + " nLNsCleaned=" + nLNsCleanedThisRun + " nLNsDead="
@@ -213,19 +214,19 @@ traceMsg += " nEntriesRead=" + nEntriesReadThisRun + " nINsObsolete=" + nINsObso
 				+ " nLNQueueHits=" + nLNQueueHitsThisRun + " nLNsLocked=" + nLNsLockedThisRun;
 			//return original(traceMsg);
  //traceMsg = this.hook141(traceMsg);
-                Label123:
+     Label123:
 Tracer.trace(Level.SEVERE, env, traceMsg);
 	//original(traceMsg);
-    //this.hook123(traceMsg);
-                if (DEBUG_TRACING) {
-                    System.out.println("\n" + traceMsg);
-                }
-            }
-            if (!cleanMultipleFiles) {
-                break;
-            }
-        }
-        return nFilesCleaned;
+ //this.hook123(traceMsg);
+     if (DEBUG_TRACING) {
+      System.out.println("\n" + traceMsg);
+     }
+   }
+   if (!cleanMultipleFiles) {
+    break;
+   }
+  }
+  return nFilesCleaned;
   }
 
 
@@ -234,7 +235,7 @@ Tracer.trace(Level.SEVERE, env, traceMsg);
    * Process all log entries in the given file. Note that we check for obsolete entries using the active TFS (TrackedFileSummary) for a file while it is being processed, and we prohibit flushing (eviction) of that offset information until file processing is complete. An entry could become obsolete because: 1- normal application activity deletes or updates the entry, 2- proactive migration migrates the entry before we process it, or 3- if trackDetail is false. However, checking the TFS is expensive if it has many entries, because we perform a linear search. There is a tradeoff between the cost of the TFS lookup and its benefit, which is to avoid a tree search if the entry is obsolete. Note that many more lookups for non-obsolete entries than obsolete entries will typically be done. In spite of that we check the tracked summary to avoid the situation where eviction does proactive migration, and evicts a BIN that is very soon afterward fetched during cleaning.
    * @return false if we aborted file processing because the environment isbeing closed.
    */
-  // line 169 "../../../../FileProcessor.ump"
+  // line 170 "../../../../FileProcessor.ump"
    private boolean processFile(Long fileNum) throws DatabaseException,IOException{
     return new FileProcessor_processFile(this, fileNum).execute();
   }
@@ -246,7 +247,7 @@ Tracer.trace(Level.SEVERE, env, traceMsg);
    * @param info
    * @param offset
    */
-  // line 179 "../../../../FileProcessor.ump"
+  // line 180 "../../../../FileProcessor.ump"
    private void processLN(Long fileNum, TreeLocation location, Long offset, LNInfo info, Object lookAheadCachep, Map dbCache) throws DatabaseException{
     new FileProcessor_processLN(this, fileNum, location, offset, info, lookAheadCachep, dbCache).execute();
   }
@@ -262,80 +263,80 @@ Tracer.trace(Level.SEVERE, env, traceMsg);
    * @param indexis the BIN index found in the tree.
    * @param parentDINis non-null for a DupCountLN only; if non-null, is latched onmethod entry and exit.
    */
-  // line 193 "../../../../FileProcessor.ump"
+  // line 194 "../../../../FileProcessor.ump"
    private void processFoundLN(LNInfo info, long logLsn, long treeLsn, BIN bin, int index, DIN parentDIN) throws DatabaseException{
     LN ln = info.getLN();
-        byte[] key = info.getKey();
-        byte[] dupKey = info.getDupKey();
-        DatabaseImpl db = bin.getDatabase();
-        boolean isDupCountLN = parentDIN != null;
-        boolean obsolete = false;
-        boolean migrated = false;
-        boolean lockDenied = false;
-        boolean completed = false;
-        long nodeId = ln.getNodeId();
-        BasicLocker locker = null;
-        try {
-            Tree tree = db.getTree();
-            assert tree != null;
-            if (treeLsn != logLsn) {
-                locker = new BasicLocker(env);
-                LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
-                if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-                    Label142:
+  byte[] key = info.getKey();
+  byte[] dupKey = info.getDupKey();
+  DatabaseImpl db = bin.getDatabase();
+  boolean isDupCountLN = parentDIN != null;
+  boolean obsolete = false;
+  boolean migrated = false;
+  boolean lockDenied = false;
+  boolean completed = false;
+  long nodeId = ln.getNodeId();
+  BasicLocker locker = null;
+  try {
+   Tree tree = db.getTree();
+   assert tree != null;
+   if (treeLsn != logLsn) {
+    locker = new BasicLocker(env);
+    LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
+    if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+     Label142:
 nLNsLockedThisRun++;
 			//original();
  //this.hook142();
-                        lockDenied = true;
-                }
-                else {
-                    Label143:
+      lockDenied = true;
+    }
+    else {
+     Label143:
 nLNsDeadThisRun++;
 			//original();
  //this.hook143();
-                        obsolete = true;
-                }
-            }
-            if (!obsolete && !lockDenied) {
-                if (isDupCountLN) {
-                    ChildReference dclRef = parentDIN.getDupCountLNRef();
-                    dclRef.setMigrate(true);
-                    parentDIN.setDirty(true);
-                    if (treeLsn == logLsn && dclRef.getTarget() == null) {
-                        ln.postFetchInit(db, logLsn);
-                        parentDIN.updateDupCountLN(ln);
-                    }
-                } else {
-                    bin.setMigrate(index, true);
-                    bin.setDirty(true);
-                    if (treeLsn == logLsn && bin.getTarget(index) == null) {
-                        ln.postFetchInit(db, logLsn);
-                        bin.updateEntry(index, ln);
-                    }
-                    if (PROHIBIT_DELTAS_WHEN_FETCHING && bin.getGeneration() == 0) {
-                        bin.setProhibitNextDelta();
-                    }
-                    bin.setGeneration();
-                }
-                Label144:
+      obsolete = true;
+    }
+   }
+   if (!obsolete && !lockDenied) {
+    if (isDupCountLN) {
+     ChildReference dclRef = parentDIN.getDupCountLNRef();
+     dclRef.setMigrate(true);
+     parentDIN.setDirty(true);
+     if (treeLsn == logLsn && dclRef.getTarget() == null) {
+      ln.postFetchInit(db, logLsn);
+      parentDIN.updateDupCountLN(ln);
+     }
+    } else {
+     bin.setMigrate(index, true);
+     bin.setDirty(true);
+     if (treeLsn == logLsn && bin.getTarget(index) == null) {
+      ln.postFetchInit(db, logLsn);
+      bin.updateEntry(index, ln);
+     }
+     if (PROHIBIT_DELTAS_WHEN_FETCHING && bin.getGeneration() == 0) {
+      bin.setProhibitNextDelta();
+     }
+     bin.setGeneration();
+    }
+    Label144:
 nLNsMarkedThisRun++;
 			//original();
  //this.hook144();
-                    migrated = true;
-            }
-            completed = true;
-        } finally {
-            if (locker != null) {
-                locker.operationEnd();
-            }
-            if (completed && lockDenied) {
-                fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
-            }
-            Label124:
+     migrated = true;
+   }
+   completed = true;
+  } finally {
+   if (locker != null) {
+    locker.operationEnd();
+   }
+   if (completed && lockDenied) {
+    fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
+   }
+   Label124:
 cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln, logLsn, completed, obsolete, migrated);
 			//original(logLsn, ln, obsolete, migrated, completed);
  //this.hook124(logLsn, ln, obsolete, migrated, completed);
-        }
+  }
   }
 
 
@@ -343,62 +344,67 @@ cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln, logLsn, complete
    * 
    * If an IN is still in use in the in-memory tree, dirty it. The checkpoint invoked at the end of the cleaning run will end up rewriting it.
    */
-  // line 259 "../../../../FileProcessor.ump"
+  // line 260 "../../../../FileProcessor.ump"
    private void processIN(IN inClone, DatabaseImpl db, long lsn) throws DatabaseException{
     try {
-            boolean obsolete = false;
-            boolean dirtied = false;
-            boolean completed = false;
-            //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
-            Label125:
+   boolean obsolete = false;
+   boolean dirtied = false;
+   boolean completed = false;
+   //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
+   Label125:
 nINsCleanedThisRun++;
 			//original(inClone, db, lsn, obsolete, dirtied, completed);
 
-                boolean b = db == null;
-            //b = this.hook159(db, b);
-            Label159:
+    boolean b = db == null;
+   //b = this.hook159(db, b);
+   Label159:
 b |= db.isDeleted();
 //	return original(db, b);
 
-                if (b) {
-                    //this.hook160(db);
-                    Label160:
+    if (b) {
+     //this.hook160(db);
+     Label160:
 cleaner.addPendingDB(db);
 			//original(db);
  Label151:
 nINsDeadThisRun++;
 			//original();
  //this.hook151();
-                        obsolete = true;
-                    completed = true;
-                    throw new ReturnVoid();
-                }
-            Tree tree = db.getTree();
-            assert tree != null;
-            IN inInTree = findINInTree(tree, db, inClone, lsn);
-            if (inInTree == null) {
-                Label152:
+      obsolete = true;
+     completed = true;
+     return; //throw new ReturnVoid();
+    }
+   Tree tree = db.getTree();
+   assert tree != null;
+   IN inInTree = findINInTree(tree, db, inClone, lsn);
+   if (inInTree == null) {
+    Label152:
 nINsDeadThisRun++;
 			//original();
  //this.hook152();
-                    obsolete = true;
-            }
-            else {
-                Label153:
+     obsolete = true;
+   }
+   else {
+    Label153:
 nINsMigratedThisRun++;
 			//original();
  //this.hook153();
-                    inInTree.setDirty(true);
-                inInTree.setProhibitNextDelta();
-                Label136: //this.hook136(inInTree);
-                    dirtied = true;
-            }
-            completed = true;
-            //End of hook125
-        } catch (ReturnVoid r) {
-            return;
-        }
-Label125_1: ;//;
+     inInTree.setDirty(true);
+    inInTree.setProhibitNextDelta();
+    Label136:
+inInTree.releaseLatch();
+//	original(inInTree);
+ //this.hook136(inInTree);
+     dirtied = true;
+   }
+   completed = true;
+   //End of hook125
+  } 
+  finally {
+    Label125_1:
+cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, completed, obsolete, dirtied);
+ ; //;
+  }
   }
 
 
@@ -406,49 +412,51 @@ Label125_1: ;//;
    * 
    * Given a clone of an IN that has been taken out of the log, try to find it in the tree and verify that it is the current one in the log. Returns the node in the tree if it is found and it is current re: LSN's. Otherwise returns null if the clone is not found in the tree or it's not the latest version. Caller is responsible for unlatching the returned IN.
    */
-  // line 302 "../../../../FileProcessor.ump"
+  // line 304 "../../../../FileProcessor.ump"
    private IN findINInTree(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException{
     try {
-            if (inClone.isDbRoot()) {
-                IN rootIN = isRoot(tree, db, inClone, lsn);
-                if (rootIN == null) {
-                    return null;
-                } else {
-                    return rootIN;
-                }
-            }
-            inClone.latch(Cleaner.UPDATE_GENERATION);
-            SearchResult result = null;
-            Label134: //this.hook134(tree, db, inClone, lsn, result);
-            result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
-            if (!result.exactParentFound) {
-                throw new ReturnObject(null);
-            }
-            int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
-            if (compareVal > 0) {
-                throw new ReturnObject(null);
-            } 
-            else {
-                IN in ;
-                if (compareVal == 0) { in = (IN) result.parent.getTarget(result.index);
-                    if ( in == null) { in = inClone; in .postFetchInit(db, lsn);
-                        result.parent.updateEntry(result.index, in );
-                    }
-                } else { in = (IN) result.parent.fetchTarget(result.index);
-                } in.latch(Cleaner.UPDATE_GENERATION);
-                throw new ReturnObject( in );
-            }
-            Label134_1:
+   if (inClone.isDbRoot()) {
+    IN rootIN = isRoot(tree, db, inClone, lsn);
+    if (rootIN == null) {
+     return null;
+    } else {
+     return rootIN;
+    }
+   }
+   inClone.latch(Cleaner.UPDATE_GENERATION);
+   SearchResult result = null;
+   Label134: //this.hook134(tree, db, inClone, lsn, result);
+    result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
+   if (!result.exactParentFound) {
+    throw new ReturnObject(null);
+   }
+   int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
+   if (compareVal > 0) {
+    throw new ReturnObject(null);
+   } else {
+    IN in ;
+    if (compareVal == 0) {
+     in = (IN) result.parent.getTarget(result.index);
+     if ( in == null) {
+      in = inClone; in .postFetchInit(db, lsn);
+      result.parent.updateEntry(result.index, in );
+     }
+    } else {
+     in = (IN) result.parent.fetchTarget(result.index);
+    } in .latch(Cleaner.UPDATE_GENERATION);
+    throw new ReturnObject( in );
+   }
+   Label134_1:
 if ((result != null) && (result.exactParentFound)) {
 					result.parent.releaseLatch();
 	    }
- ;//
-            //End of hook134
+ ; //
+   //End of hook134
 
-            throw ReturnHack.returnObject;
-        } catch (ReturnObject r) {
-            return (IN) r.value;
-        }
+   throw ReturnHack.returnObject;
+  } catch (ReturnObject r) {
+   return (IN) r.value;
+  }
   }
 
 
@@ -456,10 +464,10 @@ if ((result != null) && (result.exactParentFound)) {
    * 
    * Check if the cloned IN is the same node as the root in tree. Return the real root if it is, null otherwise. If non-null is returned, the returned IN (the root) is latched -- caller is responsible for unlatching it.
    */
-  // line 345 "../../../../FileProcessor.ump"
+  // line 349 "../../../../FileProcessor.ump"
    private IN isRoot(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException{
     RootDoWork rdw = new RootDoWork(db, inClone, lsn);
-        return tree.withRootLatchedShared(rdw);
+  return tree.withRootLatchedShared(rdw);
   }
 
 
@@ -467,92 +475,11 @@ if ((result != null) && (result.exactParentFound)) {
    * 
    * XXX: Was this intended to override Thread.toString()? If so it no longer does, because we separated Thread from DaemonThread.
    */
-  // line 353 "../../../../FileProcessor.ump"
+  // line 357 "../../../../FileProcessor.ump"
    public String toString(){
     StringBuffer sb = new StringBuffer();
-        sb.append("<Cleaner name=\"").append(name).append("\"/>");
-        return sb.toString();
-  }
-
-
-  /**
-   * protected void hook121(String traceMsg) throws DatabaseException, IOException {}
-   * protected void hook122(IOException IOE) throws DatabaseException {}
-   * protected void hook123(String traceMsg) throws DatabaseException {}
-   * protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed)
-   * throws DatabaseException {}
-   * protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
-   * throws DatabaseException {
-   * }
-   * protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result)
-   * throws DatabaseException {
-   * 
-   * result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
-   * if (!result.exactParentFound) {
-   * throw new ReturnObject(null);
-   * }
-   * int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
-   * if (compareVal > 0) {
-   * throw new ReturnObject(null);
-   * } else {
-   * IN in;
-   * if (compareVal == 0) {
-   * in = (IN) result.parent.getTarget(result.index);
-   * if (in == null) {
-   * in = inClone;
-   * in.postFetchInit(db, lsn);
-   * result.parent.updateEntry(result.index, in);
-   * }
-   * } else {
-   * in = (IN) result.parent.fetchTarget(result.index);
-   * }
-   * in.latch(Cleaner.UPDATE_GENERATION);
-   * throw new ReturnObject(in);
-   * }
-   * }
-   * protected void hook136(IN inInTree) throws DatabaseException {
-   * }
-   * protected void hook138() throws DatabaseException {
-   * }
-   */
-  // line 406 "../../../../FileProcessor.ump"
-   protected String hook139(String traceMsg) throws DatabaseException,IOException{
-    return traceMsg;
-  }
-
-  // line 409 "../../../../FileProcessor.ump"
-   protected void hook140() throws DatabaseException,IOException{
-    
-  }
-
-  // line 412 "../../../../FileProcessor.ump"
-   protected String hook141(String traceMsg) throws DatabaseException{
-    return traceMsg;
-  }
-
-
-  /**
-   * protected void hook142() throws DatabaseException {
-   * }
-   * protected void hook143() throws DatabaseException {
-   * }
-   * protected void hook144() throws DatabaseException {
-   * }
-   * protected void hook151() throws DatabaseException {
-   * }
-   * protected void hook152() throws DatabaseException {
-   * }
-   * protected void hook153() throws DatabaseException {
-   * }
-   */
-  // line 434 "../../../../FileProcessor.ump"
-   protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException{
-    return b;
-  }
-
-  // line 437 "../../../../FileProcessor.ump"
-   protected void hook160(DatabaseImpl db) throws DatabaseException{
-    
+  sb.append("<Cleaner name=\"").append(name).append("\"/>");
+  return sb.toString();
   }
 
 
@@ -665,13 +592,12 @@ if ((result != null) && (result.exactParentFound)) {
   
   
   @MethodObject
-    @MethodObject
   // line 28 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
   // line 16 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 23 "../../../../Statistics_FileProcessor_inner.ump"
   // line 4 "../../../../Checksum_FileProcessor_inner.ump"
-  // line 37 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+  // line 36 "../../../../LookAHEADCache_FileProcessor_inner.ump"
   // line 4 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
   // line 4 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
   // line 4 "../../../../Derivative_LookAHEADCache_Evictor_CriticalEviction_FileProcessor_inner.ump"
@@ -842,7 +768,13 @@ if ((result != null) && (result.exactParentFound)) {
             }
             Label129:
   while (!lookAheadCache.isEmpty()) {
-            Label116: //this.hook116();
+            Label116:
+  //  Label129 introduced in LookAHEADCache FileProcessor_inner.ump ; after Label129: execute() {
+          if (Cleaner.DO_CRITICAL_EVICTION) {
+            _this.env.getEvictor().doCriticalEviction();
+          }
+         // original();
+   //this.hook116();
             _this.processLN(fileNum,location,null,null,lookAheadCache,dbCache);
           }
           //original();
@@ -1012,16 +944,6 @@ if ((result != null) && (result.exactParentFound)) {
           //original();
     }
   
-  // line 5 "../../../../Derivative_LookAHEADCache_Evictor_CriticalEviction_FileProcessor_inner.ump"
-    protected void hook116: execute () 
-    {
-      //  Label129 introduced in LookAHEADCache FileProcessor_inner.ump ; after Label129: execute() {
-          if (Cleaner.DO_CRITICAL_EVICTION) {
-            _this.env.getEvictor().doCriticalEviction();
-          }
-         // original();
-    }
-  
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1029,7 +951,6 @@ if ((result != null) && (result.exactParentFound)) {
   
   
   @MethodObject
-    @MethodObject
   // line 198 "../../../../FileProcessor_static.ump"
   // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 5 "../../../../Statistics_FileProcessor_inner.ump"
@@ -1075,7 +996,7 @@ if ((result != null) && (result.exactParentFound)) {
       _this.nLNsCleanedThisRun++;
                   //original();
       // END OF UMPLE BEFORE INJECTION
-      // line 9 "../../../../LookAHEADCache_FileProcessor_inner.ump"
+      // line 8 "../../../../LookAHEADCache_FileProcessor_inner.ump"
       lookAheadCache=(LookAheadCache)lookAheadCachep;
               //original();
       // END OF UMPLE BEFORE INJECTION

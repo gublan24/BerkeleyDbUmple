@@ -249,7 +249,7 @@ use BooleanBinding.ump;
 use TupleBase.ump;
 use TupleTupleBinding.ump;
 
-use ../com/ump_static/Master.ump;
+use ../ump_inner/Base_Inner_Master.ump;
 use ../interfaces_required.ump;
 
 

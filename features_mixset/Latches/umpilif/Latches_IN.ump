@@ -56,14 +56,11 @@ class IN
 	latch.acquire();
     }
 
-    protected void hook619: latchNoWait(boolean ){
-	//if (latch.acquireNoWait()) {
-	    //original(updateGeneration);
-	//} else {
-	    if(! latch.acquireNoWait()) 
-        throw new ReturnBoolean(false);
-	//}
-    }
+  after Label619: latchNoWait(boolean ){
+      if (! latch.acquireExclusiveNoWait()) {
+            return false;
+      }
+  }
 
     /** 
      * See if you are the parent of this child. If not, find a child of your's that may be the parent, and return it. If there are no possiblities, return null. Note that the keys of the target are passed in so we don't have to latch the target to look at them. Also, this node is latched upon entry.

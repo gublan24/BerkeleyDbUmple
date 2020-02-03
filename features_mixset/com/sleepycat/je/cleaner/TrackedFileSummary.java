@@ -177,7 +177,6 @@ updateMemoryBudget(-MemoryBudget.TFS_LIST_SEGMENT_OVERHEAD);
   
   
   @MethodObject
-    @MethodObject
   // line 4 "../../../../TrackedFileSummary_static.ump"
   // line 4 "../../../../MemoryBudget_TrackedFileSummary_inner.ump"
   public static class TrackedFileSummary_trackObsolete

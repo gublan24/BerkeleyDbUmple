@@ -1,0 +1,52 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/INList.java
+namespace com.sleepycat.je.dbi;
+class INList {
+   static class INList_add {
+      INList_add(    INList _this,    IN in){
+        this._this=_this;
+        this.in=in;
+      }
+      void execute() throws DatabaseException {
+        Label344: //this.hook344();
+        addToMajor=true;
+try{
+        Label343: //this.hook343();
+  			Label345: //this.hook345();
+        _this.addAndSetMemory(_this.ins,in);
+Label345_1:
+}
+finally{
+         Label343_1:  ;//
+}
+				//End of hook345
+				//End of hook343
+      }
+      protected INList _this;
+      protected IN in;
+      protected boolean enteredWithLatchHeld;
+      protected boolean addToMajor;
+/*      protected void hook343() throws DatabaseException {        this.hook345();}
+      protected void hook344() throws DatabaseException {
+      }
+      protected void hook345() throws DatabaseException {
+        _this.addAndSetMemory(_this.ins,in);
+      }
+*/
+    }
+   static class INList_addAndSetMemory {
+      INList_addAndSetMemory(    INList _this,    Set set,    IN in){
+        this._this=_this;
+        this.set=set;
+        this.in=in;
+      }
+      void execute(){
+        addOk=set.add(in);
+        assert addOk : "failed adding in " + in.getNodeId();
+      }
+      protected INList _this;
+      protected Set set;
+      protected IN in;
+      protected boolean addOk;
+      protected MemoryBudget mb;
+    }
+}

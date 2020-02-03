@@ -2,7 +2,7 @@ namespace com.sleepycat.je;
 
 class Database
 {
-    protected void hook37:  verify(VerifyConfig ) {
+    after Label37:  verify(VerifyConfig ) {
 	databaseImpl.checkIsDeleted("verify");
 //	original();
     }

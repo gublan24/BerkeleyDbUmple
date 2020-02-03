@@ -84,31 +84,7 @@ class FileManager
 	  if (fileHandle == null) // continue 
   }
  
- 
-//
-//  protected FileHandle hook462(long fileNum, Long fileId, FileHandle fileHandle)
-//	    throws LogException, DatabaseException {
-//	fileHandle = fileCache.get(fileId);
-//	if (fileHandle == null) {
-//	    fileHandle = original(fileNum, fileId, fileHandle);
-//	}
-//	return fileHandle;
- //   }
 
-//  after Label463: getFileHandle(long) 
-//  {
-//    fileHandle = fileCache.get(fileId);
-//	  if (fileHandle == null) // continue 
-//  }
-
-//    protected FileHandle hook463(long fileNum, Long fileId, FileHandle fileHandle)
-//	    throws LogException, DatabaseException {
-//	fileHandle = fileCache.get(fileId);
-//	if (fileHandle == null) {
-//	    fileHandle = original(fileNum, fileId, fileHandle);
-//	}
-//	return fileHandle;
- //   }
 
   after Label464: getFileHandle(long )
 	{

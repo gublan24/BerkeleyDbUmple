@@ -485,7 +485,6 @@ if (fileHandle != null) {
   
   
   @MethodObject
-    @MethodObject
   // line 6 "../../../../FileReader_static.ump"
   // line 4 "../../../../Checksum_FileReader_inner.ump"
   // line 4 "../../../../LoggingSevere_FileReader_inner.ump"

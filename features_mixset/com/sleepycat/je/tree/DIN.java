@@ -411,7 +411,6 @@ public class DIN extends IN
   
   
   @MethodObject
-    @MethodObject
   // line 4 "../../../../DIN_static.ump"
   // line 15 "../../../../MemoryBudget_DIN_inner.ump"
   public static class DIN_updateDupCountLN
@@ -473,7 +472,6 @@ public class DIN extends IN
   
   
   @MethodObject
-    @MethodObject
   // line 17 "../../../../DIN_static.ump"
   // line 4 "../../../../MemoryBudget_DIN_inner.ump"
   public static class DIN_updateDupCountLNRefAndNullTarget

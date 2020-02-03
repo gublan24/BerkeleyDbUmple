@@ -1,45 +1,36 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/CPTime/com/sleepycat/je/recovery/Checkpointer.java
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-   static class Checkpointer_getWakeupPeriod {
-      before execute()  {
-        wakeupPeriod=PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
-        //return original();
-      }
-      after Label540: execute(){
-        result+=wakeupPeriod;
-        //original();
-      }
-    }
-   static class Checkpointer_isRunnable {
+ static class Checkpointer_getWakeupPeriod {
+  before execute() {
+   wakeupPeriod = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
+   //return original();
+  }
+  after Label540: execute() {
+   result += wakeupPeriod;
+   //original();
+  }
+ }
+ static class Checkpointer_isRunnable {
 
-      after Label542:execute() {
-        if (useTimeInterval != 0) {
-          lastUsedLsn=_this.envImpl.getFileManager().getLastUsedLsn();
-          if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn,_this.lastCheckpointEnd) != 0)) {
-            throw new ReturnBoolean(true);
-          }
-					 else {
-								    throw new ReturnBoolean(false);
-								  }
-								}
-				 else {
-						    throw new ReturnBoolean(false); // added from hook542() 
-						  }
-      }
-      
-			after Label543:execute(){
-        if (config.getMinutes() != 0) {
-          useTimeInterval=config.getMinutes() * 60 * 1000;
-				}
-				 else {
-						     Label544: useTimeInterval=_this.timeInterval; // from hook544() 
-				}
-      }
-
-      //protected void hook544() throws DatabaseException {
-      //  useTimeInterval=_this.timeInterval;
-       // original();
-      //}
+  after Label542: execute() {
+   if (useTimeInterval != 0) {
+    lastUsedLsn = _this.envImpl.getFileManager().getLastUsedLsn();
+    if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn, _this.lastCheckpointEnd) != 0)) {
+     return true;//throw new ReturnBoolean(true);
+    } else {
+     return false;//throw new ReturnBoolean(false);
     }
+   } else {
+    return false; //throw new ReturnBoolean(false); // added from hook542() 
+   }
+  }
+
+  after Label543: execute() {
+   if (config.getMinutes() != 0) {
+    useTimeInterval = config.getMinutes() * 60 * 1000;
+   } else {
+    Label544: useTimeInterval = _this.timeInterval; // from hook544() 
+   }
+  }
+ }
 }

@@ -1,0 +1,116 @@
+    
+  private boolean isRunnable(CheckpointConfig config)
+        throws DatabaseException {
+
+        /* Figure out if we're using log size or time to determine interval.*/
+        long useBytesInterval = 0;
+        long useTimeInterval = 0;
+        long nextLsn = DbLsn.NULL_LSN;
+        try {
+            if (config.getForce()) {
+                return true;
+            } else if (config.getKBytes() != 0) {
+                useBytesInterval = config.getKBytes() << 10;
+            } else if (config.getMinutes() != 0) {
+                // convert to millis
+                useTimeInterval = config.getMinutes() * 60 * 1000;
+            } else if (logSizeBytesInterval != 0) {
+                useBytesInterval = logSizeBytesInterval;
+            } else {
+                useTimeInterval = timeInterval;
+            }
+
+            /* 
+             * If our checkpoint interval is defined by log size, check on how
+             * much log has grown since the last checkpoint.
+             */
+            if (useBytesInterval != 0) {
+                nextLsn = envImpl.getFileManager().getNextLsn();
+                if (DbLsn.getNoCleaningDistance(nextLsn, lastCheckpointEnd,
+						logFileMax) >=
+                    useBytesInterval) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (useTimeInterval != 0) {
+
+                /* 
+                 * Our checkpoint is determined by time.  If enough time has
+                 * passed and some log data has been written, do a checkpoint.
+                 */
+                long lastUsedLsn = envImpl.getFileManager().getLastUsedLsn();
+                if (((System.currentTimeMillis() - lastCheckpointMillis) >=
+                     useTimeInterval) &&
+                    (DbLsn.compareTo(lastUsedLsn, lastCheckpointEnd) != 0)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } finally {
+            StringBuffer sb = new StringBuffer();
+            sb.append("size interval=").append(useBytesInterval);
+            if (nextLsn != DbLsn.NULL_LSN) {
+                sb.append(" nextLsn=").
+		    append(DbLsn.getNoFormatString(nextLsn));
+            }
+            if (lastCheckpointEnd != DbLsn.NULL_LSN) {
+                sb.append(" lastCkpt=");
+                sb.append(DbLsn.getNoFormatString(lastCheckpointEnd));
+            }
+            sb.append(" time interval=").append(useTimeInterval);
+            sb.append(" force=").append(config.getForce());
+            
+            Tracer.trace(Level.FINEST,
+                         envImpl, 
+                         sb.toString());
+        }
+    }
+
+====================================================
+static class Checkpointer_isRunnable {
+  Checkpointer_isRunnable(Checkpointer _this, CheckpointConfig config) {
+   this._this = _this;
+   this.config = config;
+  }
+
+  boolean execute() throws DatabaseException {
+
+   useBytesInterval = 0;
+   useTimeInterval = 0;
+   nextLsn = DbLsn.NULL_LSN;
+   try {
+    if (config.getForce()) {
+     return true;
+    } else {
+     Label543: ;
+     Label544: ;
+    }
+    Label542: ;
+   } 
+   finally {
+    Label521: ;
+   }
+
+  }
+
+----------------------------------------------------------------------------------------------------
+ static class Checkpointer_isRunnable {
+
+  after Label542: execute() {
+   if (useTimeInterval != 0) {
+    lastUsedLsn = _this.envImpl.getFileManager().getLastUsedLsn();
+    if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn, _this.lastCheckpointEnd) != 0)) {
+     return true;
+    } else {
+     return false;
+    }
+   } else {
+    return false; 
+   }
+  }
+
+}

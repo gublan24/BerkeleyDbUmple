@@ -138,7 +138,10 @@ Tracer.trace(Level.CONFIG, env, "Recovery checkpoint search, " + info);
 				env.readMapTreeFromLog(info.useRootLsn);
 				buildTree();
 					} else {
-				Label556:           ;  //this.hook556();
+				Label556:
+env.enableDebugLoggingToDbLog();
+	//original();
+           ;  //this.hook556();
 				Label560:
 Tracer.trace(Level.CONFIG, env, "Recovery w/no files.");
 	//original();
@@ -340,7 +343,7 @@ Tracer.trace(Level.CONFIG, env, passEndHeader(8, start, end) + info.toString());
 	//original(start, end);
            ;  //this.hook564(start, end);
 	rebuildINList();
-//	Label:           ;  //this.hook596();
+
   Label596:
 env.invokeEvictor();
 			//original();
@@ -383,7 +386,10 @@ Tracer.trace(Level.CONFIG, env, passEndHeader(10, start, end) + info.toString())
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	Label593://Label:           ;  //this.hook593(reader);
+	Label593:
+reader.setAlwaysValidateChecksum(true);
+			//original(reader);
+//          ;  //this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();
@@ -618,7 +624,6 @@ Tracer.trace(Level.INFO, env, "Found unfinished prepare record: id: " + reader.g
 			}
 		    }
 		    if (processThisLN) {
-			//Label:           ;  //this.hook598();
       Label598:
 env.invokeEvictor();
 
@@ -657,7 +662,7 @@ env.invokeEvictor();
    * 
    * Rebuild the in memory inList with INs that have been made resident by the recovery process.
    */
-  // line 540 "../../../../RecoveryManager.ump"
+  // line 539 "../../../../RecoveryManager.ump"
    private void rebuildINList() throws DatabaseException{
     env.getInMemoryINs().clear();
 	env.getDbMapTree().rebuildINListMapDb();
@@ -682,7 +687,7 @@ env.invokeEvictor();
    * @param inLsnLSN of this in -- may not be the same as the log LSN if thecurrent entry is a BINDelta
    * @param requireExactMatch -true if we won't place this node in the tree unless we find exactly that parent. Used for BINDeltas, where we want to only apply the BINDelta to that exact node.
    */
-  // line 563 "../../../../RecoveryManager.ump"
+  // line 562 "../../../../RecoveryManager.ump"
    private void replaceOrInsert(DatabaseImpl db, IN inFromLog, long logLsn, long inLsn, boolean requireExactMatch) throws DatabaseException{
     List trackingList = null;
 	try {
@@ -719,7 +724,7 @@ inFromLog.releaseLatchIfOwner();
    * 
    * Dump a tracking list into a string.
    */
-  // line 588 "../../../../RecoveryManager.ump"
+  // line 587 "../../../../RecoveryManager.ump"
    private String printTrackList(List trackingList){
     if (trackingList != null) {
 	    StringBuffer sb = new StringBuffer();
@@ -741,7 +746,7 @@ inFromLog.releaseLatchIfOwner();
    * 
    * Replay an IN delete. Remove an entry from an IN to reflect a reverse split.
    */
-  // line 608 "../../../../RecoveryManager.ump"
+  // line 607 "../../../../RecoveryManager.ump"
    private void replayINDelete(DatabaseImpl db, long nodeId, boolean containsDuplicates, byte [] mainKey, byte [] dupKey, long logLsn) throws DatabaseException{
     boolean found = false;
 	boolean deleted = false;
@@ -782,7 +787,7 @@ traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplic
    * 
    * If the root of this tree is null, use this IN from the log as a root. Note that we should really also check the LSN of the mapLN, because perhaps the root is null because it's been deleted. However, the replay of all the LNs will end up adjusting the tree correctly. If there is a root, check if this IN is a different LSN and if so, replace it.
    */
-  // line 635 "../../../../RecoveryManager.ump"
+  // line 634 "../../../../RecoveryManager.ump"
    private void replaceOrInsertRoot(DatabaseImpl db, IN inFromLog, long lsn) throws DatabaseException{
     boolean success = true;
 	Tree tree = db.getTree();
@@ -810,7 +815,7 @@ trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null,
    * 
    * Recover this root of a duplicate tree.
    */
-  // line 656 "../../../../RecoveryManager.ump"
+  // line 655 "../../../../RecoveryManager.ump"
    private void replaceOrInsertDuplicateRoot(DatabaseImpl db, DIN inFromLog, long lsn) throws DatabaseException{
     boolean found = true;
 	boolean inserted = false;
@@ -856,7 +861,7 @@ trace(detailedTraceLevel, db, TRACE_DUP_ROOT_REPLACE, success, inFromLog, lsn, p
 	}
   }
 
-  // line 693 "../../../../RecoveryManager.ump"
+  // line 692 "../../../../RecoveryManager.ump"
    private void replaceOrInsertChild(DatabaseImpl db, IN inFromLog, long logLsn, long inLsn, List trackingList, boolean requireExactMatch) throws DatabaseException{
     boolean inserted = false;
 	boolean replaced = false;
@@ -908,7 +913,7 @@ trace(detailedTraceLevel, db, TRACE_IN_REPLACE, success, inFromLog, logLsn, resu
    * @param infois a recovery stats object.
    * @return the LSN found in the tree, or null if not found.
    */
-  // line 734 "../../../../RecoveryManager.ump"
+  // line 733 "../../../../RecoveryManager.ump"
    private long redo(DatabaseImpl db, TreeLocation location, LN lnFromLog, byte [] mainKey, byte [] dupKey, long logLsn, RecoveryInfo info) throws DatabaseException{
     boolean found = false;
 	boolean replaced = false;
@@ -944,7 +949,7 @@ if (deletedKey != null) {
 					db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
 			}
 			//original(db, location, deletedKey);
- //Label:           ;  //this.hook594(db, location, deletedKey);
+           ;  //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;
@@ -985,7 +990,7 @@ trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, locatio
    * @param abortLsngives us the location of the original version of the node
    * @param infois a recovery stats object.
    */
-  // line 796 "../../../../RecoveryManager.ump"
+  // line 795 "../../../../RecoveryManager.ump"
    public static  void undo(Level traceLevel, DatabaseImpl db, TreeLocation location, LN lnFromLog, byte [] mainKey, byte [] dupKey, long logLsn, long abortLsn, boolean abortKnownDeleted, RecoveryInfo info, boolean splitsAllowed) throws DatabaseException{
     boolean found = false;
 	boolean replaced = false;
@@ -1072,7 +1077,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
    * @param keyto use when creating a new ChildReference object.
    * @return true if LN was inserted, false if it was a duplicate duplicate orif an attempt was made to insert a duplicate when allowDuplicates was false.
    */
-  // line 861 "../../../../RecoveryManager.ump"
+  // line 860 "../../../../RecoveryManager.ump"
    private static  boolean insertRecovery(DatabaseImpl db, TreeLocation location, long logLsn) throws DatabaseException{
     ChildReference newLNRef = new ChildReference(null, location.lnKey, logLsn);
 	BIN parentBIN = location.bin;
@@ -1107,7 +1112,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
    * 
    * Update file utilization info during redo.
    */
-  // line 894 "../../../../RecoveryManager.ump"
+  // line 893 "../../../../RecoveryManager.ump"
    private void redoUtilizationInfo(long logLsn, long treeLsn, long abortLsn, boolean abortKnownDeleted, LN ln, TxnNodeId txnNodeId, Set countedAbortLsnNodes){
     UtilizationTracker tracker = env.getUtilizationTracker();
 	if (ln.isDeleted()) {
@@ -1148,7 +1153,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
    * 
    * Update file utilization info during recovery undo (not abort undo).
    */
-  // line 933 "../../../../RecoveryManager.ump"
+  // line 932 "../../../../RecoveryManager.ump"
    private void undoUtilizationInfo(LN ln, long logLsn, long abortLsn, boolean abortKnownDeleted, TxnNodeId txnNodeId, Map countedFileSummaries, Set countedAbortLsnNodes){
     UtilizationTracker tracker = env.getUtilizationTracker();
 	Long logFileNum = new Long(DbLsn.getFileNumber(logLsn));
@@ -1173,7 +1178,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
    * 
    * Concoct a header for the recovery pass trace info.
    */
-  // line 955 "../../../../RecoveryManager.ump"
+  // line 954 "../../../../RecoveryManager.ump"
    private String passStartHeader(int passNum){
     return "Recovery Pass " + passNum + " start: ";
   }
@@ -1183,7 +1188,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
    * 
    * Concoct a header for the recovery pass trace info.
    */
-  // line 962 "../../../../RecoveryManager.ump"
+  // line 961 "../../../../RecoveryManager.ump"
    private String passEndHeader(int passNum, long start, long end){
     return "Recovery Pass " + passNum + " end (" + (end - start) + "): ";
   }
@@ -1193,13 +1198,13 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
    * 
    * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled. This is used to construct verbose trace messages for individual log entry processing.
    */
-  // line 971 "../../../../RecoveryManager.ump"
+  // line 970 "../../../../RecoveryManager.ump"
    private static  void trace(Level level, DatabaseImpl database, String debugType, boolean success, Node node, long logLsn, IN parent, boolean found, boolean replaced, boolean inserted, long replacedLsn, long abortLsn, int index){
     new RecoveryManager_trace(level, database, debugType, success, node, logLsn, parent, found, replaced, inserted,
 		replacedLsn, abortLsn, index).execute();
   }
 
-  // line 976 "../../../../RecoveryManager.ump"
+  // line 975 "../../../../RecoveryManager.ump"
    private void traceAndThrowException(long badLsn, String method, Exception origException) throws DatabaseException{
     String badLsnString = DbLsn.getNoFormatString(badLsn);
 	Label577:           ;  //this.hook577(method, origException, badLsnString);
@@ -1391,7 +1396,6 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
   
   @MethodObject
-    @MethodObject
   // line 44 "../../../../RecoveryManager_static.ump"
   // line 4 "../../../../loggingBase_RecoveryManager_inner.ump"
   public static class RecoveryManager_trace

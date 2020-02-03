@@ -1,0 +1,79 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/DatabaseImpl.java
+namespace com.sleepycat.je.dbi;
+class DatabaseImpl {
+  static class ObsoleteProcessor {
+      isA TreeNodeProcessor;
+      private UtilizationTracker tracker;
+      ObsoleteProcessor(    UtilizationTracker tracker){
+        this.tracker=tracker;
+      }
+      public void processLSN(    long childLsn,    LogEntryType childType){
+        assert childLsn != DbLsn.NULL_LSN;
+        tracker.countObsoleteNodeInexact(childLsn,childType);
+      }
+    }
+  static class LNCounter {
+      isA TreeNodeProcessor;
+      private long counter;
+      public void processLSN(    long childLsn,    LogEntryType childType){
+        assert childLsn != DbLsn.NULL_LSN;
+        if (childType.equals(LogEntryType.LOG_LN_TRANSACTIONAL) || childType.equals(LogEntryType.LOG_LN)) {
+          counter++;
+        }
+      }
+      long getCount(){
+        return counter;
+      }
+    }
+  static class HaltPreloadException {
+      isA RuntimeException;
+      private PreloadStatus status;
+      HaltPreloadException(    PreloadStatus status){
+        super(status.toString());
+        this.status=status;
+      }
+      PreloadStatus getStatus(){
+        return status;
+      }
+    }
+   static class DatabaseImpl_preload {
+      DatabaseImpl_preload(    DatabaseImpl _this,    PreloadConfig config){
+        this._this=_this;
+        this.config=config;
+      }
+      PreloadStats execute() throws DatabaseException {
+        maxBytes=config.getMaxBytes();
+        maxMillisecs=config.getMaxMillisecs();
+        targetTime=Long.MAX_VALUE;
+        if (maxMillisecs > 0) {
+          targetTime=System.currentTimeMillis() + maxMillisecs;
+        }
+        //this.hook290();
+        Label290:
+        ret=new PreloadStats();
+        callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
+        walker=new PreloadLSNTreeWalker(_this,callback,config);
+        Label287:  //this.hook287();
+        walker.walk();
+        //end of hook287
+ 				Label287_1:
+        execute_Latches_DatabaseImpl_preload:
+        return ret;
+      }
+      protected DatabaseImpl _this;
+      protected PreloadConfig config;
+      protected long maxBytes;
+      protected long maxMillisecs;
+      protected long targetTime;
+      protected long cacheBudget;
+      protected PreloadStats ret;
+      protected PreloadProcessor callback;
+      protected SortedLSNTreeWalker walker;
+
+ //     protected void hook287() throws DatabaseException {
+   //     walker.walk();
+     // }
+     // protected void hook290() throws DatabaseException {
+     // }
+    }
+}

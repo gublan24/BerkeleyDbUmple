@@ -1,5 +1,4 @@
 namespace com.sleepycat.je.tree;
-
 class BIN {
     after Label603: descendOnParentSearch(SearchResult, boolean, boolean, long, Node, boolean) {
 

@@ -85,109 +85,64 @@ public class DbCacheSize
   
     // line 6 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     public  DbCacheSize_insertRecords(PrintStream out, Environment env, Database db, long records, int keySize, int dataSize, boolean randomKeys){
-      this.out=out;
-          this.env=env;
-          this.db=db;
-          this.records=records;
-          this.keySize=keySize;
-          this.dataSize=dataSize;
-          this.randomKeys=randomKeys;
+      this.out = out;
+     this.env = env;
+     this.db = db;
+     this.records = records;
+     this.keySize = keySize;
+     this.dataSize = dataSize;
+     this.randomKeys = randomKeys;
     }
   
     // line 15 "../../../../MemoryBudget_DbCacheSize_inner.ump"
     public void execute() throws DatabaseException{
-      try {
-            key=new DatabaseEntry();
-            data=new DatabaseEntry(new byte[dataSize]);
-            bigInt=BigInteger.ZERO;
-            rnd=new Random(123);
-            for (int i=0; i < records; i+=1) {
-              if (randomKeys) {
-                a=new byte[keySize];
-                rnd.nextBytes(a);
-                key.setData(a);
-              }
-     else {
-                bigInt=bigInt.add(BigInteger.ONE);
-                a2=bigInt.toByteArray();
-                if (a2.length < keySize) {
-                  a3=new byte[keySize];
-                  System.arraycopy(a2,0,a3,a3.length - a2.length,a2.length);
-                  a2=a3;
-                }
-     else             if (a2.length > keySize) {
-                  out.println("*** Key doesn't fit value=" + bigInt + " byte length="+ a2.length);
-                  return;
-                }
-                key.setData(a2);
-              }
-              status=db.putNoOverwrite(null,key,data);
-              if (status == OperationStatus.KEYEXIST && randomKeys) {
-                i-=1;
-                out.println("Random key already exists -- retrying");
-                continue;
-              }
-              if (status != OperationStatus.SUCCESS) {
-                out.println("*** " + status);
-                return;
-              }
-              if (i % 10000 == 0) {
-                Label833:
+      key = new DatabaseEntry();
+      data = new DatabaseEntry(new byte[dataSize]);
+      bigInt = BigInteger.ZERO;
+      rnd = new Random(123);
+      for (int i = 0; i < records; i += 1) {
+       if (randomKeys) {
+        a = new byte[keySize];
+        rnd.nextBytes(a);
+        key.setData(a);
+       } else {
+        bigInt = bigInt.add(BigInteger.ONE);
+        a2 = bigInt.toByteArray();
+        if (a2.length < keySize) {
+         a3 = new byte[keySize];
+         System.arraycopy(a2, 0, a3, a3.length - a2.length, a2.length);
+         a2 = a3;
+        } else if (a2.length > keySize) {
+         out.println("*** Key doesn't fit value=" + bigInt + " byte length=" + a2.length);
+         return;
+        }
+        key.setData(a2);
+       }
+       status = db.putNoOverwrite(null, key, data);
+       if (status == OperationStatus.KEYEXIST && randomKeys) {
+        i -= 1;
+        out.println("Random key already exists -- retrying");
+        continue;
+       }
+       if (status != OperationStatus.SUCCESS) {
+        out.println("*** " + status);
+        return;
+       }
+       if (i % 10000 == 0) {
+        Label833:
   stats=env.getStats(null);
           if (stats.getNNodesScanned() > 0) {
             out.println("*** Ran out of cache memory at record " + i + " -- try increasing the Java heap size ***");
-            throw new ReturnVoid();
+            return; //throw new ReturnVoid();
           }
          // original();
-                //this.hook833();
-                out.print(".");
-                out.flush();
-              }
-            }
-          }
-     catch (      ReturnVoid r) {
-            return;
-          }
+   //this.hook833();
+         out.print(".");
+        out.flush();
+       }
+      }
     }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 61 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected PrintStream out ;
-  // line 62 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected Environment env ;
-  // line 63 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected Database db ;
-  // line 64 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected long records ;
-  // line 65 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected int keySize ;
-  // line 66 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected int dataSize ;
-  // line 67 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected boolean randomKeys ;
-  // line 68 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected DatabaseEntry key ;
-  // line 69 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected DatabaseEntry data ;
-  // line 70 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected BigInteger bigInt ;
-  // line 71 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected Random rnd ;
-  // line 72 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected byte[] a ;
-  // line 73 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected byte[] a2 ;
-  // line 74 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected byte[] a3 ;
-  // line 75 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected OperationStatus status ;
-  // line 76 "../../../../MemoryBudget_DbCacheSize_inner.ump"
-    protected EnvironmentStats stats ;
   
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -489,6 +444,38 @@ public class DbCacheSize
   //  }
 
   //  protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
-  //  }
+  //  }// line 56 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected PrintStream out ;
+// line 57 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected Environment env ;
+// line 58 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected Database db ;
+// line 59 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected long records ;
+// line 60 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected int keySize ;
+// line 61 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected int dataSize ;
+// line 62 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected boolean randomKeys ;
+// line 63 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected DatabaseEntry key ;
+// line 64 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected DatabaseEntry data ;
+// line 65 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected BigInteger bigInt ;
+// line 66 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected Random rnd ;
+// line 67 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected byte[] a ;
+// line 68 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected byte[] a2 ;
+// line 69 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected byte[] a3 ;
+// line 70 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected OperationStatus status ;
+// line 71 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  protected EnvironmentStats stats ;
+
   
 }

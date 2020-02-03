@@ -10,7 +10,6 @@
 package com.sleepycat.je.junit;
 
 import junit.framework.Assert;
-
 /**
  * JUnitThread is a utility class that allows JUtil assertions to be
  * run in other threads.  A JUtil assertion thrown from a

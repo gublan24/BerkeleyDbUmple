@@ -4,7 +4,6 @@ class FileProcessor {
    static class FileProcessor_processLN {
   	protected LookAheadCache lookAheadCache;
   	
-//      after Label117() throws DatabaseException {  }
       before execute() {
         lookAheadCache=(LookAheadCache)lookAheadCachep;
         //original();
@@ -36,7 +35,6 @@ class FileProcessor {
     }
    static class FileProcessor_processFile {
 
-//      after Label116() throws DatabaseException, IOException {}
 
       after Label127:  execute(){
         lookAheadCache=new LookAheadCache(lookAheadCacheSize);

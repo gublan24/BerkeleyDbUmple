@@ -279,7 +279,11 @@ class CursorImpl {
     }
 
     public BIN latchBIN() throws DatabaseException {
-        return new CursorImpl_latchBIN(this).execute();
+          Label244: //This is an extension point;
+
+          return null;
+        
+
     }
 
     public DBIN latchDBIN() throws DatabaseException {

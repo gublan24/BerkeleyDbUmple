@@ -1,146 +1,138 @@
 // //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/CursorImpl.java
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
-   static class CursorImpl_latchBIN {
-
-      around Label244-Label244_1: execute() {
-        while (_this.bin != null) {
-          around_proceed:
+    static class CursorImpl_latchBIN {
+        after Label244: execute() {
+            while (_this.bin != null) {
+                waitingOn = _this.bin;
+                waitingOn.latch();
+                if (_this.bin == waitingOn) {
+                    return _this.bin; 
+                }
+                waitingOn.releaseLatch();
+            }
         }
-        throw new ReturnObject(null);
-      }
-
-      around Label245-Label244_1: execute() {
-        waitingOn=_this.bin;
-        waitingOn.latch();
-        if (_this.bin == waitingOn) {
-          around_proceed:
-        }
-        waitingOn.releaseLatch();
-      }
 
     }
+    static class CursorImpl_getNextDuplicate {
 
-   static class CursorImpl_getNextDuplicate {
-
-      after Label250: execute() {
-        assert _this.checkAlreadyLatched(alreadyLatched) : _this.dumpToString(true);
-        //original();
-      }
-
-      after Label251: execute() {
-        if (!alreadyLatched) {
-          _this.latchDBIN();
+        after Label250: execute() {
+            assert _this.checkAlreadyLatched(alreadyLatched): _this.dumpToString(true);
+            //original();
         }
-   else {
-          alreadyLatched=false;
+
+        after Label251: execute() {
+            if (!alreadyLatched) {
+                _this.latchDBIN();
+            } else {
+                alreadyLatched = false;
+            }
+            //original();
         }
-        //original();
-      }
-      after Label252: execute() {
-        _this.releaseDBIN();
-        //original();
-      }
-      after Label253: execute() {
-        assert LatchSupport.countLatchesHeld() == 0;
-        //original();
-      }
-      after Label254: execute() {
+        after Label252: execute() {
+            _this.releaseDBIN();
+            //original();
+        }
+        after Label253: execute() {
+            assert LatchSupport.countLatchesHeld() == 0;
+            //original();
+        }
+        after Label254: execute() {
 
-        assert (LatchSupport.countLatchesHeld() == 0);
-        _this.dupBinToBeRemoved.latch();
-        //original();
-      }
-      after Label255: execute() {
-        _this.dupBinToBeRemoved.releaseLatch();
-        //original();
-      }
-      after Label256: execute() {
+            assert(LatchSupport.countLatchesHeld() == 0);
+            _this.dupBinToBeRemoved.latch();
+            //original();
+        }
+        after Label255: execute() {
+            _this.dupBinToBeRemoved.releaseLatch();
+            //original();
+        }
+        after Label256: execute() {
 
-        alreadyLatched=true;
-        //original();
-      }
-      after Label257: execute() {
-        assert LatchSupport.countLatchesHeld() == 0;
-        //original();
-      }
+            alreadyLatched = true;
+            //original();
+        }
+        after Label257: execute() {
+            assert LatchSupport.countLatchesHeld() == 0;
+            //original();
+        }
     }
-   static class CursorImpl_lockNextKeyForInsert {
-      around Label248-Label248_1:execute(){
-        latched=true;
-        try {
-              around_proceed:
+    static class CursorImpl_lockNextKeyForInsert {
+        around Label248 - Label248_1: execute() {
+            latched = true;
+            try {
+                around_proceed:
+            }
+            finally {
+                if (latched) {
+                    _this.releaseBINs();
+                }
+            }
         }
-    finally {
-          if (latched) {
-            _this.releaseBINs();
-          }
+        after Label249: execute() {
+            latched = false;
+            //original();
         }
-      }
-      after Label249:execute(){
-        latched=false;
-        //original();
-      }
     }
-   static class CursorImpl_latchDBIN {
-      around Label246-Label246_1:execute(){
-        while (_this.dupBin != null) {
-          around_proceed:
+    static class CursorImpl_latchDBIN {
+        around Label246 - Label246_1: execute() {
+            while (_this.dupBin != null) {
+                around_proceed:
+            }
+            throw new ReturnObject(null);
         }
-        throw new ReturnObject(null);
-      }
-      
-      around Label247-Label246_1:execute(){
-        waitingOn=_this.dupBin;
-        waitingOn.latch();
-        if (_this.dupBin == waitingOn) {
-                    around_proceed://original();
+
+        around Label247 - Label246_1: execute() {
+            waitingOn = _this.dupBin;
+            waitingOn.latch();
+            if (_this.dupBin == waitingOn) {
+                around_proceed: //original();
+            }
+            waitingOn.releaseLatch();
         }
-        waitingOn.releaseLatch();
-      }
     }
-   static class CursorImpl_fetchCurrent {
+    static class CursorImpl_fetchCurrent {
 
-     around Label258-Label258_1:execute(){
-        try {
-          around_proceed://original();
+        around Label258 - Label258_1: execute() {
+            try {
+                around_proceed: //original();
+            }
+            finally {
+                _this.releaseBINs();
+            }
         }
-    finally {
-          _this.releaseBINs();
-        }
-      }
 
-      after Label259:execute(){
-        assert _this.targetBin.isLatchOwner();
-        //original();
-      }
+        after Label259: execute() {
+            assert _this.targetBin.isLatchOwner();
+            //original();
+        }
 
-      around Label260-Label260_1:execute(){
-        try {
-          around_proceed://original();
+        around Label260 - Label260_1: execute() {
+            try {
+                around_proceed: //original();
+            }
+            catch (DatabaseException DE) {
+                _this.targetBin.releaseLatchIfOwner();
+                throw DE;
+            }
         }
-        catch (      DatabaseException DE) {
-          _this.targetBin.releaseLatchIfOwner();
-          throw DE;
+        after Label261: execute() {
+            _this.targetBin.releaseLatchIfOwner();
+            //original();
         }
-      }
-      after Label261:execute(){
-        _this.targetBin.releaseLatchIfOwner();
-        //original();
-      }
-      after Label262:execute(){
-        duplicateRoot.latch();
-        _this.targetBin.releaseLatch();
-        //original();
-      }
-      around Label263-Label263_1:execute(){
-        try {
-          around_proceed://original();
+        after Label262: execute() {
+            duplicateRoot.latch();
+            _this.targetBin.releaseLatch();
+            //original();
         }
-   catch (      DatabaseException DE) {
-          _this.releaseBINs();
-          throw DE;
+        around Label263 - Label263_1: execute() {
+            try {
+                around_proceed: //original();
+            }
+            catch (DatabaseException DE) {
+                _this.releaseBINs();
+                throw DE;
+            }
         }
-      }
     }
 }

@@ -1,0 +1,79 @@
+// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/recovery/RecoveryManager.java
+namespace com.sleepycat.je.recovery;
+class RecoveryManager {
+  static class TxnNodeId {
+      long nodeId;
+      long txnId;
+      TxnNodeId(    long nodeId,    long txnId){
+        this.nodeId=nodeId;
+        this.txnId=txnId;
+      }
+      /** 
+   * Compare two TxnNodeId objects
+   */
+      public boolean equals(    Object obj){
+        if (this == obj) {
+          return true;
+        }
+        if (!(obj instanceof TxnNodeId)) {
+          return false;
+        }
+        return ((((TxnNodeId)obj).txnId == txnId) && (((TxnNodeId)obj).nodeId == nodeId));
+      }
+      public int hashCode(){
+        return (int)(txnId + nodeId);
+      }
+      public String toString(){
+        return "txnId=" + txnId + "/nodeId="+ nodeId;
+      }
+    }
+  static class RootDeleter {
+      isA WithRootLatched;
+      Tree tree;
+      RootDeleter(    Tree tree){
+        this.tree=tree;
+      }
+      /** 
+   * @return true if the in-memory root was replaced.
+   */
+      public IN doWork(    ChildReference root) throws DatabaseException {
+        tree.setRoot(null,false);
+        return null;
+      }
+    }
+   static class RecoveryManager_trace {
+      RecoveryManager_trace(    Level level,    DatabaseImpl database,    String debugType,    boolean success,    Node node,    long logLsn,    IN parent,    boolean found,    boolean replaced,    boolean inserted,    long replacedLsn,    long abortLsn,    int index){
+        this.level=level;
+        this.database=database;
+        this.debugType=debugType;
+        this.success=success;
+        this.node=node;
+        this.logLsn=logLsn;
+        this.parent=parent;
+        this.found=found;
+        this.replaced=replaced;
+        this.inserted=inserted;
+        this.replacedLsn=replacedLsn;
+        this.abortLsn=abortLsn;
+        this.index=index;
+      }
+      void execute(){
+      }
+      protected Level level;
+      protected DatabaseImpl database;
+      protected String debugType;
+      protected boolean success;
+      protected Node node;
+      protected long logLsn;
+      protected IN parent;
+      protected boolean found;
+      protected boolean replaced;
+      protected boolean inserted;
+      protected long replacedLsn;
+      protected long abortLsn;
+      protected int index;
+      protected Logger logger;
+      protected Level useLevel;
+      protected StringBuffer sb;
+    }
+}

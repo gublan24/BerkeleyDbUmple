@@ -8,9 +8,8 @@ class FileProcessor
     }
 
     after Label125_1:processIN(IN , DatabaseImpl, long ) {
-			finally {
 	    cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, completed, obsolete, dirtied);
-    	}
+
   }
 
 }

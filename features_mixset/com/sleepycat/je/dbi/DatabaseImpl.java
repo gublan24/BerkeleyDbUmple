@@ -901,7 +901,6 @@ deleteState = NOT_DELETED;
   
   
   @MethodObject
-    @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
   // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
   // line 4 "../../../../Statistics_DatabaseImpl_inner.ump"

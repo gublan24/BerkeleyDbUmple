@@ -21,7 +21,7 @@ class CursorImpl {
         if (treeStatsAccumulator != null) {
           Label200: //this.hook200();
           if (_this.index < 0) {
-          throw new ReturnObject(OperationStatus.NOTFOUND);
+            return OperationStatus.NOTFOUND;//throw new ReturnObject(OperationStatus.NOTFOUND);
         }
         duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
         Label201: //this.hook201();

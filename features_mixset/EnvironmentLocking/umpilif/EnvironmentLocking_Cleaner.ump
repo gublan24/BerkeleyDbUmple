@@ -8,8 +8,8 @@ class Cleaner
     after Label115:deleteSafeToDeleteFiles(){
 	    if (!env.getFileManager().lockEnvironment(false, true)) {
 	    //bellow label introduced in EnvironmentLocking_Cleaner.ump
-      Label87:
-	    throw new ReturnVoid();
+      Label87: 
+	    return; //throw new ReturnVoid();
 	    }
     }
 

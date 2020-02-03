@@ -516,7 +516,7 @@ trace(Level.FINEST, "Database.putNoDupData", txn, key, data, null);
    public void preload(long maxBytes) throws DatabaseException{
     checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
-			//Label:           ;  //this.hook55();
+			//           ;  //this.hook55();
 			Label55:
 databaseImpl.checkIsDeleted("preload");
 			//original();
@@ -530,7 +530,7 @@ databaseImpl.checkIsDeleted("preload");
    public void preload(long maxBytes, long maxMillisecs) throws DatabaseException{
     checkEnv();
 	checkRequiredDbState(OPEN, "Can't call Database.preload");
-	//Label:           ;  //this.hook56();
+	//           ;  //this.hook56();
   Label56:
 databaseImpl.checkIsDeleted("preload");
 			//original();
@@ -545,7 +545,7 @@ databaseImpl.checkIsDeleted("preload");
    public PreloadStats preload(PreloadConfig config) throws DatabaseException{
     checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
-			//Label:           ;  //this.hook57();
+			//           ;  //this.hook57();
       Label57:
 databaseImpl.checkIsDeleted("preload");
 			//original();
@@ -602,7 +602,7 @@ databaseImpl.checkIsDeleted("preload");
     List list = new ArrayList();
 	if (hasTriggers()) {
 	    acquireTriggerListReadLock();
-	    Label53://Label:           ;  //this.hook53(list);
+	    Label53://           ;  //this.hook53(list);
 			try {
 				for (int i = 0; i < triggerList.size(); i += 1) {
 						Object obj = triggerList.get(i);
@@ -827,7 +827,7 @@ databaseImpl.checkIsDeleted("preload");
   public void notifyTriggers(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData) throws DatabaseException{
     acquireTriggerListReadLock();
 				try {	
-						Label54: //Label:           ;  //this.hook54(locker, priKey, oldData, newData);
+						Label54: //           ;  //this.hook54(locker, priKey, oldData, newData);
 						for (int i = 0; i < triggerList.size(); i += 1) {
 									DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
 									trigger.databaseUpdated(this, locker, priKey, oldData, newData);
@@ -990,7 +990,6 @@ databaseImpl.checkIsDeleted("stat");
   
   
   
-  @MethodObject
   // line 13 "../../../Database_static.ump"
   // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
@@ -1046,7 +1045,6 @@ databaseImpl.checkIsDeleted("stat");
   
   
   
-  @MethodObject
   // line 25 "../../../Database_static.ump"
   // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
@@ -1102,7 +1100,6 @@ databaseImpl.checkIsDeleted("stat");
   
   
   
-  @MethodObject
   // line 37 "../../../Database_static.ump"
   // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock

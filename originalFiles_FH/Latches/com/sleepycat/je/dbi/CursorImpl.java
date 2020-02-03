@@ -296,7 +296,7 @@ public class CursorImpl {
     in.releaseLatch();
     original(in,dupRoot);
   }
-@MethodObject static class CursorImpl_latchBIN {
+ static class CursorImpl_latchBIN {
     protected void hook244() throws DatabaseException {
       while (_this.bin != null) {
         original();

@@ -587,7 +587,7 @@ env.getEvictor().doCriticalEviction();
 		    if (offsets != null) {
 			list.add(offsets.toArray());
 		    }
-		    //Label:           ;  //this.hook187(cursor);
+		    //           ;  //this.hook187(cursor);
         Label187:
 cursor.evict();
 //	original(cursor);
@@ -715,7 +715,7 @@ if (cursor != null) {
 	try {
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    //Label:           ;  //this.hook189(cursor);
+	    //           ;  //this.hook189(cursor);
       Label189:
 // <<     private synchronized void insertFileSummary(...)
 	    cursor.setAllowEviction(false);
@@ -727,7 +727,7 @@ if (cursor != null) {
 	    env.getLogger().log(Level.SEVERE, "Cleaner duplicate key sequence file=0x" + Long.toHexString(fileNum)
 		    + " sequence=0x" + Long.toHexString(sequence));
            ;  //this.hook177(fileNum, sequence, status);
-	    //Label:           ;  //this.hook188(cursor);
+	    //           ;  //this.hook188(cursor);
       Label188:
 // <<     private synchronized void insertFileSummary(...)
 	    cursor.evict();
@@ -780,7 +780,7 @@ env.getEvictor().doCriticalEviction();
 				}
 			    }
 			}
-			//Label:           ;  //this.hook190(cursor);
+			//           ;  //this.hook190(cursor);
       Label190:
 cursor.evict();
 //	original(cursor);
@@ -817,7 +817,7 @@ cursor.evict();
 	    Label186:
 b |= db.isDeleted();
 			//return original(db, b);
- //b = Label:           ;  //this.hook186(db, b);
+ //b =            ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
@@ -924,7 +924,6 @@ b |= db.isDeleted();
   
   
   @MethodObject
-    @MethodObject
   // line 4 "../../../../UtilizationProfile_static.ump"
   // line 30 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_clearCache
@@ -983,7 +982,6 @@ b |= db.isDeleted();
   
   
   @MethodObject
-    @MethodObject
   // line 16 "../../../../UtilizationProfile_static.ump"
   // line 16 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_removeFile
@@ -1018,7 +1016,7 @@ b |= db.isDeleted();
       synchronized (_this) {
             assert _this.cachePopulated;
             if (_this.fileSummaryMap.remove(fileNum) != null) {
-              //Label:           ;  //this.hook192();
+              //           ;  //this.hook192();
               Label192:
   mb=_this.env.getMemoryBudget();
           mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
@@ -1047,7 +1045,6 @@ b |= db.isDeleted();
   
   
   @MethodObject
-    @MethodObject
   // line 37 "../../../../UtilizationProfile_static.ump"
   // line 23 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_putFileSummary
@@ -1107,7 +1104,7 @@ b |= db.isDeleted();
           _this.insertFileSummary(ln,fileNum,sequence);
           summary=ln.getBaseSummary();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
-            //Label:           ;  //this.hook193();
+            //           ;  //this.hook193();
             Label193:
   mb=_this.env.getMemoryBudget();
           mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
@@ -1187,7 +1184,7 @@ b |= db.isDeleted();
           if (!_this.openFileSummaryDatabase()) {
             return false;
           }
-          //Label:           ;  //this.hook194();
+          //           ;  //this.hook194();
           Label194:
   oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
           //original();
@@ -1234,7 +1231,7 @@ b |= db.isDeleted();
              ;  //this.hook181();
                   }
      else {
-                   // Label:           ;  //this.hook191();
+                   //            ;  //this.hook191();
                       Label191:
   cursor.evict();
           //original();
@@ -1280,7 +1277,7 @@ b |= db.isDeleted();
             if (locker != null) {
               locker.operationEnd();
             }
-            //Label:           ;  //this.hook195();
+            //           ;  //this.hook195();
             Label195:
   newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
           mb=_this.env.getMemoryBudget();
