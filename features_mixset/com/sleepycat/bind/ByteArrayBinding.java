@@ -27,17 +27,7 @@ public class ByteArrayBinding implements EntryBinding
   public void delete()
   {}
 
-
-  /**
-   * 
-   * Creates a byte array binding.
-   */
-  // line 14 "../../../ByteArrayBinding.ump"
-   public  ByteArrayBinding(){
-    
-  }
-
-  // line 17 "../../../ByteArrayBinding.ump"
+  // line 13 "../../../ByteArrayBinding.ump"
    public Object entryToObject(DatabaseEntry entry){
     int len = entry.getSize();
 	if (len == 0) {
@@ -49,7 +39,7 @@ public class ByteArrayBinding implements EntryBinding
 	}
   }
 
-  // line 28 "../../../ByteArrayBinding.ump"
+  // line 24 "../../../ByteArrayBinding.ump"
    public void objectToEntry(Object object, DatabaseEntry entry){
     byte[] bytes = (byte[]) object;
 	entry.setData(bytes, 0, bytes.length);

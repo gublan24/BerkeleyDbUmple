@@ -40,12 +40,9 @@ public abstract class TupleTupleKeyCreator extends TupleBase implements Secondar
   /**
    * 
    * Creates a tuple-tuple key creator.
+   * public TupleTupleKeyCreator() {
+   * }
    */
-  // line 17 "../../../../TupleTupleKeyCreator.ump"
-   public  TupleTupleKeyCreator(){
-    
-  }
-
   // line 21 "../../../../TupleTupleKeyCreator.ump"
    public boolean createSecondaryKey(SecondaryDatabase db, DatabaseEntry primaryKeyEntry, DatabaseEntry dataEntry, DatabaseEntry indexKeyEntry) throws DatabaseException{
     TupleOutput output = getTupleOutput(null);

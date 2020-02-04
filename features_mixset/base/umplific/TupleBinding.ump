@@ -19,8 +19,8 @@ class TupleBinding
     /** 
      * Creates a tuple binding.
      */
-    public TupleBinding() {
-    }
+ //   public TupleBinding() {
+ //   }
 
     public Object entryToObject(DatabaseEntry entry) {
 	return entryToObject(entryToInput(entry));

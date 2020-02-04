@@ -6,7 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../NotImplementedYetException.ump"
-public class NotImplementedYetException implements RuntimeException
+public class NotImplementedYetException extends RuntimeException
 {
 
   //------------------------
@@ -18,7 +18,9 @@ public class NotImplementedYetException implements RuntimeException
   //------------------------
 
   public NotImplementedYetException()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

@@ -6,7 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../CursorsExistException.ump"
-public class CursorsExistException implements Exception
+public class CursorsExistException extends Exception
 {
 
   //------------------------
@@ -18,7 +18,9 @@ public class CursorsExistException implements Exception
   //------------------------
 
   public CursorsExistException()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

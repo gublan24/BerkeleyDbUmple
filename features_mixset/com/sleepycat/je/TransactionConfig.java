@@ -31,14 +31,8 @@ public class TransactionConfig implements Cloneable
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 30 "../../../TransactionConfig.ump"
-   public  TransactionConfig(){
-    
-  }
-
-
-  /**
+   * public TransactionConfig() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

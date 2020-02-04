@@ -13,16 +13,34 @@ public class SerialBase
   // MEMBER VARIABLES
   //------------------------
 
+  //SerialBase Attributes
+  private int outputBufferSize;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public SerialBase()
-  {}
+  {
+    outputBufferSize = 0;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setOutputBufferSize(int aOutputBufferSize)
+  {
+    boolean wasSet = false;
+    outputBufferSize = aOutputBufferSize;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getOutputBufferSize()
+  {
+    return outputBufferSize;
+  }
 
   public void delete()
   {}
@@ -30,20 +48,10 @@ public class SerialBase
 
   /**
    * 
-   * Initializes the initial output buffer size to zero. <p> Unless  {@link #setSerialBufferSize} is called, the default {@link FastOutputStream#DEFAULT_INIT_SIZE} size will be used.</p>
-   */
-  // line 13 "../../../../SerialBase.ump"
-   public  SerialBase(){
-    outputBufferSize = 0;
-  }
-
-
-  /**
-   * 
    * Sets the initial byte size of the output buffer that is allocated by the default implementation of  {@link #getSerialOutput}. <p> If this property is zero (the default), the default  {@link FastOutputStream#DEFAULT_INIT_SIZE} size is used.</p>
    * @param byteSizethe initial byte size of the output buffer, or zero to use thedefault size.
    */
-  // line 21 "../../../../SerialBase.ump"
+  // line 16 "../../../../SerialBase.ump"
    public void setSerialBufferSize(int byteSize){
     outputBufferSize = byteSize;
   }
@@ -55,7 +63,7 @@ public class SerialBase
    * @return the initial byte size of the output buffer.
    * @see #setSerialBufferSize
    */
-  // line 30 "../../../../SerialBase.ump"
+  // line 25 "../../../../SerialBase.ump"
    public int getSerialBufferSize(){
     return outputBufferSize;
   }
@@ -68,7 +76,7 @@ public class SerialBase
    * @return an empty FastOutputStream instance.
    * @see #setSerialBufferSize
    */
-  // line 40 "../../../../SerialBase.ump"
+  // line 35 "../../../../SerialBase.ump"
    protected FastOutputStream getSerialOutput(Object object){
     int byteSize = getSerialBufferSize();
 	if (byteSize != 0) {
@@ -77,13 +85,11 @@ public class SerialBase
 	    return new FastOutputStream();
 	}
   }
-  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 7 "../../../../SerialBase.ump"
-  private int outputBufferSize ;
 
-  
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "outputBufferSize" + ":" + getOutputBufferSize()+ "]";
+  }
 }

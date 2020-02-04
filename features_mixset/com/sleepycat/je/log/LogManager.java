@@ -22,21 +22,9 @@ import java.nio.ByteBuffer;
 import java.nio.BufferOverflowException;
 import java.io.RandomAccessFile;
 import java.io.IOException;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogManager.ump"
 // line 3 "../../../../LogManager_static.ump"
-// line 3 "../../../../Statistics_LogManager.ump"
-// line 3 "../../../../Statistics_LogManager_inner.ump"
-// line 3 "../../../../Checksum_LogManager.ump"
-// line 3 "../../../../Checksum_LogManager_inner.ump"
-// line 3 "../../../../Latches_LogManager.ump"
-// line 3 "../../../../FSync_LogManager.ump"
-// line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
-// line 3 "../../../../Derivative_FSync_Statistics_LogManager.ump"
 public class LogManager
 {
 
@@ -61,10 +49,7 @@ public class LogManager
   // line 56 "../../../../LogManager.ump"
    static  int HEADER_CONTENT_BYTES(){
     int r = HEADER_BYTES;
-			Label504:
-r -= CHECKSUM_BYTES;
-        //return original(r);
- //r = hook504(r);
+			Label504: //r = hook504(r);
 			return r;
   }
 
@@ -80,19 +65,10 @@ r -= CHECKSUM_BYTES;
 			DbConfigManager configManager = envImpl.getConfigManager();
 			this.readOnly = readOnly;
 			logBufferPool = new LogBufferPool(fileManager, envImpl);
-			Label505:
-doChecksumOnRead = configManager.getBoolean(EnvironmentParams.LOG_CHECKSUM_READ);
-        //original(configManager);
- //this.hook505(configManager);
-			Label502:
-logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
-	//original(envImpl);
- //this.hook502(envImpl);
+			Label505: //this.hook505(configManager);
+			Label502: //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-			Label498:
-checkpointMonitor = new CheckpointMonitor(envImpl);
-	//original(envImpl);
- //this.hook498(envImpl);
+			Label498: //this.hook498(envImpl);
   }
 
   // line 77 "../../../../LogManager.ump"
@@ -196,18 +172,8 @@ checkpointMonitor = new CheckpointMonitor(envImpl);
 	} catch (IOException e) {
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
-	Label501:
-if (fsyncRequired) {
-	    fileManager.groupSync();
-	}
-	//original(fsyncRequired);
- //this.hook501(fsyncRequired);
-	Label499:
-if (logResult.wakeupCheckpointer) {
-	    checkpointMonitor.activate();
-	}
-	//original(logResult);
- //this.hook499(logResult);
+	Label501: //this.hook501(fsyncRequired);
+	Label499: //this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -254,27 +220,17 @@ if (logResult.wakeupCheckpointer) {
 					}
 					LogBuffer useLogBuffer = logBufferPool.getWriteBuffer(entrySize, flippedFile);
 					marshalledBuffer = addPrevOffsetAndChecksum(marshalledBuffer, fileManager.getPrevEntryOffset(), entrySize);
-					Label503:
-useLogBuffer.latchForWrite();
- //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
+					Label503: //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
 					ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
 					if (useBuffer.capacity() - useBuffer.position() < entrySize) {
 							fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
 							usedTemporaryBuffer = true;
 							assert useBuffer.position() == 0;
-							Label509:
-nTempBufferWrites++;
-		//	original();
- //this.hook509();
+							Label509: //this.hook509();
 					} else {
 							useBuffer.put(marshalledBuffer);
 					}
 					Label503_1:
-//try {	    usedTemporaryBuffer = original(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer, useLogBuffer);} finally {
-	    useLogBuffer.release();
-	//}
-//	return usedTemporaryBuffer;
-
 				 //End hook503
 			} catch (Exception e) {
 					fileManager.restoreLastPosition();
@@ -291,10 +247,7 @@ nTempBufferWrites++;
 			}
 			item.postLogWork(currentLsn);
 			boolean wakeupCheckpointer = false;
-			Label500:
-wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
-	//return //original(item, entrySize, wakeupCheckpointer);
- //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			Label500: //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
 			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
   }
 
@@ -502,34 +455,12 @@ wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
    protected void hook505(DbConfigManager configManager) throws DatabaseException{
     
   }
-
-  // line 12 "../../../../Statistics_LogManager.ump"
-   public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
-    stats.setNRepeatFaultReads(nRepeatFaultReads);
-			stats.setNTempBufferWrites(nTempBufferWrites);
-			if (config.getClear()) {
-					nRepeatFaultReads = 0;
-					nTempBufferWrites = 0;
-			}
-			logBufferPool.loadStats(config, stats);
-			Label497:
-fileManager.loadStats(config, stats);
-//	original(config, stats);
- //this.hook497(config, stats);
-  }
-
-  // line 12 "../../../../Checksum_LogManager.ump"
-   public boolean getChecksumOnRead(){
-    return doChecksumOnRead;
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
   // line 4 "../../../../LogManager_static.ump"
-  // line 4 "../../../../Statistics_LogManager_inner.ump"
-  // line 4 "../../../../Checksum_LogManager_inner.ump"
   public static class LogManager_getLogEntryFromLogSource
   {
   
@@ -563,33 +494,16 @@ fileManager.loadStats(config, stats);
       try {
             fileOffset=DbLsn.getFileOffset(lsn);
             entryBuffer=logSource.getBytes(fileOffset);
-            Label507:
-  validator=null;
-          storedChecksum=LogUtils.getUnsignedInt(entryBuffer);
-          if (_this.doChecksumOnRead) {
-            validator=new ChecksumValidator();
-            validator.update(_this.envImpl,entryBuffer,_this.HEADER_CONTENT_BYTES(),false);
-          }
-          //original();
-   //this.hook507();
+            Label507: //this.hook507();
             loggableType=entryBuffer.get();
             version=entryBuffer.get();
             entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
             itemSize=LogUtils.readInt(entryBuffer);
             if (entryBuffer.remaining() < itemSize) {
               entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
-              Label508:
-  _this.nRepeatFaultReads++;
-          //original();
-   //this.hook508();
+              Label508: //this.hook508();
             }
-            Label506:
-  if (_this.doChecksumOnRead) {
-            validator.update(_this.envImpl,entryBuffer,itemSize,false);
-            validator.validate(_this.envImpl,storedChecksum,lsn);
-          }
-          //original();
-   //this.hook506();
+            Label506: //this.hook506();
             assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
             logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
             logEntry.readEntry(entryBuffer,itemSize,version,true);
@@ -689,20 +603,6 @@ fileManager.loadStats(config, stats);
   abstract public void countObsoleteNodes(TrackedFileSummary[] summaries) throws DatabaseException ;
 // line 389 "../../../../LogManager.ump"
   abstract public void countObsoleteINs(List lsnList) throws DatabaseException ;
-// line 7 "../../../../Statistics_LogManager.ump"
-  private int nRepeatFaultReads ;
-// line 9 "../../../../Statistics_LogManager.ump"
-  private long nTempBufferWrites ;
-// line 5 "../../../../Checksum_LogManager.ump"
-  static final int HEADER_CHECKSUM_OFFSET = 0 ;
-// line 7 "../../../../Checksum_LogManager.ump"
-  private boolean doChecksumOnRead ;
-// line 9 "../../../../Checksum_LogManager.ump"
-  protected static ChecksumValidator validator ;
-// line 7 "../../../../Latches_LogManager.ump"
-  protected Latch logWriteLatch ;
-// line 5 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
-  private CheckpointMonitor checkpointMonitor ;
 
   
 }

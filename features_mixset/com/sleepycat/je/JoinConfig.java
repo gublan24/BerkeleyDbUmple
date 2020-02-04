@@ -31,14 +31,8 @@ public class JoinConfig implements Cloneable
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 15 "../../../JoinConfig.ump"
-   public  JoinConfig(){
-    
-  }
-
-
-  /**
+   * public JoinConfig() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

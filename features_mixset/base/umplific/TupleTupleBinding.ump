@@ -10,8 +10,8 @@ class TupleTupleBinding
     /** 
      * Creates a tuple-tuple entity binding.
      */
-    public TupleTupleBinding() {
-    }
+ //   public TupleTupleBinding() {
+ //   }
 
     public Object entryToObject(DatabaseEntry key, DatabaseEntry data) {
 	return entryToObject(TupleBinding.entryToInput(key), TupleBinding.entryToInput(data));

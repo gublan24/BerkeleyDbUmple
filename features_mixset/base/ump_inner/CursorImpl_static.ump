@@ -81,8 +81,11 @@ class CursorImpl {
         DBIN execute() throws DatabaseException {
             try {
                 Label246:; //this.hook246();
-                Label247: throw new ReturnObject(_this.dupBin);
-                Label246_1: throw ReturnHack.returnObject;
+                Label247: ;
+                Label246_1: ;
+                throw new ReturnObject(_this.dupBin);
+
+//throw ReturnHack.returnObject;
             }
             catch (ReturnObject r) {
                 return (DBIN) r.value;
@@ -122,7 +125,7 @@ class CursorImpl {
                 if (status == OperationStatus.SUCCESS) {
                     lockedNextKey = true;
                 }
-                Label249: //this.hook249();
+                Label249: ;//this.hook249();
             }
             Label248_1:
                 if (!lockedNextKey) {
@@ -182,7 +185,7 @@ class CursorImpl {
                                     if (foundKey != null) {
                                         ret = _this.getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
                                     } else {
-                                        Label252: //this.hook252();
+                                        Label252: ;//this.hook252();
                                     }
                                     if (ret == OperationStatus.SUCCESS) {
                                         _this.incrementLNCount();
@@ -220,7 +223,7 @@ class CursorImpl {
                                     }
                                     _this.addCursor(newDupBin);
                                     _this.dupBin = newDupBin;
-                                    Label256: //this.hook256();
+                                    Label256: ;//this.hook256();
                                 }
                             }
                         }
@@ -287,7 +290,7 @@ class CursorImpl {
                     n = null;
                 if (_this.targetIndex < 0 || _this.targetIndex >= _this.targetBin.getNEntries() || _this.targetBin.isEntryKnownDeleted(_this.targetIndex)) {} else {
                     if (_this.targetBin.isEntryPendingDeleted(_this.targetIndex)) {
-                        Label280: //this.hook280();
+                        Label280: ;//this.hook280();
                     }
                     Label260: ; //this.hook260();
                     n = _this.targetBin.fetchTarget(_this.targetIndex);
@@ -308,7 +311,7 @@ class CursorImpl {
                     Label262: //this.hook262();
                         if (_this.positionFirstOrLast(first, duplicateRoot)) {
                             Label263:; //this.hook263();
-                            throw new ReturnObject(_this.fetchCurrent(foundKey, foundData, lockType, first));
+                            _this.fetchCurrent(foundKey, foundData, lockType, first);
                             Label263_1:; // end of hook263();
                         }
                     else {
@@ -343,10 +346,10 @@ class CursorImpl {
                         _this.setDbt(foundKey, _this.targetBin.getKey(_this.targetIndex));
                     }
                 }
-                throw new ReturnObject(OperationStatus.SUCCESS);
+Label258_1: ;
+                return OperationStatus.SUCCESS;
 
-                Label258_1: ;
-                throw ReturnHack.returnObject;
+
             } catch (ReturnObject r) {
                 return (OperationStatus) r.value;
             }

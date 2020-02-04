@@ -6,7 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../SplitRequiredException.ump"
-public class SplitRequiredException implements Exception
+public class SplitRequiredException extends Exception
 {
 
   //------------------------
@@ -18,7 +18,9 @@ public class SplitRequiredException implements Exception
   //------------------------
 
   public SplitRequiredException()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

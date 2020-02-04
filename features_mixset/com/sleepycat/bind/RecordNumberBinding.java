@@ -28,22 +28,12 @@ public class RecordNumberBinding implements EntryBinding
   public void delete()
   {}
 
-
-  /**
-   * 
-   * Creates a byte array binding.
-   */
-  // line 13 "../../../RecordNumberBinding.ump"
-   public  RecordNumberBinding(){
-    
-  }
-
-  // line 16 "../../../RecordNumberBinding.ump"
+  // line 12 "../../../RecordNumberBinding.ump"
    public Object entryToObject(DatabaseEntry entry){
     return new Long(entryToRecordNumber(entry));
   }
 
-  // line 20 "../../../RecordNumberBinding.ump"
+  // line 16 "../../../RecordNumberBinding.ump"
    public void objectToEntry(Object object, DatabaseEntry entry){
     recordNumberToEntry(((Number) object).longValue(), entry);
   }
@@ -55,7 +45,7 @@ public class RecordNumberBinding implements EntryBinding
    * @param entrythe entry buffer.
    * @return the record number.
    */
-  // line 29 "../../../RecordNumberBinding.ump"
+  // line 25 "../../../RecordNumberBinding.ump"
    public static  long entryToRecordNumber(DatabaseEntry entry){
     return DbCompat.getRecordNumber(entry) & 0xFFFFFFFFL;
   }
@@ -67,7 +57,7 @@ public class RecordNumberBinding implements EntryBinding
    * @param recordNumberthe record number.
    * @param entrythe entry buffer to hold the record number.
    */
-  // line 38 "../../../RecordNumberBinding.ump"
+  // line 34 "../../../RecordNumberBinding.ump"
    public static  void recordNumberToEntry(long recordNumber, DatabaseEntry entry){
     entry.setData(new byte[4], 0, 4);
 	DbCompat.setRecordNumber(entry, (int) recordNumber);

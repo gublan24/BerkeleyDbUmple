@@ -181,7 +181,7 @@ class CursorImpl {
             catch (CloneNotSupportedException cannotOccur) {
                 return null;
             } finally {
-                Label207: //this.hook207();
+                Label207: ;//this.hook207();
             }
         }
         return ret;
@@ -337,7 +337,7 @@ class CursorImpl {
         BIN abin = latchBIN();
         if (abin != null) {
             abin.removeCursor(this);
-            Label209: //this.hook209(abin);
+            Label209: ; //this.hook209(abin);
         }
     }
 
@@ -345,7 +345,7 @@ class CursorImpl {
         DBIN abin = latchDBIN();
         if (abin != null) {
             abin.removeCursor(this);
-            Label210: //this.hook210(abin);
+            Label210: ;//this.hook210(abin);
         }
     }
 
@@ -356,7 +356,7 @@ class CursorImpl {
         if (dupBin != null) {
             if (alreadyLatched) {
                 dupBin.removeCursor(this);
-                Label211: //this.hook211();
+                Label211: ;//this.hook211();
             } else {
                 removeCursorDBIN();
             }
@@ -428,9 +428,9 @@ class CursorImpl {
 				    Node n = bin.fetchTarget(index);
 				    if (n != null && n.containsDuplicates()) {
 				        DIN dupRoot = (DIN) n;
-				        Label265: //this.hook265(dupRoot);
+				        Label265: ;//this.hook265(dupRoot);
 				        DupCountLN dupCountLN = (DupCountLN) dupRoot.getDupCountLNRef().fetchTarget(database, dupRoot);
-				        Label264: ////this.hook264(dupRoot);
+				        Label264: ;////this.hook264(dupRoot);
 				        if (lockType != LockType.NONE) {
 				            locker.lock(dupCountLN.getNodeId(), lockType, false, database);
 				        }
@@ -438,7 +438,7 @@ class CursorImpl {
 				    } else {
 				        throw new ReturnInt(1);
 				    }
-        throw ReturnHack.returnInt;
+
         } catch (ReturnInt r) {
             return r.value;
         }
@@ -455,30 +455,30 @@ class CursorImpl {
             return OperationStatus.KEYEMPTY;
         }
         if (targetBin.isEntryKnownDeleted(targetIndex)) {
-            Label214: //this.hook214();
+            Label214: ;//this.hook214();
             return OperationStatus.KEYEMPTY;
         }
         LN ln = (LN) targetBin.fetchTarget(targetIndex);
         if (ln == null) {
-            Label215: //this.hook215();
+            Label215: ;//this.hook215();
             return OperationStatus.KEYEMPTY;
         }
         LockResult lockResult = lockLN(ln, LockType.WRITE);
         ln = lockResult.getLN();
         if (ln == null) {
-            Label216: //this.hook216();
+            Label216: ;//this.hook216();
             return OperationStatus.KEYEMPTY;
         }
         LockResult dclLockResult = null;
         DIN dupRoot = null;
-        Label213:         //this.hook213(isDup, ln, lockResult, dclLockResult, dupRoot);
+        Label213:      ;   //this.hook213(isDup, ln, lockResult, dclLockResult, dupRoot);
 				try {
             isDup = (dupBin != null);
         if (isDup) {
             dupRoot = getLatchedDupRoot(true);
             dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
             dupRoot = (DIN) bin.getTarget(index);
-            Label267: //this.hook267();
+            Label267: ;//this.hook267();
         }
         setTargetBin();
         long oldLsn = targetBin.getLsn(targetIndex);
@@ -486,8 +486,8 @@ class CursorImpl {
         lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
         long oldLNSize = 0;
         //	oldLNSize = this.hook284(ln, oldLNSize);
-        Label284:
-            long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
+        Label284:;
+        long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
         long newLNSize = 0;
         //	newLNSize = this.hook283(ln, newLNSize);
         Label283:
@@ -497,17 +497,17 @@ class CursorImpl {
 
         if (isDup) {
             dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
-            Label268: //this.hook268(dupRoot);
+            Label268: ;//this.hook268(dupRoot);
             dupRoot = null;
-            Label281: //this.hook281(lnKey);
+            Label281: ;//this.hook281(lnKey);
         } else {
-            Label282: //this.hook282(lnKey);
+            Label282: ;//this.hook282(lnKey);
         }
-        Label204: //this.hook204(ln, oldLsn, newLsn);
+        Label204: ;//this.hook204(ln, oldLsn, newLsn);
 				}
 				finally 
 				{
-					Label213_1:
+					Label213_1: ;
 				}
         //end of hook213
         return OperationStatus.SUCCESS;
@@ -541,7 +541,7 @@ class CursorImpl {
      */
     public OperationStatus putLN(byte[] key, LN ln, boolean allowDuplicates) throws DatabaseException {
         assert assertCursorState(false): dumpToString(true);
-        Label217: //this.hook217();
+        Label217: ;//this.hook217();
         LockResult lockResult = locker.lock(ln.getNodeId(), LockType.WRITE, false, database);
         if (database.getTree().insert(ln, key, allowDuplicates, this, lockResult)) {
             status = CURSOR_INITIALIZED;
@@ -609,20 +609,20 @@ class CursorImpl {
             if (bin == null) {
                 return OperationStatus.KEYEMPTY;
             }
-            Label219: //this.hook219();
+            Label219: ;//this.hook219();
             boolean isDup = setTargetBin();
-						Label218: //            this.hook218(data, foundKey, foundData, isDup);
+						Label218: ;//            this.hook218(data, foundKey, foundData, isDup);
 	 					LN ln = (LN) targetBin.fetchTarget(targetIndex);
 				    byte[] lnKey = targetBin.getKey(targetIndex);
 				    Comparator userComparisonFcn = targetBin.getKeyComparator();
 				    if (targetBin.isEntryKnownDeleted(targetIndex) || ln == null) {
-				        Label270: //this.hook270();
+				        Label270: ;//this.hook270();
 				        throw new ReturnObject(OperationStatus.NOTFOUND);
 				    }
 				    LockResult lockResult = lockLN(ln, LockType.WRITE);
 				    ln = lockResult.getLN();
 				    if (ln == null) {
-				        Label271: //.hook271();
+				        Label271: ;//.hook271();
 				        throw new ReturnObject(OperationStatus.NOTFOUND);
 				    }
 				    byte[] foundDataBytes;
@@ -687,19 +687,19 @@ class CursorImpl {
 				    lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
 				    long oldLNSize = 0;
 				    //	oldLNSize = this.hook286(ln, oldLNSize);
-				    Lable286:
-				        byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
+				    Lable286: ; 
+				    byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
 				    long newLsn = ln.modify(newData, database, newKey, oldLsn, locker);
 				    long newLNSize = 0;
 				    //newLNSize = this.hook285(ln, newLNSize);
 				    Label285:
 				        targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-				    Label269://this.hook269();
-				    Label205: //this.hook205(ln, oldLsn, newLsn);
+				    Label269: ;//this.hook269();
+				    Label205: ;//this.hook205(ln, oldLsn, newLsn);
 				    status = CURSOR_INITIALIZED;
 				    //throw new ReturnObject(OperationStatus.SUCCESS);
 //End of hook218(            
-Label218_1:
+Label218_1: ;
 		      throw ReturnHack.returnObject;
         } catch (ReturnObject r) {
             return (OperationStatus) r.value;
@@ -793,7 +793,7 @@ Label223_1:
     public KeyChangeStatus getNextWithKeyChangeStatus(DatabaseEntry foundKey, DatabaseEntry foundData,
         LockType lockType, boolean forward, boolean alreadyLatched) throws DatabaseException {
         assert assertCursorState(true): dumpToString(true);
-        Label224: //this.hook224(alreadyLatched);
+        Label224: ; //this.hook224(alreadyLatched);
         KeyChangeStatus result = new KeyChangeStatus(OperationStatus.NOTFOUND, true);
         try {
             while (bin != null) {
@@ -806,7 +806,7 @@ Label223_1:
                             break;
                         } else {
                             removeCursorDBIN();
-                            Label226//alreadyLatched = this.hook226(alreadyLatched);
+                            Label226: ;//alreadyLatched = this.hook226(alreadyLatched);
                             dupBin = null;
                             dupIndex = -1;
                             continue;
@@ -829,9 +829,9 @@ Label223_1:
                         }
                     } else {
                         if (binToBeRemoved != null) {
-                            Label229: //this.hook229();
+                            Label229: ;//this.hook229();
                             flushBINToBeRemoved();
-                            Label228: //this.hook228();
+                            Label228: ;//this.hook228();
                         }
                         binToBeRemoved = bin;
                         bin = null;
@@ -853,7 +853,7 @@ Label223_1:
                             }
                             addCursor(newBin);
                             bin = newBin;
-                            Label230: //this.hook230(alreadyLatched);
+                            Label230: ;//this.hook230(alreadyLatched);
                         }
                     }
             }
@@ -868,7 +868,7 @@ Label223_1:
 
     private void flushBINToBeRemoved() throws DatabaseException {
         binToBeRemoved.removeCursor(this);
-        Label232: //this.hook232();
+        Label232: ;//this.hook232();
         binToBeRemoved = null;
     }
 
@@ -972,9 +972,10 @@ Label223_1:
         status = CURSOR_INITIALIZED;
         //throw new ReturnBoolean(found);
 //End of hook234
+Label234_1: ;
             throw ReturnHack.returnBoolean;
         } 
-Label234_1:
+
 catch (ReturnBoolean r) {
             return r.value;
         }
@@ -996,10 +997,11 @@ catch (ReturnBoolean r) {
             boolean exactSearch = searchMode.isExactSearch();
             BINBoundary binBoundary = new BINBoundary();
             //this.hook235(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData,foundLast, exactSearch, binBoundary);
-            throw ReturnHack.returnInt;
+            				Label235_1:  ;//extra catch statement will be addd.
+throw ReturnHack.returnInt;
 
         }
-				Label235_1:  //extra catch statement will be addd.
+
 				catch (ReturnInt r) {
             return r.value;
         }
@@ -1348,7 +1350,7 @@ catch (ReturnBoolean r) {
             throw new ReturnInt(1);
         }
     }
-*/
+
 
     protected void hook213(boolean isDup, LN ln, LockResult lockResult, LockResult dclLockResult, DIN dupRoot)
     throws DatabaseException {
@@ -1521,9 +1523,9 @@ catch (ReturnBoolean r) {
 //    }
 
 //    protected boolean hook226(boolean alreadyLatched) throws DatabaseException {
-        return alreadyLatched;
+//        return alreadyLatched;
   //  }
-
+/*
     protected void hook227() throws DatabaseException {}
 
     protected void hook228() throws DatabaseException {}
@@ -1537,6 +1539,7 @@ catch (ReturnBoolean r) {
     protected void hook232() throws DatabaseException {}
 
     protected void hook233() throws DatabaseException {}
+*/
 
   /*  protected void hook234(boolean first, DIN duplicateRoot, IN in , boolean found) throws DatabaseException {
         if (duplicateRoot == null) {
@@ -1591,7 +1594,7 @@ catch (ReturnBoolean r) {
         status = CURSOR_INITIALIZED;
         throw new ReturnBoolean(found);
     }
-*/
+
     protected void hook235(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode, LockType lockType,
         boolean foundSomething, boolean foundExactKey, boolean foundExactData, boolean foundLast,
         boolean exactSearch, BINBoundary binBoundary) throws DatabaseException {
@@ -1642,7 +1645,7 @@ catch (ReturnBoolean r) {
         throw new ReturnInt((foundSomething ? FOUND : 0) | (foundExactKey ? EXACT_KEY : 0) |
             (foundExactData ? EXACT_DATA : 0) | (foundLast ? FOUND_LAST : 0));
     }
-
+*/
    /* protected void hook236(DIN duplicateRoot) throws DatabaseException {}
 
     protected void hook237() throws DatabaseException {}

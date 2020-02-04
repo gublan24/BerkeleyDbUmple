@@ -141,7 +141,7 @@ class DbTree
 	try {
 	    nameCursor = new CursorImpl(nameDatabase, locker);
 	    //this.hook307(allowEviction, nameCursor);
-      Label307:
+      Label307: ;
 	    LN nameLN = new NameLN(newId);
 	    nameCursor.putLN(databaseName.getBytes("UTF-8"), nameLN, false);
 	    if (databaseHandle != null) {
@@ -199,7 +199,7 @@ class DbTree
 			cursor = new CursorImpl(idDatabase, locker);
 			continue;
 		    } finally {
-			Label299: //this.hook299(cursor);
+			Label299: ;//this.hook299(cursor);
 		    }
 		    break;
 		}
@@ -297,7 +297,7 @@ class DbTree
 	    try {
 		nameCursor = new CursorImpl(nameDatabase, nameLocker);
 		//this.hook308(allowEviction, nameCursor);
-    Label308:
+    Label308: ;
 		DatabaseEntry keyDbt = new DatabaseEntry(databaseName.getBytes("UTF-8"));
 		boolean found = (nameCursor.searchAndPosition(keyDbt, null, SearchMode.SET, LockType.READ)
 			& CursorImpl.FOUND) != 0;

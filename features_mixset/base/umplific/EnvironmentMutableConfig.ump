@@ -19,7 +19,7 @@ class EnvironmentMutableConfig
     /** 
      * Note that in the implementation we choose not to extend Properties  in order to keep the configuration type safe.
      */
-    private Properties props;
+     Properties props =new Properties();
 
     /** 
      * For unit testing, to prevent loading of je.properties.
@@ -34,9 +34,9 @@ class EnvironmentMutableConfig
     /** 
      * Javadoc for this public method is generated via the doc templates in the doc_src directory.
      */
-    public EnvironmentMutableConfig() {
-	props = new Properties();
-    }
+ //   public EnvironmentMutableConfig() {
+//	props = new Properties();
+ //   }
 
     /** 
      * Used by EnvironmentConfig to construct from properties.

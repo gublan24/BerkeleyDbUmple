@@ -37,12 +37,9 @@ public abstract class TupleTupleBinding extends TupleBase implements EntityBindi
   /**
    * 
    * Creates a tuple-tuple entity binding.
+   * public TupleTupleBinding() {
+   * }
    */
-  // line 14 "../../../../TupleTupleBinding.ump"
-   public  TupleTupleBinding(){
-    
-  }
-
   // line 17 "../../../../TupleTupleBinding.ump"
    public Object entryToObject(DatabaseEntry key, DatabaseEntry data){
     return entryToObject(TupleBinding.entryToInput(key), TupleBinding.entryToInput(data));

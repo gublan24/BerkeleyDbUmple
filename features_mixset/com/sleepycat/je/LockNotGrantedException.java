@@ -30,11 +30,12 @@ public class LockNotGrantedException extends DeadlockException
     super.delete();
   }
 
-  // line 8 "../../../LockNotGrantedException.ump"
-   public  LockNotGrantedException(){
-    super();
-  }
 
+  /**
+   * public LockNotGrantedException() {
+   * super();
+   * }
+   */
   // line 12 "../../../LockNotGrantedException.ump"
    public  LockNotGrantedException(Throwable t){
     super(t);

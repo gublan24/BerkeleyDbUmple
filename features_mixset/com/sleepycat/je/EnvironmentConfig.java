@@ -37,14 +37,9 @@ public class EnvironmentConfig extends EnvironmentMutableConfig
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 33 "../../../EnvironmentConfig.ump"
-   public  EnvironmentConfig(){
-    super();
-  }
-
-
-  /**
+   * public EnvironmentConfig() {
+   * super();
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

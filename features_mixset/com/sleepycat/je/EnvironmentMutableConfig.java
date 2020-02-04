@@ -19,16 +19,38 @@ public class EnvironmentMutableConfig implements Cloneable
   // MEMBER VARIABLES
   //------------------------
 
+  //EnvironmentMutableConfig Attributes
+  private Properties props;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public EnvironmentMutableConfig()
-  {}
+  {
+    props = new Properties();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setProps(Properties aProps)
+  {
+    boolean wasSet = false;
+    props = aProps;
+    wasSet = true;
+    return wasSet;
+  }
+
+  /**
+   * 
+   * Note that in the implementation we choose not to extend Properties  in order to keep the configuration type safe.
+   */
+  public Properties getProps()
+  {
+    return props;
+  }
 
   public void delete()
   {}
@@ -37,14 +59,9 @@ public class EnvironmentMutableConfig implements Cloneable
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 38 "../../../EnvironmentMutableConfig.ump"
-   public  EnvironmentMutableConfig(){
-    props = new Properties();
-  }
-
-
-  /**
+   * public EnvironmentMutableConfig() {
+   * props = new Properties();
+   * }
    * 
    * Used by EnvironmentConfig to construct from properties.
    */
@@ -378,8 +395,6 @@ public class EnvironmentMutableConfig implements Cloneable
   private boolean txnWriteNoSync = false ;
 // line 17 "../../../EnvironmentMutableConfig.ump"
   protected long cacheSize ;
-// line 22 "../../../EnvironmentMutableConfig.ump"
-  private Properties props ;
 // line 27 "../../../EnvironmentMutableConfig.ump"
   private boolean loadPropertyFile = true ;
 // line 32 "../../../EnvironmentMutableConfig.ump"

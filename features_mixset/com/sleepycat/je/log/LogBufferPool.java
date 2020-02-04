@@ -11,15 +11,8 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.nio.ByteBuffer;
 import java.io.IOException;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogBufferPool.ump"
-// line 3 "../../../../Statistics_LogBufferPool.ump"
-// line 3 "../../../../Latches_LogBufferPool.ump"
-// line 3 "../../../../Derivative_Latches_Statistics_LogBufferPool.ump"
 public class LogBufferPool
 {
 
@@ -45,10 +38,7 @@ public class LogBufferPool
   public  LogBufferPool(FileManager fileManager, EnvironmentImpl envImpl) throws DatabaseException{
     this.fileManager = fileManager;
 	this.envImpl = envImpl;
-	Label485:
-bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
-	//original(envImpl);
- //this.hook485(envImpl);
+	Label485: //this.hook485(envImpl);
 	DbConfigManager configManager = envImpl.getConfigManager();
 	runInMemory = configManager.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY);
 	reset(configManager);
@@ -75,17 +65,9 @@ bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
 	for (int i = 0; i < numBuffers; i++) {
 	    newPool.add(new LogBuffer(newBufferSize, envImpl));
 	}
-	Label486:
-bufferPoolLatch.acquire();
-	//original();
- //this.hook486();
+	Label486: //this.hook486();
 	bufferPool = newPool;
 	logBufferSize = newBufferSize;
-    
-    // line 18 "../../../../Latches_LogBufferPool.ump"
-    //original(configManager);
-    	bufferPoolLatch.release();
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -116,10 +98,7 @@ bufferPoolLatch.acquire();
   // line 81 "../../../../LogBufferPool.ump"
   public void writeBufferToFile(int sizeNeeded) throws IOException,DatabaseException{
     int bufferSize = ((logBufferSize > sizeNeeded) ? logBufferSize : sizeNeeded);
-	Label488:
-currentWriteBuffer.latchForWrite();
-	//original();
- //this.hook488();
+	Label488: //this.hook488();
 	LogBuffer latchedBuffer = currentWriteBuffer;
 	Label487: //this.hook487(bufferSize, latchedBuffer);
   ByteBuffer currentByteBuffer = currentWriteBuffer.getDataBuffer();
@@ -127,40 +106,21 @@ currentWriteBuffer.latchForWrite();
 	int saveLimit = currentByteBuffer.limit();
 	currentByteBuffer.flip();
 	if (runInMemory) {
-	    Label492:
-latchedBuffer.release();
-	//original(latchedBuffer);
- //this.hook492(latchedBuffer);
+	    Label492: //this.hook492(latchedBuffer);
 	    latchedBuffer = null;
-	    Label491:
-bufferPoolLatch.acquire();
-	//original();
- //this.hook491();
+	    Label491: //this.hook491();
 	    currentWriteBuffer = new LogBuffer(bufferSize, envImpl);
 	    bufferPool.add(currentWriteBuffer);
-	    Label490:
-bufferPoolLatch.release();
-	//original();
- //this.hook490();
+	    Label490: //this.hook490();
 	} else {
 	    try {
 		fileManager.writeLogBuffer(currentWriteBuffer);
 		currentWriteBuffer.getDataBuffer().rewind();
-		Label494:
-latchedBuffer.release();
-	//original(latchedBuffer);
- //this.hook494(latchedBuffer);
+		Label494: //this.hook494(latchedBuffer);
 		latchedBuffer = null;
 		LogBuffer nextToUse = null;
-		Label493:
-//	try {	    //original(nextToUse);} finally {
-	    bufferPoolLatch.releaseIfOwner();
-	//}
- //this.hook493(nextToUse);
-		Label495:
-bufferPoolLatch.acquire();
-	//original();
- //this.hook495();
+		Label493: //this.hook493(nextToUse);
+		Label495: //this.hook495();
 		Iterator iter = bufferPool.iterator();
 		nextToUse = (LogBuffer) iter.next();
 		boolean done = bufferPool.remove(nextToUse);
@@ -176,12 +136,6 @@ bufferPoolLatch.acquire();
 	    }
 	}
 Label487_1:
-//	try { //original(bufferSize, latchedBuffer);} finally {
-	    if (latchedBuffer != null) {
-		latchedBuffer.release();
-	    }
-//	}
-
 // End of hook487
   }
 
@@ -220,10 +174,7 @@ Label487_1:
 					foundBuffer = currentWriteBuffer;
 			}
 			if (foundBuffer == null) {
-					Label496:
-nCacheMiss++;
-			//original();
- //this.hook496();
+					Label496: //this.hook496();
 			}
 Label489_1:
 	//End of hook489
@@ -278,44 +229,6 @@ Label489_1:
    protected void hook488() throws IOException,DatabaseException{
     
   }
-
-  // line 12 "../../../../Statistics_LogBufferPool.ump"
-  public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
-    // line 46 "../../../../Statistics_LogBufferPool.ump"
-    nNotResident++;
-    			//return original(lsn, foundBuffer);
-    // END OF UMPLE BEFORE INJECTION
-    stats.setNCacheMiss(nCacheMiss);
-			stats.setNNotResident(nNotResident);
-			if (config.getClear()) {
-					nCacheMiss = 0;
-					nNotResident = 0;
-			}
-			Label484:
-bufferPoolLatch.acquire();
-	//original();
- //this.hook484();
-			long bufferBytes = 0;
-			int nLogBuffers = 0;
-			Label483: //this.hook483(bufferBytes, nLogBuffers);
-	try {
-			Iterator iter = bufferPool.iterator();
-				while (iter.hasNext()) {
-	    		LogBuffer l = (LogBuffer) iter.next();
-	    		nLogBuffers++;
-	    		bufferBytes += l.getCapacity();
-				}
-			// End hook483	
-} 
-finally {
-
-			stats.setNLogBuffers(nLogBuffers);
-			stats.setBufferBytes(bufferBytes);
-Label483_1:
-bufferPoolLatch.release();
- ;;//
-}
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -335,27 +248,6 @@ bufferPoolLatch.release();
   private FileManager fileManager ;
 // line 26 "../../../../LogBufferPool.ump"
   private boolean runInMemory ;
-// line 7 "../../../../Statistics_LogBufferPool.ump"
-  private long nNotResident = 0 ;
-// line 9 "../../../../Statistics_LogBufferPool.ump"
-  private long nCacheMiss = 0 ;
-// line 7 "../../../../Latches_LogBufferPool.ump"
-  private Latch bufferPoolLatch ;
-
-// line 42 "../../../../Latches_LogBufferPool.ump"
-  protected LogBuffer hook489: getReadBuffer (long ) 
-  {
-    bufferPoolLatch.acquire();
-//	try {foundBuffer = //original(lsn, foundBuffer);} finally {	    bufferPoolLatch.releaseIfOwner();}
-	//return foundBuffer;
-  }
-
-// line 48 "../../../../Latches_LogBufferPool.ump"
-  protected LogBuffer Label489_1: getReadBuffer (long ) 
-  {
-    bufferPoolLatch.releaseIfOwner();
-	//return foundBuffer;
-  }
 
   
 }

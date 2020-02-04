@@ -45,16 +45,6 @@ import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../UtilizationProfile.ump"
 // line 3 "../../../../UtilizationProfile_static.ump"
-// line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
-// line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
-// line 3 "../../../../Evictor_UtilizationProfile.ump"
-// line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
-// line 3 "../../../../DeleteOp_UtilizationProfile.ump"
-// line 3 "../../../../Latches_UtilizationProfile.ump"
-// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
-// line 3 "../../../../Derivative_LoggingSevere_LoggingBase_UtilizationProfile.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -494,10 +484,7 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	    OperationStatus status = OperationStatus.SUCCESS;
 	    while (status == OperationStatus.SUCCESS) {
-		Label173:
-env.getEvictor().doCriticalEviction();
-	//original();
-           ;  //this.hook173();
+		Label173:           ;  //this.hook173();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -513,10 +500,7 @@ env.getEvictor().doCriticalEviction();
 	    }
 	} finally {
 	    if (cursor != null) {
-		Label178:
-cursor.releaseBINs();
-//	original(cursor);
-           ;  //this.hook178(cursor);
+		Label178:           ;  //this.hook178(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -574,10 +558,7 @@ cursor.releaseBINs();
 		status = OperationStatus.NOTFOUND;
 	    }
 	    while (status == OperationStatus.SUCCESS) {
-		Label174:
-env.getEvictor().doCriticalEviction();
-	//original();
-           ;  //this.hook174();
+		Label174:           ;  //this.hook174();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -589,20 +570,11 @@ env.getEvictor().doCriticalEviction();
 		    }
 		    //           ;  //this.hook187(cursor);
         Label187:
-cursor.evict();
-//	original(cursor);
-
 		}
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
 	} finally {
-	    Label179:
-if (cursor != null) {
-	    cursor.releaseBINs();
-	    cursor.close();
-	}
-	//original(cursor);
-           ;  //this.hook179(cursor);
+	    Label179:           ;  //this.hook179(cursor);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -717,22 +689,10 @@ if (cursor != null) {
 	    cursor = new CursorImpl(fileSummaryDb, locker);
 	    //           ;  //this.hook189(cursor);
       Label189:
-// <<     private synchronized void insertFileSummary(...)
-	    cursor.setAllowEviction(false);
-//	original(cursor);
-
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    Label177:
-//synchronized void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence)
-	    env.getLogger().log(Level.SEVERE, "Cleaner duplicate key sequence file=0x" + Long.toHexString(fileNum)
-		    + " sequence=0x" + Long.toHexString(sequence));
-           ;  //this.hook177(fileNum, sequence, status);
+	    Label177:           ;  //this.hook177(fileNum, sequence, status);
 	    //           ;  //this.hook188(cursor);
       Label188:
-// <<     private synchronized void insertFileSummary(...)
-	    cursor.evict();
-//	original(cursor);
-
 	} finally {
 	    if (cursor != null) {
 		cursor.close();
@@ -763,10 +723,7 @@ if (cursor != null) {
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    Label175:
-env.getEvictor().doCriticalEviction();
-	//original();
-           ;  //this.hook175();
+		    Label175:           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());
@@ -782,9 +739,6 @@ env.getEvictor().doCriticalEviction();
 			}
 			//           ;  //this.hook190(cursor);
       Label190:
-cursor.evict();
-//	original(cursor);
-
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
 		}
@@ -814,10 +768,7 @@ cursor.evict();
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    Label186:
-b |= db.isDeleted();
-			//return original(db, b);
- //b =            ;  //this.hook186(db, b);
+	    Label186: //b =            ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
@@ -843,13 +794,7 @@ b |= db.isDeleted();
 
 	    throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
-	    Label180_1:
-//try {	    //original(lsn, entry, db, bin);} finally {
-	    if (bin != null) {
-		bin.releaseLatch();
-	    }
-	//}
-           ;
+	    Label180_1:           ;
 	    return r.value;
 	}
   }
@@ -923,9 +868,7 @@ b |= db.isDeleted();
   
   
   
-  @MethodObject
   // line 4 "../../../../UtilizationProfile_static.ump"
-  // line 30 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_clearCache
   {
   
@@ -954,12 +897,6 @@ b |= db.isDeleted();
   
     // line 9 "../../../../UtilizationProfile_static.ump"
     public void execute(){
-      // line 32 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
-      memorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-              mb=_this.env.getMemoryBudget();
-              mb.updateMiscMemoryUsage(0 - memorySize);
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       _this.fileSummaryMap=new TreeMap();
           _this.cachePopulated=false;
     }
@@ -981,9 +918,7 @@ b |= db.isDeleted();
   
   
   
-  @MethodObject
   // line 16 "../../../../UtilizationProfile_static.ump"
-  // line 16 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_removeFile
   {
   
@@ -1018,10 +953,6 @@ b |= db.isDeleted();
             if (_this.fileSummaryMap.remove(fileNum) != null) {
               //           ;  //this.hook192();
               Label192:
-  mb=_this.env.getMemoryBudget();
-          mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
-          //original();
-  
             }
           }
           _this.deleteFileSummary(fileNum);
@@ -1044,9 +975,7 @@ b |= db.isDeleted();
   
   
   
-  @MethodObject
   // line 37 "../../../../UtilizationProfile_static.ump"
-  // line 23 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_putFileSummary
   {
   
@@ -1106,10 +1035,6 @@ b |= db.isDeleted();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
             //           ;  //this.hook193();
             Label193:
-  mb=_this.env.getMemoryBudget();
-          mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
-          //original();
-  
           }
           return ln.getObsoleteOffsets();
     }
@@ -1145,13 +1070,7 @@ b |= db.isDeleted();
   
   
   
-  @MethodObject
-    @MethodObject
   // line 89 "../../../../UtilizationProfile_static.ump"
-  // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
-  // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
-  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1186,9 +1105,6 @@ b |= db.isDeleted();
           }
           //           ;  //this.hook194();
           Label194:
-  oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-          //original();
-  
           existingFiles=_this.env.getFileManager().getAllFileNumbers();
           locker=null;
           cursor=null;
@@ -1203,10 +1119,7 @@ b |= db.isDeleted();
                 status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
               }
               while (status == OperationStatus.SUCCESS) {
-                Label176:
-  _this.env.getEvictor().doCriticalEviction();
-         // original();
-             ;  //this.hook176();
+                Label176:           ;  //this.hook176();
                 ln=(FileSummaryLN)cursor.getCurrentLN(LockType.NONE);
                 if (ln == null) {
                   status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
@@ -1220,36 +1133,21 @@ b |= db.isDeleted();
                   _this.fileSummaryMap.put(fileNumLong,ln.getBaseSummary());
                   if (isOldVersion) {
                     _this.insertFileSummary(ln,fileNum,0);
-                    Label182:
-  cursor.latchBIN();
-          //original();
-             ;  //this.hook182();
+                    Label182:           ;  //this.hook182();
                     cursor.delete();
-                    Label181:
-  cursor.releaseBIN();
-          //original();
-             ;  //this.hook181();
+                    Label181:           ;  //this.hook181();
                   }
      else {
                    //            ;  //this.hook191();
                       Label191:
-  cursor.evict();
-          //original();
-  
                   }
                 }
      else {
                   _this.fileSummaryMap.remove(fileNumLong);
                   if (isOldVersion) {
-                    Label184:
-  cursor.latchBIN();
-          //original();
-             ;  //this.hook184();
+                    Label184:           ;  //this.hook184();
                     cursor.delete();
-                    Label183:
-  cursor.releaseBIN();
-          //original();
-             ;  //this.hook183();
+                    Label183:           ;  //this.hook183();
                   }
      else {
                     _this.deleteFileSummary(fileNumLong);
@@ -1268,22 +1166,14 @@ b |= db.isDeleted();
           }
       finally {
             if (cursor != null) {
-              Label185:
-  cursor.releaseBINs();
-          //original();
-             ;  //this.hook185();
+              Label185:           ;  //this.hook185();
               cursor.close();
             }
             if (locker != null) {
               locker.operationEnd();
             }
             //           ;  //this.hook195();
-            Label195:
-  newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-          mb=_this.env.getMemoryBudget();
-          mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
-          //original();
-   ;
+            Label195: ;
           }
           _this.cachePopulated=true;
           return true;

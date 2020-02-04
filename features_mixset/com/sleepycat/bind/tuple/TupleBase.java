@@ -31,14 +31,9 @@ public class TupleBase
   /**
    * 
    * Initializes the initial output buffer size to zero. <p> Unless  {@link #setTupleBufferSize} is called, the default {@link com.sleepycat.util.FastOutputStream#DEFAULT_INIT_SIZE} size will be used.</p>
-   */
-  // line 13 "../../../../TupleBase.ump"
-   public  TupleBase(){
-    outputBufferSize = 0;
-  }
-
-
-  /**
+   * public TupleBase() {
+   * outputBufferSize = 0;
+   * }
    * 
    * Sets the initial byte size of the output buffer that is allocated by the default implementation of  {@link #getTupleOutput}. <p> If this property is zero (the default), the default  {@link com.sleepycat.util.FastOutputStream#DEFAULT_INIT_SIZE} size is used.</p>
    * @param byteSizethe initial byte size of the output buffer, or zero to use thedefault size.
@@ -143,7 +138,7 @@ public class TupleBase
   //------------------------
   
   // line 7 "../../../../TupleBase.ump"
-  private int outputBufferSize ;
+  private int outputBufferSize = 0 ;
 
   
 }

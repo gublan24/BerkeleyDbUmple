@@ -35,7 +35,7 @@ public class LogUtils
    * 
    * Marshall a long into the next 4 bytes in this buffer. Necessary when the long is used to hold an unsigned int.
    */
-  // line 25 "../../../../LogUtils.ump"
+  // line 26 "../../../../LogUtils.ump"
    public static  void writeUnsignedInt(ByteBuffer buf, long value){
     buf.put((byte) (value >>> 0));
 	buf.put((byte) (value >>> 8));
@@ -48,7 +48,7 @@ public class LogUtils
    * 
    * Unmarshall the next four bytes which hold an unsigned int into a long.
    */
-  // line 35 "../../../../LogUtils.ump"
+  // line 36 "../../../../LogUtils.ump"
    public static  long getUnsignedInt(ByteBuffer buf){
     long ret = (buf.get() & 0xFFL) << 0;
 	ret += (buf.get() & 0xFFL) << 8;
@@ -62,7 +62,7 @@ public class LogUtils
    * 
    * Write a short into the log.
    */
-  // line 46 "../../../../LogUtils.ump"
+  // line 47 "../../../../LogUtils.ump"
    public static  void writeShort(ByteBuffer logBuf, short i){
     byte b = (byte) ((i >> 0) & 0xff);
 	logBuf.put(b);
@@ -75,7 +75,7 @@ public class LogUtils
    * 
    * Read a short from the log.
    */
-  // line 56 "../../../../LogUtils.ump"
+  // line 57 "../../../../LogUtils.ump"
    public static  short readShort(ByteBuffer logBuf){
     return (short) (((logBuf.get() & 0xFF) << 0) + ((logBuf.get() & 0xFF) << 8));
   }
@@ -85,7 +85,7 @@ public class LogUtils
    * 
    * Write an int into the log.
    */
-  // line 63 "../../../../LogUtils.ump"
+  // line 64 "../../../../LogUtils.ump"
    public static  void writeInt(ByteBuffer logBuf, int i){
     byte b = (byte) ((i >> 0) & 0xff);
 	logBuf.put(b);
@@ -102,7 +102,7 @@ public class LogUtils
    * 
    * Read a int from the log.
    */
-  // line 77 "../../../../LogUtils.ump"
+  // line 78 "../../../../LogUtils.ump"
    public static  int readInt(ByteBuffer logBuf){
     int ret = (logBuf.get() & 0xFF) << 0;
 	ret += (logBuf.get() & 0xFF) << 8;
@@ -116,7 +116,7 @@ public class LogUtils
    * 
    * @return log storage size for a byteArray.
    */
-  // line 88 "../../../../LogUtils.ump"
+  // line 89 "../../../../LogUtils.ump"
    public static  int getIntLogSize(){
     return INT_BYTES;
   }
@@ -126,7 +126,7 @@ public class LogUtils
    * 
    * Write an int into the log in MSB order.  Used for ordered keys.
    */
-  // line 95 "../../../../LogUtils.ump"
+  // line 96 "../../../../LogUtils.ump"
    public static  void writeIntMSB(ByteBuffer logBuf, int i){
     byte b = (byte) ((i >> 24) & 0xff);
 	logBuf.put(b);
@@ -143,7 +143,7 @@ public class LogUtils
    * 
    * Read a int from the log in MSB order.  Used for ordered keys.
    */
-  // line 109 "../../../../LogUtils.ump"
+  // line 110 "../../../../LogUtils.ump"
    public static  int readIntMSB(ByteBuffer logBuf){
     int ret = (logBuf.get() & 0xFF) << 24;
 	ret += (logBuf.get() & 0xFF) << 16;
@@ -157,7 +157,7 @@ public class LogUtils
    * 
    * Write a long into the log.
    */
-  // line 120 "../../../../LogUtils.ump"
+  // line 121 "../../../../LogUtils.ump"
    public static  void writeLong(ByteBuffer logBuf, long l){
     byte b = (byte) (l >>> 0);
 	logBuf.put(b);
@@ -182,7 +182,7 @@ public class LogUtils
    * 
    * Read a long from the log.
    */
-  // line 142 "../../../../LogUtils.ump"
+  // line 143 "../../../../LogUtils.ump"
    public static  long readLong(ByteBuffer logBuf){
     long ret = (logBuf.get() & 0xFFL) << 0;
 	ret += (logBuf.get() & 0xFFL) << 8;
@@ -200,7 +200,7 @@ public class LogUtils
    * 
    * @return log storage size for a byteArray.
    */
-  // line 157 "../../../../LogUtils.ump"
+  // line 158 "../../../../LogUtils.ump"
    public static  int getLongLogSize(){
     return LONG_BYTES;
   }
@@ -210,7 +210,7 @@ public class LogUtils
    * 
    * Write a byte array into the log. The size is stored first as an integer.
    */
-  // line 164 "../../../../LogUtils.ump"
+  // line 165 "../../../../LogUtils.ump"
    public static  void writeByteArray(ByteBuffer logBuf, byte [] b){
     writeInt(logBuf, b.length);
 	logBuf.put(b);
@@ -221,7 +221,7 @@ public class LogUtils
    * 
    * Read a byte array from the log. The size is stored first as an integer.
    */
-  // line 172 "../../../../LogUtils.ump"
+  // line 173 "../../../../LogUtils.ump"
    public static  byte[] readByteArray(ByteBuffer logBuf){
     int size = readInt(logBuf);
 	if (DEBUG) {
@@ -240,7 +240,7 @@ public class LogUtils
    * 
    * @return log storage size for a byteArray
    */
-  // line 188 "../../../../LogUtils.ump"
+  // line 189 "../../../../LogUtils.ump"
    public static  int getByteArrayLogSize(byte [] b){
     return INT_BYTES + b.length;
   }
@@ -250,7 +250,7 @@ public class LogUtils
    * 
    * Write a string into the log. The size is stored first as an integer.
    */
-  // line 195 "../../../../LogUtils.ump"
+  // line 196 "../../../../LogUtils.ump"
    public static  void writeString(ByteBuffer logBuf, String stringVal){
     writeByteArray(logBuf, stringVal.getBytes());
   }
@@ -260,7 +260,7 @@ public class LogUtils
    * 
    * Read a string from the log. The size is stored first as an integer.
    */
-  // line 202 "../../../../LogUtils.ump"
+  // line 203 "../../../../LogUtils.ump"
    public static  String readString(ByteBuffer logBuf){
     return new String(readByteArray(logBuf));
   }
@@ -270,7 +270,7 @@ public class LogUtils
    * 
    * @return log storage size for a string
    */
-  // line 209 "../../../../LogUtils.ump"
+  // line 210 "../../../../LogUtils.ump"
    public static  int getStringLogSize(String s){
     return INT_BYTES + s.length();
   }
@@ -280,7 +280,7 @@ public class LogUtils
    * 
    * Write a timestamp into the log.
    */
-  // line 216 "../../../../LogUtils.ump"
+  // line 217 "../../../../LogUtils.ump"
    public static  void writeTimestamp(ByteBuffer logBuf, Timestamp time){
     writeLong(logBuf, time.getTime());
   }
@@ -290,7 +290,7 @@ public class LogUtils
    * 
    * Read a timestamp from the log.
    */
-  // line 223 "../../../../LogUtils.ump"
+  // line 224 "../../../../LogUtils.ump"
    public static  Timestamp readTimestamp(ByteBuffer logBuf){
     long millis = readLong(logBuf);
 	return new Timestamp(millis);
@@ -301,7 +301,7 @@ public class LogUtils
    * 
    * @return log storage size for a timestamp
    */
-  // line 231 "../../../../LogUtils.ump"
+  // line 232 "../../../../LogUtils.ump"
    public static  int getTimestampLogSize(){
     return LONG_BYTES;
   }
@@ -311,7 +311,7 @@ public class LogUtils
    * 
    * Write a boolean into the log.
    */
-  // line 238 "../../../../LogUtils.ump"
+  // line 239 "../../../../LogUtils.ump"
    public static  void writeBoolean(ByteBuffer logBuf, boolean bool){
     byte val = bool ? (byte) 1 : (byte) 0;
 	logBuf.put(val);
@@ -322,7 +322,7 @@ public class LogUtils
    * 
    * Read a boolean from the log.
    */
-  // line 246 "../../../../LogUtils.ump"
+  // line 247 "../../../../LogUtils.ump"
    public static  boolean readBoolean(ByteBuffer logBuf){
     byte val = logBuf.get();
 	return (val == (byte) 1) ? true : false;
@@ -333,12 +333,12 @@ public class LogUtils
    * 
    * @return log storage size for a boolean.
    */
-  // line 254 "../../../../LogUtils.ump"
+  // line 255 "../../../../LogUtils.ump"
    public static  int getBooleanLogSize(){
     return 1;
   }
 
-  // line 258 "../../../../LogUtils.ump"
+  // line 259 "../../../../LogUtils.ump"
    public static  boolean dumpBoolean(ByteBuffer itemBuffer, StringBuffer sb, String tag){
     sb.append("<");
 	sb.append(tag);
@@ -358,14 +358,14 @@ public class LogUtils
    * 
    * The byte[]'s in Xid's are known to be 255 or less in length.  So instead of using read/writeByteArray(), we can save 6 bytes per record by making the byte[] length be 1 byte instead of 4.
    */
-  // line 275 "../../../../LogUtils.ump"
+  // line 276 "../../../../LogUtils.ump"
    public static  int getXidSize(Xid xid){
     byte[] gid = xid.getGlobalTransactionId();
 	byte[] bqual = xid.getBranchQualifier();
 	return INT_BYTES + 1 + 1 + (gid == null ? 0 : gid.length) + (bqual == null ? 0 : bqual.length);
   }
 
-  // line 281 "../../../../LogUtils.ump"
+  // line 282 "../../../../LogUtils.ump"
    public static  void writeXid(ByteBuffer logBuf, Xid xid){
     byte[] gid = xid.getGlobalTransactionId();
 	byte[] bqual = xid.getBranchQualifier();
@@ -384,7 +384,7 @@ public class LogUtils
 	}
   }
 
-  // line 299 "../../../../LogUtils.ump"
+  // line 300 "../../../../LogUtils.ump"
    public static  Xid readXid(ByteBuffer logBuf){
     int formatId = readInt(logBuf);
 	int gidLen = logBuf.get();
@@ -407,7 +407,7 @@ public class LogUtils
   
   import com.sleepycat.bind.serial.*;
   
-  // line 4 "../../../../LogUtils_static.ump"
+  // line 6 "../../../../LogUtils_static.ump"
   public static class XidImpl implements Xid
   {
   
@@ -429,29 +429,29 @@ public class LogUtils
     public void delete()
     {}
   
-    // line 10 "../../../../LogUtils_static.ump"
+    // line 12 "../../../../LogUtils_static.ump"
      public  XidImpl(int formatId, byte [] gid, byte [] bqual){
       this.formatId=formatId;
           this.gid=gid;
           this.bqual=bqual;
     }
   
-    // line 15 "../../../../LogUtils_static.ump"
+    // line 17 "../../../../LogUtils_static.ump"
      public int getFormatId(){
       return formatId;
     }
   
-    // line 18 "../../../../LogUtils_static.ump"
+    // line 20 "../../../../LogUtils_static.ump"
      public byte[] getGlobalTransactionId(){
       return gid;
     }
   
-    // line 21 "../../../../LogUtils_static.ump"
+    // line 23 "../../../../LogUtils_static.ump"
      public byte[] getBranchQualifier(){
       return bqual;
     }
   
-    // line 24 "../../../../LogUtils_static.ump"
+    // line 26 "../../../../LogUtils_static.ump"
      public boolean equals(Object o){
       if (!(o instanceof XidImpl)) {
             return false;
@@ -466,7 +466,7 @@ public class LogUtils
           return false;
     }
   
-    // line 37 "../../../../LogUtils_static.ump"
+    // line 39 "../../../../LogUtils_static.ump"
      public int hashCode(){
       int code=formatId;
           if (gid != null) {
@@ -482,7 +482,7 @@ public class LogUtils
           return code;
     }
   
-    // line 51 "../../../../LogUtils_static.ump"
+    // line 53 "../../../../LogUtils_static.ump"
      private boolean compareByteArrays(byte [] b1, byte [] b2){
       if (b1 == null || b2 == null) {
             return b1 == b2;
@@ -498,7 +498,7 @@ public class LogUtils
           return true;
     }
   
-    // line 65 "../../../../LogUtils_static.ump"
+    // line 67 "../../../../LogUtils_static.ump"
      public String toString(){
       StringBuffer sb=new StringBuffer();
           sb.append("<Xid formatId=\"").append(formatId);
@@ -524,11 +524,11 @@ public class LogUtils
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 6 "../../../../LogUtils_static.ump"
+    // line 8 "../../../../LogUtils_static.ump"
     private int formatId ;
-  // line 7 "../../../../LogUtils_static.ump"
+  // line 9 "../../../../LogUtils_static.ump"
     private byte[] gid ;
-  // line 8 "../../../../LogUtils_static.ump"
+  // line 10 "../../../../LogUtils_static.ump"
     private byte[] bqual ;
   
     
@@ -537,17 +537,17 @@ public class LogUtils
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 9 "../../../../LogUtils.ump"
+  // line 10 "../../../../LogUtils.ump"
   public static final int SHORT_BYTES = 2 ;
-// line 11 "../../../../LogUtils.ump"
+// line 12 "../../../../LogUtils.ump"
   public static final int INT_BYTES = 4 ;
-// line 13 "../../../../LogUtils.ump"
+// line 14 "../../../../LogUtils.ump"
   public static final int LONG_BYTES = 8 ;
-// line 15 "../../../../LogUtils.ump"
+// line 16 "../../../../LogUtils.ump"
   public static final int UNSIGNED_INT_BYTES = 4 ;
-// line 17 "../../../../LogUtils.ump"
+// line 18 "../../../../LogUtils.ump"
   private static final boolean DEBUG = false ;
-// line 19 "../../../../LogUtils.ump"
+// line 20 "../../../../LogUtils.ump"
   public static final byte[] ZERO_LENGTH_BYTE_ARRAY = new byte[0] ;
 
   

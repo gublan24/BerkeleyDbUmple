@@ -24,7 +24,7 @@ class Cursor {
     /** 
      * The underlying cursor.
      */
-    CursorImpl cursorImpl;
+    protected CursorImpl cursorImpl;
 
     /** 
      * The CursorConfig used to configure this cursor.
@@ -99,7 +99,7 @@ class Cursor {
         }
         this.config = cursorConfig;
         //           ;  //this.hook36(dbImpl);
-        Label36:
+        Label36: ;
     }
 
     /** 
@@ -166,7 +166,7 @@ class Cursor {
      */
     public int count() throws DatabaseException {
         checkState(true);
-        Label0: //           ;  //this.hook0();
+        Label0: ; //           ;  //this.hook0();
         return countInternal(null);
     }
 
@@ -184,7 +184,7 @@ class Cursor {
     public OperationStatus delete() throws DatabaseException {
         checkState(true);
         checkUpdatesAllowed("delete");
-        Label1: //           ;  //this.hook1();
+        Label1: ; //           ;  //this.hook1();
         return deleteInternal();
     }
 
@@ -197,7 +197,7 @@ class Cursor {
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("put");
-        Label2: //           ;  //this.hook2(key, data);
+        Label2: ; //           ;  //this.hook2(key, data);
         return putInternal(key, data, PutMode.OVERWRITE);
     }
 
@@ -210,7 +210,7 @@ class Cursor {
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("putNoOverwrite");
-        Label3: //           ;  //this.hook3(key, data);
+        Label3: ; //           ;  //this.hook3(key, data);
         return putInternal(key, data, PutMode.NOOVERWRITE);
     }
 
@@ -223,7 +223,7 @@ class Cursor {
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("putNoDupData");
-        Label4:           ;  //this.hook4(key, data);
+        Label4: ;           ;  //this.hook4(key, data);
         return putInternal(key, data, PutMode.NODUP);
     }
 
@@ -448,7 +448,7 @@ class Cursor {
                 status = dup.delete();
             return status;
         } finally {
-            Label20: //           ;  //this.hook20(origCursor, dup);
+            Label20: ; //           ;  //this.hook20(origCursor, dup);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -548,7 +548,7 @@ class Cursor {
             }
             return status;
         } finally {
-            Label21: //           ;  //this.hook21(origCursor);
+            Label21: ; //           ;  //this.hook21(origCursor);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -604,9 +604,9 @@ class Cursor {
             dup = beginRead(false);
             if (!dup.positionFirstOrLast(first, null)) {
                 status = OperationStatus.NOTFOUND;
-                Label22: //           ;  //this.hook22();
+                Label22: ; //           ;  //this.hook22();
             } else {
-                Label23: //           ;  //this.hook23();
+                Label23: ; //           ;  //this.hook23();
                     status = dup.getCurrentAlreadyLatched(key, data, lockType, first);
                 if (status == OperationStatus.SUCCESS) {
                     if (dup.getDupBIN() != null) {
@@ -617,7 +617,7 @@ class Cursor {
                 }
             }
         } finally {
-            Label24: //           ;  //this.hook24();
+            Label24: ; //           ;  //this.hook24();
                 endRead(dup, status == OperationStatus.SUCCESS);
         }
         return status;
@@ -710,7 +710,7 @@ class Cursor {
         try {
             assert key != null && data != null;
         } finally {
-            Label25: //           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
+            Label25: ; //           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
             //the label has been changed into the finally block.
         }
         return new KeyChangeStatus(status, keyChange);
@@ -757,7 +757,7 @@ class Cursor {
         OperationStatus status;
         boolean noNextKeyFound;
         while (true) {
-            label26: //           ;  //this.hook26();
+            label26: ; //           ;  //this.hook26();
                 CursorImpl dup = beginRead(true);
             try {
                 KeyChangeStatus result = dup.getNextWithKeyChangeStatus(tryKey, tryData, lockType, true, false);
@@ -775,7 +775,7 @@ class Cursor {
                 continue;
             } else {
                 endRead(dup, status == OperationStatus.SUCCESS);
-                Label27: //           ;  //this.hook27();
+                Label27: ; //           ;  //this.hook27();
                     break;
             }
         }
@@ -807,14 +807,14 @@ class Cursor {
             }
             if (status != OperationStatus.SUCCESS) {
                 while (true) {
-                    Label28: //           ;  //this.hook28();
+                    Label28: ; //           ;  //this.hook28();
                         status = dup.getNext(tempKey, tempData, LockType.RANGE_READ, true, false);
                     if (checkForInsertion(GetMode.NEXT, cursorImpl, dup)) {
                         dup.close();
                         dup = cursorImpl.cloneCursor(true);
                         continue;
                     } else {
-                        Label29: //           ;  //this.hook29();
+                        Label29: ; //           ;  //this.hook29();
                             break;
                     }
                 }
@@ -839,7 +839,7 @@ class Cursor {
         assert(key != null && data != null);
         OperationStatus status;
         while (true) {
-            Label30: //           ;  //this.hook30();
+            Label30: ; //           ;  //this.hook30();
                 CursorImpl dup = beginRead(true);
             try {
                 if (getMode == GetMode.NEXT) {
@@ -866,7 +866,7 @@ class Cursor {
                 continue;
             } else {
                 endRead(dup, status == OperationStatus.SUCCESS);
-                Label31: //           ;  //this.hook31();
+                Label31: ; //           ;  //this.hook31();
                     break;
             }
         }
@@ -893,7 +893,7 @@ class Cursor {
         }
         boolean ret = false;
         if (origBIN != dupBIN) {
-            Label33: //           ;  //this.hook33(origCursor);
+            Label33: ; //           ;  //this.hook33(origCursor);
             if (origDBIN == null) {
                 if (forward) {
                     if (origBIN.getNEntries() - 1 > origCursor.getIndex()) {
@@ -927,12 +927,12 @@ class Cursor {
                     }
                 }
             }
-            Label32: //           ;  //this.hook32(origCursor);
+            Label32: ; //           ;  //this.hook32(origCursor);
                 return ret;
         }
         if (origDBIN != dupCursor.getDupBIN() && origCursor.getIndex() == dupCursor.getIndex() &&
             getMode != GetMode.NEXT_NODUP && getMode != GetMode.PREV_NODUP) {
-            Label35: //           ;  //this.hook35(origCursor);
+            Label35: ; //           ;  //this.hook35(origCursor);
             if (forward) {
                 if (origDBIN.getNEntries() - 1 > origCursor.getDupIndex()) {
                     for (int i = origCursor.getDupIndex() + 1; i < origDBIN.getNEntries(); i++) {
@@ -960,7 +960,7 @@ class Cursor {
                     }
                 }
             }
-            Label34: //           ;  //this.hook34(origCursor);
+            Label34: ; //           ;  //this.hook34(origCursor);
             return ret;
         }
         return false;

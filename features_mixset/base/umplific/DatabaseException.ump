@@ -4,9 +4,10 @@ class DatabaseException
 {
   isA Exception;
   depend de.ovgu.cide.jakutil.*;
-    public DatabaseException() {
-	super();
-    }
+
+////    public DatabaseException() {
+//	super();
+ //   }
 
     public DatabaseException(Throwable t) {
 	super(t);

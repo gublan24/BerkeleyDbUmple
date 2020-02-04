@@ -46,28 +46,9 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.IOException;
-import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../../RecoveryManager.ump"
 // line 3 "../../../../RecoveryManager_static.ump"
-// line 3 "../../../../loggingBase_RecoveryManager.ump"
-// line 3 "../../../../loggingBase_RecoveryManager_inner.ump"
-// line 3 "../../../../Evictor_RecoveryManager.ump"
-// line 3 "../../../../INCompressor_RecoveryManager.ump"
-// line 3 "../../../../Checksum_RecoveryManager.ump"
-// line 3 "../../../../Latches_RecoveryManager.ump"
-// line 3 "../../../../LoggingRecovery_RecoveryManager.ump"
-// line 3 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-// line 3 "../../../../LoggingSevere_RecoveryManager.ump"
-// line 3 "../../../../LoggingInfo_RecoveryManager.ump"
-// line 3 "../../../../LoggingConfig_RecoveryManager.ump"
-// line 3 "../../../../LoggingFine_RecoveryManager.ump"
-// line 3 "../../../../LoggingFine_RecoveryManager_inner.ump"
-// line 3 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_RecoveryManager.ump"
-// line 3 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager.ump"
-// line 3 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager_inner.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager_inner.ump"
 public class RecoveryManager
 {
 
@@ -104,10 +85,7 @@ public class RecoveryManager
 			preparedTxns = new HashMap();
 			inListRebuildDbIds = new HashSet();
 			fileSummaryLsns = new HashMap();
-			Label578:
-detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_RECOVERY);
-	//original(env);
-           ;  //this.hook578(env);
+			Label578:           ;  //this.hook578(env);
   }
 
 
@@ -125,35 +103,20 @@ detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_R
 					boolean forceCheckpoint = configManager.getBoolean(EnvironmentParams.ENV_RECOVERY_FORCE_CHECKPOINT);
 					if (fileManager.filesExist()) {
 				findEndOfLog(readOnly);
-				Label559:
-Tracer.trace(Level.CONFIG, env, "Recovery underway, found end of log");
-	//original();
-           ;  //this.hook559();
+				Label559:           ;  //this.hook559();
 				findLastCheckpoint();
 				env.getLogManager().setLastLsnAtRecovery(fileManager.getLastUsedLsn());
-				Label558:
-Tracer.trace(Level.CONFIG, env, "Recovery checkpoint search, " + info);
-			//original();
-           ;  //this.hook558();
+				Label558:           ;  //this.hook558();
 				env.readMapTreeFromLog(info.useRootLsn);
 				buildTree();
 					} else {
-				Label556:
-env.enableDebugLoggingToDbLog();
-	//original();
-           ;  //this.hook556();
-				Label560:
-Tracer.trace(Level.CONFIG, env, "Recovery w/no files.");
-	//original();
-           ;  //this.hook560();
+				Label556:           ;  //this.hook556();
+				Label560:           ;  //this.hook560();
 				env.logMapTreeRoot();
 				forceCheckpoint = true;
 					}
 					if (preparedTxns.size() > 0) {
-				Label573:
-Tracer.trace(Level.INFO, env, "There are " + preparedTxns.size() + " prepared but unfinished txns.");
-	//original();
-           ;  //this.hook573();
+				Label573:           ;  //this.hook573();
 				preparedTxns = null;
 					}
 					if (DbInternal.getCreateUP(env.getConfigManager().getEnvironmentConfig())) {
@@ -166,10 +129,7 @@ Tracer.trace(Level.INFO, env, "There are " + preparedTxns.size() + " prepared bu
 				env.invokeCheckpoint(config, false, "recovery");
 					}
 			} catch (IOException e) {
-					Label575:
-Tracer.trace(env, "RecoveryManager", "recover", "Couldn't recover", e);
-	//original(e);
-           ;  //this.hook575(e);
+					Label575:           ;  //this.hook575(e);
 					throw new RecoveryException(env, "Couldn't recover: " + e.getMessage(), e);
 			} finally {
 					Tracer.trace(Level.CONFIG, env, "Recovery finished: " + info);
@@ -206,10 +166,6 @@ Tracer.trace(env, "RecoveryManager", "recover", "Couldn't recover", e);
 			info.nextAvailableLsn = reader.getEndOfLog();
 			info.nRepeatIteratorReads += reader.getNRepeatIteratorReads();
 			env.getFileManager().setLastPosition(info.nextAvailableLsn, info.lastUsedLsn, reader.getPrevOffset());
-    // line 16 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_RecoveryManager.ump"
-    //original(readOnly);
-    	env.enableDebugLoggingToDbLog();
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -267,26 +223,15 @@ Tracer.trace(env, "RecoveryManager", "recover", "Couldn't recover", e);
   // line 224 "../../../../RecoveryManager.ump"
    private void buildTree() throws IOException,DatabaseException{
     inListClearCounter = 0;
-	Label572:
-Tracer.trace(Level.CONFIG, env, passStartHeader(1) + "read map INs");
-	//original();
-           ;  //this.hook572();
+	Label572:           ;  //this.hook572();
 	long start = System.currentTimeMillis();
 	readINsAndTrackIds(info.checkpointStartLsn);
 	long end = System.currentTimeMillis();
-	Label571:
-Tracer.trace(Level.CONFIG, env, passEndHeader(1, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(2) + "read map BINDeltas");
-	//original(start, end);
-           ;  //this.hook571(start, end);
+	Label571:           ;  //this.hook571(start, end);
 	start = System.currentTimeMillis();
 	info.numOtherINs += readINs(info.checkpointStartLsn, true, LogEntryType.LOG_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label570:
-Tracer.trace(Level.CONFIG, env, passEndHeader(2, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(3) + "undo map LNs");
-	//original(start, end);
-           ;  //this.hook570(start, end);
+	Label570:           ;  //this.hook570(start, end);
 	start = System.currentTimeMillis();
 	Set mapLNSet = new HashSet();
 	mapLNSet.add(LogEntryType.LOG_MAPLN_TRANSACTIONAL);
@@ -295,63 +240,34 @@ Tracer.trace(Level.CONFIG, env, passEndHeader(2, start, end) + info.toString());
 	mapLNSet.add(LogEntryType.LOG_TXN_PREPARE);
 	undoLNs(info, mapLNSet);
 	end = System.currentTimeMillis();
-	Label569:
-Tracer.trace(Level.CONFIG, env, passEndHeader(3, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(4) + "redo map LNs");
-	//original(start, end);
-           ;  //this.hook569(start, end);
+	Label569:           ;  //this.hook569(start, end);
 	start = System.currentTimeMillis();
 	mapLNSet.add(LogEntryType.LOG_MAPLN);
 	redoLNs(info, mapLNSet);
 	end = System.currentTimeMillis();
-	Label568:
-Tracer.trace(Level.CONFIG, env, passEndHeader(4, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(5) + "read other INs");
-	//original(start, end);
-           ;  //this.hook568(start, end);
+	Label568:           ;  //this.hook568(start, end);
 	start = System.currentTimeMillis();
 	info.numOtherINs += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_IN, LogEntryType.LOG_BIN,
 		LogEntryType.LOG_IN_DELETE_INFO, false);
 	end = System.currentTimeMillis();
-	Label567:
-Tracer.trace(Level.CONFIG, env, passEndHeader(5, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(6) + "read BINDeltas");
-	//original(start, end);
-           ;  //this.hook567(start, end);
+	Label567:           ;  //this.hook567(start, end);
 	start = System.currentTimeMillis();
 	info.numBinDeltas = readINs(info.checkpointStartLsn, false, LogEntryType.LOG_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label566:
-Tracer.trace(Level.CONFIG, env, passEndHeader(6, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(7) + "read dup INs");
-	//original(start, end);
-           ;  //this.hook566(start, end);
+	Label566:           ;  //this.hook566(start, end);
 	start = System.currentTimeMillis();
 	info.numDuplicateINs += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DIN, LogEntryType.LOG_DBIN,
 		LogEntryType.LOG_IN_DUPDELETE_INFO, true);
 	end = System.currentTimeMillis();
-	Label565:
-Tracer.trace(Level.CONFIG, env, passEndHeader(7, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(8) + "read dup BINDeltas");
-	//original(start, end);
-           ;  //this.hook565(start, end);
+	Label565:           ;  //this.hook565(start, end);
 	start = System.currentTimeMillis();
 	info.numBinDeltas += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DUP_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label564:
-Tracer.trace(Level.CONFIG, env, passEndHeader(8, start, end) + info.toString());
-	//original(start, end);
-           ;  //this.hook564(start, end);
+	Label564:           ;  //this.hook564(start, end);
 	rebuildINList();
 
   Label596:
-env.invokeEvictor();
-			//original();
-
-	Label563:
-Tracer.trace(Level.CONFIG, env, passStartHeader(9) + "undo LNs");
-	//original();
-           ;  //this.hook563();
+	Label563:           ;  //this.hook563();
 	start = System.currentTimeMillis();
 	Set lnSet = new HashSet();
 	lnSet.add(LogEntryType.LOG_LN_TRANSACTIONAL);
@@ -360,11 +276,7 @@ Tracer.trace(Level.CONFIG, env, passStartHeader(9) + "undo LNs");
 	lnSet.add(LogEntryType.LOG_DUPCOUNTLN_TRANSACTIONAL);
 	undoLNs(info, lnSet);
 	end = System.currentTimeMillis();
-	Label562:
-Tracer.trace(Level.CONFIG, env, passEndHeader(9, start, end) + info.toString());
-	Tracer.trace(Level.CONFIG, env, passStartHeader(10) + "redo LNs");
-	//original(start, end);
-           ;  //this.hook562(start, end);
+	Label562:           ;  //this.hook562(start, end);
 	start = System.currentTimeMillis();
 	lnSet.add(LogEntryType.LOG_LN);
 	lnSet.add(LogEntryType.LOG_NAMELN);
@@ -373,10 +285,7 @@ Tracer.trace(Level.CONFIG, env, passEndHeader(9, start, end) + info.toString());
 	lnSet.add(LogEntryType.LOG_FILESUMMARYLN);
 	redoLNs(info, lnSet);
 	end = System.currentTimeMillis();
-	Label561:
-Tracer.trace(Level.CONFIG, env, passEndHeader(10, start, end) + info.toString());
-	//original(start, end);
-           ;  //this.hook561(start, end);
+	Label561:           ;  //this.hook561(start, end);
   }
 
   // line 291 "../../../../RecoveryManager.ump"
@@ -386,10 +295,7 @@ Tracer.trace(Level.CONFIG, env, passEndHeader(10, start, end) + info.toString())
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	Label593:
-reader.setAlwaysValidateChecksum(true);
-			//original(reader);
-//          ;  //this.hook593(reader);
+	Label593://          ;  //this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();
@@ -488,10 +394,7 @@ reader.setAlwaysValidateChecksum(true);
 	    IN in = reader.getIN();
 	    long inLsn = reader.getLsnOfIN();
 	    in.postRecoveryInit(db, inLsn);
-	    Label585:
-in.latch();
-	//original(in);
- ;  //this.hook585(in);
+	    Label585: ;  //this.hook585(in);
 	    replaceOrInsert(db, in, reader.getLastLsn(), inLsn, requireExactMatch);
 	}
 	if ((++inListClearCounter % CLEAR_INCREMENT) == 0) {
@@ -528,9 +431,6 @@ in.latch();
 		    if (txnId != null && !committedTxnIds.contains(txnId)) {
 		  //this.hook597();
       Label597:
-env.invokeEvictor();
-      			//original();
-
 			LN ln = reader.getLN();
 			long logLsn = reader.getLastLsn();
 			long abortLsn = reader.getAbortLsn();
@@ -542,12 +442,6 @@ env.invokeEvictor();
 			    Label586:           ;  //this.hook586(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);
 					undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,		abortKnownDeleted, info, true);
 					Label586_1:
-//	try {	    //original(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);	} finally {
-	    if (location.bin != null) {
-		location.bin.releaseLatchIfOwner();
-	    }
-	//}
-
 			    TxnNodeId txnNodeId = new TxnNodeId(reader.getNodeId(), txnId.longValue());
 			    undoUtilizationInfo(ln, logLsn, abortLsn, abortKnownDeleted, txnNodeId,
 				    countedFileSummaries, countedAbortLsnNodes);
@@ -563,11 +457,7 @@ env.invokeEvictor();
 			preparedTxn.setLockTimeout(0);
 			preparedTxns.put(prepareIdL, preparedTxn);
 			env.getTxnManager().registerXATxn(reader.getTxnPrepareXid(), preparedTxn, true);
-			Label574:
-Tracer.trace(Level.INFO, env, "Found unfinished prepare record: id: " + reader.getTxnPrepareId() + " Xid: "
-		+ reader.getTxnPrepareXid());
-	//original(reader);
-           ;  //this.hook574(reader);
+			Label574:           ;  //this.hook574(reader);
 		    }
 		} else if (reader.isAbort()) {
 		    abortedTxnIds.add(new Long(reader.getTxnAbortId()));
@@ -625,8 +515,6 @@ Tracer.trace(Level.INFO, env, "Found unfinished prepare record: id: " + reader.g
 		    }
 		    if (processThisLN) {
       Label598:
-env.invokeEvictor();
-
 			LN ln = reader.getLN();
 			DatabaseId dbId = reader.getDatabaseId();
 			DatabaseImpl db = dbMapTree.getDb(dbId);
@@ -703,19 +591,10 @@ env.invokeEvictor();
 	    }
 	} catch (Exception e) {
 	    String trace = printTrackList(trackingList);
-	    Label576:
-Tracer.trace(db.getDbEnvironment(), "RecoveryManager", "replaceOrInsert",
-		" lsnFromLog:" + DbLsn.getNoFormatString(logLsn) + " " + trace, e);
-	//original(db, logLsn, e, trace);
-           ;  //this.hook576(db, logLsn, e, trace);
+	    Label576:           ;  //this.hook576(db, logLsn, e, trace);
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(logLsn), e);
 	} finally {
-	    Label587:
-inFromLog.releaseLatchIfOwner();
-	assert (LatchSupport.countLatchesHeld() == 0) : LatchSupport.latchesHeldToString() + "LSN = "
-		+ DbLsn.toString(logLsn) + " inFromLog = " + inFromLog.getNodeId();
-	//original(inFromLog, logLsn);
-           ;  //this.hook587(inFromLog, logLsn);
+	    Label587:           ;  //this.hook587(inFromLog, logLsn);
 	}
   }
 
@@ -759,26 +638,15 @@ inFromLog.releaseLatchIfOwner();
 		tree.withRootLatchedExclusive(new RootDeleter(tree));
 		DbTree dbTree = db.getDbEnvironment().getDbMapTree();
 		dbTree.modifyDbRoot(db);
-		Label557:
-traceRootDeletion(Level.FINE, db);
-	//original(db);
-           ;  //this.hook557(db);
+		Label557:           ;  //this.hook557(db);
 		deleted = true;
 	    } else if (result.exactParentFound) {
 		found = true;
 		deleted = result.parent.deleteEntry(result.index, false);
 	    }
 	} finally {
-	    Label588:
-if (result.parent != null) {
-	    result.parent.releaseLatch();
-	}
-	//original(result);
-           ;  //this.hook588(result);
-	    Label579:
-traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplicates);
-	//original(nodeId, containsDuplicates, logLsn, found, deleted, result);
-           ;  //this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
+	    Label588:           ;  //this.hook588(result);
+	    Label579:           ;  //this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
 	}
   }
 
@@ -802,11 +670,7 @@ traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplic
 	    success = false;
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(lsn), e);
 	} finally {
-	    Label580:
-trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
-		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getoriginalLsn(), DbLsn.NULL_LSN, -1);
-	//original(db, inFromLog, lsn, success, rootUpdater);
-           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
+	    Label580:           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
 	}
   }
 
@@ -847,17 +711,8 @@ trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null,
 	    }
 	    success = true;
 	} finally {
-	    Label589:
-if (parent != null) {
-	    parent.releaseLatch();
-	}
-	//original(parent);
-           ;  //this.hook589(parent);
-	    Label581:
-trace(detailedTraceLevel, db, TRACE_DUP_ROOT_REPLACE, success, inFromLog, lsn, parent, found, replaced,
-		inserted, origLsn, DbLsn.NULL_LSN, index);
-	//original(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
-           ;  //this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
+	    Label589:           ;  //this.hook589(parent);
+	    Label581:           ;  //this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
 	}
   }
 
@@ -887,17 +742,8 @@ trace(detailedTraceLevel, db, TRACE_DUP_ROOT_REPLACE, success, inFromLog, lsn, p
 	    }
 	    success = true;
 	} finally {
-	    Label590:
-if (result.parent != null) {
-	    result.parent.releaseLatch();
-	}
-	//original(result);
-           ;  //this.hook590(result);
-	    Label582:
-trace(detailedTraceLevel, db, TRACE_IN_REPLACE, success, inFromLog, logLsn, result.parent,
-		result.exactParentFound, replaced, inserted, origLsn, DbLsn.NULL_LSN, result.index);
-	//original(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
-           ;  //this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
+	    Label590:           ;  //this.hook590(result);
+	    Label582:           ;  //this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
 	}
   }
 
@@ -944,12 +790,7 @@ trace(detailedTraceLevel, db, TRACE_IN_REPLACE, success, inFromLog, logLsn, resu
 		    if (DbLsn.compareTo(logLsn, location.childLsn) >= 0 && lnFromLog.isDeleted()) {
 			location.bin.setKnownDeletedLeaveTarget(location.index);
 			byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-			Label594:
-if (deletedKey != null) {
-					db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
-			}
-			//original(db, location, deletedKey);
-           ;  //this.hook594(db, location, deletedKey);
+			Label594:           ;  //this.hook594(db, location, deletedKey);
 		    }
 		} else {
 		    info.lnNotFound++;
@@ -964,17 +805,8 @@ if (deletedKey != null) {
 	    success = true;
 	    return found ? location.childLsn : DbLsn.NULL_LSN;
 	} finally {
-	    Label591:
-if (location.bin != null) {
-	    location.bin.releaseLatchIfOwner();
-	}
-	//original(location);
-           ;  //this.hook591(location);
-	    Label583:
-trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, location.bin, found, replaced,
-		inserted, location.childLsn, DbLsn.NULL_LSN, location.index);
-	//original(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
-           ;  //this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
+	    Label591:           ;  //this.hook591(location);
+	    Label583:           ;  //this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
 	}
   }
 
@@ -995,36 +827,19 @@ trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, locatio
     boolean found = false;
 	boolean replaced = false;
 	boolean success = false;
-	Label584:
-try {
-	    //original(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
-	} finally {
-	    Label555:
-//>>> reuse LoggingRecovery_RecoveryManager.ump
-
-	trace(traceLevel, db, TRACE_LN_UNDO, success, lnFromLog, logLsn, location.bin, found, replaced, false,	location.childLsn, abortLsn, location.index);
-	//original(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
- //hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
-	}
- //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
+	Label584: //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
 	location.reset();
 		found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
 			true);
 		if (lnFromLog.containsDuplicates()) {
 			  if (found) {
 			DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
-			Label592:
-//(TreeLocation location, long logLsn, long abortLsn, boolean replaced,    DIN duplicateRoot) throws DatabaseException {
-	duplicateRoot.latch();
- //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			Label592: //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
 			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
 							duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
 							replaced = true;
 					}
 			Label592_1:
-//try {replaced = //original(location, logLsn, abortLsn, replaced, duplicateRoot);} finally {
-	    duplicateRoot.releaseLatch();//}return replaced;
-
 			//end hook592
 			  }
 		} else {
@@ -1037,10 +852,7 @@ try {
 				  if (abortLsn == DbLsn.NULL_LSN) {
 				location.bin.setKnownDeletedLeaveTarget(location.index);
 				byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-				Label595:
-db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), false);
-			//original(db, location, deletedKey);
- //hook595(db, location, deletedKey);
+				Label595: //hook595(db, location, deletedKey);
 				  } else {
 				if (info != null) {
 					  info.lnReplaced++;
@@ -1210,26 +1022,6 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
 	Label577:           ;  //this.hook577(method, origException, badLsnString);
 	throw new DatabaseException("last LSN=" + badLsnString, origException);
   }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 10 "../../../../LoggingRecovery_RecoveryManager.ump"
-   private void traceINDeleteReplay(long nodeId, long logLsn, boolean found, boolean deleted, int index, boolean isDuplicate){
-    new RecoveryManager_traceINDeleteReplay(this, nodeId, logLsn, found, deleted, index, isDuplicate).execute();
-  }
-
-
-  /**
-   * 
-   * Log trace information about root deletions, called by INCompressor and recovery.
-   */
-  // line 9 "../../../../LoggingFine_RecoveryManager.ump"
-   public static  void traceRootDeletion(Level level, DatabaseImpl database){
-    new RecoveryManager_traceRootDeletion(level, database).execute();
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1395,9 +1187,7 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
   
   
-  @MethodObject
   // line 44 "../../../../RecoveryManager_static.ump"
-  // line 4 "../../../../loggingBase_RecoveryManager_inner.ump"
   public static class RecoveryManager_trace
   {
   
@@ -1438,42 +1228,6 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   
     // line 61 "../../../../RecoveryManager_static.ump"
     public void execute(){
-      // line 6 "../../../../loggingBase_RecoveryManager_inner.ump"
-      logger=database.getDbEnvironment().getLogger();
-              useLevel=level;
-              if (!success) {
-                useLevel=Level.SEVERE;
-              }
-              if (logger.isLoggable(useLevel)) {
-                sb=new StringBuffer();
-                sb.append(debugType);
-                sb.append(" success=").append(success);
-                sb.append(" node=");
-                sb.append(node.getNodeId());
-                sb.append(" lsn=");
-                sb.append(DbLsn.getNoFormatString(logLsn));
-                if (parent != null) {
-                  sb.append(" parent=").append(parent.getNodeId());
-                }
-                sb.append(" found=");
-                sb.append(found);
-                sb.append(" replaced=");
-                sb.append(replaced);
-                sb.append(" inserted=");
-                sb.append(inserted);
-                if (replacedLsn != DbLsn.NULL_LSN) {
-                  sb.append(" replacedLsn=");
-                  sb.append(DbLsn.getNoFormatString(replacedLsn));
-                }
-                if (abortLsn != DbLsn.NULL_LSN) {
-                  sb.append(" abortLsn=");
-                  sb.append(DbLsn.getNoFormatString(abortLsn));
-                }
-                sb.append(" index=").append(index);
-                logger.log(useLevel,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       
     }
     
@@ -1512,151 +1266,6 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   // line 76 "../../../../RecoveryManager_static.ump"
     protected Level useLevel ;
   // line 77 "../../../../RecoveryManager_static.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-  // line 4 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager_inner.ump"
-  public static class RecoveryManager_traceINDeleteReplay
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public RecoveryManager_traceINDeleteReplay()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    public  RecoveryManager_traceINDeleteReplay(RecoveryManager _this, long nodeId, long logLsn, boolean found, boolean deleted, int index, boolean isDuplicate){
-      this._this=_this;
-          this.nodeId=nodeId;
-          this.logLsn=logLsn;
-          this.found=found;
-          this.deleted=deleted;
-          this.index=index;
-          this.isDuplicate=isDuplicate;
-    }
-  
-    // line 15 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingRecovery_LoggingBase_RecoveryManager_inner.ump"
-      logger=_this.env.getLogger();
-              if (logger.isLoggable(_this.detailedTraceLevel)) {
-                sb=new StringBuffer();
-                sb.append((isDuplicate) ? _this.TRACE_IN_DUPDEL_REPLAY : _this.TRACE_IN_DEL_REPLAY);
-                sb.append(" node=").append(nodeId);
-                sb.append(" lsn=").append(DbLsn.getNoFormatString(logLsn));
-                sb.append(" found=").append(found);
-                sb.append(" deleted=").append(deleted);
-                sb.append(" index=").append(index);
-                logger.log(_this.detailedTraceLevel,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 16 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected RecoveryManager _this ;
-  // line 17 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected long nodeId ;
-  // line 18 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected long logLsn ;
-  // line 19 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected boolean found ;
-  // line 20 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected boolean deleted ;
-  // line 21 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected int index ;
-  // line 22 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected boolean isDuplicate ;
-  // line 23 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected Logger logger ;
-  // line 24 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFine_RecoveryManager_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager_inner.ump"
-  public static class RecoveryManager_traceRootDeletion
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public RecoveryManager_traceRootDeletion()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFine_RecoveryManager_inner.ump"
-    public  RecoveryManager_traceRootDeletion(Level level, DatabaseImpl database){
-      this.level=level;
-          this.database=database;
-    }
-  
-    // line 10 "../../../../LoggingFine_RecoveryManager_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_RecoveryManager_inner.ump"
-      logger=database.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(TRACE_ROOT_DELETE);
-                sb.append(" Dbid=").append(database.getId());
-                logger.log(level,sb.toString());
-              }
-             // original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 11 "../../../../LoggingFine_RecoveryManager_inner.ump"
-    protected Level level ;
-  // line 12 "../../../../LoggingFine_RecoveryManager_inner.ump"
-    protected DatabaseImpl database ;
-  // line 13 "../../../../LoggingFine_RecoveryManager_inner.ump"
-    protected Logger logger ;
-  // line 14 "../../../../LoggingFine_RecoveryManager_inner.ump"
     protected StringBuffer sb ;
   
     

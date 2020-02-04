@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.ArrayList;
 
 // line 3 "../../../../Lock.ump"
-// line 3 "../../../../MemoryBudget_Lock.ump"
 public class Lock
 {
 
@@ -74,9 +73,6 @@ public class Lock
 		}
 		//this.hook760(mb, lockTableIndex);
     Label760:
-mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
-      //	original(mb, lockTableIndex);
-
   }
 
 
@@ -94,9 +90,6 @@ mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
 	}
 	firstWaiter = waiter;
 	Label761:
-mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
-			//original(mb, lockTableIndex);
-
 //this.hook761(mb, lockTableIndex);
   }
 
@@ -128,9 +121,6 @@ mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
 	    firstWaiter = null;
 	   // this.hook762(mb, lockTableIndex);
 Label762:
-mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-			//original(mb, lockTableIndex);
-
 
 	} else if (waiterList != null) {
 	    Iterator iter = waiterList.iterator();
@@ -140,9 +130,6 @@ mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
 		    iter.remove();
 		    //this.hook763(mb, lockTableIndex);
         Label763:
-mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-			//original(mb, lockTableIndex);
-
 		    return;
 		}
 	    }
@@ -161,9 +148,6 @@ mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
 	}
 	//this.hook764(mb, lockTableIndex);
   Label764:
-mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
-      //			original(mb, lockTableIndex);
-
   }
 
 
@@ -204,11 +188,6 @@ mb.updateLockMemoryUsage(MemoryBudget.LOCKINFO_OVERHEAD, lockTableIndex);
 	}
   //	this.hook765(mb, lockTableIndex, removed);
   Label765:
-if (removed) {
-					mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-			}
-      //			original(mb, lockTableIndex, removed);
-
 	return removed;
   }
 
@@ -235,11 +214,6 @@ if (removed) {
 	}
 //	this.hook766(mb, lockTableIndex, flushedInfo);
   Label766:
-if (flushedInfo != null) {
-			  mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-			}
-     //		original(mb, lockTableIndex, flushedInfo);
-
 	return flushedInfo;
   }
 
@@ -452,9 +426,6 @@ if (flushedInfo != null) {
 		lockersToNotify.add(waiterLocker);
 		//this.hook767(mb, lockTableIndex);
     Label767:
-mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
-		//			original(mb, lockTableIndex);
-
 	    } else {
 		assert grant == LockGrantType.WAIT_NEW || grant == LockGrantType.WAIT_PROMOTION
 			|| grant == LockGrantType.WAIT_RESTART;
@@ -643,9 +614,6 @@ mb.updateLockMemoryUsage(REMOVE_LOCKINFO_OVERHEAD, lockTableIndex);
 	}
 	//this.hook768(mb, lockTableIndex, numRemovedLockInfos);
   Label768:
-mb.updateLockMemoryUsage(0 - (numRemovedLockInfos * MemoryBudget.LOCKINFO_OVERHEAD), lockTableIndex);
-		//			original(mb, lockTableIndex, numRemovedLockInfos);
-
 	return lockType;
   }
 
@@ -898,8 +866,6 @@ mb.updateLockMemoryUsage(0 - (numRemovedLockInfos * MemoryBudget.LOCKINFO_OVERHE
   private List waiterList ;
 // line 25 "../../../../Lock.ump"
   private Long nodeId ;
-// line 5 "../../../../MemoryBudget_Lock.ump"
-  private static final int REMOVE_LOCKINFO_OVERHEAD = 0 - MemoryBudget.LOCKINFO_OVERHEAD ;
 
   
 }

@@ -33,12 +33,9 @@ public class TupleInputBinding implements EntryBinding
   /**
    * 
    * Creates a tuple input binding.
+   * public TupleInputBinding() {
+   * }
    */
-  // line 13 "../../../../TupleInputBinding.ump"
-   public  TupleInputBinding(){
-    
-  }
-
   // line 16 "../../../../TupleInputBinding.ump"
    public Object entryToObject(DatabaseEntry entry){
     return TupleBinding.entryToInput(entry);

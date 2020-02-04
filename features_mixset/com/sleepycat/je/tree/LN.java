@@ -28,7 +28,6 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../LN.ump"
-// line 3 "../../../../MemoryBudget_LN.ump"
 public class LN extends Node implements LoggableObject,LogReadable
 {
 
@@ -461,20 +460,6 @@ public class LN extends Node implements LoggableObject,LogReadable
   // line 366 "../../../../LN.ump"
    protected void dumpLogAdditional(StringBuffer sb, boolean verbose){
     
-  }
-
-
-  /**
-   * 
-   * Compute the approximate size of this node in memory for evictor invocation purposes.
-   */
-  // line 9 "../../../../MemoryBudget_LN.ump"
-   public long getMemorySizeIncludedByParent(){
-    int size = MemoryBudget.LN_OVERHEAD;
-		if (data != null) {
-			  size += MemoryBudget.byteArraySize(data.length);
-		}
-		return size;
   }
   
   //------------------------

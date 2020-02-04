@@ -6,11 +6,7 @@ class RecordNumberBinding
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend com.sleepycat.compat.DbCompat;
-    /** 
-     * Creates a byte array binding.
-     */
-    public RecordNumberBinding() {
-    }
+ 
 
     public Object entryToObject(DatabaseEntry entry) {
 	return new Long(entryToRecordNumber(entry));

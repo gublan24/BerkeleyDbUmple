@@ -38,20 +38,6 @@ import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Txn.ump"
 // line 3 "../../../../Txn_static.ump"
-// line 3 "../../../../loggingBase_Txn.ump"
-// line 3 "../../../../loggingBase_Txn_inner.ump"
-// line 3 "../../../../MemoryBudget_Txn.ump"
-// line 3 "../../../../MemoryBudget_Txn_inner.ump"
-// line 3 "../../../../DeleteOp_Txn.ump"
-// line 3 "../../../../DeleteOp_Txn_inner.ump"
-// line 3 "../../../../INCompressor_Txn.ump"
-// line 3 "../../../../Statistics_Txn.ump"
-// line 3 "../../../../Latches_Txn.ump"
-// line 3 "../../../../LoggingSevere_Txn.ump"
-// line 3 "../../../../LoggingFine_Txn.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
-// line 3 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -113,9 +99,6 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	txnState = USABLE;
 	//this.hook809();
   Label809:
-updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
-	    //original();
-
 	this.envImpl.getTxnManager().registerTxn(this);
   }
 
@@ -279,10 +262,7 @@ updateMemoryUsage(MemoryBudget.TXN_OVERHEAD);
 						} else {
 					commitLsn = logManager.log(commitRecord);
 						}
-						Label806:
-setDeletedDatabaseState(true);
-			//original();
- //this.hook806();
+						Label806: //this.hook806();
 						Set alreadyCountedLsnSet = new HashSet();
 						Iterator iter = writeInfo.values().iterator();
 						while (iter.hasNext()) {
@@ -297,20 +277,11 @@ setDeletedDatabaseState(true);
 					}
 						}
 						writeInfo = null;
-						Label803:
-if ((deleteInfo != null) && deleteInfo.size() > 0) {
-					envImpl.addToCompressorQueue(deleteInfo.values(), false);
-					deleteInfo.clear();
-			}
-			//original();
- //this.hook803();
+						Label803: //this.hook803();
 				}
 				traceCommit(numWriteLocks, numReadLocks);
 					}
-					Label805:
-cleanupDatabaseImpls(true);
-		//	original();
- //this.hook805();
+					Label805: //this.hook805();
 					close(true);
 					return commitLsn;
 			} catch (RunRecoveryException e) {
@@ -318,10 +289,7 @@ cleanupDatabaseImpls(true);
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				Label800:
-Tracer.trace(envImpl, "Txn", "commit", "Commit of transaction " + id + " failed", t);
-	//original(t);
- //this.hook800(t);
+				Label800: //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -364,27 +332,14 @@ Tracer.trace(envImpl, "Txn", "commit", "Commit of transaction " + id + " failed"
 		}
 		undo();
 		numReadLocks = (readLocks == null) ? 0 : clearReadLocks();
-		Label808:
-setDeletedDatabaseState(false);
-			//original();
- //this.hook808();
+		Label808: //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
-		Label804:
-deleteInfo = null;
-			//original();
- //this.hook804();
+		Label804: //this.hook804();
 	    }
-	    Label807:
-cleanupDatabaseImpls(false);
-			//original();
- //this.hook807();
+	    Label807: //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		Label799:
-Tracer.trace(Level.FINE, envImpl, "Abort:id = " + id + " numWriteLocks= " + numWriteLocks + " numReadLocks= "
-		+ numReadLocks + " openCursors= " + openCursors);
-	//original(numReadLocks, numWriteLocks, openCursors);
- //this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799: //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -438,10 +393,7 @@ Tracer.trace(Level.FINE, envImpl, "Abort:id = " + id + " numWriteLocks= " + numW
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    Label801:
-Tracer.trace(envImpl, "Txn", "undo", "for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
-	//original(nodeId, undoLsn, e);
- //this.hook801(nodeId, undoLsn, e);
+	    Label801: //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
   }
@@ -517,17 +469,10 @@ Tracer.trace(envImpl, "Txn", "undo", "for node=" + nodeId + " LSN=" + DbLsn.getN
 					readLocks = new HashSet();
 			//		delta = this.hook811(delta);
           Label811:
-delta = MemoryBudget.HASHSET_OVERHEAD;
-			//return original(delta);
-
 			}
 			readLocks.add(lock);
 			//this.hook810(delta);
       Label810:
-delta += READ_LOCK_OVERHEAD;
-			updateMemoryUsage(delta);
-			//original(delta);
-
   }
 
 
@@ -541,9 +486,6 @@ delta += READ_LOCK_OVERHEAD;
 					if ((readLocks != null) && readLocks.remove(lock)) {
 				//this.hook812();
           Label812:
-updateMemoryUsage(0 - READ_LOCK_OVERHEAD);
-//			original();
-
 					} else if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
 				//this.hook813();
          label813: 
@@ -564,9 +506,6 @@ updateMemoryUsage(0 - READ_LOCK_OVERHEAD);
 		found = true;
 		//this.hook814();
     Label814:
-updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
-	    //original();
-
 	    }
 	    assert found : "Couldn't find lock for Node " + nodeId + " in writeInfo Map.";
 	    addReadLock(lock);
@@ -958,85 +897,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   public int getInMemorySize(){
     return inMemorySize;
   }
-
-  // line 12 "../../../../MemoryBudget_Txn.ump"
-   private void updateMemoryUsage(int delta){
-    inMemorySize += delta;
-			accumulatedDelta += delta;
-			if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
-					envImpl.getMemoryBudget().updateMiscMemoryUsage(accumulatedDelta);
-					accumulatedDelta = 0;
-			}
-  }
-
-  // line 21 "../../../../MemoryBudget_Txn.ump"
-  public int getAccumulatedDelta(){
-    return accumulatedDelta;
-  }
-
-
-  /**
-   * 
-   * @param dbImpl databaseImpl to remove
-   * @param deleteAtCommit true if this databaseImpl should be cleaned on commit, false if it should be cleaned on abort.
-   * @param mb environment memory budget.
-   */
-  // line 13 "../../../../DeleteOp_Txn.ump"
-   public void markDeleteAtTxnEnd(DatabaseImpl dbImpl, boolean deleteAtCommit) throws DatabaseException{
-    new Txn_markDeleteAtTxnEnd(this, dbImpl, deleteAtCommit).execute();
-  }
-
-  // line 17 "../../../../DeleteOp_Txn.ump"
-   private void setDeletedDatabaseState(boolean isCommit) throws DatabaseException{
-    if (deletedDatabases != null) {
-					Iterator iter = deletedDatabases.iterator();
-					while (iter.hasNext()) {
-				DatabaseCleanupInfo info = (DatabaseCleanupInfo) iter.next();
-				if (info.deleteAtCommit == isCommit) {
-						info.dbImpl.startDeleteProcessing();
-				}
-					}
-			}
-  }
-
-
-  /**
-   * 
-   * Cleanup leftover databaseImpls that are a by-product of database operations like removeDatabase(), truncateDatabase(). This method must be called outside the synchronization on this txn, because it calls deleteAndReleaseINs, which gets the TxnManager's allTxns latch. The checkpointer also gets the allTxns latch, and within that latch, needs to synchronize on individual txns, so we must avoid a latching hiearchy conflict.
-   */
-  // line 32 "../../../../DeleteOp_Txn.ump"
-   private void cleanupDatabaseImpls(boolean isCommit) throws DatabaseException{
-    if (deletedDatabases != null) {
-					DatabaseCleanupInfo[] infoArray;
-					synchronized (this) {
-				infoArray = new DatabaseCleanupInfo[deletedDatabases.size()];
-				deletedDatabases.toArray(infoArray);
-					}
-					for (int i = 0; i < infoArray.length; i += 1) {
-				DatabaseCleanupInfo info = infoArray[i];
-				if (info.deleteAtCommit == isCommit) {
-						info.dbImpl.releaseDeletedINs();
-				}
-					}
-					deletedDatabases = null;
-			}
-  }
-
-
-  /**
-   * 
-   * stats
-   */
-  // line 8 "../../../../Statistics_Txn.ump"
-   public LockStats collectStats(LockStats stats) throws DatabaseException{
-    synchronized(this) {
-            int nReadLocks = (readLocks == null) ? 0 : readLocks.size();
-            stats.setNReadLocks(stats.getNReadLocks() + nReadLocks);
-            int nWriteLocks = (writeInfo == null) ? 0 : writeInfo.size();
-            stats.setNWriteLocks(stats.getNWriteLocks() + nWriteLocks);
-        }
-        return stats;
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1115,9 +975,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   
-  @MethodObject
   // line 12 "../../../../Txn_static.ump"
-  // line 4 "../../../../MemoryBudget_Txn_inner.ump"
   public static class Txn_addLock
   {
   
@@ -1153,38 +1011,23 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
       synchronized (_this) {
             //this.hook815();
             Label815:
-  delta=0;
-          //original();
-  
             if (type.isWriteLock()) {
               if (_this.writeInfo == null) {
                 _this.writeInfo=new HashMap();
                 _this.undoDatabases=new HashMap();
                // this.hook818();
                 Label818:
-  delta+=MemoryBudget.TWOHASHMAPS_OVERHEAD;
-          //original();
-  
               }
               _this.writeInfo.put(nodeId,new WriteLockInfo(lock));
               //this.hook817();
               Label817:
-  delta+=_this.WRITE_LOCK_OVERHEAD;
-          //original();
-  
               if ((grantStatus == LockGrantType.PROMOTION) || (grantStatus == LockGrantType.WAIT_PROMOTION)) {
                 _this.readLocks.remove(lock);
                 //this.hook819();
                 Label819:
-  delta-=_this.READ_LOCK_OVERHEAD;
-         // original();
-  
               }
               //this.hook816();
               Label816:
-  _this.updateMemoryUsage(delta);
-          //original();
-  
             }
      else {
               _this.addReadLock(lock);
@@ -1215,10 +1058,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   
-  @MethodObject
   // line 66 "../../../../Txn_static.ump"
-  // line 4 "../../../../loggingBase_Txn_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
   public static class Txn_traceCommit
   {
   
@@ -1249,20 +1089,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
     // line 73 "../../../../Txn_static.ump"
     public void execute(){
-      // line 6 "../../../../loggingBase_Txn_inner.ump"
-      logger=envImpl.getLogger();
-      // END OF UMPLE BEFORE INJECTION
       
-      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
-      //original();
-              if (logger.isLoggable(Level.FINE)) {
-                sb=new StringBuffer();
-                sb.append(" Commit:id = ").append(id);
-                sb.append(" numWriteLocks=").append(numWriteLocks);
-                sb.append(" numReadLocks = ").append(numReadLocks);
-                Tracer.trace(Level.FINE,envImpl,sb.toString());
-              }
-      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -1279,75 +1106,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     protected Logger logger ;
   // line 78 "../../../../Txn_static.ump"
     protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../DeleteOp_Txn_inner.ump"
-  // line 4 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
-  public static class Txn_markDeleteAtTxnEnd
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Txn_markDeleteAtTxnEnd()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../DeleteOp_Txn_inner.ump"
-    public  Txn_markDeleteAtTxnEnd(Txn _this, DatabaseImpl dbImpl, boolean deleteAtCommit){
-      this._this=_this;
-          this.dbImpl=dbImpl;
-          this.deleteAtCommit=deleteAtCommit;
-    }
-  
-    // line 11 "../../../../DeleteOp_Txn_inner.ump"
-    public void execute() throws DatabaseException{
-      synchronized (_this) {
-  						    Label797:
-  delta=0;
-          //original();
-   //this.hook797();
-  						    if (_this.deletedDatabases == null) {
-  						      _this.deletedDatabases=new HashSet();
-  						      Label789: //this.hook798();
-  						    }
-  						    _this.deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,deleteAtCommit));
-  						    Label796:
-  delta+=MemoryBudget.HASHSET_ENTRY_OVERHEAD + MemoryBudget.OBJECT_OVERHEAD;
-          _this.updateMemoryUsage(delta);
-          //original();
-   //this.hook796();
-  						  }
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 21 "../../../../DeleteOp_Txn_inner.ump"
-    protected Txn _this ;
-  // line 22 "../../../../DeleteOp_Txn_inner.ump"
-    protected DatabaseImpl dbImpl ;
-  // line 23 "../../../../DeleteOp_Txn_inner.ump"
-    protected boolean deleteAtCommit ;
-  // line 24 "../../../../DeleteOp_Txn_inner.ump"
-    protected int delta ;
   
     
   }  
@@ -1399,22 +1157,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   private int inMemorySize ;
 // line 84 "../../../../Txn.ump"
   public static int ACCUMULATED_LIMIT = 10000 ;
-// line 5 "../../../../MemoryBudget_Txn.ump"
-  private final int READ_LOCK_OVERHEAD = MemoryBudget.HASHSET_ENTRY_OVERHEAD ;
-// line 7 "../../../../MemoryBudget_Txn.ump"
-  private final int WRITE_LOCK_OVERHEAD = MemoryBudget.HASHMAP_ENTRY_OVERHEAD + MemoryBudget.LONG_OVERHEAD ;
-// line 9 "../../../../MemoryBudget_Txn.ump"
-  private int accumulatedDelta = 0 ;
-// line 5 "../../../../DeleteOp_Txn.ump"
-  private Set deletedDatabases ;
-
-// line 5 "../../../../Latches_Txn.ump"
-  protected void hook802_1: undo () 
-  {
-    if (location.bin != null) {
-		location.bin.releaseLatchIfOwner();
-	    }
-  }
 
   
 }

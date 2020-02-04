@@ -30,14 +30,8 @@ public class SequenceConfig
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 30 "../../../SequenceConfig.ump"
-   public  SequenceConfig(){
-    
-  }
-
-
-  /**
+   * public SequenceConfig() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

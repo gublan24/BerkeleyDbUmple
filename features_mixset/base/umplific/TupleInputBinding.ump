@@ -9,8 +9,8 @@ class TupleInputBinding
     /** 
      * Creates a tuple input binding.
      */
-    public TupleInputBinding() {
-    }
+  // public TupleInputBinding() {
+  //  }
 
     public Object entryToObject(DatabaseEntry entry) {
 	return TupleBinding.entryToInput(entry);

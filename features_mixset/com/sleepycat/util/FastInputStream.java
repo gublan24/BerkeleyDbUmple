@@ -8,7 +8,7 @@ import java.io.IOException;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../FastInputStream.ump"
-public class FastInputStream implements InputStream
+public class FastInputStream extends InputStream
 {
 
   //------------------------
@@ -20,7 +20,9 @@ public class FastInputStream implements InputStream
   //------------------------
 
   public FastInputStream()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

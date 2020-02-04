@@ -37,14 +37,9 @@ public class TupleOutput extends FastOutputStream
   /**
    * 
    * Creates a tuple output object for writing a byte array of tuple data.
-   */
-  // line 18 "../../../../TupleOutput.ump"
-   public  TupleOutput(){
-    super();
-  }
-
-
-  /**
+   * public TupleOutput() {
+   * super();
+   * }
    * 
    * Creates a tuple output object for writing a byte array of tuple data, using a given buffer. A new buffer will be allocated only if the number of bytes needed is greater than the length of this buffer. A reference to the byte array will be kept by this object and therefore the byte array should not be modified while this object is in use.
    * @param bufferis the byte array to use as the buffer.

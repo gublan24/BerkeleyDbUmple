@@ -30,11 +30,12 @@ public class DeadlockException extends DatabaseException
     super.delete();
   }
 
-  // line 8 "../../../DeadlockException.ump"
-   public  DeadlockException(){
-    super();
-  }
 
+  /**
+   * public DeadlockException() {
+   * super();
+   * }
+   */
   // line 12 "../../../DeadlockException.ump"
    public  DeadlockException(Throwable t){
     super(t);

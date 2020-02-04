@@ -45,12 +45,9 @@ public abstract class TupleBinding extends TupleBase implements EntryBinding
   /**
    * 
    * Creates a tuple binding.
+   * public TupleBinding() {
+   * }
    */
-  // line 23 "../../../../TupleBinding.ump"
-   public  TupleBinding(){
-    
-  }
-
   // line 26 "../../../../TupleBinding.ump"
    public Object entryToObject(DatabaseEntry entry){
     return entryToObject(entryToInput(entry));

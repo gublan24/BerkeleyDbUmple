@@ -4,9 +4,9 @@ class LockNotGrantedException
 {
   isA DeadlockException;
   depend de.ovgu.cide.jakutil.*;
-    public LockNotGrantedException() {
-	super();
-    }
+    //public LockNotGrantedException() {
+	//super();
+   // }
 
     public LockNotGrantedException(Throwable t) {
 	super(t);

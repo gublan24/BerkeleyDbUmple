@@ -26,11 +26,11 @@ class Database
 
     private DbState state;
 
-    Environment envHandle;
+    protected Environment envHandle;
 
     private DatabaseImpl databaseImpl;
 
-    DatabaseConfig configuration;
+    protected DatabaseConfig configuration;
 
     private boolean isWritable;
 
@@ -386,7 +386,7 @@ class Database
 			checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
 			//           ;  //this.hook55();
-			Label55:
+			Label55: ;
 			PreloadConfig config = new PreloadConfig();
 			config.setMaxBytes(maxBytes);
 			databaseImpl.preload(config);
@@ -396,7 +396,7 @@ class Database
 	checkEnv();
 	checkRequiredDbState(OPEN, "Can't call Database.preload");
 	//           ;  //this.hook56();
-  Label56:
+  Label56: ;
 	PreloadConfig config = new PreloadConfig();
 	config.setMaxBytes(maxBytes);
 	config.setMaxMillisecs(maxMillisecs);
@@ -407,7 +407,7 @@ class Database
 			checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
 			//           ;  //this.hook57();
-      Label57:
+      Label57: ;
 			return databaseImpl.preload(config);
     }
 
@@ -452,7 +452,7 @@ class Database
 	List list = new ArrayList();
 	if (hasTriggers()) {
 	    acquireTriggerListReadLock();
-	    Label53://           ;  //this.hook53(list);
+	    Label53: ;//           ;  //this.hook53(list);
 			try {
 				for (int i = 0; i < triggerList.size(); i += 1) {
 						Object obj = triggerList.get(i);
@@ -632,14 +632,13 @@ class Database
 	    throws DatabaseException {
 				acquireTriggerListReadLock();
 				try {	
-						Label54: //           ;  //this.hook54(locker, priKey, oldData, newData);
 						for (int i = 0; i < triggerList.size(); i += 1) {
 									DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
 									trigger.databaseUpdated(this, locker, priKey, oldData, newData);
 							}
 						}
 				finally {
-									hook54_1://releaseTriggerListReadLock();
+									hook54_1: ;//releaseTriggerListReadLock();
 							}
     //End of hook54
     }

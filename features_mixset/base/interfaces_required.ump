@@ -6,19 +6,22 @@
 external interface 	  Checksum	{	}
 external interface 	  Comparable	{	}
 external interface 	  Comparator	{	}
-external interface 	  Exception	{	}
 external interface 	  FilenameFilter	{	}
-external interface 	  IOException	{	}
-external interface 	  ObjectInputStream	{	}
-external interface 	  OutputStream	{	}
+
 external interface 	  Runnable	{	}
-external interface 	  RuntimeException	{	}
 external interface 	  TreeMap	{	}
 external interface 	  TreeNodeProcessor	{	}
-external interface 	  ObjectOutputStream	{	}
+
 external interface 	  XAResource	{	}
-external interface 	  Xid	{	}
-external interface InputStream {  }
+external  interface	  Xid	{	}
 
 
+//extrenal classes : 
 external Handler { }  // class TraceLogHandler extends Handler
+external Exception	{	}
+external RuntimeException	{	}
+external InputStream {  }
+external OutputStream	{	}
+external IOException	{	}
+external ObjectOutputStream	{	}
+external ObjectInputStream	{	}

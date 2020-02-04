@@ -4,14 +4,9 @@ class SerialBase
 {
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.FastOutputStream;
-    private int outputBufferSize;
+     int outputBufferSize = 0 ;
 
-    /** 
-     * Initializes the initial output buffer size to zero. <p> Unless  {@link #setSerialBufferSize} is called, the default {@link FastOutputStream#DEFAULT_INIT_SIZE} size will be used.</p>
-     */
-    public SerialBase() {
-	outputBufferSize = 0;
-    }
+   
 
     /** 
      * Sets the initial byte size of the output buffer that is allocated by the default implementation of  {@link #getSerialOutput}. <p> If this property is zero (the default), the default  {@link FastOutputStream#DEFAULT_INIT_SIZE} size is used.</p>

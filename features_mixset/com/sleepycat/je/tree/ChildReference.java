@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../ChildReference.ump"
-// line 3 "../../../../MemoryBudget_ChildReference.ump"
 public class ChildReference implements LogWritable,LogReadable
 {
 
@@ -119,11 +118,6 @@ public class ChildReference implements LogWritable,LogReadable
 		    target = node;
 //	    this.hook613(in);
         Label613:
-if (in != null) fetchTarget(DatabaseImpl, IN){
-      in.updateMemorySize(null, target);
-	  }
-      //	original(in);
-
 		} catch (LogFileNotFoundException LNFE) {
 		    if (!isKnownDeleted() && !isPendingDeleted()) {
 			throw new DatabaseException(IN.makeFetchErrorMsg(LNFE.toString(), in, lsn, state), LNFE);

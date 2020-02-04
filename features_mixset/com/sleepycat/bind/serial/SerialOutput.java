@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 
 // line 3 "../../../../SerialOutput.ump"
-public class SerialOutput implements ObjectOutputStream
+public class SerialOutput extends ObjectOutputStream
 {
 
   //------------------------
@@ -25,7 +25,9 @@ public class SerialOutput implements ObjectOutputStream
   //------------------------
 
   public SerialOutput()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
@@ -77,7 +79,7 @@ public class SerialOutput implements ObjectOutputStream
   //------------------------
   
   // line 15 "../../../../SerialOutput.ump"
-  private final static byte[] STREAM_HEADER ;
+  private   static byte[] STREAM_HEADER ;
 // line 17 "../../../../SerialOutput.ump"
   private ClassCatalog classCatalog ;
 

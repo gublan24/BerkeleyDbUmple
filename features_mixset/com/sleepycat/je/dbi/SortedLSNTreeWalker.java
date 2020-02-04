@@ -19,11 +19,6 @@ import java.util.Arrays;
 
 // line 3 "../../../../SortedLSNTreeWalker.ump"
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
-// line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
-// line 3 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
-// line 3 "../../../../DeleteOp_SortedLSNTreeWalker.ump"
-// line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
-// line 3 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -88,12 +83,7 @@ public class SortedLSNTreeWalker
 	    accumulateLSNs(root);
 	    releaseRootIN(root);
 	}
-	Label359:
-if (setDbState) {
-			  dbImpl.finishedINListHarvest();
-		}
-		//original();
- //this.hook359();
+	Label359: //this.hook359();
 	while (true) {
 	    maybeGetMoreINs();
 	    if (currentLSNs != null && currentLSNIdx < currentLSNs.length) {
@@ -206,10 +196,7 @@ if (setDbState) {
   
   
   @MethodObject
-    @MethodObject
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
-  // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
-  // line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
   public static class SortedLSNTreeWalker_extractINsForDb
   {
   
@@ -243,14 +230,7 @@ if (setDbState) {
           foundSet=new HashSet();
           //this.hook360();
           Label360:
-  memoryChange=0;
-          mb=_this.envImpl.getMemoryBudget();
-          //original();
-  
-          Label356:
-  inList.latchMajor();
-          //original();
-   //this.hook356();
+          Label356: //this.hook356();
           try {
             this.hook357();
             iter=inList.iterator();
@@ -262,10 +242,6 @@ if (setDbState) {
                   iter.remove();
                   //this.hook361();
                   Label361:
-  memoryChange+=(thisIN.getAccumulatedDelta() - thisIN.getInMemorySize());
-          thisIN.setInListResident(false);
-          //original();
-  
                 }
                 foundSet.add(thisIN);
               }
@@ -274,9 +250,6 @@ if (setDbState) {
      catch (      DatabaseException e) {
             //this.hook362();
             Label362:
-  mb.updateTreeMemoryUsage(memoryChange);
-         // original();
-  
             throw e;
           }
      finally {
@@ -289,14 +262,8 @@ if (setDbState) {
               _this.accumulateLSNs(thisIN1);
             }
           }
-          foundSet=null;        
-          // line 6 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
-          //boolean result=original();
-                  mb.updateTreeMemoryUsage(memoryChange);
-                 // return result;
-          // END OF UMPLE AFTER INJECTION
+          foundSet=null;
           return foundSome;
-  
     }
     
     //------------------------

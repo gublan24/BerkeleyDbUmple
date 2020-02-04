@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.IOException;
 
 // line 3 "../../../../SerialInput.ump"
-public class SerialInput implements ObjectInputStream
+public class SerialInput extends ObjectInputStream
 {
 
   //------------------------
@@ -23,7 +23,9 @@ public class SerialInput implements ObjectInputStream
   //------------------------
 
   public SerialInput()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

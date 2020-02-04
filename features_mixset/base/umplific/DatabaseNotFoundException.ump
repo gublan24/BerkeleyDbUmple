@@ -4,9 +4,10 @@ class DatabaseNotFoundException
 {
   isA DatabaseException;
   depend de.ovgu.cide.jakutil.*;
-    public DatabaseNotFoundException() {
-	super();
-    }
+
+  //  public DatabaseNotFoundException() {
+//	super();
+ //   }
 
     public DatabaseNotFoundException(Throwable t) {
 	super(t);

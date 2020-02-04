@@ -12,8 +12,8 @@ class CheckpointConfig
     /** 
      * Javadoc for this public method is generated via the doc templates in the doc_src directory.
      */
-    public CheckpointConfig() {
-    }
+   // public CheckpointConfig() {
+   // }
 
     /** 
      * Javadoc for this public method is generated via the doc templates in the doc_src directory.

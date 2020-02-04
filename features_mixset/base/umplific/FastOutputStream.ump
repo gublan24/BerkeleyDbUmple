@@ -28,7 +28,7 @@ class FastOutputStream
     /** 
      * Creates an output stream with default sizes.
      */
-    public FastOutputStream() {
+   after constructor () {
 	initBuffer(DEFAULT_INIT_SIZE, DEFAULT_BUMP_SIZE);
     }
 

@@ -43,14 +43,8 @@ public class DatabaseEntry
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 34 "../../../DatabaseEntry.ump"
-   public  DatabaseEntry(){
-    
-  }
-
-
-  /**
+   * public DatabaseEntry() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

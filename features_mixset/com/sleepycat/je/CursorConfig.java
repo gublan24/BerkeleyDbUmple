@@ -31,14 +31,8 @@ public class CursorConfig implements Cloneable
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 36 "../../../CursorConfig.ump"
-   public  CursorConfig(){
-    
-  }
-
-
-  /**
+   * public CursorConfig() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

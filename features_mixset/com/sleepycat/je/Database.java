@@ -18,30 +18,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Comparator;
 import java.util.ArrayList;
-import com.sleepycat.je.dbi.TruncateResult;
 
-/**
- * namespace com.sleepycat.je;
- */
 // line 3 "../../../Database.ump"
 // line 3 "../../../Database_static.ump"
-// line 3 "../../../loggingBase_Database.ump"
-// line 3 "../../../Truncate_Database.ump"
-// line 3 "../../../Truncate_Database_inner.ump"
-// line 3 "../../../DeleteOp_Database.ump"
-// line 3 "../../../Statistics_Database.ump"
-// line 3 "../../../Latches_Database.ump"
-// line 3 "../../../Latches_Database_inner.ump"
-// line 3 "../../../LoggingFinest_Database.ump"
-// line 3 "../../../LoggingFinest_Database_inner.ump"
-// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Database.ump"
-// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
-// line 3 "../../../Derivative_DeleteOp_TruncateOp_Database.ump"
-// line 3 "../../../Derivative_Latches_TruncateOp_Database_inner.ump"
-// line 3 "../../../Derivative_LoggingFinest_TruncateOp_Database_inner.ump"
-// line 3 "../../../Derivative_Statistics_DeleteOp_Database.ump"
-// line 3 "../../../Derivative_Statistics_Verifier_Database.ump"
-// line 3 "../../../Derivative_Statistics_Verifier_DeleteOp_Database.ump"
 public class Database
 {
 
@@ -50,18 +29,14 @@ public class Database
   //------------------------
 
   //Database Attributes
-  private Environment envHandle;
-  private DatabaseConfig configuration;
   private Locker handleLocker;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Database(Environment aEnvHandle, DatabaseConfig aConfiguration, Locker aHandleLocker)
+  public Database(Locker aHandleLocker)
   {
-    envHandle = aEnvHandle;
-    configuration = aConfiguration;
     handleLocker = aHandleLocker;
   }
 
@@ -69,38 +44,12 @@ public class Database
   // INTERFACE
   //------------------------
 
-  public boolean setEnvHandle(Environment aEnvHandle)
-  {
-    boolean wasSet = false;
-    envHandle = aEnvHandle;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setConfiguration(DatabaseConfig aConfiguration)
-  {
-    boolean wasSet = false;
-    configuration = aConfiguration;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setHandleLocker(Locker aHandleLocker)
   {
     boolean wasSet = false;
     handleLocker = aHandleLocker;
     wasSet = true;
     return wasSet;
-  }
-
-  public Environment getEnvHandle()
-  {
-    return envHandle;
-  }
-
-  public DatabaseConfig getConfiguration()
-  {
-    return configuration;
   }
 
   public Locker getHandleLocker()
@@ -201,11 +150,7 @@ public class Database
     StringBuffer errors = null;
 	checkEnv();
 	checkProhibitedDbState(CLOSED, "Can't close Database:");
-	Label44:
-//synchronized void close() 
-	trace(Level.FINEST, "Database.close: ", null, null);
-	//original();
-           ;  //this.hook44();
+	Label44:           ;  //this.hook44();
 	removeAllTriggers();
 	envHandle.removeReferringHandle(this);
 	if (cursors.size() > 0) {
@@ -245,10 +190,7 @@ public class Database
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call Database.openSequence:");
 	checkWritable("openSequence");
-	Label45:
-trace(Level.FINEST, "Database.openSequence", txn, key, null, null);
-	//original(txn, key);
-           ;  //this.hook45(txn, key);
+	Label45:           ;  //this.hook45(txn, key);
 	return new Sequence(this, txn, key, config);
   }
 
@@ -270,10 +212,7 @@ trace(Level.FINEST, "Database.openSequence", txn, key, null, null);
 	if (useConfig.getReadUncommitted() && useConfig.getReadCommitted()) {
 	    throw new IllegalArgumentException("Only one may be specified: ReadCommitted or ReadUncommitted");
 	}
-	Label46:
-trace(Level.FINEST, "Database.openCursor", txn, cursorConfig);
-	//original(txn, cursorConfig);
-           ;  //this.hook46(txn, cursorConfig);
+	Label46:           ;  //this.hook46(txn, cursorConfig);
 	Cursor ret = newDbcInstance(txn, useConfig);
 	return ret;
   }
@@ -294,10 +233,7 @@ trace(Level.FINEST, "Database.openCursor", txn, cursorConfig);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call Database.delete:");
 	checkWritable("delete");
-	Label47:
-trace(Level.FINEST, "Database.delete", txn, key, null, null);
-	//original(txn, key);
-           ;  //this.hook47(txn, key);
+	Label47:           ;  //this.hook47(txn, key);
 	OperationStatus commitStatus = OperationStatus.NOTFOUND;
 	Locker locker = null;
 	try {
@@ -356,10 +292,7 @@ trace(Level.FINEST, "Database.delete", txn, key, null, null);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call Database.get:");
-	Label48:
-trace(Level.FINEST, "Database.get", txn, key, null, lockMode);
-	//original(txn, key, lockMode);
-           ;  //this.hook48(txn, key, lockMode);
+	Label48:           ;  //this.hook48(txn, key, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -383,10 +316,7 @@ trace(Level.FINEST, "Database.get", txn, key, null, lockMode);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(data, "data", true);
 	checkRequiredDbState(OPEN, "Can't call Database.getSearchBoth:");
-	Label49:
-trace(Level.FINEST, "Database.getSearchBoth", txn, key, data, lockMode);
-	//original(txn, key, data, lockMode);
-           ;  //this.hook49(txn, key, data, lockMode);
+	Label49:           ;  //this.hook49(txn, key, data, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -412,10 +342,7 @@ trace(Level.FINEST, "Database.getSearchBoth", txn, key, data, lockMode);
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.put");
 	checkWritable("put");
-	Label50:
-trace(Level.FINEST, "Database.put", txn, key, data, null);
-	//original(txn, key, data);
-           ;  //this.hook50(txn, key, data);
+	Label50:           ;  //this.hook50(txn, key, data);
 	return putInternal(txn, key, data, PutMode.OVERWRITE);
   }
 
@@ -427,10 +354,7 @@ trace(Level.FINEST, "Database.put", txn, key, data, null);
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.putNoOverWrite");
 	checkWritable("putNoOverwrite");
-	Label51:
-trace(Level.FINEST, "Database.putNoOverwrite", txn, key, data, null);
-	//original(txn, key, data);
-           ;  //this.hook51(txn, key, data);
+	Label51:           ;  //this.hook51(txn, key, data);
 	return putInternal(txn, key, data, PutMode.NOOVERWRITE);
   }
 
@@ -442,10 +366,7 @@ trace(Level.FINEST, "Database.putNoOverwrite", txn, key, data, null);
 	DatabaseUtil.checkForPartialKey(key);
 	checkRequiredDbState(OPEN, "Can't call Database.putNoDupData");
 	checkWritable("putNoDupData");
-	Label52:
-trace(Level.FINEST, "Database.putNoDupData", txn, key, data, null);
-	//original(txn, key, data);
-           ;  //this.hook52(txn, key, data);
+	Label52:           ;  //this.hook52(txn, key, data);
 	return putInternal(txn, key, data, PutMode.NODUP);
   }
 
@@ -517,10 +438,7 @@ trace(Level.FINEST, "Database.putNoDupData", txn, key, data, null);
     checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
 			//           ;  //this.hook55();
-			Label55:
-databaseImpl.checkIsDeleted("preload");
-			//original();
-
+			Label55: ;
 			PreloadConfig config = new PreloadConfig();
 			config.setMaxBytes(maxBytes);
 			databaseImpl.preload(config);
@@ -531,10 +449,7 @@ databaseImpl.checkIsDeleted("preload");
     checkEnv();
 	checkRequiredDbState(OPEN, "Can't call Database.preload");
 	//           ;  //this.hook56();
-  Label56:
-databaseImpl.checkIsDeleted("preload");
-			//original();
-
+  Label56: ;
 	PreloadConfig config = new PreloadConfig();
 	config.setMaxBytes(maxBytes);
 	config.setMaxMillisecs(maxMillisecs);
@@ -546,10 +461,7 @@ databaseImpl.checkIsDeleted("preload");
     checkEnv();
 			checkRequiredDbState(OPEN, "Can't call Database.preload");
 			//           ;  //this.hook57();
-      Label57:
-databaseImpl.checkIsDeleted("preload");
-			//original();
-
+      Label57: ;
 			return databaseImpl.preload(config);
   }
 
@@ -602,7 +514,7 @@ databaseImpl.checkIsDeleted("preload");
     List list = new ArrayList();
 	if (hasTriggers()) {
 	    acquireTriggerListReadLock();
-	    Label53://           ;  //this.hook53(list);
+	    Label53: ;//           ;  //this.hook53(list);
 			try {
 				for (int i = 0; i < triggerList.size(); i += 1) {
 						Object obj = triggerList.get(i);
@@ -612,13 +524,7 @@ databaseImpl.checkIsDeleted("preload");
 				}
 			}
 		  finally {
-						Label53_1:
-//		try {
-					//original(list);
-		//	} finally {
-					releaseTriggerListReadLock();
-			//}
-   ;//
+						Label53_1:   ;//
 			}
 	} else {
 	}
@@ -827,118 +733,21 @@ databaseImpl.checkIsDeleted("preload");
   public void notifyTriggers(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData) throws DatabaseException{
     acquireTriggerListReadLock();
 				try {	
-						Label54: //           ;  //this.hook54(locker, priKey, oldData, newData);
 						for (int i = 0; i < triggerList.size(); i += 1) {
 									DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
 									trigger.databaseUpdated(this, locker, priKey, oldData, newData);
 							}
 						}
 				finally {
-									hook54_1://releaseTriggerListReadLock();
+									hook54_1: ;//releaseTriggerListReadLock();
 							}
     //End of hook54
-  }
-
-
-  /**
-   * 
-   * @deprecated It has not been possible to implement this method withcorrect transactional semantics without incurring a performance penalty on all Database operations. Truncate functionality has been moved to Environment.truncateDatabase(), which requires that all Database handles on the database are closed before the truncate operation can execute.
-   */
-  // line 10 "../../../Truncate_Database.ump"
-   public int truncate(Transaction txn, boolean countRecords) throws DatabaseException{
-    return new Database_truncate(this, txn, countRecords).execute();
-  }
-
-
-  /**
-   * 
-   * Internal unchecked truncate that optionally counts records.
-   * @deprecated
-   */
-  // line 18 "../../../Truncate_Database.ump"
-  public int truncateInternal(Locker locker, boolean countRecords) throws DatabaseException{
-    if (databaseImpl == null) {
-					throw new DatabaseException("couldn't find database - truncate");
-			}
-
-			Label43:			//this.hook43();
-			if (handleLocker.isHandleLockTransferrable()) {
-					handleLocker.transferHandleLock(this, locker, false);
-			}
-			boolean operationOk = false;
-			try {
-					TruncateResult result = envHandle.getEnvironmentImpl().truncate(locker, databaseImpl);
-					databaseImpl = result.getDatabase();
-					operationOk = true;
-					return countRecords ? result.getRecordCount() : -1;
-			} finally {
-					locker.setHandleLockOwner(operationOk, this, false);
-			}
-  }
-
-  // line 6 "../../../Statistics_Database.ump"
-   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
-    checkEnv();
-			checkRequiredDbState(OPEN, "Can't call Database.stat");
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			if (databaseImpl != null) {
-					Label38:
-databaseImpl.checkIsDeleted("stat");
-	//original();
- //this.hook38();
-					return databaseImpl.stat(useConfig);
-			}
-			return null;
-  }
-
-
-  /**
-   * 
-   * Releases a lock acquired by calling acquireTriggerListReadLock().
-   */
-  // line 9 "../../../Latches_Database.ump"
-   private void releaseTriggerListReadLock() throws DatabaseException{
-    EnvironmentImpl env = envHandle.getEnvironmentImpl();
-	env.getTriggerLatch().release();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 10 "../../../LoggingFinest_Database.ump"
-  public void trace(Level level, String methodName, Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
-    new Database_trace(this, level, methodName, txn, key, data, lockMode).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 17 "../../../LoggingFinest_Database.ump"
-  public void trace(Level level, String methodName, Transaction txn, CursorConfig config) throws DatabaseException{
-    new Database_trace2(this, level, methodName, txn, config).execute();
-  }
-
-  // line 6 "../../../Derivative_Statistics_Verifier_Database.ump"
-   public DatabaseStats verify(VerifyConfig config) throws DatabaseException{
-    checkEnv();
-	checkRequiredDbState(OPEN, "Can't call Database.verify");
-	Label37: //this.hook37();
-	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
-	DatabaseStats stats = databaseImpl.getEmptyStats();
-	databaseImpl.verify(useConfig, stats);
-	return stats;
   }
 
 
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "envHandle" + "=" + (getEnvHandle() != null ? !getEnvHandle().equals(this)  ? getEnvHandle().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "configuration" + "=" + (getConfiguration() != null ? !getConfiguration().equals(this)  ? getConfiguration().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "handleLocker" + "=" + (getHandleLocker() != null ? !getHandleLocker().equals(this)  ? getHandleLocker().toString().replaceAll("  ","    ") : "this" : "null");
   }  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -991,7 +800,6 @@ databaseImpl.checkIsDeleted("stat");
   
   
   // line 13 "../../../Database_static.ump"
-  // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
   {
   
@@ -1020,11 +828,6 @@ databaseImpl.checkIsDeleted("stat");
   
     // line 18 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
-      // line 6 "../../../Latches_Database_inner.ump"
-      env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().acquireShared();
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -1046,7 +849,6 @@ databaseImpl.checkIsDeleted("stat");
   
   
   // line 25 "../../../Database_static.ump"
-  // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
   {
   
@@ -1075,11 +877,6 @@ databaseImpl.checkIsDeleted("stat");
   
     // line 30 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
-      // line 20 "../../../Latches_Database_inner.ump"
-      env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().acquireExclusive();
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -1101,7 +898,6 @@ databaseImpl.checkIsDeleted("stat");
   
   
   // line 37 "../../../Database_static.ump"
-  // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock
   {
   
@@ -1133,11 +929,6 @@ databaseImpl.checkIsDeleted("stat");
       if (_this.triggerList.size() == 0) {
             _this.triggerList=null;
           }
-      // line 13 "../../../Latches_Database_inner.ump"
-      //      original();
-              env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().release();
-      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -1148,275 +939,6 @@ databaseImpl.checkIsDeleted("stat");
     protected Database _this ;
   // line 47 "../../../Database_static.ump"
     protected EnvironmentImpl env ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../Truncate_Database_inner.ump"
-  // line 4 "../../../Derivative_Latches_TruncateOp_Database_inner.ump"
-  // line 4 "../../../Derivative_LoggingFinest_TruncateOp_Database_inner.ump"
-  public static class Database_truncate
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Database_truncate()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../Truncate_Database_inner.ump"
-    public  Database_truncate(Database _this, Transaction txn, boolean countRecords){
-      this._this=_this;
-          this.txn=txn;
-          this.countRecords=countRecords;
-    }
-  
-    // line 11 "../../../Truncate_Database_inner.ump"
-    public int execute() throws DatabaseException{
-      _this.checkEnv();
-          _this.checkRequiredDbState(_this.OPEN,"Can't call Database.truncate");
-          _this.checkWritable("truncate");
-          //this.hook39();
-          Label39:
-  Tracer.trace(Level.FINEST,_this.envHandle.getEnvironmentImpl(),"Database.truncate" + ": txnId=" + ((txn == null) ? "null" : Long.toString(txn.getId())));
-         // original();
-  
-          locker=null;
-          //this.hook40();
-          Label40:
-  triggerLock=false;
-          //original();
-  
-          operationOk=false;
-          try {
-            locker=LockerFactory.getWritableLocker(_this.envHandle,txn,_this.isTransactional(),true,null);
-            _this.acquireTriggerListReadLock();
-            //this.hook41();
-            Label41:
-  triggerLock=true;
-          //original();
-  
-            count=_this.truncateInternal(locker,countRecords);
-            for (int i=0; i < _this.triggerList.size(); i+=1) {
-              obj=_this.triggerList.get(i);
-              if (obj instanceof SecondaryTrigger) {
-                secDb=((SecondaryTrigger)obj).getDb();
-                secDb.truncateInternal(locker,false);
-              }
-            }
-            operationOk=true;
-            return count;
-          }
-      finally {
-            if (locker != null) {
-              locker.operationEnd(operationOk);
-            }
-            //this.hook42();
-            Label42:
-  if (triggerLock) {
-            _this.releaseTriggerListReadLock();
-          }
-          //original();
-   ;
-          }
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 44 "../../../Truncate_Database_inner.ump"
-    protected Database _this ;
-  // line 45 "../../../Truncate_Database_inner.ump"
-    protected Transaction txn ;
-  // line 46 "../../../Truncate_Database_inner.ump"
-    protected boolean countRecords ;
-  // line 47 "../../../Truncate_Database_inner.ump"
-    protected Locker locker ;
-  // line 48 "../../../Truncate_Database_inner.ump"
-    protected boolean triggerLock ;
-  // line 49 "../../../Truncate_Database_inner.ump"
-    protected boolean operationOk ;
-  // line 50 "../../../Truncate_Database_inner.ump"
-    protected int count ;
-  // line 51 "../../../Truncate_Database_inner.ump"
-    protected Object obj ;
-  // line 52 "../../../Truncate_Database_inner.ump"
-    protected SecondaryDatabase secDb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../LoggingFinest_Database_inner.ump"
-  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
-  public static class Database_trace2
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Database_trace2()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../LoggingFinest_Database_inner.ump"
-    public  Database_trace2(Database _this, Level level, String methodName, Transaction txn, CursorConfig config){
-      this._this=_this;
-          this.level=level;
-          this.methodName=methodName;
-          this.txn=txn;
-          this.config=config;
-    }
-  
-    // line 13 "../../../LoggingFinest_Database_inner.ump"
-    public void execute() throws DatabaseException{
-      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
-      if (_this.logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(methodName);
-                sb.append(" name=" + _this.getDebugName());
-                if (txn != null) {
-                  sb.append(" txnId=").append(txn.getId());
-                }
-                if (config != null) {
-                  sb.append(" config=").append(config);
-                }
-                _this.logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 14 "../../../LoggingFinest_Database_inner.ump"
-    protected Database _this ;
-  // line 15 "../../../LoggingFinest_Database_inner.ump"
-    protected Level level ;
-  // line 16 "../../../LoggingFinest_Database_inner.ump"
-    protected String methodName ;
-  // line 17 "../../../LoggingFinest_Database_inner.ump"
-    protected Transaction txn ;
-  // line 18 "../../../LoggingFinest_Database_inner.ump"
-    protected CursorConfig config ;
-  // line 19 "../../../LoggingFinest_Database_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 21 "../../../LoggingFinest_Database_inner.ump"
-  // line 21 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
-  public static class Database_trace
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Database_trace()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 23 "../../../LoggingFinest_Database_inner.ump"
-    public  Database_trace(Database _this, Level level, String methodName, Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode){
-      this._this=_this;
-          this.level=level;
-          this.methodName=methodName;
-          this.txn=txn;
-          this.key=key;
-          this.data=data;
-          this.lockMode=lockMode;
-    }
-  
-    // line 32 "../../../LoggingFinest_Database_inner.ump"
-    public void execute() throws DatabaseException{
-      // line 24 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
-      if (_this.logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(methodName);
-                if (txn != null) {
-                  sb.append(" txnId=").append(txn.getId());
-                }
-                sb.append(" key=").append(key.dumpData());
-                if (data != null) {
-                  sb.append(" data=").append(data.dumpData());
-                }
-                if (lockMode != null) {
-                  sb.append(" lockMode=").append(lockMode);
-                }
-                _this.logger.log(level,sb.toString());
-              }
-             // original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 33 "../../../LoggingFinest_Database_inner.ump"
-    protected Database _this ;
-  // line 34 "../../../LoggingFinest_Database_inner.ump"
-    protected Level level ;
-  // line 35 "../../../LoggingFinest_Database_inner.ump"
-    protected String methodName ;
-  // line 36 "../../../LoggingFinest_Database_inner.ump"
-    protected Transaction txn ;
-  // line 37 "../../../LoggingFinest_Database_inner.ump"
-    protected DatabaseEntry key ;
-  // line 38 "../../../LoggingFinest_Database_inner.ump"
-    protected DatabaseEntry data ;
-  // line 39 "../../../LoggingFinest_Database_inner.ump"
-    protected LockMode lockMode ;
-  // line 40 "../../../LoggingFinest_Database_inner.ump"
-    protected StringBuffer sb ;
   
     
   }  
@@ -1432,23 +954,18 @@ databaseImpl.checkIsDeleted("stat");
   static DbState INVALID = new DbState("INVALID") ;
 // line 27 "../../../Database.ump"
   private DbState state ;
+// line 29 "../../../Database.ump"
+  protected Environment envHandle ;
 // line 31 "../../../Database.ump"
   private DatabaseImpl databaseImpl ;
+// line 33 "../../../Database.ump"
+  protected DatabaseConfig configuration ;
 // line 35 "../../../Database.ump"
   private boolean isWritable ;
 // line 39 "../../../Database.ump"
   private TinyHashSet cursors = new TinyHashSet() ;
 // line 41 "../../../Database.ump"
   private List triggerList ;
-// line 5 "../../../loggingBase_Database.ump"
-  private Logger logger ;
-
-// line 5 "../../../Derivative_Statistics_Verifier_DeleteOp_Database.ump"
-  protected void hook37:  verify (VerifyConfig ) 
-  {
-    databaseImpl.checkIsDeleted("verify");
-//	original();
-  }
 
   
 }

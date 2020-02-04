@@ -31,14 +31,8 @@ public class PreloadConfig implements Cloneable
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 19 "../../../PreloadConfig.ump"
-   public  PreloadConfig(){
-    
-  }
-
-
-  /**
+   * public PreloadConfig() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

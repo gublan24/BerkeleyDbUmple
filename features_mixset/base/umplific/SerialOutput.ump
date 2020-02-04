@@ -12,7 +12,7 @@ class SerialOutput
   depend java.io.ObjectOutputStream;
   depend java.io.IOException;
   depend java.io.ByteArrayOutputStream;
-    private final static byte[] STREAM_HEADER;
+    private   static byte[] STREAM_HEADER;
 
     private ClassCatalog classCatalog;
 

@@ -8,8 +8,7 @@ class StoredClassCatalog {
       isA Serializable;
       private byte[] classID;
       private transient ObjectStreamClass classFormat;
-      ClassInfo(){
-      }
+ 
       ClassInfo(    DatabaseEntry dbt){
         byte[] data=dbt.getData();
         int len=data[0];

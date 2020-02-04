@@ -24,15 +24,6 @@ import java.io.FileInputStream;
 import java.io.File;
 
 // line 3 "../../../Environment.ump"
-// line 3 "../../../MemoryBudget_Environment.ump"
-// line 3 "../../../Evictor_Environment.ump"
-// line 3 "../../../RenameOp_Environment.ump"
-// line 3 "../../../Truncate_Environment.ump"
-// line 3 "../../../DeleteOp_Environment.ump"
-// line 3 "../../../INCompressor_Environment.ump"
-// line 3 "../../../Statistics_Environment.ump"
-// line 3 "../../../LoggingFinest_Environment.ump"
-// line 3 "../../../Derivative_Statistics_Verifier_Environment.ump"
 public class Environment
 {
 
@@ -285,11 +276,7 @@ public class Environment
 					}
 					DatabaseImpl database = environmentImpl.getDb(locker, databaseName, newDb);
 					boolean databaseExists = false;
-					Label59:
-if (database != null && !database.isDeleted())
-						databaseExists = true;
-//			return original(database, databaseExists);
- //databaseExists = this.hook59(database, databaseExists);
+					Label59: //databaseExists = this.hook59(database, databaseExists);
 					if (databaseExists) {
 				if (dbConfig.getAllowCreate() && dbConfig.getExclusiveCreate()) {
 						dbIsClosing = true;
@@ -625,168 +612,6 @@ if (database != null && !database.isDeleted())
    protected boolean hook59(DatabaseImpl database, boolean databaseExists) throws DatabaseException{
     return databaseExists;
   }
-
-
-  /**
-   * 
-   * Returns the current memory usage in bytes for all btrees in the environmentImpl.
-   */
-  // line 9 "../../../MemoryBudget_Environment.ump"
-  public long getMemoryUsage() throws DatabaseException{
-    checkHandleIsValid();
-	    checkEnv();
-	    return environmentImpl.getMemoryBudget().getCacheMemoryUsage();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Evictor_Environment.ump"
-   public void evictMemory() throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			environmentImpl.invokeEvictor();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../RenameOp_Environment.ump"
-   public void renameDatabase(Transaction txn, String databaseName, String newName) throws DatabaseException{
-    DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			DatabaseUtil.checkForNullParam(newName, "newName");
-			checkHandleIsValid();
-			checkEnv();
-			Locker locker = null;
-			boolean operationOk = false;
-			try {
-					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
-					environmentImpl.dbRename(locker, databaseName, newName);
-					operationOk = true;
-			} finally {
-					if (locker != null) {
-				locker.operationEnd(operationOk);
-					}
-			}
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Truncate_Environment.ump"
-   public long truncateDatabase(Transaction txn, String databaseName, boolean returnCount) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			Locker locker = null;
-			boolean operationOk = false;
-			long count = 0;
-			try {
-					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
-					count = environmentImpl.truncate(locker, databaseName, returnCount);
-					operationOk = true;
-			} finally {
-					if (locker != null) {
-				locker.operationEnd(operationOk);
-					}
-			}
-			return count;
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../DeleteOp_Environment.ump"
-   public void removeDatabase(Transaction txn, String databaseName) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			Locker locker = null;
-			boolean operationOk = false;
-			try {
-					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
-					environmentImpl.dbRemove(locker, databaseName);
-					operationOk = true;
-			} finally {
-					if (locker != null) {
-				locker.operationEnd(operationOk);
-					}
-			}
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../INCompressor_Environment.ump"
-   public void compress() throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			environmentImpl.invokeCompressor();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Statistics_Environment.ump"
-   public EnvironmentStats getStats(StatsConfig config) throws DatabaseException{
-    StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			if (environmentImpl != null) {
-					return environmentImpl.loadStats(useConfig);
-			} else {
-					return new EnvironmentStats();
-			}
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 21 "../../../Statistics_Environment.ump"
-   public LockStats getLockStats(StatsConfig config) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			return environmentImpl.lockStat(useConfig);
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 31 "../../../Statistics_Environment.ump"
-   public TransactionStats getTransactionStats(StatsConfig config) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			return environmentImpl.txnStat(useConfig);
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Derivative_Statistics_Verifier_Environment.ump"
-   public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
-    checkHandleIsValid();
-	checkEnv();
-	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
-	return environmentImpl.verify(useConfig, out);
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -806,13 +631,6 @@ if (database != null && !database.isDeleted())
   private Set referringDbTxns ;
 // line 37 "../../../Environment.ump"
   private boolean valid ;
-
-// line 5 "../../../LoggingFinest_Environment.ump"
-  protected void hook58: openDb (Transaction , Database , String , DatabaseConfig , boolean ) 
-  {
-    Tracer.trace(Level.FINEST, environmentImpl,		"Environment.open: " + " name=" + databaseName + " dbConfig=" + dbConfig);
-	//original(databaseName, dbConfig);
-  }
 
   
 }

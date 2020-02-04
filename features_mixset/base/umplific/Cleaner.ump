@@ -53,25 +53,25 @@ class Cleaner {
   */
  static final boolean UPDATE_GENERATION = false;
 
- int nCleanerRuns = 0;
+ protected int nCleanerRuns = 0;
 
- long lockTimeout;
+ protected long lockTimeout;
 
- int readBufferSize;
+ protected int readBufferSize;
 
- int nDeadlockRetries;
+ protected int nDeadlockRetries;
 
- boolean expunge;
+ protected boolean expunge;
 
- boolean clusterResident;
+ protected boolean clusterResident;
 
- boolean clusterAll;
+ protected boolean clusterAll;
 
- int maxBatchFiles;
+ protected int maxBatchFiles;
 
- long cleanerBytesInterval;
+ protected long cleanerBytesInterval;
 
- boolean trackDetail;
+ protected boolean trackDetail;
 
  /** 
   * All files that are to-be-cleaning or being-cleaned. Used to perform proactive migration. Is read-only after assignment, so no synchronization is needed.
@@ -232,7 +232,7 @@ class Cleaner {
         fileSelector.removeDeletedFile(fileNum);
        }
       }
-      Label96:
+      Label96: ;
      }
 
 
@@ -290,7 +290,7 @@ class Cleaner {
   BIN bin = null;
   DIN parentDIN = null;
   try {
-   Label97: //this.hook97();
+   Label97: ;//this.hook97();
     boolean c = db == null;
    //c = this.hook112(db, c);
    Label112: if (c) {
@@ -344,7 +344,7 @@ class Cleaner {
     if (completed && !lockDenied) {
      fileSelector.removePendingLN(ln.getNodeId());
     }
-    Label91: //this.hook91(ln, obsolete, completed);
+    Label91: ; //this.hook91(ln, obsolete, completed);
    }
   }
  }
@@ -424,15 +424,15 @@ class Cleaner {
   boolean doMigration = false;
   if (migrateFlag) {
    doMigration = true;
-   Label101: //this.hook101();
+   Label101: ;//this.hook101();
   } else if (!proactiveMigration || isBinInDupDb || env.isClosing()) {} else {
    Long fileNum = new Long(DbLsn.getFileNumber(childLsn));
    if ((PROACTIVE_MIGRATION || isResident) && mustBeCleanedFiles.contains(fileNum)) {
     doMigration = true;
-    Label102: //this.hook102();
+    Label102: ;//this.hook102();
    } else if ((clusterAll || (clusterResident && isResident)) && lowUtilizationFiles.contains(fileNum)) {
     doMigration = true;
-    Label103: //this.hook103();
+    Label103: ;//this.hook103();
    }
   }
   return doMigration;
@@ -520,7 +520,7 @@ class Cleaner {
    if (locker != null) {
     locker.operationEnd();
    }
-   Label92: //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
+   Label92: ; //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
   }
  }
 
@@ -590,7 +590,7 @@ class Cleaner {
    if (locker != null) {
     locker.operationEnd();
    }
-   Label93: //this.hook93(lsn, cleanAction, obsolete, migrated, completed, ln);
+   Label93: ; //this.hook93(lsn, cleanAction, obsolete, migrated, completed, ln);
   }
  }
 

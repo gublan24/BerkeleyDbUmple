@@ -43,25 +43,11 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.nio.ByteBuffer;
 import java.io.PrintStream;
-import com.sleepycat.je.VerifyConfig;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.DatabaseStats;
-import com.sleepycat.je.BtreeStats;
-import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../DatabaseImpl.ump"
 // line 3 "../../../../DatabaseImpl_static.ump"
-// line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
-// line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
-// line 3 "../../../../DeleteOp_DatabaseImpl.ump"
-// line 3 "../../../../Verifier_DatabaseImpl.ump"
-// line 3 "../../../../Statistics_DatabaseImpl.ump"
-// line 3 "../../../../Statistics_DatabaseImpl_inner.ump"
-// line 3 "../../../../Latches_DatabaseImpl.ump"
-// line 3 "../../../../Latches_DatabaseImpl_inner.ump"
-// line 3 "../../../../Derivative_Statistics_Verifier_DatabaseImpl.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -119,9 +105,6 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 			initDefaultSettings();
 			//this.hook288();
 			Label288:
-deleteState = NOT_DELETED;
-			//original();
-
 			tree = new Tree(this);
 			referringHandles = Collections.synchronizedSet(new HashSet());
 			eofNodeId = Node.getNextNodeId();
@@ -139,9 +122,6 @@ deleteState = NOT_DELETED;
 			envImpl = null;
 			//this.hook289();
 			Label289:
-deleteState = NOT_DELETED;
-			//original();
-
 			tree = new Tree();
 			referringHandles = Collections.synchronizedSet(new HashSet());
 			eofNodeId = Node.getNextNodeId();
@@ -636,117 +616,6 @@ deleteState = NOT_DELETED;
     return binMaxDeltas;
   }
 
-  // line 16 "../../../../DeleteOp_DatabaseImpl.ump"
-   public boolean isDeleted(){
-    return !(deleteState == NOT_DELETED);
-  }
-
-  // line 20 "../../../../DeleteOp_DatabaseImpl.ump"
-   public boolean isDeleteFinished(){
-    return (deleteState == DELETED);
-  }
-
-  // line 24 "../../../../DeleteOp_DatabaseImpl.ump"
-   public void startDeleteProcessing(){
-    assert (deleteState == NOT_DELETED);
-		deleteState = DELETED_CLEANUP_INLIST_HARVEST;
-  }
-
-  // line 29 "../../../../DeleteOp_DatabaseImpl.ump"
-  public void finishedINListHarvest(){
-    assert (deleteState == DELETED_CLEANUP_INLIST_HARVEST);
-		deleteState = DELETED_CLEANUP_LOG_HARVEST;
-  }
-
-
-  /**
-   * 
-   * Purge a DatabaseImpl and corresponding MapLN in the db mapping tree. Purging consists of removing all related INs from the db mapping tree and deleting the related MapLN. Used at the a transaction end in these cases: - purge the deleted database after a commit of Environment.removeDatabase - purge the deleted database after a commit of Environment.truncateDatabase - purge the newly created database after an abort of Environment.truncateDatabase
-   */
-  // line 37 "../../../../DeleteOp_DatabaseImpl.ump"
-   public void deleteAndReleaseINs() throws DatabaseException{
-    startDeleteProcessing();
-			releaseDeletedINs();
-  }
-
-  // line 42 "../../../../DeleteOp_DatabaseImpl.ump"
-   public void releaseDeletedINs() throws DatabaseException{
-    if (pendingDeletedHook != null) {
-					pendingDeletedHook.doHook();
-			}
-			try {
-					long rootLsn = tree.getRootLsn();
-					if (rootLsn == DbLsn.NULL_LSN) {
-				envImpl.getDbMapTree().deleteMapLN(id);
-					} else {
-				UtilizationTracker snapshot = new UtilizationTracker(envImpl);
-				snapshot.countObsoleteNodeInexact(rootLsn, LogEntryType.LOG_IN);
-				ObsoleteProcessor obsoleteProcessor = new ObsoleteProcessor(snapshot);
-				SortedLSNTreeWalker walker = new SortedLSNTreeWalker(this, true, true, rootLsn, obsoleteProcessor);
-				envImpl.getDbMapTree().deleteMapLN(id);
-				walker.walk();
-				envImpl.getUtilizationProfile().countAndLogSummaries(snapshot.getTrackedFiles());
-					}
-			} finally {
-					deleteState = DELETED;
-			}
-  }
-
-  // line 64 "../../../../DeleteOp_DatabaseImpl.ump"
-   public void checkIsDeleted(String operation) throws DatabaseException{
-    if (isDeleted()) {
-	    throw new DatabaseException("Attempt to " + operation + " a deleted database");
-	}
-  }
-
-  // line 11 "../../../../Statistics_DatabaseImpl.ump"
-   public DatabaseStats stat(StatsConfig config) throws DatabaseException{
-    if (stats == null) {
-					stats = new BtreeStats();
-			}
-			if (!config.getFast()) {
-					if (tree == null) {
-				return new BtreeStats();
-					}
-					PrintStream out = config.getShowProgressStream();
-					if (out == null) {
-				out = System.err;
-					}
-					StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), getEmptyStats());
-					walkDatabaseTree(statsAcc, out, true);
-					statsAcc.copyToStats(stats);
-			}
-			return stats;
-  }
-
-  // line 30 "../../../../Statistics_DatabaseImpl.ump"
-   public DatabaseStats getEmptyStats(){
-    return new BtreeStats();
-  }
-
-  // line 6 "../../../../Derivative_Statistics_Verifier_DatabaseImpl.ump"
-   public boolean verify(VerifyConfig config, DatabaseStats emptyStats) throws DatabaseException{
-    if (tree == null) {
-	    return true;
-	}
-	PrintStream out = config.getShowProgressStream();
-	if (out == null) {
-	    out = System.err;
-	}
-	StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), emptyStats) {
-	    void verifyNode(Node node) {
-		try {
-		    node.verify(null);
-		} catch (DatabaseException INE) {
-		    progressStream.println(INE);
-		}
-	    }
-	};
-	boolean ok = walkDatabaseTree(statsAcc, out, config.getPrintInfo());
-	statsAcc.copyToStats(emptyStats);
-	return ok;
-  }
-
 
   public String toString()
   {
@@ -855,7 +724,7 @@ deleteState = NOT_DELETED;
   import com.sleepycat.bind.serial.*;
   
   // line 28 "../../../../DatabaseImpl_static.ump"
-  public static class HaltPreloadException implements RuntimeException
+  public static class HaltPreloadException extends RuntimeException
   {
   
     //------------------------
@@ -867,7 +736,9 @@ deleteState = NOT_DELETED;
     //------------------------
   
     public HaltPreloadException()
-    {}
+    {
+      super();
+    }
   
     //------------------------
     // INTERFACE
@@ -900,11 +771,7 @@ deleteState = NOT_DELETED;
   
   
   
-  @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
-  // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
-  // line 4 "../../../../Statistics_DatabaseImpl_inner.ump"
-  // line 4 "../../../../Latches_DatabaseImpl_inner.ump"
   public static class DatabaseImpl_preload
   {
   
@@ -942,38 +809,14 @@ deleteState = NOT_DELETED;
           }
           //this.hook290();
           Label290:
-  cacheBudget=_this.envImpl.getMemoryBudget().getCacheBudget();
-          if (maxBytes == 0) {
-            maxBytes=cacheBudget;
-          }
-     			else 
-        			if (maxBytes > cacheBudget) {
-  						throw new IllegalArgumentException("maxBytes parameter to Database.preload() was specified as " + maxBytes + " bytes \nbut the cache is only "+ cacheBudget+ " bytes.");
-  						}
-  
-          //original();
-  
           ret=new PreloadStats();
           callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
           walker=new PreloadLSNTreeWalker(_this,callback,config);
-          Label287:
-  try {
-                
-    //this.hook287();
+          Label287:  //this.hook287();
           walker.walk();
           //end of hook287
-   				
-  
-          }
-     catch (   HaltPreloadException HPE) {
-            ret.status=HPE.getStatus();
-          }
-  Label287_1:
+   				Label287_1:
           execute_Latches_DatabaseImpl_preload:
-  PreloadStats result=original();
-          assert LatchSupport.countLatchesHeld() == 0;
-          //return result;
-  
           return ret;
     }
     
@@ -1044,18 +887,6 @@ deleteState = NOT_DELETED;
 // line 87 "../../../../DatabaseImpl.ump"
   static final HaltPreloadException memoryExceededPreloadException = new HaltPreloadException(
 	    PreloadStatus.FILLED_CACHE) ;
-// line 5 "../../../../DeleteOp_DatabaseImpl.ump"
-  private static final short NOT_DELETED = 1 ;
-// line 7 "../../../../DeleteOp_DatabaseImpl.ump"
-  private static final short DELETED_CLEANUP_INLIST_HARVEST = 2 ;
-// line 9 "../../../../DeleteOp_DatabaseImpl.ump"
-  private static final short DELETED_CLEANUP_LOG_HARVEST = 3 ;
-// line 11 "../../../../DeleteOp_DatabaseImpl.ump"
-  private static final short DELETED = 4 ;
-// line 13 "../../../../DeleteOp_DatabaseImpl.ump"
-  private short deleteState ;
-// line 8 "../../../../Statistics_DatabaseImpl.ump"
-  private BtreeStats stats ;
 
   
 }

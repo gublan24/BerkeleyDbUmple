@@ -21,24 +21,9 @@ import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CheckpointConfig;
 import java.text.DecimalFormat;
 import java.io.File;
-import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../DbRunAction.ump"
 // line 3 "../../../../DbRunAction_static.ump"
-// line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
-// line 3 "../../../../DbRunAction_inner.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
-// line 3 "../../../../Evictor_DbRunAction.ump"
-// line 3 "../../../../Evictor_DbRunAction_inner.ump"
-// line 3 "../../../../DeleteOp_DbRunAction.ump"
-// line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
-// line 3 "../../../../INCompressor_DbRunAction.ump"
-// line 3 "../../../../INCompressor_DbRunAction_inner.ump"
-// line 3 "../../../../Statistics_DbRunAction.ump"
-// line 3 "../../../../Statistics_DbRunAction_inner.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -102,56 +87,12 @@ public class DbRunAction
 	System.out.println("  -ro (read-only - defaults to read-write)");
 	System.out.println("  -s <dbName> (for preloading of evict or db remove)");
   }
-
-  // line 8 "../../../../Evictor_DbRunAction.ump"
-   private static  void doEvict(Environment env) throws DatabaseException{
-    new DbRunAction_doEvict(env).execute();
-  }
-
-  // line 8 "../../../../DeleteOp_DbRunAction.ump"
-   private static  void removeAndClean(Environment env, String name) throws DatabaseException{
-    long a, b, c, d, e, f;
-			Transaction txn = env.beginTransaction(null, null);
-			CheckpointConfig force = new CheckpointConfig();
-			force.setForce(true);
-			a = System.currentTimeMillis();
-			env.removeDatabase(txn, name);
-			b = System.currentTimeMillis();
-			txn.commit();
-			c = System.currentTimeMillis();
-			int cleanedCount = 0;
-			while (env.cleanLog() > 0) {
-					cleanedCount++;
-			}
-			d = System.currentTimeMillis();
-			System.out.println("cleanedCount=" + cleanedCount);
-			e = 0;
-			f = 0;
-			if (cleanedCount > 0) {
-					e = System.currentTimeMillis();
-					env.checkpoint(force);
-					f = System.currentTimeMillis();
-			}
-			System.out.println("Remove of " + name + " remove: " + getSecs(a, b) + " commit: " + getSecs(b, c) + " clean: "
-				+ getSecs(c, d) + " checkpoint: " + getSecs(e, f));
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
-  @MethodObject
-    @MethodObject
-    @MethodObject
-    @MethodObject
-    @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
-  // line 4 "../../../../DbRunAction_inner.ump"
-  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
-  // line 33 "../../../../Evictor_DbRunAction_inner.ump"
-  // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
-  // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
-  // line 4 "../../../../Statistics_DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -206,34 +147,13 @@ public class DbRunAction
                   doAction=CLEAN;
                 }
      else {
-                 Label841:
-  if (action.equalsIgnoreCase("compress")) {
-            doAction=COMPRESS;
-          }
-   //  else {
-     //       original();
-       //   }
-  // this.hook841();
+                 Label841:// this.hook841();
   							if (action.equalsIgnoreCase("checkpoint")) {
   											doAction=CHECKPOINT;
   										}
-  											Label846:
-  if (action.equalsIgnoreCase("evict")) {
-            doAction=EVICT;
-          }
-   //this.hook846();
-  											Label843:
-  if (action.equalsIgnoreCase("removedb")) {
-            doAction=REMOVEDB;
-          }
-  			// else { usage(); System.exit(1); } or// original();
-  				   //}
-   //this.hook843();
-  											Label839:
-  if (action.equalsIgnoreCase("dbstats")) {
-            doAction=DBSTATS;
-          }
-  // from hook843();
+  											Label846: //this.hook846();
+  											Label843: //this.hook843();
+  											Label839:// from hook843();
   							 else {
   											 usage();
   											 System.exit(1);
@@ -254,24 +174,9 @@ public class DbRunAction
             }
             envConfig=new EnvironmentConfig();
             Label848:
-  envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
-          //original(); //@Abdulaziz aaa
-  
             Label847:
-  if (readOnly) {
-            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
-            envConfig.setReadOnly(true);
-          }
-          //original();
-  
             //this.hook845();
             Label845:
-  if (doAction == EVICT) {
-            envConfig.setConfigParam(EnvironmentParams.ENV_RUN_EVICTOR.getName(),"false");
-            envConfig.setConfigParam(EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE.getName(),"1000");
-          }
-          //original();
-  
             recoveryStart=System.currentTimeMillis();
             env=new Environment(new File(envHome),envConfig);
             forceConfig=new CheckpointConfig();
@@ -287,42 +192,14 @@ public class DbRunAction
               }
               env.checkpoint(forceConfig);
             }
-            Label840:
-  if (doAction == COMPRESS) {
-            env.compress();
-          }
-          //original();
-   //this.hook840();
+            Label840: //this.hook840();
             //this.hook844();
             Label844:
-  if (doAction == EVICT) {
-            preload(env,dbName);
-          }
-          //original();
-  
             if (doAction == CHECKPOINT) {
               env.checkpoint(forceConfig);
             }
-            Label842:
-  if (doAction == REMOVEDB) {
-            removeAndClean(env,dbName);}
-         // original();
-   //this.hook842();
-            Label838:
-  if (doAction == DBSTATS) {
-            dbConfig=new DatabaseConfig();
-            dbConfig.setReadOnly(true);
-            DbInternal.setUseExistingConfig(dbConfig,true);
-            db=env.openDatabase(null,dbName,dbConfig);
-            try {
-              System.out.println(db.getStats(new StatsConfig()));
-            }
-      finally {
-              db.close();
-            }
-          }
-          //original();
-   //this.hook838();
+            Label842: //this.hook842();
+            Label838: //this.hook838();
             actionEnd=System.currentTimeMillis();
             env.close();
           }
@@ -424,80 +301,6 @@ public class DbRunAction
     protected long actionDuration ;
   
     
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../Evictor_DbRunAction_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
-  public static class DbRunAction_doEvict
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public DbRunAction_doEvict()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../Evictor_DbRunAction_inner.ump"
-    public  DbRunAction_doEvict(Environment env){
-      this.env=env;
-    }
-  
-    // line 9 "../../../../Evictor_DbRunAction_inner.ump"
-    public void execute() throws DatabaseException{
-      envImpl=DbInternal.envGetEnvironmentImpl(env);
-          Label837:
-  cacheUsage=envImpl.getMemoryBudget().getCacheMemoryUsage();
-          //original();
-          //this.hook837();
-          c=new EnvironmentMutableConfig();
-          Label836:
-  c.setCacheSize(cacheUsage / 2);
-          //original();
-          //this.hook836();
-          env.setMutableConfig(c);
-          start=System.currentTimeMillis();
-          env.evictMemory();
-          end=System.currentTimeMillis();
-          f=new DecimalFormat();
-          f.setMaximumFractionDigits(2);
-          System.out.println("evict time=" + f.format(end - start));
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 21 "../../../../Evictor_DbRunAction_inner.ump"
-    protected Environment env ;
-  // line 22 "../../../../Evictor_DbRunAction_inner.ump"
-    protected EnvironmentImpl envImpl ;
-  // line 23 "../../../../Evictor_DbRunAction_inner.ump"
-    protected long cacheUsage ;
-  // line 24 "../../../../Evictor_DbRunAction_inner.ump"
-    protected EnvironmentMutableConfig c ;
-  // line 25 "../../../../Evictor_DbRunAction_inner.ump"
-    protected long start ;
-  // line 26 "../../../../Evictor_DbRunAction_inner.ump"
-    protected long end ;
-  // line 27 "../../../../Evictor_DbRunAction_inner.ump"
-    protected DecimalFormat f ;
-  
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -507,14 +310,6 @@ public class DbRunAction
   private static final int CLEAN = 1 ;
 // line 26 "../../../../DbRunAction.ump"
   private static final int CHECKPOINT = 4 ;
-// line 5 "../../../../Evictor_DbRunAction.ump"
-  private static final int EVICT = 3 ;
-// line 5 "../../../../DeleteOp_DbRunAction.ump"
-  private static final int REMOVEDB = 5 ;
-// line 5 "../../../../INCompressor_DbRunAction.ump"
-  private static final int COMPRESS = 2 ;
-// line 6 "../../../../Statistics_DbRunAction.ump"
-  private static final int DBSTATS = 6 ;
 
   
 }

@@ -30,22 +30,23 @@ public class DatabaseNotFoundException extends DatabaseException
     super.delete();
   }
 
-  // line 8 "../../../DatabaseNotFoundException.ump"
-   public  DatabaseNotFoundException(){
-    super();
-  }
 
-  // line 12 "../../../DatabaseNotFoundException.ump"
+  /**
+   * public DatabaseNotFoundException() {
+   * super();
+   * }
+   */
+  // line 13 "../../../DatabaseNotFoundException.ump"
    public  DatabaseNotFoundException(Throwable t){
     super(t);
   }
 
-  // line 16 "../../../DatabaseNotFoundException.ump"
+  // line 17 "../../../DatabaseNotFoundException.ump"
    public  DatabaseNotFoundException(String message){
     super(message);
   }
 
-  // line 20 "../../../DatabaseNotFoundException.ump"
+  // line 21 "../../../DatabaseNotFoundException.ump"
    public  DatabaseNotFoundException(String message, Throwable t){
     super(message, t);
   }

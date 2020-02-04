@@ -10,15 +10,9 @@ import java.util.SortedSet;
 import java.util.Set;
 import java.util.Iterator;
 import java.util.HashSet;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../INList.ump"
 // line 3 "../../../../INList_static.ump"
-// line 3 "../../../../MemoryBudget_INList.ump"
-// line 3 "../../../../MemoryBudget_INList_inner.ump"
-// line 3 "../../../../Latches_INList.ump"
-// line 3 "../../../../Latches_INList_inner.ump"
 public class INList
 {
 
@@ -44,12 +38,7 @@ public class INList
   public  INList(EnvironmentImpl envImpl){
     this.envImpl = envImpl;
 	ins = new TreeSet();
-	Label338:
-addedINs = new HashSet();
-	majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
-	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
-	//original(envImpl);
- ;//this.hook338(envImpl);
+	Label338: ;//this.hook338(envImpl);
   }
 
 
@@ -62,11 +51,7 @@ addedINs = new HashSet();
     ins = new TreeSet(orig.getINs());
 	Lanbel340: //this.hook340();
 	this.envImpl = envImpl;
-	Label339:
-majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
-	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
-	//original(envImpl);
- //this.hook339(envImpl);
+	Label339: //this.hook339(envImpl);
   }
 
   // line 36 "../../../../INList.ump"
@@ -101,21 +86,11 @@ majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
    */
   // line 58 "../../../../INList.ump"
    public void removeLatchAlreadyHeld(IN in) throws DatabaseException{
-    // line 78 "../../../../Latches_INList.ump"
-    assert majorLatch.isOwner();
-    	//original(in);
-    // END OF UMPLE BEFORE INJECTION
     boolean removeDone = ins.remove(in);
 		Label341: //removeDone = this.hook341(in, removeDone);
 		assert removeDone;
 		//this.hook346(in);
     Label346:
-if (updateMemoryUsage) {
-			  envImpl.getMemoryBudget().updateTreeMemoryUsage(in.getAccumulatedDelta() - in.getInMemorySize());
-			  in.setInListResident(false);
-		}
-//		original(in);
-
   }
 
 
@@ -125,34 +100,20 @@ if (updateMemoryUsage) {
    */
   // line 69 "../../../../INList.ump"
    public void remove(IN in) throws DatabaseException{
-    // line 99 "../../../../Latches_INList.ump"
-    assert LatchSupport.countLatchesHeld() == 0;
-    	majorLatch.acquire();
-    // END OF UMPLE BEFORE INJECTION
     try {
 						 	removeLatchAlreadyHeld(in); //original(in);
 					} finally {
-							LabelRemove_1:
-releaseMajorLatch();
-//releaseMajorLatch();
+							LabelRemove_1://releaseMajorLatch();
 					}
   }
 
   // line 77 "../../../../INList.ump"
    public SortedSet tailSet(IN in) throws DatabaseException{
-    // line 109 "../../../../Latches_INList.ump"
-    assert majorLatch.isOwner();
-    	//return //original(in);
-    // END OF UMPLE BEFORE INJECTION
     return ins.tailSet(in);
   }
 
   // line 81 "../../../../INList.ump"
    public IN first() throws DatabaseException{
-    // line 114 "../../../../Latches_INList.ump"
-    assert majorLatch.isOwner();
-    	//return //original();
-    // END OF UMPLE BEFORE INJECTION
     return (IN) ins.first();
   }
 
@@ -164,10 +125,6 @@ releaseMajorLatch();
    */
   // line 89 "../../../../INList.ump"
    public Iterator iterator(){
-    // line 123 "../../../../Latches_INList.ump"
-    assert majorLatch.isOwner();
-    	//return //original();
-    // END OF UMPLE BEFORE INJECTION
     return ins.iterator();
   }
 
@@ -178,26 +135,8 @@ releaseMajorLatch();
    */
   // line 96 "../../../../INList.ump"
    public void clear() throws DatabaseException{
-    // line 131 "../../../../Latches_INList.ump"
-    assert LatchSupport.countLatchesHeld() == 0;
-    	majorLatch.acquire();
-    	minorLatch.acquire();
-    	//original();
-    // END OF UMPLE BEFORE INJECTION
     ins.clear();
 	//this.hook342();
-    // line 30 "../../../../MemoryBudget_INList.ump"
-    //		original();
-    		if (updateMemoryUsage) {
-    			  envImpl.getMemoryBudget().refreshTreeMemoryUsage(0);
-    			}
-    // END OF UMPLE AFTER INJECTION
-    // line 138 "../../../../Latches_INList.ump"
-    addedINs.clear();
-    	minorLatch.release();
-    	releaseMajorLatch();
-    	//original();
-    // END OF UMPLE AFTER INJECTION
   }
 
   // line 101 "../../../../INList.ump"
@@ -229,65 +168,12 @@ releaseMajorLatch();
    protected void hook346(IN in) throws DatabaseException{
     
   }
-
-
-  /**
-   * 
-   * The locking hierarchy is: 1. INList major latch. 2. IN latch. In other words, the INList major latch must be taken before any IN latches to avoid deadlock.
-   */
-  // line 17 "../../../../Latches_INList.ump"
-   public void latchMajor() throws DatabaseException{
-    assert LatchSupport.countLatchesHeld() == 0;
-	majorLatch.acquire();
-  }
-
-  // line 22 "../../../../Latches_INList.ump"
-   public void releaseMajorLatchIfHeld() throws DatabaseException{
-    if (majorLatch.isOwner()) {
-					releaseMajorLatch();
-			}
-  }
-
-  // line 28 "../../../../Latches_INList.ump"
-   public void releaseMajorLatch() throws DatabaseException{
-    latchMinorAndDumpAddedINs();
-			majorLatch.release();
-  }
-
-  // line 33 "../../../../Latches_INList.ump"
-   private void dumpAddedINsIntoMajorSet(){
-    if (addedINs.size() > 0) {
-					ins.addAll(addedINs);
-					addedINs.clear();
-			}
-  }
-
-  // line 40 "../../../../Latches_INList.ump"
-  public void latchMinorAndDumpAddedINs() throws DatabaseException{
-    latchMinor();
-	try {
-	    dumpAddedINsIntoMajorSet();
-	} finally {
-	    releaseMinorLatch();
-	}
-  }
-
-  // line 49 "../../../../Latches_INList.ump"
-   private void latchMinor() throws DatabaseException{
-    minorLatch.acquire();
-  }
-
-  // line 53 "../../../../Latches_INList.ump"
-   private void releaseMinorLatch() throws DatabaseException{
-    minorLatch.release();
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
   // line 4 "../../../../INList_static.ump"
-  // line 4 "../../../../Latches_INList_inner.ump"
   public static class INList_add
   {
   
@@ -317,51 +203,16 @@ releaseMajorLatch();
   
     // line 10 "../../../../INList_static.ump"
     public void execute() throws DatabaseException{
-      Label344:
-  enteredWithLatchHeld = _this.majorLatch.isOwner();
-     //original();
-   //this.hook344();
+      Label344: //this.hook344();
           addToMajor=true;
   try{
           Label343: //this.hook343();
-    			Label345:
-  if (enteredWithLatchHeld) {
-      addToMajor = false;
-     } else {
-      if (!(_this.majorLatch.acquireNoWait())) {
-       addToMajor = false;
-      }
-     }
-  
-     if (addToMajor) //original(); // because its only one line
-   //this.hook345();
+    			Label345: //this.hook345();
           _this.addAndSetMemory(_this.ins,in);
   Label345_1:
-  else {
-        _this.minorLatch.acquire();
-        try {
-         _this.addAndSetMemory(_this.addedINs, in );
-        } finally {
-         _this.minorLatch.release();
-        }
-        if (!enteredWithLatchHeld) {
-         if (_this.majorLatch.acquireNoWait()) {
-          try {
-           _this.latchMinorAndDumpAddedINs();
-          } finally {
-           _this.releaseMajorLatch();
-          }
-         }
-        }
-       }
-  
   }
   finally{
-           Label343_1:
-  if (addToMajor) {
-      _this.releaseMajorLatchIfHeld();
-     }
-    ;//
+           Label343_1:  ;//
   }
   				//End of hook345
   				//End of hook343
@@ -386,9 +237,7 @@ releaseMajorLatch();
   
   
   
-  @MethodObject
   // line 36 "../../../../INList_static.ump"
-  // line 4 "../../../../MemoryBudget_INList_inner.ump"
   public static class INList_addAndSetMemory
   {
   
@@ -421,14 +270,6 @@ releaseMajorLatch();
     public void execute(){
       addOk=set.add(in);
           assert addOk : "failed adding in " + in.getNodeId();
-      // line 6 "../../../../MemoryBudget_INList_inner.ump"
-      //original();
-              if (_this.updateMemoryUsage) {
-                mb=_this.envImpl.getMemoryBudget();
-                mb.updateTreeMemoryUsage(in.getInMemorySize());
-                in.setInListResident(true);
-              }
-      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -458,29 +299,6 @@ releaseMajorLatch();
   private SortedSet ins = null ;
 // line 17 "../../../../INList.ump"
   private EnvironmentImpl envImpl ;
-// line 5 "../../../../MemoryBudget_INList.ump"
-  private boolean updateMemoryUsage ;
-// line 7 "../../../../Latches_INList.ump"
-  private Set addedINs = null ;
-// line 9 "../../../../Latches_INList.ump"
-  private Latch majorLatch ;
-// line 11 "../../../../Latches_INList.ump"
-  private Latch minorLatch ;
-
-// line 82 "../../../../Latches_INList.ump"
-  protected boolean hook341: removeLatchAlreadyHeld (IN ) 
-  {
-    if (!removeDone) {
-			  minorLatch.acquire();
-			  try {
-			removeDone = addedINs.remove(in);
-			dumpAddedINsIntoMajorSet();
-			  } finally {
-			minorLatch.release();
-			  }
-		}
-			//	return //original(in, removeDone);
-  }
 
   
 }

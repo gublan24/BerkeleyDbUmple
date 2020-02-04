@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Collections;
 
 // line 3 "../../../../FileSelector.ump"
-// line 3 "../../../../DeleteOp_FileSelector.ump"
 public class FileSelector
 {
 
@@ -47,9 +46,6 @@ public class FileSelector
 			pendingLNs = new HashMap();
 			//this.hook163();
 			Label163:
-pendingDBs = new HashSet();
-			//original();
-
 			lowUtilizationFiles = Collections.EMPTY_SET;
 			beingCleanedFiles = new HashSet();
   }
@@ -171,10 +167,7 @@ pendingDBs = new HashSet();
   // line 140 "../../../../FileSelector.ump"
    synchronized  Set[] getFilesAtCheckpointStart(){
     anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
-			Label164:
-anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
-			//original();
- //this.hook164();
+			Label164: //this.hook164();
 			Set[] files = new Set[2];
 			files[0] = (cleanedFiles.size() > 0) ? (new HashSet(cleanedFiles)) : null;
 			files[1] = (fullyProcessedFiles.size() > 0) ? (new HashSet(fullyProcessedFiles)) : null;
@@ -279,53 +272,11 @@ anyPendingDuringCheckpoint |= !pendingDBs.isEmpty();
   // line 224 "../../../../FileSelector.ump"
    private void updateProcessedFiles(){
     boolean b = pendingLNs.isEmpty();
-			Label165:
-b &= pendingDBs.isEmpty();
-			//return original(b);
- //b = this.hook165(b);
+			Label165: //b = this.hook165(b);
 			if (b) {
 					fullyProcessedFiles.addAll(checkpointedFiles);
 					checkpointedFiles.clear();
 			}
-  }
-
-
-  /**
-   * 
-   * Adds the given DatabaseId to the pending DB set.
-   */
-  // line 11 "../../../../DeleteOp_FileSelector.ump"
-   synchronized  boolean addPendingDB(DatabaseId dbId){
-    boolean added = pendingDBs.add(dbId);
-			anyPendingDuringCheckpoint = true;
-			return added;
-  }
-
-
-  /**
-   * 
-   * Returns an array of DatabaseIds for DBs that were pending deletion in a prior cleaning attempt, or null if no DBs are pending.
-   */
-  // line 20 "../../../../DeleteOp_FileSelector.ump"
-   synchronized  DatabaseId[] getPendingDBs(){
-    if (pendingDBs.size() > 0) {
-					DatabaseId[] dbs = new DatabaseId[pendingDBs.size()];
-					pendingDBs.toArray(dbs);
-					return dbs;
-			} else {
-					return null;
-			}
-  }
-
-
-  /**
-   * 
-   * Removes the DatabaseId from the pending DB set.
-   */
-  // line 33 "../../../../DeleteOp_FileSelector.ump"
-   synchronized  void removePendingDB(DatabaseId dbId){
-    pendingDBs.remove(dbId);
-			updateProcessedFiles();
   }
   
   //------------------------
@@ -350,8 +301,6 @@ b &= pendingDBs.isEmpty();
   private boolean anyPendingDuringCheckpoint ;
 // line 32 "../../../../FileSelector.ump"
   private Set lowUtilizationFiles ;
-// line 5 "../../../../DeleteOp_FileSelector.ump"
-  private Set pendingDBs ;
 
   
 }

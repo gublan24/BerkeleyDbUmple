@@ -33,14 +33,8 @@ public class DatabaseConfig implements Cloneable
   /**
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 39 "../../../DatabaseConfig.ump"
-   public  DatabaseConfig(){
-    
-  }
-
-
-  /**
+   * public DatabaseConfig() {
+   * }
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */

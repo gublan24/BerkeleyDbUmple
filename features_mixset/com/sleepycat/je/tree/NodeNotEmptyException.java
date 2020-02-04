@@ -6,7 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../NodeNotEmptyException.ump"
-public class NodeNotEmptyException implements Exception
+public class NodeNotEmptyException extends Exception
 {
 
   //------------------------
@@ -18,7 +18,9 @@ public class NodeNotEmptyException implements Exception
   //------------------------
 
   public NodeNotEmptyException()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

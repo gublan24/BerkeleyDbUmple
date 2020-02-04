@@ -32,30 +32,10 @@ import com.sleepycat.je.DatabaseEntry;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.Comparator;
-import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.latch.LatchNotHeldException;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../CursorImpl.ump"
 // line 3 "../../../../CursorImpl_static.ump"
-// line 3 "../../../../MemoryBudget_CursorImpl.ump"
-// line 3 "../../../../Evictor_CursorImpl.ump"
-// line 3 "../../../../INCompressor_CursorImpl.ump"
-// line 3 "../../../../INCompressor_CursorImpl_inner.ump"
-// line 3 "../../../../Verifier_CursorImpl.ump"
-// line 3 "../../../../Verifier_CursorImpl_inner.ump"
-// line 3 "../../../../Statistics_CursorImpl.ump"
-// line 3 "../../../../Statistics_CursorImpl_inner.ump"
-// line 3 "../../../../Latches_CursorImpl.ump"
-// line 3 "../../../../Latches_CursorImpl_inner.ump"
-// line 3 "../../../../LoggingFiner_CursorImpl.ump"
-// line 3 "../../../../LoggingFiner_CursorImpl_inner.ump"
-// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl.ump"
-// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
-// line 3 "../../../../Derivative_Latches_Evictor_CursorImpl.ump"
-// line 3 "../../../../Derivative_Latches_Statistics_CursorImpl.ump"
-// line 3 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
 {
 
@@ -63,160 +43,16 @@ public class CursorImpl implements Cloneable
   // MEMBER VARIABLES
   //------------------------
 
-  //CursorImpl Attributes
-  private return alreadyLatched;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public CursorImpl(return aAlreadyLatched)
-  {
-    alreadyLatched = aAlreadyLatched;
-  }
+  public CursorImpl()
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setAlreadyLatched(return aAlreadyLatched)
-  {
-    boolean wasSet = false;
-    alreadyLatched = aAlreadyLatched;
-    wasSet = true;
-    return wasSet;
-  }
-
-  /**
-   * protected void hook214() throws DatabaseException {}
-   * protected void hook215() throws DatabaseException {}
-   * protected void hook216() throws DatabaseException {}
-   * protected void hook217() throws DatabaseException {}
-   * protected void hook218(DatabaseEntry data, DatabaseEntry foundKey, DatabaseEntry foundData, boolean isDup)
-   * throws DatabaseException {
-   * LN ln = (LN) targetBin.fetchTarget(targetIndex);
-   * byte[] lnKey = targetBin.getKey(targetIndex);
-   * Comparator userComparisonFcn = targetBin.getKeyComparator();
-   * if (targetBin.isEntryKnownDeleted(targetIndex) || ln == null) {
-   * Label270: //this.hook270();
-   * throw new ReturnObject(OperationStatus.NOTFOUND);
-   * }
-   * LockResult lockResult = lockLN(ln, LockType.WRITE);
-   * ln = lockResult.getLN();
-   * if (ln == null) {
-   * Label271: //this.hook271();
-   * throw new ReturnObject(OperationStatus.NOTFOUND);
-   * }
-   * byte[] foundDataBytes;
-   * byte[] foundKeyBytes;
-   * isDup = setTargetBin();
-   * if (isDup) {
-   * foundDataBytes = lnKey;
-   * foundKeyBytes = targetBin.getDupKey();
-   * 
-   * foundDataBytes = ln.getData();
-   * foundKeyBytes = lnKey;
-   * }
-   * byte[] newData;
-   * if (data.getPartial()) {
-   * int dlen = data.getPartialLength();
-   * int doff = data.getPartialOffset();
-   * int origlen = (foundDataBytes != null) ? foundDataBytes.length : 0;
-   * int oldlen = (doff + dlen > origlen) ? doff + dlen : origlen;
-   * int len = oldlen - dlen + data.getSize();
-   * if (len == 0) {
-   * newData = LogUtils.ZERO_LENGTH_BYTE_ARRAY;
-   * } else {
-   * newData = new byte[len];
-   * }
-   * 
-   * int slicelen = (doff < origlen) ? doff : origlen;
-   * if (slicelen > 0)
-   * System.arraycopy(foundDataBytes, 0, newData, pos, slicelen);
-   * 
-   * slicelen = data.getSize();
-   * System.arraycopy(data.getData(), data.getOffset(), newData, pos, slicelen);
-   * pos += slicelen;
-   * slicelen = origlen - (doff + dlen);
-   * if (slicelen > 0)
-   * System.arraycopy(foundDataBytes, doff + dlen, newData, pos, slicelen);
-   * 
-   * int len = data.getSize();
-   * if (len == 0) {
-   * newData = LogUtils.ZERO_LENGTH_BYTE_ARRAY;
-   * } else {
-   * newData = new byte[len];
-   * }
-   * System.arraycopy(data.getData(), data.getOffset(), newData, 0, len);
-   * }
-   * if (database.getSortedDuplicates()) {
-   * boolean keysEqual = false;
-   * if (foundDataBytes != null) {
-   * keysEqual = Key.compareKeys(foundDataBytes, newData, userComparisonFcn) == 0;
-   * }
-   * if (!keysEqual) {
-   * revertLock(ln, lockResult);
-   * throw new DatabaseException("Can't replace a duplicate with different data.");
-   * }
-   * }
-   * if (foundData != null) {
-   * setDbt(foundData, foundDataBytes);
-   * }
-   * if (foundKey != null) {
-   * setDbt(foundKey, foundKeyBytes);
-   * }
-   * long oldLsn = targetBin.getLsn(targetIndex);
-   * lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
-   * long oldLNSize = 0;
-   * //	oldLNSize = this.hook286(ln, oldLNSize);
-   * Lable286:
-   * byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
-   * long newLsn = ln.modify(newData, database, newKey, oldLsn, locker);
-   * long newLNSize = 0;
-   * //newLNSize = this.hook285(ln, newLNSize);
-   * Label285:
-   * targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-   * this.hook269();
-   * this.hook205(ln, oldLsn, newLsn);
-   * status = CURSOR_INITIALIZED;
-   * throw new ReturnObject(OperationStatus.SUCCESS);
-   * }
-   * protected void hook219() throws DatabaseException {}
-   * protected void hook220() throws DatabaseException {}
-   * protected void hook221(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first)
-   * throws DatabaseException {
-   * throw new ReturnObject(fetchCurrent(foundKey, foundData, lockType, first));
-   * }
-   * protected void hook222() throws DatabaseException {}
-   * protected void hook223(LockType lockType) throws DatabaseException {
-   * assert assertCursorState(true): dumpToString(true);
-   * Label272: //this.hook272();
-   * if (bin == null) {
-   * throw new ReturnObject(null);
-   * }
-   * LN ln = null;
-   * if (!bin.isEntryKnownDeleted(index)) {
-   * ln = (LN) bin.fetchTarget(index);
-   * }
-   * if (ln == null) {
-   * Label273: //this.hook273();
-   * throw new ReturnObject(null);
-   * }
-   * addCursor(bin);
-   * LockResult lockResult = lockLN(ln, lockType);
-   * ln = lockResult.getLN();
-   * throw new ReturnObject(ln);
-   * }
-   * protected void hook224(boolean alreadyLatched) throws DatabaseException {}
-   * protected boolean hook225(boolean alreadyLatched) throws DatabaseException {
-   * return alreadyLatched;
-   * }
-   * protected boolean hook226(boolean alreadyLatched) throws DatabaseException {
-   */
-  public return getAlreadyLatched()
-  {
-    return alreadyLatched;
-  }
 
   public void delete()
   {}
@@ -307,10 +143,7 @@ public class CursorImpl implements Cloneable
             ret = this;
         } else {
             try {
-                Label206:
-latchBINs();
-        //original();
- //this.hook206();
+                Label206: //this.hook206();
                     ret = (CursorImpl) super.clone();
                 if (!retainNonTxnLocks) {
                     ret.locker = locker.newNonTxnLocker();
@@ -326,33 +159,13 @@ latchBINs();
                     ret.addCursor();
                 }
             }
-            catch (CloneNotSupportedException cannotOccur) {                
-                // line 41 "../../../../Evictor_CursorImpl.ump"
-                //CursorImpl result = original(addCursor, usePosition);
-                	if (allowEviction) {
-                
-                     Label203:	   // this.hook203();
-                	}
-                	return result;
-                // END OF UMPLE AFTER INJECTION
+            catch (CloneNotSupportedException cannotOccur) {
                 return null;
             } finally {
-                Label207:
-releaseBINs();
-        //original();
- //this.hook207();
+                Label207: ;//this.hook207();
             }
-        }        
-        // line 41 "../../../../Evictor_CursorImpl.ump"
-        //CursorImpl result = original(addCursor, usePosition);
-        	if (allowEviction) {
-        
-             Label203:	   // this.hook203();
-        	}
-        	return result;
-        // END OF UMPLE AFTER INJECTION
+        }
         return ret;
-
   }
 
   // line 191 "../../../../CursorImpl.ump"
@@ -483,10 +296,7 @@ releaseBINs();
   // line 298 "../../../../CursorImpl.ump"
    public void addCursor(BIN bin){
     if (bin != null) {
-            Label208:
-assert bin.isLatchOwner();
-        //original(bin);
- //this.hook208(bin);
+            Label208: //this.hook208(bin);
                 bin.addCursor(this);
         }
   }
@@ -534,10 +344,7 @@ assert bin.isLatchOwner();
     BIN abin = latchBIN();
         if (abin != null) {
             abin.removeCursor(this);
-            Label209:
-abin.releaseLatch();
-        //original(abin);
- //this.hook209(abin);
+            Label209: ; //this.hook209(abin);
         }
   }
 
@@ -546,10 +353,7 @@ abin.releaseLatch();
     DBIN abin = latchDBIN();
         if (abin != null) {
             abin.removeCursor(this);
-            Label210:
-abin.releaseLatch();
-        //original(abin);
- //this.hook210(abin);
+            Label210: ;//this.hook210(abin);
         }
   }
 
@@ -563,10 +367,7 @@ abin.releaseLatch();
     if (dupBin != null) {
             if (alreadyLatched) {
                 dupBin.removeCursor(this);
-                Label211:
-dupBin.releaseLatch();
-        //original();
- //this.hook211();
+                Label211: ;//this.hook211();
             } else {
                 removeCursorDBIN();
             }
@@ -616,12 +417,6 @@ dupBin.releaseLatch();
         dupBin = null;
         dupIndex = -1;
         status = CURSOR_NOT_INITIALIZED;
-    // line 15 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
-    //original();
-    	if (allowEviction) {
-    	    database.getDbEnvironment().getEvictor().doCriticalEviction();
-    	}
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -639,19 +434,10 @@ dupBin.releaseLatch();
             locker.releaseNonTxnLocks();
         }
         status = CURSOR_CLOSED;
-    // line 26 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
-    //original();
-    	if (allowEviction) {
-    	    database.getDbEnvironment().getEvictor().doCriticalEviction();
-    	}
-    // END OF UMPLE AFTER INJECTION
   }
 
   // line 416 "../../../../CursorImpl.ump"
    public int count(LockType lockType) throws DatabaseException{
-    // line 73 "../../../../Latches_CursorImpl.ump"
-    latchBIN();
-    // END OF UMPLE BEFORE INJECTION
     try {
             assert assertCursorState(true): dumpToString(true);
             if (!database.getSortedDuplicates()) {
@@ -667,16 +453,9 @@ dupBin.releaseLatch();
 				    Node n = bin.fetchTarget(index);
 				    if (n != null && n.containsDuplicates()) {
 				        DIN dupRoot = (DIN) n;
-				        Label265:
-dupRoot.latch();
-    releaseBIN();
-    //original(dupRoot);
- //this.hook265(dupRoot);
+				        Label265: ;//this.hook265(dupRoot);
 				        DupCountLN dupCountLN = (DupCountLN) dupRoot.getDupCountLNRef().fetchTarget(database, dupRoot);
-				        Label264:
-dupRoot.releaseLatch();
-    //original(dupRoot);
- ////this.hook264(dupRoot);
+				        Label264: ;////this.hook264(dupRoot);
 				        if (lockType != LockType.NONE) {
 				            locker.lock(dupCountLN.getNodeId(), lockType, false, database);
 				        }
@@ -684,7 +463,7 @@ dupRoot.releaseLatch();
 				    } else {
 				        throw new ReturnInt(1);
 				    }
-        throw ReturnHack.returnInt;
+
         } catch (ReturnInt r) {
             return r.value;
         }
@@ -704,30 +483,30 @@ dupRoot.releaseLatch();
             return OperationStatus.KEYEMPTY;
         }
         if (targetBin.isEntryKnownDeleted(targetIndex)) {
-            Label214: //this.hook214();
+            Label214: ;//this.hook214();
             return OperationStatus.KEYEMPTY;
         }
         LN ln = (LN) targetBin.fetchTarget(targetIndex);
         if (ln == null) {
-            Label215: //this.hook215();
+            Label215: ;//this.hook215();
             return OperationStatus.KEYEMPTY;
         }
         LockResult lockResult = lockLN(ln, LockType.WRITE);
         ln = lockResult.getLN();
         if (ln == null) {
-            Label216: //this.hook216();
+            Label216: ;//this.hook216();
             return OperationStatus.KEYEMPTY;
         }
         LockResult dclLockResult = null;
         DIN dupRoot = null;
-        Label213:         //this.hook213(isDup, ln, lockResult, dclLockResult, dupRoot);
+        Label213:      ;   //this.hook213(isDup, ln, lockResult, dclLockResult, dupRoot);
 				try {
             isDup = (dupBin != null);
         if (isDup) {
             dupRoot = getLatchedDupRoot(true);
             dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
             dupRoot = (DIN) bin.getTarget(index);
-            Label267: //this.hook267();
+            Label267: ;//this.hook267();
         }
         setTargetBin();
         long oldLsn = targetBin.getLsn(targetIndex);
@@ -735,32 +514,28 @@ dupRoot.releaseLatch();
         lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
         long oldLNSize = 0;
         //	oldLNSize = this.hook284(ln, oldLNSize);
-        Label284:
-oldLNSize = ln.getMemorySizeIncludedByParent();
-
-            long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
+        Label284:;
+        long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
         long newLNSize = 0;
         //	newLNSize = this.hook283(ln, newLNSize);
         Label283:
-newLNSize = ln.getMemorySizeIncludedByParent();
-
             targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
         targetBin.setPendingDeleted(targetIndex);
         Label266: //this.hook266();
 
         if (isDup) {
             dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
-            Label268: //this.hook268(dupRoot);
+            Label268: ;//this.hook268(dupRoot);
             dupRoot = null;
-            Label281: //this.hook281(lnKey);
+            Label281: ;//this.hook281(lnKey);
         } else {
-            Label282: //this.hook282(lnKey);
+            Label282: ;//this.hook282(lnKey);
         }
-        Label204: //this.hook204(ln, oldLsn, newLsn);
+        Label204: ;//this.hook204(ln, oldLsn, newLsn);
 				}
 				finally 
 				{
-					Label213_1:
+					Label213_1: ;
 				}
         //end of hook213
         return OperationStatus.SUCCESS;
@@ -803,10 +578,7 @@ newLNSize = ln.getMemorySizeIncludedByParent();
   // line 543 "../../../../CursorImpl.ump"
    public OperationStatus putLN(byte [] key, LN ln, boolean allowDuplicates) throws DatabaseException{
     assert assertCursorState(false): dumpToString(true);
-        Label217:
-assert LatchSupport.countLatchesHeld() == 0;
-        //original();
- //this.hook217();
+        Label217: ;//this.hook217();
         LockResult lockResult = locker.lock(ln.getNodeId(), LockType.WRITE, false, database);
         if (database.getTree().insert(ln, key, allowDuplicates, this, lockResult)) {
             status = CURSOR_INITIALIZED;
@@ -884,29 +656,20 @@ assert LatchSupport.countLatchesHeld() == 0;
             if (bin == null) {
                 return OperationStatus.KEYEMPTY;
             }
-            Label219:
-latchBINs();
-        //original();
- //this.hook219();
+            Label219: ;//this.hook219();
             boolean isDup = setTargetBin();
-						Label218: //            this.hook218(data, foundKey, foundData, isDup);
+						Label218: ;//            this.hook218(data, foundKey, foundData, isDup);
 	 					LN ln = (LN) targetBin.fetchTarget(targetIndex);
 				    byte[] lnKey = targetBin.getKey(targetIndex);
 				    Comparator userComparisonFcn = targetBin.getKeyComparator();
 				    if (targetBin.isEntryKnownDeleted(targetIndex) || ln == null) {
-				        Label270:
-releaseBINs();
-    //original();
- //this.hook270();
+				        Label270: ;//this.hook270();
 				        throw new ReturnObject(OperationStatus.NOTFOUND);
 				    }
 				    LockResult lockResult = lockLN(ln, LockType.WRITE);
 				    ln = lockResult.getLN();
 				    if (ln == null) {
-				        Label271:
-releaseBINs();
-    //original();
- //.hook271();
+				        Label271: ;//.hook271();
 				        throw new ReturnObject(OperationStatus.NOTFOUND);
 				    }
 				    byte[] foundDataBytes;
@@ -971,31 +734,19 @@ releaseBINs();
 				    lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
 				    long oldLNSize = 0;
 				    //	oldLNSize = this.hook286(ln, oldLNSize);
-				    Lable286:
-				        byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
+				    Lable286: ; 
+				    byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
 				    long newLsn = ln.modify(newData, database, newKey, oldLsn, locker);
 				    long newLNSize = 0;
 				    //newLNSize = this.hook285(ln, newLNSize);
 				    Label285:
 				        targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-				    Label269:
-releaseBINs();
-    //original();
-//this.hook269();
-				    Label205:
-trace(Level.FINER, TRACE_MOD, targetBin, ln, targetIndex, oldLsn, newLsn);
-//	original(ln, oldLsn, newLsn);
- //this.hook205(ln, oldLsn, newLsn);
+				    Label269: ;//this.hook269();
+				    Label205: ;//this.hook205(ln, oldLsn, newLsn);
 				    status = CURSOR_INITIALIZED;
 				    //throw new ReturnObject(OperationStatus.SUCCESS);
 //End of hook218(            
-Label218_1:
-//    try {
-            //original(data, foundKey, foundData, isDup);
-      //  } finally {
-            releaseBINs();
-        //}
-
+Label218_1: ;
 		      throw ReturnHack.returnObject;
         } catch (ReturnObject r) {
             return (OperationStatus) r.value;
@@ -1013,14 +764,7 @@ Label218_1:
         if (bin == null) {
             return OperationStatus.KEYEMPTY;
         }
-        Label220:
-if (dupBin == null) {
-            latchBIN();
-        } else {
-            latchDBIN();
-        }
-        //original();
- //this.hook220();
+        Label220: //this.hook220();
         return getCurrentAlreadyLatched(foundKey, foundData, lockType, true);
   }
 
@@ -1033,15 +777,7 @@ if (dupBin == null) {
    public OperationStatus getCurrentAlreadyLatched(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first) throws DatabaseException{
     try {
             assert assertCursorState(true): dumpToString(true);
-            Label221:
-assert checkAlreadyLatched(true): dumpToString(true);
-        try {
-                    throw new ReturnObject(fetchCurrent(foundKey, foundData, lockType, first));
-										//original(foundKey, foundData, lockType, first);
-        } finally {
-            releaseBINs();
-        }
- //this.hook221(foundKey, foundData, lockType, first);
+            Label221: //this.hook221(foundKey, foundData, lockType, first);
             throw ReturnHack.returnObject;
         } catch (ReturnObject r) {
             return (OperationStatus) r.value;
@@ -1059,10 +795,7 @@ assert checkAlreadyLatched(true): dumpToString(true);
         if (bin == null) {
             return null;
         } else {
-            Label222:
-latchBIN();
-        //original();
- //this.hook222();
+            Label222: //this.hook222();
             return getCurrentLNAlreadyLatched(lockType);
         }
   }
@@ -1077,10 +810,7 @@ latchBIN();
     try {
             Label223: //this.hook223(lockType);
     				assert assertCursorState(true): dumpToString(true);
-				    Label272:
-assert checkAlreadyLatched(true): dumpToString(true);
-    //original();
- //this.hook272();
+				    Label272: //this.hook272();
 				    if (bin == null) {
 				        throw new ReturnObject(null);
 				    }
@@ -1089,10 +819,7 @@ assert checkAlreadyLatched(true): dumpToString(true);
 				        ln = (LN) bin.fetchTarget(index);
 				    }
 				    if (ln == null) {
-				        Label273:
-releaseBIN();
-    //original();
- //this.hook273();
+				        Label273: //this.hook273();
 				        throw new ReturnObject(null);
 				    }
 				    addCursor(bin);
@@ -1101,12 +828,6 @@ releaseBIN();
 				    //throw new ReturnObject(ln);
 //End of hook 223
 Label223_1:
-// try {
-            //original(lockType);
-        //} finally {
-            releaseBINs();
-        //}
-
             throw ReturnHack.returnObject;
         } catch (ReturnObject r) {
             return (LN) r.value;
@@ -1131,20 +852,12 @@ Label223_1:
   // line 795 "../../../../CursorImpl.ump"
    public KeyChangeStatus getNextWithKeyChangeStatus(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean forward, boolean alreadyLatched) throws DatabaseException{
     assert assertCursorState(true): dumpToString(true);
-        Label224:
-assert checkAlreadyLatched(alreadyLatched): dumpToString(true);
-        //original(alreadyLatched);
- //this.hook224(alreadyLatched);
+        Label224: ; //this.hook224(alreadyLatched);
         KeyChangeStatus result = new KeyChangeStatus(OperationStatus.NOTFOUND, true);
         try {
             while (bin != null) {
                 if (dupBin != null) {
-                    Label277:
-if (DEBUG) {
-					verifyCursor(dupBin);
-			}
-//			original();
- //this.hook277();
+                    Label277: //this.hook277();
                         if (getNextDuplicate(foundKey, foundData, lockType, forward,
                                 alreadyLatched) == OperationStatus.SUCCESS) {
                             result.status = OperationStatus.SUCCESS;
@@ -1152,19 +865,14 @@ if (DEBUG) {
                             break;
                         } else {
                             removeCursorDBIN();
-                            Label226//alreadyLatched = this.hook226(alreadyLatched);
+                            Label226: ;//alreadyLatched = this.hook226(alreadyLatched);
                             dupBin = null;
                             dupIndex = -1;
                             continue;
                         }
                 }
                 Label225: //alreadyLatched = this.hook225(alreadyLatched);
-                Label276:
-if (DEBUG) {
-			  verifyCursor(bin);
-		}
-		//original();
- //this.hook276();
+                Label276: //this.hook276();
                     if ((forward && ++index < bin.getNEntries()) || (!forward && --index > -1)) {
                         OperationStatus ret = getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
                         if (ret == OperationStatus.SUCCESS) {
@@ -1172,10 +880,7 @@ if (DEBUG) {
                             result.status = OperationStatus.SUCCESS;
                             break;
                         } else {
-                            Label227:
-assert LatchSupport.countLatchesHeld() == 0;
-        //original();
- //this.hook227();
+                            Label227: //this.hook227();
                             if (binToBeRemoved != null) {
                                 flushBINToBeRemoved();
                             }
@@ -1183,15 +888,9 @@ assert LatchSupport.countLatchesHeld() == 0;
                         }
                     } else {
                         if (binToBeRemoved != null) {
-                            Label229:
-releaseBIN();
-        //original();
- //this.hook229();
+                            Label229: ;//this.hook229();
                             flushBINToBeRemoved();
-                            Label228:
-latchBIN();
-        //original();
- //this.hook228();
+                            Label228: ;//this.hook228();
                         }
                         binToBeRemoved = bin;
                         bin = null;
@@ -1213,18 +912,12 @@ latchBIN();
                             }
                             addCursor(newBin);
                             bin = newBin;
-                            Label230:
-alreadyLatched = true;
-        //original(alreadyLatched);
- //this.hook230(alreadyLatched);
+                            Label230: ;//this.hook230(alreadyLatched);
                         }
                     }
             }
         } finally {
-            Label231:
-assert LatchSupport.countLatchesHeld() == 0: LatchSupport.latchesHeldToString();
-        //original();
- //this.hook231();
+            Label231: //this.hook231();
             if (binToBeRemoved != null) {
                 flushBINToBeRemoved();
             }
@@ -1234,15 +927,8 @@ assert LatchSupport.countLatchesHeld() == 0: LatchSupport.latchesHeldToString();
 
   // line 870 "../../../../CursorImpl.ump"
    private void flushBINToBeRemoved() throws DatabaseException{
-    // line 212 "../../../../Latches_CursorImpl.ump"
-    binToBeRemoved.latch();
-            //original();
-    // END OF UMPLE BEFORE INJECTION
     binToBeRemoved.removeCursor(this);
-        Label232:
-binToBeRemoved.releaseLatch();
-        //original();
- //this.hook232();
+        Label232: ;//this.hook232();
         binToBeRemoved = null;
   }
 
@@ -1284,15 +970,8 @@ binToBeRemoved.releaseLatch();
 
   // line 908 "../../../../CursorImpl.ump"
    private void flushDBINToBeRemoved() throws DatabaseException{
-    // line 222 "../../../../Latches_CursorImpl.ump"
-    dupBinToBeRemoved.latch();
-            //original();
-    // END OF UMPLE BEFORE INJECTION
     dupBinToBeRemoved.removeCursor(this);
-        Label233:
-dupBinToBeRemoved.releaseLatch();
-        //original();
- //this.hook233();
+        Label233: //this.hook233();
         dupBinToBeRemoved = null;
   }
 
@@ -1331,10 +1010,7 @@ dupBinToBeRemoved.releaseLatch();
                     }
                     if (n != null && n.containsDuplicates()) {
                         DIN dupRoot = (DIN) n;
-                        Label274:
-dupRoot.latch(); in .releaseLatch();
-    //original(in, dupRoot);
- //this.hook274( in , dupRoot); in = null;
+                        Label274: //this.hook274( in , dupRoot); in = null;
                         found = positionFirstOrLast(first, dupRoot);
                     } else {
                         if (treeStatsAccumulator != null) {
@@ -1364,18 +1040,9 @@ dupRoot.latch(); in .releaseLatch();
         status = CURSOR_INITIALIZED;
         //throw new ReturnBoolean(found);
 //End of hook234
+Label234_1: ;
             throw ReturnHack.returnBoolean;
         } 
-Label234_1:
-//try {
-            //original(first, duplicateRoot, in, found);
-       // } 
-       catch (DatabaseException e) {
-            if ( in != null) 
-            { in .releaseLatch();
-            }
-            throw e;
-        }
 
 catch (ReturnBoolean r) {
             return r.value;
@@ -1387,7 +1054,7 @@ catch (ReturnBoolean r) {
    * 
    * Position the cursor at the key. This returns a three part value that's bitwise or'ed into the int. We find out if there was any kind of match and if the match was exact. Note that this match focuses on whether the searching criteria (key, or key and data, depending on the search type) is met. <p> Note this returns with the BIN latched! </p> <p> If this method returns without the FOUND bit set, the caller can assume that no match is possible. Otherwise, if the FOUND bit is set, the caller should check the EXACT_KEY and EXACT_DATA bits. If EXACT_KEY is not set (or for BOTH and BOTH_RANGE, if EXACT_DATA is not set), an approximate match was found. In an approximate match, the cursor is always positioned before the target key/data. This allows the caller to perform a 'next' operation to advance to the value that is equal or higher than the target key/data. </p> <p> Even if the search returns an exact result, the record may be deleted. The caller must therefore check for both an approximate match and for whether the cursor is positioned on a deleted record. </p> <p> If SET or BOTH is specified, the FOUND bit will only be returned if an exact match is found. However, the record found may be deleted. </p> <p> There is one special case where this method may be called without checking the EXACT_KEY (and EXACT_DATA) bits and without checking for a deleted record: If SearchMode.SET is specified then only the FOUND bit need be checked. When SET is specified and FOUND is returned, it is guaranteed to be an exact match on a non-deleted record. It is for this case only that this method is public. </p> <p> If FOUND is set, FOUND_LAST may also be set if the cursor is positioned on the last record in the database. Note that this state can only be counted on as long as the BIN is latched, so it is not set if this method must release the latch to lock the record. Therefore, it should only be used for optimizations. If FOUND_LAST is set, the cursor is positioned on the last record and the BIN is latched. If FOUND_LAST is not set, the cursor may or may not be positioned on the last record. Note that exact searches always perform an unlatch and a lock, so FOUND_LAST will only be set for inexact (range) searches. </p> <p> Be aware that when an approximate match is returned, the index or dupIndex may be set to -1. This is done intentionally so that a 'next' operation will increment it. </p>
    */
-  // line 988 "../../../../CursorImpl.ump"
+  // line 989 "../../../../CursorImpl.ump"
    public int searchAndPosition(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode, LockType lockType) throws DatabaseException{
     try {
             assert assertCursorState(false): dumpToString(true);
@@ -1400,18 +1067,11 @@ catch (ReturnBoolean r) {
             boolean exactSearch = searchMode.isExactSearch();
             BINBoundary binBoundary = new BINBoundary();
             //this.hook235(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData,foundLast, exactSearch, binBoundary);
-            throw ReturnHack.returnInt;
+            				Label235_1:  ;//extra catch statement will be addd.
+throw ReturnHack.returnInt;
 
         }
-				Label235_1:
-//try {
-            //original(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData, foundLast,            exactSearch,            binBoundary);
-//    } 
-catch (DatabaseException e) {
-        releaseBIN();
-        throw e;
-    }
-  //extra catch statement will be addd.
+
 				catch (ReturnInt r) {
             return r.value;
         }
@@ -1422,7 +1082,7 @@ catch (DatabaseException e) {
    * 
    * For this type of search, we need to match both key and data. This method is called after the key is matched to perform the data portion of the match. We may be matching just against an LN, or doing further searching into the dup tree. See searchAndPosition for more details.
    */
-  // line 1013 "../../../../CursorImpl.ump"
+  // line 1015 "../../../../CursorImpl.ump"
    private int searchAndPositionBoth(boolean containsDuplicates, Node n, DatabaseEntry matchData, boolean exactSearch, LockType lockType, long oldLsn) throws DatabaseException{
     assert assertCursorState(false): dumpToString(true);
         boolean found = false;
@@ -1431,11 +1091,7 @@ catch (DatabaseException e) {
         byte[] data = Key.makeKey(matchData);
         if (containsDuplicates) {
             DIN duplicateRoot = (DIN) n;
-            Label236:
-duplicateRoot.latch();
-    releaseBIN();
-    //original(duplicateRoot);
- //this.hook236(duplicateRoot);
+            Label236: //this.hook236(duplicateRoot);
             dupBin = (DBIN) database.getTree().searchSubTree(duplicateRoot, data, Tree.SearchType.NORMAL, -1, null,
                 true);
             if (dupBin != null) {
@@ -1476,7 +1132,7 @@ duplicateRoot.latch();
         return (found ? FOUND : 0) | (exact ? EXACT_DATA : 0);
   }
 
-  // line 1063 "../../../../CursorImpl.ump"
+  // line 1065 "../../../../CursorImpl.ump"
    private OperationStatus fetchCurrent(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first) throws DatabaseException{
     return new CursorImpl_fetchCurrent(this, foundKey, foundData, lockType, first).execute();
   }
@@ -1489,7 +1145,7 @@ duplicateRoot.latch();
    * @param lockTypethe type of lock requested.
    * @return the LockResult containing the LN that was locked, or containing anull LN if the LN was deleted or cleaned. If the LN is deleted, a lock will not be held.
    */
-  // line 1073 "../../../../CursorImpl.ump"
+  // line 1075 "../../../../CursorImpl.ump"
    private LockResult lockLN(LN ln, LockType lockType) throws DatabaseException{
     LockResult lockResult = lockLNDeletedAllowed(ln, lockType);
         ln = lockResult.getLN();
@@ -1511,7 +1167,7 @@ duplicateRoot.latch();
    * @param lockTypethe type of lock requested.
    * @return the LockResult containing the LN that was locked, or containing anull LN if the LN was cleaned.
    */
-  // line 1092 "../../../../CursorImpl.ump"
+  // line 1094 "../../../../CursorImpl.ump"
    public LockResult lockLNDeletedAllowed(LN ln, LockType lockType) throws DatabaseException{
     LockResult lockResult;
         if (lockType == LockType.NONE) {
@@ -1530,15 +1186,9 @@ duplicateRoot.latch();
         }
         while (true) {
             long nodeId = ln.getNodeId();
-            Label238:
-releaseBINs();
-    //original();
- //this.hook238();
+            Label238: //this.hook238();
             lockResult = locker.lock(nodeId, lockType, false, database);
-            Label237:
-latchBINs();
-    //original();
- //this.hook237();
+            Label237: //this.hook237();
             setTargetBin();
             ln = (LN) targetBin.fetchTarget(targetIndex);
             if (ln != null && nodeId != ln.getNodeId()) {
@@ -1559,7 +1209,7 @@ latchBINs();
    * @param lockTypethe type of lock requested.
    * @return the LockResult containing the LN that was locked.
    */
-  // line 1131 "../../../../CursorImpl.ump"
+  // line 1133 "../../../../CursorImpl.ump"
    public LockResult lockDupCountLN(DIN dupRoot, LockType lockType) throws DatabaseException{
     DupCountLN ln = dupRoot.getDupCountLN();
         LockResult lockResult;
@@ -1569,22 +1219,11 @@ latchBINs();
             lockResult = locker.nonBlockingLock(ln.getNodeId(), lockType, database);
         }
         if (lockResult.getLockGrant() == LockGrantType.DENIED) {
-            Label241:
-dupRoot.releaseLatch();
-    releaseBINs();
-    //original(dupRoot);
- //this.hook241(dupRoot);
+            Label241: //this.hook241(dupRoot);
             lockResult = locker.lock(ln.getNodeId(), lockType, false, database);
-            Label240:
-latchBIN();
-    //original();
- //this.hook240();
+            Label240: //this.hook240();
             dupRoot = (DIN) bin.fetchTarget(index);
-            Label239:
-dupRoot.latch();
-    latchDBIN();
-    //original(dupRoot);
- //this.hook239(dupRoot);
+            Label239: //this.hook239(dupRoot);
             ln = dupRoot.getDupCountLN();
         }
         lockResult.setLN(ln);
@@ -1597,27 +1236,13 @@ dupRoot.latch();
    * Fetch, latch and return the DIN root of the duplicate tree at the cursor position. Preconditions: The BIN must be latched and the current BIN entry must contain a DIN. Postconditions: The BIN and DIN will be latched. The DBIN will remain latched if isDBINLatched is true.
    * @param isDBINLatchedis true if the DBIN is currently latched.
    */
-  // line 1155 "../../../../CursorImpl.ump"
+  // line 1157 "../../../../CursorImpl.ump"
    public DIN getLatchedDupRoot(boolean isDBINLatched) throws DatabaseException{
     assert bin != null;
-        Label243:
-assert bin.isLatchOwner();
-    //original();
- //this.hook243();
+        Label243: //this.hook243();
         assert index >= 0;
         DIN dupRoot = (DIN) bin.fetchTarget(index);
-        Label242:
-if (isDBINLatched) {
-        if (!dupRoot.latchNoWait()) {
-            releaseDBIN();
-            dupRoot.latch();
-            latchDBIN();
-        }
-    } else {
-        dupRoot.latch();
-    }
-    //original(isDBINLatched, dupRoot);
- //this.hook242(isDBINLatched, dupRoot);
+        Label242: //this.hook242(isDBINLatched, dupRoot);
         return dupRoot;
   }
 
@@ -1626,7 +1251,7 @@ if (isDBINLatched) {
    * 
    * Helper to return a Data DBT from a BIN.
    */
-  // line 1167 "../../../../CursorImpl.ump"
+  // line 1169 "../../../../CursorImpl.ump"
    private void setDbt(DatabaseEntry data, byte [] bytes){
     if (bytes != null) {
             boolean partial = data.getPartial();
@@ -1657,7 +1282,7 @@ if (isDBINLatched) {
    * 
    * Calls checkCursorState and returns false is an exception is thrown.
    */
-  // line 1195 "../../../../CursorImpl.ump"
+  // line 1197 "../../../../CursorImpl.ump"
    private boolean assertCursorState(boolean mustBeInitialized){
     try {
             checkCursorState(mustBeInitialized);
@@ -1672,20 +1297,10 @@ if (isDBINLatched) {
    * 
    * Check that the cursor is open and optionally if it is initialized.
    */
-  // line 1207 "../../../../CursorImpl.ump"
+  // line 1209 "../../../../CursorImpl.ump"
    public void checkCursorState(boolean mustBeInitialized) throws DatabaseException{
     if (status == CURSOR_INITIALIZED) {
-            Label278:
-if (DEBUG) {
-					if (bin != null) {
-				verifyCursor(bin);
-					}
-					if (dupBin != null) {
-				verifyCursor(dupBin);
-					}
-			}
-			//original();
- //this.hook278();
+            Label278: //this.hook278();
                 return;
         }
         else if (status == CURSOR_NOT_INITIALIZED) {
@@ -1704,7 +1319,7 @@ if (DEBUG) {
    * 
    * Return this lock to its prior status. If the lock was just obtained, release it. If it was promoted, demote it.
    */
-  // line 1226 "../../../../CursorImpl.ump"
+  // line 1228 "../../../../CursorImpl.ump"
    private void revertLock(LN ln, LockResult lockResult) throws DatabaseException{
     revertLock(ln.getNodeId(), lockResult.getLockGrant());
   }
@@ -1714,7 +1329,7 @@ if (DEBUG) {
    * 
    * Return this lock to its prior status. If the lock was just obtained, release it. If it was promoted, demote it.
    */
-  // line 1233 "../../../../CursorImpl.ump"
+  // line 1235 "../../../../CursorImpl.ump"
    private void revertLock(long nodeId, LockGrantType lockStatus) throws DatabaseException{
     if ((lockStatus == LockGrantType.NEW) || (lockStatus == LockGrantType.WAIT_NEW)) {
             locker.releaseLock(nodeId);
@@ -1728,7 +1343,7 @@ if (DEBUG) {
    * 
    * Locks the logical EOF node for the database.
    */
-  // line 1244 "../../../../CursorImpl.ump"
+  // line 1246 "../../../../CursorImpl.ump"
    public void lockEofNode(LockType lockType) throws DatabaseException{
     locker.lock(database.getEofNodeId(), lockType, false, database);
   }
@@ -1738,27 +1353,27 @@ if (DEBUG) {
    * 
    * @throws RunRecoveryExceptionif the underlying environment is invalid.
    */
-  // line 1251 "../../../../CursorImpl.ump"
+  // line 1253 "../../../../CursorImpl.ump"
    public void checkEnv() throws RunRecoveryException{
     database.getDbEnvironment().checkIfInvalid();
   }
 
-  // line 1255 "../../../../CursorImpl.ump"
+  // line 1257 "../../../../CursorImpl.ump"
    public CursorImpl getLockerPrev(){
     return lockerPrev;
   }
 
-  // line 1259 "../../../../CursorImpl.ump"
+  // line 1261 "../../../../CursorImpl.ump"
    public CursorImpl getLockerNext(){
     return lockerNext;
   }
 
-  // line 1263 "../../../../CursorImpl.ump"
+  // line 1265 "../../../../CursorImpl.ump"
    public void setLockerPrev(CursorImpl p){
     lockerPrev = p;
   }
 
-  // line 1267 "../../../../CursorImpl.ump"
+  // line 1269 "../../../../CursorImpl.ump"
    public void setLockerNext(CursorImpl n){
     lockerNext = n;
   }
@@ -1768,7 +1383,7 @@ if (DEBUG) {
    * 
    * Dump the cursor for debugging purposes. Dump the bin and dbin that the cursor refers to if verbose is true.
    */
-  // line 1274 "../../../../CursorImpl.ump"
+  // line 1276 "../../../../CursorImpl.ump"
    public void dump(boolean verbose){
     System.out.println(dumpToString(verbose));
   }
@@ -1778,12 +1393,12 @@ if (DEBUG) {
    * 
    * dump the cursor for debugging purposes.
    */
-  // line 1281 "../../../../CursorImpl.ump"
+  // line 1283 "../../../../CursorImpl.ump"
    public void dump(){
     System.out.println(dumpToString(true));
   }
 
-  // line 1285 "../../../../CursorImpl.ump"
+  // line 1287 "../../../../CursorImpl.ump"
    private String statusToString(byte status){
     switch (status) {
             case CURSOR_NOT_INITIALIZED:
@@ -1797,7 +1412,7 @@ if (DEBUG) {
         }
   }
 
-  // line 1298 "../../../../CursorImpl.ump"
+  // line 1300 "../../../../CursorImpl.ump"
    public String dumpToString(boolean verbose){
     StringBuffer sb = new StringBuffer();
         sb.append("<Cursor idx=\"").append(index).append("\"");
@@ -1814,328 +1429,11 @@ if (DEBUG) {
         return sb.toString();
   }
 
-  // line 1314 "../../../../CursorImpl.ump"
+  // line 1316 "../../../../CursorImpl.ump"
    public void setTestHook(TestHook hook){
     testHook = hook;
   }
-
-
-  /**
-   * protected void hook204(LN ln, long oldLsn, long newLsn) throws DatabaseException {}
-   * 
-   * protected void hook205(LN ln, long oldLsn, long newLsn) throws DatabaseException {}
-   * 
-   * protected void hook206() throws DatabaseException, CloneNotSupportedException {}
-   * 
-   * protected void hook207() throws DatabaseException {}
-   * 
-   * protected void hook208(BIN bin) {}
-   * 
-   * protected void hook209(BIN abin) throws DatabaseException {}
-   * 
-   * protected void hook210(DBIN abin) throws DatabaseException {}
-   * 
-   * protected void hook211() throws DatabaseException {}
-   * protected void hook212(LockType lockType) throws DatabaseException {
-   * if (bin.getNEntries() <= index) {
-   * throw new ReturnInt(0);
-   * }
-   * Node n = bin.fetchTarget(index);
-   * if (n != null && n.containsDuplicates()) {
-   * DIN dupRoot = (DIN) n;
-   * Label265: //this.hook265(dupRoot);
-   * DupCountLN dupCountLN = (DupCountLN) dupRoot.getDupCountLNRef().fetchTarget(database, dupRoot);
-   * Label264: ////this.hook264(dupRoot);
-   * if (lockType != LockType.NONE) {
-   * locker.lock(dupCountLN.getNodeId(), lockType, false, database);
-   * }
-   * throw new ReturnInt(dupCountLN.getDupCount());
-   * 
-   * throw new ReturnInt(1);
-   * }
-   * }
-   */
-  // line 1355 "../../../../CursorImpl.ump"
-   protected void hook213(boolean isDup, LN ln, LockResult lockResult, LockResult dclLockResult, DIN dupRoot) throws DatabaseException{
-    //
-        //	isDup = (dupBin != null);
-        //	if (isDup) {
-        //	    dupRoot = getLatchedDupRoot(true);
-        //	    dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
-        //	    dupRoot = (DIN) bin.getTarget(index);
-        //	    this.hook267();
-        //	}
-        //	setTargetBin();
-        //	long oldLsn = targetBin.getLsn(targetIndex);
-        //	byte[] lnKey = targetBin.getKey(targetIndex);
-        //	lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
-        //	long oldLNSize = 0;
-        // //	oldLNSize = this.hook284(ln, oldLNSize);
-        //  Label284____:
-        //	long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
-        //	long newLNSize = 0;
-        //  //	newLNSize = this.hook283(ln, newLNSize);
-        //  Label283____:
-        //	targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-        //	targetBin.setPendingDeleted(targetIndex);
-        //	this.hook266();
-        //	if (isDup) {
-        //	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
-        //	    this.hook268(dupRoot);
-        //	    dupRoot = null;
-        //	    this.hook281(lnKey);
-        //	} else {
-        //	    this.hook282(lnKey);
-        //	}
-        //	this.hook204(ln, oldLsn, newLsn);
-  }
-
-
-  /**
-   * }
-   */
-  // line 1527 "../../../../CursorImpl.ump"
-   protected void hook227() throws DatabaseException{
-    
-  }
-
-  // line 1529 "../../../../CursorImpl.ump"
-   protected void hook228() throws DatabaseException{
-    
-  }
-
-  // line 1531 "../../../../CursorImpl.ump"
-   protected void hook229() throws DatabaseException{
-    
-  }
-
-  // line 1533 "../../../../CursorImpl.ump"
-   protected void hook230(boolean alreadyLatched) throws DatabaseException{
-    
-  }
-
-  // line 1535 "../../../../CursorImpl.ump"
-   protected void hook231() throws DatabaseException{
-    
-  }
-
-  // line 1537 "../../../../CursorImpl.ump"
-   protected void hook232() throws DatabaseException{
-    
-  }
-
-  // line 1539 "../../../../CursorImpl.ump"
-   protected void hook233() throws DatabaseException{
-    
-  }
-
-
-  /**
-   * protected void hook234(boolean first, DIN duplicateRoot, IN in , boolean found) throws DatabaseException {
-   * if (duplicateRoot == null) {
-   * removeCursorBIN();
-   * if (first) { in = database.getTree().getFirstNode();
-   * } else { in = database.getTree().getLastNode();
-   * }
-   * if ( in != null) {
-   * assert( in instanceof BIN);
-   * dupBin = null;
-   * dupIndex = -1;
-   * 
-   * index = (first ? 0 : (bin.getNEntries() - 1));
-   * addCursor(bin);
-   * TreeWalkerStatsAccumulator treeStatsAccumulator = getTreeStatsAccumulator();
-   * if (bin.getNEntries() == 0) {
-   * found = true;
-   * } else {
-   * Node n = null;
-   * if (! in .isEntryKnownDeleted(index)) {
-   * n = in .fetchTarget(index);
-   * }
-   * if (n != null && n.containsDuplicates()) {
-   * DIN dupRoot = (DIN) n;
-   * Label274: //this.hook274( in , dupRoot); in = null;
-   * found = positionFirstOrLast(first, dupRoot);
-   * } else {
-   * if (treeStatsAccumulator != null) {
-   * if (n == null || ((LN) n).isDeleted()) {
-   * treeStatsAccumulator.incrementDeletedLNCount();
-   * } else {
-   * treeStatsAccumulator.incrementLNCount();
-   * }
-   * }
-   * found = true;
-   * }
-   * }
-   * }
-   * 
-   * removeCursorDBIN();
-   * if (first) { in = database.getTree().getFirstNode(duplicateRoot);
-   * } else { in = database.getTree().getLastNode(duplicateRoot);
-   * }
-   * if ( in != null) {
-   * assert( in instanceof DBIN);
-   * dupBin = (DBIN) in ;
-   * dupIndex = (first ? 0 : (dupBin.getNEntries() - 1));
-   * addCursor(dupBin);
-   * found = true;
-   * }
-   * }
-   * status = CURSOR_INITIALIZED;
-   * throw new ReturnBoolean(found);
-   * }
-   */
-  // line 1598 "../../../../CursorImpl.ump"
-   protected void hook235(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode, LockType lockType, boolean foundSomething, boolean foundExactKey, boolean foundExactData, boolean foundLast, boolean exactSearch, BINBoundary binBoundary) throws DatabaseException{
-    byte[] key = Key.makeKey(matchKey);
-        bin = (BIN) database.getTree().search(key, Tree.SearchType.NORMAL, -1, binBoundary, true);
-        if (bin != null) {
-            addCursor(bin);
-            index = bin.findEntry(key, true, exactSearch);
-            foundSomething = !exactSearch;
-            dupBin = null;
-            dupIndex = -1;
-            boolean containsDuplicates = false;
-            if (index >= 0) {
-                if ((index & IN.EXACT_MATCH) != 0) {
-                    foundExactKey = true;
-                    index &= ~IN.EXACT_MATCH;
-                }
-                Node n = null;
-                if (!bin.isEntryKnownDeleted(index)) {
-                    n = bin.fetchTarget(index);
-                }
-                if (n != null) {
-                    containsDuplicates = n.containsDuplicates();
-                    if (searchMode.isDataSearch()) {
-                        if (foundExactKey) {
-                            int searchResult = searchAndPositionBoth(containsDuplicates, n, matchData, exactSearch,
-                                lockType, bin.getLsn(index));
-                            foundSomething = (searchResult & FOUND) != 0;
-                            foundExactData = (searchResult & EXACT_DATA) != 0;
-                        }
-                    } else {
-                        foundSomething = true;
-                        if (!containsDuplicates && exactSearch) {
-                            LN ln = (LN) n;
-                            LockResult lockResult = lockLN(ln, lockType);
-                            ln = lockResult.getLN();
-                            if (ln == null) {
-                                foundSomething = false;
-                            }
-                        }
-                    }
-                }
-                foundLast = (searchMode == SearchMode.SET_RANGE && foundSomething && !containsDuplicates &&
-                    binBoundary.isLastBin && index == bin.getNEntries() - 1);
-            }
-        }
-        status = CURSOR_INITIALIZED;
-        throw new ReturnInt((foundSomething ? FOUND : 0) | (foundExactKey ? EXACT_KEY : 0) |
-            (foundExactData ? EXACT_DATA : 0) | (foundLast ? FOUND_LAST : 0));
-  }
-
-
-  /**
-   * 
-   * Disables or enables eviction during cursor operations for an internal cursor. For example, a cursor used to implement eviction should not itself perform eviction. Eviction is enabled by default.
-   */
-  // line 11 "../../../../Evictor_CursorImpl.ump"
-   public void setAllowEviction(boolean allowed){
-    allowEviction = allowed;
-  }
-
-
-  /**
-   * 
-   * Evict the LN node at the cursor position. This is used for internal databases only.
-   */
-  // line 19 "../../../../Evictor_CursorImpl.ump"
-   public void evict() throws DatabaseException{
-    try {
-      Label202:
-latchBINs();
-	//original();
-			//this.hook202();
-			setTargetBin();
-			targetBin.evictLN(targetIndex);
-
-	} finally {
-
-LabelEvict_1:
-releaseBINs();
-	//}
- ;//
-
-}
-  }
-
-  // line 8 "../../../../Verifier_CursorImpl.ump"
-   private void verifyCursor(BIN bin) throws DatabaseException{
-    if (!bin.getCursorSet().contains(this)) {
-					throw new DatabaseException("BIN cursorSet is inconsistent.");
-			}
-  }
-
-  // line 6 "../../../../Statistics_CursorImpl.ump"
-   public LockStats getLockStats() throws DatabaseException{
-    return locker.collectStats(new LockStats());
-  }
-
-  // line 7 "../../../../Latches_CursorImpl.ump"
-   public void releaseBIN() throws LatchNotHeldException{
-    if (bin != null) {
-            bin.releaseLatchIfOwner();
-        }
-  }
-
-  // line 13 "../../../../Latches_CursorImpl.ump"
-   public void latchBINs() throws DatabaseException{
-    latchBIN();
-        latchDBIN();
-  }
-
-  // line 18 "../../../../Latches_CursorImpl.ump"
-   public void releaseBINs() throws LatchNotHeldException{
-    releaseBIN();
-        releaseDBIN();
-  }
-
-  // line 23 "../../../../Latches_CursorImpl.ump"
-   public void releaseDBIN() throws LatchNotHeldException{
-    if (dupBin != null) {
-            dupBin.releaseLatchIfOwner();
-        }
-  }
-
-  // line 29 "../../../../Latches_CursorImpl.ump"
-   private boolean checkAlreadyLatched(boolean alreadyLatched){
-    if (alreadyLatched) {
-            if (dupBin != null) {
-                return dupBin.isLatchOwner();
-            } else if (bin != null) {
-                return bin.isLatchOwner();
-            }
-        }
-        return true;
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 9 "../../../../LoggingFiner_CursorImpl.ump"
-   private void trace(Level level, String changeType, BIN theBin, LN ln, int lnIndex, long oldLsn, long newLsn){
-    new CursorImpl_trace(this, level, changeType, theBin, ln, lnIndex, oldLsn, newLsn).execute();
-  }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "alreadyLatched" + "=" + (getAlreadyLatched() != null ? !getAlreadyLatched().equals(this)  ? getAlreadyLatched().toString().replaceAll("  ","    ") : "this" : "null");
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
@@ -2255,7 +1553,6 @@ releaseBINs();
   
   
   // line 49 "../../../../CursorImpl_static.ump"
-  // line 4 "../../../../Latches_CursorImpl_inner.ump"
   public static class CursorImpl_latchBIN
   {
   
@@ -2285,16 +1582,7 @@ releaseBINs();
     // line 54 "../../../../CursorImpl_static.ump"
     public BIN execute() throws DatabaseException{
       // try {
-                  Label244:
-  while (_this.bin != null) {
-                  waitingOn = _this.bin;
-                  waitingOn.latch();
-                  if (_this.bin == waitingOn) {
-                      return _this.bin; 
-                  }
-                  waitingOn.releaseLatch();
-              }
-   //this.hook244();
+                  Label244: //this.hook244();
    //                   Label245: //this.hook245();
   //                    throw new ReturnObject(_this.bin);
    //               Label244_1: throw ReturnHack.returnObject;
@@ -2322,7 +1610,6 @@ releaseBINs();
   
   
   // line 77 "../../../../CursorImpl_static.ump"
-  // line 77 "../../../../Latches_CursorImpl_inner.ump"
   public static class CursorImpl_latchDBIN
   {
   
@@ -2353,8 +1640,11 @@ releaseBINs();
     public DBIN execute() throws DatabaseException{
       try {
                   Label246:; //this.hook246();
-                  Label247: throw new ReturnObject(_this.dupBin);
-                  Label246_1: throw ReturnHack.returnObject;
+                  Label247: ;
+                  Label246_1: ;
+                  throw new ReturnObject(_this.dupBin);
+  
+  //throw ReturnHack.returnObject;
               }
               catch (ReturnObject r) {
                   return (DBIN) r.value;
@@ -2365,30 +1655,10 @@ releaseBINs();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 91 "../../../../CursorImpl_static.ump"
+    // line 94 "../../../../CursorImpl_static.ump"
     protected CursorImpl _this ;
-  // line 92 "../../../../CursorImpl_static.ump"
+  // line 95 "../../../../CursorImpl_static.ump"
     protected BIN waitingOn ;
-  
-  // line 78 "../../../../Latches_CursorImpl_inner.ump"
-    around Label246 - Label246_1: execute () 
-    {
-      while (_this.dupBin != null) {
-                  around_proceed:
-              }
-              throw new ReturnObject(null);
-    }
-  
-  // line 85 "../../../../Latches_CursorImpl_inner.ump"
-    around Label247 - Label246_1: execute () 
-    {
-      waitingOn = _this.dupBin;
-              waitingOn.latch();
-              if (_this.dupBin == waitingOn) {
-                  around_proceed: //original();
-              }
-              waitingOn.releaseLatch();
-    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/
@@ -2396,8 +1666,7 @@ releaseBINs();
   
   
   
-  // line 100 "../../../../CursorImpl_static.ump"
-  // line 60 "../../../../Latches_CursorImpl_inner.ump"
+  // line 103 "../../../../CursorImpl_static.ump"
   public static class CursorImpl_lockNextKeyForInsert
   {
   
@@ -2419,14 +1688,14 @@ releaseBINs();
     public void delete()
     {}
   
-    // line 102 "../../../../CursorImpl_static.ump"
+    // line 105 "../../../../CursorImpl_static.ump"
     public  CursorImpl_lockNextKeyForInsert(CursorImpl _this, DatabaseEntry key, DatabaseEntry data){
       this._this = _this;
               this.key = key;
               this.data = data;
     }
   
-    // line 107 "../../../../CursorImpl_static.ump"
+    // line 110 "../../../../CursorImpl_static.ump"
     public void execute() throws DatabaseException{
       tempKey = new DatabaseEntry(key.getData(), key.getOffset(), key.getSize());
               tempData = new DatabaseEntry(data.getData(), data.getOffset(), data.getSize());
@@ -2446,10 +1715,7 @@ releaseBINs();
                   if (status == OperationStatus.SUCCESS) {
                       lockedNextKey = true;
                   }
-                  Label249:
-  latched = false;
-              //original();
-   //this.hook249();
+                  Label249: ;//this.hook249();
               }
               Label248_1:
                   if (!lockedNextKey) {
@@ -2461,40 +1727,26 @@ releaseBINs();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 132 "../../../../CursorImpl_static.ump"
+    // line 135 "../../../../CursorImpl_static.ump"
     protected CursorImpl _this ;
-  // line 133 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry key ;
-  // line 134 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry data ;
-  // line 135 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry tempKey ;
   // line 136 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry tempData ;
+    protected DatabaseEntry key ;
   // line 137 "../../../../CursorImpl_static.ump"
-    protected boolean lockedNextKey ;
+    protected DatabaseEntry data ;
   // line 138 "../../../../CursorImpl_static.ump"
-    protected SearchMode searchMode ;
+    protected DatabaseEntry tempKey ;
   // line 139 "../../../../CursorImpl_static.ump"
-    protected boolean latched ;
+    protected DatabaseEntry tempData ;
   // line 140 "../../../../CursorImpl_static.ump"
-    protected int searchResult ;
+    protected boolean lockedNextKey ;
   // line 141 "../../../../CursorImpl_static.ump"
+    protected SearchMode searchMode ;
+  // line 142 "../../../../CursorImpl_static.ump"
+    protected boolean latched ;
+  // line 143 "../../../../CursorImpl_static.ump"
+    protected int searchResult ;
+  // line 144 "../../../../CursorImpl_static.ump"
     protected OperationStatus status ;
-  
-  // line 61 "../../../../Latches_CursorImpl_inner.ump"
-    around Label248 - Label248_1: execute () 
-    {
-      latched = true;
-              try {
-                  around_proceed:
-              }
-              finally {
-                  if (latched) {
-                      _this.releaseBINs();
-                  }
-              }
-    }
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/
@@ -2502,11 +1754,7 @@ releaseBINs();
   
   
   
-  // line 163 "../../../../CursorImpl_static.ump"
-  // line 5 "../../../../Verifier_CursorImpl_inner.ump"
-  // line 4 "../../../../Statistics_CursorImpl_inner.ump"
-  // line 17 "../../../../Latches_CursorImpl_inner.ump"
-  // line 4 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
+  // line 166 "../../../../CursorImpl_static.ump"
   public static class CursorImpl_getNextDuplicate
   {
   
@@ -2528,7 +1776,7 @@ releaseBINs();
     public void delete()
     {}
   
-    // line 165 "../../../../CursorImpl_static.ump"
+    // line 168 "../../../../CursorImpl_static.ump"
     public  CursorImpl_getNextDuplicate(CursorImpl _this, DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean forward, boolean alreadyLatched){
       this._this = _this;
               this.foundKey = foundKey;
@@ -2538,48 +1786,27 @@ releaseBINs();
               this.alreadyLatched = alreadyLatched;
     }
   
-    // line 173 "../../../../CursorImpl_static.ump"
+    // line 176 "../../../../CursorImpl_static.ump"
     public OperationStatus execute() throws DatabaseException{
       // try {
                   assert _this.assertCursorState(true): _this.dumpToString(true);
-                  Label250:
-  assert _this.checkAlreadyLatched(alreadyLatched): _this.dumpToString(true);
-              //original();
-   //this.hook250();
+                  Label250: //this.hook250();
                       try {
                           while (_this.dupBin != null) {
-                              Label251:
-  if (!alreadyLatched) {
-                  _this.latchDBIN();
-              } else {
-                  alreadyLatched = false;
-              }
-              //original();
-   //this.hook251();
-                                  Label279:
-  if (_this.DEBUG) {
-            _this.verifyCursor(_this.dupBin);
-          }
-          //original();
-   //this.hook279();
+                              Label251: //this.hook251();
+                                  Label279: //this.hook279();
                                   if ((forward && ++_this.dupIndex < _this.dupBin.getNEntries()) || (!forward && --_this.dupIndex > -1)) {
                                       ret = OperationStatus.SUCCESS;
                                       if (foundKey != null) {
                                           ret = _this.getCurrentAlreadyLatched(foundKey, foundData, lockType, forward);
                                       } else {
-                                          Label252:
-  _this.releaseDBIN();
-              //original();
-   //this.hook252();
+                                          Label252: ;//this.hook252();
                                       }
                                       if (ret == OperationStatus.SUCCESS) {
                                           _this.incrementLNCount();
                                           return ret;
                                       } else {
-                                          Label253:
-  assert LatchSupport.countLatchesHeld() == 0;
-              //original();
-   //this.hook253();
+                                          Label253: //this.hook253();
                                               if (_this.dupBinToBeRemoved != null) {
                                                   _this.flushDBINToBeRemoved();
                                               }
@@ -2592,47 +1819,9 @@ releaseBINs();
                                   }
                                   _this.dupBinToBeRemoved = _this.dupBin;
                                   _this.dupBin = null;
-                                  Label255:
-  _this.dupBinToBeRemoved.releaseLatch();
-              //original();
-   //this.hook255();
-                                      Label275:
-  treeStatsAccumulator=_this.getTreeStatsAccumulator();
-          if (treeStatsAccumulator != null) {
-            Label200:
-  _this.latchBIN();
-          try {
-            //original();
-          }
-      finally {
-            _this.releaseBIN();
-          }
-   //this.hook200();
-            if (_this.index < 0) {
-              return OperationStatus.NOTFOUND;//throw new ReturnObject(OperationStatus.NOTFOUND);
-          }
-          duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
-          Label201:
-  duplicateRoot.latch();
-          try {
-            //original();
-          }
-      finally {
-            duplicateRoot.releaseLatch();
-          }
-   //this.hook201();
-          dcl=duplicateRoot.getDupCountLN();
-          	if (dcl != null) {
-          	  dcl.accumulateStats(treeStatsAccumulator);
-          	}
-          }
-          //original();
-   //this.hook275();
-                                      Label254:
-  assert(LatchSupport.countLatchesHeld() == 0);
-              _this.dupBinToBeRemoved.latch();
-              //original();
-   //this.hook254();
+                                  Label255: //this.hook255();
+                                      Label275: //this.hook275();
+                                      Label254: //this.hook254();
                                       {}
                                   if (forward) {
                                       newDupBin = (DBIN) _this.database.getTree().getNextBin(_this.dupBinToBeRemoved, true);
@@ -2649,19 +1838,13 @@ releaseBINs();
                                       }
                                       _this.addCursor(newDupBin);
                                       _this.dupBin = newDupBin;
-                                      Label256:
-  alreadyLatched = true;
-              //original();
-   //this.hook256();
+                                      Label256: ;//this.hook256();
                                   }
                               }
                           }
                       }
                   finally {
-                      Label257:
-  assert LatchSupport.countLatchesHeld() == 0;
-              //original();
-   //this.hook257();
+                      Label257: //this.hook257();
                           if (_this.dupBinToBeRemoved != null) {
                               _this.flushDBINToBeRemoved();
                           }
@@ -2676,27 +1859,27 @@ releaseBINs();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 239 "../../../../CursorImpl_static.ump"
+    // line 242 "../../../../CursorImpl_static.ump"
     protected CursorImpl _this ;
-  // line 240 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry foundKey ;
-  // line 241 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry foundData ;
-  // line 242 "../../../../CursorImpl_static.ump"
-    protected LockType lockType ;
   // line 243 "../../../../CursorImpl_static.ump"
-    protected boolean forward ;
+    protected DatabaseEntry foundKey ;
   // line 244 "../../../../CursorImpl_static.ump"
-    protected boolean alreadyLatched ;
+    protected DatabaseEntry foundData ;
   // line 245 "../../../../CursorImpl_static.ump"
-    protected OperationStatus ret ;
+    protected LockType lockType ;
   // line 246 "../../../../CursorImpl_static.ump"
-    protected TreeWalkerStatsAccumulator treeStatsAccumulator ;
+    protected boolean forward ;
   // line 247 "../../../../CursorImpl_static.ump"
-    protected DIN duplicateRoot ;
+    protected boolean alreadyLatched ;
   // line 248 "../../../../CursorImpl_static.ump"
-    protected DupCountLN dcl ;
+    protected OperationStatus ret ;
   // line 249 "../../../../CursorImpl_static.ump"
+    protected TreeWalkerStatsAccumulator treeStatsAccumulator ;
+  // line 250 "../../../../CursorImpl_static.ump"
+    protected DIN duplicateRoot ;
+  // line 251 "../../../../CursorImpl_static.ump"
+    protected DupCountLN dcl ;
+  // line 252 "../../../../CursorImpl_static.ump"
     protected DBIN newDupBin ;
   
     
@@ -2705,10 +1888,7 @@ releaseBINs();
   
   
   
-  @MethodObject
-  // line 271 "../../../../CursorImpl_static.ump"
-  // line 4 "../../../../INCompressor_CursorImpl_inner.ump"
-  // line 94 "../../../../Latches_CursorImpl_inner.ump"
+  // line 274 "../../../../CursorImpl_static.ump"
   public static class CursorImpl_fetchCurrent
   {
   
@@ -2730,7 +1910,7 @@ releaseBINs();
     public void delete()
     {}
   
-    // line 273 "../../../../CursorImpl_static.ump"
+    // line 276 "../../../../CursorImpl_static.ump"
     public  CursorImpl_fetchCurrent(CursorImpl _this, DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first){
       this._this = _this;
               this.foundKey = foundKey;
@@ -2739,7 +1919,7 @@ releaseBINs();
               this.first = first;
     }
   
-    // line 280 "../../../../CursorImpl_static.ump"
+    // line 283 "../../../../CursorImpl_static.ump"
     public OperationStatus execute() throws DatabaseException{
       try {
                   treeStatsAccumulator = _this.getTreeStatsAccumulator();
@@ -2747,18 +1927,11 @@ releaseBINs();
                   if (_this.targetBin == null) {
                       return OperationStatus.NOTFOUND;
                   }
-                  Label259:
-  assert _this.targetBin.isLatchOwner();
-              //original();
-   //this.hook259();
+                  Label259: //this.hook259();
                       n = null;
                   if (_this.targetIndex < 0 || _this.targetIndex >= _this.targetBin.getNEntries() || _this.targetBin.isEntryKnownDeleted(_this.targetIndex)) {} else {
                       if (_this.targetBin.isEntryPendingDeleted(_this.targetIndex)) {
-                          Label280:
-  envImpl=_this.database.getDbEnvironment();
-          envImpl.addToCompressorQueue(_this.targetBin,new Key(_this.targetBin.getKey(_this.targetIndex)),false);
-          //original();
-   //this.hook280();
+                          Label280: ;//this.hook280();
                       }
                       Label260: ; //this.hook260();
                       n = _this.targetBin.fetchTarget(_this.targetIndex);
@@ -2769,24 +1942,17 @@ releaseBINs();
                       if (treeStatsAccumulator != null) {
                           treeStatsAccumulator.incrementDeletedLNCount();
                       }
-                      Label261:
-  _this.targetBin.releaseLatchIfOwner();
-              //original();
-   //this.hook261();
+                      Label261: //this.hook261();
                           return OperationStatus.KEYEMPTY;
                   }
                   _this.addCursor(_this.targetBin);
                   if (n.containsDuplicates()) {
                       assert!duplicateFetch;
                       duplicateRoot = (DIN) n;
-                      Label262:
-  duplicateRoot.latch();
-              _this.targetBin.releaseLatch();
-              //original();
-   //this.hook262();
+                      Label262: //this.hook262();
                           if (_this.positionFirstOrLast(first, duplicateRoot)) {
                               Label263:; //this.hook263();
-                              throw new ReturnObject(_this.fetchCurrent(foundKey, foundData, lockType, first));
+                              _this.fetchCurrent(foundKey, foundData, lockType, first);
                               Label263_1:; // end of hook263();
                           }
                       else {
@@ -2821,10 +1987,10 @@ releaseBINs();
                           _this.setDbt(foundKey, _this.targetBin.getKey(_this.targetIndex));
                       }
                   }
-                  throw new ReturnObject(OperationStatus.SUCCESS);
+  Label258_1: ;
+                  return OperationStatus.SUCCESS;
   
-                  Label258_1: ;
-                  throw ReturnHack.returnObject;
+  
               } catch (ReturnObject r) {
                   return (OperationStatus) r.value;
               }
@@ -2834,157 +2000,32 @@ releaseBINs();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 354 "../../../../CursorImpl_static.ump"
+    // line 357 "../../../../CursorImpl_static.ump"
     protected CursorImpl _this ;
-  // line 355 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry foundKey ;
-  // line 356 "../../../../CursorImpl_static.ump"
-    protected DatabaseEntry foundData ;
-  // line 357 "../../../../CursorImpl_static.ump"
-    protected LockType lockType ;
   // line 358 "../../../../CursorImpl_static.ump"
-    protected boolean first ;
+    protected DatabaseEntry foundKey ;
   // line 359 "../../../../CursorImpl_static.ump"
-    protected TreeWalkerStatsAccumulator treeStatsAccumulator ;
+    protected DatabaseEntry foundData ;
   // line 360 "../../../../CursorImpl_static.ump"
-    protected boolean duplicateFetch ;
+    protected LockType lockType ;
   // line 361 "../../../../CursorImpl_static.ump"
-    protected Node n ;
+    protected boolean first ;
   // line 362 "../../../../CursorImpl_static.ump"
-    protected EnvironmentImpl envImpl ;
+    protected TreeWalkerStatsAccumulator treeStatsAccumulator ;
   // line 363 "../../../../CursorImpl_static.ump"
-    protected DIN duplicateRoot ;
+    protected boolean duplicateFetch ;
   // line 364 "../../../../CursorImpl_static.ump"
-    protected LN ln ;
+    protected Node n ;
   // line 365 "../../../../CursorImpl_static.ump"
-    protected LockResult lockResult ;
+    protected EnvironmentImpl envImpl ;
   // line 366 "../../../../CursorImpl_static.ump"
-    protected byte[] lnData ;
-  
-  // line 96 "../../../../Latches_CursorImpl_inner.ump"
-    around Label258 - Label258_1: execute () 
-    {
-      try {
-                  around_proceed: //original();
-              }
-              finally {
-                  _this.releaseBINs();
-              }
-    }
-  
-  // line 110 "../../../../Latches_CursorImpl_inner.ump"
-    around Label260 - Label260_1: execute () 
-    {
-      try {
-                  around_proceed: //original();
-              }
-              catch (DatabaseException DE) {
-                  _this.targetBin.releaseLatchIfOwner();
-                  throw DE;
-              }
-    }
-  
-  // line 128 "../../../../Latches_CursorImpl_inner.ump"
-    around Label263 - Label263_1: execute () 
-    {
-      try {
-                  around_proceed: //original();
-              }
-              catch (DatabaseException DE) {
-                  _this.releaseBINs();
-                  throw DE;
-              }
-    }
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFiner_CursorImpl_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
-  public static class CursorImpl_trace
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public CursorImpl_trace()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    public  CursorImpl_trace(CursorImpl _this, Level level, String changeType, BIN theBin, LN ln, int lnIndex, long oldLsn, long newLsn){
-      this._this=_this;
-          this.level=level;
-          this.changeType=changeType;
-          this.theBin=theBin;
-          this.ln=ln;
-          this.lnIndex=lnIndex;
-          this.oldLsn=oldLsn;
-          this.newLsn=newLsn;
-    }
-  
-    // line 16 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
-      logger=_this.database.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(changeType);
-                sb.append(" bin=");
-                sb.append(theBin.getNodeId());
-                sb.append(" ln=");
-                sb.append(ln.getNodeId());
-                sb.append(" lnIdx=");
-                sb.append(lnIndex);
-                sb.append(" oldLnLsn=");
-                sb.append(DbLsn.getNoFormatString(oldLsn));
-                sb.append(" newLnLsn=");
-                sb.append(DbLsn.getNoFormatString(newLsn));
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 17 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected CursorImpl _this ;
-  // line 18 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected Level level ;
-  // line 19 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected String changeType ;
-  // line 20 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected BIN theBin ;
-  // line 21 "../../../../LoggingFiner_CursorImpl_inner.ump"
+    protected DIN duplicateRoot ;
+  // line 367 "../../../../CursorImpl_static.ump"
     protected LN ln ;
-  // line 22 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected int lnIndex ;
-  // line 23 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected long oldLsn ;
-  // line 24 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected long newLsn ;
-  // line 25 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected Logger logger ;
-  // line 26 "../../../../LoggingFiner_CursorImpl_inner.ump"
-    protected StringBuffer sb ;
+  // line 368 "../../../../CursorImpl_static.ump"
+    protected LockResult lockResult ;
+  // line 369 "../../../../CursorImpl_static.ump"
+    protected byte[] lnData ;
   
     
   }  
@@ -3050,29 +2091,6 @@ releaseBINs();
   public static final int EXACT_DATA = 0x4 ;
 // line 94 "../../../../CursorImpl.ump"
   public static final int FOUND_LAST = 0x8 ;
-// line 5 "../../../../Evictor_CursorImpl.ump"
-  private boolean allowEviction = true ;
-// line 5 "../../../../Verifier_CursorImpl.ump"
-  private static final boolean DEBUG = false ;
-
-// line 170 "../../../../Latches_CursorImpl.ump"
-  protected boolean hook225: getNextWithKeyChangeStatus (DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) 
-  {
-    assert checkAlreadyLatched(alreadyLatched): dumpToString(true);
-        if (!alreadyLatched) {
-            latchBIN();
-        } else {
-            alreadyLatched = false;
-        }
-        return //original(alreadyLatched);
-  }
-
-// line 180 "../../../../Latches_CursorImpl.ump"
-  protected boolean hook226:  getNextWithKeyChangeStatus (DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) 
-  {
-    alreadyLatched = false;
-        return //original(alreadyLatched);
-  }
 
   
 }

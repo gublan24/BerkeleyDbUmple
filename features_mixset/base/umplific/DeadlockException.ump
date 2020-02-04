@@ -4,9 +4,9 @@ class DeadlockException
 {
   isA DatabaseException;
   depend de.ovgu.cide.jakutil.*;
-    public DeadlockException() {
-	super();
-    }
+    //public DeadlockException() {
+	//super();
+ //   }
 
     public DeadlockException(Throwable t) {
 	super(t);

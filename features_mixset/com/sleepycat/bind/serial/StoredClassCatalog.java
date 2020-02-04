@@ -312,12 +312,7 @@ public class StoredClassCatalog implements ClassCatalog
     public void delete()
     {}
   
-    // line 12 "../../../../StoredClassCatalog_static.ump"
-    public  ClassInfo(){
-      
-    }
-  
-    // line 14 "../../../../StoredClassCatalog_static.ump"
+    // line 13 "../../../../StoredClassCatalog_static.ump"
     public  ClassInfo(DatabaseEntry dbt){
       byte[] data=dbt.getData();
           int len=data[0];
@@ -325,7 +320,7 @@ public class StoredClassCatalog implements ClassCatalog
           System.arraycopy(data,1,classID,0,len);
     }
   
-    // line 20 "../../../../StoredClassCatalog_static.ump"
+    // line 19 "../../../../StoredClassCatalog_static.ump"
     public void toDbt(DatabaseEntry dbt){
       byte[] data=new byte[1 + classID.length];
           data[0]=(byte)classID.length;
@@ -333,22 +328,22 @@ public class StoredClassCatalog implements ClassCatalog
           dbt.setData(data);
     }
   
-    // line 26 "../../../../StoredClassCatalog_static.ump"
+    // line 25 "../../../../StoredClassCatalog_static.ump"
     public void setClassID(byte [] classID){
       this.classID=classID;
     }
   
-    // line 29 "../../../../StoredClassCatalog_static.ump"
+    // line 28 "../../../../StoredClassCatalog_static.ump"
     public byte[] getClassID(){
       return classID;
     }
   
-    // line 32 "../../../../StoredClassCatalog_static.ump"
+    // line 31 "../../../../StoredClassCatalog_static.ump"
     public ObjectStreamClass getClassFormat(){
       return classFormat;
     }
   
-    // line 35 "../../../../StoredClassCatalog_static.ump"
+    // line 34 "../../../../StoredClassCatalog_static.ump"
     public void setClassFormat(ObjectStreamClass classFormat){
       this.classFormat=classFormat;
     }

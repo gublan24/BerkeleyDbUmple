@@ -18,7 +18,6 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DBIN.ump"
-// line 3 "../../../../MemoryBudget_DBIN.ump"
 public class DBIN extends BIN implements LoggableObject
 {
 
@@ -298,27 +297,6 @@ public class DBIN extends BIN implements LoggableObject
   // line 229 "../../../../DBIN.ump"
    public String shortClassName(){
     return "DBIN";
-  }
-
-
-  /**
-   * 
-   * Count up the memory usage attributable to this node alone.
-   */
-  // line 9 "../../../../MemoryBudget_DBIN.ump"
-   protected long computeMemorySize(){
-    long size = super.computeMemorySize();
-	    return size;
-  }
-
-  // line 14 "../../../../MemoryBudget_DBIN.ump"
-   public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
-    return MemoryBudget.DBIN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
-  }
-
-  // line 18 "../../../../MemoryBudget_DBIN.ump"
-   protected long getMemoryOverhead(MemoryBudget mb){
-    return mb.getDBINOverhead();
   }
   
   //------------------------

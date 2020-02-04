@@ -6,7 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../DatabaseException.ump"
-public class DatabaseException implements Exception
+public class DatabaseException extends Exception
 {
 
   //------------------------
@@ -18,7 +18,9 @@ public class DatabaseException implements Exception
   //------------------------
 
   public DatabaseException()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
@@ -27,22 +29,23 @@ public class DatabaseException implements Exception
   public void delete()
   {}
 
-  // line 8 "../../../DatabaseException.ump"
-   public  DatabaseException(){
-    super();
-  }
 
-  // line 12 "../../../DatabaseException.ump"
+  /**
+   * //    public DatabaseException() {
+   * super();
+   * }
+   */
+  // line 13 "../../../DatabaseException.ump"
    public  DatabaseException(Throwable t){
     super(t);
   }
 
-  // line 16 "../../../DatabaseException.ump"
+  // line 17 "../../../DatabaseException.ump"
    public  DatabaseException(String message){
     super(message);
   }
 
-  // line 20 "../../../DatabaseException.ump"
+  // line 21 "../../../DatabaseException.ump"
    public  DatabaseException(String message, Throwable t){
     super(message, t);
   }

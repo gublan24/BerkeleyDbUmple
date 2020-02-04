@@ -15,6 +15,7 @@ class DbTree {
       }
     }
   static class NameLockResult {
+      public NameLockResult() { }
       CursorImpl nameCursor;
       DatabaseImpl dbImpl;
       NameLN nameLN;

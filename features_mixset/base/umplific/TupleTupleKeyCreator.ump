@@ -13,8 +13,8 @@ class TupleTupleKeyCreator
     /** 
      * Creates a tuple-tuple key creator.
      */
-    public TupleTupleKeyCreator() {
-    }
+   // public TupleTupleKeyCreator() {
+   // }
 
     public boolean createSecondaryKey(SecondaryDatabase db, DatabaseEntry primaryKeyEntry, DatabaseEntry dataEntry,
 	    DatabaseEntry indexKeyEntry) throws DatabaseException {

@@ -71,7 +71,7 @@ class Sequence
 	this.db = db;
 	this.key = copyEntry(key);
 	//this.hook84(db);
-  Label_84:  
+  Label_84:  ;
 
 	Locker locker = null;
 	Cursor cursor = null;

@@ -33,23 +33,10 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
-import com.sleepycat.je.latch.SharedLatch;
-import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Tree.ump"
 // line 3 "../../../../Tree_static.ump"
-// line 3 "../../../../INCompressor_Tree.ump"
-// line 3 "../../../../Latches_Tree.ump"
-// line 3 "../../../../Latches_Tree_inner.ump"
-// line 3 "../../../../LoggingFine_Tree.ump"
-// line 3 "../../../../LoggingFine_Tree_inner.ump"
-// line 3 "../../../../LoggingFiner_Tree.ump"
-// line 3 "../../../../LoggingFiner_Tree_inner.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Tree.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_Tree.ump"
-// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
 public class Tree implements LogWritable,LogReadable
 {
 
@@ -101,10 +88,6 @@ public class Tree implements LogWritable,LogReadable
    */
   // line 92 "../../../../Tree.ump"
    private void init(DatabaseImpl database){
-    // line 23 "../../../../Latches_Tree.ump"
-    rootLatch = LatchSupport.makeSharedLatch("RootLatch", (database != null) ? database.getDbEnvironment() : null);
-            ////original(database);
-    // END OF UMPLE BEFORE INJECTION
     treeStats = new TreeStats();
         this.root = null;
         this.database = database;
@@ -141,10 +124,6 @@ public class Tree implements LogWritable,LogReadable
    */
   // line 119 "../../../../Tree.ump"
    public void setRoot(ChildReference newRoot, boolean notLatched){
-    // line 31 "../../../../Latches_Tree.ump"
-    assert(notLatched || rootLatch.isWriteLockedByCurrentThread());
-            ////original(newRoot, notLatched);
-    // END OF UMPLE BEFORE INJECTION
     root = newRoot;
   }
 
@@ -201,12 +180,8 @@ public class Tree implements LogWritable,LogReadable
     try {
             Label670:; //this.hook670(wrl);
             Label728:; //this.hook728();
-            throw new ReturnObject(wrl.doWork(root));
-            Label670_1:
-//	try {	    //original(wrl);} finally {
-        rootLatch.release();
-        //	}
-;
+            return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root));
+            Label670_1:;
             //throw ReturnHack.returnObject;
         }
         catch (ReturnObject r) {
@@ -219,7 +194,7 @@ public class Tree implements LogWritable,LogReadable
     try {
             Label671:; //this.hook671(wrl);
             Label729:; //this.hook729();
-            throw new ReturnObject(wrl.doWork(root))
+            return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root))
             Label671_1:
             //throw ReturnHack.returnObject;
         }
@@ -242,9 +217,7 @@ public class Tree implements LogWritable,LogReadable
             ArrayList nodeLadder = new ArrayList();
             IN rootIN = null;
             boolean rootNeedsUpdating = false;
-            Label672:
-rootLatch.acquireExclusive();
- ; //this.hook672(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
+            Label672: ; //this.hook672(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
             if (root == null) {
                 return; //throw new ReturnVoid();
             }
@@ -266,13 +239,7 @@ rootLatch.acquireExclusive();
                 subtreeRootIN = detachPoint.child;
             }
             finally {
-              Label672_1:
-releaseNodeLadderLatches(nodeLadder);
-        if (rootIN != null) {
-            rootIN.releaseLatch();
-        }
-        rootLatch.release();
-  ;
+              Label672_1:  ;
 				    }
 
                 //End hook672
@@ -297,10 +264,6 @@ releaseNodeLadderLatches(nodeLadder);
    */
   // line 242 "../../../../Tree.ump"
    private IN logTreeRemoval(IN rootIN, UtilizationTracker tracker) throws DatabaseException{
-    // line 66 "../../../../Latches_Tree.ump"
-    assert rootLatch.isWriteLockedByCurrentThread();
-            //	return //original(rootIN, tracker);
-    // END OF UMPLE BEFORE INJECTION
     IN detachedRootIN = null;
         if ((rootIN.getNEntries() <= 1) && (rootIN.validateSubtreeBeforeDelete(0))) {
             root = null;
@@ -338,10 +301,7 @@ releaseNodeLadderLatches(nodeLadder);
         boolean rootNeedsUpdating = false;
         if (info4 != null) {
             if (info4.parent.isDbRoot()) {
-                Label673:
-assert rootLatch.isWriteLockedByCurrentThread();
-        //original();
-; //this.hook673();
+                Label673:; //this.hook673();
                 root.setLsn(newLsn);
                 rootNeedsUpdating = true;
             }
@@ -368,10 +328,7 @@ assert rootLatch.isWriteLockedByCurrentThread();
     IN in = search(mainKey, SearchType.NORMAL, -1, null, false);
         IN deletedSubtreeRoot = null;
         Label674: ; //deletedSubtreeRoot = this.hook674(idKey, mainKey, in, deletedSubtreeRoot);
-        Label730:
-assert in .isLatchOwner();
-            //original(in);
- ; //this.hook730(in);
+        Label730: ; //this.hook730(in);
         assert in instanceof BIN;
         assert in .getNEntries() > 0;
         int index = in .findEntry(mainKey, false, true);
@@ -421,12 +378,7 @@ assert in .isLatchOwner();
                     logManager.log(new INDupDeleteInfo(duplicateRoot.getNodeId(), duplicateRoot.getMainTreeKey(),
                         duplicateRoot.getDupTreeKey(), database.getId()));
                     subtreeRootIN = duplicateRoot;
-                    Label754:
-if (bin.getNEntries() == 0) {
-					database.getDbEnvironment().addToCompressorQueue(bin, null, false);
-			}
-			//original(bin);
- ; //this.hook754(bin);
+                    Label754: ; //this.hook754(bin);
                 } else {
                     throw CursorsExistException.CURSORS_EXIST;
                 }
@@ -480,10 +432,7 @@ if (bin.getNEntries() == 0) {
     if (dupRoot == null) {
             throw new IllegalArgumentException("getFirstNode passed null root");
         }
-        Label677:
-assert dupRoot.isLatchOwner();
-        //original(dupRoot);
- ; //this.hook677(dupRoot);
+        Label677: ; //this.hook677(dupRoot);
         IN ret = searchSubTree(dupRoot, null, SearchType.LEFT, -1, null, true);
         return (DBIN) ret;
   }
@@ -499,10 +448,7 @@ assert dupRoot.isLatchOwner();
     if (dupRoot == null) {
             throw new IllegalArgumentException("getLastNode passed null root");
         }
-        Label678:
-assert dupRoot.isLatchOwner();
-        //original(dupRoot);
- ; //this.hook678(dupRoot);
+        Label678: ; //this.hook678(dupRoot);
         IN ret = searchSubTree(dupRoot, null, SearchType.RIGHT, -1, null, true);
         return (DBIN) ret;
   }
@@ -532,17 +478,11 @@ assert dupRoot.isLatchOwner();
     if (child == null) {
             throw new IllegalArgumentException("getParentNode passed null");
         }
-        Label680:
-assert child.isLatchOwner();
-        //original(child);
- ; //this.hook680(child);
+        Label680: ; //this.hook680(child);
         byte[] mainTreeKey = child.getMainTreeKey();
         byte[] dupTreeKey = child.getDupTreeKey();
         boolean isRoot = child.isRoot();
-        Label679:
-child.releaseLatch();
-        //original(child);
- ; //this.hook679(child);
+        Label679: ; //this.hook679(child);
         return getParentINForChildIN(child.getNodeId(), child.containsDuplicates(), isRoot, mainTreeKey, dupTreeKey,
             requireExactMatch, updateGeneration, targetLevel, trackingList, true);
   }
@@ -576,10 +516,7 @@ child.releaseLatch();
                     potentialParent = result.parent;
                 }
             } catch (Exception e) {
-                Label681:
-potentialParent.releaseLatchIfOwner();
-        //original(potentialParent);
-; //this.hook681(potentialParent);
+                Label681:; //this.hook681(potentialParent);
                 throw new DatabaseException(e);
             }
         }
@@ -613,10 +550,7 @@ potentialParent.releaseLatchIfOwner();
             } catch (Exception e) {
                 StringBuffer msg = new StringBuffer();
                 if (searchResult != null) {
-                    Label682:
-searchResult.releaseLatchIfOwner();
-        //original(searchResult);
-; //this.hook682(searchResult);
+                    Label682:; //this.hook682(searchResult);
                     msg.append("searchResult=" + searchResult.getClass() + " nodeId=" + searchResult.getNodeId() +
                         " nEntries=" + searchResult.getNEntries());
                 }
@@ -660,13 +594,6 @@ searchResult.releaseLatchIfOwner();
                             }
                         }
                         Label683_1:
-//	try {	    //original(location, mainKey, dupKey, ln, splitsAllowed, findDeletedEntries, searchDupTree, updateGeneration,		    exactSearch, indicateIfExact, childNode);} 
-
-        catch (DatabaseException e) {
-            location.bin.releaseLatchIfOwner();
-            throw e;
-        }
-
                             finally {}
                         //End og hook683
                     }
@@ -692,12 +619,7 @@ searchResult.releaseLatchIfOwner();
             BIN oldBIN = location.bin;
             if (childNode.matchLNByNodeId(location, ln.getNodeId())) {
                 location.index &= ~IN.EXACT_MATCH;
-                Label684:
-if (oldBIN != null) {
-            oldBIN.releaseLatch();
-        }
-        //original(oldBIN);
- ; //this.hook684(oldBIN);
+                Label684: ; //this.hook684(oldBIN);
                 location.bin.latch(updateGeneration);
                 return true;
             } else {
@@ -734,16 +656,11 @@ if (oldBIN != null) {
    private boolean searchDupTreeForDBIN(TreeLocation location, byte [] dupKey, DIN dupRoot, LN ln, boolean findDeletedEntries, boolean indicateIfExact, boolean exactSearch, boolean splitsAllowed, boolean updateGeneration) throws DatabaseException{
     try {
             assert dupKey != null;
-            Label685:
-dupRoot.latch();
- ; //this.hook685(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed,		    updateGeneration);
+            Label685: ; //this.hook685(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed,		    updateGeneration);
             if (maybeSplitDuplicateRoot(location.bin, location.index)) {
                 dupRoot = (DIN) location.bin.fetchTarget(location.index);
             }
-            Label731:
-location.bin.releaseLatch();
-            //original(location);
- ; //this.hook731(location);
+            Label731: ; //this.hook731(location);
             location.lnKey = dupKey;
             if (splitsAllowed) {
                 try {
@@ -773,12 +690,6 @@ location.bin.releaseLatch();
             //hook685
             throw ReturnHack.returnBoolean;
             Label685_1:
-//	try {	    //original(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed, updateGeneration);} 
-        catch (DatabaseException e) {
-            dupRoot.releaseLatchIfOwner();
-            throw e;
-        }
-
         } catch (ReturnBoolean r) {
             return r.value;
         }
@@ -827,10 +738,7 @@ location.bin.releaseLatch();
                 idKey = bin.getKey(0);
             }
             IN next = bin;
-            Label687:
-assert LatchSupport.countLatchesHeld() == 1: LatchSupport.latchesHeldToString();
-        //original();
- ; //this.hook687();
+            Label687: ; //this.hook687();
             IN parent = null;
             IN nextIN = null;
             Label686: ; //this.hook686(traverseWithinDupTree, forward, idKey, next, parent, nextIN);
@@ -841,33 +749,24 @@ assert LatchSupport.countLatchesHeld() == 1: LatchSupport.latchesHeldToString();
                     if (result.exactParentFound) {
                         parent = result.parent;
                     } else {
-                        Label733:
-assert(LatchSupport.countLatchesHeld() == 0): LatchSupport.latchesHeldToString();
-            //original();
-; //this.hook733();
-                        throw new ReturnObject(null);
+                        Label733:; //this.hook733();
+                        return null; //throw new ReturnObject(null);
                     }
                 } else {
                     if (next.isRoot()) {
-                        Label734:
-next.releaseLatch();
-            //original(next);
-; //this.hook734(next);
-                        throw new ReturnObject(null);
+                        Label734:; //this.hook734(next);
+                        return null; //throw new ReturnObject(null);
                     }
                     else {
                         result = getParentINForChildIN(next, true, true);
                         if (result.exactParentFound) {
                             parent = result.parent;
                         } else {
-                            throw new ReturnObject(null);
+                            return null; //throw new ReturnObject(null);
                         }
                     }
                 }
-                Label732:
-assert(LatchSupport.countLatchesHeld() == 1): LatchSupport.latchesHeldToString();
-            //original();
- ; //this.hook732();
+                Label732: ; //this.hook732();
                 int index = parent.findEntry(idKey, false, false);
                 boolean moreEntriesThisBin = false;
                 if (forward) {
@@ -885,26 +784,19 @@ assert(LatchSupport.countLatchesHeld() == 1): LatchSupport.latchesHeldToString()
                     nextIN = (IN) parent.fetchTarget(index);
                     Label735: ; //this.hook735(nextIN);
                     if (nextIN instanceof BIN) {
-                        Label736:
-parent.releaseLatch();
-            //original(parent);
-; //this.hook736(parent);
+                        Label736:; //this.hook736(parent);
                         TreeWalkerStatsAccumulator treeStatsAccumulator = getTreeStatsAccumulator();
                         if (treeStatsAccumulator != null) {
                             nextIN.accumulateStats(treeStatsAccumulator);
                         }
-                        throw new ReturnObject((BIN) nextIN);
+                        return (BIN) nextIN; //throw new ReturnObject((BIN) nextIN);
                     }
                     else {
                         IN ret = searchSubTree(nextIN, null, (forward ? SearchType.LEFT : SearchType.RIGHT), -1, null,
                             true);
-                        Label737:
-parent.releaseLatch();
-            assert LatchSupport.countLatchesHeld() == 1: LatchSupport.latchesHeldToString();
-            //original(parent);
- ; //this.hook737(parent);
+                        Label737: ; //this.hook737(parent);
                         if (ret instanceof BIN) {
-                            throw new ReturnObject((BIN) ret);
+                            return (BIN) ret; //throw new ReturnObject((BIN) ret);
                         } else {
                             throw new InconsistentNodeException("subtree did not have a BIN for leaf");
                         }
@@ -916,19 +808,6 @@ parent.releaseLatch();
             throw ReturnHack.returnObject;
         }
         Label686_1:
-//					try {							//original(traverseWithinDupTree, forward, idKey, next, parent, nextIN);} 
-
-        catch (DatabaseException e) {
-            next.releaseLatchIfOwner();
-            if (parent != null) {
-                parent.releaseLatchIfOwner();
-            }
-            if (nextIN != null) {
-                nextIN.releaseLatchIfOwner();
-            }
-            throw e;
-        }
-
             catch (ReturnObject r) {
                 return (BIN) r.value;
             }
@@ -946,10 +825,7 @@ parent.releaseLatch();
         INList inMemoryINs = env.getInMemoryINs();
         IN curRoot = null;
         curRoot = (IN) root.fetchTarget(database, null);
-        Label689:
-curRoot.latch();
-        //original(curRoot);
- ; //this.hook689(curRoot);
+        Label689: ; //this.hook689(curRoot);
         long curRootLsn = 0;
         long logLsn = 0;
         IN newRoot = null;
@@ -973,8 +849,6 @@ curRoot.latch();
         curRoot.split(newRoot, 0, maxMainTreeEntriesPerNode);
         root.setLsn(newRoot.getLastFullVersion());
         Label688_1:
-curRoot.releaseLatch();
-
             //end of hook688
             treeStats.nRootSplits++;
         Label662: ; //this.hook662(curRoot, curRootLsn, logLsn, newRoot);
@@ -1028,15 +902,9 @@ curRoot.releaseLatch();
         if ((searchType == SearchType.LEFT || searchType == SearchType.RIGHT) && key != null) {
             throw new IllegalArgumentException("searchSubTree passed key and left/right search");
         }
-        Label690:
-assert parent.isLatchOwner();
-        //original(parent);
- ; //this.hook690(parent);
+        Label690: ; //this.hook690(parent);
         if (parent.getNodeId() == nid) {
-            Label691:
-parent.releaseLatch();
-        //original(parent);
-; //this.hook691(parent);
+            Label691:; //this.hook691(parent);
             return null;
         }
         if (binBoundary != null) {
@@ -1077,27 +945,15 @@ parent.releaseLatch();
                     child.accumulateStats(treeStatsAccumulator);
                 }
                 if (child.getNodeId() == nid) {
-                    Label693:
-child.releaseLatch();
-        //original(child);
-; //this.hook693(child);
+                    Label693:; //this.hook693(child);
                     return parent;
                 }
-                Label692:
-parent.releaseLatch();
-        //original(parent);
- ; //this.hook692(parent);
+                Label692: ; //this.hook692(parent);
                 parent = child;
             } while (!(parent instanceof BIN));
             return child;
         } catch (Throwable t) {
-            Label694:
-if (child != null) {
-            child.releaseLatchIfOwner();
-        }
-        parent.releaseLatchIfOwner();
-        //original(parent, child);
-; //this.hook694(parent, child);
+            Label694:; //this.hook694(parent, child);
             if (t instanceof DatabaseException) {
                 throw (DatabaseException) t;
             } else {
@@ -1115,10 +971,7 @@ if (child != null) {
    public void searchDeletableSubTree(IN parent, byte [] key, ArrayList nodeLadder) throws DatabaseException,NodeNotEmptyException,CursorsExistException{
     assert(parent != null);
         assert(key != null);
-        Label695:
-assert parent.isLatchOwner();
-        //original(parent);
- ; //this.hook695(parent);
+        Label695: ; //this.hook695(parent);
         int index;
         IN child = null;
         IN lowestMultipleEntryIN = null;
@@ -1151,18 +1004,12 @@ assert parent.isLatchOwner();
                 if (info5.parent == lowestMultipleEntryIN) {
                     break;
                 } else {
-                    Label696:
-info5.child.releaseLatch();
-        //original(info5);
-; //this.hook696(info5);
+                    Label696:; //this.hook696(info5);
                     iter.remove();
                 }
             }
         } else {
-            Label697:
-releaseNodeLadderLatches(nodeLadder);
-        //original(nodeLadder);
-; //this.hook697(nodeLadder);
+            Label697:; //this.hook697(nodeLadder);
             nodeLadder.clear();
         }
   }
@@ -1197,19 +1044,13 @@ releaseNodeLadderLatches(nodeLadder);
    */
   // line 967 "../../../../Tree.ump"
    private IN searchSubTreeUntilSplit(IN parent, byte [] key, long nid, boolean updateGeneration) throws DatabaseException,SplitRequiredException{
-    try {
+    //  try {
             if (parent == null) {
                 return null;
             }
-            Label699:
-assert parent.isLatchOwner();
-            //original(parent);
- ; //this.hook699(parent);
+            Label699: ; //this.hook699(parent);
             if (parent.getNodeId() == nid) {
-                Label700:
-parent.releaseLatch();
-            //original(parent);
-; //this.hook700(parent);
+                Label700:; //this.hook700(parent);
                 return null;
             }
             int index = 0;
@@ -1217,7 +1058,7 @@ parent.releaseLatch();
             Label698: ; //this.hook698(parent, key, nid, updateGeneration, index, child);
             do {
                 if (parent.getNEntries() == 0) {
-                    throw new ReturnObject(parent);
+                    return parent; //throw new ReturnObject(parent);
                 } else {
                     index = parent.findEntry(key, false, false);
                 }
@@ -1225,41 +1066,25 @@ parent.releaseLatch();
                 child = (IN) parent.fetchTarget(index);
                 child.latch(updateGeneration);
                 if (child.needsSplitting()) {
-                    Label739:
-child.releaseLatch();
-            parent.releaseLatch();
-            //original(parent, child);
-; //this.hook739(parent, child);
+                    Label739:; //this.hook739(parent, child);
                     throw splitRequiredException;
                 }
                 if (child.getNodeId() == nid) {
-                    Label740:
-child.releaseLatch();
-            //original(child);
-; //this.hook740(child);
-                    throw new ReturnObject(parent);
+                    Label740:; //this.hook740(child);
+                    return parent; //throw new ReturnObject(parent);
                 }
-                Label738:
-parent.releaseLatch();
-            //original(parent);
- ; //this.hook738(parent);
+                Label738: ; //this.hook738(parent);
                 parent = child;
             } while (!(parent instanceof BIN));
-            throw new ReturnObject(parent);
-            //hook698
-            Label698_1:
-catch (DatabaseException e) {
-            if (child != null) {
-                child.releaseLatchIfOwner();
-            }
-            parent.releaseLatchIfOwner();
-            throw e;
-        }
 
-                throw ReturnHack.returnObject;
-        } catch (ReturnObject r) {
-            return (IN) r.value;
-        }
+            //hook698
+            Label698_1:            
+            return parent; //throw new ReturnObject(parent);
+               
+// throw ReturnHack.returnObject;
+//        } catch (ReturnObject r) {
+  //          return (IN) r.value;
+  //      }
   }
 
 
@@ -1267,7 +1092,7 @@ catch (DatabaseException e) {
    * 
    * Do pre-emptive splitting in the subtree topped by the "parent" node. Search down the tree until we get to the BIN level, and split any nodes that fit the splittable requirement. Note that more than one node in the path may be splittable. For example, a tree might have a level2 IN and a BIN that are both splittable, and would be encountered by the same insert operation.
    */
-  // line 1012 "../../../../Tree.ump"
+  // line 1014 "../../../../Tree.ump"
    private void forceSplit(IN parent, byte [] key) throws DatabaseException,SplitRequiredException{
     new Tree_forceSplit(this, parent, key).execute();
   }
@@ -1277,29 +1102,24 @@ catch (DatabaseException e) {
    * 
    * Helper to obtain the root IN with proper root latching. Optionally updates the generation of the root when latching it.
    */
-  // line 1019 "../../../../Tree.ump"
+  // line 1021 "../../../../Tree.ump"
    public IN getRootIN(boolean updateGeneration) throws DatabaseException{
-    try {
-            Label702:
-rootLatch.acquireShared();
-            //original();
-; //this.hook702();
+    //      try {
+            Label702:; //this.hook702();
             IN rootIN = null;
             Label701:; //this.hook701(updateGeneration, rootIN);
             if (root != null) {
                 rootIN = (IN) root.fetchTarget(database, null);
                 rootIN.latch(updateGeneration);
             }
-            throw new ReturnObject(rootIN);
-            Label701_1:
-rootLatch.release();
 
+            Label701_1:
                 //end hook 701
                 throw ReturnHack.returnObject;
-        }
-        catch (ReturnObject r) {
-            return (IN) r.value;
-        }
+//        }        catch (ReturnObject r) {
+//            return (IN) r.value;
+//        }
+            return rootIN;
   }
 
 
@@ -1312,7 +1132,7 @@ rootLatch.release();
    * @param cursorthe cursor to update to point to the newly inserted key/datapair, or null if no cursor should be updated.
    * @return true if LN was inserted, false if it was a duplicate duplicate orif an attempt was made to insert a duplicate when allowDuplicates was false.
    */
-  // line 1047 "../../../../Tree.ump"
+  // line 1049 "../../../../Tree.ump"
    public boolean insert(LN ln, byte [] key, boolean allowDuplicates, CursorImpl cursor, LockResult lnLock) throws DatabaseException{
     try {
             validateInsertArgs(allowDuplicates);
@@ -1322,10 +1142,7 @@ rootLatch.release();
             BIN bin = null;
             Label703: ; //this.hook703(ln, key, allowDuplicates, cursor, lnLock, env, logManager, inMemoryINs, bin);
             bin = findBinForInsert(key, logManager, inMemoryINs, cursor);
-            Label741:
-assert bin.isLatchOwner();
-            //original(bin);
- ; //this.hook741(bin);
+            Label741: ; //this.hook741(bin);
             ChildReference newLNRef = new ChildReference(ln, key, DbLsn.NULL_LSN);
             cursor.setBIN(bin);
             int index = bin.insertEntry1(newLNRef);
@@ -1397,8 +1214,6 @@ assert bin.isLatchOwner();
             }
             //end of hook 703
             Label703_1:
-cursor.releaseBIN();
-
                 throw ReturnHack.returnBoolean;
         } catch (ReturnBoolean r) {
             return r.value;
@@ -1411,7 +1226,7 @@ cursor.releaseBIN();
    * Attempts to insert a duplicate at the current cursor BIN position. If an existing dup tree exists, insert into it; otherwise, create a new dup tree and place the new LN and the existing LN into it. If the current BIN entry contains an LN, the caller guarantees that it is not deleted.
    * @return true if duplicate inserted successfully, false if it was aduplicate duplicate, false if a there is an existing LN and allowDuplicates is false.
    */
-  // line 1139 "../../../../Tree.ump"
+  // line 1141 "../../../../Tree.ump"
    private boolean insertDuplicate(byte [] key, BIN bin, LN newLN, LogManager logManager, INList inMemoryINs, CursorImpl cursor, LockResult lnLock, boolean allowDuplicates) throws DatabaseException{
     try {
             EnvironmentImpl env = database.getDbEnvironment();
@@ -1424,10 +1239,7 @@ cursor.releaseBIN();
                 DBIN dupBin = null;
                 Label704: ; //this.hook704(key, bin, newLN, cursor, lnLock, allowDuplicates, env, index, successfulInsert, dupRoot, n, binNid, dupBin);
                 dupRoot = (DIN) n;
-                Label744:
-dupRoot.latch();
-            //original(dupRoot);
- ; //this.hook744(dupRoot);
+                Label744: ; //this.hook744(dupRoot);
                 LockResult dclLockResult = cursor.lockDupCountLN(dupRoot, LockType.WRITE);
                 bin = cursor.getBIN();
                 index = cursor.getIndex();
@@ -1450,10 +1262,7 @@ dupRoot.latch();
                 if (currentLsn != previousLsn) {
                     bin.updateEntry(index, currentLsn);
                 }
-                Label743:
-cursor.releaseBIN();
-            //original(cursor);
- ; //this.hook743(cursor);
+                Label743: ; //this.hook743(cursor);
                 bin = null;
                 dupRoot = null;
                 ChildReference newLNRef = new ChildReference(newLN, newLNKey, DbLsn.NULL_LSN);
@@ -1511,31 +1320,15 @@ cursor.releaseBIN();
                         successfulInsert = false;
                     }
                 }
-                Label742:
-dupBin.releaseLatch();
-            //original(dupBin);
- ; //this.hook742(dupBin);
+                Label742: ; //this.hook742(dupBin);
                 dupBin = null;
                 if (successfulInsert) {
-                    Label746:
-cursor.latchBIN();
-            //original(cursor);
-; //this.hook746(cursor);
+                    Label746:; //this.hook746(cursor);
                     dupRoot = cursor.getLatchedDupRoot(false);
-                    Label745:
-cursor.releaseBIN();
-            //original(cursor);
-; //this.hook745(cursor);
+                    Label745:; //this.hook745(cursor);
                     dupRoot.incrementDuplicateCount(dclLockResult, key, cursor.getLocker(), true);
                 }
                 Label704_1:
-if (dupBin != null) {
-                dupBin.releaseLatchIfOwner();
-            }
-            if (dupRoot != null) {
-                dupRoot.releaseLatchIfOwner();
-            }
-
                     //end hook704
             } else if (n instanceof LN) {
                 if (!allowDuplicates) {
@@ -1546,10 +1339,7 @@ if (dupBin != null) {
                     dupRoot = createDuplicateTree(key, logManager, inMemoryINs, newLN, cursor);
                 } finally {
                     if (dupRoot != null) {
-                        Label705:
-dupRoot.releaseLatch();
-            //original(dupRoot);
-; //this.hook705(dupRoot);
+                        Label705:; //this.hook705(dupRoot);
                         successfulInsert = true;
                     }
                     else {
@@ -1573,7 +1363,7 @@ dupRoot.releaseLatch();
    * @param indexthe index of the duplicate root in bin.
    * @return true if the duplicate root was split.
    */
-  // line 1273 "../../../../Tree.ump"
+  // line 1275 "../../../../Tree.ump"
    private boolean maybeSplitDuplicateRoot(BIN bin, int index) throws DatabaseException{
     DIN curRoot = (DIN) bin.fetchTarget(index);
         if (curRoot.needsSplitting()) {
@@ -1583,16 +1373,11 @@ dupRoot.releaseLatch();
             byte[] rootIdKey = curRoot.getKey(0);
             DIN newRoot = new DIN(database, rootIdKey, maxDupTreeEntriesPerNode, curRoot.getDupKey(),
                 curRoot.getDupCountLNRef(), curRoot.getLevel() + 1);
-            Label707:
-newRoot.latch();
-            //original(newRoot);
- ; //this.hook707(newRoot);
+            Label707: ; //this.hook707(newRoot);
             long curRootLsn = 0;
             long logLsn = 0;
             Label706: ; //this.hook706(bin, index, curRoot, logManager, inMemoryINs, rootIdKey, newRoot, curRootLsn, logLsn);
             Label706_1:
-curRoot.releaseLatch();
-
                 Label663: ; //this.hook663(curRoot, newRoot, curRootLsn, logLsn);
             return true;
         } else {
@@ -1611,7 +1396,7 @@ curRoot.releaseLatch();
    * @param cursorpoints to the target position for this new dup tree.
    * @return the new duplicate subtree root (a DIN). It is latched when it isreturned and the caller should unlatch it. If new entry to be inserted is a duplicate of the existing LN, null is returned.
    */
-  // line 1304 "../../../../Tree.ump"
+  // line 1306 "../../../../Tree.ump"
    private DIN createDuplicateTree(byte [] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor) throws DatabaseException{
     try {
             EnvironmentImpl env = database.getDbEnvironment();
@@ -1636,16 +1421,10 @@ curRoot.releaseLatch();
             long firstDupCountLNLsn = dupCountLN.logProvisional(env, database.getId(), key, DbLsn.NULL_LSN);
             dupRoot = new DIN(database, existingKey, maxDupTreeEntriesPerNode, key,
                 new ChildReference(dupCountLN, key, firstDupCountLNLsn), 2);
-            Label710:
-dupRoot.latch();
-            //original(dupRoot);
- ; //this.hook710(dupRoot);
+            Label710: ; //this.hook710(dupRoot);
             dupRoot.setIsRoot(true);
             dupBin = new DBIN(database, existingKey, maxDupTreeEntriesPerNode, key, 1);
-            Label709:
-dupBin.latch();
-            //original(dupBin);
- ; //this.hook709(dupBin);
+            Label709: ; //this.hook709(dupBin);
             ChildReference newExistingLNRef = new ChildReference(existingLN, existingKey, bin.getLsn(index),
                 bin.getState(index));
             boolean insertOk = dupBin.insertEntry(newExistingLNRef);
@@ -1666,21 +1445,12 @@ dupBin.latch();
             dupIndex &= ~IN.INSERT_SUCCESS;
             cursor.updateDBin(dupBin, dupIndex);
             bin.adjustCursorsForMutation(index, dupBin, dupIndex ^ 1, cursor);
-            Label747:
-dupBin.releaseLatch();
-            //original(dupBin);
- ; //this.hook747(dupBin);
+            Label747: ; //this.hook747(dupBin);
             bin.updateEntry(index, dupRoot, dinLsn);
             bin.setMigrate(index, false);
             Label664: ; //this.hook664(newLN, dupRoot, dupBin, bin, existingLN, dupCountLN, dbinLsn, dinLsn, dupCountLsn, newLsn);
         }
         Label708_1:
-catch (DatabaseException e) {
-                dupBin.releaseLatchIfOwner();
-                dupRoot.releaseLatchIfOwner();
-                throw e;
-            }
-
             finally {}
         //end hook708
         Label708_1:
@@ -1692,7 +1462,7 @@ catch (DatabaseException e) {
    * 
    * Validate args passed to insert. Presently this just means making sure that if they say duplicates are allowed that the database supports duplicates.
    */
-  // line 1367 "../../../../Tree.ump"
+  // line 1369 "../../../../Tree.ump"
    private void validateInsertArgs(boolean allowDuplicates) throws DatabaseException{
     if (allowDuplicates && !database.getSortedDuplicates()) {
             throw new DatabaseException(
@@ -1706,7 +1476,7 @@ catch (DatabaseException e) {
    * Find the BIN that is relevant to the insert. If the tree doesn't exist yet, then create the first IN and BIN.
    * @return the BIN that was found or created and return it latched.
    */
-  // line 1379 "../../../../Tree.ump"
+  // line 1381 "../../../../Tree.ump"
    private BIN findBinForInsert(byte [] key, LogManager logManager, INList inMemoryINs, CursorImpl cursor) throws DatabaseException{
     BIN bin;
         bin = cursor.latchBIN();
@@ -1714,10 +1484,7 @@ catch (DatabaseException e) {
             if (!bin.needsSplitting() && bin.isKeyInBounds(key)) {
                 return bin;
             } else {
-                Label712:
-bin.releaseLatch();
-            //original(bin);
-; //this.hook712(bin);
+                Label712:; //this.hook712(bin);
             }
         }
         boolean rootLatchIsHeld = false;
@@ -1725,29 +1492,16 @@ bin.releaseLatch();
             long logLsn;
         while (true) {
             rootLatchIsHeld = true;
-            Label748:
-rootLatch.acquireShared();
-            //original();
- ; //this.hook748();
+            Label748: ; //this.hook748();
             if (root == null) {
-                Label751:
-rootLatch.release();
-            rootLatch.acquireExclusive();
-            //original();
-; //this.hook751();
+                Label751:; //this.hook751();
                 if (root != null) {
-                    Label752:
-rootLatch.release();
-            //original();
-; //this.hook752();
+                    Label752:; //this.hook752();
                     rootLatchIsHeld = false;
                     continue;
                 }
                 bin = new BIN(database, key, maxMainTreeEntriesPerNode, 1);
-                Label750:
-bin.latch();
-            //original(bin);
-; //this.hook750(bin);
+                Label750:; //this.hook750(bin);
                 logLsn = bin.logProvisional(logManager, null);
                 IN rootIN = new IN(database, key, maxMainTreeEntriesPerNode, 2);
                 rootIN.setIsRoot(true);
@@ -1758,18 +1512,12 @@ bin.latch();
                 root = new ChildReference(rootIN, new byte[0], logLsn);
                 inMemoryINs.add(bin);
                 inMemoryINs.add(rootIN);
-                Label749:
-rootLatch.release();
-            //original();
-; //this.hook749();
+                Label749:; //this.hook749();
                 rootLatchIsHeld = false;
                 break;
             }
             else {
-                Label753:
-rootLatch.release();
-            //original();
-; //this.hook753();
+                Label753:; //this.hook753();
                 rootLatchIsHeld = false;
                 IN in = searchSplitsAllowed(key, -1, true);
                 if ( in == null) {
@@ -1781,10 +1529,6 @@ rootLatch.release();
             }
         }
         Label711_1:
-if (rootLatchIsHeld) {
-                rootLatch.release();
-            }
-
             //end hook711
             if (ckptHook != null) {
                 ckptHook.doHook();
@@ -1792,19 +1536,15 @@ if (rootLatchIsHeld) {
         return bin;
   }
 
-  // line 1440 "../../../../Tree.ump"
+  // line 1442 "../../../../Tree.ump"
    private void accountForSubtreeRemoval(INList inList, IN subtreeRoot, UtilizationTracker tracker) throws DatabaseException{
     try {
-            Label713:
-inList.latchMajor();
-; //this.hook713(inList, subtreeRoot, tracker);
+            Label713:; //this.hook713(inList, subtreeRoot, tracker);
             //original(inList, subtreeRoot, tracker);
             subtreeRoot.accountForSubtreeRemoval(inList, tracker);
         }
         finally {
-            Label713_1:
-inList.releaseMajorLatch();
-;
+            Label713_1:;
         }
 
         //end
@@ -1817,7 +1557,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogWritable#getLogSize
    */
-  // line 1458 "../../../../Tree.ump"
+  // line 1460 "../../../../Tree.ump"
    public int getLogSize(){
     int size = LogUtils.getBooleanLogSize();
         if (root != null) {
@@ -1831,7 +1571,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogWritable#writeToLog
    */
-  // line 1469 "../../../../Tree.ump"
+  // line 1471 "../../../../Tree.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeBoolean(logBuffer, (root != null));
         if (root != null) {
@@ -1844,7 +1584,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#readFromLog
    */
-  // line 1479 "../../../../Tree.ump"
+  // line 1481 "../../../../Tree.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion){
     boolean rootExists = LogUtils.readBoolean(itemBuffer);
         if (rootExists) {
@@ -1858,7 +1598,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#dumpLog
    */
-  // line 1490 "../../../../Tree.ump"
+  // line 1492 "../../../../Tree.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<root>");
         if (root != null) {
@@ -1872,7 +1612,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#isTransactional
    */
-  // line 1501 "../../../../Tree.ump"
+  // line 1503 "../../../../Tree.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -1882,7 +1622,7 @@ inList.releaseMajorLatch();
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 1508 "../../../../Tree.ump"
+  // line 1510 "../../../../Tree.ump"
    public long getTransactionId(){
     return 0;
   }
@@ -1892,7 +1632,7 @@ inList.releaseMajorLatch();
    * 
    * rebuildINList is used by recovery to add all the resident nodes to the IN list.
    */
-  // line 1515 "../../../../Tree.ump"
+  // line 1517 "../../../../Tree.ump"
    public void rebuildINList() throws DatabaseException{
     INList inMemoryList = database.getDbEnvironment().getInMemoryINs();
         if (root != null) {
@@ -1904,12 +1644,12 @@ inList.releaseMajorLatch();
         }
   }
 
-  // line 1526 "../../../../Tree.ump"
+  // line 1528 "../../../../Tree.ump"
    public void dump() throws DatabaseException{
     System.out.println(dumpString(0));
   }
 
-  // line 1530 "../../../../Tree.ump"
+  // line 1532 "../../../../Tree.ump"
    public String dumpString(int nSpaces) throws DatabaseException{
     StringBuffer sb = new StringBuffer();
         sb.append(TreeUtils.indent(nSpaces));
@@ -1936,7 +1676,7 @@ inList.releaseMajorLatch();
    * 
    * Unit test support to validate subtree pruning. Didn't want to make root access public.
    */
-  // line 1554 "../../../../Tree.ump"
+  // line 1556 "../../../../Tree.ump"
   public boolean validateDelete(int index) throws DatabaseException{
     try {
             Label715:; //this.hook715(index);
@@ -1955,7 +1695,7 @@ inList.releaseMajorLatch();
    * 
    * Debugging check that all resident nodes are on the INList and no stray nodes are present in the unused portion of the IN arrays.
    */
-  // line 1570 "../../../../Tree.ump"
+  // line 1572 "../../../../Tree.ump"
    public void validateINList(IN parent) throws DatabaseException{
     if (parent == null) {
             parent = (IN) root.getTarget();
@@ -1989,69 +1729,19 @@ inList.releaseMajorLatch();
         }
   }
 
-  // line 1603 "../../../../Tree.ump"
+  // line 1605 "../../../../Tree.ump"
    public void setWaitHook(TestHook hook){
     waitHook = hook;
   }
 
-  // line 1607 "../../../../Tree.ump"
+  // line 1609 "../../../../Tree.ump"
    public void setSearchHook(TestHook hook){
     searchHook = hook;
   }
 
-  // line 1611 "../../../../Tree.ump"
+  // line 1613 "../../../../Tree.ump"
    public void setCkptHook(TestHook hook){
     ckptHook = hook;
-  }
-
-  // line 12 "../../../../Latches_Tree.ump"
-   private void releaseNodeLadderLatches(ArrayList nodeLadder){
-    ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
-        while (iter.hasPrevious()) {
-            SplitInfo info3 = (SplitInfo) iter.previous();
-            info3.child.releaseLatch();
-        }
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 10 "../../../../LoggingFine_Tree.ump"
-   private void traceSplitRoot(Level level, String splitType, IN newRoot, long newRootLsn, IN oldRoot, long oldRootLsn){
-    new Tree_traceSplitRoot(this, level, splitType, newRoot, newRootLsn, oldRoot, oldRootLsn).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 18 "../../../../LoggingFine_Tree.ump"
-   private void traceMutate(Level level, BIN theBin, LN existingLn, LN newLn, long newLsn, DupCountLN dupCountLN, long dupRootLsn, DIN dupRoot, long ddinLsn, DBIN dupBin, long dbinLsn){
-    new Tree_traceMutate(this, level, theBin, existingLn, newLn, newLsn, dupCountLN, dupRootLsn, dupRoot, ddinLsn,
-		dupBin, dbinLsn).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 9 "../../../../LoggingFiner_Tree.ump"
-   private void traceInsert(Level level, EnvironmentImpl env, BIN insertingBin, LN ln, long lnLsn, int index){
-    new Tree_traceInsert(this, level, env, insertingBin, ln, lnLsn, index).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 17 "../../../../LoggingFiner_Tree.ump"
-   private void traceInsertDuplicate(Level level, EnvironmentImpl env, BIN insertingDBin, LN ln, long lnLsn, long binNid){
-    new Tree_traceInsertDuplicate(this, level, env, insertingDBin, ln, lnLsn, binNid).execute();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -2103,7 +1793,6 @@ inList.releaseMajorLatch();
   
   
   // line 12 "../../../../Tree_static.ump"
-  // line 101 "../../../../Latches_Tree_inner.ump"
   public class RootChildReference extends ChildReference
   {
   
@@ -2146,40 +1835,25 @@ inList.releaseMajorLatch();
   
     // line 24 "../../../../Tree_static.ump"
      public Node fetchTarget(DatabaseImpl database, IN in) throws DatabaseException{
-      Label666:
-  if (getTarget() == null && !rootLatch.isWriteLockedByCurrentThread()) {
-            rootLatch.release();
-            rootLatch.acquireExclusive();
-          }
-          //original();
-             ;  //this.hook666();
+      Label666:           ;  //this.hook666();
           return super.fetchTarget(database,in);
     }
   
     // line 28 "../../../../Tree_static.ump"
      public void setTarget(Node target){
-      Label667:
-  assert rootLatch.isWriteLockedByCurrentThread();
-          //original();
-             ;  //this.hook667();
+      Label667:           ;  //this.hook667();
           super.setTarget(target);
     }
   
     // line 32 "../../../../Tree_static.ump"
      public void clearTarget(){
-      Label668:
-  assert rootLatch.isWriteLockedByCurrentThread();
-          //original();
-             ;  //this.hook668();
+      Label668:           ;  //this.hook668();
           super.clearTarget();
     }
   
     // line 36 "../../../../Tree_static.ump"
      public void setLsn(long lsn){
-      Label669:
-  assert rootLatch.isWriteLockedByCurrentThread();
-          //original();
-             ;  //this.hook669();
+      Label669:           ;  //this.hook669();
           super.setLsn(lsn);
     }
   
@@ -2280,7 +1954,6 @@ inList.releaseMajorLatch();
   
   @MethodObject
   // line 54 "../../../../Tree_static.ump"
-  // line 56 "../../../../Latches_Tree_inner.ump"
   public static class Tree_searchSplitsAllowed
   {
   
@@ -2314,12 +1987,7 @@ inList.releaseMajorLatch();
     public IN execute() throws DatabaseException{
       insertTarget=null;
           while (insertTarget == null) {
-            Label717:
-  _this.rootLatch.acquireShared();
-          rootLatched=true;
-          rootLatchedExclusive=false;
-          //original();
-             ;  //this.hook717();
+            Label717:           ;  //this.hook717();
             rootIN=null;
             Label716:           ;  //this.hook716();
   try{
@@ -2328,46 +1996,21 @@ inList.releaseMajorLatch();
               rootIN=(IN)_this.root.fetchTarget(_this.database,null);
               if (rootIN.needsSplitting()) {
                 b=true;
-                Label721:
-  b=!rootLatchedExclusive;
-          if (b) {
-            rootIN=null;
-            _this.rootLatch.release();
-            _this.rootLatch.acquireExclusive();
-            rootLatchedExclusive=true;
-          }
-          //original();
-             ;  //this.hook721();
+                Label721:           ;  //this.hook721();
                 if (b)             continue;
-                Label720:
-  _this.splitRoot();
-          _this.rootLatch.release();
-          rootLatched=false;
-          //original();
-             ;  //this.hook720();
+                Label720:           ;  //this.hook720();
                 env=_this.database.getDbEnvironment();
                 env.getDbMapTree().modifyDbRoot(_this.database);
-                Label719:
-  rootLatched=true;
-          _this.rootLatch.acquireExclusive();
-          //original();
-             ;  //this.hook719();
+                Label719:           ;  //this.hook719();
                 rootIN=(IN)_this.root.fetchTarget(_this.database,null);
               }
-              Label718:
-  rootIN.latch();
-          //original();
-             ;  //this.hook718();
+              Label718:           ;  //this.hook718();
             }
             break;
           }
   }
   finally {
   Label716_1:
-  if (rootLatched) {
-              _this.rootLatch.release();
-            }
-  
   }
   //End of hook716
             if (rootIN == null) {
@@ -2415,7 +2058,6 @@ inList.releaseMajorLatch();
   
   
   // line 146 "../../../../Tree_static.ump"
-  // line 5 "../../../../Latches_Tree_inner.ump"
   public static class Tree_forceSplit
   {
   
@@ -2454,20 +2096,10 @@ inList.releaseMajorLatch();
           child=null;
           origParent=parent;
           iter=null;
-          Label722:
-  isRootLatched=false;
-          //original();
-             ;  //this.hook722();
+          Label722:           ;  //this.hook722();
           success=false;
           try {
-            Label723:
-  if (origParent.isDbRoot()) {
-            _this.rootLatch.acquireExclusive();
-            isRootLatched=true;
-          }
-          origParent.latch();
-          //original();
-             ;  //this.hook723();
+            Label723:           ;  //this.hook723();
             if (origParent.needsSplitting() || !origParent.isRoot()) {
               throw _this.splitRequiredException;
             }
@@ -2490,10 +2122,7 @@ inList.releaseMajorLatch();
                 break;
               }
      else {
-                Label724:
-  child.latch();
-          //original();
-             ;  //this.hook724();
+                Label724:           ;  //this.hook724();
                 nodeLadder.add(new SplitInfo(parent,child,index));
               }
               parent=child;
@@ -2519,10 +2148,7 @@ inList.releaseMajorLatch();
                 lastParentForSplit=parent.getNodeId();
                 startedSplits=true;
                 if (parent.isDbRoot()) {
-                  Label726:
-  assert isRootLatched;
-          //original();
-             ;  //this.hook726();
+                  Label726:           ;  //this.hook726();
                   _this.root.setLsn(parent.getLastFullVersion());
                   parent.setDirty(true);
                 }
@@ -2539,35 +2165,14 @@ inList.releaseMajorLatch();
                   parent.updateEntry(index,newLsn);
                 }
               }
-              Label725:
-  child.releaseLatch();
-          //original();
-             ;  //this.hook725();
+              Label725:           ;  //this.hook725();
               child=null;
               iter.remove();
             }
             success=true;
           }
       finally {
-            Label727:
-  if (!success) {
-            if (child != null) {
-              child.releaseLatchIfOwner();
-            }
-            origParent.releaseLatchIfOwner();
-          }
-          if (nodeLadder.size() > 0) {
-            iter=nodeLadder.listIterator(nodeLadder.size());
-            while (iter.hasPrevious()) {
-              info2=(SplitInfo)iter.previous();
-              info2.child.releaseLatchIfOwner();
-            }
-          }
-          if (isRootLatched) {
-            _this.rootLatch.release();
-          }
-          //original();
-             ;  //this.hook727();
+            Label727:           ;  //this.hook727();
           }
     }
     
@@ -2615,369 +2220,6 @@ inList.releaseMajorLatch();
     protected SplitInfo info2 ;
   
     
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFine_Tree_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceMutate
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceMutate()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFine_Tree_inner.ump"
-    public  Tree_traceMutate(Tree _this, Level level, BIN theBin, LN existingLn, LN newLn, long newLsn, DupCountLN dupCountLN, long dupRootLsn, DIN dupRoot, long ddinLsn, DBIN dupBin, long dbinLsn){
-      this._this=_this;
-          this.level=level;
-          this.theBin=theBin;
-          this.existingLn=existingLn;
-          this.newLn=newLn;
-          this.newLsn=newLsn;
-          this.dupCountLN=dupCountLN;
-          this.dupRootLsn=dupRootLsn;
-          this.dupRoot=dupRoot;
-          this.ddinLsn=ddinLsn;
-          this.dupBin=dupBin;
-          this.dbinLsn=dbinLsn;
-    }
-  
-    // line 20 "../../../../LoggingFine_Tree_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-      logger=_this.database.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_MUTATE);
-                sb.append(" existingLn=");
-                sb.append(existingLn.getNodeId());
-                sb.append(" newLn=");
-                sb.append(newLn.getNodeId());
-                sb.append(" newLnLsn=");
-                sb.append(DbLsn.getNoFormatString(newLsn));
-                sb.append(" dupCountLN=");
-                sb.append(dupCountLN.getNodeId());
-                sb.append(" dupRootLsn=");
-                sb.append(DbLsn.getNoFormatString(dupRootLsn));
-                sb.append(" rootdin=");
-                sb.append(dupRoot.getNodeId());
-                sb.append(" ddinLsn=");
-                sb.append(DbLsn.getNoFormatString(ddinLsn));
-                sb.append(" dbin=");
-                sb.append(dupBin.getNodeId());
-                sb.append(" dbinLsn=");
-                sb.append(DbLsn.getNoFormatString(dbinLsn));
-                sb.append(" bin=");
-                sb.append(theBin.getNodeId());
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 21 "../../../../LoggingFine_Tree_inner.ump"
-    protected Tree _this ;
-  // line 22 "../../../../LoggingFine_Tree_inner.ump"
-    protected Level level ;
-  // line 23 "../../../../LoggingFine_Tree_inner.ump"
-    protected BIN theBin ;
-  // line 24 "../../../../LoggingFine_Tree_inner.ump"
-    protected LN existingLn ;
-  // line 25 "../../../../LoggingFine_Tree_inner.ump"
-    protected LN newLn ;
-  // line 26 "../../../../LoggingFine_Tree_inner.ump"
-    protected long newLsn ;
-  // line 27 "../../../../LoggingFine_Tree_inner.ump"
-    protected DupCountLN dupCountLN ;
-  // line 28 "../../../../LoggingFine_Tree_inner.ump"
-    protected long dupRootLsn ;
-  // line 29 "../../../../LoggingFine_Tree_inner.ump"
-    protected DIN dupRoot ;
-  // line 30 "../../../../LoggingFine_Tree_inner.ump"
-    protected long ddinLsn ;
-  // line 31 "../../../../LoggingFine_Tree_inner.ump"
-    protected DBIN dupBin ;
-  // line 32 "../../../../LoggingFine_Tree_inner.ump"
-    protected long dbinLsn ;
-  // line 33 "../../../../LoggingFine_Tree_inner.ump"
-    protected Logger logger ;
-  // line 34 "../../../../LoggingFine_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 36 "../../../../LoggingFine_Tree_inner.ump"
-  // line 35 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceSplitRoot
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceSplitRoot()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 38 "../../../../LoggingFine_Tree_inner.ump"
-    public  Tree_traceSplitRoot(Tree _this, Level level, String splitType, IN newRoot, long newRootLsn, IN oldRoot, long oldRootLsn){
-      this._this=_this;
-          this.level=level;
-          this.splitType=splitType;
-          this.newRoot=newRoot;
-          this.newRootLsn=newRootLsn;
-          this.oldRoot=oldRoot;
-          this.oldRootLsn=oldRootLsn;
-    }
-  
-    // line 47 "../../../../LoggingFine_Tree_inner.ump"
-    public void execute(){
-      // line 37 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-      logger=_this.database.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(splitType);
-                sb.append(" newRoot=").append(newRoot.getNodeId());
-                sb.append(" newRootLsn=").append(DbLsn.getNoFormatString(newRootLsn));
-                sb.append(" oldRoot=").append(oldRoot.getNodeId());
-                sb.append(" oldRootLsn=").append(DbLsn.getNoFormatString(oldRootLsn));
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 48 "../../../../LoggingFine_Tree_inner.ump"
-    protected Tree _this ;
-  // line 49 "../../../../LoggingFine_Tree_inner.ump"
-    protected Level level ;
-  // line 50 "../../../../LoggingFine_Tree_inner.ump"
-    protected String splitType ;
-  // line 51 "../../../../LoggingFine_Tree_inner.ump"
-    protected IN newRoot ;
-  // line 52 "../../../../LoggingFine_Tree_inner.ump"
-    protected long newRootLsn ;
-  // line 53 "../../../../LoggingFine_Tree_inner.ump"
-    protected IN oldRoot ;
-  // line 54 "../../../../LoggingFine_Tree_inner.ump"
-    protected long oldRootLsn ;
-  // line 55 "../../../../LoggingFine_Tree_inner.ump"
-    protected Logger logger ;
-  // line 56 "../../../../LoggingFine_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFiner_Tree_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceInsertDuplicate
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceInsertDuplicate()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFiner_Tree_inner.ump"
-    public  Tree_traceInsertDuplicate(Tree _this, Level level, EnvironmentImpl env, BIN insertingDBin, LN ln, long lnLsn, long binNid){
-      this._this=_this;
-          this.level=level;
-          this.env=env;
-          this.insertingDBin=insertingDBin;
-          this.ln=ln;
-          this.lnLsn=lnLsn;
-          this.binNid=binNid;
-    }
-  
-    // line 15 "../../../../LoggingFiner_Tree_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-      logger=env.getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_INSERT_DUPLICATE);
-                sb.append(" dbin=");
-                sb.append(insertingDBin.getNodeId());
-                sb.append(" bin=");
-                sb.append(binNid);
-                sb.append(" ln=");
-                sb.append(ln.getNodeId());
-                sb.append(" lnLsn=");
-                sb.append(DbLsn.getNoFormatString(lnLsn));
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 16 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Tree _this ;
-  // line 17 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Level level ;
-  // line 18 "../../../../LoggingFiner_Tree_inner.ump"
-    protected EnvironmentImpl env ;
-  // line 19 "../../../../LoggingFiner_Tree_inner.ump"
-    protected BIN insertingDBin ;
-  // line 20 "../../../../LoggingFiner_Tree_inner.ump"
-    protected LN ln ;
-  // line 21 "../../../../LoggingFiner_Tree_inner.ump"
-    protected long lnLsn ;
-  // line 22 "../../../../LoggingFiner_Tree_inner.ump"
-    protected long binNid ;
-  // line 23 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Logger logger ;
-  // line 24 "../../../../LoggingFiner_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 26 "../../../../LoggingFiner_Tree_inner.ump"
-  // line 23 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceInsert
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceInsert()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 28 "../../../../LoggingFiner_Tree_inner.ump"
-    public  Tree_traceInsert(Tree _this, Level level, EnvironmentImpl env, BIN insertingBin, LN ln, long lnLsn, int index){
-      this._this=_this;
-          this.level=level;
-          this.env=env;
-          this.insertingBin=insertingBin;
-          this.ln=ln;
-          this.lnLsn=lnLsn;
-          this.index=index;
-    }
-  
-    // line 37 "../../../../LoggingFiner_Tree_inner.ump"
-    public void execute(){
-      // line 25 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-      logger=env.getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_INSERT);
-                sb.append(" bin=");
-                sb.append(insertingBin.getNodeId());
-                sb.append(" ln=");
-                sb.append(ln.getNodeId());
-                sb.append(" lnLsn=");
-                sb.append(DbLsn.getNoFormatString(lnLsn));
-                sb.append(" index=");
-                sb.append(index);
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 38 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Tree _this ;
-  // line 39 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Level level ;
-  // line 40 "../../../../LoggingFiner_Tree_inner.ump"
-    protected EnvironmentImpl env ;
-  // line 41 "../../../../LoggingFiner_Tree_inner.ump"
-    protected BIN insertingBin ;
-  // line 42 "../../../../LoggingFiner_Tree_inner.ump"
-    protected LN ln ;
-  // line 43 "../../../../LoggingFiner_Tree_inner.ump"
-    protected long lnLsn ;
-  // line 44 "../../../../LoggingFiner_Tree_inner.ump"
-    protected int index ;
-  // line 45 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Logger logger ;
-  // line 46 "../../../../LoggingFiner_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -3015,72 +2257,6 @@ inList.releaseMajorLatch();
   private TestHook searchHook ;
 // line 69 "../../../../Tree.ump"
   private TestHook ckptHook ;
-// line 8 "../../../../Latches_Tree.ump"
-  private SharedLatch rootLatch ;
-
-// line 22 "../../../../LoggingFine_Tree.ump"
-  protected void hook661: delete (byte , UtilizationTracker ) 
-  {
-    RecoveryManager.traceRootDeletion(Level.FINE, database);
-//	original();
-  }
-
-// line 27 "../../../../LoggingFine_Tree.ump"
-  protected void hook662: splitRoot () 
-  {
-    traceSplitRoot(Level.FINE, TRACE_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
-//	original(curRoot, curRootLsn, logLsn, newRoot);
-  }
-
-// line 32 "../../../../LoggingFine_Tree.ump"
-  protected void hook663: maybeSplitDuplicateRoot (BIN , int ) 
-  {
-    traceSplitRoot(Level.FINE, TRACE_DUP_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
-//	original(curRoot, newRoot, curRootLsn, logLsn);
-  }
-
-// line 37 "../../../../LoggingFine_Tree.ump"
-  protected void hook664: createDuplicateTree (byte , LogManager , INList , LN , CursorImpl ) 
-  {
-    traceMutate(Level.FINE, bin, existingLN, newLN, newLsn, dupCountLN, dupCountLsn, dupRoot, dinLsn, dupBin,		dbinLsn);
-//	original(newLN, dupRoot, dupBin, bin, existingLN, dupCountLN, dbinLsn, dinLsn, dupCountLsn, newLsn);
-  }
-
-// line 42 "../../../../LoggingFine_Tree.ump"
-  protected void hook665: accountForSubtreeRemoval (INList , IN , UtilizationTracker ) 
-  {
-    Tracer.trace(Level.FINE, database.getDbEnvironment(),
-		"SubtreeRemoval: subtreeRoot = " + subtreeRoot.getNodeId());
-	//original(subtreeRoot);
-  }
-
-// line 20 "../../../../LoggingFiner_Tree.ump"
-  protected void hook657: insert (LN , byte , boolean , CursorImpl , LockResult ) 
-  {
-    traceInsert(Level.FINER, env, bin, ln, newLsn, index);
-	//original(ln, env, bin, index, newLsn);
-  }
-
-// line 25 "../../../../LoggingFiner_Tree.ump"
-  protected void hook658: insert (LN , byte , boolean , CursorImpl , LockResult ) 
-  {
-    traceInsert(Level.FINER, env, bin, ln, newLsn, index);
-	//original(ln, env, bin, index, newLsn);
-  }
-
-// line 30 "../../../../LoggingFiner_Tree.ump"
-  protected void hook659: insertDuplicate (byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) 
-  {
-    traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
-	//original(newLN, binNid, dupBin, newLsn);
-  }
-
-// line 35 "../../../../LoggingFiner_Tree.ump"
-  protected void hook660: insertDuplicate (byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) 
-  {
-    traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
-	//original(newLN, binNid, dupBin, newLsn);
-  }
 
   
 }

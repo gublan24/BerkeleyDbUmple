@@ -24,13 +24,6 @@ import java.util.Comparator;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../BIN.ump"
-// line 3 "../../../../MemoryBudget_BIN.ump"
-// line 3 "../../../../Evictor_BIN.ump"
-// line 3 "../../../../INCompressor_BIN.ump"
-// line 3 "../../../../Verifier_BIN.ump"
-// line 3 "../../../../Latches_BIN.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_BIN.ump"
-// line 3 "../../../../Derivative_Latches_Evictor_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -56,19 +49,19 @@ public class BIN extends IN implements LoggableObject
     super.delete();
   }
 
-  // line 39 "../../../../BIN.ump"
+  // line 38 "../../../../BIN.ump"
    public  BIN(){
     cursorSet = new TinyHashSet();
-	numDeltasSinceLastFull = 0;
-	prohibitNextDelta = false;
+  numDeltasSinceLastFull = 0;
+  prohibitNextDelta = false;
   }
 
-  // line 45 "../../../../BIN.ump"
+  // line 44 "../../../../BIN.ump"
    public  BIN(DatabaseImpl db, byte [] identifierKey, int maxEntriesPerNode, int level){
     super(db, identifierKey, maxEntriesPerNode, level);
-	cursorSet = new TinyHashSet();
-	numDeltasSinceLastFull = 0;
-	prohibitNextDelta = false;
+  cursorSet = new TinyHashSet();
+  numDeltasSinceLastFull = 0;
+  prohibitNextDelta = false;
   }
 
 
@@ -76,7 +69,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * Create a holder object that encapsulates information about this BIN for the INCompressor.
    */
-  // line 55 "../../../../BIN.ump"
+  // line 54 "../../../../BIN.ump"
    public BINReference createReference(){
     return new BINReference(getNodeId(), getDatabase().getId(), getIdentifierKey());
   }
@@ -86,7 +79,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * Create a new BIN. Need this because we can't call newInstance() without getting a 0 for nodeid.
    */
-  // line 62 "../../../../BIN.ump"
+  // line 61 "../../../../BIN.ump"
    protected IN createNewInstance(byte [] identifierKey, int maxEntries, int level){
     return new BIN(getDatabase(), identifierKey, maxEntries, level);
   }
@@ -96,7 +89,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * Get the key (dupe or identifier) in child that is used to locate it in 'this' node. For BIN's, the child node has to be a DIN so we use the Dup Key to cross the main-tree/dupe-tree boundary.
    */
-  // line 69 "../../../../BIN.ump"
+  // line 68 "../../../../BIN.ump"
    public byte[] getChildKey(IN child) throws DatabaseException{
     return child.getDupKey();
   }
@@ -106,7 +99,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * @return the log entry type to use for bin delta log entries.
    */
-  // line 76 "../../../../BIN.ump"
+  // line 75 "../../../../BIN.ump"
   public LogEntryType getBINDeltaType(){
     return LogEntryType.LOG_BIN_DELTA;
   }
@@ -116,7 +109,7 @@ public class BIN extends IN implements LoggableObject
    * 
    * @return location of last logged delta version. If never set, return null.
    */
-  // line 83 "../../../../BIN.ump"
+  // line 82 "../../../../BIN.ump"
    public long getLastDeltaVersion(){
     return lastDeltaVersion;
   }
@@ -127,58 +120,46 @@ public class BIN extends IN implements LoggableObject
    * If cleaned or compressed, must log full version.
    * @Override
    */
-  // line 91 "../../../../BIN.ump"
+  // line 90 "../../../../BIN.ump"
    public void setProhibitNextDelta(){
     prohibitNextDelta = true;
   }
 
-  // line 96 "../../../../BIN.ump"
+  // line 95 "../../../../BIN.ump"
    protected void descendOnParentSearch(SearchResult result, boolean targetContainsDuplicates, boolean targetIsRoot, long targetNodeId, Node child, boolean requireExactMatch) throws DatabaseException{
     if (child.canBeAncestor(targetContainsDuplicates)) {
-	    if (targetContainsDuplicates && targetIsRoot) {
-		long childNid = child.getNodeId();
-		Label603:
-((IN) child).releaseLatch();
-        //original(child);
- //this.hook603(child);
-		result.keepSearching = false;
-		if (childNid == targetNodeId) {
-		    result.exactParentFound = true;
-		} else {
-		    result.exactParentFound = false;
-		}
-		if (requireExactMatch && !result.exactParentFound) {
-		    result.parent = null;
-		    Label604:
-releaseLatch();
-        //original();
- //this.hook604();
-		} else {
-		    result.parent = this;
-		}
-	    } else {
-		Label605:
-releaseLatch();
-        //original();
- //this.hook605();
-		result.parent = (IN) child;
-	    }
-	} else {
-	    result.exactParentFound = false;
-	    result.keepSearching = false;
-	    if (!requireExactMatch && targetContainsDuplicates) {
-		result.parent = this;
-	    } else {
-		Label606:
-releaseLatch();
-        //original();
- //this.hook606();
-		result.parent = null;
-	    }
-	}
+   if (targetContainsDuplicates && targetIsRoot) {
+    long childNid = child.getNodeId();
+    Label603: //this.hook603(child);
+     result.keepSearching = false;
+    if (childNid == targetNodeId) {
+     result.exactParentFound = true;
+    } else {
+     result.exactParentFound = false;
+    }
+    if (requireExactMatch && !result.exactParentFound) {
+     result.parent = null;
+     Label604: //this.hook604();
+    } else {
+     result.parent = this;
+    }
+   } else {
+    Label605: //this.hook605();
+     result.parent = (IN) child;
+   }
+  } else {
+   result.exactParentFound = false;
+   result.keepSearching = false;
+   if (!requireExactMatch && targetContainsDuplicates) {
+    result.parent = this;
+   } else {
+    Label606: //this.hook606();
+     result.parent = null;
+   }
+  }
   }
 
-  // line 129 "../../../../BIN.ump"
+  // line 128 "../../../../BIN.ump"
    protected boolean canBeAncestor(boolean targetContainsDuplicates){
     return targetContainsDuplicates;
   }
@@ -188,7 +169,7 @@ releaseLatch();
    * 
    * @Override
    */
-  // line 136 "../../../../BIN.ump"
+  // line 135 "../../../../BIN.ump"
   public boolean isEvictionProhibited(){
     return (nCursors() > 0);
   }
@@ -198,17 +179,17 @@ releaseLatch();
    * 
    * @Override
    */
-  // line 143 "../../../../BIN.ump"
+  // line 142 "../../../../BIN.ump"
   public boolean hasNonLNChildren(){
     for (int i = 0; i < getNEntries(); i++) {
-	    Node node = getTarget(i);
-	    if (node != null) {
-		if (!(node instanceof LN)) {
-		    return true;
-		}
-	    }
-	}
-	return false;
+   Node node = getTarget(i);
+   if (node != null) {
+    if (!(node instanceof LN)) {
+     return true;
+    }
+   }
+  }
+  return false;
   }
 
 
@@ -216,7 +197,7 @@ releaseLatch();
    * 
    * Indicates whether entry 0's key is "special" in that it always compares less than any other key. BIN's don't have the special key, but IN's do.
    */
-  // line 158 "../../../../BIN.ump"
+  // line 157 "../../../../BIN.ump"
   public boolean entryZeroKeyComparesLow(){
     return false;
   }
@@ -227,17 +208,14 @@ releaseLatch();
    * Mark this entry as deleted, using the delete flag. Only BINS may do this.
    * @param indexindicates target entry
    */
-  // line 166 "../../../../BIN.ump"
+  // line 165 "../../../../BIN.ump"
    public void setKnownDeleted(int index){
     super.setKnownDeleted(index);
-	//this.hook610(index);
-Label610:
-updateMemorySize(getTarget(index), null);
-	//original(index);
-
-	setMigrate(index, false);
-	super.setTarget(index, null);
-	setDirty(true);
+  //this.hook610(index);
+  Label610:
+   setMigrate(index, false);
+  super.setTarget(index, null);
+  setDirty(true);
   }
 
 
@@ -246,11 +224,11 @@ updateMemorySize(getTarget(index), null);
    * Mark this entry as deleted, using the delete flag. Only BINS may do this. Don't null the target field. This is used so that an LN can still be locked by the compressor even if the entry is knownDeleted. See BIN.compress.
    * @param indexindicates target entry
    */
-  // line 179 "../../../../BIN.ump"
+  // line 178 "../../../../BIN.ump"
    public void setKnownDeletedLeaveTarget(int index){
     setMigrate(index, false);
-	super.setKnownDeleted(index);
-	setDirty(true);
+  super.setKnownDeleted(index);
+  setDirty(true);
   }
 
 
@@ -259,13 +237,13 @@ updateMemorySize(getTarget(index), null);
    * Clear the known deleted flag. Only BINS may do this.
    * @param indexindicates target entry
    */
-  // line 189 "../../../../BIN.ump"
+  // line 188 "../../../../BIN.ump"
    public void clearKnownDeleted(int index){
     super.clearKnownDeleted(index);
-	setDirty(true);
+  setDirty(true);
   }
 
-  // line 194 "../../../../BIN.ump"
+  // line 193 "../../../../BIN.ump"
    public Set getCursorSet(){
     return cursorSet.copy();
   }
@@ -276,12 +254,8 @@ updateMemorySize(getTarget(index), null);
    * Register a cursor with this bin. Caller has this bin already latched.
    * @param cursorCursor to register.
    */
-  // line 202 "../../../../BIN.ump"
+  // line 201 "../../../../BIN.ump"
    public void addCursor(CursorImpl cursor){
-    // line 31 "../../../../Latches_BIN.ump"
-    assert isLatchOwner();
-            //original(cursor);
-    // END OF UMPLE BEFORE INJECTION
     cursorSet.add(cursor);
   }
 
@@ -291,12 +265,8 @@ updateMemorySize(getTarget(index), null);
    * Unregister a cursor with this bin. Caller has this bin already latched.
    * @param cursorCursor to unregister.
    */
-  // line 210 "../../../../BIN.ump"
+  // line 209 "../../../../BIN.ump"
    public void removeCursor(CursorImpl cursor){
-    // line 40 "../../../../Latches_BIN.ump"
-    assert isLatchOwner();
-            //original(cursor);
-    // END OF UMPLE BEFORE INJECTION
     cursorSet.remove(cursor);
   }
 
@@ -305,7 +275,7 @@ updateMemorySize(getTarget(index), null);
    * 
    * @return the number of cursors currently referring to this BIN.
    */
-  // line 217 "../../../../BIN.ump"
+  // line 216 "../../../../BIN.ump"
    public int nCursors(){
     return cursorSet.size();
   }
@@ -315,27 +285,27 @@ updateMemorySize(getTarget(index), null);
    * 
    * The following four methods access the correct fields in a cursor depending on whether "this" is a BIN or DBIN. For BIN's, the CursorImpl.index and CursorImpl.bin fields should be used. For DBIN's, the CursorImpl.dupIndex and CursorImpl.dupBin fields should be used.
    */
-  // line 224 "../../../../BIN.ump"
+  // line 223 "../../../../BIN.ump"
   public BIN getCursorBIN(CursorImpl cursor){
     return cursor.getBIN();
   }
 
-  // line 228 "../../../../BIN.ump"
+  // line 227 "../../../../BIN.ump"
   public BIN getCursorBINToBeRemoved(CursorImpl cursor){
     return cursor.getBINToBeRemoved();
   }
 
-  // line 232 "../../../../BIN.ump"
+  // line 231 "../../../../BIN.ump"
   public int getCursorIndex(CursorImpl cursor){
     return cursor.getIndex();
   }
 
-  // line 236 "../../../../BIN.ump"
+  // line 235 "../../../../BIN.ump"
   public void setCursorBIN(CursorImpl cursor, BIN bin){
     cursor.setBIN(bin);
   }
 
-  // line 240 "../../../../BIN.ump"
+  // line 239 "../../../../BIN.ump"
   public void setCursorIndex(CursorImpl cursor, int index){
     cursor.setIndex(index);
   }
@@ -345,19 +315,19 @@ updateMemorySize(getTarget(index), null);
    * 
    * Called when we know we are about to split on behalf of a key that is the minimum (leftSide) or maximum (!leftSide) of this node. This is achieved by just forcing the split to occur either one element in from the left or the right (i.e. splitIndex is 1 or nEntries - 1).
    */
-  // line 248 "../../../../BIN.ump"
+  // line 247 "../../../../BIN.ump"
   public void splitSpecial(IN parent, int parentIndex, int maxEntriesPerNode, byte [] key, boolean leftSide) throws DatabaseException{
     int index = findEntry(key, true, false);
-	int nEntries = getNEntries();
-	boolean exact = (index & IN.EXACT_MATCH) != 0;
-	index &= ~IN.EXACT_MATCH;
-	if (leftSide && index < 0) {
-	    splitInternal(parent, parentIndex, maxEntriesPerNode, 1);
-	} else if (!leftSide && !exact && index == (nEntries - 1)) {
-	    splitInternal(parent, parentIndex, maxEntriesPerNode, nEntries - 1);
-	} else {
-	    split(parent, parentIndex, maxEntriesPerNode);
-	}
+  int nEntries = getNEntries();
+  boolean exact = (index & IN.EXACT_MATCH) != 0;
+  index &= ~IN.EXACT_MATCH;
+  if (leftSide && index < 0) {
+   splitInternal(parent, parentIndex, maxEntriesPerNode, 1);
+  } else if (!leftSide && !exact && index == (nEntries - 1)) {
+   splitInternal(parent, parentIndex, maxEntriesPerNode, nEntries - 1);
+  } else {
+   split(parent, parentIndex, maxEntriesPerNode);
+  }
   }
 
 
@@ -367,42 +337,37 @@ updateMemorySize(getTarget(index), null);
    * @param newSibling -the newSibling into which "this" has been split.
    * @param newSiblingLow,newSiblingHigh - the low and high entry of "this" that were moved into newSibling.
    */
-  // line 267 "../../../../BIN.ump"
+  // line 266 "../../../../BIN.ump"
   public void adjustCursors(IN newSibling, int newSiblingLow, int newSiblingHigh){
-    // line 50 "../../../../Latches_BIN.ump"
-    assert newSibling.isLatchOwner();
-            assert this.isLatchOwner();
-            //original(newSibling, newSiblingLow, newSiblingHigh);
-    // END OF UMPLE BEFORE INJECTION
     int adjustmentDelta = (newSiblingHigh - newSiblingLow);
-	Iterator iter = cursorSet.iterator();
-	while (iter.hasNext()) {
-	    CursorImpl cursor = (CursorImpl) iter.next();
-	    if (getCursorBINToBeRemoved(cursor) == this) {
-		continue;
-	    }
-	    int cIdx = getCursorIndex(cursor);
-	    BIN cBin = getCursorBIN(cursor);
-	    assert cBin == this : "nodeId=" + getNodeId() + " cursor=" + cursor.dumpToString(true);
-	    assert newSibling instanceof BIN;
-	    BIN ns = (BIN) newSibling;
-	    if (newSiblingLow == 0) {
-		if (cIdx < newSiblingHigh) {
-		    setCursorBIN(cursor, ns);
-		    iter.remove();
-		    ns.addCursor(cursor);
-		} else {
-		    setCursorIndex(cursor, cIdx - adjustmentDelta);
-		}
-	    } else {
-		if (cIdx >= newSiblingLow) {
-		    setCursorIndex(cursor, cIdx - newSiblingLow);
-		    setCursorBIN(cursor, ns);
-		    iter.remove();
-		    ns.addCursor(cursor);
-		}
-	    }
-	}
+  Iterator iter = cursorSet.iterator();
+  while (iter.hasNext()) {
+   CursorImpl cursor = (CursorImpl) iter.next();
+   if (getCursorBINToBeRemoved(cursor) == this) {
+    continue;
+   }
+   int cIdx = getCursorIndex(cursor);
+   BIN cBin = getCursorBIN(cursor);
+   assert cBin == this: "nodeId=" + getNodeId() + " cursor=" + cursor.dumpToString(true);
+   assert newSibling instanceof BIN;
+   BIN ns = (BIN) newSibling;
+   if (newSiblingLow == 0) {
+    if (cIdx < newSiblingHigh) {
+     setCursorBIN(cursor, ns);
+     iter.remove();
+     ns.addCursor(cursor);
+    } else {
+     setCursorIndex(cursor, cIdx - adjustmentDelta);
+    }
+   } else {
+    if (cIdx >= newSiblingLow) {
+     setCursorIndex(cursor, cIdx - newSiblingLow);
+     setCursorBIN(cursor, ns);
+     iter.remove();
+     ns.addCursor(cursor);
+    }
+   }
+  }
   }
 
 
@@ -411,24 +376,20 @@ updateMemorySize(getTarget(index), null);
    * Adjust cursors referring to this BIN following an insert.
    * @param insertIndex -The index of the new entry.
    */
-  // line 303 "../../../../BIN.ump"
+  // line 302 "../../../../BIN.ump"
   public void adjustCursorsForInsert(int insertIndex){
-    // line 60 "../../../../Latches_BIN.ump"
-    assert this.isLatchOwner();
-            //original(insertIndex);
-    // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
-	    Iterator iter = cursorSet.iterator();
-	    while (iter.hasNext()) {
-		CursorImpl cursor = (CursorImpl) iter.next();
-		if (getCursorBINToBeRemoved(cursor) != this) {
-		    int cIdx = getCursorIndex(cursor);
-		    if (insertIndex <= cIdx) {
-			setCursorIndex(cursor, cIdx + 1);
-		    }
-		}
-	    }
-	}
+   Iterator iter = cursorSet.iterator();
+   while (iter.hasNext()) {
+    CursorImpl cursor = (CursorImpl) iter.next();
+    if (getCursorBINToBeRemoved(cursor) != this) {
+     int cIdx = getCursorIndex(cursor);
+     if (insertIndex <= cIdx) {
+      setCursorIndex(cursor, cIdx + 1);
+     }
+    }
+   }
+  }
   }
 
 
@@ -440,24 +401,20 @@ updateMemorySize(getTarget(index), null);
    * @param dupBinIndex -The index of the moved LN entry in the DBIN.
    * @param excludeCursor -The cursor being used for insertion and that should not be updated.
    */
-  // line 325 "../../../../BIN.ump"
+  // line 324 "../../../../BIN.ump"
   public void adjustCursorsForMutation(int binIndex, DBIN dupBin, int dupBinIndex, CursorImpl excludeCursor){
-    // line 72 "../../../../Latches_BIN.ump"
-    assert this.isLatchOwner();
-            //original(binIndex, dupBin, dupBinIndex, excludeCursor);
-    // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
-	    Iterator iter = cursorSet.iterator();
-	    while (iter.hasNext()) {
-		CursorImpl cursor = (CursorImpl) iter.next();
-		if (getCursorBINToBeRemoved(cursor) != this && cursor != excludeCursor
-			&& cursor.getIndex() == binIndex) {
-		    assert cursor.getDupBIN() == null;
-		    cursor.addCursor(dupBin);
-		    cursor.updateDBin(dupBin, dupBinIndex);
-		}
-	    }
-	}
+   Iterator iter = cursorSet.iterator();
+   while (iter.hasNext()) {
+    CursorImpl cursor = (CursorImpl) iter.next();
+    if (getCursorBINToBeRemoved(cursor) != this && cursor != excludeCursor &&
+     cursor.getIndex() == binIndex) {
+     assert cursor.getDupBIN() == null;
+     cursor.addCursor(dupBin);
+     cursor.updateDBin(dupBin, dupBinIndex);
+    }
+   }
+  }
   }
 
 
@@ -468,91 +425,88 @@ updateMemorySize(getTarget(index), null);
    * @param canFetchif false, don't fetch any non-resident children. We don't wantsome callers of compress, such as the evictor, to fault in other nodes.
    * @return true if we had to requeue the entry because we were unable to getlocks, false if all entries were processed and therefore any remaining deleted keys in the BINReference must now be in some other BIN because of a split.
    */
-  // line 346 "../../../../BIN.ump"
+  // line 345 "../../../../BIN.ump"
    public boolean compress(BINReference binRef, boolean canFetch) throws DatabaseException{
     boolean ret = false;
-			boolean setNewIdKey = false;
-			boolean anyLocksDenied = false;
-			DatabaseImpl db = getDatabase();
-			BasicLocker lockingTxn = new BasicLocker(db.getDbEnvironment());
-			try {
-					for (int i = 0; i < getNEntries(); i++) {
-				boolean deleteEntry = false;
-				if (binRef == null || isEntryPendingDeleted(i) || isEntryKnownDeleted(i)
-					|| binRef.hasDeletedKey(new Key(getKey(i)))) {
-						Node n = null;
-						if (canFetch) {
-					n = fetchTarget(i);
-						} else {
-					n = getTarget(i);
-					if (n == null) {
-							continue;
-					}
-						}
-						if (n == null) {
-					deleteEntry = true;
-						} else if (isEntryKnownDeleted(i)) {
-					LockResult lockRet = lockingTxn.nonBlockingLock(n.getNodeId(), LockType.READ, db);
-					if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-							anyLocksDenied = true;
-							continue;
-					}
-					deleteEntry = true;
-						} else {
-					if (!n.containsDuplicates()) {
-							LN ln = (LN) n;
-							LockResult lockRet = lockingTxn.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
-							if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-						anyLocksDenied = true;
-						continue;
-							}
-							if (ln.isDeleted()) {
-						deleteEntry = true;
-							}
-					}
-						}
-						if (binRef != null) {
-					binRef.removeDeletedKey(new Key(getKey(i)));
-						}
-				}
-				if (deleteEntry) {
-						boolean entryIsIdentifierKey = Key.compareKeys(getKey(i), getIdentifierKey(),
-							getKeyComparator()) == 0;
-						if (entryIsIdentifierKey) {
-					setNewIdKey = true;
-						}
-						boolean deleteSuccess = deleteEntry(i, true);
-						assert deleteSuccess;
-						i--;
-				}
-					}
-			} finally {
-					if (lockingTxn != null) {
-				lockingTxn.operationEnd();
-					}
-			}
-			if (anyLocksDenied && binRef != null) {
-					Label609:
-db.getDbEnvironment().addToCompressorQueue(binRef, false);
-			//original(binRef, db);
- //this.hook609(binRef, db);
-					ret = true;
-			}
-			if (getNEntries() != 0 && setNewIdKey) {
-					setIdentifierKey(getKey(0));
-			}
-			if (getNEntries() == 0) {
-					setGeneration(0);
-			}
-			return ret;
+  boolean setNewIdKey = false;
+  boolean anyLocksDenied = false;
+  DatabaseImpl db = getDatabase();
+  BasicLocker lockingTxn = new BasicLocker(db.getDbEnvironment());
+  try {
+   for (int i = 0; i < getNEntries(); i++) {
+    boolean deleteEntry = false;
+    if (binRef == null || isEntryPendingDeleted(i) || isEntryKnownDeleted(i) ||
+     binRef.hasDeletedKey(new Key(getKey(i)))) {
+     Node n = null;
+     if (canFetch) {
+      n = fetchTarget(i);
+     } else {
+      n = getTarget(i);
+      if (n == null) {
+       continue;
+      }
+     }
+     if (n == null) {
+      deleteEntry = true;
+     } else if (isEntryKnownDeleted(i)) {
+      LockResult lockRet = lockingTxn.nonBlockingLock(n.getNodeId(), LockType.READ, db);
+      if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+       anyLocksDenied = true;
+       continue;
+      }
+      deleteEntry = true;
+     } else {
+      if (!n.containsDuplicates()) {
+       LN ln = (LN) n;
+       LockResult lockRet = lockingTxn.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
+       if (lockRet.getLockGrant() == LockGrantType.DENIED) {
+        anyLocksDenied = true;
+        continue;
+       }
+       if (ln.isDeleted()) {
+        deleteEntry = true;
+       }
+      }
+     }
+     if (binRef != null) {
+      binRef.removeDeletedKey(new Key(getKey(i)));
+     }
+    }
+    if (deleteEntry) {
+     boolean entryIsIdentifierKey = Key.compareKeys(getKey(i), getIdentifierKey(),
+      getKeyComparator()) == 0;
+     if (entryIsIdentifierKey) {
+      setNewIdKey = true;
+     }
+     boolean deleteSuccess = deleteEntry(i, true);
+     assert deleteSuccess;
+     i--;
+    }
+   }
+  } finally {
+   if (lockingTxn != null) {
+    lockingTxn.operationEnd();
+   }
+  }
+  if (anyLocksDenied && binRef != null) {
+   Label609: //this.hook609(binRef, db);
+    ret = true;
+  }
+  if (getNEntries() != 0 && setNewIdKey) {
+   setIdentifierKey(getKey(0));
+  }
+  if (getNEntries() == 0) {
+   setGeneration(0);
+  }
+  return ret;
   }
 
-  // line 421 "../../../../BIN.ump"
+  // line 420 "../../../../BIN.ump"
    public boolean isCompressible(){
     return true;
   }
 
-  // line 425 "../../../../BIN.ump"
+  // line 424 "../../../../BIN.ump"
   public boolean validateSubtreeBeforeDelete(int index) throws DatabaseException{
     return true;
   }
@@ -562,50 +516,41 @@ db.getDbEnvironment().addToCompressorQueue(binRef, false);
    * 
    * Check if this node fits the qualifications for being part of a deletable subtree. It can only have one IN child and no LN children.
    */
-  // line 432 "../../../../BIN.ump"
+  // line 431 "../../../../BIN.ump"
   public boolean isValidForDelete() throws DatabaseException{
+    int validIndex = 0;
+    int numValidEntries = 0;
+    boolean needToLatch = false;
     try {
-	    int validIndex = 0;
-	    int numValidEntries = 0;
-	    boolean needToLatch = false;
-	    Label607:
-needToLatch = !isLatchOwner();
- //this.hook607(validIndex, numValidEntries, needToLatch);
-      label608: //this.hook608(needToLatch);
-				for (int i = 0; i < getNEntries(); i++) {
-					if (!isEntryKnownDeleted(i)) {
-							numValidEntries++;
-							validIndex = i;
-					}
-				}
-				if (numValidEntries > 1) {
-						throw new ReturnBoolean(false);
-				} 
-				else {
-						if (nCursors() > 0) {
-					throw new ReturnBoolean(false);
-						}
-						if (numValidEntries == 1) {
-							Node child = fetchTarget(validIndex);
-							throw new ReturnBoolean(child != null && child.isValidForDelete());
-						} 
-						else {
-									throw new ReturnBoolean(true);
-						}
-				}
-//End hook607
-Label607_1:
-if (needToLatch && isLatchOwner()) {
-            releaseLatch();
+      Label607: ; // extension point.
+      label608: ; // extension point.
+      for (int i = 0; i < getNEntries(); i++) {
+        if (!isEntryKnownDeleted(i)) {
+          numValidEntries++;
+          validIndex = i;
         }
-
-	    throw ReturnHack.returnBoolean;
-	} catch (ReturnBoolean r) {
-	    return r.value;
-	}
+      }
+      if (numValidEntries > 1) {
+        return false;
+      } else {
+        if (nCursors() > 0) {
+          return false;
+        }
+        if (numValidEntries == 1) {
+          Node child = fetchTarget(validIndex);
+          boolean ret = child.isValidForDelete();
+          child.releaseLatch();
+          return ret;
+        } else {
+          return true;
+        }
+      }
+    } finally {
+      Label607_1: ; // extension point.
+    }
   }
 
-  // line 468 "../../../../BIN.ump"
+  // line 465 "../../../../BIN.ump"
   public void accumulateStats(TreeWalkerStatsAccumulator acc){
     acc.processBIN(this, new Long(getNodeId()), getLevel());
   }
@@ -615,17 +560,17 @@ if (needToLatch && isLatchOwner()) {
    * 
    * Return the relevant user defined comparison function for this type of node. For IN's and BIN's, this is the BTree Comparison function. Overriden by DBIN.
    */
-  // line 475 "../../../../BIN.ump"
+  // line 472 "../../../../BIN.ump"
    public Comparator getKeyComparator(){
     return getDatabase().getBtreeComparator();
   }
 
-  // line 479 "../../../../BIN.ump"
+  // line 476 "../../../../BIN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 483 "../../../../BIN.ump"
+  // line 480 "../../../../BIN.ump"
    public String endTag(){
     return END_TAG;
   }
@@ -635,12 +580,12 @@ if (needToLatch && isLatchOwner()) {
    * 
    * @see LoggableObject#getLogType
    */
-  // line 490 "../../../../BIN.ump"
+  // line 487 "../../../../BIN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_BIN;
   }
 
-  // line 494 "../../../../BIN.ump"
+  // line 491 "../../../../BIN.ump"
    public String shortClassName(){
     return "BIN";
   }
@@ -650,29 +595,29 @@ if (needToLatch && isLatchOwner()) {
    * 
    * Decide how to log this node. BINs may be logged provisionally. If logging a delta, return an null for the LSN.
    */
-  // line 502 "../../../../BIN.ump"
+  // line 499 "../../../../BIN.ump"
    protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional, boolean proactiveMigration, IN parent) throws DatabaseException{
     boolean doDeltaLog = false;
-	long lastFullVersion = getLastFullVersion();
-	Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
-	cleaner.lazyMigrateLNs(this, proactiveMigration);
-	BINDelta deltaInfo = null;
-	if ((allowDeltas) && (lastFullVersion != DbLsn.NULL_LSN) && !prohibitNextDelta) {
-	    deltaInfo = new BINDelta(this);
-	    doDeltaLog = doDeltaLog(deltaInfo);
-	}
-	long returnLsn = DbLsn.NULL_LSN;
-	if (doDeltaLog) {
-	    lastDeltaVersion = logManager.log(deltaInfo);
-	    returnLsn = DbLsn.NULL_LSN;
-	    numDeltasSinceLastFull++;
-	} else {
-	    returnLsn = super.logInternal(logManager, allowDeltas, isProvisional, proactiveMigration, parent);
-	    lastDeltaVersion = DbLsn.NULL_LSN;
-	    numDeltasSinceLastFull = 0;
-	}
-	prohibitNextDelta = false;
-	return returnLsn;
+  long lastFullVersion = getLastFullVersion();
+  Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
+  cleaner.lazyMigrateLNs(this, proactiveMigration);
+  BINDelta deltaInfo = null;
+  if ((allowDeltas) && (lastFullVersion != DbLsn.NULL_LSN) && !prohibitNextDelta) {
+   deltaInfo = new BINDelta(this);
+   doDeltaLog = doDeltaLog(deltaInfo);
+  }
+  long returnLsn = DbLsn.NULL_LSN;
+  if (doDeltaLog) {
+   lastDeltaVersion = logManager.log(deltaInfo);
+   returnLsn = DbLsn.NULL_LSN;
+   numDeltasSinceLastFull++;
+  } else {
+   returnLsn = super.logInternal(logManager, allowDeltas, isProvisional, proactiveMigration, parent);
+   lastDeltaVersion = DbLsn.NULL_LSN;
+   numDeltasSinceLastFull = 0;
+  }
+  prohibitNextDelta = false;
+  return returnLsn;
   }
 
 
@@ -681,207 +626,31 @@ if (needToLatch && isLatchOwner()) {
    * Decide whether to log a full or partial BIN, depending on the ratio of the delta size to full BIN size, and the number of deltas that have been logged since the last full.
    * @return true if we should log the deltas of this BIN
    */
-  // line 530 "../../../../BIN.ump"
+  // line 527 "../../../../BIN.ump"
    private boolean doDeltaLog(BINDelta deltaInfo) throws DatabaseException{
     int maxDiffs = (getNEntries() * getDatabase().getBinDeltaPercent()) / 100;
-	if ((deltaInfo.getNumDeltas() <= maxDiffs) && (numDeltasSinceLastFull < getDatabase().getBinMaxDeltas())) {
-	    return true;
-	} else {
-	    return false;
-	}
+  if ((deltaInfo.getNumDeltas() <= maxDiffs) && (numDeltasSinceLastFull < getDatabase().getBinMaxDeltas())) {
+   return true;
+  } else {
+   return false;
   }
-
-
-  /**
-   * protected void hook603(Node child) throws DatabaseException {
-   * }
-   */
-  // line 542 "../../../../BIN.ump"
-   protected void hook604() throws DatabaseException{
-    
-  }
-
-  // line 545 "../../../../BIN.ump"
-   protected void hook605() throws DatabaseException{
-    
-  }
-
-  // line 548 "../../../../BIN.ump"
-   protected void hook606() throws DatabaseException{
-    
-  }
-
-
-  /**
-   * protected void hook607(int validIndex, int numValidEntries, boolean needToLatch) throws DatabaseException {
-   * label608: //this.hook608(needToLatch);
-   * for (int i = 0; i < getNEntries(); i++) {
-   * if (!isEntryKnownDeleted(i)) {
-   * numValidEntries++;
-   * validIndex = i;
-   * }
-   * }
-   * if (numValidEntries > 1) {
-   * throw new ReturnBoolean(false);
-   * }
-   * else {
-   * if (nCursors() > 0) {
-   * throw new ReturnBoolean(false);
-   * }
-   * if (numValidEntries == 1) {
-   * Node child = fetchTarget(validIndex);
-   * throw new ReturnBoolean(child != null && child.isValidForDelete());
-   * }
-   * else {
-   * throw new ReturnBoolean(true);
-   * }
-   * }
-   * }
-   */
-  // line 576 "../../../../BIN.ump"
-   protected void hook608(boolean needToLatch) throws DatabaseException{
-    
-  }
-
-
-  /**
-   * protected void hook609(BINReference binRef, DatabaseImpl db) throws DatabaseException {
-   * }
-   */
-  // line 582 "../../../../BIN.ump"
-   protected void hook610(int index){
-    
-  }
-
-  // line 6 "../../../../MemoryBudget_BIN.ump"
-   public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
-    return MemoryBudget.BIN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
-  }
-
-  // line 10 "../../../../MemoryBudget_BIN.ump"
-   protected long getMemoryOverhead(MemoryBudget mb){
-    return mb.getBINOverhead();
-  }
-
-
-  /**
-   * 
-   * @Override
-   */
-  // line 9 "../../../../Evictor_BIN.ump"
-  public int getChildEvictionType(){
-    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
-			for (int i = 0; i < getNEntries(); i++) {
-					Node node = getTarget(i);
-					if (node != null) {
-				if (node instanceof LN) {
-						if (cleaner.isEvictable(this, i)) {
-					return MAY_EVICT_LNS;
-						}
-				} else {
-						return MAY_NOT_EVICT;
-				}
-					}
-			}
-			return MAY_EVICT_NODE;
-  }
-
-
-  /**
-   * 
-   * Reduce memory consumption by evicting all LN targets. Note that the targets are not persistent, so this doesn't affect node dirtiness. The BIN should be latched by the caller.
-   * @return number of evicted bytes
-   */
-  // line 30 "../../../../Evictor_BIN.ump"
-   public long evictLNs() throws DatabaseException{
-    // line 10 "../../../../Derivative_Latches_Evictor_BIN.ump"
-    assert isLatchOwner() : "BIN must be latched before evicting LNs";
-    	//return original();
-    // END OF UMPLE BEFORE INJECTION
-    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
-			long removed = 0;
-			if (nCursors() == 0) {
-					for (int i = 0; i < getNEntries(); i++) {
-				removed += evictInternal(i, cleaner);
-					}
-
-					Label601:
-// Label601 from  Evictor_BIN.ump
-	updateMemorySize(removed, 0);
-//	original(removed);
-  					//this.hook601(removed);;
-
-			}
-			return removed;
-  }
-
-
-  /**
-   * 
-   * Evict a single LN if allowed and adjust the memory budget.
-   */
-  // line 47 "../../../../Evictor_BIN.ump"
-   public void evictLN(int index) throws DatabaseException{
-    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
-			long removed = evictInternal(index, cleaner);
-
-      Label602:
-// Label602 from  Evictor_BIN.ump
-	updateMemorySize(removed, 0);
-	//original(removed);
- 			//this.hook602(removed);
-  }
-
-
-  /**
-   * 
-   * Evict a single LN if allowed. The amount of memory freed is returned and must be subtracted from the memory budget by the caller.
-   */
-  // line 57 "../../../../Evictor_BIN.ump"
-   private long evictInternal(int index, Cleaner cleaner) throws DatabaseException{
-    Node n = getTarget(index);
-			if (n instanceof LN && cleaner.isEvictable(this, index)) {
-					setTarget(index, null);
-					return n.getMemorySizeIncludedByParent();
-			} else {
-					return 0;
-			}
-  }
-
-
-  /**
-   * 
-   * For each cursor in this BIN's cursor set, ensure that the cursor is actually referring to this BIN.
-   */
-  // line 9 "../../../../Verifier_BIN.ump"
-   public void verifyCursors(){
-    if (cursorSet != null) {
-					Iterator iter = cursorSet.iterator();
-					while (iter.hasNext()) {
-				CursorImpl cursor = (CursorImpl) iter.next();
-				if (getCursorBINToBeRemoved(cursor) != this) {
-						BIN cBin = getCursorBIN(cursor);
-						assert cBin == this;
-				}
-					}
-			}
   }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 26 "../../../../BIN.ump"
+  // line 25 "../../../../BIN.ump"
   private static final String BEGIN_TAG = "<bin>" ;
-// line 28 "../../../../BIN.ump"
+// line 27 "../../../../BIN.ump"
   private static final String END_TAG = "</bin>" ;
-// line 30 "../../../../BIN.ump"
+// line 29 "../../../../BIN.ump"
   private TinyHashSet cursorSet ;
-// line 32 "../../../../BIN.ump"
+// line 31 "../../../../BIN.ump"
   private long lastDeltaVersion = DbLsn.NULL_LSN ;
-// line 34 "../../../../BIN.ump"
+// line 33 "../../../../BIN.ump"
   private int numDeltasSinceLastFull ;
-// line 36 "../../../../BIN.ump"
+// line 35 "../../../../BIN.ump"
   private boolean prohibitNextDelta ;
 
   

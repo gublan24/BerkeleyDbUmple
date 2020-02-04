@@ -9,7 +9,7 @@ import java.io.IOException;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../FastOutputStream.ump"
-public class FastOutputStream implements OutputStream
+public class FastOutputStream extends OutputStream
 {
 
   //------------------------
@@ -21,7 +21,12 @@ public class FastOutputStream implements OutputStream
   //------------------------
 
   public FastOutputStream()
-  {}
+  {
+    super();
+    // line 32 "../../../FastOutputStream.ump"
+    initBuffer(DEFAULT_INIT_SIZE, DEFAULT_BUMP_SIZE);
+    // END OF UMPLE AFTER INJECTION
+  }
 
   //------------------------
   // INTERFACE
@@ -29,16 +34,6 @@ public class FastOutputStream implements OutputStream
 
   public void delete()
   {}
-
-
-  /**
-   * 
-   * Creates an output stream with default sizes.
-   */
-  // line 32 "../../../FastOutputStream.ump"
-   public  FastOutputStream(){
-    initBuffer(DEFAULT_INIT_SIZE, DEFAULT_BUMP_SIZE);
-  }
 
 
   /**
