@@ -39,24 +39,14 @@ public class TxnAbort extends TxnEnd
 
   /**
    * 
-   * For constructing from the log.
-   */
-  // line 16 "../../../../TxnAbort.ump"
-   public  TxnAbort(){
-    
-  }
-
-
-  /**
-   * 
    * @see TxnEnd#getLogType
    */
-  // line 22 "../../../../TxnAbort.ump"
+  // line 17 "../../../../TxnAbort.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_TXN_ABORT;
   }
 
-  // line 26 "../../../../TxnAbort.ump"
+  // line 21 "../../../../TxnAbort.ump"
    protected String getTagName(){
     return "TxnAbort";
   }

@@ -13,94 +13,24 @@ public class WriteLockInfo
   // MEMBER VARIABLES
   //------------------------
 
-  //WriteLockInfo Attributes
-  private Lock lock;
-  private long abortLsn;
-  private boolean abortKnownDeleted;
-  private boolean neverLocked;
-  private boolean createdThisTxn;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public WriteLockInfo(Lock aLock, boolean aAbortKnownDeleted, boolean aNeverLocked, boolean aCreatedThisTxn)
+  public WriteLockInfo()
   {
-    lock = aLock;
-    abortLsn = DbLsn.NULL_LSN;
-    abortKnownDeleted = aAbortKnownDeleted;
-    neverLocked = aNeverLocked;
-    createdThisTxn = aCreatedThisTxn;
+    // line 28 "../../../../WriteLockInfo.ump"
+    this.lock = null;
+    	abortLsn = DbLsn.NULL_LSN;
+    	abortKnownDeleted = true;
+    	neverLocked = true;
+    	createdThisTxn = false;
+    // END OF UMPLE AFTER INJECTION
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setLock(Lock aLock)
-  {
-    boolean wasSet = false;
-    lock = aLock;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setAbortLsn(long aAbortLsn)
-  {
-    boolean wasSet = false;
-    abortLsn = aAbortLsn;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setAbortKnownDeleted(boolean aAbortKnownDeleted)
-  {
-    boolean wasSet = false;
-    abortKnownDeleted = aAbortKnownDeleted;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setNeverLocked(boolean aNeverLocked)
-  {
-    boolean wasSet = false;
-    neverLocked = aNeverLocked;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setCreatedThisTxn(boolean aCreatedThisTxn)
-  {
-    boolean wasSet = false;
-    createdThisTxn = aCreatedThisTxn;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public Lock getLock()
-  {
-    return lock;
-  }
-
-  public long getAbortLsn()
-  {
-    return abortLsn;
-  }
-
-  public boolean getAbortKnownDeleted()
-  {
-    return abortKnownDeleted;
-  }
-
-  public boolean getNeverLocked()
-  {
-    return neverLocked;
-  }
-
-  public boolean getCreatedThisTxn()
-  {
-    return createdThisTxn;
-  }
 
   public void delete()
   {}
@@ -114,30 +44,31 @@ public class WriteLockInfo
 	createdThisTxn = false;
   }
 
-  // line 28 "../../../../WriteLockInfo.ump"
-  public  WriteLockInfo(){
-    this.lock = null;
-	abortLsn = DbLsn.NULL_LSN;
-	abortKnownDeleted = true;
-	neverLocked = true;
-	createdThisTxn = false;
+  // line 36 "../../../../WriteLockInfo.ump"
+   public boolean getAbortKnownDeleted(){
+    return abortKnownDeleted;
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "abortLsn" + ":" + getAbortLsn()+ "," +
-            "abortKnownDeleted" + ":" + getAbortKnownDeleted()+ "," +
-            "neverLocked" + ":" + getNeverLocked()+ "," +
-            "createdThisTxn" + ":" + getCreatedThisTxn()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "lock" + "=" + (getLock() != null ? !getLock().equals(this)  ? getLock().toString().replaceAll("  ","    ") : "this" : "null");
-  }  
+  // line 40 "../../../../WriteLockInfo.ump"
+   public long getAbortLsn(){
+    return abortLsn;
+  }
+  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 17 "../../../../WriteLockInfo.ump"
+  // line 7 "../../../../WriteLockInfo.ump"
+  public Lock lock ;
+// line 9 "../../../../WriteLockInfo.ump"
+  protected long abortLsn = DbLsn.NULL_LSN ;
+// line 11 "../../../../WriteLockInfo.ump"
+  protected boolean abortKnownDeleted ;
+// line 13 "../../../../WriteLockInfo.ump"
+  protected boolean neverLocked ;
+// line 15 "../../../../WriteLockInfo.ump"
+  protected boolean createdThisTxn ;
+// line 17 "../../../../WriteLockInfo.ump"
   static final WriteLockInfo basicWriteLockInfo = new WriteLockInfo() ;
 
   

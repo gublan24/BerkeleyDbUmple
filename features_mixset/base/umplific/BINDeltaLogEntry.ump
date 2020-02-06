@@ -10,6 +10,7 @@ class BINDeltaLogEntry
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.dbi.DatabaseId;
   depend com.sleepycat.je.DatabaseException;
+  depend com.sleepycat.je.log.LogReadable;
     /** 
      * @param logClass
      */

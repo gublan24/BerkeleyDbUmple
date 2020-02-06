@@ -18,11 +18,7 @@ class TxnPrepare
 	this.xid = xid;
     }
 
-    /** 
-     * For constructing from the log.
-     */
-    public TxnPrepare() {
-    }
+
 
     public Xid getXid() {
 	return xid;

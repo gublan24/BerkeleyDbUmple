@@ -47,9 +47,9 @@ class Tree {
 
     private ChildReference root;
 
-    private int maxMainTreeEntriesPerNode;
+    int maxMainTreeEntriesPerNode = 0;
 
-    private int maxDupTreeEntriesPerNode;
+    int maxDupTreeEntriesPerNode = 0;
 
     private boolean purgeRoot;
 
@@ -79,10 +79,10 @@ class Tree {
     /** 
      * Create a tree that's being read in from the log.
      */
-    public Tree() throws DatabaseException {
+    after constructor{
         init(null);
-        maxMainTreeEntriesPerNode = 0;
-        maxDupTreeEntriesPerNode = 0;
+        //maxMainTreeEntriesPerNode = 0;
+        //maxDupTreeEntriesPerNode = 0;
     }
 
     /** 
@@ -162,11 +162,11 @@ class Tree {
             Label670:; //this.hook670(wrl);
             Label728:; //this.hook728();
             return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root));
-            Label670_1:;
+
             //throw ReturnHack.returnObject;
         }
-        catch (ReturnObject r) {
-            return (IN) r.value;
+        finally  {
+            Label670_1:;
         }
     }
 
@@ -175,11 +175,10 @@ class Tree {
             Label671:; //this.hook671(wrl);
             Label729:; //this.hook729();
             return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root))
-            Label671_1:
             //throw ReturnHack.returnObject;
         }
-        catch (ReturnObject r) {
-            return (IN) r.value;
+       finally  {
+            Label671_1:  ;
         }
     }
 
@@ -209,19 +208,16 @@ class Tree {
                         rootNeedsUpdating = true;
                     }
                 }
-            } else {
+            } 
+            else {
                 SplitInfo detachPoint = (SplitInfo) nodeLadder.get(nodeLadder.size() - 1);
                 boolean deleteOk = detachPoint.parent.deleteEntry(detachPoint.index, true);
                 assert deleteOk;
                 rootNeedsUpdating = cascadeUpdates(nodeLadder, null, -1);
                 subtreeRootIN = detachPoint.child;
             }
-            finally {
-              Label672_1:  ;
-				    }
 
-                //End hook672
-                if (subtreeRootIN != null) {
+           if (subtreeRootIN != null) {
                     EnvironmentImpl envImpl = database.getDbEnvironment();
                     if (rootNeedsUpdating) {
                         DbTree dbTree = envImpl.getDbMapTree();
@@ -231,7 +227,14 @@ class Tree {
                     INList inList = envImpl.getInMemoryINs();
                     accountForSubtreeRemoval(inList, subtreeRootIN, tracker);
                 }
-        } 
+            } 
+
+            finally {
+              Label672_1:  ;
+				    }
+
+                //End hook672
+              
     }
 
     /** 
@@ -305,7 +308,7 @@ class Tree {
         if (index >= 0) {
             deletedSubtreeRoot = deleteDupSubtree(idKey, (BIN) in , index);
         }
-        Label674_1:
+        Label674_1:   ;
             //end hook674
 
             if (deletedSubtreeRoot != null) {
@@ -488,7 +491,7 @@ class Tree {
     public boolean getParentBINForChildLN(TreeLocation location, byte[] mainKey, byte[] dupKey, LN ln,
         boolean splitsAllowed, boolean findDeletedEntries, boolean searchDupTree, boolean updateGeneration)
     throws DatabaseException {
-        try {
+       
             IN searchResult = null;
             try {
                 if (splitsAllowed) {
@@ -527,35 +530,29 @@ class Tree {
                 if (!location.bin.isEntryKnownDeleted(location.index)) {
                     if (database.getSortedDuplicates()) {
                         Node childNode = location.bin.fetchTarget(location.index);
-                        Label683: ; //this.hook683(location, mainKey, dupKey, ln, splitsAllowed, findDeletedEntries, searchDupTree,updateGeneration, exactSearch, indicateIfExact, childNode);
-                        try {
+                        Label683: ; 
                             if (childNode == null) {} else if (ln.containsDuplicates()) {
-                                throw new ReturnBoolean(searchDupTreeForDupCountLNParent(location, mainKey, childNode));
+                                return searchDupTreeForDupCountLNParent(location, mainKey, childNode);
                             } else {
                                 if (childNode.containsDuplicates()) {
                                     if (dupKey == null) {
-                                        throw new ReturnBoolean(
-                                            searchDupTreeByNodeId(location, childNode, ln, searchDupTree, updateGeneration));
+                                        return    searchDupTreeByNodeId(location, childNode, ln, searchDupTree, updateGeneration);
                                     } else {
-                                        throw new ReturnBoolean(searchDupTreeForDBIN(location, dupKey, (DIN) childNode, ln,
-                                            findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed, updateGeneration));
+                                        return searchDupTreeForDBIN(location, dupKey, (DIN) childNode, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed, updateGeneration);
                                     }
                                 }
                             }
                         }
-                        Label683_1:
-                            finally {}
-                        //End og hook683
+                        Label683_1:   ;
+                         
                     }
-                }
+           
                 location.childLsn = location.bin.getLsn(location.index);
             } else {
                 location.lnKey = mainKey;
             }
             return match;
-        } catch (ReturnBoolean r) {
-            return r.value;
-        }
+       
     }
 
     /** 
@@ -596,50 +593,47 @@ class Tree {
     /** 
      * Search the dup tree for the DBIN parent of this ln.
      */
-    private boolean searchDupTreeForDBIN(TreeLocation location, byte[] dupKey, DIN dupRoot, LN ln,
-        boolean findDeletedEntries, boolean indicateIfExact, boolean exactSearch, boolean splitsAllowed,
-        boolean updateGeneration) throws DatabaseException {
+      private boolean searchDupTreeForDBIN(TreeLocation location, byte[] dupKey, DIN dupRoot, LN ln,
+      boolean findDeletedEntries, boolean indicateIfExact, boolean exactSearch, boolean splitsAllowed,
+      boolean updateGeneration) throws DatabaseException {
+    try {
+      assert dupKey != null;
+      Label685: ; 
+               
+      if (maybeSplitDuplicateRoot(location.bin, location.index)) {
+        dupRoot = (DIN) location.bin.fetchTarget(location.index);
+      }
+      Label731: ; 
+      location.lnKey = dupKey;
+      if (splitsAllowed) {
         try {
-            assert dupKey != null;
-            Label685: ; //this.hook685(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed,		    updateGeneration);
-            if (maybeSplitDuplicateRoot(location.bin, location.index)) {
-                dupRoot = (DIN) location.bin.fetchTarget(location.index);
-            }
-            Label731: ; //this.hook731(location);
-            location.lnKey = dupKey;
-            if (splitsAllowed) {
-                try {
-                    location.bin = (BIN) searchSubTreeSplitsAllowed(dupRoot, location.lnKey, ln.getNodeId(),
-                        updateGeneration);
-                } catch (SplitRequiredException e) {
-                    throw new DatabaseException(e);
-                }
-            } else {
-                location.bin = (BIN) searchSubTree(dupRoot, location.lnKey, SearchType.NORMAL, ln.getNodeId(), null,
-                    updateGeneration);
-            }
-            location.index = location.bin.findEntry(location.lnKey, indicateIfExact, exactSearch);
-            boolean match;
-            if (findDeletedEntries) {
-                match = (location.index >= 0 && (location.index & IN.EXACT_MATCH) != 0);
-                location.index &= ~IN.EXACT_MATCH;
-            } else {
-                match = (location.index >= 0);
-            }
-            if (match) {
-                location.childLsn = location.bin.getLsn(location.index);
-                throw new ReturnBoolean(true);
-            } else {
-                throw new ReturnBoolean(false);
-            }
-            //hook685
-            throw ReturnHack.returnBoolean;
-            Label685_1:
-        } catch (ReturnBoolean r) {
-            return r.value;
+          location.bin = (BIN) searchSubTreeSplitsAllowed(dupRoot, location.lnKey, ln.getNodeId(), updateGeneration);
+        } catch (SplitRequiredException e) {
+          throw new DatabaseException(e);
         }
-    }
+      } else {
+        location.bin = (BIN) searchSubTree(dupRoot, location.lnKey, SearchType.NORMAL, ln.getNodeId(), null,
+            updateGeneration);
+      }
+      location.index = location.bin.findEntry(location.lnKey, indicateIfExact, exactSearch);
+      boolean match;
+      if (findDeletedEntries) {
+        match = (location.index >= 0 && (location.index & IN.EXACT_MATCH) != 0);
+        location.index &= ~IN.EXACT_MATCH;
+      } else {
+        match = (location.index >= 0);
+      }
+      if (match) {
+        location.childLsn = location.bin.getLsn(location.index);
+        return true;
+      } else {
+        return false;
+      }
+    } finally {
+      Label685_1: ;
 
+    }
+  }
     /** 
      * Return a reference to the adjacent BIN.
      * @param binThe BIN to find the next BIN for. This BIN is latched.
@@ -663,92 +657,86 @@ class Tree {
     /** 
      * Helper routine for above two routines to iterate through BIN's.
      */
-    private BIN getNextBinInternal(boolean traverseWithinDupTree, BIN bin, boolean forward) throws DatabaseException {
-        try {
-            byte[] idKey = null;
-            if (bin.getNEntries() == 0) {
-                idKey = bin.getIdentifierKey();
-            } else if (forward) {
-                idKey = bin.getKey(bin.getNEntries() - 1);
+     private BIN getNextBinInternal(boolean traverseWithinDupTree, BIN bin, boolean forward) throws DatabaseException {
+    try {
+      byte[] idKey = null;
+      if (bin.getNEntries() == 0) {
+        idKey = bin.getIdentifierKey();
+      } else if (forward) {
+        idKey = bin.getKey(bin.getNEntries() - 1);
+      } else {
+        idKey = bin.getKey(0);
+      }
+      IN next = bin;
+      Label687: ; // this.hook687();
+      IN parent = null;
+      IN nextIN = null;
+      Label686: ; // this.hook686(traverseWithinDupTree, forward, idKey, next, parent, nextIN);
+      while (true) {
+        SearchResult result = null;
+        if (!traverseWithinDupTree) {
+          result = getParentINForChildIN(next, true, true);
+          if (result.exactParentFound) {
+            parent = result.parent;
+          } else {
+            Label733: ; // this.hook733();
+            return null; // throw new ReturnObject(null);
+          }
+        } else {
+          if (next.isRoot()) {
+            Label734: ; // this.hook734(next);
+            return null; // throw new ReturnObject(null);
+          } else {
+            result = getParentINForChildIN(next, true, true);
+            if (result.exactParentFound) {
+              parent = result.parent;
             } else {
-                idKey = bin.getKey(0);
+              return null; // throw new ReturnObject(null);
             }
-            IN next = bin;
-            Label687: ; //this.hook687();
-            IN parent = null;
-            IN nextIN = null;
-            Label686: ; //this.hook686(traverseWithinDupTree, forward, idKey, next, parent, nextIN);
-            while (true) {
-                SearchResult result = null;
-                if (!traverseWithinDupTree) {
-                    result = getParentINForChildIN(next, true, true);
-                    if (result.exactParentFound) {
-                        parent = result.parent;
-                    } else {
-                        Label733:; //this.hook733();
-                        return null; //throw new ReturnObject(null);
-                    }
-                } else {
-                    if (next.isRoot()) {
-                        Label734:; //this.hook734(next);
-                        return null; //throw new ReturnObject(null);
-                    }
-                    else {
-                        result = getParentINForChildIN(next, true, true);
-                        if (result.exactParentFound) {
-                            parent = result.parent;
-                        } else {
-                            return null; //throw new ReturnObject(null);
-                        }
-                    }
-                }
-                Label732: ; //this.hook732();
-                int index = parent.findEntry(idKey, false, false);
-                boolean moreEntriesThisBin = false;
-                if (forward) {
-                    index++;
-                    if (index < parent.getNEntries()) {
-                        moreEntriesThisBin = true;
-                    }
-                } else {
-                    if (index > 0) {
-                        moreEntriesThisBin = true;
-                    }
-                    index--;
-                }
-                if (moreEntriesThisBin) {
-                    nextIN = (IN) parent.fetchTarget(index);
-                    Label735: ; //this.hook735(nextIN);
-                    if (nextIN instanceof BIN) {
-                        Label736:; //this.hook736(parent);
-                        TreeWalkerStatsAccumulator treeStatsAccumulator = getTreeStatsAccumulator();
-                        if (treeStatsAccumulator != null) {
-                            nextIN.accumulateStats(treeStatsAccumulator);
-                        }
-                        return (BIN) nextIN; //throw new ReturnObject((BIN) nextIN);
-                    }
-                    else {
-                        IN ret = searchSubTree(nextIN, null, (forward ? SearchType.LEFT : SearchType.RIGHT), -1, null,
-                            true);
-                        Label737: ; //this.hook737(parent);
-                        if (ret instanceof BIN) {
-                            return (BIN) ret; //throw new ReturnObject((BIN) ret);
-                        } else {
-                            throw new InconsistentNodeException("subtree did not have a BIN for leaf");
-                        }
-                    }
-                }
-                next = parent;
-            }
-            // end hook686
-            throw ReturnHack.returnObject;
+          }
         }
-        Label686_1:
-            catch (ReturnObject r) {
-                return (BIN) r.value;
+        Label732: ; // this.hook732();
+        int index = parent.findEntry(idKey, false, false);
+        boolean moreEntriesThisBin = false;
+        if (forward) {
+          index++;
+          if (index < parent.getNEntries()) {
+            moreEntriesThisBin = true;
+          }
+        } else {
+          if (index > 0) {
+            moreEntriesThisBin = true;
+          }
+          index--;
+        }
+        if (moreEntriesThisBin) {
+          nextIN = (IN) parent.fetchTarget(index);
+          Label735: ; // this.hook735(nextIN);
+          if (nextIN instanceof BIN) {
+            Label736: ; // this.hook736(parent);
+            TreeWalkerStatsAccumulator treeStatsAccumulator = getTreeStatsAccumulator();
+            if (treeStatsAccumulator != null) {
+              nextIN.accumulateStats(treeStatsAccumulator);
             }
-    }
+            return (BIN) nextIN; // throw new ReturnObject((BIN) nextIN);
+          } else {
+            IN ret = searchSubTree(nextIN, null, (forward ? SearchType.LEFT : SearchType.RIGHT), -1, null, true);
+            Label737: ; // this.hook737(parent);
+            if (ret instanceof BIN) {
+              return (BIN) ret; // throw new ReturnObject((BIN) ret);
+            } else {
+              throw new InconsistentNodeException("subtree did not have a BIN for leaf");
+            }
+          }
+        }
+        next = parent;
+      }
+      // end hook686
+    } finally {
+      Label686_1: ;
 
+    }
+  }
     /** 
      * Split the root of the tree.
      */
@@ -1017,24 +1005,19 @@ class Tree {
     /** 
      * Helper to obtain the root IN with proper root latching. Optionally updates the generation of the root when latching it.
      */
-    public IN getRootIN(boolean updateGeneration) throws DatabaseException {
-  //      try {
-            Label702:; //this.hook702();
-            IN rootIN = null;
-            Label701:; //this.hook701(updateGeneration, rootIN);
-            if (root != null) {
-                rootIN = (IN) root.fetchTarget(database, null);
-                rootIN.latch(updateGeneration);
-            }
-
-            Label701_1:
-                //end hook 701
-                throw ReturnHack.returnObject;
-//        }        catch (ReturnObject r) {
-//            return (IN) r.value;
-//        }
-            return rootIN;
+  public IN getRootIN(boolean updateGeneration) throws DatabaseException {
+    Label702: ; // this.hook702();
+    IN rootIN = null;
+    Label701: ; // this.hook701(updateGeneration, rootIN);
+    if (root != null) {
+      rootIN = (IN) root.fetchTarget(database, null);
+      rootIN.latch(updateGeneration);
     }
+
+    Label701_1:
+
+    return rootIN;
+  }
 
     /** 
      * Inserts a new LN into the tree.
@@ -1044,226 +1027,218 @@ class Tree {
      * @param cursorthe cursor to update to point to the newly inserted key/datapair, or null if no cursor should be updated.
      * @return true if LN was inserted, false if it was a duplicate duplicate orif an attempt was made to insert a duplicate when allowDuplicates was false.
      */
-    public boolean insert(LN ln, byte[] key, boolean allowDuplicates, CursorImpl cursor, LockResult lnLock)
-    throws DatabaseException {
+  public boolean insert(LN ln, byte[] key, boolean allowDuplicates, CursorImpl cursor, LockResult lnLock)
+      throws DatabaseException {
+    try {
+      validateInsertArgs(allowDuplicates);
+      EnvironmentImpl env = database.getDbEnvironment();
+      LogManager logManager = env.getLogManager();
+      INList inMemoryINs = env.getInMemoryINs();
+      BIN bin = null;
+      Label703: ;
+      bin = findBinForInsert(key, logManager, inMemoryINs, cursor);
+      Label741: ;
+      ChildReference newLNRef = new ChildReference(ln, key, DbLsn.NULL_LSN);
+      cursor.setBIN(bin);
+      int index = bin.insertEntry1(newLNRef);
+      if ((index & IN.INSERT_SUCCESS) != 0) {
+        index &= ~IN.INSERT_SUCCESS;
+        cursor.updateBin(bin, index);
+        long newLsn = DbLsn.NULL_LSN;
         try {
-            validateInsertArgs(allowDuplicates);
-            EnvironmentImpl env = database.getDbEnvironment();
-            LogManager logManager = env.getLogManager();
-            INList inMemoryINs = env.getInMemoryINs();
-            BIN bin = null;
-            Label703: ; //this.hook703(ln, key, allowDuplicates, cursor, lnLock, env, logManager, inMemoryINs, bin);
-            bin = findBinForInsert(key, logManager, inMemoryINs, cursor);
-            Label741: ; //this.hook741(bin);
-            ChildReference newLNRef = new ChildReference(ln, key, DbLsn.NULL_LSN);
-            cursor.setBIN(bin);
-            int index = bin.insertEntry1(newLNRef);
-            if ((index & IN.INSERT_SUCCESS) != 0) {
-                index &= ~IN.INSERT_SUCCESS;
-                cursor.updateBin(bin, index);
-                long newLsn = DbLsn.NULL_LSN;
-                try {
-                    newLsn = ln.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-                } finally {
-                    if (newLsn == DbLsn.NULL_LSN) {
-                        bin.setKnownDeleted(index);
-                    }
-                }
-                lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
-                bin.updateEntry(index, newLsn);
-                Label657: ; //this.hook657(ln, env, bin, index, newLsn);
-                throw new ReturnBoolean(true);
-            } else {
-                index &= ~IN.EXACT_MATCH;
-                cursor.updateBin(bin, index);
-                LN currentLN = null;
-                boolean isDup = false;
-                Node n = bin.fetchTarget(index);
-                if (n == null || n instanceof LN) {
-                    currentLN = (LN) n;
-                } else {
-                    isDup = true;
-                }
-                boolean isDeleted = false;
-                LockResult currentLock = null;
-                if (!isDup) {
-                    if (currentLN == null) {
-                        isDeleted = true;
-                    } else {
-                        currentLock = cursor.lockLNDeletedAllowed(currentLN, LockType.WRITE);
-                        currentLN = currentLock.getLN();
-                        bin = cursor.getBIN();
-                        index = cursor.getIndex();
-                        if (cursor.getDupBIN() != null) {
-                            cursor.clearDupBIN(true);
-                            isDup = true;
-                        } else if (bin.isEntryKnownDeleted(index) || currentLN == null || currentLN.isDeleted()) {
-                            isDeleted = true;
-                        }
-                    }
-                }
-                if (isDeleted) {
-                    long abortLsn = bin.getLsn(index);
-                    boolean abortKnownDeleted = true;
-                    if (currentLN != null && currentLock.getLockGrant() == LockGrantType.EXISTING) {
-                        long nodeId = currentLN.getNodeId();
-                        Locker locker = cursor.getLocker();
-                        WriteLockInfo info6 = locker.getWriteLockInfo(nodeId);
-                        abortLsn = info6.getAbortLsn();
-                        abortKnownDeleted = info6.getAbortKnownDeleted();
-                    }
-                    lnLock.setAbortLsn(abortLsn, abortKnownDeleted);
-                    long newLsn = ln.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-                    bin.updateEntry(index, ln, newLsn, key);
-                    bin.clearKnownDeleted(index);
-                    bin.clearPendingDeleted(index);
-                    Label658: ; //this.hook658(ln, env, bin, index, newLsn);
-                    throw new ReturnBoolean(true);
-                } else {
-                    throw new ReturnBoolean(
-                        insertDuplicate(key, bin, ln, logManager, inMemoryINs, cursor, lnLock, allowDuplicates));
-                }
-            }
-            //end of hook 703
-            Label703_1:
-                throw ReturnHack.returnBoolean;
-        } catch (ReturnBoolean r) {
-            return r.value;
+          newLsn = ln.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
+        } finally {
+          if (newLsn == DbLsn.NULL_LSN) {
+            bin.setKnownDeleted(index);
+          }
         }
+        lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
+        bin.updateEntry(index, newLsn);
+        Label657: ;
+        return true;
+      } else {
+        index &= ~IN.EXACT_MATCH;
+        cursor.updateBin(bin, index);
+        LN currentLN = null;
+        boolean isDup = false;
+        Node n = bin.fetchTarget(index);
+        if (n == null || n instanceof LN) {
+          currentLN = (LN) n;
+        } else {
+          isDup = true;
+        }
+        boolean isDeleted = false;
+        LockResult currentLock = null;
+        if (!isDup) {
+          if (currentLN == null) {
+            isDeleted = true;
+          } else {
+            currentLock = cursor.lockLNDeletedAllowed(currentLN, LockType.WRITE);
+            currentLN = currentLock.getLN();
+            bin = cursor.getBIN();
+            index = cursor.getIndex();
+            if (cursor.getDupBIN() != null) {
+              cursor.clearDupBIN(true);
+              isDup = true;
+            } else if (bin.isEntryKnownDeleted(index) || currentLN == null || currentLN.isDeleted()) {
+              isDeleted = true;
+            }
+          }
+        }
+        if (isDeleted) {
+          long abortLsn = bin.getLsn(index);
+          boolean abortKnownDeleted = true;
+          if (currentLN != null && currentLock.getLockGrant() == LockGrantType.EXISTING) {
+            long nodeId = currentLN.getNodeId();
+            Locker locker = cursor.getLocker();
+            WriteLockInfo info6 = locker.getWriteLockInfo(nodeId);
+            abortLsn = info6.getAbortLsn();
+            abortKnownDeleted = info6.getAbortKnownDeleted();
+          }
+          lnLock.setAbortLsn(abortLsn, abortKnownDeleted);
+          long newLsn = ln.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
+          bin.updateEntry(index, ln, newLsn, key);
+          bin.clearKnownDeleted(index);
+          bin.clearPendingDeleted(index);
+          Label658: ; // this.hook658(ln, env, bin, index, newLsn);
+          return true;
+        } else {
+          return insertDuplicate(key, bin, ln, logManager, inMemoryINs, cursor, lnLock, allowDuplicates);
+        }
+      }
+    } finally {
+      Label703_1: ;
     }
+  }
 
     /** 
      * Attempts to insert a duplicate at the current cursor BIN position. If an existing dup tree exists, insert into it; otherwise, create a new dup tree and place the new LN and the existing LN into it. If the current BIN entry contains an LN, the caller guarantees that it is not deleted.
      * @return true if duplicate inserted successfully, false if it was aduplicate duplicate, false if a there is an existing LN and allowDuplicates is false.
      */
-    private boolean insertDuplicate(byte[] key, BIN bin, LN newLN, LogManager logManager, INList inMemoryINs,
-        CursorImpl cursor, LockResult lnLock, boolean allowDuplicates) throws DatabaseException {
-        try {
-            EnvironmentImpl env = database.getDbEnvironment();
-            int index = cursor.getIndex();
-            boolean successfulInsert = false;
-            DIN dupRoot = null;
-            Node n = bin.fetchTarget(index);
-            long binNid = bin.getNodeId();
-            if (n instanceof DIN) {
-                DBIN dupBin = null;
-                Label704: ; //this.hook704(key, bin, newLN, cursor, lnLock, allowDuplicates, env, index, successfulInsert, dupRoot, n, binNid, dupBin);
-                dupRoot = (DIN) n;
-                Label744: ; //this.hook744(dupRoot);
-                LockResult dclLockResult = cursor.lockDupCountLN(dupRoot, LockType.WRITE);
-                bin = cursor.getBIN();
-                index = cursor.getIndex();
-                if (!allowDuplicates) {
-                    DupCountLN dcl = (DupCountLN) dclLockResult.getLN();
-                    if (dcl.getDupCount() > 0) {
-                        throw new ReturnBoolean(false);
-                    }
-                }
-                maybeSplitDuplicateRoot(bin, index);
-                dupRoot = (DIN) bin.fetchTarget(index);
-                byte[] newLNKey = newLN.getData();
-                long previousLsn = dupRoot.getLastFullVersion();
-                try {
-                    dupBin = (DBIN) searchSubTreeSplitsAllowed(dupRoot, newLNKey, -1, true);
-                } catch (SplitRequiredException e) {
-                    throw new DatabaseException(e);
-                }
-                long currentLsn = dupRoot.getLastFullVersion();
-                if (currentLsn != previousLsn) {
-                    bin.updateEntry(index, currentLsn);
-                }
-                Label743: ; //this.hook743(cursor);
-                bin = null;
-                dupRoot = null;
-                ChildReference newLNRef = new ChildReference(newLN, newLNKey, DbLsn.NULL_LSN);
-                int dupIndex = dupBin.insertEntry1(newLNRef);
-                if ((dupIndex & IN.INSERT_SUCCESS) != 0) {
-                    dupIndex &= ~IN.INSERT_SUCCESS;
-                    cursor.updateDBin(dupBin, dupIndex);
-                    long newLsn = DbLsn.NULL_LSN;
-                    try {
-                        newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-                    } finally {
-                        if (newLsn == DbLsn.NULL_LSN) {
-                            dupBin.setKnownDeleted(dupIndex);
-                        }
-                    }
-                    lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
-                    dupBin.setLsn(dupIndex, newLsn);
-                    Label659: ; //this.hook659(newLN, binNid, dupBin, newLsn);
-                    successfulInsert = true;
-                } else {
-                    dupIndex &= ~IN.EXACT_MATCH;
-                    cursor.updateDBin(dupBin, dupIndex);
-                    LN currentLN = (LN) dupBin.fetchTarget(dupIndex);
-                    boolean isDeleted = false;
-                    LockResult currentLock = null;
-                    if (currentLN == null) {
-                        isDeleted = true;
-                    } else {
-                        currentLock = cursor.lockLNDeletedAllowed(currentLN, LockType.WRITE);
-                        currentLN = currentLock.getLN();
-                        dupBin = cursor.getDupBIN();
-                        dupIndex = cursor.getDupIndex();
-                        if (dupBin.isEntryKnownDeleted(dupIndex) || currentLN == null || currentLN.isDeleted()) {
-                            isDeleted = true;
-                        }
-                    }
-                    if (isDeleted) {
-                        long abortLsn = dupBin.getLsn(dupIndex);
-                        boolean abortKnownDeleted = true;
-                        if (currentLN != null && currentLock.getLockGrant() == LockGrantType.EXISTING) {
-                            long nodeId = currentLN.getNodeId();
-                            Locker locker = cursor.getLocker();
-                            WriteLockInfo info7 = locker.getWriteLockInfo(nodeId);
-                            abortLsn = info7.getAbortLsn();
-                            abortKnownDeleted = info7.getAbortKnownDeleted();
-                        }
-                        lnLock.setAbortLsn(abortLsn, abortKnownDeleted);
-                        long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
-                        dupBin.updateEntry(dupIndex, newLN, newLsn, newLNKey);
-                        dupBin.clearKnownDeleted(dupIndex);
-                        dupBin.clearPendingDeleted(dupIndex);
-                        Label660: ; //this.hook660(newLN, binNid, dupBin, newLsn);
-                        successfulInsert = true;
-                    } else {
-                        successfulInsert = false;
-                    }
-                }
-                Label742: ; //this.hook742(dupBin);
-                dupBin = null;
-                if (successfulInsert) {
-                    Label746:; //this.hook746(cursor);
-                    dupRoot = cursor.getLatchedDupRoot(false);
-                    Label745:; //this.hook745(cursor);
-                    dupRoot.incrementDuplicateCount(dclLockResult, key, cursor.getLocker(), true);
-                }
-                Label704_1:
-                    //end hook704
-            } else if (n instanceof LN) {
-                if (!allowDuplicates) {
-                    return false;
-                }
-                try {
-                    lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
-                    dupRoot = createDuplicateTree(key, logManager, inMemoryINs, newLN, cursor);
-                } finally {
-                    if (dupRoot != null) {
-                        Label705:; //this.hook705(dupRoot);
-                        successfulInsert = true;
-                    }
-                    else {
-                        successfulInsert = false;
-                    }
-                }
-            } else {
-                throw new InconsistentNodeException("neither LN or DIN found in BIN");
-            }
-            return successfulInsert;
-        } catch (ReturnBoolean r) {
-            return r.value;
+  private boolean insertDuplicate(byte[] key, BIN bin, LN newLN, LogManager logManager, INList inMemoryINs,
+      CursorImpl cursor, LockResult lnLock, boolean allowDuplicates) throws DatabaseException {
+    EnvironmentImpl env = database.getDbEnvironment();
+    int index = cursor.getIndex();
+    boolean successfulInsert = false;
+    DIN dupRoot = null;
+    Node n = bin.fetchTarget(index);
+    long binNid = bin.getNodeId();
+    if (n instanceof DIN) {
+      DBIN dupBin = null;
+      Label704: ; // this.hook704(key, bin, newLN, cursor, lnLock, allowDuplicates, env, index,
+                  // successfulInsert, dupRoot, n, binNid, dupBin);
+      dupRoot = (DIN) n;
+      Label744: ; // this.hook744(dupRoot);
+      LockResult dclLockResult = cursor.lockDupCountLN(dupRoot, LockType.WRITE);
+      bin = cursor.getBIN();
+      index = cursor.getIndex();
+      if (!allowDuplicates) {
+        DupCountLN dcl = (DupCountLN) dclLockResult.getLN();
+        if (dcl.getDupCount() > 0) {
+          return false;
         }
+      }
+      maybeSplitDuplicateRoot(bin, index);
+      dupRoot = (DIN) bin.fetchTarget(index);
+      byte[] newLNKey = newLN.getData();
+      long previousLsn = dupRoot.getLastFullVersion();
+      try {
+        dupBin = (DBIN) searchSubTreeSplitsAllowed(dupRoot, newLNKey, -1, true);
+      } catch (SplitRequiredException e) {
+        throw new DatabaseException(e);
+      }
+      long currentLsn = dupRoot.getLastFullVersion();
+      if (currentLsn != previousLsn) {
+        bin.updateEntry(index, currentLsn);
+      }
+      Label743: ; // this.hook743(cursor);
+      bin = null;
+      dupRoot = null;
+      ChildReference newLNRef = new ChildReference(newLN, newLNKey, DbLsn.NULL_LSN);
+      int dupIndex = dupBin.insertEntry1(newLNRef);
+      if ((dupIndex & IN.INSERT_SUCCESS) != 0) {
+        dupIndex &= ~IN.INSERT_SUCCESS;
+        cursor.updateDBin(dupBin, dupIndex);
+        long newLsn = DbLsn.NULL_LSN;
+        try {
+          newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
+        } finally {
+          if (newLsn == DbLsn.NULL_LSN) {
+            dupBin.setKnownDeleted(dupIndex);
+          }
+        }
+        lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
+        dupBin.setLsn(dupIndex, newLsn);
+        Label659: ;
+        successfulInsert = true;
+      } else {
+        dupIndex &= ~IN.EXACT_MATCH;
+        cursor.updateDBin(dupBin, dupIndex);
+        LN currentLN = (LN) dupBin.fetchTarget(dupIndex);
+        boolean isDeleted = false;
+        LockResult currentLock = null;
+        if (currentLN == null) {
+          isDeleted = true;
+        } else {
+          currentLock = cursor.lockLNDeletedAllowed(currentLN, LockType.WRITE);
+          currentLN = currentLock.getLN();
+          dupBin = cursor.getDupBIN();
+          dupIndex = cursor.getDupIndex();
+          if (dupBin.isEntryKnownDeleted(dupIndex) || currentLN == null || currentLN.isDeleted()) {
+            isDeleted = true;
+          }
+        }
+        if (isDeleted) {
+          long abortLsn = dupBin.getLsn(dupIndex);
+          boolean abortKnownDeleted = true;
+          if (currentLN != null && currentLock.getLockGrant() == LockGrantType.EXISTING) {
+            long nodeId = currentLN.getNodeId();
+            Locker locker = cursor.getLocker();
+            WriteLockInfo info7 = locker.getWriteLockInfo(nodeId);
+            abortLsn = info7.getAbortLsn();
+            abortKnownDeleted = info7.getAbortKnownDeleted();
+          }
+          lnLock.setAbortLsn(abortLsn, abortKnownDeleted);
+          long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, cursor.getLocker());
+          dupBin.updateEntry(dupIndex, newLN, newLsn, newLNKey);
+          dupBin.clearKnownDeleted(dupIndex);
+          dupBin.clearPendingDeleted(dupIndex);
+          Label660: ; // this.hook660(newLN, binNid, dupBin, newLsn);
+          successfulInsert = true;
+        } else {
+          successfulInsert = false;
+        }
+      }
+      Label742: ; // this.hook742(dupBin);
+      dupBin = null;
+      if (successfulInsert) {
+        Label746: ; // this.hook746(cursor);
+        dupRoot = cursor.getLatchedDupRoot(false);
+        Label745: ; // this.hook745(cursor);
+        dupRoot.incrementDuplicateCount(dclLockResult, key, cursor.getLocker(), true);
+      }
+      Label704_1: ;
+    } else if (n instanceof LN) {
+      if (!allowDuplicates) {
+        return false;
+      }
+      try {
+        lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
+        dupRoot = createDuplicateTree(key, logManager, inMemoryINs, newLN, cursor);
+      } finally {
+        if (dupRoot != null) {
+          Label705: ; // this.hook705(dupRoot);
+          successfulInsert = true;
+        } else {
+          successfulInsert = false;
+        }
+      }
+    } else {
+      throw new InconsistentNodeException("neither LN or DIN found in BIN");
     }
+    return successfulInsert;
+
+  }
 
     /** 
      * Check if the duplicate root needs to be split. The current duplicate root is latched. Exit with the new root (even if it's unchanged) latched and the old root (unless the root is unchanged) unlatched.
@@ -1301,66 +1276,64 @@ class Tree {
      * @param cursorpoints to the target position for this new dup tree.
      * @return the new duplicate subtree root (a DIN). It is latched when it isreturned and the caller should unlatch it. If new entry to be inserted is a duplicate of the existing LN, null is returned.
      */
-    private DIN createDuplicateTree(byte[] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor)
-    throws DatabaseException {
-        try {
-            EnvironmentImpl env = database.getDbEnvironment();
-            DIN dupRoot = null;
-            DBIN dupBin = null;
-            BIN bin = cursor.getBIN();
-            int index = cursor.getIndex();
-            LN existingLN = (LN) bin.fetchTarget(index);
-            boolean existingLNIsDeleted = bin.isEntryKnownDeleted(index) || existingLN.isDeleted();
-            assert existingLN != null;
-            byte[] existingKey = existingLN.getData();
-            byte[] newLNKey = newLN.getData();
-            boolean keysEqual = Key.compareKeys(newLNKey, existingKey, database.getDuplicateComparator()) == 0;
-            if (keysEqual) {
-                return null;
-            }
-            Locker locker = cursor.getLocker();
-            long nodeId = existingLN.getNodeId();
-            int startingCount = (locker.createdNode(nodeId) || existingLNIsDeleted ||
-                locker.getWriteLockInfo(nodeId).getAbortKnownDeleted()) ? 0 : 1;
-            DupCountLN dupCountLN = new DupCountLN(startingCount);
-            long firstDupCountLNLsn = dupCountLN.logProvisional(env, database.getId(), key, DbLsn.NULL_LSN);
-            dupRoot = new DIN(database, existingKey, maxDupTreeEntriesPerNode, key,
-                new ChildReference(dupCountLN, key, firstDupCountLNLsn), 2);
-            Label710: ; //this.hook710(dupRoot);
-            dupRoot.setIsRoot(true);
-            dupBin = new DBIN(database, existingKey, maxDupTreeEntriesPerNode, key, 1);
-            Label709: ; //this.hook709(dupBin);
-            ChildReference newExistingLNRef = new ChildReference(existingLN, existingKey, bin.getLsn(index),
-                bin.getState(index));
-            boolean insertOk = dupBin.insertEntry(newExistingLNRef);
-            assert insertOk;
-            Label708: ; //this.hook708(key, logManager, inMemoryINs, newLN, cursor, env, dupRoot, dupBin, bin, index, existingLN, newLNKey, locker, dupCountLN, firstDupCountLNLsn);
-            long dbinLsn = dupBin.logProvisional(logManager, dupRoot);
-            inMemoryINs.add(dupBin);
-            dupRoot.setEntry(0, dupBin, dupBin.getKey(0), dbinLsn, dupBin.getState(0));
-            long dinLsn = dupRoot.log(logManager);
-            inMemoryINs.add(dupRoot);
-            LockResult lockResult = locker.lock(dupCountLN.getNodeId(), LockType.WRITE, false, database);
-            lockResult.setAbortLsn(firstDupCountLNLsn, false);
-            dupCountLN.setDupCount(2);
-            long dupCountLsn = dupCountLN.log(env, database.getId(), key, firstDupCountLNLsn, locker);
-            dupRoot.updateDupCountLNRef(dupCountLsn);
-            long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, locker);
-            int dupIndex = dupBin.insertEntry1(new ChildReference(newLN, newLNKey, newLsn));
-            dupIndex &= ~IN.INSERT_SUCCESS;
-            cursor.updateDBin(dupBin, dupIndex);
-            bin.adjustCursorsForMutation(index, dupBin, dupIndex ^ 1, cursor);
-            Label747: ; //this.hook747(dupBin);
-            bin.updateEntry(index, dupRoot, dinLsn);
-            bin.setMigrate(index, false);
-            Label664: ; //this.hook664(newLN, dupRoot, dupBin, bin, existingLN, dupCountLN, dbinLsn, dinLsn, dupCountLsn, newLsn);
-        }
-        Label708_1:
-            finally {}
-        //end hook708
-        Label708_1:
-            return dupRoot;
+      private DIN createDuplicateTree(byte[] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor)
+      throws DatabaseException {
+
+    EnvironmentImpl env = database.getDbEnvironment();
+    DIN dupRoot = null;
+    DBIN dupBin = null;
+    BIN bin = cursor.getBIN();
+    int index = cursor.getIndex();
+    LN existingLN = (LN) bin.fetchTarget(index);
+    boolean existingLNIsDeleted = bin.isEntryKnownDeleted(index) || existingLN.isDeleted();
+    assert existingLN != null;
+    byte[] existingKey = existingLN.getData();
+    byte[] newLNKey = newLN.getData();
+    boolean keysEqual = Key.compareKeys(newLNKey, existingKey, database.getDuplicateComparator()) == 0;
+    if (keysEqual) {
+      return null;
     }
+    Locker locker = cursor.getLocker();
+    long nodeId = existingLN.getNodeId();
+    int startingCount = (locker.createdNode(nodeId) || existingLNIsDeleted
+        || locker.getWriteLockInfo(nodeId).getAbortKnownDeleted()) ? 0 : 1;
+    DupCountLN dupCountLN = new DupCountLN(startingCount);
+    long firstDupCountLNLsn = dupCountLN.logProvisional(env, database.getId(), key, DbLsn.NULL_LSN);
+    dupRoot = new DIN(database, existingKey, maxDupTreeEntriesPerNode, key,
+        new ChildReference(dupCountLN, key, firstDupCountLNLsn), 2);
+    Label710: ; // this.hook710(dupRoot);
+    dupRoot.setIsRoot(true);
+    dupBin = new DBIN(database, existingKey, maxDupTreeEntriesPerNode, key, 1);
+    Label709: ; // this.hook709(dupBin);
+    ChildReference newExistingLNRef = new ChildReference(existingLN, existingKey, bin.getLsn(index),
+        bin.getState(index));
+    boolean insertOk = dupBin.insertEntry(newExistingLNRef);
+    assert insertOk;
+    Label708: ; // this.hook708(key, logManager, inMemoryINs, newLN, cursor, env, dupRoot,
+                // dupBin, bin, index, existingLN, newLNKey, locker, dupCountLN,
+                // firstDupCountLNLsn);
+    long dbinLsn = dupBin.logProvisional(logManager, dupRoot);
+    inMemoryINs.add(dupBin);
+    dupRoot.setEntry(0, dupBin, dupBin.getKey(0), dbinLsn, dupBin.getState(0));
+    long dinLsn = dupRoot.log(logManager);
+    inMemoryINs.add(dupRoot);
+    LockResult lockResult = locker.lock(dupCountLN.getNodeId(), LockType.WRITE, false, database);
+    lockResult.setAbortLsn(firstDupCountLNLsn, false);
+    dupCountLN.setDupCount(2);
+    long dupCountLsn = dupCountLN.log(env, database.getId(), key, firstDupCountLNLsn, locker);
+    dupRoot.updateDupCountLNRef(dupCountLsn);
+    long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, locker);
+    int dupIndex = dupBin.insertEntry1(new ChildReference(newLN, newLNKey, newLsn));
+    dupIndex &= ~IN.INSERT_SUCCESS;
+    cursor.updateDBin(dupBin, dupIndex);
+    bin.adjustCursorsForMutation(index, dupBin, dupIndex ^ 1, cursor);
+    Label747: ; // this.hook747(dupBin);
+    bin.updateEntry(index, dupRoot, dinLsn);
+    bin.setMigrate(index, false);
+    Label664: ;
+    return dupRoot;
+
+  }
 
     /** 
      * Validate args passed to insert. Presently this just means making sure that if they say duplicates are allowed that the database supports duplicates.
@@ -1384,11 +1357,11 @@ class Tree {
             if (!bin.needsSplitting() && bin.isKeyInBounds(key)) {
                 return bin;
             } else {
-                Label712:; //this.hook712(bin);
+                Label712:   ;; //this.hook712(bin);
             }
         }
         boolean rootLatchIsHeld = false;
-        Label711: //bin =            ;  //this.hook711(key, logManager, inMemoryINs, bin, rootLatchIsHeld);
+        Label711:   ; //bin =            ;  //this.hook711(key, logManager, inMemoryINs, bin, rootLatchIsHeld);
             long logLsn;
         while (true) {
             rootLatchIsHeld = true;
@@ -1428,7 +1401,7 @@ class Tree {
                 }
             }
         }
-        Label711_1:
+        Label711_1:   ;
             //end hook711
             if (ckptHook != null) {
                 ckptHook.doHook();

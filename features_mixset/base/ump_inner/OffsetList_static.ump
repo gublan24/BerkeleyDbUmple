@@ -4,10 +4,11 @@ class OffsetList {
   static class Segment {
       private int index;
       private Segment next;
-      private int[] values;
-      public Segment(){
-        values=new int[SEGMENT_CAPACITY];
-      }
+      private int[] values = new int[SEGMENT_CAPACITY];
+
+//      public Segment(){
+//        values=new int[SEGMENT_CAPACITY];
+ //     }
       /** 
    * Call this method on the tail.  The new tail is returned, if
    * allocating a new tail is necessary.

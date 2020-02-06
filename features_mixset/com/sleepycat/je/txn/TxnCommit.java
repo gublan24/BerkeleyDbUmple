@@ -39,24 +39,14 @@ public class TxnCommit extends TxnEnd
 
   /**
    * 
-   * For constructing from the log.
-   */
-  // line 16 "../../../../TxnCommit.ump"
-   public  TxnCommit(){
-    
-  }
-
-
-  /**
-   * 
    * @see TxnEnd#getLogType
    */
-  // line 22 "../../../../TxnCommit.ump"
+  // line 17 "../../../../TxnCommit.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_TXN_COMMIT;
   }
 
-  // line 26 "../../../../TxnCommit.ump"
+  // line 21 "../../../../TxnCommit.ump"
    protected String getTagName(){
     return "TxnCommit";
   }

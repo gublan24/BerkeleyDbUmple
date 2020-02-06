@@ -45,7 +45,7 @@ public class MemoryBudget implements EnvConfigObserver
 			envImpl.addConfigObserver(this);
 			reset(configManager);
 			//this.hook351(configManager);
-      Label351:
+      Label351:   ;
   }
 
 
@@ -126,7 +126,7 @@ public class MemoryBudget implements EnvConfigObserver
   
     // line 6 "../../../../MemoryBudget_static.ump"
     public void execute(){
-      Label348: //this.hook348();
+      Label348:   ; //this.hook348();
     }
     
     //------------------------
@@ -216,10 +216,10 @@ public class MemoryBudget implements EnvConfigObserver
             newLogBufferBudget=numBuffers * startingBufferSize;
           }
   
-          Label350:        //this.hook350();
+          Label350:   ;        //this.hook350();
           newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
           _this.maxMemory=newMaxMemory;
-          Label349: //this.hook349();
+          Label349:   ; //this.hook349();
           _this.logBufferBudget=newLogBufferBudget;
     }
     

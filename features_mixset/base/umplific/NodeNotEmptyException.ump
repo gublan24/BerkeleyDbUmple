@@ -6,7 +6,6 @@ class NodeNotEmptyException
   depend de.ovgu.cide.jakutil.*;
     public static final NodeNotEmptyException NODE_NOT_EMPTY = new NodeNotEmptyException();
 
-    private NodeNotEmptyException() {
-    }
+  
 
 }

@@ -83,7 +83,7 @@ public class SortedLSNTreeWalker
 	    accumulateLSNs(root);
 	    releaseRootIN(root);
 	}
-	Label359: //this.hook359();
+	Label359:   ;//this.hook359();
 	while (true) {
 	    maybeGetMoreINs();
 	    if (currentLSNs != null && currentLSNIdx < currentLSNs.length) {
@@ -195,7 +195,6 @@ public class SortedLSNTreeWalker
   
   
   
-  @MethodObject
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
   public static class SortedLSNTreeWalker_extractINsForDb
   {
@@ -229,10 +228,10 @@ public class SortedLSNTreeWalker
       foundSome=false;
           foundSet=new HashSet();
           //this.hook360();
-          Label360:
-          Label356: //this.hook356();
+          Label360:   ;
+          Label356:   ;//this.hook356();
           try {
-            this.hook357();
+          //  this.hook357();
             iter=inList.iterator();
             while (iter.hasNext()) {
               thisIN=(IN)iter.next();
@@ -241,19 +240,14 @@ public class SortedLSNTreeWalker
                 if (_this.removeINsFromINList) {
                   iter.remove();
                   //this.hook361();
-                  Label361:
+                  Label361:   ;
                 }
                 foundSet.add(thisIN);
               }
             }
           }
-     catch (      DatabaseException e) {
-            //this.hook362();
-            Label362:
-            throw e;
-          }
      finally {
-            Label358: //this.hook358();
+            Label358:   ;//this.hook358();
           }
           if (foundSome) {
             iter1=foundSet.iterator();
@@ -262,7 +256,8 @@ public class SortedLSNTreeWalker
               _this.accumulateLSNs(thisIN1);
             }
           }
-          foundSet=null;
+          foundSet=null;          
+          Label362:   ;
           return foundSome;
     }
     
@@ -270,25 +265,25 @@ public class SortedLSNTreeWalker
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 52 "../../../../SortedLSNTreeWalker_static.ump"
+    // line 48 "../../../../SortedLSNTreeWalker_static.ump"
     protected SortedLSNTreeWalker _this ;
-  // line 53 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 49 "../../../../SortedLSNTreeWalker_static.ump"
     protected INList inList ;
-  // line 54 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 50 "../../../../SortedLSNTreeWalker_static.ump"
     protected boolean foundSome ;
-  // line 55 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 51 "../../../../SortedLSNTreeWalker_static.ump"
     protected Set foundSet ;
-  // line 56 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 52 "../../../../SortedLSNTreeWalker_static.ump"
     protected long memoryChange ;
-  // line 57 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 53 "../../../../SortedLSNTreeWalker_static.ump"
     protected MemoryBudget mb ;
-  // line 58 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 54 "../../../../SortedLSNTreeWalker_static.ump"
     protected Iterator iter ;
-  // line 59 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 55 "../../../../SortedLSNTreeWalker_static.ump"
     protected IN thisIN ;
-  // line 60 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 56 "../../../../SortedLSNTreeWalker_static.ump"
     protected Iterator iter1 ;
-  // line 61 "../../../../SortedLSNTreeWalker_static.ump"
+  // line 57 "../../../../SortedLSNTreeWalker_static.ump"
     protected IN thisIN1 ;
   
     

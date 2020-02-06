@@ -3,24 +3,19 @@ namespace com.sleepycat.je.tree;
 class SearchResult
 {
   depend de.ovgu.cide.jakutil.*;
-    public boolean exactParentFound;
+     public boolean exactParentFound;
+     public boolean keepSearching;
+     public boolean childNotResident;
+     public IN parent ;
+     int index =-1;
 
-    public boolean keepSearching;
-
-    public boolean childNotResident;
-
-    public IN parent;
-
-    public int index;
-
-    public SearchResult() {
+  after constructor {
 	exactParentFound = false;
 	keepSearching = true;
 	parent = null;
-	index = -1;
+//	index = -1;
 	childNotResident = false;
     }
-
     public String toString() {
 	return "exactParentFound=" + exactParentFound + " keepSearching=" + keepSearching + " parent="
 		+ ((parent == null) ? "null" : Long.toString(parent.getNodeId())) + " index=" + index

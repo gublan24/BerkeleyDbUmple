@@ -36,7 +36,7 @@ public class PreloadProcessor implements TreeNodeProcessor
     this.envImpl = envImpl;
 			this.maxBytes = maxBytes;
 			this.targetTime = targetTime;
-			Label535: //this.hook353(stats);
+			Label535:   ; //this.hook353(stats);
   }
 
 
@@ -51,8 +51,8 @@ public class PreloadProcessor implements TreeNodeProcessor
 					throw DatabaseImpl.timeExceededPreloadException;
 			}
 			//this.hook355();
-			Label355:
-			Label354: //this.hook354(childType);
+			Label355:   ;
+			Label354:   ; //this.hook354(childType);
   }
   
   //------------------------

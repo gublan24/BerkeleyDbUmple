@@ -17,11 +17,12 @@ class BINDelta
   depend java.util.List;
   depend java.util.ArrayList;
   depend java.nio.ByteBuffer;
-    private DatabaseId dbId;
 
-    private long lastFullLsn;
+     DatabaseId dbId = new DatabaseId();
 
-    private List deltas;
+     long lastFullLsn = DbLsn.NULL_LSN;
+
+     List deltas = new ArrayList();
 
     private LogEntryType logEntryType;
 
@@ -43,11 +44,11 @@ class BINDelta
     /** 
      * For instantiating from the log.
      */
-    public BINDelta() {
-	dbId = new DatabaseId();
-	lastFullLsn = DbLsn.NULL_LSN;
-	deltas = new ArrayList();
-    }
+   // public BINDelta() {
+//	dbId = new DatabaseId();
+//	lastFullLsn = DbLsn.NULL_LSN;
+//	deltas = new ArrayList();
+ //   }
 
     /** 
      * @return a count of deltas for this BIN.
@@ -78,7 +79,7 @@ class BINDelta
 	DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	fullBIN.setDatabase(db);
 	fullBIN.setLastFullLsn(lastFullLsn);
-	Label612: //this.hook612(fullBIN);
+	Label612:   ; //this.hook612(fullBIN);
 	for (int i = 0; i < deltas.size(); i++) {
 	    DeltaInfo info = (DeltaInfo) deltas.get(i);
 	    int foundIndex = fullBIN.findEntry(info.getKey(), true, false);
@@ -98,7 +99,7 @@ class BINDelta
 	    }
 	}
 	fullBIN.setGeneration(0);
-	Label611: //this.hook611(fullBIN);
+	Label611:   ; //this.hook611(fullBIN);
 	return fullBIN;
     }
 

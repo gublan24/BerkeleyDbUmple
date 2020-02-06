@@ -32,12 +32,7 @@ public class InconsistentNodeException extends DatabaseException
     super.delete();
   }
 
-  // line 9 "../../../../InconsistentNodeException.ump"
-   public  InconsistentNodeException(){
-    super();
-  }
-
-  // line 13 "../../../../InconsistentNodeException.ump"
+  // line 11 "../../../../InconsistentNodeException.ump"
    public  InconsistentNodeException(String message){
     super(message);
   }

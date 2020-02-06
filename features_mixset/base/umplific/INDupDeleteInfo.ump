@@ -18,7 +18,7 @@ class INDupDeleteInfo
 
     private byte[] deletedDupKey;
 
-    private DatabaseId dbId;
+    DatabaseId dbId = new DatabaseId();
 
     /** 
      * Create a new delete info entry.
@@ -30,12 +30,7 @@ class INDupDeleteInfo
 	this.dbId = dbId;
     }
 
-    /** 
-     * Used by logging system only.
-     */
-    public INDupDeleteInfo() {
-	dbId = new DatabaseId();
-    }
+
 
     public long getDeletedNodeId() {
 	return deletedNodeId;

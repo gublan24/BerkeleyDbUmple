@@ -31,9 +31,13 @@ public class DIN extends IN
   // CONSTRUCTOR
   //------------------------
 
-  public DIN()
+  public DIN(long aNodeId)
   {
-    super();
+    super(aNodeId);
+    // line 39 "../../../../DIN.ump"
+    dupCountLNRef = new ChildReference();
+    	init(null, Key.EMPTY_KEY, 0, 0);
+    // END OF UMPLE AFTER INJECTION
   }
 
   //------------------------
@@ -48,28 +52,16 @@ public class DIN extends IN
 
   /**
    * 
-   * Create an empty DIN, with no node id, to be filled in from the log.
-   */
-  // line 39 "../../../../DIN.ump"
-   public  DIN(){
-    super();
-	dupCountLNRef = new ChildReference();
-	init(null, Key.EMPTY_KEY, 0, 0);
-  }
-
-
-  /**
-   * 
    * Create a new DIN.
    */
-  // line 49 "../../../../DIN.ump"
+  // line 48 "../../../../DIN.ump"
    public  DIN(DatabaseImpl db, byte [] identifierKey, int capacity, byte [] dupKey, ChildReference dupCountLNRef, int level){
     super(db, identifierKey, capacity, level);
 	this.dupKey = dupKey;
 	this.dupCountLNRef = dupCountLNRef;
   }
 
-  // line 55 "../../../../DIN.ump"
+  // line 54 "../../../../DIN.ump"
    protected int generateLevel(DatabaseId dbId, int newLevel){
     return newLevel;
   }
@@ -79,7 +71,7 @@ public class DIN extends IN
    * 
    * Create a new DIN.  Need this because we can't call newInstance() without getting a 0 node.
    */
-  // line 62 "../../../../DIN.ump"
+  // line 61 "../../../../DIN.ump"
    protected IN createNewInstance(byte [] identifierKey, int maxEntries, int level){
     return new DIN(getDatabase(), identifierKey, maxEntries, dupKey, dupCountLNRef, level);
   }
@@ -89,7 +81,7 @@ public class DIN extends IN
    * 
    * Return the key for this duplicate set.
    */
-  // line 69 "../../../../DIN.ump"
+  // line 68 "../../../../DIN.ump"
    public byte[] getDupKey(){
     return dupKey;
   }
@@ -99,12 +91,12 @@ public class DIN extends IN
    * 
    * Get the key (dupe or identifier) in child that is used to locate it in 'this' node.
    */
-  // line 76 "../../../../DIN.ump"
+  // line 75 "../../../../DIN.ump"
    public byte[] getChildKey(IN child) throws DatabaseException{
     return child.getIdentifierKey();
   }
 
-  // line 80 "../../../../DIN.ump"
+  // line 79 "../../../../DIN.ump"
    public byte[] selectKey(byte [] mainTreeKey, byte [] dupTreeKey){
     return dupTreeKey;
   }
@@ -114,7 +106,7 @@ public class DIN extends IN
    * 
    * Return the key for navigating through the duplicate tree.
    */
-  // line 87 "../../../../DIN.ump"
+  // line 86 "../../../../DIN.ump"
    public byte[] getDupTreeKey(){
     return getIdentifierKey();
   }
@@ -124,17 +116,17 @@ public class DIN extends IN
    * 
    * Return the key for navigating through the main tree.
    */
-  // line 94 "../../../../DIN.ump"
+  // line 93 "../../../../DIN.ump"
    public byte[] getMainTreeKey(){
     return dupKey;
   }
 
-  // line 98 "../../../../DIN.ump"
+  // line 97 "../../../../DIN.ump"
    public ChildReference getDupCountLNRef(){
     return dupCountLNRef;
   }
 
-  // line 102 "../../../../DIN.ump"
+  // line 101 "../../../../DIN.ump"
    public DupCountLN getDupCountLN() throws DatabaseException{
     return (DupCountLN) dupCountLNRef.fetchTarget(getDatabase(), this);
   }
@@ -144,7 +136,7 @@ public class DIN extends IN
    * 
    * Assign the Dup Count LN.
    */
-  // line 109 "../../../../DIN.ump"
+  // line 108 "../../../../DIN.ump"
   public void setDupCountLN(ChildReference dupCountLNRef){
     this.dupCountLNRef = dupCountLNRef;
   }
@@ -154,7 +146,7 @@ public class DIN extends IN
    * 
    * Assign the Dup Count LN node.  Does not dirty the DIN.
    */
-  // line 116 "../../../../DIN.ump"
+  // line 115 "../../../../DIN.ump"
    public void updateDupCountLN(Node target){
     new DIN_updateDupCountLN(this, target).execute();
   }
@@ -164,7 +156,7 @@ public class DIN extends IN
    * 
    * Update Dup Count LN.
    */
-  // line 123 "../../../../DIN.ump"
+  // line 122 "../../../../DIN.ump"
    public void updateDupCountLNRefAndNullTarget(long newLsn){
     new DIN_updateDupCountLNRefAndNullTarget(this, newLsn).execute();
   }
@@ -174,7 +166,7 @@ public class DIN extends IN
    * 
    * Update dup count LSN.
    */
-  // line 130 "../../../../DIN.ump"
+  // line 129 "../../../../DIN.ump"
    public void updateDupCountLNRef(long newLsn){
     setDirty(true);
 	dupCountLNRef.setLsn(newLsn);
@@ -185,12 +177,12 @@ public class DIN extends IN
    * 
    * @return true if this node is a duplicate-bearing node type, falseif otherwise.
    */
-  // line 138 "../../../../DIN.ump"
+  // line 137 "../../../../DIN.ump"
    public boolean containsDuplicates(){
     return true;
   }
 
-  // line 142 "../../../../DIN.ump"
+  // line 141 "../../../../DIN.ump"
    public boolean isDbRoot(){
     return false;
   }
@@ -200,7 +192,7 @@ public class DIN extends IN
    * 
    * Increment or decrement the DupCountLN, log the updated LN, and update the lock result. Preconditions: This DIN is latched and the DupCountLN is write locked. Postconditions: Same as preconditions.
    */
-  // line 157 "../../../../DIN.ump"
+  // line 156 "../../../../DIN.ump"
    public void incrementDuplicateCount(LockResult lockResult, byte [] key, Locker locker, boolean increment) throws DatabaseException{
     long oldLsn = dupCountLNRef.getLsn();
 	lockResult.setAbortLsn(oldLsn, dupCountLNRef.isKnownDeleted());
@@ -216,7 +208,7 @@ public class DIN extends IN
 	updateDupCountLNRef(newCountLSN);
   }
 
-  // line 172 "../../../../DIN.ump"
+  // line 171 "../../../../DIN.ump"
   public boolean matchLNByNodeId(TreeLocation location, long nodeId) throws DatabaseException{
     for (int i = 0; i < getNEntries(); i++) {
 	    Node n = fetchTarget(i);
@@ -230,7 +222,7 @@ public class DIN extends IN
 	return false;
   }
 
-  // line 185 "../../../../DIN.ump"
+  // line 184 "../../../../DIN.ump"
   public void accumulateStats(TreeWalkerStatsAccumulator acc){
     acc.processDIN(this, new Long(getNodeId()), getLevel());
   }
@@ -240,7 +232,7 @@ public class DIN extends IN
    * 
    * @see IN#getLogType
    */
-  // line 192 "../../../../DIN.ump"
+  // line 191 "../../../../DIN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_DIN;
   }
@@ -250,7 +242,7 @@ public class DIN extends IN
    * 
    * Handles lazy migration of DupCountLNs prior to logging a DIN.  See BIN.logInternal for more information.
    */
-  // line 200 "../../../../DIN.ump"
+  // line 199 "../../../../DIN.ump"
    protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional, boolean proactiveMigration, IN parent) throws DatabaseException{
     if (dupCountLNRef != null) {
 	    Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
@@ -264,7 +256,7 @@ public class DIN extends IN
    * 
    * @see IN#getLogSize
    */
-  // line 211 "../../../../DIN.ump"
+  // line 210 "../../../../DIN.ump"
    public int getLogSize(){
     int size = super.getLogSize();
 	size += LogUtils.getByteArrayLogSize(dupKey);
@@ -280,7 +272,7 @@ public class DIN extends IN
    * 
    * @see IN#writeToLog
    */
-  // line 224 "../../../../DIN.ump"
+  // line 223 "../../../../DIN.ump"
    public void writeToLog(ByteBuffer logBuffer){
     super.writeToLog(logBuffer);
 	LogUtils.writeByteArray(logBuffer, dupKey);
@@ -296,7 +288,7 @@ public class DIN extends IN
    * 
    * @see IN#readFromLog
    */
-  // line 237 "../../../../DIN.ump"
+  // line 236 "../../../../DIN.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     super.readFromLog(itemBuffer, entryTypeVersion);
 	dupKey = LogUtils.readByteArray(itemBuffer);
@@ -313,7 +305,7 @@ public class DIN extends IN
    * 
    * DINS need to dump their dup key
    */
-  // line 251 "../../../../DIN.ump"
+  // line 250 "../../../../DIN.ump"
    protected void dumpLogAdditional(StringBuffer sb){
     super.dumpLogAdditional(sb);
 	sb.append(Key.dumpString(dupKey, 0));
@@ -322,12 +314,12 @@ public class DIN extends IN
 	}
   }
 
-  // line 259 "../../../../DIN.ump"
+  // line 258 "../../../../DIN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 263 "../../../../DIN.ump"
+  // line 262 "../../../../DIN.ump"
    public String endTag(){
     return END_TAG;
   }
@@ -338,7 +330,7 @@ public class DIN extends IN
    * For unit test support:
    * @return a string that dumps information about this DIN, without
    */
-  // line 271 "../../../../DIN.ump"
+  // line 270 "../../../../DIN.ump"
    public String dumpString(int nSpaces, boolean dumpTags){
     StringBuffer sb = new StringBuffer();
 	if (dumpTags) {
@@ -366,12 +358,12 @@ public class DIN extends IN
 	return sb.toString();
   }
 
-  // line 298 "../../../../DIN.ump"
+  // line 297 "../../../../DIN.ump"
    public String toString(){
     return dumpString(0, true);
   }
 
-  // line 302 "../../../../DIN.ump"
+  // line 301 "../../../../DIN.ump"
    public String shortClassName(){
     return "DIN";
   }
@@ -497,7 +489,7 @@ public class DIN extends IN
 // line 33 "../../../../DIN.ump"
   private ChildReference dupCountLNRef ;
 
-// line 148 "../../../../DIN.ump"
+// line 147 "../../../../DIN.ump"
   public final Comparator getKeyComparator () 
   {
     return getDatabase().getDuplicateComparator();

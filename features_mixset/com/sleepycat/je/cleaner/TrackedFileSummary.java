@@ -84,7 +84,7 @@ public class TrackedFileSummary extends FileSummary
     obsoleteOffsets = null;
 			tracker.resetFile(this);
 			//this.hook168();
-			Label168:
+			Label168:   ;
       super.reset();
   }
 
@@ -110,7 +110,7 @@ public class TrackedFileSummary extends FileSummary
 	    if (obsoleteOffsets != null) {
 		if (obsoleteOffsets.merge(other.obsoleteOffsets)) {
 		    //this.hook169();
-        Label169:
+        Label169:   ;
 		}
 	    } else {
 		obsoleteOffsets = other.obsoleteOffsets;
@@ -184,15 +184,15 @@ public class TrackedFileSummary extends FileSummary
             return;
           }
           //this.hook170();
-          Label170:
+          Label170:   ;
           if (_this.obsoleteOffsets == null) {
             _this.obsoleteOffsets=new OffsetList();
             //this.hook171();
-            Label171:
+            Label171:   ;
           }
           if (_this.obsoleteOffsets.add(offset,_this.tracker.getEnvironment().isOpen())) {
             //this.hook172();
-            Label172:
+            Label172:   ;
           }
     }
     

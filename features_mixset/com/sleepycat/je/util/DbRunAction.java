@@ -120,103 +120,96 @@ public class DbRunAction
     }
   
     // line 9 "../../../../DbRunAction_static.ump"
-    public void execute(){
-      recoveryStart=0;
-          actionStart=0;
-          actionEnd=0;
-          try {
-            whichArg=0;
-            if (argv.length == 0) {
-              usage();
-              System.exit(1);
-            }
-            dbName=null;
-            doAction=0;
-            envHome=".";
-            readOnly=false;
-            while (whichArg < argv.length) {
-              nextArg=argv[whichArg];
-              if (nextArg.equals("-h")) {
-                whichArg++;
-                envHome=CmdUtil.getArg(argv,whichArg);
-              }
-     else           if (nextArg.equals("-a")) {
-                whichArg++;
-                action=CmdUtil.getArg(argv,whichArg);
-                if (action.equalsIgnoreCase("clean")) {
-                  doAction=CLEAN;
-                }
-     else {
-                 Label841:// this.hook841();
-  							if (action.equalsIgnoreCase("checkpoint")) {
-  											doAction=CHECKPOINT;
-  										}
-  											Label846: //this.hook846();
-  											Label843: //this.hook843();
-  											Label839:// from hook843();
-  							 else {
-  											 usage();
-  											 System.exit(1);
-  										}
-  							//End of hook841
-                }
-              }
-     else           if (nextArg.equals("-ro")) {
-                readOnly=true;
-              }
-     else           if (nextArg.equals("-s")) {
-                dbName=argv[++whichArg];
-              }
-     else {
-                throw new IllegalArgumentException(nextArg + " is not a supported option.");
-              }
-              whichArg++;
-            }
-            envConfig=new EnvironmentConfig();
-            Label848:
-            Label847:
-            //this.hook845();
-            Label845:
-            recoveryStart=System.currentTimeMillis();
-            env=new Environment(new File(envHome),envConfig);
-            forceConfig=new CheckpointConfig();
-            forceConfig.setForce(true);
-            actionStart=System.currentTimeMillis();
-            if (doAction == CLEAN) {
-              while (true) {
-                nFiles=env.cleanLog();
-                System.out.println("Files cleaned: " + nFiles);
-                if (nFiles == 0) {
-                  break;
-                }
-              }
-              env.checkpoint(forceConfig);
-            }
-            Label840: //this.hook840();
-            //this.hook844();
-            Label844:
-            if (doAction == CHECKPOINT) {
-              env.checkpoint(forceConfig);
-            }
-            Label842: //this.hook842();
-            Label838: //this.hook838();
-            actionEnd=System.currentTimeMillis();
-            env.close();
-          }
-     catch (      Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+     public void execute(){
+      recoveryStart = 0;
+        actionStart = 0;
+        actionEnd = 0;
+        try {
+          whichArg = 0;
+          if (argv.length == 0) {
             usage();
             System.exit(1);
           }
-     finally {
-            f=new DecimalFormat();
-            f.setMaximumFractionDigits(2);
-            recoveryDuration=actionStart - recoveryStart;
-            System.out.println("\nrecovery time = " + f.format(recoveryDuration) + " millis "+ f.format((double)recoveryDuration / 60000)+ " minutes");
-            actionDuration=actionEnd - actionStart;
-            System.out.println("action time = " + f.format(actionDuration) + " millis "+ f.format(actionDuration / 60000)+ " minutes");
+          dbName = null;
+          doAction = 0;
+          envHome = ".";
+          readOnly = false;
+          while (whichArg < argv.length) {
+            nextArg = argv[whichArg];
+            if (nextArg.equals("-h")) {
+              whichArg++;
+              envHome = CmdUtil.getArg(argv, whichArg);
+            } else if (nextArg.equals("-a")) {
+              whichArg++;
+              action = CmdUtil.getArg(argv, whichArg);
+              if (action.equalsIgnoreCase("clean")) {
+                doAction = CLEAN;
+              } else {
+                boolean elseFlag = true; 
+                Label841: // this.hook841();
+                if (action.equalsIgnoreCase("checkpoint")) {
+                  doAction = CHECKPOINT;
+                  elseFlag = false; 
+                }
+                 Label846: ;
+                 Label843: ;
+                 Label839: ;
+                if (elseFlag) {
+                  usage();
+                  System.exit(1);
+                }
+              }
+            } else if (nextArg.equals("-ro")) {
+              readOnly = true;
+            } else if (nextArg.equals("-s")) {
+              dbName = argv[++whichArg];
+            } else {
+              throw new IllegalArgumentException(nextArg + " is not a supported option.");
+            }
+            whichArg++;
           }
+          envConfig = new EnvironmentConfig();
+          Label848: Label847:
+          // this.hook845();
+          Label845: recoveryStart = System.currentTimeMillis();
+          env = new Environment(new File(envHome), envConfig);
+          forceConfig = new CheckpointConfig();
+          forceConfig.setForce(true);
+          actionStart = System.currentTimeMillis();
+          if (doAction == CLEAN) {
+            while (true) {
+              nFiles = env.cleanLog();
+              System.out.println("Files cleaned: " + nFiles);
+              if (nFiles == 0) {
+                break;
+              }
+            }
+            env.checkpoint(forceConfig);
+          }
+          Label840: // this.hook840();
+          // this.hook844();
+          Label844: if (doAction == CHECKPOINT) {
+            env.checkpoint(forceConfig);
+          }
+          Label842: // this.hook842();
+          Label838: // this.hook838();
+          actionEnd = System.currentTimeMillis();
+          env.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+          System.out.println(e.getMessage());
+          usage();
+          System.exit(1);
+        } finally {
+          f = new DecimalFormat();
+          f.setMaximumFractionDigits(2);
+          recoveryDuration = actionStart - recoveryStart;
+          System.out.println("\nrecovery time = " + f.format(recoveryDuration) + " millis "
+              + f.format((double) recoveryDuration / 60000) + " minutes");
+          actionDuration = actionEnd - actionStart;
+          System.out.println(
+              "action time = " + f.format(actionDuration) + " millis " + f.format(actionDuration / 60000) + " minutes");
+        }
     }
   
   
@@ -230,7 +223,7 @@ public class DbRunAction
      * protected void hook840() throws Exception {
      * }
      */
-    // line 136 "../../../../DbRunAction_static.ump"
+    // line 129 "../../../../DbRunAction_static.ump"
      protected void hook841() throws Exception{
       
     }
@@ -250,7 +243,7 @@ public class DbRunAction
      * this.hook843();
      * }
      */
-    // line 150 "../../../../DbRunAction_static.ump"
+    // line 143 "../../../../DbRunAction_static.ump"
      protected void hook847() throws Exception{
       
     }
@@ -259,45 +252,45 @@ public class DbRunAction
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 106 "../../../../DbRunAction_static.ump"
+    // line 99 "../../../../DbRunAction_static.ump"
     protected String[] argv ;
-  // line 107 "../../../../DbRunAction_static.ump"
+  // line 100 "../../../../DbRunAction_static.ump"
     protected long recoveryStart ;
-  // line 108 "../../../../DbRunAction_static.ump"
+  // line 101 "../../../../DbRunAction_static.ump"
     protected long actionStart ;
-  // line 109 "../../../../DbRunAction_static.ump"
+  // line 102 "../../../../DbRunAction_static.ump"
     protected long actionEnd ;
-  // line 110 "../../../../DbRunAction_static.ump"
+  // line 103 "../../../../DbRunAction_static.ump"
     protected int whichArg ;
-  // line 111 "../../../../DbRunAction_static.ump"
+  // line 104 "../../../../DbRunAction_static.ump"
     protected String dbName ;
-  // line 112 "../../../../DbRunAction_static.ump"
+  // line 105 "../../../../DbRunAction_static.ump"
     protected int doAction ;
-  // line 113 "../../../../DbRunAction_static.ump"
+  // line 106 "../../../../DbRunAction_static.ump"
     protected String envHome ;
-  // line 114 "../../../../DbRunAction_static.ump"
+  // line 107 "../../../../DbRunAction_static.ump"
     protected boolean readOnly ;
-  // line 115 "../../../../DbRunAction_static.ump"
+  // line 108 "../../../../DbRunAction_static.ump"
     protected String nextArg ;
-  // line 116 "../../../../DbRunAction_static.ump"
+  // line 109 "../../../../DbRunAction_static.ump"
     protected String action ;
-  // line 117 "../../../../DbRunAction_static.ump"
+  // line 110 "../../../../DbRunAction_static.ump"
     protected EnvironmentConfig envConfig ;
-  // line 118 "../../../../DbRunAction_static.ump"
+  // line 111 "../../../../DbRunAction_static.ump"
     protected Environment env ;
-  // line 119 "../../../../DbRunAction_static.ump"
+  // line 112 "../../../../DbRunAction_static.ump"
     protected CheckpointConfig forceConfig ;
-  // line 120 "../../../../DbRunAction_static.ump"
+  // line 113 "../../../../DbRunAction_static.ump"
     protected int nFiles ;
-  // line 121 "../../../../DbRunAction_static.ump"
+  // line 114 "../../../../DbRunAction_static.ump"
     protected DatabaseConfig dbConfig ;
-  // line 122 "../../../../DbRunAction_static.ump"
+  // line 115 "../../../../DbRunAction_static.ump"
     protected Database db ;
-  // line 123 "../../../../DbRunAction_static.ump"
+  // line 116 "../../../../DbRunAction_static.ump"
     protected DecimalFormat f ;
-  // line 124 "../../../../DbRunAction_static.ump"
+  // line 117 "../../../../DbRunAction_static.ump"
     protected long recoveryDuration ;
-  // line 125 "../../../../DbRunAction_static.ump"
+  // line 118 "../../../../DbRunAction_static.ump"
     protected long actionDuration ;
   
     

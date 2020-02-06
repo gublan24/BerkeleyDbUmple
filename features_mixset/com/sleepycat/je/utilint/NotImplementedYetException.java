@@ -29,12 +29,7 @@ public class NotImplementedYetException extends RuntimeException
   public void delete()
   {}
 
-  // line 8 "../../../../NotImplementedYetException.ump"
-   public  NotImplementedYetException(){
-    super();
-  }
-
-  // line 12 "../../../../NotImplementedYetException.ump"
+  // line 9 "../../../../NotImplementedYetException.ump"
    public  NotImplementedYetException(String message){
     super(message);
   }

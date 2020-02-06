@@ -35,8 +35,7 @@ class DIN
     /** 
      * Create an empty DIN, with no node id, to be filled in from the log.
      */
-    public DIN() {
-	super();
+  after constructor {
 	dupCountLNRef = new ChildReference();
 	init(null, Key.EMPTY_KEY, 0, 0);
     }

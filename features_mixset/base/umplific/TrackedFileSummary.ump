@@ -52,7 +52,7 @@ class TrackedFileSummary
 			obsoleteOffsets = null;
 			tracker.resetFile(this);
 			//this.hook168();
-			Label168:
+			Label168:   ;
       super.reset();
     }
 
@@ -72,7 +72,7 @@ class TrackedFileSummary
 	    if (obsoleteOffsets != null) {
 		if (obsoleteOffsets.merge(other.obsoleteOffsets)) {
 		    //this.hook169();
-        Label169:
+        Label169:   ;
 		}
 	    } else {
 		obsoleteOffsets = other.obsoleteOffsets;

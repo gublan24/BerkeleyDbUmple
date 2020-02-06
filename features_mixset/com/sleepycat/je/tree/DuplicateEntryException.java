@@ -32,12 +32,7 @@ public class DuplicateEntryException extends DatabaseException
     super.delete();
   }
 
-  // line 9 "../../../../DuplicateEntryException.ump"
-   public  DuplicateEntryException(){
-    super();
-  }
-
-  // line 13 "../../../../DuplicateEntryException.ump"
+  // line 11 "../../../../DuplicateEntryException.ump"
    public  DuplicateEntryException(String message){
     super(message);
   }

@@ -6,10 +6,10 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.DatabaseException;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
-import com.sleepycat.je.cleaner.*;
+import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../TreeIterator.ump"
-public class TreeIterator extends Iterator
+public class TreeIterator implements Iterator
 {
 
   //------------------------
@@ -21,18 +21,14 @@ public class TreeIterator extends Iterator
   //------------------------
 
   public TreeIterator()
-  {
-    super();
-  }
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {
-    super.delete();
-  }
+  {}
 
   // line 17 "../../../../TreeIterator.ump"
    public  TreeIterator(Tree tree) throws DatabaseException{
@@ -59,25 +55,24 @@ public class TreeIterator extends Iterator
   // line 37 "../../../../TreeIterator.ump"
    public Object next(){
     Object ret = null;
-	try {
-	    if (nextBin == null) {
-		throw new NoSuchElementException();
-	    }
-	    Label758:           ;  //this.hook758();
-	    ret = nextBin.getKey(index);
-	} catch (DatabaseException e) {
-	} finally {
-	    Label759:           ;  //this.hook759();
-	}
-	return ret;
+    try {
+      if (nextBin == null) {
+        throw new NoSuchElementException();
+      }
+      Label758: ; // this.hook758();
+      ret = nextBin.getKey(index);
+    } finally {
+      Label759: ; // this.hook759();
+    }
+    return ret;
   }
 
-  // line 52 "../../../../TreeIterator.ump"
+  // line 51 "../../../../TreeIterator.ump"
    public void remove(){
     throw new UnsupportedOperationException();
   }
 
-  // line 56 "../../../../TreeIterator.ump"
+  // line 55 "../../../../TreeIterator.ump"
    private void advance() throws DatabaseException{
     while (nextBin != null) {
 	    if (++index < nextBin.getNEntries()) {

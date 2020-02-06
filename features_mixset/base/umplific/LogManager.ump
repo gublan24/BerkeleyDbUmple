@@ -22,6 +22,9 @@ class LogManager
   depend java.nio.BufferOverflowException;
   depend java.io.RandomAccessFile;
   depend java.io.IOException;
+  
+  abstract;
+
     private static final String DEBUG_NAME = LogManager.class.getName();
 
     static final int HEADER_BYTES = 14;
@@ -54,7 +57,7 @@ class LogManager
 
     static int HEADER_CONTENT_BYTES() {
 			int r = HEADER_BYTES;
-			Label504: //r = hook504(r);
+			Label504:   ; //r = hook504(r);
 			return r;
     }
 
@@ -67,10 +70,10 @@ class LogManager
 			DbConfigManager configManager = envImpl.getConfigManager();
 			this.readOnly = readOnly;
 			logBufferPool = new LogBufferPool(fileManager, envImpl);
-			Label505: //this.hook505(configManager);
-			Label502: //this.hook502(envImpl);
+			Label505:   ; //this.hook505(configManager);
+			Label502:   ; //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-			Label498: //this.hook498(envImpl);
+			Label498:   ; //this.hook498(envImpl);
     }
 
     public long getLastLsnAtRecovery() {
@@ -155,8 +158,8 @@ class LogManager
 	} catch (IOException e) {
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
-	Label501: //this.hook501(fsyncRequired);
-	Label499: //this.hook499(logResult);
+	Label501:   ; //this.hook501(fsyncRequired);
+	Label499:   ; //this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -206,17 +209,17 @@ class LogManager
 					}
 					LogBuffer useLogBuffer = logBufferPool.getWriteBuffer(entrySize, flippedFile);
 					marshalledBuffer = addPrevOffsetAndChecksum(marshalledBuffer, fileManager.getPrevEntryOffset(), entrySize);
-					Label503: //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
+					Label503:   ; //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
 					ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
 					if (useBuffer.capacity() - useBuffer.position() < entrySize) {
 							fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
 							usedTemporaryBuffer = true;
 							assert useBuffer.position() == 0;
-							Label509: //this.hook509();
+							Label509:   ; //this.hook509();
 					} else {
 							useBuffer.put(marshalledBuffer);
 					}
-					Label503_1:
+					Label503_1:   ;
 				 //End hook503
 			} catch (Exception e) {
 					fileManager.restoreLastPosition();
@@ -233,7 +236,7 @@ class LogManager
 			}
 			item.postLogWork(currentLsn);
 			boolean wakeupCheckpointer = false;
-			Label500: //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			Label500:   ; //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
 			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
     }
 
@@ -409,8 +412,8 @@ class LogManager
 
 //    protected void hook501(boolean fsyncRequired) throws DatabaseException { }
 
-    protected void hook502(EnvironmentImpl envImpl) throws DatabaseException {
-    }
+   // protected void hook502(EnvironmentImpl envImpl) throws DatabaseException {
+ //   }
 
 //    protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer,
 //	    LogBuffer useLogBuffer) throws IOException, DatabaseException, Exception {
@@ -430,8 +433,8 @@ class LogManager
 //	return r;
  //   }
 
-    protected void hook505(DbConfigManager configManager) throws DatabaseException {
-    }
+ //   protected void hook505(DbConfigManager configManager) throws DatabaseException {
+ //   }
 
 //    protected void hook509() throws IOException, DatabaseException, Exception {
 //    }

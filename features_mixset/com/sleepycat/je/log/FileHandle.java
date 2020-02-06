@@ -34,7 +34,7 @@ public class FileHandle
   public  FileHandle(RandomAccessFile file, String fileName, EnvironmentImpl env, boolean oldHeaderVersion){
     this.file = file;
 	this.oldHeaderVersion = oldHeaderVersion;
-	Label444: //this.hook444(fileName, env);
+	Label444:   ; //this.hook444(fileName, env);
   }
 
   // line 21 "../../../../FileHandle.ump"

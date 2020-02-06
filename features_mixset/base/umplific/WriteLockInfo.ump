@@ -4,15 +4,15 @@ class WriteLockInfo
 {
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
-    Lock lock;
+    public Lock lock;
 
-    long abortLsn = DbLsn.NULL_LSN;
+    protected long abortLsn = DbLsn.NULL_LSN;
 
-    boolean abortKnownDeleted;
+    protected boolean abortKnownDeleted;
 
-    boolean neverLocked;
+    protected boolean neverLocked;
 
-    boolean createdThisTxn;
+    protected boolean createdThisTxn;
 
     static final WriteLockInfo basicWriteLockInfo = new WriteLockInfo();
 
@@ -24,8 +24,8 @@ class WriteLockInfo
 	createdThisTxn = false;
     }
 
-    WriteLockInfo() {
-	this.lock = null;
+  after constructor {
+  this.lock = null;
 	abortLsn = DbLsn.NULL_LSN;
 	abortKnownDeleted = true;
 	neverLocked = true;

@@ -36,21 +36,21 @@ class FileProcessor {
         obsoleteIter=obsoleteOffsets.iterator();
         nextObsolete=-1;
         readBufferSize=_this.cleaner.readBufferSize;
-        Label128: //this.hook128();
+        Label128:   ; //this.hook128();
         //this.hook161();
-        Label161:
-        Label119: //this.hook119();
-        Label127: //this.hook127();
-        Label154: //this.hook154();
+        Label161:   ;
+        Label119:   ; //this.hook119();
+        Label127:   ; //this.hook127();
+        Label154:   ; //this.hook154();
         dbCache=new HashMap();
         try {
           reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
-          Label137: //this.hook137();
+          Label137:   ; //this.hook137();
           dbMapTree=_this.env.getDbMapTree();
           location=new TreeLocation();
           nProcessedLNs=0;
           while (reader.readNextEntry()) {
-            Label146: //this.hook146();
+            Label146:   ; //this.hook146();
             lsn=reader.getLastLsn();
             fileOffset=DbLsn.getFileOffset(lsn);
             isLN=reader.isLN();
@@ -76,11 +76,11 @@ class FileProcessor {
               isObsolete=true;
             }
             if (isObsolete) {
-              Label147: //this.hook147();
-              Label156: //this.hook156();
+              Label147:   ; //this.hook147();
+              Label156:   ; //this.hook156();
               continue;
             }
-            Label120: //this.hook120();
+            Label120:   ; //this.hook120();
             if (isLN) {
               targetLN=reader.getLN();
               dbId2=reader.getDatabaseId();
@@ -88,9 +88,9 @@ class FileProcessor {
               dupKey=reader.getDupTreeKey();
               aLsn=new Long(DbLsn.getFileOffset(lsn));
               aLninfo=new LNInfo(targetLN,dbId2,key,dupKey);
-              Label130: //this.hook130();
+              Label130:   ; //this.hook130();
   						p=null;
-        			Label131: //this.hook131();
+        			Label131:   ; //this.hook131();
         			_this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
 //end hook130
               nProcessedLNs+=1;
@@ -112,13 +112,13 @@ class FileProcessor {
               assert false;
             }
           }
-          Label129: //this.hook129();
-          Label155: //this.hook155();
-          Label145: //this.hook145();
+          Label129:   ; //this.hook129();
+          Label155:   ; //this.hook155();
+          Label145:   ; //this.hook145();
         }
     finally {
           //this.hook162();
-          Label162:
+          Label162:   ;
           if (tfs != null) {
             tfs.setAllowFlush(true);
           }
@@ -170,7 +170,7 @@ class FileProcessor {
       }
       protected void hook129() throws DatabaseException, IOException {
       }
-*/
+
       protected void hook130() throws DatabaseException, IOException {
         p=null;
         this.hook131();
@@ -194,6 +194,7 @@ class FileProcessor {
       }
       protected void hook162() throws DatabaseException, IOException {
       }
+*/
     }
    static class FileProcessor_processLN {
       FileProcessor_processLN(    FileProcessor _this,    Long fileNum,    TreeLocation location,    Long offset,    LNInfo info,    Object lookAheadCachep,    Map dbCache){
@@ -206,7 +207,7 @@ class FileProcessor {
         this.dbCache=dbCache;
       }
       void execute() throws DatabaseException {
-        Label132: //this.hook132();
+        Label132:   ; //this.hook132();
         ln=info.getLN();
         key=info.getKey();
         dupKey=info.getDupKey();
@@ -219,10 +220,10 @@ class FileProcessor {
         parentDIN=null;
         try {
           b=db == null;
-          Label157: //this.hook157();
+          Label157:   ; //this.hook157();
           if (b) {
-            Label158: //this.hook158();
-            Label148: //this.hook148();
+            Label158:   ; //this.hook158();
+            Label148:   ; //this.hook148();
             obsolete=true;
             completed=true;
             return;
@@ -233,13 +234,13 @@ class FileProcessor {
           bin=location.bin;
           index=location.index;
           if (!parentFound) {
-            Label149: //this.hook149();
+            Label149:   ; //this.hook149();
             obsolete=true;
             completed=true;
             return;
           }
           if (bin.isEntryKnownDeleted(index)) {
-            Label150: //this.hook150();
+            Label150:   ; //this.hook150();
             obsolete=true;
             completed=true;
             return;
@@ -259,12 +260,12 @@ class FileProcessor {
           processedHere=false;
           _this.processFoundLN(info,logLsn,treeLsn,bin,index,parentDIN);
           completed=true;
-          Label133: //this.hook133();
+          Label133:   ; //this.hook133();
           return;
         }
     finally {
-          Label135: //this.hook135();
-          Label126: //this.hook126();
+          Label135:   ; //this.hook135();
+          Label126:   ; //this.hook126();
         }
       }
       protected FileProcessor _this;

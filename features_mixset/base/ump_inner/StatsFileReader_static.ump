@@ -1,20 +1,19 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/StatsFileReader.java
 namespace com.sleepycat.je.log;
 class StatsFileReader {
+
+
+
+
   static class EntryInfo {
-      public int count;
-      public int provisionalCount;
-      public long totalBytes;
-      public int minBytes;
-      public int maxBytes;
-      EntryInfo(){
-        count=0;
-        provisionalCount=0;
-        totalBytes=0;
-        minBytes=0;
-        maxBytes=0;
-      }
+      int count = 0;
+      int provisionalCount =0;
+      long totalBytes = 0 ;
+      int minBytes = 0;
+      int maxBytes = 0;
+
     }
+
   static class LogEntryTypeComparator {
       isA Comparator;
       public int compare(    Object o1,    Object o2){

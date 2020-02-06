@@ -28,11 +28,6 @@ public class NodeNotEmptyException extends Exception
 
   public void delete()
   {}
-
-  // line 10 "../../../../NodeNotEmptyException.ump"
-   private  NodeNotEmptyException(){
-    
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

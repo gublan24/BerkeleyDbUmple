@@ -5,9 +5,7 @@ class DuplicateEntryException
   isA DatabaseException;
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
-    public DuplicateEntryException() {
-	super();
-    }
+
 
     public DuplicateEntryException(String message) {
 	super(message);

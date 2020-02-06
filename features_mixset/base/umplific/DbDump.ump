@@ -58,8 +58,7 @@ class DbDump
 	    + "  [-s <databaseName>] # database to dump\n" + "  [-v]                # verbose in salvage mode\n"
 	    + "  [-V]                # print JE version number\n";
 
-    private DbDump() {
-    }
+
 
     public DbDump(Environment env, String dbName, PrintStream outputFile, String outputDirectory,
 	    boolean formatUsingPrintable) {
@@ -194,7 +193,7 @@ class DbDump
 
     public void dump() throws IOException, DatabaseException {
 	openEnv(true);
-	Label834: //this.hook834();
+	Label834: ; //this.hook834();
 	DatabaseEntry foundKey = new DatabaseEntry();
 	DatabaseEntry foundData = new DatabaseEntry();
 	DatabaseConfig dbConfig = new DatabaseConfig();

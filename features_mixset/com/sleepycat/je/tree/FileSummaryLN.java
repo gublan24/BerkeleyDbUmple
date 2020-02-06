@@ -23,18 +23,50 @@ public class FileSummaryLN extends LN
   // MEMBER VARIABLES
   //------------------------
 
+  //FileSummaryLN Attributes
+  private FileSummary baseSummary;
+  private PackedOffsets obsoleteOffsets;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public FileSummaryLN()
+  public FileSummaryLN(long aNodeId)
   {
-    super();
+    super(aNodeId);
+    baseSummary = new FileSummary();
+    obsoleteOffsets = new PackedOffsets();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setBaseSummary(FileSummary aBaseSummary)
+  {
+    boolean wasSet = false;
+    baseSummary = aBaseSummary;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setObsoleteOffsets(PackedOffsets aObsoleteOffsets)
+  {
+    boolean wasSet = false;
+    obsoleteOffsets = aObsoleteOffsets;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public FileSummary getBaseSummary()
+  {
+    return baseSummary;
+  }
+
+  public PackedOffsets getObsoleteOffsets()
+  {
+    return obsoleteOffsets;
+  }
 
   public void delete()
   {
@@ -59,15 +91,10 @@ public class FileSummaryLN extends LN
   /**
    * 
    * Creates an empty LN to be filled in from the log.
-   */
-  // line 47 "../../../../FileSummaryLN.ump"
-   public  FileSummaryLN() throws DatabaseException{
-    baseSummary = new FileSummary();
-	obsoleteOffsets = new PackedOffsets();
-  }
-
-
-  /**
+   * public FileSummaryLN() throws DatabaseException {
+   * baseSummary = new FileSummary();
+   * obsoleteOffsets = new PackedOffsets();
+   * }
    * 
    * Sets the live summary object that will be added to the base summary at the time the LN is logged.
    */
@@ -90,29 +117,9 @@ public class FileSummaryLN extends LN
 
   /**
    * 
-   * Returns the base summary for the file that is stored in the LN.
-   */
-  // line 70 "../../../../FileSummaryLN.ump"
-   public FileSummary getBaseSummary(){
-    return baseSummary;
-  }
-
-
-  /**
-   * 
-   * Returns the obsolete offsets for the file.
-   */
-  // line 77 "../../../../FileSummaryLN.ump"
-   public PackedOffsets getObsoleteOffsets(){
-    return obsoleteOffsets;
-  }
-
-
-  /**
-   * 
    * Returns true if the given key for this LN is a String file number key. For the old version of the LN there will be a single record per file. If this is a version 0 log entry, the key is a string.  However, such an LN may be migrated by the cleaner, in which case the version will be 1 or greater [#13061].  In the latter case, we can distinguish a string key by: 1) If the key is not 8 bytes long, it has to be a string key. 2) If the key is 8 bytes long, but bytes[4] is ascii "0" to "9", then it must be a string key.  bytes[4] to bytes[7] are a sequence number that is the number of log entries counted.  For this number to be greater than 0x30000000, the binary value of 4 digits starting with ascii "0", over 400 million log entries would have to occur in a single file; this should never happen. Note that having to rely on method (2) is unlikely.  A string key will only be 8 bytes if the file number reach 8 decimal digits (10,000,000 to 99,999,999).  This is a very large file number and unlikely to have occurred using JE 1.7.1 or earlier. In summary, the only time the algorithm here could fail is if there were more than 400 million log entries per file, and more than 10 million were written with JE 1.7.1 or earlier.
    */
-  // line 84 "../../../../FileSummaryLN.ump"
+  // line 82 "../../../../FileSummaryLN.ump"
    public boolean hasStringKey(byte [] bytes){
     if (logVersion == 0 || bytes.length != 8) {
 	    return true;
@@ -126,7 +133,7 @@ public class FileSummaryLN extends LN
    * 
    * Convert a FileSummaryLN key from a byte array to a long.  The file number is the first 4 bytes of the key.
    */
-  // line 95 "../../../../FileSummaryLN.ump"
+  // line 93 "../../../../FileSummaryLN.ump"
    public long getFileNumber(byte [] bytes){
     if (hasStringKey(bytes)) {
 	    try {
@@ -146,7 +153,7 @@ public class FileSummaryLN extends LN
    * 
    * Returns the first 4 bytes of the key for the given file number.  This can be used to do a range search to find the first LN for the file.
    */
-  // line 112 "../../../../FileSummaryLN.ump"
+  // line 110 "../../../../FileSummaryLN.ump"
    public static  byte[] makePartialKey(long fileNum){
     byte[] bytes = new byte[4];
 	ByteBuffer buf = ByteBuffer.wrap(bytes);
@@ -160,7 +167,7 @@ public class FileSummaryLN extends LN
    * Returns the full two-part key for a given file number and unique sequence.  This can be used to insert a new LN.
    * @param sequence is a unique identifier for the LN for the given file,and must be greater than the last sequence.
    */
-  // line 123 "../../../../FileSummaryLN.ump"
+  // line 121 "../../../../FileSummaryLN.ump"
    public static  byte[] makeFullKey(long fileNum, int sequence){
     assert sequence >= 0;
 	byte[] bytes = new byte[8];
@@ -175,7 +182,7 @@ public class FileSummaryLN extends LN
    * 
    * Initialize a node that has been faulted in from the log.  If this FSLN contains version 1 offsets that can be incorrect when RMW was used, and if je.cleaner.rmwFix is enabled, discard the offsets.  [#13158]
    */
-  // line 135 "../../../../FileSummaryLN.ump"
+  // line 133 "../../../../FileSummaryLN.ump"
    public void postFetchInit(DatabaseImpl db, long sourceLsn) throws DatabaseException{
     super.postFetchInit(db, sourceLsn);
 	if (logVersion == 1 && db.getDbEnvironment().getUtilizationProfile().isRMWFixEnabled()) {
@@ -183,22 +190,22 @@ public class FileSummaryLN extends LN
 	}
   }
 
-  // line 142 "../../../../FileSummaryLN.ump"
+  // line 140 "../../../../FileSummaryLN.ump"
    public String toString(){
     return dumpString(0, true);
   }
 
-  // line 146 "../../../../FileSummaryLN.ump"
+  // line 144 "../../../../FileSummaryLN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 150 "../../../../FileSummaryLN.ump"
+  // line 148 "../../../../FileSummaryLN.ump"
    public String endTag(){
     return END_TAG;
   }
 
-  // line 154 "../../../../FileSummaryLN.ump"
+  // line 152 "../../../../FileSummaryLN.ump"
    public String dumpString(int nSpaces, boolean dumpTags){
     StringBuffer sb = new StringBuffer();
 	sb.append(super.dumpString(nSpaces, dumpTags));
@@ -215,7 +222,7 @@ public class FileSummaryLN extends LN
    * 
    * Dump additional fields. Done this way so the additional info can be within the XML tags defining the dumped log entry.
    */
-  // line 168 "../../../../FileSummaryLN.ump"
+  // line 166 "../../../../FileSummaryLN.ump"
    protected void dumpLogAdditional(StringBuffer sb, boolean verbose){
     if (!isDeleted()) {
 	    baseSummary.dumpLog(sb, true);
@@ -230,7 +237,7 @@ public class FileSummaryLN extends LN
    * 
    * Log type for transactional entries.
    */
-  // line 180 "../../../../FileSummaryLN.ump"
+  // line 178 "../../../../FileSummaryLN.ump"
    protected LogEntryType getTransactionalLogType(){
     assert false : "Txnl access to UP db not allowed";
 	return LogEntryType.LOG_FILESUMMARYLN;
@@ -241,7 +248,7 @@ public class FileSummaryLN extends LN
    * 
    * @see LN#getLogType
    */
-  // line 188 "../../../../FileSummaryLN.ump"
+  // line 186 "../../../../FileSummaryLN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_FILESUMMARYLN;
   }
@@ -251,7 +258,7 @@ public class FileSummaryLN extends LN
    * 
    * @see LoggableObject#marshallOutsideWriteLatchFileSummaryLNs must be marshalled within the log write latch, becausethat critical section is used to guarantee that all previous log entries are reflected in the summary.
    */
-  // line 195 "../../../../FileSummaryLN.ump"
+  // line 193 "../../../../FileSummaryLN.ump"
    public boolean marshallOutsideWriteLatch(){
     return false;
   }
@@ -261,7 +268,7 @@ public class FileSummaryLN extends LN
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 202 "../../../../FileSummaryLN.ump"
+  // line 200 "../../../../FileSummaryLN.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
@@ -271,7 +278,7 @@ public class FileSummaryLN extends LN
    * 
    * @see LN#getLogSize
    */
-  // line 209 "../../../../FileSummaryLN.ump"
+  // line 207 "../../../../FileSummaryLN.ump"
    public int getLogSize(){
     int size = super.getLogSize();
 	if (!isDeleted()) {
@@ -287,7 +294,7 @@ public class FileSummaryLN extends LN
    * 
    * @see LN#writeToLog
    */
-  // line 222 "../../../../FileSummaryLN.ump"
+  // line 220 "../../../../FileSummaryLN.ump"
    public void writeToLog(ByteBuffer logBuffer){
     if (trackedSummary != null) {
 	    baseSummary.add(trackedSummary);
@@ -308,7 +315,7 @@ public class FileSummaryLN extends LN
    * 
    * @see LN#readFromLog
    */
-  // line 240 "../../../../FileSummaryLN.ump"
+  // line 238 "../../../../FileSummaryLN.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     super.readFromLog(itemBuffer, entryTypeVersion);
 	logVersion = entryTypeVersion;
@@ -325,7 +332,7 @@ public class FileSummaryLN extends LN
    * 
    * If tracked offsets may be present, get them so they are ready to be written to the log.
    */
-  // line 254 "../../../../FileSummaryLN.ump"
+  // line 252 "../../../../FileSummaryLN.ump"
    private void getOffsets(){
     if (needOffsets) {
 	    long[] offsets = trackedSummary.getObsoleteOffsets();
@@ -344,12 +351,8 @@ public class FileSummaryLN extends LN
   private static final String BEGIN_TAG = "<fileSummaryLN>" ;
 // line 20 "../../../../FileSummaryLN.ump"
   private static final String END_TAG = "</fileSummaryLN>" ;
-// line 22 "../../../../FileSummaryLN.ump"
-  private FileSummary baseSummary ;
 // line 24 "../../../../FileSummaryLN.ump"
   private TrackedFileSummary trackedSummary ;
-// line 26 "../../../../FileSummaryLN.ump"
-  private PackedOffsets obsoleteOffsets ;
 // line 28 "../../../../FileSummaryLN.ump"
   private boolean needOffsets ;
 // line 30 "../../../../FileSummaryLN.ump"

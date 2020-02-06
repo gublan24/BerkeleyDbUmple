@@ -26,19 +26,19 @@ class BIN {
 
  private static final String END_TAG = "</bin>";
 
- private TinyHashSet cursorSet;
+ TinyHashSet cursorSet = new TinyHashSet();;
 
  private long lastDeltaVersion = DbLsn.NULL_LSN;
 
- private int numDeltasSinceLastFull;
+ int numDeltasSinceLastFull = 0;
 
- private boolean prohibitNextDelta;
+ boolean prohibitNextDelta = false;
 
- public BIN() {
-  cursorSet = new TinyHashSet();
-  numDeltasSinceLastFull = 0;
-  prohibitNextDelta = false;
- }
+ //public BIN() {
+  //cursorSet = new TinyHashSet();
+  //numDeltasSinceLastFull = 0;
+  //prohibitNextDelta = false;
+ //}
 
  public BIN(DatabaseImpl db, byte[] identifierKey, int maxEntriesPerNode, int level) {
   super(db, identifierKey, maxEntriesPerNode, level);
@@ -95,7 +95,7 @@ class BIN {
   if (child.canBeAncestor(targetContainsDuplicates)) {
    if (targetContainsDuplicates && targetIsRoot) {
     long childNid = child.getNodeId();
-    Label603: //this.hook603(child);
+    Label603:   ; //this.hook603(child);
      result.keepSearching = false;
     if (childNid == targetNodeId) {
      result.exactParentFound = true;
@@ -104,12 +104,12 @@ class BIN {
     }
     if (requireExactMatch && !result.exactParentFound) {
      result.parent = null;
-     Label604: //this.hook604();
+     Label604:   ; //this.hook604();
     } else {
      result.parent = this;
     }
    } else {
-    Label605: //this.hook605();
+    Label605:   ; //this.hook605();
      result.parent = (IN) child;
    }
   } else {
@@ -118,7 +118,7 @@ class BIN {
    if (!requireExactMatch && targetContainsDuplicates) {
     result.parent = this;
    } else {
-    Label606: //this.hook606();
+    Label606:   ; //this.hook606();
      result.parent = null;
    }
   }
@@ -164,7 +164,7 @@ class BIN {
  public void setKnownDeleted(int index) {
   super.setKnownDeleted(index);
   //this.hook610(index);
-  Label610:
+  Label610:   ;
    setMigrate(index, false);
   super.setTarget(index, null);
   setDirty(true);
@@ -404,7 +404,7 @@ class BIN {
    }
   }
   if (anyLocksDenied && binRef != null) {
-   Label609: //this.hook609(binRef, db);
+   Label609:   ; //this.hook609(binRef, db);
     ret = true;
   }
   if (getNEntries() != 0 && setNewIdKey) {

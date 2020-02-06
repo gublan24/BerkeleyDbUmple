@@ -9,11 +9,6 @@ class TxnAbort
 	super(id, lastLsn);
     }
 
-    /** 
-     * For constructing from the log.
-     */
-    public TxnAbort() {
-    }
 
     /** 
      * @see TxnEnd#getLogType

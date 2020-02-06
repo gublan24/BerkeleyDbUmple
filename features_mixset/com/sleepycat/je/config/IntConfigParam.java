@@ -16,9 +16,9 @@ public class IntConfigParam extends ConfigParam
   // CONSTRUCTOR
   //------------------------
 
-  public IntConfigParam(String aName)
+  public IntConfigParam()
   {
-    super(aName);
+    super();
   }
 
   //------------------------

@@ -47,13 +47,10 @@ public class CheckpointStart implements LoggableObject,LogReadable
 	}
   }
 
-  // line 33 "../../../../CheckpointStart.ump"
-   public  CheckpointStart(){
-    
-  }
-
 
   /**
+   * public CheckpointStart() {
+   * }
    * 
    * @see LoggableObject#getLogType
    */

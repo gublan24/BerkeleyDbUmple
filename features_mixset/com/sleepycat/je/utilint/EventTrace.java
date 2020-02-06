@@ -32,12 +32,7 @@ public class EventTrace
     this.comment = comment;
   }
 
-  // line 25 "../../../../EventTrace.ump"
-   public  EventTrace(){
-    comment = null;
-  }
-
-  // line 29 "../../../../EventTrace.ump"
+  // line 27 "../../../../EventTrace.ump"
    public String toString(){
     return comment;
   }
@@ -61,7 +56,7 @@ public class EventTrace
 // line 18 "../../../../EventTrace.ump"
   protected String comment ;
 
-// line 32 "../../../../EventTrace.ump"
+// line 30 "../../../../EventTrace.ump"
   static public void addEvent (EventTrace event) 
   {
     if (disableEvents) {
@@ -72,7 +67,7 @@ public class EventTrace
 	threadIdHashes[nextEventIdx] = System.identityHashCode(Thread.currentThread());
   }
 
-// line 41 "../../../../EventTrace.ump"
+// line 39 "../../../../EventTrace.ump"
   static public void addEvent (String comment) 
   {
     if (disableEvents) {
@@ -81,7 +76,7 @@ public class EventTrace
 	addEvent(new EventTrace(comment));
   }
 
-// line 48 "../../../../EventTrace.ump"
+// line 46 "../../../../EventTrace.ump"
   static public void dumpEvents () 
   {
     if (disableEvents) {

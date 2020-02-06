@@ -9,12 +9,13 @@ external interface 	  Comparator	{	}
 external interface 	  FilenameFilter	{	}
 
 external interface 	  Runnable	{	}
-external interface 	  TreeMap	{	}
+
 external interface 	  TreeNodeProcessor	{	}
 
 external interface 	  XAResource	{	}
 external  interface	  Xid	{	}
 
+external  interface	  Iterator	{	}
 
 //extrenal classes : 
 external Handler { }  // class TraceLogHandler extends Handler
@@ -25,3 +26,4 @@ external OutputStream	{	}
 external IOException	{	}
 external ObjectOutputStream	{	}
 external ObjectInputStream	{	}
+external  	  TreeMap	{	}

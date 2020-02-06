@@ -46,7 +46,7 @@ public abstract class FileReader
    public  FileReader(EnvironmentImpl env, int readBufferSize, boolean forward, long startLsn, Long singleFileNumber, long endOfFileLsn, long finishLsn) throws IOException,DatabaseException{
     this.env = env;
 	this.fileManager = env.getFileManager();
-	Label473: //this.hook473(env);
+	Label473:   ; //this.hook473(env);
 	this.singleFile = (singleFileNumber != null);
 	this.forward = forward;
 	readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -58,7 +58,7 @@ public abstract class FileReader
 	this.finishLsn = finishLsn;
 	initStartingPosition(endOfFileLsn, singleFileNumber);
 	nRead = 0;
-	Label472: //this.hook472();
+	Label472:   ; //this.hook472();
 	anticipateChecksumErrors = false;
   }
 
@@ -183,7 +183,7 @@ public abstract class FileReader
 		    }
 		}
 		FileHandle fileHandle = fileManager.getFileHandle(readBufferFileNum);
-		Label469: //this.hook469(fileHandle);
+		Label469:   ; //this.hook469(fileHandle);
 		try
 		{
 			readBuffer.clear();
@@ -191,7 +191,7 @@ public abstract class FileReader
 			assert EnvironmentImpl.maybeForceYield();
 		}
 		finally {
-					Label469_1://fileHandle.release();
+					Label469_1:   ;//fileHandle.release();
 			}
 		readBufferFileEnd = readBufferFileStart + threadSafeBufferPosition(readBuffer);
 		threadSafeBufferFlip(readBuffer);
@@ -337,7 +337,7 @@ public abstract class FileReader
 		    Long nextFile = fileManager.getFollowingFileNum(readBufferFileNum, forward);
 		    if (nextFile != null) {
 			readBufferFileNum = nextFile.longValue();
-			Label470: //this.hook470(fileHandle);
+			Label470:   ; //this.hook470(fileHandle);
 			fileHandle = fileManager.getFileHandle(readBufferFileNum);
 			fileOk = true;
 			readBufferFileEnd = 0;
@@ -360,7 +360,7 @@ public abstract class FileReader
 	    throw new DatabaseException(
 		    "Problem in fillReadBuffer, readBufferFileNum = " + readBufferFileNum + ": " + e.getMessage());
 	} finally {
-	    Label471: //this.hook471(fileHandle);
+	    Label471:   ; //this.hook471(fileHandle);
 	}
   }
 
@@ -461,15 +461,15 @@ public abstract class FileReader
               dataBuffer=_this.readData(LogManager.HEADER_BYTES,true);
               _this.readHeader(dataBuffer);
               isTargetEntry=_this.isTargetEntry(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
-              Label476: //this.hook476();
+              Label476:   ; //this.hook476();
               collectData=isTargetEntry;
-              Label475: //this.hook475();
+              Label475:   ; //this.hook475();
               dataBuffer=_this.readData(_this.currentEntrySize,collectData);
               if (_this.forward) {
                 _this.currentEntryOffset=_this.nextEntryOffset;
                 _this.nextEntryOffset+=LogManager.HEADER_BYTES + _this.currentEntrySize;
               }
-              Label474: //this.hook474();
+              Label474:   ; //this.hook474();
               if (isTargetEntry) {
                 if (_this.processEntry(dataBuffer)) {
                   foundEntry=true;
@@ -485,7 +485,7 @@ public abstract class FileReader
             _this.eof=true;
           }
     catch (      DatabaseException e) {
-            Label468: //this.hook468();
+            Label468:   ; //this.hook468();
             throw e;
           }
           return foundEntry;

@@ -51,7 +51,15 @@ public class DbTree implements LoggableObject,LogReadable
   //------------------------
 
   public DbTree()
-  {}
+  {
+    // line 64 "../../../../DbTree.ump"
+    this.envImpl = null;
+    			idDatabase = new DatabaseImpl();
+    			idDatabase.setDebugDatabaseName(ID_DB_NAME);
+    			nameDatabase = new DatabaseImpl();
+    			nameDatabase.setDebugDatabaseName(NAME_DB_NAME);
+    // END OF UMPLE AFTER INJECTION
+  }
 
   //------------------------
   // INTERFACE
@@ -63,23 +71,9 @@ public class DbTree implements LoggableObject,LogReadable
 
   /**
    * 
-   * Create a dbTree from the log.
-   */
-  // line 63 "../../../../DbTree.ump"
-   public  DbTree() throws DatabaseException{
-    this.envImpl = null;
-	idDatabase = new DatabaseImpl();
-	idDatabase.setDebugDatabaseName(ID_DB_NAME);
-	nameDatabase = new DatabaseImpl();
-	nameDatabase.setDebugDatabaseName(NAME_DB_NAME);
-  }
-
-
-  /**
-   * 
    * Create a new dbTree for a new environment.
    */
-  // line 74 "../../../../DbTree.ump"
+  // line 75 "../../../../DbTree.ump"
    public  DbTree(EnvironmentImpl env) throws DatabaseException{
     this.envImpl = env;
 	idDatabase = new DatabaseImpl(ID_DB_NAME, new DatabaseId(0), env, new DatabaseConfig());
@@ -92,7 +86,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Get the latest allocated id, for checkpoint info.
    */
-  // line 84 "../../../../DbTree.ump"
+  // line 85 "../../../../DbTree.ump"
    public synchronized  int getLastDbId(){
     return lastAllocatedDbId;
   }
@@ -102,7 +96,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Get the next available database id.
    */
-  // line 91 "../../../../DbTree.ump"
+  // line 92 "../../../../DbTree.ump"
    private synchronized  int getNextDbId(){
     return ++lastAllocatedDbId;
   }
@@ -112,12 +106,12 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Initialize the db id, from recovery.
    */
-  // line 98 "../../../../DbTree.ump"
+  // line 99 "../../../../DbTree.ump"
    public synchronized  void setLastDbId(int maxDbId){
     lastAllocatedDbId = maxDbId;
   }
 
-  // line 102 "../../../../DbTree.ump"
+  // line 103 "../../../../DbTree.ump"
    private Locker createLocker(EnvironmentImpl envImpl) throws DatabaseException{
     if (envImpl.isNoLocking()) {
 	    return new BasicLocker(envImpl);
@@ -131,7 +125,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Set the db environment during recovery, after instantiating the tree from the log.
    */
-  // line 113 "../../../../DbTree.ump"
+  // line 114 "../../../../DbTree.ump"
   public void setEnvironmentImpl(EnvironmentImpl envImpl) throws DatabaseException{
     this.envImpl = envImpl;
 	idDatabase.setEnvironmentImpl(envImpl);
@@ -143,7 +137,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Create a database.
    */
-  // line 123 "../../../../DbTree.ump"
+  // line 124 "../../../../DbTree.ump"
    public synchronized  DatabaseImpl createDb(Locker locker, String databaseName, DatabaseConfig dbConfig, Database databaseHandle) throws DatabaseException{
     return createDb(locker, databaseName, dbConfig, databaseHandle, true);
   }
@@ -157,7 +151,7 @@ public class DbTree implements LoggableObject,LogReadable
    * @param dbConfig
    * @param allowEvictionis whether eviction is allowed during cursor operations.
    */
-  // line 135 "../../../../DbTree.ump"
+  // line 136 "../../../../DbTree.ump"
    public synchronized  DatabaseImpl createDb(Locker locker, String databaseName, DatabaseConfig dbConfig, Database databaseHandle, boolean allowEviction) throws DatabaseException{
     DatabaseId newId = new DatabaseId(getNextDbId());
 	DatabaseImpl newDb = new DatabaseImpl(databaseName, newId, envImpl, dbConfig);
@@ -202,7 +196,7 @@ public class DbTree implements LoggableObject,LogReadable
    * Called by the Tree to propagate a root change. If the tree is a data database, we will write the MapLn that represents this db to the log. If the tree is one of the mapping dbs, we'll write the dbtree to the log.
    * @param dbthe target db
    */
-  // line 177 "../../../../DbTree.ump"
+  // line 178 "../../../../DbTree.ump"
    public void modifyDbRoot(DatabaseImpl db) throws DatabaseException{
     if (db.getId().equals(ID_DB_ID) || db.getId().equals(NAME_DB_ID)) {
 	    envImpl.logMapTreeRoot();
@@ -245,7 +239,7 @@ public class DbTree implements LoggableObject,LogReadable
 	}
   }
 
-  // line 219 "../../../../DbTree.ump"
+  // line 220 "../../../../DbTree.ump"
    private NameLockResult lockNameLN(Locker locker, String databaseName, String action) throws DatabaseException{
     NameLockResult result = new NameLockResult();
 	result.dbImpl = getDb(locker, databaseName, null);
@@ -282,7 +276,7 @@ public class DbTree implements LoggableObject,LogReadable
 	return result;
   }
 
-  // line 255 "../../../../DbTree.ump"
+  // line 256 "../../../../DbTree.ump"
   public void deleteMapLN(DatabaseId id) throws DatabaseException{
     Locker autoTxn = null;
 	boolean operationOk = false;
@@ -311,7 +305,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Get a database object given a database name.
    */
-  // line 282 "../../../../DbTree.ump"
+  // line 283 "../../../../DbTree.ump"
    public DatabaseImpl getDb(Locker nameLocker, String databaseName, Database databaseHandle) throws DatabaseException{
     return getDb(nameLocker, databaseName, databaseHandle, true);
   }
@@ -325,7 +319,7 @@ public class DbTree implements LoggableObject,LogReadable
    * @return null if database doesn't exist
    * @param allowEvictionis whether eviction is allowed during cursor operations.
    */
-  // line 294 "../../../../DbTree.ump"
+  // line 295 "../../../../DbTree.ump"
    public DatabaseImpl getDb(Locker nameLocker, String databaseName, Database databaseHandle, boolean allowEviction) throws DatabaseException{
     try {
 	    CursorImpl nameCursor = null;
@@ -366,7 +360,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Get a database object based on an id only. Used by recovery, cleaning and other clients who have an id in hand, and don't have a resident node, to find the matching database for a given log entry.
    */
-  // line 332 "../../../../DbTree.ump"
+  // line 333 "../../../../DbTree.ump"
    public DatabaseImpl getDb(DatabaseId dbId) throws DatabaseException{
     return getDb(dbId, -1);
   }
@@ -376,7 +370,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Get a database object based on an id only. Specify the lock timeout to use, or -1 to use the default timeout. A timeout should normally only be specified by daemons with their own timeout configuration. public for unit tests.
    */
-  // line 339 "../../../../DbTree.ump"
+  // line 340 "../../../../DbTree.ump"
    public DatabaseImpl getDb(DatabaseId dbId, long lockTimeout) throws DatabaseException{
     return getDb(dbId, lockTimeout, true, null);
   }
@@ -386,7 +380,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Get a database object based on an id only, caching the id-db mapping in the given map.
    */
-  // line 346 "../../../../DbTree.ump"
+  // line 347 "../../../../DbTree.ump"
    public DatabaseImpl getDb(DatabaseId dbId, long lockTimeout, Map dbCache) throws DatabaseException{
     if (dbCache.containsKey(dbId)) {
 	    return (DatabaseImpl) dbCache.get(dbId);
@@ -403,7 +397,7 @@ public class DbTree implements LoggableObject,LogReadable
    * Get a database object based on an id only. Specify the lock timeout to use, or -1 to use the default timeout. A timeout should normally only be specified by daemons with their own timeout configuration. public for unit tests.
    * @param allowEvictionis whether eviction is allowed during cursor operations.
    */
-  // line 361 "../../../../DbTree.ump"
+  // line 362 "../../../../DbTree.ump"
    public DatabaseImpl getDb(DatabaseId dbId, long lockTimeout, boolean allowEviction, String dbNameIfAvailable) throws DatabaseException{
     if (dbId.equals(idDatabase.getId())) {
 	    return idDatabase;
@@ -454,7 +448,7 @@ public class DbTree implements LoggableObject,LogReadable
 	}
   }
 
-  // line 411 "../../../../DbTree.ump"
+  // line 412 "../../../../DbTree.ump"
    private void setDebugNameForDatabaseImpl(DatabaseImpl dbImpl, String dbName) throws DatabaseException{
     if (dbImpl != null) {
 	    if (dbName != null) {
@@ -470,7 +464,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Rebuild the IN list after recovery.
    */
-  // line 424 "../../../../DbTree.ump"
+  // line 425 "../../../../DbTree.ump"
    public void rebuildINListMapDb() throws DatabaseException{
     idDatabase.getTree().rebuildINList();
   }
@@ -480,7 +474,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Return the database name for a given db. Slow, must traverse. Used by truncate and for debugging.
    */
-  // line 431 "../../../../DbTree.ump"
+  // line 432 "../../../../DbTree.ump"
    public String getDbName(DatabaseId id) throws DatabaseException{
     if (id.equals(ID_DB_ID)) {
 	    return ID_DB_NAME;
@@ -527,7 +521,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @return a list of database names held in the environment, as strings.
    */
-  // line 475 "../../../../DbTree.ump"
+  // line 476 "../../../../DbTree.ump"
    public List getDbNames() throws DatabaseException{
     List nameList = new ArrayList();
 	Locker locker = null;
@@ -567,7 +561,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * Returns true if the name is a reserved JE database name.
    */
-  // line 512 "../../../../DbTree.ump"
+  // line 513 "../../../../DbTree.ump"
    public boolean isReservedDbName(String name){
     for (int i = 0; i < RESERVED_DB_NAMES.length; i += 1) {
 	    if (RESERVED_DB_NAMES[i].equals(name)) {
@@ -582,7 +576,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @return the higest level node in the environment.
    */
-  // line 524 "../../../../DbTree.ump"
+  // line 525 "../../../../DbTree.ump"
    public int getHighestLevel() throws DatabaseException{
     RootLevel getLevel = new RootLevel(idDatabase);
 	idDatabase.getTree().withRootLatchedShared(getLevel);
@@ -598,7 +592,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#getLogType
    */
-  // line 537 "../../../../DbTree.ump"
+  // line 538 "../../../../DbTree.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_ROOT;
   }
@@ -608,7 +602,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#marshallOutsideWriteLatch Can be marshalled outsidethe log write latch.
    */
-  // line 544 "../../../../DbTree.ump"
+  // line 545 "../../../../DbTree.ump"
    public boolean marshallOutsideWriteLatch(){
     return true;
   }
@@ -618,7 +612,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 551 "../../../../DbTree.ump"
+  // line 552 "../../../../DbTree.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
@@ -628,7 +622,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 558 "../../../../DbTree.ump"
+  // line 559 "../../../../DbTree.ump"
    public int getLogSize(){
     return LogUtils.getIntLogSize() + idDatabase.getLogSize() + nameDatabase.getLogSize();
   }
@@ -638,7 +632,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#writeToLog
    */
-  // line 565 "../../../../DbTree.ump"
+  // line 566 "../../../../DbTree.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeInt(logBuffer, lastAllocatedDbId);
 	idDatabase.writeToLog(logBuffer);
@@ -650,7 +644,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#postLogWork
    */
-  // line 574 "../../../../DbTree.ump"
+  // line 575 "../../../../DbTree.ump"
    public void postLogWork(long justLoggedLsn) throws DatabaseException{
     
   }
@@ -660,7 +654,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 580 "../../../../DbTree.ump"
+  // line 581 "../../../../DbTree.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     lastAllocatedDbId = LogUtils.readInt(itemBuffer);
 	idDatabase.readFromLog(itemBuffer, entryTypeVersion);
@@ -672,7 +666,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 589 "../../../../DbTree.ump"
+  // line 590 "../../../../DbTree.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<dbtree lastId = \"");
 	sb.append(lastAllocatedDbId);
@@ -690,7 +684,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional.
    */
-  // line 604 "../../../../DbTree.ump"
+  // line 605 "../../../../DbTree.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -700,12 +694,12 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 611 "../../../../DbTree.ump"
+  // line 612 "../../../../DbTree.ump"
    public long getTransactionId(){
     return 0;
   }
 
-  // line 615 "../../../../DbTree.ump"
+  // line 616 "../../../../DbTree.ump"
   public String dumpString(int nSpaces){
     StringBuffer self = new StringBuffer();
 	self.append(TreeUtils.indent(nSpaces));
@@ -721,7 +715,7 @@ public class DbTree implements LoggableObject,LogReadable
 	return self.toString();
   }
 
-  // line 630 "../../../../DbTree.ump"
+  // line 631 "../../../../DbTree.ump"
    public String toString(){
     return dumpString(0);
   }
@@ -731,7 +725,7 @@ public class DbTree implements LoggableObject,LogReadable
    * 
    * For debugging.
    */
-  // line 637 "../../../../DbTree.ump"
+  // line 638 "../../../../DbTree.ump"
    public void dump() throws DatabaseException{
     idDatabase.getTree().dump();
 	nameDatabase.getTree().dump();
@@ -740,7 +734,7 @@ public class DbTree implements LoggableObject,LogReadable
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import com.sleepycat.je.tree.*;
+  //import com.sleepycat.je.tree.*;
   
   // line 5 "../../../../DbTree_static.ump"
   public static class RewriteMapLN implements WithRootLatched
@@ -876,7 +870,7 @@ public class DbTree implements LoggableObject,LogReadable
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import com.sleepycat.je.tree.*;
+ // import com.sleepycat.je.tree.*;
   
   // line 23 "../../../../DbTree_static.ump"
   public static class RootLevel implements WithRootLatched

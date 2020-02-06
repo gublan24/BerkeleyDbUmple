@@ -6,7 +6,7 @@ class ConfigParam
 
    const String CONFIG_DELIM = "\u003B"; //@Abdulaziz  CONFIG_DELIM has a semicolon.
 
-    String name;
+    protected String name;
 
     private String defaultValue;
 

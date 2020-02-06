@@ -23,7 +23,7 @@ class UtilizationProfile {
           assert _this.cachePopulated;
           if (_this.fileSummaryMap.remove(fileNum) != null) {
             //           ;  //this.hook192();
-            Label192:
+            Label192:   ;
           }
         }
         _this.deleteFileSummary(fileNum);
@@ -69,7 +69,7 @@ class UtilizationProfile {
         summary=ln.getBaseSummary();
         if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
           //           ;  //this.hook193();
-          Label193:
+          Label193:   ;
         }
         return ln.getObsoleteOffsets();
       }
@@ -96,7 +96,7 @@ class UtilizationProfile {
           return false;
         }
         //           ;  //this.hook194();
-        Label194:
+        Label194: ;
         existingFiles=_this.env.getFileManager().getAllFileNumbers();
         locker=null;
         cursor=null;
@@ -131,7 +131,7 @@ class UtilizationProfile {
                 }
    else {
                  //            ;  //this.hook191();
-                    Label191:
+                    Label191: ;
                 }
               }
    else {

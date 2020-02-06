@@ -43,14 +43,8 @@ public class FileHeader implements LoggableObject,LogReadable
   /**
    * 
    * For logging only.
-   */
-  // line 33 "../../../../FileHeader.ump"
-   public  FileHeader(){
-    
-  }
-
-
-  /**
+   * public FileHeader() {
+   * }
    * 
    * @return whether the file header has an old version number.
    * @throws DatabaseException if the header isn't valid.

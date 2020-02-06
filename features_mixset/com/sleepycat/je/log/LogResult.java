@@ -12,65 +12,35 @@ public class LogResult
   // MEMBER VARIABLES
   //------------------------
 
-  //LogResult Attributes
-  private long currentLsn;
-  private boolean wakeupCleaner;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public LogResult(long aCurrentLsn, boolean aWakeupCleaner)
-  {
-    currentLsn = aCurrentLsn;
-    wakeupCleaner = aWakeupCleaner;
-  }
+  public LogResult()
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setCurrentLsn(long aCurrentLsn)
-  {
-    boolean wasSet = false;
-    currentLsn = aCurrentLsn;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setWakeupCleaner(boolean aWakeupCleaner)
-  {
-    boolean wasSet = false;
-    wakeupCleaner = aWakeupCleaner;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public long getCurrentLsn()
-  {
-    return currentLsn;
-  }
-
-  public boolean getWakeupCleaner()
-  {
-    return wakeupCleaner;
-  }
-
   public void delete()
   {}
 
-  // line 11 "../../../../LogResult.ump"
+  // line 10 "../../../../LogResult.ump"
   public  LogResult(long currentLsn, boolean wakeupCheckpointer, boolean wakeupCleaner){
     this.currentLsn = currentLsn;
-	Label510: //this.hook510(wakeupCheckpointer);
-	this.wakeupCleaner = wakeupCleaner;
+	  Label510: //this.hook510(wakeupCheckpointer);
+	  this.wakeupCleaner = wakeupCleaner;
   }
+  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 6 "../../../../LogResult.ump"
+  protected long currentLsn ;
+// line 7 "../../../../LogResult.ump"
+  protected boolean wakeupCleaner ;
 
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "currentLsn" + ":" + getCurrentLsn()+ "," +
-            "wakeupCleaner" + ":" + getWakeupCleaner()+ "]";
-  }
+  
 }

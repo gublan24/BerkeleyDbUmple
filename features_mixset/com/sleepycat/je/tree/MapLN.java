@@ -22,9 +22,9 @@ public class MapLN extends LN
   // CONSTRUCTOR
   //------------------------
 
-  public MapLN()
+  public MapLN(long aNodeId)
   {
-    super();
+    super(aNodeId);
   }
 
   //------------------------

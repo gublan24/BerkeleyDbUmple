@@ -15,7 +15,7 @@ class TxnEnd
 
     protected Timestamp time;
 
-    private long lastLsn;
+    long lastLsn = DbLsn.NULL_LSN;
 
     TxnEnd(long id, long lastLsn) {
 	this.id = id;
@@ -23,12 +23,7 @@ class TxnEnd
 	this.lastLsn = lastLsn;
     }
 
-    /** 
-     * For constructing from the log
-     */
-    public TxnEnd() {
-	lastLsn = DbLsn.NULL_LSN;
-    }
+  
 
     public long getId() {
 	return id;

@@ -48,16 +48,16 @@ public abstract class LockManager implements EnvConfigObserver
    public  LockManager(EnvironmentImpl envImpl) throws DatabaseException{
     DbConfigManager configMgr = envImpl.getConfigManager();
 			//this.hook779(configMgr);
-			Label779:
+			Label779:   ;
 			lockTables = new Map[nLockTables];
-			Label770: //this.hook770();
+			Label770:   ; //this.hook770();
 			for (int i = 0; i < nLockTables; i++) {
 					lockTables[i] = new HashMap();
-					Label771: //this.hook771(envImpl, i);
+					Label771:   ; //this.hook771(envImpl, i);
 			}
 			this.envImpl = envImpl;
 			memoryBudget = envImpl.getMemoryBudget();
-			Label774: //this.hook774();
+			Label774:   ; //this.hook774();
 			envConfigUpdate(configMgr);
 			envImpl.addConfigObserver(this);
   }
@@ -114,7 +114,7 @@ public abstract class LockManager implements EnvConfigObserver
 	    if (result.success || result.lockGrant == LockGrantType.DENIED) {
 		return result.lockGrant;
 	    }
-	    Label772: //this.hook772(nonBlockingRequest);
+	    Label772:   ; //this.hook772(nonBlockingRequest);
 	    assert !nonBlockingRequest;
 	    try {
 		boolean doWait = true;
@@ -179,7 +179,7 @@ public abstract class LockManager implements EnvConfigObserver
 					useLock = new Lock(nodeId);
 					lockTable.put(nodeId, useLock);
 					//this.hook780(lockTableIndex);
-				  Label780:
+				  Label780:   ;
 			}
 			LockGrantType lockGrant = useLock.lock(type, locker, nonBlockingRequest, memoryBudget, lockTableIndex);
 			boolean success = false;
@@ -190,7 +190,7 @@ public abstract class LockManager implements EnvConfigObserver
 					success = true;
 			} else if (lockGrant == LockGrantType.DENIED) {
 			} else {
-					Label775: //this.hook775();
+					Label775:   ; //this.hook775();
 			}
 			return new LockAttemptResult(useLock, lockGrant, success);
   }
@@ -329,7 +329,7 @@ public abstract class LockManager implements EnvConfigObserver
 	if ((useLock.nWaiters() == 0) && (useLock.nOwners() == 0)) {
 	    lockTables[lockTableIndex].remove(useLock.getNodeId());
 	    //this.hook781(lockTableIndex);
-      Label781:
+      Label781:   ;
 	}
 	return lockersToNotify;
   }
@@ -561,15 +561,15 @@ public abstract class LockManager implements EnvConfigObserver
   // line 492 "../../../../LockManager.ump"
    protected void dumpLockTableInternal(LockStats stats, int i){
     Map lockTable = lockTables[i];
-			Label776: //	this.hook776(stats, lockTable);
+			Label776:   ; //	this.hook776(stats, lockTable);
 			Iterator iter = lockTable.values().iterator();
 			while (iter.hasNext()) {
 					Lock lock = (Lock) iter.next();
-					Label777: //this.hook777(stats, lock);
+					Label777:   ; //this.hook777(stats, lock);
 					Iterator ownerIter = lock.getOwnersClone().iterator();
 					while (ownerIter.hasNext()) {
 					LockInfo info = (LockInfo) ownerIter.next();
-					Label778: //this.hook778(stats, info);
+					Label778:   ; //this.hook778(stats, info);
 					}
 			}
   }
@@ -588,7 +588,7 @@ public abstract class LockManager implements EnvConfigObserver
    public String dumpToString() throws DatabaseException{
     StringBuffer sb = new StringBuffer();
 	for (int i = 0; i < nLockTables; i++) {
-	    Label773: //this.hook773(sb, i);	
+	    Label773:   ; //this.hook773(sb, i);	
 			try {
 					dumpToStringNoLatch(sb, i);//original(sb, i);
 			} finally {
@@ -660,52 +660,6 @@ public abstract class LockManager implements EnvConfigObserver
 	    }
 	}
 	return null;
-  }
-
-
-  /**
-   * 
-   * This is just a struct to hold a multi-value return.
-   * protected void hook770() throws DatabaseException {
-   * }
-   * protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException {
-   * }
-   * protected void hook772(boolean nonBlockingRequest) throws DeadlockException, DatabaseException {
-   * }
-   * protected void hook773(StringBuffer sb, int i) throws DatabaseException {
-   * dumpToStringNoLatch(sb, i);
-   * }
-   * protected void hook774() throws DatabaseException {
-   * }
-   */
-  // line 607 "../../../../LockManager.ump"
-   protected void hook775() throws DatabaseException{
-    
-  }
-
-  // line 610 "../../../../LockManager.ump"
-   protected void hook776(LockStats stats, Map lockTable){
-    
-  }
-
-  // line 613 "../../../../LockManager.ump"
-   protected void hook777(LockStats stats, Lock lock){
-    
-  }
-
-  // line 616 "../../../../LockManager.ump"
-   protected void hook778(LockStats stats, LockInfo info){
-    
-  }
-
-
-  /**
-   * protected void hook779(DbConfigManager configMgr) throws DatabaseException {
-   * }
-   */
-  // line 622 "../../../../LockManager.ump"
-   protected void hook780(int lockTableIndex) throws DatabaseException{
-    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

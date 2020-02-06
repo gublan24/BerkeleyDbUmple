@@ -4,10 +4,7 @@ class NotImplementedYetException
 {
   isA RuntimeException;
   depend de.ovgu.cide.jakutil.*;
-    public NotImplementedYetException() {
-	super();
-    }
-
+  
     public NotImplementedYetException(String message) {
 	super(message);
     }

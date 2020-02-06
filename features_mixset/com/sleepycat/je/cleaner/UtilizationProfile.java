@@ -569,7 +569,7 @@ public class UtilizationProfile implements EnvConfigObserver
 			list.add(offsets.toArray());
 		    }
 		    //           ;  //this.hook187(cursor);
-        Label187:
+        Label187: ;
 		}
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
@@ -688,11 +688,11 @@ public class UtilizationProfile implements EnvConfigObserver
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
 	    //           ;  //this.hook189(cursor);
-      Label189:
+      Label189:   ;
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
 	    Label177:           ;  //this.hook177(fileNum, sequence, status);
 	    //           ;  //this.hook188(cursor);
-      Label188:
+      Label188:   ;
 	} finally {
 	    if (cursor != null) {
 		cursor.close();
@@ -738,7 +738,7 @@ public class UtilizationProfile implements EnvConfigObserver
 			    }
 			}
 			//           ;  //this.hook190(cursor);
-      Label190:
+      Label190:   ;
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
 		}
@@ -768,7 +768,7 @@ public class UtilizationProfile implements EnvConfigObserver
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    Label186: //b =            ;  //this.hook186(db, b);
+	    Label186:   ; //b =            ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
@@ -780,21 +780,21 @@ public class UtilizationProfile implements EnvConfigObserver
 			bin = location.bin;
 			int index = location.index;
 			if (!parentFound) {
-					throw new ReturnBoolean(true);
+		return true;
 			}
 			if (bin.isEntryKnownDeleted(index)) {
-					throw new ReturnBoolean(true);
+		return true;
 			}
 			if (bin.getLsn(index) != lsn) {
-					throw new ReturnBoolean(true);
+		return true;
 			}
 			System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
-			throw new ReturnBoolean(false);
+		return false;
 //end hook180
 
-	    throw ReturnHack.returnBoolean;
+	   // throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
-	    Label180_1:           ;
+	    Label180_1:   ;           ;
 	    return r.value;
 	}
   }
@@ -952,7 +952,7 @@ public class UtilizationProfile implements EnvConfigObserver
             assert _this.cachePopulated;
             if (_this.fileSummaryMap.remove(fileNum) != null) {
               //           ;  //this.hook192();
-              Label192:
+              Label192:   ;
             }
           }
           _this.deleteFileSummary(fileNum);
@@ -1034,7 +1034,7 @@ public class UtilizationProfile implements EnvConfigObserver
           summary=ln.getBaseSummary();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
             //           ;  //this.hook193();
-            Label193:
+            Label193:   ;
           }
           return ln.getObsoleteOffsets();
     }
@@ -1104,7 +1104,7 @@ public class UtilizationProfile implements EnvConfigObserver
             return false;
           }
           //           ;  //this.hook194();
-          Label194:
+          Label194: ;
           existingFiles=_this.env.getFileManager().getAllFileNumbers();
           locker=null;
           cursor=null;
@@ -1139,7 +1139,7 @@ public class UtilizationProfile implements EnvConfigObserver
                   }
      else {
                    //            ;  //this.hook191();
-                      Label191:
+                      Label191: ;
                   }
                 }
      else {

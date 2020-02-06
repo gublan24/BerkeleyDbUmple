@@ -55,34 +55,16 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   // MEMBER VARIABLES
   //------------------------
 
-  //DatabaseImpl Attributes
-  private Tree tree;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public DatabaseImpl(Tree aTree)
-  {
-    tree = aTree;
-  }
+  public DatabaseImpl()
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setTree(Tree aTree)
-  {
-    boolean wasSet = false;
-    tree = aTree;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public Tree getTree()
-  {
-    return tree;
-  }
 
   public void delete()
   {}
@@ -168,6 +150,21 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   // line 156 "../../../../DatabaseImpl.ump"
    public Object clone() throws CloneNotSupportedException{
     return super.clone();
+  }
+
+
+  /**
+   * 
+   * @return the database tree.
+   */
+  // line 163 "../../../../DatabaseImpl.ump"
+   public Tree getTree(){
+    return tree;
+  }
+
+  // line 167 "../../../../DatabaseImpl.ump"
+  public void setTree(Tree tree){
+    this.tree = tree;
   }
 
 
@@ -615,13 +612,7 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
    public int getBinMaxDeltas(){
     return binMaxDeltas;
   }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "tree" + "=" + (getTree() != null ? !getTree().equals(this)  ? getTree().toString().replaceAll("  ","    ") : "this" : "null");
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
@@ -851,6 +842,8 @@ public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
   
   // line 47 "../../../../DatabaseImpl.ump"
   private DatabaseId id ;
+// line 49 "../../../../DatabaseImpl.ump"
+  protected Tree tree ;
 // line 51 "../../../../DatabaseImpl.ump"
   private EnvironmentImpl envImpl ;
 // line 53 "../../../../DatabaseImpl.ump"

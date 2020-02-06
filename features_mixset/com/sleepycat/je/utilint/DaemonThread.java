@@ -12,7 +12,7 @@ import java.util.Collection;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../DaemonThread.ump"
-public class DaemonThread implements DaemonRunner,Runnable
+public abstract class DaemonThread implements DaemonRunner,Runnable
 {
 
   //------------------------
@@ -33,23 +33,18 @@ public class DaemonThread implements DaemonRunner,Runnable
   public void delete()
   {}
 
-  // line 36 "../../../../DaemonThread.ump"
-   protected  DaemonThread(){
-    
-  }
-
-  // line 39 "../../../../DaemonThread.ump"
+  // line 41 "../../../../DaemonThread.ump"
    public  DaemonThread(long waitTime, String name, EnvironmentImpl env){
     init(waitTime, name, env);
   }
 
-  // line 43 "../../../../DaemonThread.ump"
+  // line 45 "../../../../DaemonThread.ump"
    protected void init(long waitTime, String name, EnvironmentImpl env){
     this.waitTime = waitTime;
 			this.name = name;
 			this.env = env;
 			workQueue = new HashSet();
-			Label856: //this.hook856(name, env);
+			Label856: ; //this.hook856(name, env);
   }
 
 
@@ -57,7 +52,7 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * For testing.
    */
-  // line 54 "../../../../DaemonThread.ump"
+  // line 56 "../../../../DaemonThread.ump"
    public Thread getThread(){
     return thread;
   }
@@ -67,7 +62,7 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * If run is true, starts the thread if not started or unpauses it if already started; if run is false, pauses the thread if started or does nothing if not started.
    */
-  // line 61 "../../../../DaemonThread.ump"
+  // line 63 "../../../../DaemonThread.ump"
    public void runOrPause(boolean run){
     if (run) {
 	    paused = false;
@@ -83,7 +78,7 @@ public class DaemonThread implements DaemonRunner,Runnable
 	}
   }
 
-  // line 76 "../../../../DaemonThread.ump"
+  // line 78 "../../../../DaemonThread.ump"
    public void requestShutdown(){
     shutdownRequest = true;
   }
@@ -93,7 +88,7 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * Requests shutdown and calls join() to wait for the thread to stop.
    */
-  // line 83 "../../../../DaemonThread.ump"
+  // line 85 "../../../../DaemonThread.ump"
    public void shutdown(){
     if (thread != null) {
 	    shutdownRequest = true;
@@ -110,31 +105,31 @@ public class DaemonThread implements DaemonRunner,Runnable
 	}
   }
 
-  // line 99 "../../../../DaemonThread.ump"
+  // line 101 "../../../../DaemonThread.ump"
    public String toString(){
     StringBuffer sb = new StringBuffer();
 	sb.append("<DaemonThread name=\"").append(name).append("\"/>");
 	return sb.toString();
   }
 
-  // line 105 "../../../../DaemonThread.ump"
+  // line 107 "../../../../DaemonThread.ump"
    public void addToQueue(Object o) throws DatabaseException{
     workQueue.add(o);
 	wakeup();
   }
 
-  // line 110 "../../../../DaemonThread.ump"
+  // line 112 "../../../../DaemonThread.ump"
    public int getQueueSize() throws DatabaseException{
     int count = workQueue.size();
 	return count;
   }
 
-  // line 115 "../../../../DaemonThread.ump"
+  // line 117 "../../../../DaemonThread.ump"
    public void addToQueueAlreadyLatched(Collection c) throws DatabaseException{
     workQueue.addAll(c);
   }
 
-  // line 119 "../../../../DaemonThread.ump"
+  // line 121 "../../../../DaemonThread.ump"
    public void wakeup(){
     if (!paused) {
 	    synchronized (synchronizer) {
@@ -143,16 +138,16 @@ public class DaemonThread implements DaemonRunner,Runnable
 	}
   }
 
-  // line 127 "../../../../DaemonThread.ump"
+  // line 129 "../../../../DaemonThread.ump"
    public void run(){
     while (true) {
 	    if (shutdownRequest) {
 		break;
 	    }
 	    try {
-		Label858: //this.hook858();
+		Label858: ; //this.hook858();
 		boolean nothingToDo = workQueue.size() == 0;
-		Label857: //this.hook857();
+		Label857: ; //this.hook857();
 		if (nothingToDo) {
 		    synchronized (synchronizer) {
 			if (waitTime == 0) {
@@ -212,7 +207,7 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * Returns the number of retries to perform when Deadlock Exceptions occur.
    */
-  // line 193 "../../../../DaemonThread.ump"
+  // line 195 "../../../../DaemonThread.ump"
    protected int nDeadlockRetries() throws DatabaseException{
     return 0;
   }
@@ -222,7 +217,7 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * Returns whether shutdown has been requested. This method should be used to to terminate daemon loops.
    */
-  // line 205 "../../../../DaemonThread.ump"
+  // line 207 "../../../../DaemonThread.ump"
    protected boolean isShutdownRequested(){
     return shutdownRequest;
   }
@@ -232,7 +227,7 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * Returns whether the onWakeup method is currently executing. This is only an approximation and is used to avoid unnecessary wakeups.
    */
-  // line 212 "../../../../DaemonThread.ump"
+  // line 214 "../../../../DaemonThread.ump"
    public boolean isRunning(){
     return running;
   }
@@ -242,12 +237,12 @@ public class DaemonThread implements DaemonRunner,Runnable
    * 
    * For unit testing.
    */
-  // line 219 "../../../../DaemonThread.ump"
+  // line 221 "../../../../DaemonThread.ump"
    public int getNWakeupRequests(){
     return nWakeupRequests;
   }
 
-  // line 223 "../../../../DaemonThread.ump"
+  // line 225 "../../../../DaemonThread.ump"
    protected void hook856(String name, EnvironmentImpl env){
     
   }
@@ -256,29 +251,29 @@ public class DaemonThread implements DaemonRunner,Runnable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 13 "../../../../DaemonThread.ump"
+  // line 16 "../../../../DaemonThread.ump"
   private static final int JOIN_MILLIS = 10 ;
-// line 15 "../../../../DaemonThread.ump"
+// line 18 "../../../../DaemonThread.ump"
   private long waitTime ;
-// line 17 "../../../../DaemonThread.ump"
+// line 20 "../../../../DaemonThread.ump"
   private Object synchronizer = new Object() ;
-// line 19 "../../../../DaemonThread.ump"
+// line 22 "../../../../DaemonThread.ump"
   private Thread thread ;
-// line 21 "../../../../DaemonThread.ump"
+// line 24 "../../../../DaemonThread.ump"
   private EnvironmentImpl env ;
-// line 23 "../../../../DaemonThread.ump"
+// line 26 "../../../../DaemonThread.ump"
   protected String name ;
-// line 25 "../../../../DaemonThread.ump"
+// line 28 "../../../../DaemonThread.ump"
   protected Set workQueue ;
-// line 27 "../../../../DaemonThread.ump"
+// line 30 "../../../../DaemonThread.ump"
   protected int nWakeupRequests ;
-// line 29 "../../../../DaemonThread.ump"
+// line 32 "../../../../DaemonThread.ump"
   private volatile boolean shutdownRequest = false ;
-// line 31 "../../../../DaemonThread.ump"
+// line 34 "../../../../DaemonThread.ump"
   private volatile boolean paused = false ;
-// line 33 "../../../../DaemonThread.ump"
+// line 36 "../../../../DaemonThread.ump"
   private boolean running = false ;
-// line 199 "../../../../DaemonThread.ump"
+// line 201 "../../../../DaemonThread.ump"
   abstract protected void onWakeup() throws DatabaseException ;
 
   

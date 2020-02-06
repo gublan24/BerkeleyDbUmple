@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
 namespace com.sleepycat.je.dbi;
 class SortedLSNTreeWalker {
-  @MethodObject static class SortedLSNTreeWalker_extractINsForDb {
+   static class SortedLSNTreeWalker_extractINsForDb {
       after execute()  {
         //boolean result=original();
         mb.updateTreeMemoryUsage(memoryChange);

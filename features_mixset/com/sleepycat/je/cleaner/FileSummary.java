@@ -36,14 +36,8 @@ public class FileSummary implements LogWritable,LogReadable
   /**
    * 
    * Creates an empty summary.
-   */
-  // line 32 "../../../../FileSummary.ump"
-   public  FileSummary(){
-    
-  }
-
-
-  /**
+   * public FileSummary() {
+   * }
    * 
    * Returns whether this summary contains any non-zero totals.
    */

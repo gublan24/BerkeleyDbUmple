@@ -22,34 +22,16 @@ public class ConfigParam
   // MEMBER VARIABLES
   //------------------------
 
-  //ConfigParam Attributes
-  private String name;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ConfigParam(String aName)
-  {
-    name = aName;
-  }
+  public ConfigParam()
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setName(String aName)
-  {
-    boolean wasSet = false;
-    name = aName;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
 
   public void delete()
   {}
@@ -63,6 +45,11 @@ public class ConfigParam
 	validateName(configName);
 	validateValue(configDefault);
 	EnvironmentParams.addSupportedParam(this);
+  }
+
+  // line 29 "../../../../ConfigParam.ump"
+   public String getName(){
+    return name;
   }
 
   // line 33 "../../../../ConfigParam.ump"
@@ -117,7 +104,9 @@ public class ConfigParam
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 11 "../../../../ConfigParam.ump"
+  // line 9 "../../../../ConfigParam.ump"
+  protected String name ;
+// line 11 "../../../../ConfigParam.ump"
   private String defaultValue ;
 // line 13 "../../../../ConfigParam.ump"
   private String description ;

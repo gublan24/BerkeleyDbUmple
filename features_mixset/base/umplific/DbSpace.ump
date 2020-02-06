@@ -56,8 +56,6 @@ class DbSpace
 	}
     }
 
-    private DbSpace() {
-    }
 
     public DbSpace(Environment env, boolean quiet, boolean details, boolean sorted) {
 	this(DbInternal.envGetEnvironmentImpl(env), quiet, details, sorted);

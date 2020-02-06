@@ -20,16 +20,34 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
   // MEMBER VARIABLES
   //------------------------
 
+  //TxnEnd Attributes
+  private long lastLsn;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public TxnEnd()
-  {}
+  {
+    lastLsn = DbLsn.NULL_LSN;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setLastLsn(long aLastLsn)
+  {
+    boolean wasSet = false;
+    lastLsn = aLastLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public long getLastLsn()
+  {
+    return lastLsn;
+  }
 
   public void delete()
   {}
@@ -41,24 +59,9 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
 	this.lastLsn = lastLsn;
   }
 
-
-  /**
-   * 
-   * For constructing from the log
-   */
-  // line 30 "../../../../TxnEnd.ump"
-   public  TxnEnd(){
-    lastLsn = DbLsn.NULL_LSN;
-  }
-
-  // line 34 "../../../../TxnEnd.ump"
+  // line 29 "../../../../TxnEnd.ump"
    public long getId(){
     return id;
-  }
-
-  // line 38 "../../../../TxnEnd.ump"
-  public long getLastLsn(){
-    return lastLsn;
   }
 
    protected abstract String getTagName();
@@ -75,7 +78,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#marshallOutsideWriteLatchCan be marshalled outside the log write latch.
    */
-  // line 52 "../../../../TxnEnd.ump"
+  // line 47 "../../../../TxnEnd.ump"
    public boolean marshallOutsideWriteLatch(){
     return true;
   }
@@ -85,7 +88,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 59 "../../../../TxnEnd.ump"
+  // line 54 "../../../../TxnEnd.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
@@ -95,7 +98,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#postLogWork
    */
-  // line 66 "../../../../TxnEnd.ump"
+  // line 61 "../../../../TxnEnd.ump"
    public void postLogWork(long justLoggedLsn){
     
   }
@@ -105,7 +108,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 72 "../../../../TxnEnd.ump"
+  // line 67 "../../../../TxnEnd.ump"
    public int getLogSize(){
     return LogUtils.LONG_BYTES + LogUtils.getTimestampLogSize() + LogUtils.getLongLogSize();
   }
@@ -115,7 +118,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#writeToLog
    */
-  // line 79 "../../../../TxnEnd.ump"
+  // line 74 "../../../../TxnEnd.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeLong(logBuffer, id);
 	LogUtils.writeTimestamp(logBuffer, time);
@@ -127,7 +130,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 88 "../../../../TxnEnd.ump"
+  // line 83 "../../../../TxnEnd.ump"
    public void readFromLog(ByteBuffer logBuffer, byte entryTypeVersion){
     id = LogUtils.readLong(logBuffer);
 	time = LogUtils.readTimestamp(logBuffer);
@@ -139,7 +142,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 97 "../../../../TxnEnd.ump"
+  // line 92 "../../../../TxnEnd.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<").append(getTagName());
 	sb.append(" id=\"").append(id);
@@ -154,7 +157,7 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 109 "../../../../TxnEnd.ump"
+  // line 104 "../../../../TxnEnd.ump"
    public boolean logEntryIsTransactional(){
     return true;
   }
@@ -164,11 +167,17 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 116 "../../../../TxnEnd.ump"
+  // line 111 "../../../../TxnEnd.ump"
    public long getTransactionId(){
     return id;
   }
-  
+
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "lastLsn" + ":" + getLastLsn()+ "]";
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
@@ -177,8 +186,6 @@ public abstract class TxnEnd implements LoggableObject,LogReadable
   protected long id ;
 // line 16 "../../../../TxnEnd.ump"
   protected Timestamp time ;
-// line 18 "../../../../TxnEnd.ump"
-  private long lastLsn ;
 
   
 }

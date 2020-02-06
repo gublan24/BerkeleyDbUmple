@@ -10,7 +10,7 @@ import java.util.HashSet;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../LevelOrderedINMap.ump"
-public class LevelOrderedINMap implements TreeMap
+public class LevelOrderedINMap extends TreeMap
 {
 
   //------------------------
@@ -22,7 +22,9 @@ public class LevelOrderedINMap implements TreeMap
   //------------------------
 
   public LevelOrderedINMap()
-  {}
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE

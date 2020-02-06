@@ -102,7 +102,7 @@ class EnvironmentImpl
      */
     private static boolean noComparators = false;
 
-    public static final boolean JAVA5_AVAILABLE;
+    public static  boolean JAVA5_AVAILABLE;
 
     private static final String DISABLE_JAVA_ADLER32 = "je.disable.java.adler32";
 
@@ -116,13 +116,13 @@ class EnvironmentImpl
 	try {
 	    this.envHome = envHome;
 	    envState = DbEnvState.INIT;
-	    Label323: //this.hook323();
+	    Label323:   ; //this.hook323();
 	    configManager = new DbConfigManager(envConfig);
 	    configObservers = new ArrayList();
 	    addConfigObserver(this);
 	    memoryBudget = new MemoryBudget(this, configManager);
 	    //this.hook336(envHome);
-      Label336:
+      Label336:   ;
 	    forcedYield = configManager.getBoolean(EnvironmentParams.ENV_FORCED_YIELD);
 	    isTransactional = configManager.getBoolean(EnvironmentParams.ENV_INIT_TXN);
 	    isNoLocking = !(configManager.getBoolean(EnvironmentParams.ENV_INIT_LOCKING));
@@ -134,20 +134,21 @@ class EnvironmentImpl
 			    "Can't set 'je.env.isNoLocking' and " + "'je.env.isTransactional';");
 		}
 	    }
-	    Label322: //this.hook322();
+	    Label322:   ; //this.hook322();
 	    isReadOnly = configManager.getBoolean(EnvironmentParams.ENV_RDONLY);
 	    fileManager = new FileManager(this, envHome, isReadOnly);
 	    if (!envConfig.getAllowCreate() && !fileManager.filesExist()) {
 		throw new DatabaseException("Enviroment creation isn't allowed, " + " but there is no pre-existing "
 			+ " environment in " + envHome);
 	    }
-	    Label321: 	logManager = new SyncedLogManager(this, isReadOnly); //this.hook321();
+	    Label321:   ; 	
+      logManager = new SyncedLogManager(this, isReadOnly); //this.hook321();
 	    inMemoryINs = new INList(this);
 	    txnManager = new TxnManager(this);
 	    createDaemons();
 	    dbMapTree = new DbTree(this);
 	    referenceCount = 0;
-	    Label320: //this.hook320();
+	    Label320:   ; //this.hook320();
 	    if (configManager.getBoolean(EnvironmentParams.ENV_RECOVERY)) {
 		try {
 		    RecoveryManager recoveryManager = new RecoveryManager(this);
@@ -168,7 +169,7 @@ class EnvironmentImpl
 	    lockTimeout = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.LOCK_TIMEOUT));
 	    txnTimeout = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.TXN_TIMEOUT));
 	  //  this.hook335();
-      Label335:
+      Label335:   ;
 	    open();
 	} catch (DatabaseException e) {
 	    if (fileManager != null) {
@@ -200,11 +201,11 @@ class EnvironmentImpl
      */
     private void runOrPauseDaemons(DbConfigManager mgr) throws DatabaseException {
 	if (!isReadOnly) {
-	    Label330: //this.hook330(mgr);
-	    Label333: //this.hook333(mgr);
-	    Label326: //this.hook326(mgr);
+	    Label330:   ; //this.hook330(mgr);
+	    Label333:   ; //this.hook333(mgr);
+	    Label326:   ; //this.hook326(mgr);
 	}
-	Label317: //this.hook317(mgr);
+	Label317:   ; //this.hook317(mgr);
     }
 
     /** 
@@ -228,7 +229,7 @@ class EnvironmentImpl
 				try {
 				mapTreeRootLsn = logManager.log(dbMapTree);
 				} finally {
-						logMapTreeRoot_1: //mapTreeRootLatch.release();
+						logMapTreeRoot_1:   ; //mapTreeRootLatch.release();
 				}
     }
 
@@ -260,7 +261,7 @@ class EnvironmentImpl
     public void readMapTreeFromLog(long rootLsn) throws DatabaseException {
 			dbMapTree = (DbTree) logManager.get(rootLsn);
 			dbMapTree.setEnvironmentImpl(this);
-			Label324:	//this.hook324(rootLsn);
+			Label324:   ;	//this.hook324(rootLsn);
 			try{
 				mapTreeRootLsn = rootLsn;
 			}
@@ -339,7 +340,7 @@ class EnvironmentImpl
     private void doClose(boolean doCheckpoint) throws DatabaseException {
 			StringBuffer errors = new StringBuffer();
 			try {
-					Label319: //this.hook319();
+					Label319:   ; //this.hook319();
 					try {
 				envState.checkState(DbEnvState.VALID_FOR_CLOSE, DbEnvState.CLOSED);
 					} catch (DatabaseException DBE) {
@@ -396,9 +397,9 @@ class EnvironmentImpl
 				errors.append(DBE.toString()).append("\n");
 					}
 					//this.hook337();
-				  Label337:
+				  Label337:   ;
 					DbEnvPool.getInstance().remove(envHome);
-					Label325: //this.hook325(errors);
+					Label325:   ; //this.hook325(errors);
 			} finally {
 					envState = DbEnvState.CLOSED;
 			}
@@ -471,10 +472,10 @@ class EnvironmentImpl
 
     private void requestShutdownDaemons() {
 			closing = true;
-			Label331: //this.hook331();
+			Label331:   ; //this.hook331();
 			//this.hook334();
-			Label334:
-			Label327: //this.hook327();
+			Label334:   ;
+			Label327:   ; //this.hook327();
     }
 
     /** 
@@ -486,7 +487,7 @@ class EnvironmentImpl
 
     void shutdownCheckpointer() throws InterruptedException {
 	if (checkpointer != null) {
-	    Label328: //this.hook328();
+	    Label328:   ; //this.hook328();
 	    checkpointer = null;
 	}
 	return;
@@ -672,6 +673,7 @@ class EnvironmentImpl
 //	logManager = new SyncedLogManager(this, isReadOnly);
 //    }
 
+/*
     protected void hook322() throws DatabaseException {
     }
 
@@ -714,5 +716,7 @@ class EnvironmentImpl
 
     protected void hook337() throws DatabaseException {
     }
+
+*/
 
 }

@@ -12,6 +12,9 @@ class ScavengerFileReader
   depend java.util.HashSet;
   depend java.nio.ByteBuffer;
   depend java.io.IOException;
+  
+  abstract;
+
     private Set targetEntryTypes;
 
     private int readBufferSize;

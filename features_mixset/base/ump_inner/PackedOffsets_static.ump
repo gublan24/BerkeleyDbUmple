@@ -4,8 +4,8 @@ class PackedOffsets {
   inner class Iterator {
       private int index;
       private long priorVal;
-      private Iterator(){
-      }
+     // private Iterator(){
+     // }
       boolean hasNext(){
         return data != null && index < data.length;
       }

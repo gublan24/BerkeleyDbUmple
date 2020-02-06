@@ -11,16 +11,16 @@ class LogManager {
         try {
           fileOffset=DbLsn.getFileOffset(lsn);
           entryBuffer=logSource.getBytes(fileOffset);
-          Label507: //this.hook507();
+          Label507:   ; //this.hook507();
           loggableType=entryBuffer.get();
           version=entryBuffer.get();
           entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
           itemSize=LogUtils.readInt(entryBuffer);
           if (entryBuffer.remaining() < itemSize) {
             entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
-            Label508: //this.hook508();
+            Label508:   ; //this.hook508();
           }
-          Label506: //this.hook506();
+          Label506:   ; //this.hook506();
           assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
           logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
           logEntry.readEntry(entryBuffer,itemSize,version,true);

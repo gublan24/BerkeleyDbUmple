@@ -43,17 +43,7 @@ public class TxnPrepare extends TxnEnd
 	this.xid = xid;
   }
 
-
-  /**
-   * 
-   * For constructing from the log.
-   */
-  // line 25 "../../../../TxnPrepare.ump"
-   public  TxnPrepare(){
-    
-  }
-
-  // line 28 "../../../../TxnPrepare.ump"
+  // line 24 "../../../../TxnPrepare.ump"
    public Xid getXid(){
     return xid;
   }
@@ -63,12 +53,12 @@ public class TxnPrepare extends TxnEnd
    * 
    * @see TxnEnd#getLogType
    */
-  // line 35 "../../../../TxnPrepare.ump"
+  // line 31 "../../../../TxnPrepare.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_TXN_PREPARE;
   }
 
-  // line 39 "../../../../TxnPrepare.ump"
+  // line 35 "../../../../TxnPrepare.ump"
    protected String getTagName(){
     return "TxnPrepare";
   }
@@ -78,7 +68,7 @@ public class TxnPrepare extends TxnEnd
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 46 "../../../../TxnPrepare.ump"
+  // line 42 "../../../../TxnPrepare.ump"
    public int getLogSize(){
     return LogUtils.LONG_BYTES + LogUtils.getTimestampLogSize() + LogUtils.getXidSize(xid);
   }
@@ -88,7 +78,7 @@ public class TxnPrepare extends TxnEnd
    * 
    * @see LoggableObject#writeToLog
    */
-  // line 53 "../../../../TxnPrepare.ump"
+  // line 49 "../../../../TxnPrepare.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeLong(logBuffer, id);
 	LogUtils.writeTimestamp(logBuffer, time);
@@ -100,7 +90,7 @@ public class TxnPrepare extends TxnEnd
    * 
    * @see LogReadable#readFromLog
    */
-  // line 62 "../../../../TxnPrepare.ump"
+  // line 58 "../../../../TxnPrepare.ump"
    public void readFromLog(ByteBuffer logBuffer, byte entryTypeVersion){
     id = LogUtils.readLong(logBuffer);
 	time = LogUtils.readTimestamp(logBuffer);
@@ -112,7 +102,7 @@ public class TxnPrepare extends TxnEnd
    * 
    * @see LogReadable#dumpLog
    */
-  // line 71 "../../../../TxnPrepare.ump"
+  // line 67 "../../../../TxnPrepare.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<").append(getTagName());
 	sb.append(" id=\"").append(id);

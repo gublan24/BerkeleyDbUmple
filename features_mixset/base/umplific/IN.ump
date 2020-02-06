@@ -133,7 +133,7 @@ class IN {
  protected void init(DatabaseImpl db, byte[] identifierKey, int initialCapacity, int level) {
   setDatabase(db);
   EnvironmentImpl env = (databaseImpl == null) ? null : databaseImpl.getDbEnvironment();
-  Label618: //this.hook618(env);
+  Label618:   ; //this.hook618(env);
    generation = 0;
   dirty = false;
   nEntries = 0;
@@ -200,7 +200,7 @@ class IN {
   setLastFullLsn(sourceLsn);
   EnvironmentImpl env = db.getDbEnvironment();
   //this.hook637();
-  Label637:
+  Label637:   ;
    env.getInMemoryINs().add(this);
  }
 
@@ -239,7 +239,7 @@ class IN {
   * Latch this node if it is not latched by another thread, optionally setting the generation if the latch succeeds.
   */
   public boolean latchNoWait(boolean updateGeneration) throws DatabaseException {
-    Label619: 
+    Label619:   ; 
     if (updateGeneration) {
      setGeneration();
     }
@@ -677,7 +677,7 @@ class IN {
      node.postFetchInit(databaseImpl, lsn);
      entryTargets[idx] = node;
      // this.hook638(node);
-     Label638:
+     Label638:   ;
 
     } catch (LogFileNotFoundException LNFE) {
      if (!isEntryKnownDeleted(idx) && !isEntryPendingDeleted(idx)) {
@@ -1041,7 +1041,7 @@ class IN {
   boolean requireExactMatch, boolean updateGeneration, int targetLevel, List trackingList, boolean doFetch)
  throws DatabaseException {
   if (getNodeId() == targetNodeId) {
-   Label620: //this.hook620();
+   Label620:   ; //this.hook620();
     result.exactParentFound = false;
    result.keepSearching = false;
    result.parent = null;
@@ -1051,7 +1051,7 @@ class IN {
    result.keepSearching = false;
    result.exactParentFound = false;
    if (requireExactMatch) {
-    Label621: //this.hook621();
+    Label621:   ; //this.hook621();
      result.parent = null;
    }
    else {
@@ -1073,7 +1073,7 @@ class IN {
     result.keepSearching = false;
     result.exactParentFound = false;
     if (requireExactMatch) {
-     Label622: //this.hook622();
+     Label622:   ; //this.hook622();
       result.parent = null;
     }
     else {
@@ -1098,7 +1098,7 @@ class IN {
     result.keepSearching = false;
     if (requireExactMatch) {
      result.parent = null;
-     Label623: //this.hook623();
+     Label623:   ; //this.hook623();
     } else {
      result.parent = this;
     }
@@ -1140,15 +1140,15 @@ class IN {
  protected void descendOnParentSearch(SearchResult result, boolean targetContainsDuplicates, boolean targetIsRoot,
   long targetNodeId, Node child, boolean requireExactMatch) throws DatabaseException {
   if (child.canBeAncestor(targetContainsDuplicates)) {
-   Label624: //this.hook624();
+   Label624:   ; //this.hook624();
     result.parent = (IN) child;
   }
   else {
-   Label625: //this.hook625(child);
+   Label625:   ; //this.hook625(child);
     result.exactParentFound = false;
    result.keepSearching = false;
    if (requireExactMatch) {
-    Label626: //this.hook626();
+    Label626:   ; //this.hook626();
      result.parent = null;
    }
    else {
@@ -1160,7 +1160,7 @@ class IN {
  protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException {
   latch(updateGeneration);
   if (getNodeId() == nid) {
-   Label627: //this.hook627();
+   Label627:   ; //this.hook627();
     return true;
   }
   else {

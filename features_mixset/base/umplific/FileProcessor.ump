@@ -122,25 +122,25 @@ class FileProcessor {
    if (fileNum == null) {
     break;
    }
-   Label138: //this.hook138();
+   Label138: ;//this.hook138();
     boolean finished = false;
    long fileNumValue = fileNum.longValue();
    int runId = ++cleaner.nCleanerRuns;
    try {
     String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue);
-    Label139: //traceMsg = this.hook139(traceMsg);
-     Label121: //this.hook121(traceMsg);
+    Label139:   ; //traceMsg = this.hook139(traceMsg);
+     Label121:   ; //this.hook121(traceMsg);
      if (DEBUG_TRACING) {
       System.out.println("\n" + traceMsg);
      }
     if (processFile(fileNum)) {
      fileSelector.addCleanedFile(fileNum);
      nFilesCleaned += 1;
-     Label140: //this.hook140();
+     Label140:   ; //this.hook140();
       finished = true;
     }
    } catch (IOException IOE) {
-    Label122: //this.hook122(IOE);
+    Label122:   ; //this.hook122(IOE);
      throw new DatabaseException(IOE);
    }
    finally {
@@ -149,8 +149,8 @@ class FileProcessor {
     }
     String traceMsg = "CleanerRun " + runId + " on file 0x" + Long.toHexString(fileNumValue) +
      " invokedFromDaemon=" + invokedFromDaemon + " finished=" + finished;
-    Label141: //traceMsg = this.hook141(traceMsg);
-     Label123: //this.hook123(traceMsg);
+    Label141:   ; //traceMsg = this.hook141(traceMsg);
+     Label123:   ; //this.hook123(traceMsg);
      if (DEBUG_TRACING) {
       System.out.println("\n" + traceMsg);
      }
@@ -209,11 +209,11 @@ class FileProcessor {
     locker = new BasicLocker(env);
     LockResult lockRet = locker.nonBlockingLock(nodeId, LockType.READ, db);
     if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-     Label142: //this.hook142();
+     Label142:   ; //this.hook142();
       lockDenied = true;
     }
     else {
-     Label143: //this.hook143();
+     Label143:   ; //this.hook143();
       obsolete = true;
     }
    }
@@ -238,7 +238,7 @@ class FileProcessor {
      }
      bin.setGeneration();
     }
-    Label144: //this.hook144();
+    Label144:   ; //this.hook144();
      migrated = true;
    }
    completed = true;
@@ -249,7 +249,7 @@ class FileProcessor {
    if (completed && lockDenied) {
     fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
    }
-   Label124: //this.hook124(logLsn, ln, obsolete, migrated, completed);
+   Label124:   ; ;//this.hook124(logLsn, ln, obsolete, migrated, completed);
   }
  }
 
@@ -262,13 +262,14 @@ class FileProcessor {
    boolean dirtied = false;
    boolean completed = false;
    //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
-   Label125:
+   Label125:;
     boolean b = db == null;
    //b = this.hook159(db, b);
-   Label159:
+   Label159:   ;
     if (b) {
      //this.hook160(db);
-     Label160: Label151: //this.hook151();
+     Label160:   ; 
+     Label151:   ; //this.hook151();
       obsolete = true;
      completed = true;
      return; //throw new ReturnVoid();
@@ -277,14 +278,14 @@ class FileProcessor {
    assert tree != null;
    IN inInTree = findINInTree(tree, db, inClone, lsn);
    if (inInTree == null) {
-    Label152: //this.hook152();
+    Label152:   ; //this.hook152();
      obsolete = true;
    }
    else {
-    Label153: //this.hook153();
+    Label153:   ; //this.hook153();
      inInTree.setDirty(true);
     inInTree.setProhibitNextDelta();
-    Label136: //this.hook136(inInTree);
+    Label136:   ; //this.hook136(inInTree);
      dirtied = true;
    }
    completed = true;
@@ -312,14 +313,14 @@ class FileProcessor {
    }
    inClone.latch(Cleaner.UPDATE_GENERATION);
    SearchResult result = null;
-   Label134: //this.hook134(tree, db, inClone, lsn, result);
+   Label134:   ; //this.hook134(tree, db, inClone, lsn, result);
     result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
    if (!result.exactParentFound) {
-    throw new ReturnObject(null);
+     return null;
    }
    int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
    if (compareVal > 0) {
-    throw new ReturnObject(null);
+     return null;
    } else {
     IN in ;
     if (compareVal == 0) {
@@ -331,15 +332,12 @@ class FileProcessor {
     } else {
      in = (IN) result.parent.fetchTarget(result.index);
     } in .latch(Cleaner.UPDATE_GENERATION);
-    throw new ReturnObject( in );
+        return in ;
    }
-   Label134_1: ; //
-   //End of hook134
-
-   throw ReturnHack.returnObject;
-  } catch (ReturnObject r) {
-   return (IN) r.value;
-  }
+  } 
+ finally {
+    Label134_1: ;
+      }
  }
 
  /** 

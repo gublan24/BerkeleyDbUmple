@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.io.IOException;
 
 // line 3 "../../../../ScavengerFileReader.ump"
-public class ScavengerFileReader extends FileReader
+public abstract class ScavengerFileReader extends FileReader
 {
 
   //------------------------
@@ -43,7 +43,7 @@ public class ScavengerFileReader extends FileReader
    * 
    * Create this reader to start at a given LSN.
    */
-  // line 26 "../../../../ScavengerFileReader.ump"
+  // line 29 "../../../../ScavengerFileReader.ump"
    public  ScavengerFileReader(EnvironmentImpl env, int readBufferSize, long startLsn, long finishLsn, long endOfFileLsn) throws IOException,DatabaseException{
     super(env, readBufferSize, false, startLsn, null, endOfFileLsn, finishLsn);
 	this.readBufferSize = readBufferSize;
@@ -57,7 +57,7 @@ public class ScavengerFileReader extends FileReader
    * 
    * Set to true if corrupted boundaries should be dumped to stderr.
    */
-  // line 37 "../../../../ScavengerFileReader.ump"
+  // line 40 "../../../../ScavengerFileReader.ump"
    public void setDumpCorruptedBounds(boolean dumpCorruptedBounds){
     this.dumpCorruptedBounds = dumpCorruptedBounds;
   }
@@ -67,12 +67,12 @@ public class ScavengerFileReader extends FileReader
    * 
    * Tell the reader that we are interested in these kind of entries.
    */
-  // line 44 "../../../../ScavengerFileReader.ump"
+  // line 47 "../../../../ScavengerFileReader.ump"
    public void setTargetType(LogEntryType type){
     targetEntryTypes.add(new Byte(type.getTypeNum()));
   }
 
-  // line 48 "../../../../ScavengerFileReader.ump"
+  // line 51 "../../../../ScavengerFileReader.ump"
    protected boolean processEntry(ByteBuffer entryBuffer) throws DatabaseException{
     LogEntryType lastEntryType = LogEntryType.findType(currentEntryTypeNum, currentEntryTypeVersion);
 	LogEntry entry = lastEntryType.getSharedLogEntry();
@@ -81,7 +81,7 @@ public class ScavengerFileReader extends FileReader
 	return true;
   }
 
-  // line 58 "../../../../ScavengerFileReader.ump"
+  // line 61 "../../../../ScavengerFileReader.ump"
    public boolean readNextEntry() throws DatabaseException,IOException{
     long saveCurrentEntryOffset = currentEntryOffset;
 	try {
@@ -92,7 +92,7 @@ public class ScavengerFileReader extends FileReader
 	}
   }
 
-  // line 69 "../../../../ScavengerFileReader.ump"
+  // line 72 "../../../../ScavengerFileReader.ump"
    protected boolean resyncReader(long nextGoodRecordPostCorruption, boolean showCorruptedBounds) throws DatabaseException,IOException{
     LastFileReader reader = null;
 	long tryReadBufferFileNum = DbLsn.getFileNumber(nextGoodRecordPostCorruption);
@@ -133,7 +133,7 @@ public class ScavengerFileReader extends FileReader
    * 
    * @return true if this reader should process this entry, or just skipover it.
    */
-  // line 107 "../../../../ScavengerFileReader.ump"
+  // line 110 "../../../../ScavengerFileReader.ump"
    protected boolean isTargetEntry(byte logEntryTypeNumber, byte logEntryTypeVersion){
     if (targetEntryTypes.size() == 0) {
 	    return true;
@@ -146,13 +146,13 @@ public class ScavengerFileReader extends FileReader
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 15 "../../../../ScavengerFileReader.ump"
+  // line 18 "../../../../ScavengerFileReader.ump"
   private Set targetEntryTypes ;
-// line 17 "../../../../ScavengerFileReader.ump"
+// line 20 "../../../../ScavengerFileReader.ump"
   private int readBufferSize ;
-// line 19 "../../../../ScavengerFileReader.ump"
+// line 22 "../../../../ScavengerFileReader.ump"
   private boolean dumpCorruptedBounds ;
-// line 55 "../../../../ScavengerFileReader.ump"
+// line 58 "../../../../ScavengerFileReader.ump"
   abstract protected void processEntryCallback(LogEntry entry, LogEntryType entryType) throws DatabaseException ;
 
   

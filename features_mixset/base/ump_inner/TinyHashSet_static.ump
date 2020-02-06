@@ -3,7 +3,7 @@ namespace com.sleepycat.je.utilint;
 class TinyHashSet {
   static class SingleElementIterator  {
       isA Iterator;
-      Object theObject;
+      public Object theObject;
       TinyHashSet theSet;
       boolean returnedTheObject=false;
       SingleElementIterator(    Object o,    TinyHashSet theSet){

@@ -7,6 +7,7 @@ import com.sleepycat.je.utilint.DbLsn;
 import com.sleepycat.je.tree.LN;
 import com.sleepycat.je.tree.IN;
 import com.sleepycat.je.log.entry.LogEntry;
+import com.sleepycat.je.log.StatsFileReader.EntryInfo;
 import com.sleepycat.je.log.entry.LNLogEntry;
 import com.sleepycat.je.log.entry.INLogEntry;
 import com.sleepycat.je.dbi.EnvironmentImpl;
@@ -53,7 +54,7 @@ public class CleanerFileReader extends FileReader
    * @param startLsn where to start in the log, or null for the beginning.
    * @param fileNum single file number.
    */
-  // line 41 "../../../../CleanerFileReader.ump"
+  // line 42 "../../../../CleanerFileReader.ump"
    public  CleanerFileReader(EnvironmentImpl env, int readBufferSize, long startLsn, Long fileNum) throws IOException,DatabaseException{
     super(env, readBufferSize, true, startLsn, fileNum, DbLsn.NULL_LSN, DbLsn.NULL_LSN);
 	targetEntryMap = new HashMap();
@@ -75,7 +76,7 @@ public class CleanerFileReader extends FileReader
 	addTargetType(IS_ROOT, LogEntryType.LOG_ROOT);
   }
 
-  // line 62 "../../../../CleanerFileReader.ump"
+  // line 63 "../../../../CleanerFileReader.ump"
    private void addTargetType(byte category, LogEntryType entryType) throws DatabaseException{
     targetEntryMap.put(entryType, new EntryInfo(entryType.getNewLogEntry(), category));
   }
@@ -85,7 +86,7 @@ public class CleanerFileReader extends FileReader
    * 
    * Helper for determining the starting position and opening up a file at the desired location.
    */
-  // line 69 "../../../../CleanerFileReader.ump"
+  // line 70 "../../../../CleanerFileReader.ump"
    protected void initStartingPosition(long endOfFileLsn, Long fileNum) throws IOException,DatabaseException{
     eof = false;
 	readBufferFileNum = fileNum.longValue();
@@ -98,7 +99,7 @@ public class CleanerFileReader extends FileReader
    * 
    * @return true if this is a type we're interested in.
    */
-  // line 79 "../../../../CleanerFileReader.ump"
+  // line 80 "../../../../CleanerFileReader.ump"
    protected boolean isTargetEntry(byte entryTypeNum, byte entryTypeVersion){
     LogEntryType fromLogType = new LogEntryType(entryTypeNum, entryTypeVersion);
 	EntryInfo info = (EntryInfo) targetEntryMap.get(fromLogType);
@@ -116,7 +117,7 @@ public class CleanerFileReader extends FileReader
    * 
    * This reader instantiates an LN and key for every LN entry.
    */
-  // line 94 "../../../../CleanerFileReader.ump"
+  // line 95 "../../../../CleanerFileReader.ump"
    protected boolean processEntry(ByteBuffer entryBuffer) throws DatabaseException{
     targetLogEntry.readEntry(entryBuffer, currentEntrySize, currentEntryTypeVersion, true);
 	return true;
@@ -127,7 +128,7 @@ public class CleanerFileReader extends FileReader
    * 
    * @return true if the last entry was an IN.
    */
-  // line 102 "../../../../CleanerFileReader.ump"
+  // line 103 "../../../../CleanerFileReader.ump"
    public boolean isIN(){
     return (targetCategory == IS_IN);
   }
@@ -137,7 +138,7 @@ public class CleanerFileReader extends FileReader
    * 
    * @return true if the last entry was a LN.
    */
-  // line 109 "../../../../CleanerFileReader.ump"
+  // line 110 "../../../../CleanerFileReader.ump"
    public boolean isLN(){
     return (targetCategory == IS_LN);
   }
@@ -147,7 +148,7 @@ public class CleanerFileReader extends FileReader
    * 
    * @return true if the last entry was a root
    */
-  // line 116 "../../../../CleanerFileReader.ump"
+  // line 117 "../../../../CleanerFileReader.ump"
    public boolean isRoot(){
     return (targetCategory == IS_ROOT);
   }
@@ -157,7 +158,7 @@ public class CleanerFileReader extends FileReader
    * 
    * Get the last LN seen by the reader.
    */
-  // line 123 "../../../../CleanerFileReader.ump"
+  // line 124 "../../../../CleanerFileReader.ump"
    public LN getLN(){
     return ((LNLogEntry) targetLogEntry).getLN();
   }
@@ -167,7 +168,7 @@ public class CleanerFileReader extends FileReader
    * 
    * Get the last entry seen by the reader as an IN.
    */
-  // line 130 "../../../../CleanerFileReader.ump"
+  // line 131 "../../../../CleanerFileReader.ump"
    public IN getIN() throws DatabaseException{
     return ((INLogEntry) targetLogEntry).getIN(env);
   }
@@ -177,7 +178,7 @@ public class CleanerFileReader extends FileReader
    * 
    * Get the last databaseId seen by the reader.
    */
-  // line 137 "../../../../CleanerFileReader.ump"
+  // line 138 "../../../../CleanerFileReader.ump"
    public DatabaseId getDatabaseId(){
     if (targetCategory == IS_LN) {
 	    return ((LNLogEntry) targetLogEntry).getDbId();
@@ -193,7 +194,7 @@ public class CleanerFileReader extends FileReader
    * 
    * Get the last key seen by the reader.
    */
-  // line 150 "../../../../CleanerFileReader.ump"
+  // line 151 "../../../../CleanerFileReader.ump"
    public byte[] getKey(){
     return ((LNLogEntry) targetLogEntry).getKey();
   }
@@ -203,7 +204,7 @@ public class CleanerFileReader extends FileReader
    * 
    * Get the last key seen by the reader.
    */
-  // line 157 "../../../../CleanerFileReader.ump"
+  // line 158 "../../../../CleanerFileReader.ump"
    public byte[] getDupTreeKey(){
     return ((LNLogEntry) targetLogEntry).getDupKey();
   }
@@ -212,17 +213,17 @@ public class CleanerFileReader extends FileReader
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 20 "../../../../CleanerFileReader.ump"
+  // line 21 "../../../../CleanerFileReader.ump"
   private static final byte IS_IN = 0 ;
-// line 22 "../../../../CleanerFileReader.ump"
+// line 23 "../../../../CleanerFileReader.ump"
   private static final byte IS_LN = 1 ;
-// line 24 "../../../../CleanerFileReader.ump"
+// line 25 "../../../../CleanerFileReader.ump"
   private static final byte IS_ROOT = 2 ;
-// line 26 "../../../../CleanerFileReader.ump"
+// line 27 "../../../../CleanerFileReader.ump"
   private Map targetEntryMap ;
-// line 28 "../../../../CleanerFileReader.ump"
+// line 29 "../../../../CleanerFileReader.ump"
   private LogEntry targetLogEntry ;
-// line 30 "../../../../CleanerFileReader.ump"
+// line 31 "../../../../CleanerFileReader.ump"
   private byte targetCategory ;
 
   

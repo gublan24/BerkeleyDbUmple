@@ -29,9 +29,9 @@ public class DBIN extends BIN implements LoggableObject
   // CONSTRUCTOR
   //------------------------
 
-  public DBIN()
+  public DBIN(long aNodeId)
   {
-    super();
+    super(aNodeId);
   }
 
   //------------------------
@@ -43,12 +43,11 @@ public class DBIN extends BIN implements LoggableObject
     super.delete();
   }
 
-  // line 30 "../../../../DBIN.ump"
-   public  DBIN(){
-    super();
-  }
 
-  // line 34 "../../../../DBIN.ump"
+  /**
+   * public DBIN() {super();}
+   */
+  // line 32 "../../../../DBIN.ump"
    public  DBIN(DatabaseImpl db, byte [] identifierKey, int maxEntriesPerNode, byte [] dupKey, int level){
     super(db, identifierKey, maxEntriesPerNode, level);
 	this.dupKey = dupKey;
@@ -59,12 +58,12 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * Create a new DBIN. Need this because we can't call newInstance() without getting a 0 node.
    */
-  // line 42 "../../../../DBIN.ump"
+  // line 40 "../../../../DBIN.ump"
    protected IN createNewInstance(byte [] identifierKey, int maxEntries, int level){
     return new DBIN(getDatabase(), identifierKey, maxEntries, dupKey, level);
   }
 
-  // line 46 "../../../../DBIN.ump"
+  // line 44 "../../../../DBIN.ump"
    protected int generateLevel(DatabaseId dbId, int newLevel){
     return newLevel;
   }
@@ -74,7 +73,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * Return the key for this duplicate set.
    */
-  // line 60 "../../../../DBIN.ump"
+  // line 58 "../../../../DBIN.ump"
    public byte[] getDupKey(){
     return dupKey;
   }
@@ -84,12 +83,12 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * Get the key (dupe or identifier) in child that is used to locate it in 'this' node.
    */
-  // line 67 "../../../../DBIN.ump"
+  // line 65 "../../../../DBIN.ump"
    public byte[] getChildKey(IN child) throws DatabaseException{
     return child.getIdentifierKey();
   }
 
-  // line 71 "../../../../DBIN.ump"
+  // line 69 "../../../../DBIN.ump"
    public byte[] selectKey(byte [] mainTreeKey, byte [] dupTreeKey){
     return dupTreeKey;
   }
@@ -99,7 +98,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * Return the key for navigating through the duplicate tree.
    */
-  // line 78 "../../../../DBIN.ump"
+  // line 76 "../../../../DBIN.ump"
    public byte[] getDupTreeKey(){
     return getIdentifierKey();
   }
@@ -109,7 +108,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * Return the key for navigating through the main tree.
    */
-  // line 85 "../../../../DBIN.ump"
+  // line 83 "../../../../DBIN.ump"
    public byte[] getMainTreeKey(){
     return dupKey;
   }
@@ -119,7 +118,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @return true if this node is a duplicate-bearing node type, false ifotherwise.
    */
-  // line 92 "../../../../DBIN.ump"
+  // line 90 "../../../../DBIN.ump"
    public boolean containsDuplicates(){
     return true;
   }
@@ -129,17 +128,17 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @return the log entry type to use for bin delta log entries.
    */
-  // line 99 "../../../../DBIN.ump"
+  // line 97 "../../../../DBIN.ump"
   public LogEntryType getBINDeltaType(){
     return LogEntryType.LOG_DUP_BIN_DELTA;
   }
 
-  // line 103 "../../../../DBIN.ump"
+  // line 101 "../../../../DBIN.ump"
    public BINReference createReference(){
     return new DBINReference(getNodeId(), getDatabase().getId(), getIdentifierKey(), dupKey);
   }
 
-  // line 107 "../../../../DBIN.ump"
+  // line 105 "../../../../DBIN.ump"
    protected boolean canBeAncestor(boolean targetContainsDuplicates){
     return false;
   }
@@ -149,7 +148,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @Override
    */
-  // line 114 "../../../../DBIN.ump"
+  // line 112 "../../../../DBIN.ump"
   public boolean hasNonLNChildren(){
     return false;
   }
@@ -159,32 +158,32 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * The following four methods access the correct fields in a cursor depending on whether "this" is a BIN or DBIN. For BIN's, the CursorImpl.index and CursorImpl.bin fields should be used. For DBIN's, the CursorImpl.dupIndex and CursorImpl.dupBin fields should be used.
    */
-  // line 121 "../../../../DBIN.ump"
+  // line 119 "../../../../DBIN.ump"
   public BIN getCursorBIN(CursorImpl cursor){
     return cursor.getDupBIN();
   }
 
-  // line 125 "../../../../DBIN.ump"
+  // line 123 "../../../../DBIN.ump"
   public BIN getCursorBINToBeRemoved(CursorImpl cursor){
     return cursor.getDupBINToBeRemoved();
   }
 
-  // line 129 "../../../../DBIN.ump"
+  // line 127 "../../../../DBIN.ump"
   public int getCursorIndex(CursorImpl cursor){
     return cursor.getDupIndex();
   }
 
-  // line 133 "../../../../DBIN.ump"
+  // line 131 "../../../../DBIN.ump"
   public void setCursorBIN(CursorImpl cursor, BIN bin){
     cursor.setDupBIN((DBIN) bin);
   }
 
-  // line 137 "../../../../DBIN.ump"
+  // line 135 "../../../../DBIN.ump"
   public void setCursorIndex(CursorImpl cursor, int index){
     cursor.setDupIndex(index);
   }
 
-  // line 141 "../../../../DBIN.ump"
+  // line 139 "../../../../DBIN.ump"
   public boolean matchLNByNodeId(TreeLocation location, long nodeId) throws DatabaseException{
     for (int i = 0; i < getNEntries(); i++) {
 	    LN ln = (LN) fetchTarget(i);
@@ -201,17 +200,17 @@ public class DBIN extends BIN implements LoggableObject
 	return false;
   }
 
-  // line 157 "../../../../DBIN.ump"
+  // line 155 "../../../../DBIN.ump"
   public void accumulateStats(TreeWalkerStatsAccumulator acc){
     acc.processDBIN(this, new Long(getNodeId()), getLevel());
   }
 
-  // line 161 "../../../../DBIN.ump"
+  // line 159 "../../../../DBIN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 165 "../../../../DBIN.ump"
+  // line 163 "../../../../DBIN.ump"
    public String endTag(){
     return END_TAG;
   }
@@ -222,7 +221,7 @@ public class DBIN extends BIN implements LoggableObject
    * For unit test support:
    * @return a string that dumps information about this IN, without
    */
-  // line 173 "../../../../DBIN.ump"
+  // line 171 "../../../../DBIN.ump"
    public String dumpString(int nSpaces, boolean dumpTags){
     StringBuffer sb = new StringBuffer();
 	sb.append(TreeUtils.indent(nSpaces));
@@ -244,7 +243,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @see LoggableObject#getLogType
    */
-  // line 192 "../../../../DBIN.ump"
+  // line 190 "../../../../DBIN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_DBIN;
   }
@@ -254,7 +253,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 199 "../../../../DBIN.ump"
+  // line 197 "../../../../DBIN.ump"
    public int getLogSize(){
     int size = super.getLogSize();
 	size += LogUtils.getByteArrayLogSize(dupKey);
@@ -266,7 +265,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @see LoggableObject#writeToLog
    */
-  // line 208 "../../../../DBIN.ump"
+  // line 206 "../../../../DBIN.ump"
    public void writeToLog(ByteBuffer logBuffer){
     super.writeToLog(logBuffer);
 	LogUtils.writeByteArray(logBuffer, dupKey);
@@ -277,7 +276,7 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * @see BIN#readFromLog
    */
-  // line 216 "../../../../DBIN.ump"
+  // line 214 "../../../../DBIN.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     super.readFromLog(itemBuffer, entryTypeVersion);
 	dupKey = LogUtils.readByteArray(itemBuffer);
@@ -288,13 +287,13 @@ public class DBIN extends BIN implements LoggableObject
    * 
    * DBINS need to dump their dup key
    */
-  // line 224 "../../../../DBIN.ump"
+  // line 222 "../../../../DBIN.ump"
    protected void dumpLogAdditional(StringBuffer sb){
     super.dumpLogAdditional(sb);
 	sb.append(Key.dumpString(dupKey, 0));
   }
 
-  // line 229 "../../../../DBIN.ump"
+  // line 227 "../../../../DBIN.ump"
    public String shortClassName(){
     return "DBIN";
   }
@@ -310,7 +309,7 @@ public class DBIN extends BIN implements LoggableObject
 // line 27 "../../../../DBIN.ump"
   private byte[] dupKey ;
 
-// line 52 "../../../../DBIN.ump"
+// line 50 "../../../../DBIN.ump"
   public final Comparator getKeyComparator () 
   {
     return getDatabase().getDuplicateComparator();

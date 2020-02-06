@@ -49,9 +49,9 @@ public class INList
   // line 29 "../../../../INList.ump"
    public  INList(INList orig, EnvironmentImpl envImpl) throws DatabaseException{
     ins = new TreeSet(orig.getINs());
-	Lanbel340: //this.hook340();
+	Lanbel340:   ; //this.hook340();
 	this.envImpl = envImpl;
-	Label339: //this.hook339(envImpl);
+	Label339:   ; //this.hook339(envImpl);
   }
 
   // line 36 "../../../../INList.ump"
@@ -87,10 +87,10 @@ public class INList
   // line 58 "../../../../INList.ump"
    public void removeLatchAlreadyHeld(IN in) throws DatabaseException{
     boolean removeDone = ins.remove(in);
-		Label341: //removeDone = this.hook341(in, removeDone);
+		Label341:   ; //removeDone = this.hook341(in, removeDone);
 		assert removeDone;
 		//this.hook346(in);
-    Label346:
+    Label346:   ;
   }
 
 
@@ -103,7 +103,7 @@ public class INList
     try {
 						 	removeLatchAlreadyHeld(in); //original(in);
 					} finally {
-							LabelRemove_1://releaseMajorLatch();
+							LabelRemove_1:   ;//releaseMajorLatch();
 					}
   }
 
@@ -203,13 +203,13 @@ public class INList
   
     // line 10 "../../../../INList_static.ump"
     public void execute() throws DatabaseException{
-      Label344: //this.hook344();
+      Label344:   ; //this.hook344();
           addToMajor=true;
   try{
-          Label343: //this.hook343();
-    			Label345: //this.hook345();
+          Label343:   ; //this.hook343();
+    			Label345:   ; //this.hook345();
           _this.addAndSetMemory(_this.ins,in);
-  Label345_1:
+  Label345_1:   ;
   }
   finally{
            Label343_1:  ;//

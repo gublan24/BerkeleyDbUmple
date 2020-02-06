@@ -32,12 +32,7 @@ public class InternalException extends DatabaseException
     super.delete();
   }
 
-  // line 9 "../../../../InternalException.ump"
-   public  InternalException(){
-    super();
-  }
-
-  // line 13 "../../../../InternalException.ump"
+  // line 11 "../../../../InternalException.ump"
    public  InternalException(String message){
     super(message);
   }

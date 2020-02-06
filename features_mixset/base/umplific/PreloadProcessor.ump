@@ -18,7 +18,7 @@ class PreloadProcessor
 			this.envImpl = envImpl;
 			this.maxBytes = maxBytes;
 			this.targetTime = targetTime;
-			Label535: //this.hook353(stats);
+			Label535:   ; //this.hook353(stats);
     }
 
     /** 
@@ -30,8 +30,8 @@ class PreloadProcessor
 					throw DatabaseImpl.timeExceededPreloadException;
 			}
 			//this.hook355();
-			Label355:
-			Label354: //this.hook354(childType);
+			Label355:   ;
+			Label354:   ; //this.hook354(childType);
     }
 
   //  protected void hook353(PreloadStats stats) {

@@ -59,12 +59,12 @@ public class Checkpointer
 
   // line 52 "../../../../Checkpointer.ump"
    public  Checkpointer(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException{
-    Label538: //this.hook538(envImpl, waitTime, name);
+    Label538:   ; //this.hook538(envImpl, waitTime, name);
             this.envImpl = envImpl;
-        Label539: //this.hook539(envImpl);
+        Label539:   ; //this.hook539(envImpl);
             logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
-        Label531: //this.hook531();
-            Label545: //this.hook545(waitTime);
+        Label531:   ; //this.hook531();
+            Label545:   ; //this.hook545(waitTime);
             lastCheckpointMillis = 0;
         highestFlushLevel = IN.MIN_LEVEL;
         logManager = envImpl.getLogManager();
@@ -159,9 +159,9 @@ public class Checkpointer
             Iterator iter = nodeSet.iterator();
             while (iter.hasNext()) {
                 CheckpointReference targetRef = (CheckpointReference) iter.next();
-                Label520: //this.hook520();
+                Label520:   ; //this.hook520();
                 //this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
-                Label546:
+                Label546:   ;
                     iter.remove();
             }
             dirtyMap.remove(currentLevel);
@@ -198,7 +198,7 @@ public class Checkpointer
             if (flushed) {
                 DbTree dbTree = targetRef.db.getDbEnvironment().getDbMapTree();
                 dbTree.modifyDbRoot(targetRef.db);
-                Label532: //this.hook532();
+                Label532:   ; //this.hook532();
             }
         }
         if (!targetWasRoot) {
@@ -229,7 +229,7 @@ public class Checkpointer
                         addToDirtyMap(dirtyMap, result.parent);
                     }
                 } finally {
-                    Label526: //;
+                    Label526:   ; //;
                 }
             }
         }
@@ -284,11 +284,11 @@ public class Checkpointer
     target.latch(false);
         long newLsn = DbLsn.NULL_LSN;
         boolean mustLogParent = true;
-        Label527: //this.hook527(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
+        Label527:   ; //this.hook527(target, parent, allowDeltas, checkpointStart, logProvisionally, newLsn, mustLogParent);
             if (target.getDirty()) {
                 newLsn = target.log(logManager, allowDeltas, logProvisionally, true, parent);
                 if (allowDeltas && newLsn == DbLsn.NULL_LSN) {
-                    Label537: //this.hook537();
+                    Label537:   ; //this.hook537();
                         long lastFullLsn = target.getLastFullVersion();
                     if (DbLsn.compareTo(lastFullLsn, checkpointStart) < 0) {
                         mustLogParent = false;
@@ -296,9 +296,9 @@ public class Checkpointer
                 }
             }
         //End hook527
-        Label527_1: //;
+        Label527_1:   ; //;
         if (newLsn != DbLsn.NULL_LSN) {
-            Label533: //this.hook533(target);
+            Label533:   ; //this.hook533(target);
                 parent.updateEntry(index, newLsn);
         }
         return mustLogParent;
@@ -319,73 +319,10 @@ public class Checkpointer
         }
         inSet.add(new CheckpointReference( in .getDatabase(), in .getNodeId(), in .containsDuplicates(), in .isDbRoot(), in .getMainTreeKey(), in .getDupTreeKey()));
   }
-
-
-  /**
-   * protected void hook520() throws DatabaseException {}
-   * protected void hook526(CheckpointReference targetRef, Map dirtyMap, int currentLevel, boolean logProvisionally,
-   * boolean allowDeltas, long checkpointStart, Tree tree, SearchResult result, boolean mustLogParent)
-   * throws DatabaseException {
-   * if (result.exactParentFound) {
-   * IN renewedTarget = (IN) result.parent.getTarget(result.index);
-   * if (renewedTarget == null) {
-   * mustLogParent = true;
-   * } else {
-   * mustLogParent = logTargetAndUpdateParent(renewedTarget, result.parent, result.index, allowDeltas,
-   * checkpointStart, logProvisionally);
-   * }
-   * } else {
-   * if (result.childNotResident) {
-   * if (result.parent.getLevel() > currentLevel) {
-   * mustLogParent = true;
-   * }
-   * }
-   * }
-   * if (mustLogParent) {
-   * assert checkParentChildRelationship(result, currentLevel): dumpParentChildInfo(result, result.parent,
-   * targetRef.nodeId, currentLevel, tree);
-   * addToDirtyMap(dirtyMap, result.parent);
-   * }
-   * }
-   */
-  // line 321 "../../../../Checkpointer.ump"
-   protected void hook527(IN target, IN parent, boolean allowDeltas, long checkpointStart, boolean logProvisionally, long newLsn, boolean mustLogParent) throws DatabaseException{
-    
-  }
-
-  // line 323 "../../../../Checkpointer.ump"
-   protected void hook531() throws DatabaseException{
-    
-  }
-
-  // line 325 "../../../../Checkpointer.ump"
-   protected void hook532() throws DatabaseException{
-    
-  }
-
-  // line 327 "../../../../Checkpointer.ump"
-   protected void hook533(IN target) throws DatabaseException{
-    
-  }
-
-
-  /**
-   * protected void hook537() throws DatabaseException {
-   * }
-   * protected void hook538(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
-   * }
-   * protected void hook539(EnvironmentImpl envImpl) throws DatabaseException {
-   * }
-   */
-  // line 338 "../../../../Checkpointer.ump"
-   protected void hook545(long waitTime) throws DatabaseException{
-    
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import java.util.*;
   
   // line 4 "../../../../Checkpointer_static.ump"
   public static class CheckpointReference
@@ -400,8 +337,6 @@ public class Checkpointer
     private long nodeId;
     private boolean containsDuplicates;
     private boolean isDbRoot;
-    private List<byte> mainTreeKey;
-    private List<byte> dupTreeKey;
   
     //------------------------
     // CONSTRUCTOR
@@ -413,8 +348,6 @@ public class Checkpointer
       nodeId = aNodeId;
       containsDuplicates = aContainsDuplicates;
       isDbRoot = aIsDbRoot;
-      mainTreeKey = new ArrayList<byte>();
-      dupTreeKey = new ArrayList<byte>();
     }
   
     //------------------------
@@ -452,34 +385,6 @@ public class Checkpointer
       wasSet = true;
       return wasSet;
     }
-    /* Code from template attribute_SetMany */
-    public boolean addMainTreeKey(byte aMainTreeKey)
-    {
-      boolean wasAdded = false;
-      wasAdded = mainTreeKey.add(aMainTreeKey);
-      return wasAdded;
-    }
-  
-    public boolean removeMainTreeKey(byte aMainTreeKey)
-    {
-      boolean wasRemoved = false;
-      wasRemoved = mainTreeKey.remove(aMainTreeKey);
-      return wasRemoved;
-    }
-    /* Code from template attribute_SetMany */
-    public boolean addDupTreeKey(byte aDupTreeKey)
-    {
-      boolean wasAdded = false;
-      wasAdded = dupTreeKey.add(aDupTreeKey);
-      return wasAdded;
-    }
-  
-    public boolean removeDupTreeKey(byte aDupTreeKey)
-    {
-      boolean wasRemoved = false;
-      wasRemoved = dupTreeKey.remove(aDupTreeKey);
-      return wasRemoved;
-    }
   
     public DatabaseImpl getDb()
     {
@@ -499,66 +404,6 @@ public class Checkpointer
     public boolean getIsDbRoot()
     {
       return isDbRoot;
-    }
-    /* Code from template attribute_GetMany */
-    public byte getMainTreeKey(int index)
-    {
-      byte aMainTreeKey = mainTreeKey.get(index);
-      return aMainTreeKey;
-    }
-  
-    public byte[] getMainTreeKey()
-    {
-      byte[] newMainTreeKey = mainTreeKey.toArray(new byte[mainTreeKey.size()]);
-      return newMainTreeKey;
-    }
-  
-    public int numberOfMainTreeKey()
-    {
-      int number = mainTreeKey.size();
-      return number;
-    }
-  
-    public boolean hasMainTreeKey()
-    {
-      boolean has = mainTreeKey.size() > 0;
-      return has;
-    }
-  
-    public int indexOfMainTreeKey(byte aMainTreeKey)
-    {
-      int index = mainTreeKey.indexOf(aMainTreeKey);
-      return index;
-    }
-    /* Code from template attribute_GetMany */
-    public byte getDupTreeKey(int index)
-    {
-      byte aDupTreeKey = dupTreeKey.get(index);
-      return aDupTreeKey;
-    }
-  
-    public byte[] getDupTreeKey()
-    {
-      byte[] newDupTreeKey = dupTreeKey.toArray(new byte[dupTreeKey.size()]);
-      return newDupTreeKey;
-    }
-  
-    public int numberOfDupTreeKey()
-    {
-      int number = dupTreeKey.size();
-      return number;
-    }
-  
-    public boolean hasDupTreeKey()
-    {
-      boolean has = dupTreeKey.size() > 0;
-      return has;
-    }
-  
-    public int indexOfDupTreeKey(byte aDupTreeKey)
-    {
-      int index = dupTreeKey.indexOf(aDupTreeKey);
-      return index;
     }
   
     public void delete()
@@ -596,7 +441,17 @@ public class Checkpointer
               "containsDuplicates" + ":" + getContainsDuplicates()+ "," +
               "isDbRoot" + ":" + getIsDbRoot()+ "]" + System.getProperties().getProperty("line.separator") +
               "  " + "db" + "=" + (getDb() != null ? !getDb().equals(this)  ? getDb().toString().replaceAll("  ","    ") : "this" : "null");
-    }
+    }  
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 9 "../../../../Checkpointer_static.ump"
+    protected byte[] mainTreeKey ;
+  // line 10 "../../../../Checkpointer_static.ump"
+    protected byte[] dupTreeKey ;
+  
+    
   }  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -631,10 +486,10 @@ public class Checkpointer
   
     // line 35 "../../../../Checkpointer_static.ump"
     public long execute() throws IllegalArgumentException,DatabaseException{
-      Label541: //this.hook541();
-      Label519: //this.hook519();
+      Label541:   ; //this.hook541();
+      Label519:   ; //this.hook519();
       result = 0;
-      Label540: //this.hook540();
+      Label540:   ; //this.hook540();
       return result;
     }
   
@@ -709,13 +564,14 @@ public class Checkpointer
       if (config.getForce()) {
        return true;
       } else {
-       Label543: //this.hook543();
-       Label544: //added from this.hook543();
+       Label543:   ; //this.hook543();
+       Label544:   ; //added from this.hook543();
       }
-      Label542: //this.hook542();
+      Label542:   ; //this.hook542();
+      return false;
      } 
      finally {
-      Label521: //this.hook521();
+      Label521:   ; //this.hook521();
      }
      //throw ReturnHack.returnBoolean;
   
@@ -726,19 +582,19 @@ public class Checkpointer
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 76 "../../../../Checkpointer_static.ump"
+    // line 77 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 77 "../../../../Checkpointer_static.ump"
-    protected CheckpointConfig config ;
   // line 78 "../../../../Checkpointer_static.ump"
-    protected long useBytesInterval ;
+    protected CheckpointConfig config ;
   // line 79 "../../../../Checkpointer_static.ump"
-    protected long useTimeInterval ;
+    protected long useBytesInterval ;
   // line 80 "../../../../Checkpointer_static.ump"
-    protected long nextLsn ;
+    protected long useTimeInterval ;
   // line 81 "../../../../Checkpointer_static.ump"
-    protected long lastUsedLsn ;
+    protected long nextLsn ;
   // line 82 "../../../../Checkpointer_static.ump"
+    protected long lastUsedLsn ;
+  // line 83 "../../../../Checkpointer_static.ump"
     protected StringBuffer sb ;
   
     
@@ -747,7 +603,7 @@ public class Checkpointer
   
   
   
-  // line 93 "../../../../Checkpointer_static.ump"
+  // line 94 "../../../../Checkpointer_static.ump"
   public static class Checkpointer_doCheckpoint
   {
   
@@ -769,7 +625,7 @@ public class Checkpointer
     public void delete()
     {}
   
-    // line 95 "../../../../Checkpointer_static.ump"
+    // line 96 "../../../../Checkpointer_static.ump"
     public  Checkpointer_doCheckpoint(Checkpointer _this, CheckpointConfig config, boolean flushAll, String invokingSource){
       this._this = _this;
      this.config = config;
@@ -777,7 +633,7 @@ public class Checkpointer
      this.invokingSource = invokingSource;
     }
   
-    // line 101 "../../../../Checkpointer_static.ump"
+    // line 102 "../../../../Checkpointer_static.ump"
     public void execute() throws DatabaseException{
       if (_this.envImpl.isReadOnly()) {
       return;
@@ -792,21 +648,21 @@ public class Checkpointer
       flushExtraLevel = true;
      }
      _this.lastCheckpointMillis = System.currentTimeMillis();
-     Label535: //this.hook535();
+     Label535:   ; //this.hook535();
       _this.checkpointId++;
-     Label534: //this.hook534();
+     Label534:   ; //this.hook534();
       success = false;
-     Label522: //this.hook522();
+     Label522:   ; //this.hook522();
       //this.hook548();
-      Label548:
+      Label548:   ;
       mb = _this.envImpl.getMemoryBudget();
      try {
       //this.hook525();
-      Label525: checkpointStart = DbLsn.NULL_LSN;
+      Label525:   ; checkpointStart = DbLsn.NULL_LSN;
       firstActiveLsn = DbLsn.NULL_LSN;
       dirtyMap = null;
       //this.hook547();
-      Label547: startEntry = new CheckpointStart(_this.checkpointId, invokingSource);
+      Label547:   ; startEntry = new CheckpointStart(_this.checkpointId, invokingSource);
       checkpointStart = _this.logManager.log(startEntry);
       firstActiveLsn = _this.envImpl.getTxnManager().getFirstActiveLsn();
       if (firstActiveLsn == DbLsn.NULL_LSN) {
@@ -819,20 +675,20 @@ public class Checkpointer
       dirtyMap = _this.selectDirtyINs(flushAll, flushExtraLevel);
       //end of hook547
       //this.hook551();
-      Label551: for (Iterator i = dirtyMap.values().iterator(); i.hasNext();) {
+      Label551:   ; for (Iterator i = dirtyMap.values().iterator(); i.hasNext();) {
        nodeSet = (Set) i.next();
        //this.hook552();
-       Label552:
+       Label552:   ;
       }
       //this.hook550();
-      Label550: allowDeltas = !config.getMinimizeRecoveryTime();
+      Label550:   ; allowDeltas = !config.getMinimizeRecoveryTime();
       _this.flushDirtyNodes(dirtyMap, flushAll, allowDeltas, flushExtraLevel, checkpointStart);
       _this.flushUtilizationInfo();
       endEntry = new CheckpointEnd(invokingSource, checkpointStart, _this.envImpl.getRootLsn(), firstActiveLsn, Node.getLastId(), _this.envImpl.getDbMapTree().getLastDbId(), _this.envImpl.getTxnManager().getLastTxnId(), _this.checkpointId);
-      Label523: //this.hook523();
+      Label523:   ; //this.hook523();
        _this.lastCheckpointEnd = _this.logManager.logForceFlush(endEntry, true);
       _this.lastFirstActiveLsn = firstActiveLsn;
-      Label536: //this.hook536();
+      Label536:   ; //this.hook536();
        _this.highestFlushLevel = IN.MIN_LEVEL;
       success = true;
       if (cleanerFiles != null) {
@@ -842,7 +698,7 @@ public class Checkpointer
      }
      finally {
       //this.hook549();
-      Label549: Label524: //this.hook524();
+      Label549:   ; Label524:   ; //this.hook524();
      }
     }
   
@@ -854,17 +710,17 @@ public class Checkpointer
      * protected void hook525() throws DatabaseException {
      * }
      */
-    // line 193 "../../../../Checkpointer_static.ump"
+    // line 194 "../../../../Checkpointer_static.ump"
      protected void hook534() throws DatabaseException{
       
     }
   
-    // line 194 "../../../../Checkpointer_static.ump"
+    // line 195 "../../../../Checkpointer_static.ump"
      protected void hook535() throws DatabaseException{
       
     }
   
-    // line 195 "../../../../Checkpointer_static.ump"
+    // line 196 "../../../../Checkpointer_static.ump"
      protected void hook536() throws DatabaseException{
       
     }
@@ -873,45 +729,45 @@ public class Checkpointer
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 167 "../../../../Checkpointer_static.ump"
+    // line 168 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 168 "../../../../Checkpointer_static.ump"
-    protected CheckpointConfig config ;
   // line 169 "../../../../Checkpointer_static.ump"
-    protected boolean flushAll ;
+    protected CheckpointConfig config ;
   // line 170 "../../../../Checkpointer_static.ump"
-    protected String invokingSource ;
+    protected boolean flushAll ;
   // line 171 "../../../../Checkpointer_static.ump"
-    protected boolean flushExtraLevel ;
+    protected String invokingSource ;
   // line 172 "../../../../Checkpointer_static.ump"
-    protected Cleaner cleaner ;
+    protected boolean flushExtraLevel ;
   // line 173 "../../../../Checkpointer_static.ump"
-    protected Set[] cleanerFiles ;
+    protected Cleaner cleaner ;
   // line 174 "../../../../Checkpointer_static.ump"
-    protected boolean success ;
+    protected Set[] cleanerFiles ;
   // line 175 "../../../../Checkpointer_static.ump"
-    protected boolean traced ;
+    protected boolean success ;
   // line 176 "../../../../Checkpointer_static.ump"
-    protected int dirtyMapMemSize ;
+    protected boolean traced ;
   // line 177 "../../../../Checkpointer_static.ump"
-    protected MemoryBudget mb ;
+    protected int dirtyMapMemSize ;
   // line 178 "../../../../Checkpointer_static.ump"
-    protected long checkpointStart ;
+    protected MemoryBudget mb ;
   // line 179 "../../../../Checkpointer_static.ump"
-    protected long firstActiveLsn ;
+    protected long checkpointStart ;
   // line 180 "../../../../Checkpointer_static.ump"
-    protected SortedMap dirtyMap ;
+    protected long firstActiveLsn ;
   // line 181 "../../../../Checkpointer_static.ump"
-    protected CheckpointStart startEntry ;
+    protected SortedMap dirtyMap ;
   // line 182 "../../../../Checkpointer_static.ump"
-    protected int totalSize ;
+    protected CheckpointStart startEntry ;
   // line 183 "../../../../Checkpointer_static.ump"
-    protected Set nodeSet ;
+    protected int totalSize ;
   // line 184 "../../../../Checkpointer_static.ump"
-    protected int size ;
+    protected Set nodeSet ;
   // line 185 "../../../../Checkpointer_static.ump"
-    protected boolean allowDeltas ;
+    protected int size ;
   // line 186 "../../../../Checkpointer_static.ump"
+    protected boolean allowDeltas ;
+  // line 187 "../../../../Checkpointer_static.ump"
     protected CheckpointEnd endEntry ;
   
     
@@ -920,7 +776,7 @@ public class Checkpointer
   
   
   
-  // line 210 "../../../../Checkpointer_static.ump"
+  // line 211 "../../../../Checkpointer_static.ump"
   public static class Checkpointer_selectDirtyINs
   {
   
@@ -942,28 +798,28 @@ public class Checkpointer
     public void delete()
     {}
   
-    // line 212 "../../../../Checkpointer_static.ump"
+    // line 213 "../../../../Checkpointer_static.ump"
     public  Checkpointer_selectDirtyINs(Checkpointer _this, boolean flushAll, boolean flushExtraLevel){
       this._this = _this;
      this.flushAll = flushAll;
      this.flushExtraLevel = flushExtraLevel;
     }
   
-    // line 217 "../../../../Checkpointer_static.ump"
+    // line 218 "../../../../Checkpointer_static.ump"
     public SortedMap execute() throws DatabaseException{
       newDirtyMap = new TreeMap();
      inMemINs = _this.envImpl.getInMemoryINs();
-     Label529: //this.hook529();
+     Label529:   ; //this.hook529();
       //this.hook553();
-      Label553:
+      Label553:   ;
       //this.hook528();
-      Label528:
+      Label528:   ;
       try {
        iter = inMemINs.iterator();
        while (iter.hasNext()) {
         in = (IN) iter.next(); in .latch(false);
         //this.hook530();
-        Label530:
+        Label530:   ;
          if ( in .getDirty()) {
           level = new Integer( in .getLevel());
           if (newDirtyMap.containsKey(level)) {
@@ -975,9 +831,9 @@ public class Checkpointer
           dirtySet.add(new CheckpointReference( in .getDatabase(), in .getNodeId(), in .containsDuplicates(), in .isDbRoot(), in .getMainTreeKey(), in .getDupTreeKey()));
          }
        }
-       Label530_1:
+       Label530_1:   ;
         //this.hook554(); //excute()
-        Label554:
+        Label554:   ;
         if (newDirtyMap.size() > 0) {
          if (flushAll) {
           _this.highestFlushLevel = _this.envImpl.getDbMapTree().getHighestLevel();
@@ -993,7 +849,7 @@ public class Checkpointer
        }
       }
      finally {
-      Label528_1:; //;
+      Label528_1:   ; //;
   
      }
      //end hook528
@@ -1004,27 +860,27 @@ public class Checkpointer
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 265 "../../../../Checkpointer_static.ump"
+    // line 266 "../../../../Checkpointer_static.ump"
     protected Checkpointer _this ;
-  // line 266 "../../../../Checkpointer_static.ump"
-    protected boolean flushAll ;
   // line 267 "../../../../Checkpointer_static.ump"
-    protected boolean flushExtraLevel ;
+    protected boolean flushAll ;
   // line 268 "../../../../Checkpointer_static.ump"
-    protected SortedMap newDirtyMap ;
+    protected boolean flushExtraLevel ;
   // line 269 "../../../../Checkpointer_static.ump"
-    protected INList inMemINs ;
+    protected SortedMap newDirtyMap ;
   // line 270 "../../../../Checkpointer_static.ump"
-    protected long totalSize ;
+    protected INList inMemINs ;
   // line 271 "../../../../Checkpointer_static.ump"
-    protected MemoryBudget mb ;
+    protected long totalSize ;
   // line 272 "../../../../Checkpointer_static.ump"
-    protected Iterator iter ;
+    protected MemoryBudget mb ;
   // line 273 "../../../../Checkpointer_static.ump"
-    protected IN in ;
+    protected Iterator iter ;
   // line 274 "../../../../Checkpointer_static.ump"
-    protected Integer level ;
+    protected IN in ;
   // line 275 "../../../../Checkpointer_static.ump"
+    protected Integer level ;
+  // line 276 "../../../../Checkpointer_static.ump"
     protected Set dirtySet ;
   
     

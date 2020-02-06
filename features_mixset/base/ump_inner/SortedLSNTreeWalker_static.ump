@@ -4,7 +4,7 @@ class SortedLSNTreeWalker {
   interface TreeNodeProcessor {
       void processLSN(    long childLSN,    LogEntryType childType);
     }
-  @MethodObject static class SortedLSNTreeWalker_extractINsForDb {
+   static class SortedLSNTreeWalker_extractINsForDb {
       SortedLSNTreeWalker_extractINsForDb(    SortedLSNTreeWalker _this,    INList inList){
         this._this=_this;
         this.inList=inList;
@@ -13,10 +13,10 @@ class SortedLSNTreeWalker {
         foundSome=false;
         foundSet=new HashSet();
         //this.hook360();
-        Label360:
-        Label356: //this.hook356();
+        Label360:   ;
+        Label356:   ;//this.hook356();
         try {
-          this.hook357();
+        //  this.hook357();
           iter=inList.iterator();
           while (iter.hasNext()) {
             thisIN=(IN)iter.next();
@@ -25,19 +25,14 @@ class SortedLSNTreeWalker {
               if (_this.removeINsFromINList) {
                 iter.remove();
                 //this.hook361();
-                Label361:
+                Label361:   ;
               }
               foundSet.add(thisIN);
             }
           }
         }
-   catch (      DatabaseException e) {
-          //this.hook362();
-          Label362:
-          throw e;
-        }
    finally {
-          Label358: //this.hook358();
+          Label358:   ;//this.hook358();
         }
         if (foundSome) {
           iter1=foundSet.iterator();
@@ -46,7 +41,8 @@ class SortedLSNTreeWalker {
             _this.accumulateLSNs(thisIN1);
           }
         }
-        foundSet=null;
+        foundSet=null;          
+        Label362:   ;
         return foundSome;
       }
       protected SortedLSNTreeWalker _this;

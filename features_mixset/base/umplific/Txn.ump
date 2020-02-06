@@ -69,7 +69,7 @@ class Txn
 
     private Map undoDatabases;
 
-    private long lastLoggedLsn = DbLsn.NULL_LSN;
+    long lastLoggedLsn = DbLsn.NULL_LSN;
 
     private long firstLoggedLsn = DbLsn.NULL_LSN;
 
@@ -113,16 +113,11 @@ class Txn
 	firstLoggedLsn = DbLsn.NULL_LSN;
 	txnState = USABLE;
 	//this.hook809();
-  Label809:
+  Label809: ;
 	this.envImpl.getTxnManager().registerTxn(this);
     }
 
-    /** 
-     * Constructor for reading from log.
-     */
-    public Txn() {
-	lastLoggedLsn = DbLsn.NULL_LSN;
-    }
+  
 
     /** 
      * UserTxns get a new unique id for each instance.
@@ -254,7 +249,7 @@ class Txn
 						} else {
 					commitLsn = logManager.log(commitRecord);
 						}
-						Label806: //this.hook806();
+						Label806: ; //this.hook806();
 						Set alreadyCountedLsnSet = new HashSet();
 						Iterator iter = writeInfo.values().iterator();
 						while (iter.hasNext()) {
@@ -269,11 +264,11 @@ class Txn
 					}
 						}
 						writeInfo = null;
-						Label803: //this.hook803();
+						Label803: ; //this.hook803();
 				}
 				traceCommit(numWriteLocks, numReadLocks);
 					}
-					Label805: //this.hook805();
+					Label805: ; //this.hook805();
 					close(true);
 					return commitLsn;
 			} catch (RunRecoveryException e) {
@@ -281,7 +276,7 @@ class Txn
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				Label800: //this.hook800(t);
+				Label800: ; //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -320,14 +315,14 @@ class Txn
 		}
 		undo();
 		numReadLocks = (readLocks == null) ? 0 : clearReadLocks();
-		Label808: //this.hook808();
+		Label808: ; //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
-		Label804: //this.hook804();
+		Label804: ; //this.hook804();
 	    }
-	    Label807: //this.hook807();
+	    Label807: ; //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		Label799: //this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799: ; //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -366,9 +361,9 @@ class Txn
 		    undoLN.postFetchInit(db, undoLsn);
 		    long abortLsn = undoEntry.getAbortLsn();
 		    boolean abortKnownDeleted = undoEntry.getAbortKnownDeleted();
-		    Label802: //this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
+		    Label802: ; //this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
 				RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn, abortLsn, abortKnownDeleted, null, false);
-		    Label802_1: //end of hook802
+		    Label802_1: ; //end of hook802
 		    if (!undoLN.isDeleted()) {
 			logManager.countObsoleteNode(undoLsn, null);
 		    }
@@ -378,7 +373,7 @@ class Txn
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    Label801: //this.hook801(nodeId, undoLsn, e);
+	    Label801: ; //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
     }
@@ -441,11 +436,11 @@ class Txn
 			if (readLocks == null) {
 					readLocks = new HashSet();
 			//		delta = this.hook811(delta);
-          Label811:
+          Label811: ;
 			}
 			readLocks.add(lock);
 			//this.hook810(delta);
-      Label810:
+      Label810: ;
     }
 
     /** 
@@ -455,10 +450,10 @@ class Txn
 			synchronized (this) {
 					if ((readLocks != null) && readLocks.remove(lock)) {
 				//this.hook812();
-          Label812:
+          Label812: ;
 					} else if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
 				//this.hook813();
-         label813: 
+         label813: ; 
 					}
 			}
     }
@@ -472,7 +467,7 @@ class Txn
 	    if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
 		found = true;
 		//this.hook814();
-    Label814:
+    Label814: ;
 	    }
 	    assert found : "Couldn't find lock for Node " + nodeId + " in writeInfo Map.";
 	    addReadLock(lock);

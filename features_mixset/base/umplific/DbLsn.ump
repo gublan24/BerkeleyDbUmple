@@ -13,9 +13,7 @@ class DbLsn
 
     public static final long NULL_LSN = -1;
 
-    private DbLsn() {
-    }
-
+ 
     public static long makeLsn(long fileNumber, long fileOffset) {
 	return fileOffset & INT_MASK | ((fileNumber & INT_MASK) << 32);
     }

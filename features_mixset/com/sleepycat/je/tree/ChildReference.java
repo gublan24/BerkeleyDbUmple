@@ -27,7 +27,11 @@ public class ChildReference implements LogWritable,LogReadable
   //------------------------
 
   public ChildReference()
-  {}
+  {
+    // line 40 "../../../../ChildReference.ump"
+    init(null, Key.EMPTY_KEY, DbLsn.NULL_LSN, 0);
+    // END OF UMPLE AFTER INJECTION
+  }
 
   //------------------------
   // INTERFACE
@@ -35,16 +39,6 @@ public class ChildReference implements LogWritable,LogReadable
 
   public void delete()
   {}
-
-
-  /**
-   * 
-   * Construct an empty child reference, for reading from the log.
-   */
-  // line 40 "../../../../ChildReference.ump"
-  public  ChildReference(){
-    init(null, Key.EMPTY_KEY, DbLsn.NULL_LSN, 0);
-  }
 
 
   /**
@@ -117,7 +111,7 @@ public class ChildReference implements LogWritable,LogReadable
 		    node.postFetchInit(database, lsn);
 		    target = node;
 //	    this.hook613(in);
-        Label613:
+        Label613:   ;
 		} catch (LogFileNotFoundException LNFE) {
 		    if (!isKnownDeleted() && !isPendingDeleted()) {
 			throw new DatabaseException(IN.makeFetchErrorMsg(LNFE.toString(), in, lsn, state), LNFE);

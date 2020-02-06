@@ -38,7 +38,7 @@ public class LogBufferPool
   public  LogBufferPool(FileManager fileManager, EnvironmentImpl envImpl) throws DatabaseException{
     this.fileManager = fileManager;
 	this.envImpl = envImpl;
-	Label485: //this.hook485(envImpl);
+	Label485:   ; //this.hook485(envImpl);
 	DbConfigManager configManager = envImpl.getConfigManager();
 	runInMemory = configManager.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY);
 	reset(configManager);
@@ -65,7 +65,7 @@ public class LogBufferPool
 	for (int i = 0; i < numBuffers; i++) {
 	    newPool.add(new LogBuffer(newBufferSize, envImpl));
 	}
-	Label486: //this.hook486();
+	Label486:   ; //this.hook486();
 	bufferPool = newPool;
 	logBufferSize = newBufferSize;
   }
@@ -98,29 +98,29 @@ public class LogBufferPool
   // line 81 "../../../../LogBufferPool.ump"
   public void writeBufferToFile(int sizeNeeded) throws IOException,DatabaseException{
     int bufferSize = ((logBufferSize > sizeNeeded) ? logBufferSize : sizeNeeded);
-	Label488: //this.hook488();
+	Label488:   ; //this.hook488();
 	LogBuffer latchedBuffer = currentWriteBuffer;
-	Label487: //this.hook487(bufferSize, latchedBuffer);
+	Label487:   ; //this.hook487(bufferSize, latchedBuffer);
   ByteBuffer currentByteBuffer = currentWriteBuffer.getDataBuffer();
 	int savePosition = currentByteBuffer.position();
 	int saveLimit = currentByteBuffer.limit();
 	currentByteBuffer.flip();
 	if (runInMemory) {
-	    Label492: //this.hook492(latchedBuffer);
+	    Label492:   ; //this.hook492(latchedBuffer);
 	    latchedBuffer = null;
-	    Label491: //this.hook491();
+	    Label491:   ; //this.hook491();
 	    currentWriteBuffer = new LogBuffer(bufferSize, envImpl);
 	    bufferPool.add(currentWriteBuffer);
-	    Label490: //this.hook490();
+	    Label490:   ; //this.hook490();
 	} else {
 	    try {
 		fileManager.writeLogBuffer(currentWriteBuffer);
 		currentWriteBuffer.getDataBuffer().rewind();
-		Label494: //this.hook494(latchedBuffer);
+		Label494:   ; //this.hook494(latchedBuffer);
 		latchedBuffer = null;
 		LogBuffer nextToUse = null;
-		Label493: //this.hook493(nextToUse);
-		Label495: //this.hook495();
+		Label493:   ; //this.hook493(nextToUse);
+		Label495:   ; //this.hook495();
 		Iterator iter = bufferPool.iterator();
 		nextToUse = (LogBuffer) iter.next();
 		boolean done = bufferPool.remove(nextToUse);
@@ -135,7 +135,7 @@ public class LogBufferPool
 		throw DE;
 	    }
 	}
-Label487_1:
+Label487_1:   ;
 // End of hook487
   }
 
@@ -161,7 +161,7 @@ Label487_1:
   // line 138 "../../../../LogBufferPool.ump"
   public LogBuffer getReadBuffer(long lsn) throws DatabaseException{
     LogBuffer foundBuffer = null;
-			Label489: //	foundBuffer = this.hook489(lsn, foundBuffer);
+			Label489:   ; //	foundBuffer = this.hook489(lsn, foundBuffer);
 			Iterator iter = bufferPool.iterator();
 			while (iter.hasNext()) {
 					LogBuffer l = (LogBuffer) iter.next();
@@ -174,9 +174,9 @@ Label487_1:
 					foundBuffer = currentWriteBuffer;
 			}
 			if (foundBuffer == null) {
-					Label496: //this.hook496();
+					Label496:   ; //this.hook496();
 			}
-Label489_1:
+Label489_1:   ;
 	//End of hook489
 		if (foundBuffer == null) {
 			  return null;

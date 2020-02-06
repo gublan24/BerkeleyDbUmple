@@ -37,14 +37,8 @@ public class PackedOffsets implements LogWritable,LogReadable
   /**
    * 
    * Creates an empty object.
-   */
-  // line 20 "../../../../PackedOffsets.ump"
-   public  PackedOffsets(){
-    
-  }
-
-
-  /**
+   * public PackedOffsets() {
+   * }
    * 
    * Returns an iterator over all offsets.
    */
@@ -235,11 +229,11 @@ public class PackedOffsets implements LogWritable,LogReadable
     public void delete()
     {}
   
-    // line 8 "../../../../PackedOffsets_static.ump"
-     private  Iterator(){
-      
-    }
   
+    /**
+     * private Iterator(){
+     * }
+     */
     // line 10 "../../../../PackedOffsets_static.ump"
     public boolean hasNext(){
       return data != null && index < data.length;

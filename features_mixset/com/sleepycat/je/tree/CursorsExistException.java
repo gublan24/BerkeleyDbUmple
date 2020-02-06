@@ -28,11 +28,6 @@ public class CursorsExistException extends Exception
 
   public void delete()
   {}
-
-  // line 10 "../../../../CursorsExistException.ump"
-   private  CursorsExistException(){
-    
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/INList.java
+// Original file:   ;/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/INList.java
 namespace com.sleepycat.je.dbi;
 class INList {
    static class INList_add {
@@ -7,13 +7,13 @@ class INList {
         this.in=in;
       }
       void execute() throws DatabaseException {
-        Label344: //this.hook344();
+        Label344:   ; //this.hook344();
         addToMajor=true;
 try{
-        Label343: //this.hook343();
-  			Label345: //this.hook345();
+        Label343:   ; //this.hook343();
+  			Label345:   ; //this.hook345();
         _this.addAndSetMemory(_this.ins,in);
-Label345_1:
+Label345_1:   ;
 }
 finally{
          Label343_1:  ;//

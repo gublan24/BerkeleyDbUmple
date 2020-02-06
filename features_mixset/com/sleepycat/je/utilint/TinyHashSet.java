@@ -102,10 +102,10 @@ public class TinyHashSet
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import com.sleepycat.je.cleaner.*;
+  import com.sleepycat.bind.serial.*;
   
   // line 4 "../../../../TinyHashSet_static.ump"
-  public static class SingleElementIterator extends Iterator
+  public static class SingleElementIterator implements Iterator
   {
   
     //------------------------
@@ -113,7 +113,6 @@ public class TinyHashSet
     //------------------------
   
     //SingleElementIterator Attributes
-    private Object theObject;
     private TinyHashSet theSet;
     private boolean returnedTheObject;
   
@@ -121,10 +120,8 @@ public class TinyHashSet
     // CONSTRUCTOR
     //------------------------
   
-    public SingleElementIterator(Object aTheObject, TinyHashSet aTheSet)
+    public SingleElementIterator(TinyHashSet aTheSet)
     {
-      super();
-      theObject = aTheObject;
       theSet = aTheSet;
       returnedTheObject = false;
     }
@@ -132,14 +129,6 @@ public class TinyHashSet
     //------------------------
     // INTERFACE
     //------------------------
-  
-    public boolean setTheObject(Object aTheObject)
-    {
-      boolean wasSet = false;
-      theObject = aTheObject;
-      wasSet = true;
-      return wasSet;
-    }
   
     public boolean setTheSet(TinyHashSet aTheSet)
     {
@@ -157,11 +146,6 @@ public class TinyHashSet
       return wasSet;
     }
   
-    public Object getTheObject()
-    {
-      return theObject;
-    }
-  
     public TinyHashSet getTheSet()
     {
       return theSet;
@@ -173,9 +157,7 @@ public class TinyHashSet
     }
   
     public void delete()
-    {
-      super.delete();
-    }
+    {}
   
     // line 10 "../../../../TinyHashSet_static.ump"
     public  SingleElementIterator(Object o, TinyHashSet theSet){
@@ -211,9 +193,16 @@ public class TinyHashSet
     {
       return super.toString() + "["+
               "returnedTheObject" + ":" + getReturnedTheObject()+ "]" + System.getProperties().getProperty("line.separator") +
-              "  " + "theObject" + "=" + (getTheObject() != null ? !getTheObject().equals(this)  ? getTheObject().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
               "  " + "theSet" + "=" + (getTheSet() != null ? !getTheSet().equals(this)  ? getTheSet().toString().replaceAll("  ","    ") : "this" : "null");
-    }
+    }  
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 6 "../../../../TinyHashSet_static.ump"
+    public Object theObject ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS

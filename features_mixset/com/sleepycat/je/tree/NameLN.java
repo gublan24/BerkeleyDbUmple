@@ -21,9 +21,9 @@ public class NameLN extends LN
   // CONSTRUCTOR
   //------------------------
 
-  public NameLN()
+  public NameLN(long aNodeId)
   {
-    super();
+    super(aNodeId);
   }
 
   //------------------------

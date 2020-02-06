@@ -12,7 +12,7 @@ class DeltaInfo
   depend java.nio.ByteBuffer;
     private byte[] key;
 
-    private long lsn;
+    long lsn = DbLsn.NULL_LSN;
 
     private byte state;
 
@@ -25,9 +25,7 @@ class DeltaInfo
     /** 
      * For reading from the log only.
      */
-    DeltaInfo() {
-	lsn = DbLsn.NULL_LSN;
-    }
+//    DeltaInfo() {	lsn = DbLsn.NULL_LSN; }
 
     public int getLogSize() {
 	return LogUtils.getByteArrayLogSize(key) + LogUtils.getLongLogSize() + 1;

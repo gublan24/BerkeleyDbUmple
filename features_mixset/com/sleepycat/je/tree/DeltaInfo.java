@@ -19,16 +19,34 @@ public class DeltaInfo implements LogWritable,LogReadable
   // MEMBER VARIABLES
   //------------------------
 
+  //DeltaInfo Attributes
+  private long lsn;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public DeltaInfo()
-  {}
+  {
+    lsn = DbLsn.NULL_LSN;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setLsn(long aLsn)
+  {
+    boolean wasSet = false;
+    lsn = aLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public long getLsn()
+  {
+    return lsn;
+  }
 
   public void delete()
   {}
@@ -44,32 +62,28 @@ public class DeltaInfo implements LogWritable,LogReadable
   /**
    * 
    * For reading from the log only.
+   * DeltaInfo() {	lsn = DbLsn.NULL_LSN; }
    */
-  // line 29 "../../../../DeltaInfo.ump"
-  public  DeltaInfo(){
-    lsn = DbLsn.NULL_LSN;
-  }
-
-  // line 33 "../../../../DeltaInfo.ump"
+  // line 31 "../../../../DeltaInfo.ump"
    public int getLogSize(){
     return LogUtils.getByteArrayLogSize(key) + LogUtils.getLongLogSize() + 1;
   }
 
-  // line 37 "../../../../DeltaInfo.ump"
+  // line 35 "../../../../DeltaInfo.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeByteArray(logBuffer, key);
 	LogUtils.writeLong(logBuffer, lsn);
 	logBuffer.put(state);
   }
 
-  // line 43 "../../../../DeltaInfo.ump"
+  // line 41 "../../../../DeltaInfo.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     key = LogUtils.readByteArray(itemBuffer);
 	lsn = LogUtils.readLong(itemBuffer);
 	state = itemBuffer.get();
   }
 
-  // line 49 "../../../../DeltaInfo.ump"
+  // line 47 "../../../../DeltaInfo.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append(Key.dumpString(key, 0));
 	sb.append(DbLsn.toString(lsn));
@@ -81,7 +95,7 @@ public class DeltaInfo implements LogWritable,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 58 "../../../../DeltaInfo.ump"
+  // line 56 "../../../../DeltaInfo.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -91,7 +105,7 @@ public class DeltaInfo implements LogWritable,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 65 "../../../../DeltaInfo.ump"
+  // line 63 "../../../../DeltaInfo.ump"
    public long getTransactionId(){
     return 0;
   }
@@ -101,7 +115,7 @@ public class DeltaInfo implements LogWritable,LogReadable
    * 
    * @return the Key.
    */
-  // line 72 "../../../../DeltaInfo.ump"
+  // line 70 "../../../../DeltaInfo.ump"
   public byte[] getKey(){
     return key;
   }
@@ -111,7 +125,7 @@ public class DeltaInfo implements LogWritable,LogReadable
    * 
    * @return the state flags.
    */
-  // line 79 "../../../../DeltaInfo.ump"
+  // line 77 "../../../../DeltaInfo.ump"
   public byte getState(){
     return state;
   }
@@ -121,29 +135,23 @@ public class DeltaInfo implements LogWritable,LogReadable
    * 
    * @return true if this is known to be deleted.
    */
-  // line 86 "../../../../DeltaInfo.ump"
+  // line 84 "../../../../DeltaInfo.ump"
   public boolean isKnownDeleted(){
     return IN.isStateKnownDeleted(state);
   }
 
 
-  /**
-   * 
-   * @return the LSN.
-   */
-  // line 93 "../../../../DeltaInfo.ump"
-  public long getLsn(){
-    return lsn;
-  }
-  
+  public String toString()
+  {
+    return super.toString() + "["+
+            "lsn" + ":" + getLsn()+ "]";
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
   // line 13 "../../../../DeltaInfo.ump"
   private byte[] key ;
-// line 15 "../../../../DeltaInfo.ump"
-  private long lsn ;
 // line 17 "../../../../DeltaInfo.ump"
   private byte state ;
 

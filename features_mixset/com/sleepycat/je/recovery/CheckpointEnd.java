@@ -22,21 +22,69 @@ public class CheckpointEnd implements LoggableObject,LogReadable
   // MEMBER VARIABLES
   //------------------------
 
+  //CheckpointEnd Attributes
+  private long checkpointStartLsn;
+  private long rootLsn;
+  private long firstActiveLsn;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public CheckpointEnd()
-  {}
+  {
+    checkpointStartLsn = DbLsn.NULL_LSN;
+    rootLsn = DbLsn.NULL_LSN;
+    firstActiveLsn = DbLsn.NULL_LSN;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  public boolean setCheckpointStartLsn(long aCheckpointStartLsn)
+  {
+    boolean wasSet = false;
+    checkpointStartLsn = aCheckpointStartLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setRootLsn(long aRootLsn)
+  {
+    boolean wasSet = false;
+    rootLsn = aRootLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setFirstActiveLsn(long aFirstActiveLsn)
+  {
+    boolean wasSet = false;
+    firstActiveLsn = aFirstActiveLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public long getCheckpointStartLsn()
+  {
+    return checkpointStartLsn;
+  }
+
+  public long getRootLsn()
+  {
+    return rootLsn;
+  }
+
+  public long getFirstActiveLsn()
+  {
+    return firstActiveLsn;
+  }
+
   public void delete()
   {}
 
-  // line 38 "../../../../CheckpointEnd.ump"
+  // line 41 "../../../../CheckpointEnd.ump"
    public  CheckpointEnd(String invoker, long checkpointStartLsn, long rootLsn, long firstActiveLsn, long lastNodeId, int lastDbId, long lastTxnId, long id){
     if (invoker == null) {
 	    this.invoker = "";
@@ -63,19 +111,17 @@ public class CheckpointEnd implements LoggableObject,LogReadable
 	this.id = id;
   }
 
-  // line 64 "../../../../CheckpointEnd.ump"
-   public  CheckpointEnd(){
-    checkpointStartLsn = DbLsn.NULL_LSN;
-	rootLsn = DbLsn.NULL_LSN;
-	firstActiveLsn = DbLsn.NULL_LSN;
-  }
-
 
   /**
+   * public CheckpointEnd() {
+   * checkpointStartLsn = DbLsn.NULL_LSN;
+   * rootLsn = DbLsn.NULL_LSN;
+   * firstActiveLsn = DbLsn.NULL_LSN;
+   * }
    * 
    * @see LoggableObject#getLogType
    */
-  // line 73 "../../../../CheckpointEnd.ump"
+  // line 76 "../../../../CheckpointEnd.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_CKPT_END;
   }
@@ -85,7 +131,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#marshallOutsideWriteLatchCan be marshalled outside the log write latch.
    */
-  // line 80 "../../../../CheckpointEnd.ump"
+  // line 83 "../../../../CheckpointEnd.ump"
    public boolean marshallOutsideWriteLatch(){
     return true;
   }
@@ -95,7 +141,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 87 "../../../../CheckpointEnd.ump"
+  // line 90 "../../../../CheckpointEnd.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
@@ -105,7 +151,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#postLogWork
    */
-  // line 94 "../../../../CheckpointEnd.ump"
+  // line 97 "../../../../CheckpointEnd.ump"
    public void postLogWork(long justLoggedLsn){
     
   }
@@ -115,7 +161,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 100 "../../../../CheckpointEnd.ump"
+  // line 103 "../../../../CheckpointEnd.ump"
    public int getLogSize(){
     int size = LogUtils.getStringLogSize(invoker) + LogUtils.getTimestampLogSize() + LogUtils.getLongLogSize()
 		+ LogUtils.getBooleanLogSize() + LogUtils.getLongLogSize() + LogUtils.getLongLogSize()
@@ -131,7 +177,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#writeToLog
    */
-  // line 113 "../../../../CheckpointEnd.ump"
+  // line 116 "../../../../CheckpointEnd.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeString(logBuffer, invoker);
 	LogUtils.writeTimestamp(logBuffer, endTime);
@@ -152,7 +198,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 131 "../../../../CheckpointEnd.ump"
+  // line 134 "../../../../CheckpointEnd.ump"
    public void readFromLog(ByteBuffer logBuffer, byte entryTypeVersion) throws LogException{
     invoker = LogUtils.readString(logBuffer);
 	endTime = LogUtils.readTimestamp(logBuffer);
@@ -173,7 +219,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 149 "../../../../CheckpointEnd.ump"
+  // line 152 "../../../../CheckpointEnd.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<CkptEnd invoker=\"").append(invoker);
 	sb.append("\" time=\"").append(endTime);
@@ -202,7 +248,7 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 175 "../../../../CheckpointEnd.ump"
+  // line 178 "../../../../CheckpointEnd.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -212,12 +258,12 @@ public class CheckpointEnd implements LoggableObject,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 182 "../../../../CheckpointEnd.ump"
+  // line 185 "../../../../CheckpointEnd.ump"
    public long getTransactionId(){
     return 0;
   }
 
-  // line 186 "../../../../CheckpointEnd.ump"
+  // line 189 "../../../../CheckpointEnd.ump"
    public String toString(){
     StringBuffer sb = new StringBuffer();
 	sb.append("time=").append(endTime);
@@ -234,37 +280,22 @@ public class CheckpointEnd implements LoggableObject,LogReadable
 	return sb.toString();
   }
 
-  // line 202 "../../../../CheckpointEnd.ump"
-  public long getCheckpointStartLsn(){
-    return checkpointStartLsn;
-  }
-
-  // line 206 "../../../../CheckpointEnd.ump"
-  public long getRootLsn(){
-    return rootLsn;
-  }
-
-  // line 210 "../../../../CheckpointEnd.ump"
-  public long getFirstActiveLsn(){
-    return firstActiveLsn;
-  }
-
-  // line 214 "../../../../CheckpointEnd.ump"
+  // line 217 "../../../../CheckpointEnd.ump"
   public long getLastNodeId(){
     return lastNodeId;
   }
 
-  // line 218 "../../../../CheckpointEnd.ump"
+  // line 221 "../../../../CheckpointEnd.ump"
   public int getLastDbId(){
     return lastDbId;
   }
 
-  // line 222 "../../../../CheckpointEnd.ump"
+  // line 225 "../../../../CheckpointEnd.ump"
   public long getLastTxnId(){
     return lastTxnId;
   }
 
-  // line 226 "../../../../CheckpointEnd.ump"
+  // line 229 "../../../../CheckpointEnd.ump"
   public long getId(){
     return id;
   }
@@ -273,25 +304,19 @@ public class CheckpointEnd implements LoggableObject,LogReadable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 16 "../../../../CheckpointEnd.ump"
+  // line 17 "../../../../CheckpointEnd.ump"
   private String invoker ;
-// line 18 "../../../../CheckpointEnd.ump"
+// line 19 "../../../../CheckpointEnd.ump"
   private Timestamp endTime ;
-// line 20 "../../../../CheckpointEnd.ump"
-  private long checkpointStartLsn ;
-// line 22 "../../../../CheckpointEnd.ump"
+// line 23 "../../../../CheckpointEnd.ump"
   private boolean rootLsnExists ;
-// line 24 "../../../../CheckpointEnd.ump"
-  private long rootLsn ;
-// line 26 "../../../../CheckpointEnd.ump"
-  private long firstActiveLsn ;
-// line 28 "../../../../CheckpointEnd.ump"
+// line 29 "../../../../CheckpointEnd.ump"
   private long lastNodeId ;
-// line 30 "../../../../CheckpointEnd.ump"
+// line 31 "../../../../CheckpointEnd.ump"
   private int lastDbId ;
-// line 32 "../../../../CheckpointEnd.ump"
+// line 33 "../../../../CheckpointEnd.ump"
   private long lastTxnId ;
-// line 34 "../../../../CheckpointEnd.ump"
+// line 35 "../../../../CheckpointEnd.ump"
   private long id ;
 
   

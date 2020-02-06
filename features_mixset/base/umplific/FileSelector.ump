@@ -30,8 +30,10 @@ class FileSelector
     private boolean anyPendingDuringCheckpoint;
 
     private Set lowUtilizationFiles;
+    
+     int dummyVar;
 
-    FileSelector() {
+    public FileSelector() {
 			toBeCleanedFiles = new TreeSet();
 			cleanedFiles = new HashSet();
 			checkpointedFiles = new HashSet();
@@ -39,7 +41,7 @@ class FileSelector
 			safeToDeleteFiles = new HashSet();
 			pendingLNs = new HashMap();
 			//this.hook163();
-			Label163:
+			Label163:   ;
 			lowUtilizationFiles = Collections.EMPTY_SET;
 			beingCleanedFiles = new HashSet();
     }
@@ -138,7 +140,7 @@ class FileSelector
      */
     synchronized Set[] getFilesAtCheckpointStart() {
 			anyPendingDuringCheckpoint = !pendingLNs.isEmpty();
-			Label164: //this.hook164();
+			Label164:   ; //this.hook164();
 			Set[] files = new Set[2];
 			files[0] = (cleanedFiles.size() > 0) ? (new HashSet(cleanedFiles)) : null;
 			files[1] = (fullyProcessedFiles.size() > 0) ? (new HashSet(fullyProcessedFiles)) : null;
@@ -222,7 +224,7 @@ class FileSelector
      */
     private void updateProcessedFiles() {
 			boolean b = pendingLNs.isEmpty();
-			Label165: //b = this.hook165(b);
+			Label165:   ; //b = this.hook165(b);
 			if (b) {
 					fullyProcessedFiles.addAll(checkpointedFiles);
 					checkpointedFiles.clear();

@@ -7,8 +7,7 @@ class DbSpace {
       Long fileNum;
       long totalSize;
       long obsoleteSize;
-      Summary(){
-      }
+    
       Summary(    Long fileNum,    FileSummary summary) throws DatabaseException {
         this.fileNum=fileNum;
         totalSize=summary.totalSize;

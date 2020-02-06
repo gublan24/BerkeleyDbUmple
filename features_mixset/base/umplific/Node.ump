@@ -21,7 +21,7 @@ class Node
 
     private static final String END_TAG = "</node>";
 
-    private long nodeId;
+    long nodeId;
 
     public  static synchronized void setLastNodeId(long id) {
 	if (lastAllocatedId < id) {
@@ -32,8 +32,7 @@ class Node
     /** 
      * Disallow use
      */
-    private Node() {
-    }
+//    private Node() {   }
 
     /** 
      * Create a new node, assigning it the next available node id.
@@ -218,6 +217,16 @@ class Node
 	sb.append(BEGIN_TAG);
 	sb.append(nodeId);
 	sb.append(END_TAG);
+    }
+
+   public void latchShared()
+	throws DatabaseException {
+
+    }
+
+    public void releaseLatch()
+	throws LatchNotHeldException {
+
     }
 
 }

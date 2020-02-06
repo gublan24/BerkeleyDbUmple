@@ -68,7 +68,7 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 	    INEntry inEntry = (INEntry) lsnINMap.remove(new Long(lsn));
 	    assert (inEntry != null);
 	    IN in = inEntry.in;
-	    Label352: //this.hook352(lsn, inEntry, in);
+	    Label352: ; //this.hook352(lsn, inEntry, in);
 			int index = inEntry.index;
 			if (in.isEntryKnownDeleted(inEntry.index) || in.getLsn(inEntry.index) != lsn) {
 					return null; //throw new ReturnObject(null);
@@ -89,49 +89,16 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
     // MEMBER VARIABLES
     //------------------------
   
-    //INEntry Attributes
-    private IN in;
-    private int index;
-  
     //------------------------
     // CONSTRUCTOR
     //------------------------
   
-    public INEntry(IN aIn, int aIndex)
-    {
-      in = aIn;
-      index = aIndex;
-    }
+    public INEntry()
+    {}
   
     //------------------------
     // INTERFACE
     //------------------------
-  
-    public boolean setIn(IN aIn)
-    {
-      boolean wasSet = false;
-      in = aIn;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public boolean setIndex(int aIndex)
-    {
-      boolean wasSet = false;
-      index = aIndex;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public IN getIn()
-    {
-      return in;
-    }
-  
-    public int getIndex()
-    {
-      return index;
-    }
   
     public void delete()
     {}
@@ -141,14 +108,17 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
       this.in=in;
           this.index=index;
     }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 9 "../../../../PreloadLSNTreeWalker_static.ump"
+    protected IN in ;
+  // line 10 "../../../../PreloadLSNTreeWalker_static.ump"
+    protected int index ;
   
-  
-    public String toString()
-    {
-      return super.toString() + "["+
-              "index" + ":" + getIndex()+ "]" + System.getProperties().getProperty("line.separator") +
-              "  " + "in" + "=" + (getIn() != null ? !getIn().equals(this)  ? getIn().toString().replaceAll("  ","    ") : "this" : "null");
-    }
+    
   }  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   

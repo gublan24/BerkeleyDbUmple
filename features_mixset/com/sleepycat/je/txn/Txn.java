@@ -45,6 +45,9 @@ public class Txn extends Locker implements LogWritable,LogReadable
   // MEMBER VARIABLES
   //------------------------
 
+  //Txn Attributes
+  private long lastLoggedLsn;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -52,11 +55,25 @@ public class Txn extends Locker implements LogWritable,LogReadable
   public Txn()
   {
     super();
+    lastLoggedLsn = DbLsn.NULL_LSN;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setLastLoggedLsn(long aLastLoggedLsn)
+  {
+    boolean wasSet = false;
+    lastLoggedLsn = aLastLoggedLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public long getLastLoggedLsn()
+  {
+    return lastLoggedLsn;
+  }
 
   public void delete()
   {
@@ -98,18 +115,8 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	firstLoggedLsn = DbLsn.NULL_LSN;
 	txnState = USABLE;
 	//this.hook809();
-  Label809:
+  Label809: ;
 	this.envImpl.getTxnManager().registerTxn(this);
-  }
-
-
-  /**
-   * 
-   * Constructor for reading from log.
-   */
-  // line 124 "../../../../Txn.ump"
-   public  Txn(){
-    lastLoggedLsn = DbLsn.NULL_LSN;
   }
 
 
@@ -117,7 +124,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * UserTxns get a new unique id for each instance.
    */
-  // line 131 "../../../../Txn.ump"
+  // line 126 "../../../../Txn.ump"
    protected long generateId(TxnManager txnManager){
     return txnManager.incTxnId();
   }
@@ -127,12 +134,12 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Access to last LSN.
    */
-  // line 138 "../../../../Txn.ump"
+  // line 133 "../../../../Txn.ump"
   public long getLastLsn(){
     return lastLoggedLsn;
   }
 
-  // line 142 "../../../../Txn.ump"
+  // line 137 "../../../../Txn.ump"
    public void setPrepared(boolean prepared){
     if (prepared) {
 	    txnState |= IS_PREPARED;
@@ -141,7 +148,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	}
   }
 
-  // line 150 "../../../../Txn.ump"
+  // line 145 "../../../../Txn.ump"
    public void setSuspended(boolean suspended){
     if (suspended) {
 	    txnState |= XA_SUSPENDED;
@@ -150,7 +157,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	}
   }
 
-  // line 158 "../../../../Txn.ump"
+  // line 153 "../../../../Txn.ump"
    public boolean isSuspended(){
     return (txnState & XA_SUSPENDED) != 0;
   }
@@ -162,7 +169,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * @see Locker#lockInternal
    * @Override
    */
-  // line 168 "../../../../Txn.ump"
+  // line 163 "../../../../Txn.ump"
   public LockResult lockInternal(long nodeId, LockType lockType, boolean noWait, DatabaseImpl database) throws DatabaseException{
     long timeout = 0;
 	boolean useNoWait = noWait || defaultNoWait;
@@ -185,7 +192,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	return new LockResult(grant, info);
   }
 
-  // line 190 "../../../../Txn.ump"
+  // line 185 "../../../../Txn.ump"
    public int prepare(Xid xid) throws DatabaseException{
     if ((txnState & IS_PREPARED) != 0) {
 	    throw new DatabaseException("prepare() has already been called for Transaction " + id + ".");
@@ -203,14 +210,14 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	return XAResource.XA_OK;
   }
 
-  // line 207 "../../../../Txn.ump"
+  // line 202 "../../../../Txn.ump"
    public void commit(Xid xid) throws DatabaseException{
     commit(TXN_SYNC);
 	envImpl.getTxnManager().unRegisterXATxn(xid, true);
 	return;
   }
 
-  // line 213 "../../../../Txn.ump"
+  // line 208 "../../../../Txn.ump"
    public void abort(Xid xid) throws DatabaseException{
     abort(true);
 	envImpl.getTxnManager().unRegisterXATxn(xid, false);
@@ -222,7 +229,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Call commit() with the default sync configuration property.
    */
-  // line 222 "../../../../Txn.ump"
+  // line 217 "../../../../Txn.ump"
    public long commit() throws DatabaseException{
     return commit(defaultFlushSyncBehavior);
   }
@@ -232,7 +239,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Commit this transaction 1. Releases read locks 2. Writes a txn commit record into the log 3. Flushes the log to disk. 4. Add deleted LN info to IN compressor queue 5. Release all write locks  If any step of this fails, we must convert this transaction to an abort.
    */
-  // line 229 "../../../../Txn.ump"
+  // line 224 "../../../../Txn.ump"
    public long commit(byte flushSyncBehavior) throws DatabaseException{
     try {
 					long commitLsn = DbLsn.NULL_LSN;
@@ -262,7 +269,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
 						} else {
 					commitLsn = logManager.log(commitRecord);
 						}
-						Label806: //this.hook806();
+						Label806: ; //this.hook806();
 						Set alreadyCountedLsnSet = new HashSet();
 						Iterator iter = writeInfo.values().iterator();
 						while (iter.hasNext()) {
@@ -277,11 +284,11 @@ public class Txn extends Locker implements LogWritable,LogReadable
 					}
 						}
 						writeInfo = null;
-						Label803: //this.hook803();
+						Label803: ; //this.hook803();
 				}
 				traceCommit(numWriteLocks, numReadLocks);
 					}
-					Label805: //this.hook805();
+					Label805: ; //this.hook805();
 					close(true);
 					return commitLsn;
 			} catch (RunRecoveryException e) {
@@ -289,7 +296,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				Label800: //this.hook800(t);
+				Label800: ; //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -306,12 +313,12 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Abort this transaction. Steps are: 1. Release LN read locks. 2. Write a txn abort entry to the log. This is only for log file cleaning optimization and there's no need to guarantee a flush to disk.   3. Find the last LN log entry written for this txn, and use that to traverse the log looking for nodes to undo. For each node, use the same undo logic as recovery to rollback the transaction. Note that we walk the log in order to undo in reverse order of the actual operations. For example, suppose the txn did this: delete K1/D1 (in LN 10) create K1/D1 (in LN 20) If we process LN10 before LN 20, we'd inadvertently create a  duplicate tree of "K1", which would be fatal for the mapping tree. 4. Release the write lock for this LN.
    */
-  // line 300 "../../../../Txn.ump"
+  // line 295 "../../../../Txn.ump"
    public long abort(boolean forceFlush) throws DatabaseException{
     return abortInternal(forceFlush, true);
   }
 
-  // line 304 "../../../../Txn.ump"
+  // line 299 "../../../../Txn.ump"
    private long abortInternal(boolean forceFlush, boolean writeAbortRecord) throws DatabaseException{
     try {
 	    int numReadLocks;
@@ -332,14 +339,14 @@ public class Txn extends Locker implements LogWritable,LogReadable
 		}
 		undo();
 		numReadLocks = (readLocks == null) ? 0 : clearReadLocks();
-		Label808: //this.hook808();
+		Label808: ; //this.hook808();
 		numWriteLocks = (writeInfo == null) ? 0 : clearWriteLocks();
-		Label804: //this.hook804();
+		Label804: ; //this.hook804();
 	    }
-	    Label807: //this.hook807();
+	    Label807: ; //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		Label799: //this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799: ; //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -362,7 +369,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Rollback the changes to this txn's write locked nodes.
    */
-  // line 352 "../../../../Txn.ump"
+  // line 347 "../../../../Txn.ump"
    private void undo() throws DatabaseException{
     Long nodeId = null;
 	long undoLsn = lastLoggedLsn;
@@ -381,9 +388,9 @@ public class Txn extends Locker implements LogWritable,LogReadable
 		    undoLN.postFetchInit(db, undoLsn);
 		    long abortLsn = undoEntry.getAbortLsn();
 		    boolean abortKnownDeleted = undoEntry.getAbortKnownDeleted();
-		    Label802: //this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
+		    Label802: ; //this.hook802(undoLsn, location, undoEntry, undoLN, db, abortLsn, abortKnownDeleted);
 				RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn, abortLsn, abortKnownDeleted, null, false);
-		    Label802_1: //end of hook802
+		    Label802_1: ; //end of hook802
 		    if (!undoLN.isDeleted()) {
 			logManager.countObsoleteNode(undoLsn, null);
 		    }
@@ -393,12 +400,12 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    Label801: //this.hook801(nodeId, undoLsn, e);
+	    Label801: ; //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
   }
 
-  // line 387 "../../../../Txn.ump"
+  // line 382 "../../../../Txn.ump"
    private int clearWriteLocks() throws DatabaseException{
     int numWriteLocks = writeInfo.size();
 	Iterator iter = writeInfo.values().iterator();
@@ -410,7 +417,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
 	return numWriteLocks;
   }
 
-  // line 398 "../../../../Txn.ump"
+  // line 393 "../../../../Txn.ump"
    private int clearReadLocks() throws DatabaseException{
     int numReadLocks = 0;
 	if (readLocks != null) {
@@ -430,7 +437,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Called by the recovery manager when logging a transaction aware object. This method is synchronized by the caller, by being called within the log latch. Record the last LSN for this transaction, to create the transaction chain, and also record the LSN in the write info for abort logic.
    */
-  // line 415 "../../../../Txn.ump"
+  // line 410 "../../../../Txn.ump"
    public void addLogInfo(long lastLsn) throws DatabaseException{
     lastLoggedLsn = lastLsn;
 	synchronized (this) {
@@ -445,7 +452,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @return first logged LSN, to aid recovery rollback.
    */
-  // line 427 "../../../../Txn.ump"
+  // line 422 "../../../../Txn.ump"
   public long getFirstActiveLsn() throws DatabaseException{
     synchronized (this) {
 	    return firstLoggedLsn;
@@ -457,22 +464,22 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Add lock to the appropriate queue.
    */
-  // line 436 "../../../../Txn.ump"
+  // line 431 "../../../../Txn.ump"
   public void addLock(Long nodeId, Lock lock, LockType type, LockGrantType grantStatus) throws DatabaseException{
     new Txn_addLock(this, nodeId, lock, type, grantStatus).execute();
   }
 
-  // line 440 "../../../../Txn.ump"
+  // line 435 "../../../../Txn.ump"
    private void addReadLock(Lock lock){
     int delta = 0;
 			if (readLocks == null) {
 					readLocks = new HashSet();
 			//		delta = this.hook811(delta);
-          Label811:
+          Label811: ;
 			}
 			readLocks.add(lock);
 			//this.hook810(delta);
-      Label810:
+      Label810: ;
   }
 
 
@@ -480,15 +487,15 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Remove the lock from the set owned by this transaction. If specified to LockManager.release, the lock manager will call this when its releasing a lock. Usually done because the transaction doesn't need to really keep the lock, i.e for a deleted record.
    */
-  // line 455 "../../../../Txn.ump"
+  // line 450 "../../../../Txn.ump"
   public void removeLock(long nodeId, Lock lock) throws DatabaseException{
     synchronized (this) {
 					if ((readLocks != null) && readLocks.remove(lock)) {
 				//this.hook812();
-          Label812:
+          Label812: ;
 					} else if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
 				//this.hook813();
-         label813: 
+         label813: ; 
 					}
 			}
   }
@@ -498,14 +505,14 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * A lock is being demoted. Move it from the write collection into the read collection.
    */
-  // line 470 "../../../../Txn.ump"
+  // line 465 "../../../../Txn.ump"
   public void moveWriteToReadLock(long nodeId, Lock lock){
     boolean found = false;
 	synchronized (this) {
 	    if ((writeInfo != null) && (writeInfo.remove(new Long(nodeId)) != null)) {
 		found = true;
 		//this.hook814();
-    Label814:
+    Label814: ;
 	    }
 	    assert found : "Couldn't find lock for Node " + nodeId + " in writeInfo Map.";
 	    addReadLock(lock);
@@ -517,7 +524,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @return true if this transaction created this node. We know that thisis true if the node is write locked and has a null abort LSN.
    */
-  // line 486 "../../../../Txn.ump"
+  // line 481 "../../../../Txn.ump"
    public boolean createdNode(long nodeId) throws DatabaseException{
     boolean created = false;
 	synchronized (this) {
@@ -536,7 +543,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @return the abortLsn for this node.
    */
-  // line 502 "../../../../Txn.ump"
+  // line 497 "../../../../Txn.ump"
    public long getAbortLsn(long nodeId) throws DatabaseException{
     WriteLockInfo info = null;
 	synchronized (this) {
@@ -556,7 +563,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @return the WriteLockInfo for this node.
    */
-  // line 519 "../../../../Txn.ump"
+  // line 514 "../../../../Txn.ump"
    public WriteLockInfo getWriteLockInfo(long nodeId) throws DatabaseException{
     WriteLockInfo info = WriteLockInfo.basicWriteLockInfo;
 	synchronized (this) {
@@ -572,7 +579,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Is always transactional.
    */
-  // line 532 "../../../../Txn.ump"
+  // line 527 "../../../../Txn.ump"
    public boolean isTransactional(){
     return true;
   }
@@ -582,7 +589,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Is serializable isolation if so configured.
    */
-  // line 539 "../../../../Txn.ump"
+  // line 534 "../../../../Txn.ump"
    public boolean isSerializableIsolation(){
     return serializableIsolation;
   }
@@ -592,7 +599,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Is read-committed isolation if so configured.
    */
-  // line 546 "../../../../Txn.ump"
+  // line 541 "../../../../Txn.ump"
    public boolean isReadCommittedIsolation(){
     return readCommittedIsolation;
   }
@@ -602,7 +609,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * This is a transactional locker.
    */
-  // line 553 "../../../../Txn.ump"
+  // line 548 "../../../../Txn.ump"
    public Txn getTxnLocker(){
     return this;
   }
@@ -612,7 +619,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Returns 'this', since this locker holds no non-transactional locks.
    */
-  // line 560 "../../../../Txn.ump"
+  // line 555 "../../../../Txn.ump"
    public Locker newNonTxnLocker() throws DatabaseException{
     return this;
   }
@@ -622,7 +629,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * This locker holds no non-transactional locks.
    */
-  // line 567 "../../../../Txn.ump"
+  // line 562 "../../../../Txn.ump"
    public void releaseNonTxnLocks() throws DatabaseException{
     
   }
@@ -632,7 +639,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Created transactions do nothing at the end of the operation.
    */
-  // line 573 "../../../../Txn.ump"
+  // line 568 "../../../../Txn.ump"
    public void operationEnd() throws DatabaseException{
     
   }
@@ -642,7 +649,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Created transactions do nothing at the end of the operation.
    */
-  // line 579 "../../../../Txn.ump"
+  // line 574 "../../../../Txn.ump"
    public void operationEnd(boolean operationOK) throws DatabaseException{
     
   }
@@ -652,7 +659,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Created transactions don't transfer locks until commit.
    */
-  // line 585 "../../../../Txn.ump"
+  // line 580 "../../../../Txn.ump"
    public void setHandleLockOwner(boolean ignore, Database dbHandle, boolean dbIsClosing) throws DatabaseException{
     if (dbIsClosing) {
 	    Long handleLockId = (Long) handleToHandleLockMap.get(dbHandle);
@@ -678,7 +685,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Cursors operating under this transaction are added to the collection.
    */
-  // line 608 "../../../../Txn.ump"
+  // line 603 "../../../../Txn.ump"
    public void registerCursor(CursorImpl cursor) throws DatabaseException{
     synchronized (this) {
 	    cursor.setLockerNext(cursorSet);
@@ -694,7 +701,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Remove a cursor from the collection.
    */
-  // line 621 "../../../../Txn.ump"
+  // line 616 "../../../../Txn.ump"
    public void unRegisterCursor(CursorImpl cursor) throws DatabaseException{
     synchronized (this) {
 	    CursorImpl prev = cursor.getLockerPrev();
@@ -717,7 +724,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @return true if this txn is willing to give up the handle lock toanother txn before this txn ends.
    */
-  // line 641 "../../../../Txn.ump"
+  // line 636 "../../../../Txn.ump"
    public boolean isHandleLockTransferrable(){
     return false;
   }
@@ -728,7 +735,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * Check if all cursors associated with the txn are closed. If not, those open cursors will be forcibly closed.
    * @return true if open cursors exist
    */
-  // line 649 "../../../../Txn.ump"
+  // line 644 "../../../../Txn.ump"
    private boolean checkCursorsForClose() throws DatabaseException{
     CursorImpl c = cursorSet;
 	while (c != null) {
@@ -745,7 +752,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Set the state of a transaction to ONLY_ABORTABLE.
    */
-  // line 663 "../../../../Txn.ump"
+  // line 658 "../../../../Txn.ump"
    public void setOnlyAbortable(){
     txnState &= ~STATE_BITS;
 	txnState |= ONLY_ABORTABLE;
@@ -756,7 +763,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Get the state of a transaction's ONLY_ABORTABLE.
    */
-  // line 671 "../../../../Txn.ump"
+  // line 666 "../../../../Txn.ump"
    public boolean getOnlyAbortable(){
     return (txnState & ONLY_ABORTABLE) != 0;
   }
@@ -766,7 +773,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Throw an exception if the transaction is not open. If calledByAbort is true, it means we're being called from abort(). Caller must invoke with "this" synchronized.
    */
-  // line 678 "../../../../Txn.ump"
+  // line 673 "../../../../Txn.ump"
    protected void checkState(boolean calledByAbort) throws DatabaseException{
     boolean ok = false;
 	boolean onlyAbortable = false;
@@ -786,7 +793,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
   /**
    * 
    */
-  // line 695 "../../../../Txn.ump"
+  // line 690 "../../../../Txn.ump"
    private void close(boolean isCommit) throws DatabaseException{
     synchronized (this) {
 	    txnState &= ~STATE_BITS;
@@ -800,7 +807,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @see LogWritable#getLogSize
    */
-  // line 706 "../../../../Txn.ump"
+  // line 701 "../../../../Txn.ump"
    public int getLogSize(){
     return LogUtils.LONG_BYTES + LogUtils.LONG_BYTES;
   }
@@ -810,7 +817,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @see LogWritable#writeToLog
    */
-  // line 713 "../../../../Txn.ump"
+  // line 708 "../../../../Txn.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeLong(logBuffer, id);
 	LogUtils.writeLong(logBuffer, lastLoggedLsn);
@@ -821,7 +828,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @see LogReadable#readFromLogIt's ok for FindBugs to whine about id not being synchronized.
    */
-  // line 721 "../../../../Txn.ump"
+  // line 716 "../../../../Txn.ump"
    public void readFromLog(ByteBuffer logBuffer, byte entryTypeVersion){
     id = LogUtils.readLong(logBuffer);
 	lastLoggedLsn = LogUtils.readLong(logBuffer);
@@ -832,7 +839,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 729 "../../../../Txn.ump"
+  // line 724 "../../../../Txn.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<txn id=\"");
 	sb.append(super.toString());
@@ -846,7 +853,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 740 "../../../../Txn.ump"
+  // line 735 "../../../../Txn.ump"
    public long getTransactionId(){
     return getId();
   }
@@ -856,7 +863,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 747 "../../../../Txn.ump"
+  // line 742 "../../../../Txn.ump"
    public boolean logEntryIsTransactional(){
     return true;
   }
@@ -866,7 +873,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Transfer a single handle lock to the set of corresponding handles at commit time.
    */
-  // line 754 "../../../../Txn.ump"
+  // line 749 "../../../../Txn.ump"
    private void transferHandleLockToHandleSet(Long handleLockId, Set dbHandleSet) throws DatabaseException{
     int numHandles = dbHandleSet.size();
 	Database[] dbHandles = new Database[numHandles];
@@ -888,12 +895,12 @@ public class Txn extends Locker implements LogWritable,LogReadable
    * 
    * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.  The string construction can be numerous enough to show up on a performance profile.
    */
-  // line 773 "../../../../Txn.ump"
+  // line 768 "../../../../Txn.ump"
    private void traceCommit(int numWriteLocks, int numReadLocks){
     new Txn_traceCommit(this, numWriteLocks, numReadLocks).execute();
   }
 
-  // line 777 "../../../../Txn.ump"
+  // line 772 "../../../../Txn.ump"
   public int getInMemorySize(){
     return inMemorySize;
   }
@@ -957,12 +964,6 @@ public class Txn extends Locker implements LogWritable,LogReadable
     public void delete()
     {}
   
-    // line 8 "../../../../Txn_static.ump"
-    public  DatabaseCleanupInfo(DatabaseImpl dbImpl, boolean deleteAtCommit){
-      this.dbImpl=dbImpl;
-          this.deleteAtCommit=deleteAtCommit;
-    }
-  
   
     public String toString()
     {
@@ -975,7 +976,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
   
   
   
-  // line 12 "../../../../Txn_static.ump"
+  // line 9 "../../../../Txn_static.ump"
   public static class Txn_addLock
   {
   
@@ -997,7 +998,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
     public void delete()
     {}
   
-    // line 14 "../../../../Txn_static.ump"
+    // line 11 "../../../../Txn_static.ump"
     public  Txn_addLock(Txn _this, Long nodeId, Lock lock, LockType type, LockGrantType grantStatus){
       this._this=_this;
           this.nodeId=nodeId;
@@ -1006,28 +1007,28 @@ public class Txn extends Locker implements LogWritable,LogReadable
           this.grantStatus=grantStatus;
     }
   
-    // line 21 "../../../../Txn_static.ump"
+    // line 18 "../../../../Txn_static.ump"
     public void execute() throws DatabaseException{
       synchronized (_this) {
             //this.hook815();
-            Label815:
+            Label815: ;
             if (type.isWriteLock()) {
               if (_this.writeInfo == null) {
                 _this.writeInfo=new HashMap();
                 _this.undoDatabases=new HashMap();
                // this.hook818();
-                Label818:
+                Label818: ;
               }
               _this.writeInfo.put(nodeId,new WriteLockInfo(lock));
               //this.hook817();
-              Label817:
+              Label817: ;
               if ((grantStatus == LockGrantType.PROMOTION) || (grantStatus == LockGrantType.WAIT_PROMOTION)) {
                 _this.readLocks.remove(lock);
                 //this.hook819();
-                Label819:
+                Label819: ;
               }
               //this.hook816();
-              Label816:
+              Label816: ;
             }
      else {
               _this.addReadLock(lock);
@@ -1039,17 +1040,17 @@ public class Txn extends Locker implements LogWritable,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 47 "../../../../Txn_static.ump"
+    // line 44 "../../../../Txn_static.ump"
     protected Txn _this ;
-  // line 48 "../../../../Txn_static.ump"
+  // line 45 "../../../../Txn_static.ump"
     protected Long nodeId ;
-  // line 49 "../../../../Txn_static.ump"
+  // line 46 "../../../../Txn_static.ump"
     protected Lock lock ;
-  // line 50 "../../../../Txn_static.ump"
+  // line 47 "../../../../Txn_static.ump"
     protected LockType type ;
-  // line 51 "../../../../Txn_static.ump"
+  // line 48 "../../../../Txn_static.ump"
     protected LockGrantType grantStatus ;
-  // line 52 "../../../../Txn_static.ump"
+  // line 49 "../../../../Txn_static.ump"
     protected int delta ;
   
     
@@ -1058,7 +1059,7 @@ public class Txn extends Locker implements LogWritable,LogReadable
   
   
   
-  // line 66 "../../../../Txn_static.ump"
+  // line 52 "../../../../Txn_static.ump"
   public static class Txn_traceCommit
   {
   
@@ -1080,14 +1081,14 @@ public class Txn extends Locker implements LogWritable,LogReadable
     public void delete()
     {}
   
-    // line 68 "../../../../Txn_static.ump"
+    // line 54 "../../../../Txn_static.ump"
     public  Txn_traceCommit(Txn _this, int numWriteLocks, int numReadLocks){
       this._this=_this;
           this.numWriteLocks=numWriteLocks;
           this.numReadLocks=numReadLocks;
     }
   
-    // line 73 "../../../../Txn_static.ump"
+    // line 59 "../../../../Txn_static.ump"
     public void execute(){
       
     }
@@ -1096,15 +1097,15 @@ public class Txn extends Locker implements LogWritable,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 74 "../../../../Txn_static.ump"
+    // line 60 "../../../../Txn_static.ump"
     protected Txn _this ;
-  // line 75 "../../../../Txn_static.ump"
+  // line 61 "../../../../Txn_static.ump"
     protected int numWriteLocks ;
-  // line 76 "../../../../Txn_static.ump"
+  // line 62 "../../../../Txn_static.ump"
     protected int numReadLocks ;
-  // line 77 "../../../../Txn_static.ump"
+  // line 63 "../../../../Txn_static.ump"
     protected Logger logger ;
-  // line 78 "../../../../Txn_static.ump"
+  // line 64 "../../../../Txn_static.ump"
     protected StringBuffer sb ;
   
     
@@ -1143,8 +1144,6 @@ public class Txn extends Locker implements LogWritable,LogReadable
   private Map writeInfo ;
 // line 70 "../../../../Txn.ump"
   private Map undoDatabases ;
-// line 72 "../../../../Txn.ump"
-  private long lastLoggedLsn = DbLsn.NULL_LSN ;
 // line 74 "../../../../Txn.ump"
   private long firstLoggedLsn = DbLsn.NULL_LSN ;
 // line 76 "../../../../Txn.ump"

@@ -6,14 +6,11 @@ class Tree {
       public static final SearchType LEFT=new SearchType();
       public static final SearchType RIGHT=new SearchType();
 
-      private SearchType(){
-      }
+    
     }
   inner class RootChildReference{
       isA ChildReference;
-      private RootChildReference(){
-        super();
-      }
+  
       private RootChildReference(    Node target,    byte[] key,    long lsn){
         super(target,key,lsn);
       }
@@ -45,60 +42,53 @@ class Tree {
       IN parent;
       IN child;
       int index;
-      SplitInfo(    IN parent,    IN child,    int index){
-        this.parent=parent;
-        this.child=child;
-        this.index=index;
-      }
+      
     }
-  @MethodObject static class Tree_searchSplitsAllowed {
+   static class Tree_searchSplitsAllowed {
       Tree_searchSplitsAllowed(    Tree _this,    byte[] key,    long nid,    boolean updateGeneration){
         this._this=_this;
         this.key=key;
         this.nid=nid;
         this.updateGeneration=updateGeneration;
       }
-      IN execute() throws DatabaseException {
-        insertTarget=null;
-        while (insertTarget == null) {
-          Label717:           ;  //this.hook717();
-          rootIN=null;
-          Label716:           ;  //this.hook716();
-try{
-       while (true) {
+
+      public IN execute() throws DatabaseException {
+      insertTarget = null;
+      while (insertTarget == null) {
+        Label717: ; // this.hook717();
+        rootIN = null;
+        Label716: ; // this.hook716();
+
+        while (true) {
           if (_this.root != null) {
-            rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+            rootIN = (IN) _this.root.fetchTarget(_this.database, null);
             if (rootIN.needsSplitting()) {
-              b=true;
-              Label721:           ;  //this.hook721();
-              if (b)             continue;
-              Label720:           ;  //this.hook720();
-              env=_this.database.getDbEnvironment();
+              b = true;
+              Label721: ; // this.hook721();
+              if (b)
+                continue;
+              abel720: ;// this.hook720();
+              env = _this.database.getDbEnvironment();
               env.getDbMapTree().modifyDbRoot(_this.database);
-              Label719:           ;  //this.hook719();
-              rootIN=(IN)_this.root.fetchTarget(_this.database,null);
+              abel719: ;// this.hook719();
+              rootIN = (IN) _this.root.fetchTarget(_this.database, null);
             }
-            Label718:           ;  //this.hook718();
+            abel718: ;// this.hook718();
           }
           break;
         }
-}
-finally {
-Label716_1:
-}
-//End of hook716
-          if (rootIN == null) {
-            break;
-          }
-          try {
-            insertTarget=_this.searchSubTreeSplitsAllowed(rootIN,key,nid,updateGeneration);
-          }
-   catch (        SplitRequiredException e) {
-            continue;
-          }
+        Label716_1: ;
+        if (rootIN == null) {
+          break;
         }
-        return insertTarget;
+        try {
+          insertTarget = _this.searchSubTreeSplitsAllowed(rootIN, key, nid, updateGeneration);
+        } catch (SplitRequiredException e) {
+          continue;
+        }
       }
+      return insertTarget;
+    }
       protected Tree _this;
       protected byte[] key;
       protected long nid;

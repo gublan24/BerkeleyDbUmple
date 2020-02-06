@@ -29,9 +29,4 @@ public class SplitRequiredException extends Exception
   public void delete()
   {}
 
-  // line 8 "../../../../SplitRequiredException.ump"
-   public  SplitRequiredException(){
-    
-  }
-
 }

@@ -14,28 +14,59 @@ public class OffsetList
   // MEMBER VARIABLES
   //------------------------
 
+  //OffsetList Attributes
+  private Segment head;
+  private Segment tail;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public OffsetList()
-  {}
+  {
+    head = new Segment();
+    tail = head;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  public boolean setHead(Segment aHead)
+  {
+    boolean wasSet = false;
+    head = aHead;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setTail(Segment aTail)
+  {
+    boolean wasSet = false;
+    tail = aTail;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public Segment getHead()
+  {
+    return head;
+  }
+
+  public Segment getTail()
+  {
+    return tail;
+  }
+
   public void delete()
   {}
 
-  // line 16 "../../../../OffsetList.ump"
-   public  OffsetList(){
-    head = new Segment();
-	tail = head;
-  }
-
 
   /**
+   * public OffsetList() {
+   * head = new Segment();
+   * tail = head;
+   * }
    * 
    * Adds the given value and returns whether a new segment was allocated.
    */
@@ -120,7 +151,14 @@ public class OffsetList
 	}
 	return false;
   }
-  /*PLEASE DO NOT EDIT THIS CODE*/
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "head" + "=" + (getHead() != null ? !getHead().equals(this)  ? getHead().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "tail" + "=" + (getTail() != null ? !getTail().equals(this)  ? getTail().toString().replaceAll("  ","    ") : "this" : "null");
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
@@ -147,18 +185,16 @@ public class OffsetList
     public void delete()
     {}
   
-    // line 9 "../../../../OffsetList_static.ump"
-     public  Segment(){
-      values=new int[SEGMENT_CAPACITY];
-    }
-  
   
     /**
+     * public Segment(){
+     * values=new int[SEGMENT_CAPACITY];
+     * }
      * 
      * Call this method on the tail.  The new tail is returned, if
      * allocating a new tail is necessary.
      */
-    // line 16 "../../../../OffsetList_static.ump"
+    // line 17 "../../../../OffsetList_static.ump"
     public Segment add(long value){
       if (index < values.length) {
             values[index]=(int)value;
@@ -179,7 +215,7 @@ public class OffsetList
      * 
      * Returns the value at the given index from this segment only.
      */
-    // line 33 "../../../../OffsetList_static.ump"
+    // line 34 "../../../../OffsetList_static.ump"
     public long get(int i){
       return ((long)values[i]) & 0xFFFFFFFF;
     }
@@ -189,7 +225,7 @@ public class OffsetList
      * 
      * Returns the next segment or null if this is the tail segment.
      */
-    // line 39 "../../../../OffsetList_static.ump"
+    // line 40 "../../../../OffsetList_static.ump"
     public Segment next(){
       return next;
     }
@@ -199,7 +235,7 @@ public class OffsetList
      * 
      * Sets the next pointer during a merge.
      */
-    // line 45 "../../../../OffsetList_static.ump"
+    // line 46 "../../../../OffsetList_static.ump"
     public void setNext(Segment next){
       this.next=next;
     }
@@ -209,7 +245,7 @@ public class OffsetList
      * 
      * Returns the number of values in this segment.
      */
-    // line 51 "../../../../OffsetList_static.ump"
+    // line 52 "../../../../OffsetList_static.ump"
     public int size(){
       return index;
     }
@@ -223,7 +259,7 @@ public class OffsetList
   // line 6 "../../../../OffsetList_static.ump"
     private Segment next ;
   // line 7 "../../../../OffsetList_static.ump"
-    private int[] values ;
+    private int[] values = new int[SEGMENT_CAPACITY] ;
   
     
   }  
@@ -233,10 +269,6 @@ public class OffsetList
   
   // line 7 "../../../../OffsetList.ump"
   static final int SEGMENT_CAPACITY = 100 ;
-// line 9 "../../../../OffsetList.ump"
-  private Segment head ;
-// line 11 "../../../../OffsetList.ump"
-  private Segment tail ;
 // line 13 "../../../../OffsetList.ump"
   private int size ;
 

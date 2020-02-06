@@ -78,7 +78,7 @@ class SortedLSNTreeWalker
 	    accumulateLSNs(root);
 	    releaseRootIN(root);
 	}
-	Label359: //this.hook359();
+	Label359:   ;//this.hook359();
 	while (true) {
 	    maybeGetMoreINs();
 	    if (currentLSNs != null && currentLSNIdx < currentLSNs.length) {

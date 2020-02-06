@@ -6,16 +6,16 @@ class OffsetList
   depend com.sleepycat.je.utilint.Tracer;
     static final int SEGMENT_CAPACITY = 100;
 
-    private Segment head;
+     Segment head = new Segment();;
 
-    private Segment tail;
+    Segment tail = head;
 
     private int size;
 
-    public OffsetList() {
-	head = new Segment();
-	tail = head;
-    }
+ //   public OffsetList() {
+//	head = new Segment();
+//	tail = head;
+//    }
 
     /** 
      * Adds the given value and returns whether a new segment was allocated.

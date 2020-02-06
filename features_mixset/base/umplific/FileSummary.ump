@@ -28,8 +28,8 @@ class FileSummary
     /** 
      * Creates an empty summary.
      */
-    public FileSummary() {
-    }
+   // public FileSummary() {
+ //   }
 
     /** 
      * Returns whether this summary contains any non-zero totals.

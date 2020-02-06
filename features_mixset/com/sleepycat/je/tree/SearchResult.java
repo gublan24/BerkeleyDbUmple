@@ -12,30 +12,46 @@ public class SearchResult
   // MEMBER VARIABLES
   //------------------------
 
+  //SearchResult Attributes
+  private int index;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public SearchResult()
-  {}
+  {
+    index = -1;
+    // line 13 "../../../../SearchResult.ump"
+    exactParentFound = false;
+    	keepSearching = true;
+    	parent = null;
+    //	index = -1;
+    	childNotResident = false;
+    // END OF UMPLE AFTER INJECTION
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  public boolean setIndex(int aIndex)
+  {
+    boolean wasSet = false;
+    index = aIndex;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getIndex()
+  {
+    return index;
+  }
+
   public void delete()
   {}
 
-  // line 17 "../../../../SearchResult.ump"
-   public  SearchResult(){
-    exactParentFound = false;
-	keepSearching = true;
-	parent = null;
-	index = -1;
-	childNotResident = false;
-  }
-
-  // line 25 "../../../../SearchResult.ump"
+  // line 20 "../../../../SearchResult.ump"
    public String toString(){
     return "exactParentFound=" + exactParentFound + " keepSearching=" + keepSearching + " parent="
 		+ ((parent == null) ? "null" : Long.toString(parent.getNodeId())) + " index=" + index
@@ -48,14 +64,12 @@ public class SearchResult
   
   // line 6 "../../../../SearchResult.ump"
   public boolean exactParentFound ;
-// line 8 "../../../../SearchResult.ump"
+// line 7 "../../../../SearchResult.ump"
   public boolean keepSearching ;
-// line 10 "../../../../SearchResult.ump"
+// line 8 "../../../../SearchResult.ump"
   public boolean childNotResident ;
-// line 12 "../../../../SearchResult.ump"
+// line 9 "../../../../SearchResult.ump"
   public IN parent ;
-// line 14 "../../../../SearchResult.ump"
-  public int index ;
 
   
 }

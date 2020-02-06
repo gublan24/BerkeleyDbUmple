@@ -19,11 +19,11 @@ class FileSummaryLN
 
     private static final String END_TAG = "</fileSummaryLN>";
 
-    private FileSummary baseSummary;
+    FileSummary baseSummary = new FileSummary();
 
     private TrackedFileSummary trackedSummary;
 
-    private PackedOffsets obsoleteOffsets;
+    PackedOffsets obsoleteOffsets = new PackedOffsets();
 
     private boolean needOffsets;
 
@@ -43,10 +43,10 @@ class FileSummaryLN
     /** 
      * Creates an empty LN to be filled in from the log.
      */
-    public FileSummaryLN() throws DatabaseException {
-	baseSummary = new FileSummary();
-	obsoleteOffsets = new PackedOffsets();
-    }
+ //   public FileSummaryLN() throws DatabaseException {
+//	baseSummary = new FileSummary();
+//	obsoleteOffsets = new PackedOffsets();
+ //   }
 
     /** 
      * Sets the live summary object that will be added to the base summary at the time the LN is logged.
@@ -66,9 +66,7 @@ class FileSummaryLN
     /** 
      * Returns the base summary for the file that is stored in the LN.
      */
-    public FileSummary getBaseSummary() {
-	return baseSummary;
-    }
+//    public FileSummary getBaseSummary() {	return baseSummary;}
 
     /** 
      * Returns the obsolete offsets for the file.

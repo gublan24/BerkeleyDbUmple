@@ -3,7 +3,7 @@ namespace com.sleepycat.je.dbi;
 class MemoryBudget {
    static class MemoryBudget_sinit {
       void execute(){
-        Label348: //this.hook348();
+        Label348:   ; //this.hook348();
       }
       protected boolean is64;
       protected boolean isJVM14;
@@ -54,10 +54,10 @@ class MemoryBudget {
           newLogBufferBudget=numBuffers * startingBufferSize;
         }
 
-        Label350:        //this.hook350();
+        Label350:   ;        //this.hook350();
         newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
         _this.maxMemory=newMaxMemory;
-        Label349: //this.hook349();
+        Label349:   ; //this.hook349();
         _this.logBufferBudget=newLogBufferBudget;
       }
       protected MemoryBudget _this;

@@ -32,7 +32,7 @@ class MemoryBudget
 			envImpl.addConfigObserver(this);
 			reset(configManager);
 			//this.hook351(configManager);
-      Label351:
+      Label351:   ;
     }
 
     /** 

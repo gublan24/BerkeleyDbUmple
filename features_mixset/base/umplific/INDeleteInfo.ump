@@ -16,7 +16,7 @@ class INDeleteInfo
 
     private byte[] deletedIdKey;
 
-    private DatabaseId dbId;
+    DatabaseId dbId = new DatabaseId();
 
     /** 
      * Create a new delete info entry.
@@ -27,12 +27,7 @@ class INDeleteInfo
 	this.dbId = dbId;
     }
 
-    /** 
-     * Used by logging system only.
-     */
-    public INDeleteInfo() {
-	dbId = new DatabaseId();
-    }
+
 
     public long getDeletedNodeId() {
 	return deletedNodeId;

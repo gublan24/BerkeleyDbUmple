@@ -39,9 +39,9 @@ public class LN extends Node implements LoggableObject,LogReadable
   // CONSTRUCTOR
   //------------------------
 
-  public LN()
+  public LN(long aNodeId)
   {
-    super();
+    super(aNodeId);
   }
 
   //------------------------

@@ -17,18 +17,35 @@ public class DupCountLN extends LN
   // MEMBER VARIABLES
   //------------------------
 
+  //DupCountLN Attributes
+  private int dupCount;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public DupCountLN()
+  public DupCountLN(long aNodeId)
   {
-    super();
+    super(aNodeId);
+    dupCount = 0;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setDupCount(int aDupCount)
+  {
+    boolean wasSet = false;
+    dupCount = aDupCount;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getDupCount()
+  {
+    return dupCount;
+  }
 
   public void delete()
   {
@@ -46,22 +63,6 @@ public class DupCountLN extends LN
 	this.dupCount = count;
   }
 
-
-  /**
-   * 
-   * Create an empty DupCountLN, to be filled in from the log.
-   */
-  // line 30 "../../../../DupCountLN.ump"
-   public  DupCountLN(){
-    super();
-	dupCount = 0;
-  }
-
-  // line 35 "../../../../DupCountLN.ump"
-   public int getDupCount(){
-    return dupCount;
-  }
-
   // line 39 "../../../../DupCountLN.ump"
    public int incDupCount(){
     dupCount++;
@@ -76,42 +77,38 @@ public class DupCountLN extends LN
 	return dupCount;
   }
 
-  // line 51 "../../../../DupCountLN.ump"
-  public void setDupCount(int dupCount){
-    this.dupCount = dupCount;
-  }
-
 
   /**
+   * void setDupCount(int dupCount) {	this.dupCount = dupCount;}
    * 
    * @return true if this node is a duplicate-bearing node type, falseif otherwise.
    */
-  // line 58 "../../../../DupCountLN.ump"
+  // line 56 "../../../../DupCountLN.ump"
    public boolean containsDuplicates(){
     return true;
   }
 
-  // line 62 "../../../../DupCountLN.ump"
+  // line 60 "../../../../DupCountLN.ump"
    public boolean isDeleted(){
     return false;
   }
 
-  // line 66 "../../../../DupCountLN.ump"
+  // line 64 "../../../../DupCountLN.ump"
    public String toString(){
     return dumpString(0, true);
   }
 
-  // line 70 "../../../../DupCountLN.ump"
+  // line 68 "../../../../DupCountLN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 74 "../../../../DupCountLN.ump"
+  // line 72 "../../../../DupCountLN.ump"
    public String endTag(){
     return END_TAG;
   }
 
-  // line 78 "../../../../DupCountLN.ump"
+  // line 76 "../../../../DupCountLN.ump"
    public String dumpString(int nSpaces, boolean dumpTags){
     StringBuffer sb = new StringBuffer();
 	if (dumpTags) {
@@ -134,7 +131,7 @@ public class DupCountLN extends LN
    * 
    * Log type for transactional entries.
    */
-  // line 98 "../../../../DupCountLN.ump"
+  // line 96 "../../../../DupCountLN.ump"
    protected LogEntryType getTransactionalLogType(){
     return LogEntryType.LOG_DUPCOUNTLN_TRANSACTIONAL;
   }
@@ -144,7 +141,7 @@ public class DupCountLN extends LN
    * 
    * @see LN#getLogType
    */
-  // line 105 "../../../../DupCountLN.ump"
+  // line 103 "../../../../DupCountLN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_DUPCOUNTLN;
   }
@@ -154,7 +151,7 @@ public class DupCountLN extends LN
    * 
    * @see LN#getLogSize
    */
-  // line 112 "../../../../DupCountLN.ump"
+  // line 110 "../../../../DupCountLN.ump"
    public int getLogSize(){
     return super.getLogSize() + LogUtils.INT_BYTES;
   }
@@ -164,7 +161,7 @@ public class DupCountLN extends LN
    * 
    * @see LN#writeToLog
    */
-  // line 119 "../../../../DupCountLN.ump"
+  // line 117 "../../../../DupCountLN.ump"
    public void writeToLog(ByteBuffer logBuffer){
     super.writeToLog(logBuffer);
 	LogUtils.writeInt(logBuffer, dupCount);
@@ -175,7 +172,7 @@ public class DupCountLN extends LN
    * 
    * @see LN#readFromLog
    */
-  // line 127 "../../../../DupCountLN.ump"
+  // line 125 "../../../../DupCountLN.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     super.readFromLog(itemBuffer, entryTypeVersion);
 	dupCount = LogUtils.readInt(itemBuffer);
@@ -186,7 +183,7 @@ public class DupCountLN extends LN
    * 
    * Dump additional fields
    */
-  // line 135 "../../../../DupCountLN.ump"
+  // line 133 "../../../../DupCountLN.ump"
    protected void dumpLogAdditional(StringBuffer sb, boolean verbose){
     super.dumpLogAdditional(sb, verbose);
 	sb.append("<count v=\"").append(dupCount).append("\"/>");
@@ -200,8 +197,6 @@ public class DupCountLN extends LN
   private static final String BEGIN_TAG = "<dupCountLN>" ;
 // line 14 "../../../../DupCountLN.ump"
   private static final String END_TAG = "</dupCountLN>" ;
-// line 16 "../../../../DupCountLN.ump"
-  private int dupCount ;
 
   
 }

@@ -4,7 +4,5 @@ class SplitRequiredException
 {
   isA Exception;
   depend de.ovgu.cide.jakutil.*;
-    public SplitRequiredException() {
-    }
-
+   
 }

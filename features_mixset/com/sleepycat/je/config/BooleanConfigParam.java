@@ -16,9 +16,9 @@ public class BooleanConfigParam extends ConfigParam
   // CONSTRUCTOR
   //------------------------
 
-  public BooleanConfigParam(String aName)
+  public BooleanConfigParam()
   {
-    super(aName);
+    super();
   }
 
   //------------------------

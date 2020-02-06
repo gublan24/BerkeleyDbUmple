@@ -18,10 +18,11 @@ class Checkpointer {
 		      if (useBytesInterval != 0) {
 		        nextLsn=_this.envImpl.getFileManager().getNextLsn();
 		        if (DbLsn.getNoCleaningDistance(nextLsn,_this.lastCheckpointEnd,_this.logFileMax) >= useBytesInterval) {
-		          throw new ReturnBoolean(true);
+		                   return true; //throw new ReturnBoolean(true);
 		        }
 				 else {
-						      throw new ReturnBoolean(false);
+						               return false;
+
 						  }
 					}
 

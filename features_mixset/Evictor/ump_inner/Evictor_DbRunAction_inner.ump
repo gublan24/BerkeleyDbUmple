@@ -47,6 +47,7 @@ class DbRunAction {
       after Label846: execute(){
         if (action.equalsIgnoreCase("evict")) {
           doAction=EVICT;
+          elseFlag = false; 
         }
   
       }

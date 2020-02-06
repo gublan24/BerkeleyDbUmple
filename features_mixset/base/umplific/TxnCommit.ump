@@ -9,11 +9,6 @@ class TxnCommit
 	super(id, lastLsn);
     }
 
-    /** 
-     * For constructing from the log.
-     */
-    public TxnCommit() {
-    }
 
     /** 
      * @see TxnEnd#getLogType

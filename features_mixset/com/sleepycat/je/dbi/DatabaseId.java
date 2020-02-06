@@ -20,16 +20,38 @@ public class DatabaseId implements Comparable,LogWritable,LogReadable
   // MEMBER VARIABLES
   //------------------------
 
+  //DatabaseId Attributes
+  private int id;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public DatabaseId()
-  {}
+  public DatabaseId(int aId)
+  {
+    id = aId;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setId(int aId)
+  {
+    boolean wasSet = false;
+    id = aId;
+    wasSet = true;
+    return wasSet;
+  }
+
+  /**
+   * 
+   * The unique id of this database.
+   */
+  public int getId()
+  {
+    return id;
+  }
 
   public void delete()
   {}
@@ -37,30 +59,15 @@ public class DatabaseId implements Comparable,LogWritable,LogReadable
 
   /**
    * 
-   */
-  // line 21 "../../../../DatabaseId.ump"
-   public  DatabaseId(int id){
-    this.id = id;
-  }
-
-
-  /**
+   * public DatabaseId(int id) {
+   * this.id = id;
+   * }
    * 
    * Uninitialized database id, for logging.
    */
   // line 28 "../../../../DatabaseId.ump"
    public  DatabaseId(){
     
-  }
-
-
-  /**
-   * 
-   * @return id value
-   */
-  // line 34 "../../../../DatabaseId.ump"
-   public int getId(){
-    return id;
   }
 
 
@@ -184,13 +191,5 @@ public class DatabaseId implements Comparable,LogWritable,LogReadable
    public long getTransactionId(){
     return 0;
   }
-  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 16 "../../../../DatabaseId.ump"
-  private int id ;
 
-  
 }

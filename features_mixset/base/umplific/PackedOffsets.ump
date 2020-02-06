@@ -16,8 +16,8 @@ class PackedOffsets
     /** 
      * Creates an empty object.
      */
-    public PackedOffsets() {
-    }
+//   public PackedOffsets() {
+ //   }
 
     /** 
      * Returns an iterator over all offsets.

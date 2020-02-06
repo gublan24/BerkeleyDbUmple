@@ -42,7 +42,7 @@ public class TxnManager
 
   // line 40 "../../../../TxnManager.ump"
    public  TxnManager(EnvironmentImpl env) throws DatabaseException{
-    Label822:           ;  //this.hook822(env);
+    Label822:  ;           ;  //this.hook822(env);
    			if (env.isNoLocking()) {
             lockManager = new DummyLockManager(env);
         } else {
@@ -125,8 +125,8 @@ public class TxnManager
   public void unRegisterTxn(Txn txn, boolean isCommit) throws DatabaseException{
     allTxns.remove(txn);
         //	           ;  //this.hook828(txn);
-        Label828:
-            Label825: //           ;  //this.hook825(isCommit);
+        Label828:  ;
+            Label825:  ; //           ;  //this.hook825(isCommit);
         if (txn.isSerializableIsolation()) {
             nActiveSerializable--;
         }
@@ -142,9 +142,9 @@ public class TxnManager
     if (!allXATxns.containsKey(xid)) {
             allXATxns.put(xid, txn);
             //	               ;  //this.hook829();
-            Label829:
+            Label829:  ;
         }
-        Label826: //           ;  //this.hook826(isPrepare);
+        Label826:  ; //           ;  //this.hook826(isPrepare);
   }
 
 
@@ -158,8 +158,8 @@ public class TxnManager
             throw new DatabaseException("XA Transaction " + xid + " can not be unregistered.");
         }
         //	           ;  //this.hook830();
-        Label830:
-            Label827: //           ;  //this.hook827(isCommit);
+        Label830:  ;
+            Label827:  ; //           ;  //this.hook827(isCommit);
   }
 
 
@@ -232,7 +232,7 @@ public class TxnManager
    public long getFirstActiveLsn() throws DatabaseException{
     try{
 						  long firstActive = DbLsn.NULL_LSN;
-						  Label823: //firstActive = this.hook823(firstActive);
+						  Label823:  ; //firstActive = this.hook823(firstActive);
 							Iterator iter = allTxns.iterator();
 						  while (iter.hasNext()) {
 						      long txnFirstActive = ((Txn) iter.next()).getFirstActiveLsn();
@@ -244,70 +244,12 @@ public class TxnManager
 						          }
 						      }
 						  }
-			}
+			return firstActive;
+      }
 			finally{
-			Label823_1:
+			Label823_1:  ;
 			}
 //end of hook823
-        return firstActive;
-  }
-
-
-  /**
-   * protected void hook821(EnvironmentImpl env) throws DatabaseException {}
-   * protected void hook822(EnvironmentImpl env) throws DatabaseException {
-   * if (env.isNoLocking()) {
-   * lockManager = new DummyLockManager(env);
-   * 
-   * lockManager = new SyncedLockManager(env);
-   * }
-   * }
-   * 
-   * protected long hook823(long firstActive) throws DatabaseException {
-   * Iterator iter = allTxns.iterator();
-   * while (iter.hasNext()) {
-   * long txnFirstActive = ((Txn) iter.next()).getFirstActiveLsn();
-   * if (firstActive == DbLsn.NULL_LSN) {
-   * firstActive = txnFirstActive;
-   * } else if (txnFirstActive != DbLsn.NULL_LSN) {
-   * if (DbLsn.compareTo(txnFirstActive, firstActive) < 0) {
-   * firstActive = txnFirstActive;
-   * }
-   * }
-   * }
-   * return firstActive;
-   * }
-   * protected void hook824() throws DatabaseException {
-   * }
-   */
-  // line 242 "../../../../TxnManager.ump"
-   protected void hook825(boolean isCommit) throws DatabaseException{
-    
-  }
-
-  // line 244 "../../../../TxnManager.ump"
-   protected void hook826(boolean isPrepare) throws DatabaseException{
-    
-  }
-
-  // line 246 "../../../../TxnManager.ump"
-   protected void hook827(boolean isCommit) throws DatabaseException{
-    
-  }
-
-
-  /**
-   * protected void hook828(Txn txn) throws DatabaseException {
-   * }
-   */
-  // line 251 "../../../../TxnManager.ump"
-   protected void hook829() throws DatabaseException{
-    
-  }
-
-  // line 253 "../../../../TxnManager.ump"
-   protected void hook830() throws DatabaseException{
-    
   }
   
   //------------------------

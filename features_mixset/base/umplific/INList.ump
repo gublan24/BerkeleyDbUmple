@@ -27,9 +27,9 @@ class INList
      */
     public INList(INList orig, EnvironmentImpl envImpl) throws DatabaseException {
 	ins = new TreeSet(orig.getINs());
-	Lanbel340: //this.hook340();
+	Lanbel340:   ; //this.hook340();
 	this.envImpl = envImpl;
-	Label339: //this.hook339(envImpl);
+	Label339:   ; //this.hook339(envImpl);
     }
 
     public SortedSet getINs() {
@@ -56,10 +56,10 @@ class INList
      */
     public void removeLatchAlreadyHeld(IN in) throws DatabaseException {
 		boolean removeDone = ins.remove(in);
-		Label341: //removeDone = this.hook341(in, removeDone);
+		Label341:   ; //removeDone = this.hook341(in, removeDone);
 		assert removeDone;
 		//this.hook346(in);
-    Label346:
+    Label346:   ;
     }
 
     /** 
@@ -69,7 +69,7 @@ class INList
 				try {
 						 	removeLatchAlreadyHeld(in); //original(in);
 					} finally {
-							LabelRemove_1://releaseMajorLatch();
+							LabelRemove_1:   ;//releaseMajorLatch();
 					}
     }
 

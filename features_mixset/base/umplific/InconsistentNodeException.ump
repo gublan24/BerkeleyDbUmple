@@ -5,9 +5,7 @@ class InconsistentNodeException
   isA DatabaseException;
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
-    public InconsistentNodeException() {
-	super();
-    }
+  
 
     public InconsistentNodeException(String message) {
 	super(message);

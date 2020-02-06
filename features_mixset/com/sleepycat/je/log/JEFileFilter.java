@@ -6,7 +6,6 @@ import de.ovgu.cide.jakutil.*;
 import java.util.StringTokenizer;
 import java.io.FilenameFilter;
 import java.io.File;
-import java.util.*;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../JEFileFilter.ump"
@@ -17,75 +16,26 @@ public class JEFileFilter implements FilenameFilter
   // MEMBER VARIABLES
   //------------------------
 
-  //JEFileFilter Attributes
-  private List<String> suffix;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public JEFileFilter()
-  {
-    suffix = new ArrayList<String>();
-  }
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template attribute_SetMany */
-  public boolean addSuffix(String aSuffix)
-  {
-    boolean wasAdded = false;
-    wasAdded = suffix.add(aSuffix);
-    return wasAdded;
-  }
-
-  public boolean removeSuffix(String aSuffix)
-  {
-    boolean wasRemoved = false;
-    wasRemoved = suffix.remove(aSuffix);
-    return wasRemoved;
-  }
-  /* Code from template attribute_GetMany */
-  public String getSuffix(int index)
-  {
-    String aSuffix = suffix.get(index);
-    return aSuffix;
-  }
-
-  public String[] getSuffix()
-  {
-    String[] newSuffix = suffix.toArray(new String[suffix.size()]);
-    return newSuffix;
-  }
-
-  public int numberOfSuffix()
-  {
-    int number = suffix.size();
-    return number;
-  }
-
-  public boolean hasSuffix()
-  {
-    boolean has = suffix.size() > 0;
-    return has;
-  }
-
-  public int indexOfSuffix(String aSuffix)
-  {
-    int index = suffix.indexOf(aSuffix);
-    return index;
-  }
 
   public void delete()
   {}
 
-  // line 13 "../../../../JEFileFilter.ump"
+  // line 14 "../../../../JEFileFilter.ump"
   public  JEFileFilter(String [] suffix){
     this.suffix = suffix;
   }
 
-  // line 17 "../../../../JEFileFilter.ump"
+  // line 18 "../../../../JEFileFilter.ump"
    private boolean matches(String fileSuffix){
     for (int i = 0; i < suffix.length; i++) {
 	    if (fileSuffix.equalsIgnoreCase(suffix[i])) {
@@ -100,7 +50,7 @@ public class JEFileFilter implements FilenameFilter
    * 
    * A JE file has to be of the format nnnnnnnn.suffix.
    */
-  // line 29 "../../../../JEFileFilter.ump"
+  // line 30 "../../../../JEFileFilter.ump"
    public boolean accept(File dir, String name){
     boolean ok = false;
 	StringTokenizer tokenizer = new StringTokenizer(name, ".");
@@ -129,10 +79,13 @@ public class JEFileFilter implements FilenameFilter
 	}
 	return ok;
   }
+  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 11 "../../../../JEFileFilter.ump"
+  public String[] suffix ;
 
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]";
-  }
+  
 }

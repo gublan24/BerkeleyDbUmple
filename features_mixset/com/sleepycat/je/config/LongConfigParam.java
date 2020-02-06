@@ -16,9 +16,9 @@ public class LongConfigParam extends ConfigParam
   // CONSTRUCTOR
   //------------------------
 
-  public LongConfigParam(String aName)
+  public LongConfigParam()
   {
-    super(aName);
+    super();
   }
 
   //------------------------

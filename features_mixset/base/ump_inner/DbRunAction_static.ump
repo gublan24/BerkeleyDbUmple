@@ -5,104 +5,97 @@ class DbRunAction {
       DbRunAction_main(    String[] argv){
         this.argv=argv;
       }
-      void execute(){
-        recoveryStart=0;
-        actionStart=0;
-        actionEnd=0;
-        try {
-          whichArg=0;
-          if (argv.length == 0) {
-            usage();
-            System.exit(1);
-          }
-          dbName=null;
-          doAction=0;
-          envHome=".";
-          readOnly=false;
-          while (whichArg < argv.length) {
-            nextArg=argv[whichArg];
-            if (nextArg.equals("-h")) {
-              whichArg++;
-              envHome=CmdUtil.getArg(argv,whichArg);
-            }
-   else           if (nextArg.equals("-a")) {
-              whichArg++;
-              action=CmdUtil.getArg(argv,whichArg);
-              if (action.equalsIgnoreCase("clean")) {
-                doAction=CLEAN;
-              }
-   else {
-               Label841:// this.hook841();
-							if (action.equalsIgnoreCase("checkpoint")) {
-											doAction=CHECKPOINT;
-										}
-											Label846: //this.hook846();
-											Label843: //this.hook843();
-											Label839:// from hook843();
-							 else {
-											 usage();
-											 System.exit(1);
-										}
-							//End of hook841
-              }
-            }
-   else           if (nextArg.equals("-ro")) {
-              readOnly=true;
-            }
-   else           if (nextArg.equals("-s")) {
-              dbName=argv[++whichArg];
-            }
-   else {
-              throw new IllegalArgumentException(nextArg + " is not a supported option.");
-            }
-            whichArg++;
-          }
-          envConfig=new EnvironmentConfig();
-          Label848:
-          Label847:
-          //this.hook845();
-          Label845:
-          recoveryStart=System.currentTimeMillis();
-          env=new Environment(new File(envHome),envConfig);
-          forceConfig=new CheckpointConfig();
-          forceConfig.setForce(true);
-          actionStart=System.currentTimeMillis();
-          if (doAction == CLEAN) {
-            while (true) {
-              nFiles=env.cleanLog();
-              System.out.println("Files cleaned: " + nFiles);
-              if (nFiles == 0) {
-                break;
-              }
-            }
-            env.checkpoint(forceConfig);
-          }
-          Label840: //this.hook840();
-          //this.hook844();
-          Label844:
-          if (doAction == CHECKPOINT) {
-            env.checkpoint(forceConfig);
-          }
-          Label842: //this.hook842();
-          Label838: //this.hook838();
-          actionEnd=System.currentTimeMillis();
-          env.close();
-        }
-   catch (      Exception e) {
-          e.printStackTrace();
-          System.out.println(e.getMessage());
+    public void execute() {
+      recoveryStart = 0;
+      actionStart = 0;
+      actionEnd = 0;
+      try {
+        whichArg = 0;
+        if (argv.length == 0) {
           usage();
           System.exit(1);
         }
-   finally {
-          f=new DecimalFormat();
-          f.setMaximumFractionDigits(2);
-          recoveryDuration=actionStart - recoveryStart;
-          System.out.println("\nrecovery time = " + f.format(recoveryDuration) + " millis "+ f.format((double)recoveryDuration / 60000)+ " minutes");
-          actionDuration=actionEnd - actionStart;
-          System.out.println("action time = " + f.format(actionDuration) + " millis "+ f.format(actionDuration / 60000)+ " minutes");
+        dbName = null;
+        doAction = 0;
+        envHome = ".";
+        readOnly = false;
+        while (whichArg < argv.length) {
+          nextArg = argv[whichArg];
+          if (nextArg.equals("-h")) {
+            whichArg++;
+            envHome = CmdUtil.getArg(argv, whichArg);
+          } else if (nextArg.equals("-a")) {
+            whichArg++;
+            action = CmdUtil.getArg(argv, whichArg);
+            if (action.equalsIgnoreCase("clean")) {
+              doAction = CLEAN;
+            } else {
+              boolean elseFlag = true; 
+              Label841: // this.hook841();
+              if (action.equalsIgnoreCase("checkpoint")) {
+                doAction = CHECKPOINT;
+                elseFlag = false; 
+              }
+               Label846: ;
+               Label843: ;
+               Label839: ;
+              if (elseFlag) {
+                usage();
+                System.exit(1);
+              }
+            }
+          } else if (nextArg.equals("-ro")) {
+            readOnly = true;
+          } else if (nextArg.equals("-s")) {
+            dbName = argv[++whichArg];
+          } else {
+            throw new IllegalArgumentException(nextArg + " is not a supported option.");
+          }
+          whichArg++;
         }
+        envConfig = new EnvironmentConfig();
+        Label848: Label847:
+        // this.hook845();
+        Label845: recoveryStart = System.currentTimeMillis();
+        env = new Environment(new File(envHome), envConfig);
+        forceConfig = new CheckpointConfig();
+        forceConfig.setForce(true);
+        actionStart = System.currentTimeMillis();
+        if (doAction == CLEAN) {
+          while (true) {
+            nFiles = env.cleanLog();
+            System.out.println("Files cleaned: " + nFiles);
+            if (nFiles == 0) {
+              break;
+            }
+          }
+          env.checkpoint(forceConfig);
+        }
+        Label840: // this.hook840();
+        // this.hook844();
+        Label844: if (doAction == CHECKPOINT) {
+          env.checkpoint(forceConfig);
+        }
+        Label842: // this.hook842();
+        Label838: // this.hook838();
+        actionEnd = System.currentTimeMillis();
+        env.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println(e.getMessage());
+        usage();
+        System.exit(1);
+      } finally {
+        f = new DecimalFormat();
+        f.setMaximumFractionDigits(2);
+        recoveryDuration = actionStart - recoveryStart;
+        System.out.println("\nrecovery time = " + f.format(recoveryDuration) + " millis "
+            + f.format((double) recoveryDuration / 60000) + " minutes");
+        actionDuration = actionEnd - actionStart;
+        System.out.println(
+            "action time = " + f.format(actionDuration) + " millis " + f.format(actionDuration / 60000) + " minutes");
       }
+    }
       protected String[] argv;
       protected long recoveryStart;
       protected long actionStart;

@@ -76,14 +76,6 @@ public abstract class Locker
   /**
    * 
    * For reading from the log.
-   */
-  // line 82 "../../../../Locker.ump"
-  public  Locker(){
-    
-  }
-
-
-  /**
    * 
    * A Locker has to generate its next id. Some subtypes, like BasicLocker, have a single id for all instances because they are never used for recovery. Other subtypes ask the txn manager for an id.
    */
@@ -94,7 +86,7 @@ public abstract class Locker
    * 
    * @return the transaction's id.
    */
-  // line 93 "../../../../Locker.ump"
+  // line 91 "../../../../Locker.ump"
    public long getId(){
     return id;
   }
@@ -104,7 +96,7 @@ public abstract class Locker
    * 
    * @return the default no-wait (non-blocking) setting.
    */
-  // line 100 "../../../../Locker.ump"
+  // line 98 "../../../../Locker.ump"
    public boolean getDefaultNoWait(){
     return defaultNoWait;
   }
@@ -114,7 +106,7 @@ public abstract class Locker
    * 
    * Get the lock timeout period for this transaction, in milliseconds
    */
-  // line 107 "../../../../Locker.ump"
+  // line 105 "../../../../Locker.ump"
    public synchronized  long getLockTimeout(){
     return lockTimeOutMillis;
   }
@@ -124,7 +116,7 @@ public abstract class Locker
    * 
    * Set the lock timeout period for any locks in this transaction, in milliseconds.
    */
-  // line 114 "../../../../Locker.ump"
+  // line 112 "../../../../Locker.ump"
    public synchronized  void setLockTimeout(long timeOutMillis){
     lockTimeOutMillis = timeOutMillis;
   }
@@ -134,7 +126,7 @@ public abstract class Locker
    * 
    * Set the timeout period for this transaction, in milliseconds.
    */
-  // line 121 "../../../../Locker.ump"
+  // line 119 "../../../../Locker.ump"
    public synchronized  void setTxnTimeout(long timeOutMillis){
     txnTimeOutMillis = timeOutMillis;
 	txnStartMillis = System.currentTimeMillis();
@@ -145,17 +137,17 @@ public abstract class Locker
    * 
    * @return true if transaction was created with read-uncommitted as adefault.
    */
-  // line 129 "../../../../Locker.ump"
+  // line 127 "../../../../Locker.ump"
    public boolean isReadUncommittedDefault(){
     return readUncommittedDefault;
   }
 
-  // line 133 "../../../../Locker.ump"
+  // line 131 "../../../../Locker.ump"
   public Lock getWaitingFor(){
     return waitingFor;
   }
 
-  // line 137 "../../../../Locker.ump"
+  // line 135 "../../../../Locker.ump"
   public void setWaitingFor(Lock lock){
     waitingFor = lock;
   }
@@ -165,7 +157,7 @@ public abstract class Locker
    * 
    * Set the state of a transaction to ONLY_ABORTABLE.
    */
-  // line 144 "../../../../Locker.ump"
+  // line 142 "../../../../Locker.ump"
   public void setOnlyAbortable(){
     
   }
@@ -195,7 +187,7 @@ public abstract class Locker
    * @throws LockNotGrantedException if a non-blocking lock was denied.
    * @throws DeadlockException if acquiring a blocking lock would result in adeadlock.
    */
-  // line 170 "../../../../Locker.ump"
+  // line 168 "../../../../Locker.ump"
    public LockResult lock(long nodeId, LockType lockType, boolean noWait, DatabaseImpl database) throws LockNotGrantedException,DeadlockException,DatabaseException{
     LockResult result = lockInternal(nodeId, lockType, noWait, database);
 	if (result.getLockGrant() == LockGrantType.DENIED) {
@@ -213,7 +205,7 @@ public abstract class Locker
    * @param lockType is the type of lock to request.
    * @param database is the database containing nodeId.
    */
-  // line 185 "../../../../Locker.ump"
+  // line 183 "../../../../Locker.ump"
    public LockResult nonBlockingLock(long nodeId, LockType lockType, DatabaseImpl database) throws DatabaseException{
     return lockInternal(nodeId, lockType, true, database);
   }
@@ -223,7 +215,7 @@ public abstract class Locker
    * 
    * Release the lock on this LN and remove from the transaction's owning set.
    */
-  // line 192 "../../../../Locker.ump"
+  // line 190 "../../../../Locker.ump"
    public void releaseLock(long nodeId) throws DatabaseException{
     lockManager.release(nodeId, this);
   }
@@ -233,7 +225,7 @@ public abstract class Locker
    * 
    * Revert this lock from a write lock to a read lock.
    */
-  // line 199 "../../../../Locker.ump"
+  // line 197 "../../../../Locker.ump"
    public void demoteLock(long nodeId) throws DatabaseException{
     lockManager.demote(nodeId, this);
   }
@@ -285,7 +277,7 @@ public abstract class Locker
    * 
    * Returns whether this locker can share locks with the given locker. <p>All lockers share locks with a BuddyLocker whose buddy is this locker.  To support BuddyLocker when overriding this method, always return true if this implementation (super.sharesLocksWith(...)) returns true.</p>
    */
-  // line 236 "../../../../Locker.ump"
+  // line 234 "../../../../Locker.ump"
    public boolean sharesLocksWith(Locker other){
     if (other instanceof BuddyLocker) {
 	    BuddyLocker buddy = (BuddyLocker) other;
@@ -322,7 +314,7 @@ public abstract class Locker
    * 
    * A SUCCESS status equals operationOk.
    */
-  // line 265 "../../../../Locker.ump"
+  // line 263 "../../../../Locker.ump"
    public void operationEnd(OperationStatus status) throws DatabaseException{
     operationEnd(status == OperationStatus.SUCCESS);
   }
@@ -383,7 +375,7 @@ public abstract class Locker
    */
   public abstract void moveWriteToReadLock(long nodeId, Lock lock);
 
-  // line 309 "../../../../Locker.ump"
+  // line 307 "../../../../Locker.ump"
   public boolean isTimedOut() throws DatabaseException{
     if (txnStartMillis != 0) {
 	    long diff = System.currentTimeMillis() - txnStartMillis;
@@ -394,12 +386,12 @@ public abstract class Locker
 	return false;
   }
 
-  // line 319 "../../../../Locker.ump"
+  // line 317 "../../../../Locker.ump"
    public long getTxnTimeOut(){
     return txnTimeOutMillis;
   }
 
-  // line 323 "../../../../Locker.ump"
+  // line 321 "../../../../Locker.ump"
   public long getTxnStartMillis(){
     return txnStartMillis;
   }
@@ -409,7 +401,7 @@ public abstract class Locker
    * 
    * Remove this Database from the protected Database handle set
    */
-  // line 330 "../../../../Locker.ump"
+  // line 328 "../../../../Locker.ump"
   public void unregisterHandle(Database dbHandle){
     if (handleToHandleLockMap != null) {
 	    handleToHandleLockMap.remove(dbHandle);
@@ -421,7 +413,7 @@ public abstract class Locker
    * 
    * Remember how handle locks and handles match up.
    */
-  // line 339 "../../../../Locker.ump"
+  // line 337 "../../../../Locker.ump"
    public void addToHandleMaps(Long handleLockId, Database databaseHandle){
     Set dbHandleSet = null;
 	if (handleLockToHandleMap == null) {
@@ -443,7 +435,7 @@ public abstract class Locker
    * 
    * @return true if this txn is willing to give up the handle lock toanother txn before this txn ends.
    */
-  // line 358 "../../../../Locker.ump"
+  // line 356 "../../../../Locker.ump"
    public boolean isHandleLockTransferrable(){
     return true;
   }
@@ -453,7 +445,7 @@ public abstract class Locker
    * 
    * The currentTxn passes responsiblity for this db handle lock to a txn owned by the Database object.
    */
-  // line 365 "../../../../Locker.ump"
+  // line 363 "../../../../Locker.ump"
   public void transferHandleLockToHandle(Database dbHandle) throws DatabaseException{
     Locker holderTxn = new BasicLocker(envImpl);
 	transferHandleLock(dbHandle, holderTxn, true);
@@ -463,7 +455,7 @@ public abstract class Locker
   /**
    * 
    */
-  // line 373 "../../../../Locker.ump"
+  // line 371 "../../../../Locker.ump"
    public void transferHandleLock(Database dbHandle, Locker destLocker, boolean demoteToRead) throws DatabaseException{
     if (DbInternal.dbGetDatabaseImpl(dbHandle) != null) {
 	    Long handleLockId = (Long) handleToHandleLockMap.get(dbHandle);
@@ -492,12 +484,12 @@ public abstract class Locker
    * 
    * If necessary, remember that this txn once owned a handle lock.  Done to make commit optimizations work correctly.
    */
-  // line 399 "../../../../Locker.ump"
+  // line 397 "../../../../Locker.ump"
    protected void rememberHandleWriteLock(Long lockId){
     
   }
 
-  // line 402 "../../../../Locker.ump"
+  // line 400 "../../../../Locker.ump"
    public String toString(){
     String className = getClass().getName();
 	className = className.substring(className.lastIndexOf('.') + 1);
@@ -509,7 +501,7 @@ public abstract class Locker
    * 
    * Dump lock table, for debugging
    */
-  // line 411 "../../../../Locker.ump"
+  // line 409 "../../../../Locker.ump"
    public void dumpLockTable() throws DatabaseException{
     lockManager.dump();
   }

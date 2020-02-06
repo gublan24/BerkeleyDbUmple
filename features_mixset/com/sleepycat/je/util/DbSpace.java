@@ -78,8 +78,7 @@ public class DbSpace
         Long fileNum;
         long totalSize;
         long obsoleteSize;
-        Summary(){
-        }
+      
         Summary(    Long fileNum,    FileSummary summary) throws DatabaseException {
           this.fileNum=fileNum;
           totalSize=summary.totalSize;
@@ -163,8 +162,6 @@ public class DbSpace
 	}
     }
 
-    private DbSpace() {
-    }
 
     public DbSpace(Environment env, boolean quiet, boolean details, boolean sorted) {
 	this(DbInternal.envGetEnvironmentImpl(env), quiet, details, sorted);

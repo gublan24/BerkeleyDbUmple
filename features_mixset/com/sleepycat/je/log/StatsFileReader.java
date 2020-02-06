@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.text.NumberFormat;
 import java.nio.ByteBuffer;
 import java.io.IOException;
+import com.sleepycat.je.log.entry.LogEntry;
 
 // line 3 "../../../../StatsFileReader.ump"
 // line 3 "../../../../StatsFileReader_static.ump"
@@ -48,7 +49,7 @@ public class StatsFileReader extends DumpFileReader
    * 
    * Create this reader to start at a given LSN.
    */
-  // line 36 "../../../../StatsFileReader.ump"
+  // line 38 "../../../../StatsFileReader.ump"
    public  StatsFileReader(EnvironmentImpl env, int readBufferSize, long startLsn, long finishLsn, String entryTypes, String txnIds, boolean verbose) throws IOException,DatabaseException{
     super(env, readBufferSize, startLsn, finishLsn, entryTypes, txnIds, verbose);
 	entryInfoMap = new TreeMap(new LogEntryTypeComparator());
@@ -66,7 +67,7 @@ public class StatsFileReader extends DumpFileReader
    * 
    * This reader collects stats about the log entry.
    */
-  // line 51 "../../../../StatsFileReader.ump"
+  // line 53 "../../../../StatsFileReader.ump"
    protected boolean processEntry(ByteBuffer entryBuffer) throws DatabaseException{
     LogEntryType lastEntryType = LogEntryType.findType(currentEntryTypeNum, currentEntryTypeVersion);
 	entryBuffer.position(entryBuffer.position() + currentEntrySize);
@@ -104,7 +105,7 @@ public class StatsFileReader extends DumpFileReader
 	return true;
   }
 
-  // line 88 "../../../../StatsFileReader.ump"
+  // line 90 "../../../../StatsFileReader.ump"
    public void summarize(){
     System.out.println("Log statistics:");
 	Iterator iter = entryInfoMap.entrySet().iterator();
@@ -158,7 +159,7 @@ public class StatsFileReader extends DumpFileReader
 	}
   }
 
-  // line 141 "../../../../StatsFileReader.ump"
+  // line 143 "../../../../StatsFileReader.ump"
    private String pad(String result){
     int spaces = 15 - result.length();
 	StringBuffer sb = new StringBuffer();
@@ -169,7 +170,7 @@ public class StatsFileReader extends DumpFileReader
 	return sb.toString();
   }
 
-  // line 151 "../../../../StatsFileReader.ump"
+  // line 153 "../../../../StatsFileReader.ump"
    private void summarizeCheckpointInfo(){
     System.out.println("\nPer checkpoint interval info:");
 	System.out.println(pad("lnTxn") + pad("ln") + pad("mapLNTxn") + pad("mapLN") + pad("end-end") + pad("end-start")
@@ -238,7 +239,7 @@ public class StatsFileReader extends DumpFileReader
   
   
   // line 4 "../../../../CleanerFileReader_static.ump"
-  // line 4 "../../../../StatsFileReader_static.ump"
+  // line 8 "../../../../StatsFileReader_static.ump"
   public static class EntryInfo
   {
   
@@ -246,16 +247,94 @@ public class StatsFileReader extends DumpFileReader
     // MEMBER VARIABLES
     //------------------------
   
+    //EntryInfo Attributes
+    private int count;
+    private int provisionalCount;
+    private long totalBytes;
+    private int minBytes;
+    private int maxBytes;
+  
     //------------------------
     // CONSTRUCTOR
     //------------------------
   
     public EntryInfo()
-    {}
+    {
+      count = 0;
+      provisionalCount = 0;
+      totalBytes = 0;
+      minBytes = 0;
+      maxBytes = 0;
+    }
   
     //------------------------
     // INTERFACE
     //------------------------
+  
+    public boolean setCount(int aCount)
+    {
+      boolean wasSet = false;
+      count = aCount;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setProvisionalCount(int aProvisionalCount)
+    {
+      boolean wasSet = false;
+      provisionalCount = aProvisionalCount;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setTotalBytes(long aTotalBytes)
+    {
+      boolean wasSet = false;
+      totalBytes = aTotalBytes;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setMinBytes(int aMinBytes)
+    {
+      boolean wasSet = false;
+      minBytes = aMinBytes;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public boolean setMaxBytes(int aMaxBytes)
+    {
+      boolean wasSet = false;
+      maxBytes = aMaxBytes;
+      wasSet = true;
+      return wasSet;
+    }
+  
+    public int getCount()
+    {
+      return count;
+    }
+  
+    public int getProvisionalCount()
+    {
+      return provisionalCount;
+    }
+  
+    public long getTotalBytes()
+    {
+      return totalBytes;
+    }
+  
+    public int getMinBytes()
+    {
+      return minBytes;
+    }
+  
+    public int getMaxBytes()
+    {
+      return maxBytes;
+    }
   
     public void delete()
     {}
@@ -266,15 +345,16 @@ public class StatsFileReader extends DumpFileReader
           this.targetCategory=targetCategory;
     }
   
-    // line 11 "../../../../StatsFileReader_static.ump"
-    public  EntryInfo(){
-      count=0;
-          provisionalCount=0;
-          totalBytes=0;
-          minBytes=0;
-          maxBytes=0;
-    }
-    
+  
+    public String toString()
+    {
+      return super.toString() + "["+
+              "count" + ":" + getCount()+ "," +
+              "provisionalCount" + ":" + getProvisionalCount()+ "," +
+              "totalBytes" + ":" + getTotalBytes()+ "," +
+              "minBytes" + ":" + getMinBytes()+ "," +
+              "maxBytes" + ":" + getMaxBytes()+ "]";
+    }  
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
@@ -283,16 +363,6 @@ public class StatsFileReader extends DumpFileReader
     public LogEntry targetLogEntry ;
   // line 6 "../../../../CleanerFileReader_static.ump"
     public byte targetCategory ;
-  // line 5 "../../../../StatsFileReader_static.ump"
-    public int count ;
-  // line 6 "../../../../StatsFileReader_static.ump"
-    public int provisionalCount ;
-  // line 7 "../../../../StatsFileReader_static.ump"
-    public long totalBytes ;
-  // line 8 "../../../../StatsFileReader_static.ump"
-    public int minBytes ;
-  // line 9 "../../../../StatsFileReader_static.ump"
-    public int maxBytes ;
   
     
   }  /*PLEASE DO NOT EDIT THIS CODE*/
@@ -301,7 +371,7 @@ public class StatsFileReader extends DumpFileReader
   
   import com.sleepycat.bind.serial.*;
   
-  // line 18 "../../../../StatsFileReader_static.ump"
+  // line 17 "../../../../StatsFileReader_static.ump"
   public static class LogEntryTypeComparator implements Comparator
   {
   
@@ -323,7 +393,7 @@ public class StatsFileReader extends DumpFileReader
     public void delete()
     {}
   
-    // line 21 "../../../../StatsFileReader_static.ump"
+    // line 20 "../../../../StatsFileReader_static.ump"
      public int compare(Object o1, Object o2){
       if (o1 == null) {
             return -1;
@@ -346,7 +416,7 @@ public class StatsFileReader extends DumpFileReader
   
   
   
-  // line 37 "../../../../StatsFileReader_static.ump"
+  // line 36 "../../../../StatsFileReader_static.ump"
   public static class CheckpointCounter
   {
   
@@ -368,7 +438,7 @@ public class StatsFileReader extends DumpFileReader
     public void delete()
     {}
   
-    // line 49 "../../../../StatsFileReader_static.ump"
+    // line 48 "../../../../StatsFileReader_static.ump"
      public void increment(FileReader reader, byte currentEntryTypeNum){
       if (currentEntryTypeNum == LogEntryType.LOG_CKPT_START.getTypeNum()) {
             startCkptLsn=reader.getLastLsn();
@@ -411,25 +481,25 @@ public class StatsFileReader extends DumpFileReader
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 38 "../../../../StatsFileReader_static.ump"
+    // line 37 "../../../../StatsFileReader_static.ump"
     public long startCkptLsn=DbLsn.NULL_LSN ;
-  // line 39 "../../../../StatsFileReader_static.ump"
+  // line 38 "../../../../StatsFileReader_static.ump"
     public long endCkptLsn=DbLsn.NULL_LSN ;
-  // line 40 "../../../../StatsFileReader_static.ump"
+  // line 39 "../../../../StatsFileReader_static.ump"
     public int preStartLNTxnCount ;
-  // line 41 "../../../../StatsFileReader_static.ump"
+  // line 40 "../../../../StatsFileReader_static.ump"
     public int preStartLNCount ;
-  // line 42 "../../../../StatsFileReader_static.ump"
+  // line 41 "../../../../StatsFileReader_static.ump"
     public int preStartMapLNTxnCount ;
-  // line 43 "../../../../StatsFileReader_static.ump"
+  // line 42 "../../../../StatsFileReader_static.ump"
     public int preStartMapLNCount ;
-  // line 44 "../../../../StatsFileReader_static.ump"
+  // line 43 "../../../../StatsFileReader_static.ump"
     public int postStartLNTxnCount ;
-  // line 45 "../../../../StatsFileReader_static.ump"
+  // line 44 "../../../../StatsFileReader_static.ump"
     public int postStartLNCount ;
-  // line 46 "../../../../StatsFileReader_static.ump"
+  // line 45 "../../../../StatsFileReader_static.ump"
     public int postStartMapLNTxnCount ;
-  // line 47 "../../../../StatsFileReader_static.ump"
+  // line 46 "../../../../StatsFileReader_static.ump"
     public int postStartMapLNCount ;
   
     
@@ -438,17 +508,17 @@ public class StatsFileReader extends DumpFileReader
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 19 "../../../../StatsFileReader.ump"
+  // line 21 "../../../../StatsFileReader.ump"
   private Map entryInfoMap ;
-// line 21 "../../../../StatsFileReader.ump"
-  private long totalLogBytes ;
 // line 23 "../../../../StatsFileReader.ump"
-  private long totalCount ;
+  private long totalLogBytes ;
 // line 25 "../../../../StatsFileReader.ump"
-  private ArrayList ckptList ;
+  private long totalCount ;
 // line 27 "../../../../StatsFileReader.ump"
-  private CheckpointCounter ckptCounter ;
+  private ArrayList ckptList ;
 // line 29 "../../../../StatsFileReader.ump"
+  private CheckpointCounter ckptCounter ;
+// line 31 "../../../../StatsFileReader.ump"
   private long firstLsnRead ;
 
   

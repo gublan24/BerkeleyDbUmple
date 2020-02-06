@@ -26,9 +26,7 @@ class DBIN
      */
     private byte[] dupKey;
 
-    public DBIN() {
-	super();
-    }
+//    public DBIN() {super();}
 
     public DBIN(DatabaseImpl db, byte[] identifierKey, int maxEntriesPerNode, byte[] dupKey, int level) {
 	super(db, identifierKey, maxEntriesPerNode, level);

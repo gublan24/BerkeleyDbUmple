@@ -37,14 +37,9 @@ public class DbEnvPool
   /**
    * 
    * Enforce singleton behavior.
-   */
-  // line 20 "../../../../DbEnvPool.ump"
-   private  DbEnvPool(){
-    envs = new Hashtable();
-  }
-
-
-  /**
+   * private DbEnvPool() {
+   * envs = new Hashtable();
+   * }
    * 
    * Access the singleton instance.
    */
@@ -182,7 +177,7 @@ public class DbEnvPool
   // line 12 "../../../../DbEnvPool.ump"
   private static DbEnvPool pool = new DbEnvPool() ;
 // line 14 "../../../../DbEnvPool.ump"
-  private Map envs ;
+  private Map envs = new Hashtable() ;
 
   
 }

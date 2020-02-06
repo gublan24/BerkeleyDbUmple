@@ -11,11 +11,9 @@ class BitMap
 
     private static final int SEGMENT_MASK = 0xffff;
 
-    private Map bitSegments;
+    Map bitSegments = new HashMap();
 
-    public BitMap() {
-	bitSegments = new HashMap();
-    }
+
 
     public void set(long index) throws IndexOutOfBoundsException {
 	if (index < 0) {

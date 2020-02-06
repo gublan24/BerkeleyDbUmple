@@ -13,7 +13,7 @@ class DupCountLN
 
     private static final String END_TAG = "</dupCountLN>";
 
-    private int dupCount;
+    int dupCount = 0;
 
     /** 
      * Create a new DupCountLn to hold a new DIN.
@@ -26,10 +26,10 @@ class DupCountLN
     /** 
      * Create an empty DupCountLN, to be filled in from the log.
      */
-    public DupCountLN() {
-	super();
-	dupCount = 0;
-    }
+    //public DupCountLN() {
+	//super();
+	//dupCount = 0;
+   // }
 
     public int getDupCount() {
 	return dupCount;
@@ -47,9 +47,7 @@ class DupCountLN
 	return dupCount;
     }
 
-    void setDupCount(int dupCount) {
-	this.dupCount = dupCount;
-    }
+//    void setDupCount(int dupCount) {	this.dupCount = dupCount;}
 
     /** 
      * @return true if this node is a duplicate-bearing node type, falseif otherwise.

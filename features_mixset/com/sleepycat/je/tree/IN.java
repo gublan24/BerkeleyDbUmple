@@ -45,9 +45,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   // CONSTRUCTOR
   //------------------------
 
-  public IN()
+  public IN(long aNodeId)
   {
-    super();
+    super(aNodeId);
   }
 
   //------------------------
@@ -90,7 +90,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    protected void init(DatabaseImpl db, byte [] identifierKey, int initialCapacity, int level){
     setDatabase(db);
   EnvironmentImpl env = (databaseImpl == null) ? null : databaseImpl.getDbEnvironment();
-  Label618: //this.hook618(env);
+  Label618:   ; //this.hook618(env);
    generation = 0;
   dirty = false;
   nEntries = 0;
@@ -169,7 +169,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   setLastFullLsn(sourceLsn);
   EnvironmentImpl env = db.getDbEnvironment();
   //this.hook637();
-  Label637:
+  Label637:   ;
    env.getInMemoryINs().add(this);
   }
 
@@ -223,7 +223,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    */
   // line 242 "../../../../IN.ump"
    public boolean latchNoWait(boolean updateGeneration) throws DatabaseException{
-    Label619: 
+    Label619:   ; 
     if (updateGeneration) {
      setGeneration();
     }
@@ -774,7 +774,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
      node.postFetchInit(databaseImpl, lsn);
      entryTargets[idx] = node;
      // this.hook638(node);
-     Label638:
+     Label638:   ;
 
     } catch (LogFileNotFoundException LNFE) {
      if (!isEntryKnownDeleted(idx) && !isEntryPendingDeleted(idx)) {
@@ -1222,15 +1222,15 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   // line 1142 "../../../../IN.ump"
    protected void descendOnParentSearch(SearchResult result, boolean targetContainsDuplicates, boolean targetIsRoot, long targetNodeId, Node child, boolean requireExactMatch) throws DatabaseException{
     if (child.canBeAncestor(targetContainsDuplicates)) {
-   Label624: //this.hook624();
+   Label624:   ; //this.hook624();
     result.parent = (IN) child;
   }
   else {
-   Label625: //this.hook625(child);
+   Label625:   ; //this.hook625(child);
     result.exactParentFound = false;
    result.keepSearching = false;
    if (requireExactMatch) {
-    Label626: //this.hook626();
+    Label626:   ; //this.hook626();
      result.parent = null;
    }
    else {
@@ -1243,7 +1243,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException{
     latch(updateGeneration);
   if (getNodeId() == nid) {
-   Label627: //this.hook627();
+   Label627:   ; //this.hook627();
     return true;
   }
   else {
@@ -1776,7 +1776,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void execute(){
       _this.setLsnElement(idx,lsn);
           //this.hook639();
-          Label639:
+          Label639: ;
           _this.entryStates[idx]|=_this.DIRTY_BIT;
     }
   
@@ -1842,14 +1842,14 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           if (newNEntries > _this.nEntries) {
             _this.nEntries=newNEntries;
             //this.hook641();
-            Label641:
+            Label641:   ;
           }
           _this.entryTargets[idx]=target;
           _this.entryKeyVals[idx]=keyVal;
           _this.setLsnElement(idx,lsn);
           _this.entryStates[idx]=state;
           //this.hook640();
-          Label640:
+          Label640:   ;
           _this.setDirty(true);
     }
   
@@ -1977,7 +1977,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
       _this.setLsn(idx,lsn);
           _this.setTarget(idx,node);
           //this.hook642();
-          Label642:
+          Label642:   ;
           _this.setDirty(true);
     }
   
@@ -2046,7 +2046,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           _this.setTarget(idx,node);
           _this.setKey(idx,key);
           //this.hook643();
-          Label643:
+          Label643:   ;
           _this.setDirty(true);
     }
   
@@ -2121,7 +2121,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             _this.setKey(idx,key);
           }
           //this.hook644();
-         Label644:
+         Label644:   ;
           _this.setDirty(true);
     }
     
@@ -2198,10 +2198,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             }
             if (index < _this.nEntries) {
               //this.hook647();
-              Label647:
+              Label647:   ;
               _this.shiftEntriesRight(index);
               //this.hook646();
-              Label646:
+              Label646:   ;
             }
             _this.entryTargets[index]=entry.getTarget();
             _this.entryKeyVals[index]=entry.getKey();
@@ -2210,7 +2210,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             _this.nEntries++;
             _this.adjustCursorsForInsert(index);
            // this.hook645();
-           Label645:
+           Label645:   ;
             _this.setDirty(true);
             return (index | _this.INSERT_SUCCESS);
           }
@@ -2277,17 +2277,17 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           assert maybeValidate ? _this.validateSubtreeBeforeDelete(index) : true;
           if (index < _this.nEntries) {
             //this.hook649();
-            Label649:
+            Label649:   ;
             for (int i=index; i < _this.nEntries - 1; i++) {
               _this.setEntryInternal(i + 1,i);
             }
             _this.clearEntry(_this.nEntries - 1);
             //this.hook648();
-            Label648:
+            Label648:   ;
             _this.nEntries--;
             _this.setDirty(true);
             _this.setProhibitNextDelta();
-            Label616: //this.hook616();
+            Label616:   ; //this.hook616();
             return true;
           }
      else {
@@ -2345,35 +2345,33 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // line 253 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-            Label628: //this.hook628();
-  	 				this.hook629();
+            Label628:   ; //this.hook628();
+  	 			//	this.hook629();
   		      if (index >= _this.nEntries) {
-  		        throw new ReturnBoolean(true);
+  		        return true;
   		      }
   					 else {
   		        child=_this.fetchTarget(index);
-  		        throw new ReturnBoolean(child != null && child.isValidForDelete());
+  		        return (child != null && child.isValidForDelete());
   		      }
   // end hook628
-            throw ReturnHack.returnBoolean;
           }
-     catch (      ReturnBoolean r) {
-  Label628_1:
-            return r.value;
-          }
+    finally {
+    Label628_1:   ;
+     }
     }
     
     //------------------------
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 271 "../../../../IN_static.ump"
+    // line 269 "../../../../IN_static.ump"
     protected IN _this ;
-  // line 272 "../../../../IN_static.ump"
+  // line 270 "../../../../IN_static.ump"
     protected int index ;
-  // line 273 "../../../../IN_static.ump"
+  // line 271 "../../../../IN_static.ump"
     protected boolean needToLatch ;
-  // line 274 "../../../../IN_static.ump"
+  // line 272 "../../../../IN_static.ump"
     protected Node child ;
   
     
@@ -2382,7 +2380,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
-  // line 289 "../../../../IN_static.ump"
+  // line 287 "../../../../IN_static.ump"
   public static class IN_splitInternal
   {
   
@@ -2404,7 +2402,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void delete()
     {}
   
-    // line 291 "../../../../IN_static.ump"
+    // line 289 "../../../../IN_static.ump"
     public  IN_splitInternal(IN _this, IN parent, int childIndex, int maxEntries, int splitIndex){
       this._this=_this;
           this.parent=parent;
@@ -2413,7 +2411,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           this.splitIndex=splitIndex;
     }
   
-    // line 298 "../../../../IN_static.ump"
+    // line 296 "../../../../IN_static.ump"
     public void execute() throws DatabaseException{
       if (_this.identifierKey == null) {
             throw new InconsistentNodeException("idkey is null");
@@ -2422,24 +2420,22 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           if (splitIndex < 0) {
             splitIndex=_this.nEntries / 2;
           }
-    {
-          }
+  
           newSibling=null;
-          if (idKeyIndearentLsn=DbLsn.NULL_LSN;
-          newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
-          Label631: //this.hook631();
-          oldMemorySize=_this.inMemorySize;
-          //this.hook630();
-          Label630:x < splitIndex) {
+          if (idKeyIndex < splitIndex) {
             low=splitIndex;
             high=_this.nEntries;
           }
-     else {
+          else {
             low=0;
             high=splitIndex;
           }
           newIdKey=_this.entryKeyVals[low];
-          p
+          parentLsn=DbLsn.NULL_LSN;
+          newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
+          Label631:   ; //this.hook631();
+          oldMemorySize=_this.inMemorySize;
+          Label630:   ; 
           toIdx=0;
           deletedEntrySeen=false;
           binRef=null;
@@ -2455,7 +2451,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
             _this.clearEntry(i);
           }
-          Label636: //this.hook636();
+          Label636:   ; //this.hook636();
           newSiblingNEntries=(high - low);
           if (low == 0) {
             _this.shiftEntriesLeft(newSiblingNEntries);
@@ -2494,7 +2490,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             parent.setDirty(true);
           }
           //this.hook650();
-          Label650:
+          Label650:   ;
           inMemoryINs.add(newSibling);
           Label617: ;//this.hook617();
     }
@@ -2503,55 +2499,55 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 384 "../../../../IN_static.ump"
+    // line 380 "../../../../IN_static.ump"
     protected IN _this ;
-  // line 385 "../../../../IN_static.ump"
+  // line 381 "../../../../IN_static.ump"
     protected IN parent ;
-  // line 386 "../../../../IN_static.ump"
+  // line 382 "../../../../IN_static.ump"
     protected int childIndex ;
-  // line 387 "../../../../IN_static.ump"
+  // line 383 "../../../../IN_static.ump"
     protected int maxEntries ;
-  // line 388 "../../../../IN_static.ump"
+  // line 384 "../../../../IN_static.ump"
     protected int splitIndex ;
-  // line 389 "../../../../IN_static.ump"
+  // line 385 "../../../../IN_static.ump"
     protected int idKeyIndex ;
-  // line 390 "../../../../IN_static.ump"
+  // line 386 "../../../../IN_static.ump"
     protected int low ;
-  // line 391 "../../../../IN_static.ump"
+  // line 387 "../../../../IN_static.ump"
     protected int high ;
-  // line 392 "../../../../IN_static.ump"
+  // line 388 "../../../../IN_static.ump"
     protected IN newSibling ;
-  // line 393 "../../../../IN_static.ump"
+  // line 389 "../../../../IN_static.ump"
     protected byte[] newIdKey ;
-  // line 394 "../../../../IN_static.ump"
+  // line 390 "../../../../IN_static.ump"
     protected long parentLsn ;
-  // line 395 "../../../../IN_static.ump"
+  // line 391 "../../../../IN_static.ump"
     protected long oldMemorySize ;
-  // line 396 "../../../../IN_static.ump"
+  // line 392 "../../../../IN_static.ump"
     protected int toIdx ;
-  // line 397 "../../../../IN_static.ump"
+  // line 393 "../../../../IN_static.ump"
     protected boolean deletedEntrySeen ;
-  // line 398 "../../../../IN_static.ump"
+  // line 394 "../../../../IN_static.ump"
     protected BINReference binRef ;
-  // line 399 "../../../../IN_static.ump"
+  // line 395 "../../../../IN_static.ump"
     protected byte[] thisKey ;
-  // line 400 "../../../../IN_static.ump"
+  // line 396 "../../../../IN_static.ump"
     protected int newSiblingNEntries ;
-  // line 401 "../../../../IN_static.ump"
+  // line 397 "../../../../IN_static.ump"
     protected EnvironmentImpl env ;
-  // line 402 "../../../../IN_static.ump"
+  // line 398 "../../../../IN_static.ump"
     protected LogManager logManager ;
-  // line 403 "../../../../IN_static.ump"
+  // line 399 "../../../../IN_static.ump"
     protected INList inMemoryINs ;
-  // line 404 "../../../../IN_static.ump"
+  // line 400 "../../../../IN_static.ump"
     protected long newSiblingLsn ;
-  // line 405 "../../../../IN_static.ump"
+  // line 401 "../../../../IN_static.ump"
     protected long myNewLsn ;
-  // line 406 "../../../../IN_static.ump"
+  // line 402 "../../../../IN_static.ump"
     protected boolean insertOk1 ;
-  // line 407 "../../../../IN_static.ump"
+  // line 403 "../../../../IN_static.ump"
     protected boolean insertOk2 ;
-  // line 408 "../../../../IN_static.ump"
+  // line 404 "../../../../IN_static.ump"
     protected long newSize ;
   
     
@@ -2560,7 +2556,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
-  // line 416 "../../../../IN_static.ump"
+  // line 412 "../../../../IN_static.ump"
   public static class IN_verify
   {
   
@@ -2582,16 +2578,16 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void delete()
     {}
   
-    // line 418 "../../../../IN_static.ump"
+    // line 414 "../../../../IN_static.ump"
     public  IN_verify(IN _this, byte [] maxKey){
       this._this=_this;
           this.maxKey=maxKey;
     }
   
-    // line 422 "../../../../IN_static.ump"
+    // line 418 "../../../../IN_static.ump"
     public void execute() throws DatabaseException{
       try {
-            Label632: //this.hook632();
+            Label632:   ; //this.hook632();
             userCompareToFcn=(_this.databaseImpl == null ? null : _this.getKeyComparator());
             key1=null;
             for (int i=1; i < _this.nEntries; i++) {
@@ -2616,7 +2612,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             DE.printStackTrace(System.out);
           }
      finally {
-            Label633: //this.hook633();
+            Label633:   ; //this.hook633();
           }
     }
     
@@ -2624,21 +2620,21 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 451 "../../../../IN_static.ump"
+    // line 447 "../../../../IN_static.ump"
     protected IN _this ;
-  // line 452 "../../../../IN_static.ump"
+  // line 448 "../../../../IN_static.ump"
     protected byte[] maxKey ;
-  // line 453 "../../../../IN_static.ump"
+  // line 449 "../../../../IN_static.ump"
     protected boolean unlatchThis ;
-  // line 454 "../../../../IN_static.ump"
+  // line 450 "../../../../IN_static.ump"
     protected Comparator userCompareToFcn ;
-  // line 455 "../../../../IN_static.ump"
+  // line 451 "../../../../IN_static.ump"
     protected byte[] key1 ;
-  // line 456 "../../../../IN_static.ump"
+  // line 452 "../../../../IN_static.ump"
     protected byte[] key2 ;
-  // line 457 "../../../../IN_static.ump"
+  // line 453 "../../../../IN_static.ump"
     protected int s ;
-  // line 458 "../../../../IN_static.ump"
+  // line 454 "../../../../IN_static.ump"
     protected boolean inconsistent ;
   
     
@@ -2647,7 +2643,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
-  // line 462 "../../../../IN_static.ump"
+  // line 458 "../../../../IN_static.ump"
   public static class IN_isValidForDelete
   {
   
@@ -2669,34 +2665,30 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void delete()
     {}
   
-    // line 464 "../../../../IN_static.ump"
+    // line 460 "../../../../IN_static.ump"
     public  IN_isValidForDelete(IN _this){
       this._this=_this;
     }
   
-    // line 467 "../../../../IN_static.ump"
+    // line 463 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-  				      Label634: //this.hook634();
-  							Label635: //this.hook635();
+  				      Label634:   ; //this.hook634();
+  							Label635:   ; //this.hook635();
   						  if (_this.nEntries > 1) {
-  						    throw new ReturnBoolean(false);
+  						   return false;
   						  }
   				 else       if (_this.nEntries == 1) {
   						    child=_this.fetchTarget(0);
-  						    throw new ReturnBoolean(child != null && child.isValidForDelete());
+  						    return (child != null && child.isValidForDelete());
   						  }
   				 else {
-  						    throw new ReturnBoolean(true);
+  						    return true;
   						  }
-  
-  //end hook634
-  
-            throw ReturnHack.returnBoolean;
           }
-     catch (      ReturnBoolean r) {
-  Label634_1: 
-            return r.value;
+     finally {
+  					Label634_1:   ; 
+            
           }
     }
     
@@ -2704,11 +2696,11 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 490 "../../../../IN_static.ump"
+    // line 482 "../../../../IN_static.ump"
     protected IN _this ;
-  // line 491 "../../../../IN_static.ump"
+  // line 483 "../../../../IN_static.ump"
     protected boolean needToLatch ;
-  // line 492 "../../../../IN_static.ump"
+  // line 484 "../../../../IN_static.ump"
     protected Node child ;
   
     
@@ -2717,7 +2709,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
-  // line 512 "../../../../IN_static.ump"
+  // line 504 "../../../../IN_static.ump"
   public static class IN_trackProvisionalObsolete
   {
   
@@ -2739,7 +2731,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void delete()
     {}
   
-    // line 514 "../../../../IN_static.ump"
+    // line 506 "../../../../IN_static.ump"
     public  IN_trackProvisionalObsolete(IN _this, IN child, long obsoleteLsn1, long obsoleteLsn2){
       this._this=_this;
           this.child=child;
@@ -2747,12 +2739,12 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           this.obsoleteLsn2=obsoleteLsn2;
     }
   
-    // line 520 "../../../../IN_static.ump"
+    // line 512 "../../../../IN_static.ump"
     public void execute(){
       memDelta=0;
           if (child.provisionalObsolete != null) {
             //this.hook652();
-            Label652:
+            Label652:   ;
             if (_this.provisionalObsolete != null) {
               _this.provisionalObsolete.addAll(child.provisionalObsolete);
             }
@@ -2761,7 +2753,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             }
             child.provisionalObsolete=null;
             //this.hook651();
-            Label651:
+            Label651:   ;
           }
           if (obsoleteLsn1 != DbLsn.NULL_LSN || obsoleteLsn2 != DbLsn.NULL_LSN) {
             if (_this.provisionalObsolete == null) {
@@ -2770,17 +2762,17 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             if (obsoleteLsn1 != DbLsn.NULL_LSN) {
               _this.provisionalObsolete.add(new Long(obsoleteLsn1));
               //this.hook653();
-              Label653:
+              Label653:   ;
             }
             if (obsoleteLsn2 != DbLsn.NULL_LSN) {
               _this.provisionalObsolete.add(new Long(obsoleteLsn2));
               //this.hook654();
-              Label654:
+              Label654:   ;
             }
           }
     }
   
-    // line 557 "../../../../IN_static.ump"
+    // line 549 "../../../../IN_static.ump"
      protected void hook651(){
       
     }
@@ -2790,7 +2782,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
      * protected void hook652(){
      * }
      */
-    // line 561 "../../../../IN_static.ump"
+    // line 553 "../../../../IN_static.ump"
      protected void hook653(){
       
     }
@@ -2799,17 +2791,17 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 550 "../../../../IN_static.ump"
+    // line 542 "../../../../IN_static.ump"
     protected IN _this ;
-  // line 551 "../../../../IN_static.ump"
+  // line 543 "../../../../IN_static.ump"
     protected IN child ;
-  // line 552 "../../../../IN_static.ump"
+  // line 544 "../../../../IN_static.ump"
     protected long obsoleteLsn1 ;
-  // line 553 "../../../../IN_static.ump"
+  // line 545 "../../../../IN_static.ump"
     protected long obsoleteLsn2 ;
-  // line 554 "../../../../IN_static.ump"
+  // line 546 "../../../../IN_static.ump"
     protected int memDelta ;
-  // line 555 "../../../../IN_static.ump"
+  // line 547 "../../../../IN_static.ump"
     protected int childMemDelta ;
   
     
@@ -2818,7 +2810,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
-  // line 565 "../../../../IN_static.ump"
+  // line 557 "../../../../IN_static.ump"
   public static class IN_flushProvisionalObsolete
   {
   
@@ -2840,30 +2832,30 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void delete()
     {}
   
-    // line 567 "../../../../IN_static.ump"
+    // line 559 "../../../../IN_static.ump"
     public  IN_flushProvisionalObsolete(IN _this, LogManager logManager){
       this._this=_this;
           this.logManager=logManager;
     }
   
-    // line 571 "../../../../IN_static.ump"
+    // line 563 "../../../../IN_static.ump"
     public void execute() throws DatabaseException{
       if (_this.provisionalObsolete != null) {
             //this.hook656();
-            Label656:
+            Label656:   ;
             logManager.countObsoleteINs(_this.provisionalObsolete);
             _this.provisionalObsolete=null;
             //this.hook655();
-            Label655:
+            Label655:   ;
           }
     }
   
-    // line 584 "../../../../IN_static.ump"
+    // line 576 "../../../../IN_static.ump"
      protected void hook655() throws DatabaseException{
       
     }
   
-    // line 586 "../../../../IN_static.ump"
+    // line 578 "../../../../IN_static.ump"
      protected void hook656() throws DatabaseException{
       
     }
@@ -2872,11 +2864,11 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 580 "../../../../IN_static.ump"
+    // line 572 "../../../../IN_static.ump"
     protected IN _this ;
-  // line 581 "../../../../IN_static.ump"
+  // line 573 "../../../../IN_static.ump"
     protected LogManager logManager ;
-  // line 582 "../../../../IN_static.ump"
+  // line 574 "../../../../IN_static.ump"
     protected int memDelta ;
   
     
@@ -2975,7 +2967,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
  throws DatabaseException 
   {
     if (getNodeId() == targetNodeId) {
-   Label620: //this.hook620();
+   Label620:   ; //this.hook620();
     result.exactParentFound = false;
    result.keepSearching = false;
    result.parent = null;
@@ -2985,7 +2977,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    result.keepSearching = false;
    result.exactParentFound = false;
    if (requireExactMatch) {
-    Label621: //this.hook621();
+    Label621:   ; //this.hook621();
      result.parent = null;
    }
    else {
@@ -3007,7 +2999,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     result.keepSearching = false;
     result.exactParentFound = false;
     if (requireExactMatch) {
-     Label622: //this.hook622();
+     Label622:   ; //this.hook622();
       result.parent = null;
     }
     else {
@@ -3032,7 +3024,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     result.keepSearching = false;
     if (requireExactMatch) {
      result.parent = null;
-     Label623: //this.hook623();
+     Label623:   ; //this.hook623();
     } else {
      result.parent = this;
     }

@@ -26,16 +26,64 @@ public class BINDelta implements LoggableObject,LogReadable
   // MEMBER VARIABLES
   //------------------------
 
+  //BINDelta Attributes
+  private DatabaseId dbId;
+  private long lastFullLsn;
+  private List deltas;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public BINDelta()
-  {}
+  {
+    dbId = new DatabaseId();
+    lastFullLsn = DbLsn.NULL_LSN;
+    deltas = new ArrayList();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setDbId(DatabaseId aDbId)
+  {
+    boolean wasSet = false;
+    dbId = aDbId;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setLastFullLsn(long aLastFullLsn)
+  {
+    boolean wasSet = false;
+    lastFullLsn = aLastFullLsn;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setDeltas(List aDeltas)
+  {
+    boolean wasSet = false;
+    deltas = aDeltas;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public DatabaseId getDbId()
+  {
+    return dbId;
+  }
+
+  public long getLastFullLsn()
+  {
+    return lastFullLsn;
+  }
+
+  public List getDeltas()
+  {
+    return deltas;
+  }
 
   public void delete()
   {}
@@ -45,7 +93,7 @@ public class BINDelta implements LoggableObject,LogReadable
    * 
    * Read a BIN and create the deltas.
    */
-  // line 32 "../../../../BINDelta.ump"
+  // line 33 "../../../../BINDelta.ump"
    public  BINDelta(BIN bin){
     lastFullLsn = bin.getLastFullVersion();
 	dbId = bin.getDatabaseId();
@@ -62,20 +110,15 @@ public class BINDelta implements LoggableObject,LogReadable
   /**
    * 
    * For instantiating from the log.
-   */
-  // line 47 "../../../../BINDelta.ump"
-   public  BINDelta(){
-    dbId = new DatabaseId();
-	lastFullLsn = DbLsn.NULL_LSN;
-	deltas = new ArrayList();
-  }
-
-
-  /**
+   * public BINDelta() {
+   * dbId = new DatabaseId();
+   * lastFullLsn = DbLsn.NULL_LSN;
+   * deltas = new ArrayList();
+   * }
    * 
    * @return a count of deltas for this BIN.
    */
-  // line 56 "../../../../BINDelta.ump"
+  // line 57 "../../../../BINDelta.ump"
   public int getNumDeltas(){
     return deltas.size();
   }
@@ -83,35 +126,15 @@ public class BINDelta implements LoggableObject,LogReadable
 
   /**
    * 
-   * @return the dbId for this BIN.
-   */
-  // line 63 "../../../../BINDelta.ump"
-   public DatabaseId getDbId(){
-    return dbId;
-  }
-
-
-  /**
-   * 
-   * @return the last full version of this BIN
-   */
-  // line 70 "../../../../BINDelta.ump"
-   public long getLastFullLsn(){
-    return lastFullLsn;
-  }
-
-
-  /**
-   * 
    * Create a BIN by starting with the full version and applying the deltas.
    */
-  // line 77 "../../../../BINDelta.ump"
+  // line 78 "../../../../BINDelta.ump"
    public BIN reconstituteBIN(EnvironmentImpl env) throws DatabaseException{
     BIN fullBIN = (BIN) env.getLogManager().get(lastFullLsn);
 	DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	fullBIN.setDatabase(db);
 	fullBIN.setLastFullLsn(lastFullLsn);
-	Label612: //this.hook612(fullBIN);
+	Label612:   ; //this.hook612(fullBIN);
 	for (int i = 0; i < deltas.size(); i++) {
 	    DeltaInfo info = (DeltaInfo) deltas.get(i);
 	    int foundIndex = fullBIN.findEntry(info.getKey(), true, false);
@@ -131,11 +154,11 @@ public class BINDelta implements LoggableObject,LogReadable
 	    }
 	}
 	fullBIN.setGeneration(0);
-	Label611: //this.hook611(fullBIN);
+	Label611:   ; //this.hook611(fullBIN);
 	return fullBIN;
   }
 
-  // line 106 "../../../../BINDelta.ump"
+  // line 107 "../../../../BINDelta.ump"
    public LogEntryType getLogType(){
     return logEntryType;
   }
@@ -145,7 +168,7 @@ public class BINDelta implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#marshallOutsideWriteLatchCan be marshalled outside the log write latch.
    */
-  // line 113 "../../../../BINDelta.ump"
+  // line 114 "../../../../BINDelta.ump"
    public boolean marshallOutsideWriteLatch(){
     return true;
   }
@@ -155,17 +178,17 @@ public class BINDelta implements LoggableObject,LogReadable
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 120 "../../../../BINDelta.ump"
+  // line 121 "../../../../BINDelta.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
 
-  // line 124 "../../../../BINDelta.ump"
+  // line 125 "../../../../BINDelta.ump"
    public void postLogWork(long justLoggedLsn){
     
   }
 
-  // line 127 "../../../../BINDelta.ump"
+  // line 128 "../../../../BINDelta.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     dbId.readFromLog(itemBuffer, entryTypeVersion);
 	lastFullLsn = LogUtils.readLong(itemBuffer);
@@ -177,7 +200,7 @@ public class BINDelta implements LoggableObject,LogReadable
 	}
   }
 
-  // line 138 "../../../../BINDelta.ump"
+  // line 139 "../../../../BINDelta.ump"
    public int getLogSize(){
     int size = dbId.getLogSize() + LogUtils.LONG_BYTES + LogUtils.INT_BYTES;
 	for (int i = 0; i < deltas.size(); i++) {
@@ -187,7 +210,7 @@ public class BINDelta implements LoggableObject,LogReadable
 	return size;
   }
 
-  // line 147 "../../../../BINDelta.ump"
+  // line 148 "../../../../BINDelta.ump"
    public void writeToLog(ByteBuffer logBuffer){
     dbId.writeToLog(logBuffer);
 	LogUtils.writeLong(logBuffer, lastFullLsn);
@@ -198,7 +221,7 @@ public class BINDelta implements LoggableObject,LogReadable
 	}
   }
 
-  // line 157 "../../../../BINDelta.ump"
+  // line 158 "../../../../BINDelta.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     dbId.dumpLog(sb, verbose);
 	sb.append("<lastFullLsn>");
@@ -216,7 +239,7 @@ public class BINDelta implements LoggableObject,LogReadable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 172 "../../../../BINDelta.ump"
+  // line 173 "../../../../BINDelta.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -226,22 +249,24 @@ public class BINDelta implements LoggableObject,LogReadable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 179 "../../../../BINDelta.ump"
+  // line 180 "../../../../BINDelta.ump"
    public long getTransactionId(){
     return 0;
   }
-  
+
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "lastFullLsn" + ":" + getLastFullLsn()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "dbId" + "=" + (getDbId() != null ? !getDbId().equals(this)  ? getDbId().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "deltas" + "=" + (getDeltas() != null ? !getDeltas().equals(this)  ? getDeltas().toString().replaceAll("  ","    ") : "this" : "null");
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 20 "../../../../BINDelta.ump"
-  private DatabaseId dbId ;
-// line 22 "../../../../BINDelta.ump"
-  private long lastFullLsn ;
-// line 24 "../../../../BINDelta.ump"
-  private List deltas ;
-// line 26 "../../../../BINDelta.ump"
+  // line 27 "../../../../BINDelta.ump"
   private LogEntryType logEntryType ;
 
   

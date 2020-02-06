@@ -29,8 +29,8 @@ class CheckpointStart
 	}
     }
 
-    public CheckpointStart() {
-    }
+ //   public CheckpointStart() {
+//    }
 
     /** 
      * @see LoggableObject#getLogType

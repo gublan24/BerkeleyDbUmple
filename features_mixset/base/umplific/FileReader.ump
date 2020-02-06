@@ -66,7 +66,7 @@ class FileReader
 	    long endOfFileLsn, long finishLsn) throws IOException, DatabaseException {
 	this.env = env;
 	this.fileManager = env.getFileManager();
-	Label473: //this.hook473(env);
+	Label473:   ; //this.hook473(env);
 	this.singleFile = (singleFileNumber != null);
 	this.forward = forward;
 	readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -78,7 +78,7 @@ class FileReader
 	this.finishLsn = finishLsn;
 	initStartingPosition(endOfFileLsn, singleFileNumber);
 	nRead = 0;
-	Label472: //this.hook472();
+	Label472:   ; //this.hook472();
 	anticipateChecksumErrors = false;
     }
 
@@ -188,7 +188,7 @@ class FileReader
 		    }
 		}
 		FileHandle fileHandle = fileManager.getFileHandle(readBufferFileNum);
-		Label469: //this.hook469(fileHandle);
+		Label469:   ; //this.hook469(fileHandle);
 		try
 		{
 			readBuffer.clear();
@@ -196,7 +196,7 @@ class FileReader
 			assert EnvironmentImpl.maybeForceYield();
 		}
 		finally {
-					Label469_1://fileHandle.release();
+					Label469_1:   ;//fileHandle.release();
 			}
 		readBufferFileEnd = readBufferFileStart + threadSafeBufferPosition(readBuffer);
 		threadSafeBufferFlip(readBuffer);
@@ -328,7 +328,7 @@ class FileReader
 		    Long nextFile = fileManager.getFollowingFileNum(readBufferFileNum, forward);
 		    if (nextFile != null) {
 			readBufferFileNum = nextFile.longValue();
-			Label470: //this.hook470(fileHandle);
+			Label470:   ; //this.hook470(fileHandle);
 			fileHandle = fileManager.getFileHandle(readBufferFileNum);
 			fileOk = true;
 			readBufferFileEnd = 0;
@@ -351,7 +351,7 @@ class FileReader
 	    throw new DatabaseException(
 		    "Problem in fillReadBuffer, readBufferFileNum = " + readBufferFileNum + ": " + e.getMessage());
 	} finally {
-	    Label471: //this.hook471(fileHandle);
+	    Label471:   ; //this.hook471(fileHandle);
 	}
     }
 

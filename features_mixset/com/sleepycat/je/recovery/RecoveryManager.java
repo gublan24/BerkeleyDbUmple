@@ -266,7 +266,7 @@ public class RecoveryManager
 	Label564:           ;  //this.hook564(start, end);
 	rebuildINList();
 
-  Label596:
+  Label596:   ;
 	Label563:           ;  //this.hook563();
 	start = System.currentTimeMillis();
 	Set lnSet = new HashSet();
@@ -430,7 +430,7 @@ public class RecoveryManager
 		    Long txnId = reader.getTxnId();
 		    if (txnId != null && !committedTxnIds.contains(txnId)) {
 		  //this.hook597();
-      Label597:
+      Label597:   ;
 			LN ln = reader.getLN();
 			long logLsn = reader.getLastLsn();
 			long abortLsn = reader.getAbortLsn();
@@ -441,7 +441,7 @@ public class RecoveryManager
 			    ln.postFetchInit(db, logLsn);
 			    Label586:           ;  //this.hook586(info, reader, location, ln, logLsn, abortLsn, abortKnownDeleted, db);
 					undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,		abortKnownDeleted, info, true);
-					Label586_1:
+					Label586_1:   ;
 			    TxnNodeId txnNodeId = new TxnNodeId(reader.getNodeId(), txnId.longValue());
 			    undoUtilizationInfo(ln, logLsn, abortLsn, abortKnownDeleted, txnNodeId,
 				    countedFileSummaries, countedAbortLsnNodes);
@@ -514,7 +514,7 @@ public class RecoveryManager
 			}
 		    }
 		    if (processThisLN) {
-      Label598:
+      Label598:   ;
 			LN ln = reader.getLN();
 			DatabaseId dbId = reader.getDatabaseId();
 			DatabaseImpl db = dbMapTree.getDb(dbId);
@@ -827,19 +827,19 @@ public class RecoveryManager
     boolean found = false;
 	boolean replaced = false;
 	boolean success = false;
-	Label584: //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
+	Label584:   ; //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
 	location.reset();
 		found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
 			true);
 		if (lnFromLog.containsDuplicates()) {
 			  if (found) {
 			DIN duplicateRoot = (DIN) location.bin.fetchTarget(location.index);
-			Label592: //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
+			Label592:   ; //replaced = hook592(location, logLsn, abortLsn, replaced, duplicateRoot);
 			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
 							duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
 							replaced = true;
 					}
-			Label592_1:
+			Label592_1:   ;
 			//end hook592
 			  }
 		} else {
@@ -852,7 +852,7 @@ public class RecoveryManager
 				  if (abortLsn == DbLsn.NULL_LSN) {
 				location.bin.setKnownDeletedLeaveTarget(location.index);
 				byte[] deletedKey = location.bin.containsDuplicates() ? dupKey : mainKey;
-				Label595: //hook595(db, location, deletedKey);
+				Label595: ; //hook595(db, location, deletedKey);
 				  } else {
 				if (info != null) {
 					  info.lnReplaced++;
@@ -1082,14 +1082,12 @@ public class RecoveryManager
     public void delete()
     {}
   
-    // line 8 "../../../../RecoveryManager_static.ump"
-    public  TxnNodeId(long nodeId, long txnId){
-      this.nodeId=nodeId;
-          this.txnId=txnId;
-    }
-  
   
     /**
+     * TxnNodeId(    long nodeId,    long txnId){
+     * this.nodeId=nodeId;
+     * this.txnId=txnId;
+     * }
      * 
      * Compare two TxnNodeId objects
      */
@@ -1160,13 +1158,11 @@ public class RecoveryManager
     public void delete()
     {}
   
-    // line 34 "../../../../RecoveryManager_static.ump"
-    public  RootDeleter(Tree tree){
-      this.tree=tree;
-    }
-  
   
     /**
+     * RootDeleter(    Tree tree){
+     * this.tree=tree;
+     * }
      * 
      * @return true if the in-memory root was replaced.
      */

@@ -32,9 +32,4 @@ public class RangeRestartException extends DatabaseException
     super.delete();
   }
 
-  // line 9 "../../../../RangeRestartException.ump"
-   public  RangeRestartException(){
-    super();
-  }
-
 }

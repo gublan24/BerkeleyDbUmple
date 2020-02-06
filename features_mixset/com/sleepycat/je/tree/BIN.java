@@ -31,31 +31,79 @@ public class BIN extends IN implements LoggableObject
   // MEMBER VARIABLES
   //------------------------
 
+  //BIN Attributes
+  private TinyHashSet cursorSet;
+  private int numDeltasSinceLastFull;
+  private boolean prohibitNextDelta;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public BIN()
+  public BIN(long aNodeId)
   {
-    super();
+    super(aNodeId);
+    cursorSet = new TinyHashSet();
+    numDeltasSinceLastFull = 0;
+    prohibitNextDelta = false;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  public boolean setCursorSet(TinyHashSet aCursorSet)
+  {
+    boolean wasSet = false;
+    cursorSet = aCursorSet;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setNumDeltasSinceLastFull(int aNumDeltasSinceLastFull)
+  {
+    boolean wasSet = false;
+    numDeltasSinceLastFull = aNumDeltasSinceLastFull;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setProhibitNextDelta(boolean aProhibitNextDelta)
+  {
+    boolean wasSet = false;
+    prohibitNextDelta = aProhibitNextDelta;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public TinyHashSet getCursorSet()
+  {
+    return cursorSet;
+  }
+
+  public int getNumDeltasSinceLastFull()
+  {
+    return numDeltasSinceLastFull;
+  }
+
+  public boolean getProhibitNextDelta()
+  {
+    return prohibitNextDelta;
+  }
+
   public void delete()
   {
     super.delete();
   }
 
-  // line 38 "../../../../BIN.ump"
-   public  BIN(){
-    cursorSet = new TinyHashSet();
-  numDeltasSinceLastFull = 0;
-  prohibitNextDelta = false;
-  }
 
+  /**
+   * public BIN() {
+   * cursorSet = new TinyHashSet();
+   * numDeltasSinceLastFull = 0;
+   * prohibitNextDelta = false;
+   * }
+   */
   // line 44 "../../../../BIN.ump"
    public  BIN(DatabaseImpl db, byte [] identifierKey, int maxEntriesPerNode, int level){
     super(db, identifierKey, maxEntriesPerNode, level);
@@ -130,7 +178,7 @@ public class BIN extends IN implements LoggableObject
     if (child.canBeAncestor(targetContainsDuplicates)) {
    if (targetContainsDuplicates && targetIsRoot) {
     long childNid = child.getNodeId();
-    Label603: //this.hook603(child);
+    Label603:   ; //this.hook603(child);
      result.keepSearching = false;
     if (childNid == targetNodeId) {
      result.exactParentFound = true;
@@ -139,12 +187,12 @@ public class BIN extends IN implements LoggableObject
     }
     if (requireExactMatch && !result.exactParentFound) {
      result.parent = null;
-     Label604: //this.hook604();
+     Label604:   ; //this.hook604();
     } else {
      result.parent = this;
     }
    } else {
-    Label605: //this.hook605();
+    Label605:   ; //this.hook605();
      result.parent = (IN) child;
    }
   } else {
@@ -153,7 +201,7 @@ public class BIN extends IN implements LoggableObject
    if (!requireExactMatch && targetContainsDuplicates) {
     result.parent = this;
    } else {
-    Label606: //this.hook606();
+    Label606:   ; //this.hook606();
      result.parent = null;
    }
   }
@@ -212,7 +260,7 @@ public class BIN extends IN implements LoggableObject
    public void setKnownDeleted(int index){
     super.setKnownDeleted(index);
   //this.hook610(index);
-  Label610:
+  Label610:   ;
    setMigrate(index, false);
   super.setTarget(index, null);
   setDirty(true);
@@ -241,11 +289,6 @@ public class BIN extends IN implements LoggableObject
    public void clearKnownDeleted(int index){
     super.clearKnownDeleted(index);
   setDirty(true);
-  }
-
-  // line 193 "../../../../BIN.ump"
-   public Set getCursorSet(){
-    return cursorSet.copy();
   }
 
 
@@ -489,7 +532,7 @@ public class BIN extends IN implements LoggableObject
    }
   }
   if (anyLocksDenied && binRef != null) {
-   Label609: //this.hook609(binRef, db);
+   Label609:   ; //this.hook609(binRef, db);
     ret = true;
   }
   if (getNEntries() != 0 && setNewIdKey) {
@@ -644,14 +687,8 @@ public class BIN extends IN implements LoggableObject
   private static final String BEGIN_TAG = "<bin>" ;
 // line 27 "../../../../BIN.ump"
   private static final String END_TAG = "</bin>" ;
-// line 29 "../../../../BIN.ump"
-  private TinyHashSet cursorSet ;
 // line 31 "../../../../BIN.ump"
   private long lastDeltaVersion = DbLsn.NULL_LSN ;
-// line 33 "../../../../BIN.ump"
-  private int numDeltasSinceLastFull ;
-// line 35 "../../../../BIN.ump"
-  private boolean prohibitNextDelta ;
 
   
 }

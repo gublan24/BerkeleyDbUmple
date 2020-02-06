@@ -7,7 +7,8 @@ class JEFileFilter
   depend java.util.StringTokenizer;
   depend java.io.FilenameFilter;
   depend java.io.File;
-    String[] suffix;
+ 
+  public String[] suffix;
 
     JEFileFilter(String[] suffix) {
 	this.suffix = suffix;

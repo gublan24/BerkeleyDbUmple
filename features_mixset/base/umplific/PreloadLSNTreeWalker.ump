@@ -38,7 +38,7 @@ class PreloadLSNTreeWalker
 	    INEntry inEntry = (INEntry) lsnINMap.remove(new Long(lsn));
 	    assert (inEntry != null);
 	    IN in = inEntry.in;
-	    Label352: //this.hook352(lsn, inEntry, in);
+	    Label352: ; //this.hook352(lsn, inEntry, in);
 			int index = inEntry.index;
 			if (in.isEntryKnownDeleted(inEntry.index) || in.getLsn(inEntry.index) != lsn) {
 					return null; //throw new ReturnObject(null);

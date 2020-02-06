@@ -3,6 +3,9 @@ namespace com.sleepycat.je.utilint;
 class DaemonThread
 {
   isA DaemonRunner,Runnable;
+  
+  abstract;
+  
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.DeadlockException;
@@ -32,8 +35,7 @@ class DaemonThread
 
     private boolean running = false;
 
-    protected DaemonThread() {
-    }
+
 
     public DaemonThread(long waitTime, String name, EnvironmentImpl env) {
 	init(waitTime, name, env);
@@ -44,7 +46,7 @@ class DaemonThread
 			this.name = name;
 			this.env = env;
 			workQueue = new HashSet();
-			Label856: //this.hook856(name, env);
+			Label856: ; //this.hook856(name, env);
     }
 
     /** 
@@ -129,9 +131,9 @@ class DaemonThread
 		break;
 	    }
 	    try {
-		Label858: //this.hook858();
+		Label858: ; //this.hook858();
 		boolean nothingToDo = workQueue.size() == 0;
-		Label857: //this.hook857();
+		Label857: ; //this.hook857();
 		if (nothingToDo) {
 		    synchronized (synchronizer) {
 			if (waitTime == 0) {

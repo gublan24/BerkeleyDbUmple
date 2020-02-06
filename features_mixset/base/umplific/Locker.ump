@@ -78,8 +78,6 @@ class Locker
     /** 
      * For reading from the log.
      */
-    Locker() {
-    }
 
     /** 
      * A Locker has to generate its next id. Some subtypes, like BasicLocker, have a single id for all instances because they are never used for recovery. Other subtypes ask the txn manager for an id.

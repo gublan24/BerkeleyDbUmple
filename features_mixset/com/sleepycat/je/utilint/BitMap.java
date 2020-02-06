@@ -16,26 +16,39 @@ public class BitMap
   // MEMBER VARIABLES
   //------------------------
 
+  //BitMap Attributes
+  private Map bitSegments;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public BitMap()
-  {}
+  {
+    bitSegments = new HashMap();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  public boolean setBitSegments(Map aBitSegments)
+  {
+    boolean wasSet = false;
+    bitSegments = aBitSegments;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public Map getBitSegments()
+  {
+    return bitSegments;
+  }
+
   public void delete()
   {}
 
-  // line 17 "../../../../BitMap.ump"
-   public  BitMap(){
-    bitSegments = new HashMap();
-  }
-
-  // line 21 "../../../../BitMap.ump"
+  // line 19 "../../../../BitMap.ump"
    public void set(long index) throws IndexOutOfBoundsException{
     if (index < 0) {
 	    throw new IndexOutOfBoundsException(index + " is negative.");
@@ -48,7 +61,7 @@ public class BitMap
 	bitset.set(useIndex);
   }
 
-  // line 33 "../../../../BitMap.ump"
+  // line 31 "../../../../BitMap.ump"
    public boolean get(long index) throws IndexOutOfBoundsException{
     if (index < 0) {
 	    throw new IndexOutOfBoundsException(index + " is negative.");
@@ -61,7 +74,7 @@ public class BitMap
 	return bitset.get(useIndex);
   }
 
-  // line 45 "../../../../BitMap.ump"
+  // line 43 "../../../../BitMap.ump"
    private BitSet getBitSet(long index, boolean allowCreate){
     Long segmentId = new Long(index >> SEGMENT_SIZE);
 	BitSet bitset = (BitSet) bitSegments.get(segmentId);
@@ -74,17 +87,17 @@ public class BitMap
 	return bitset;
   }
 
-  // line 57 "../../../../BitMap.ump"
+  // line 55 "../../../../BitMap.ump"
    private int getIntIndex(long index){
     return (int) (index & SEGMENT_MASK);
   }
 
-  // line 61 "../../../../BitMap.ump"
+  // line 59 "../../../../BitMap.ump"
   public int getNumSegments(){
     return bitSegments.size();
   }
 
-  // line 65 "../../../../BitMap.ump"
+  // line 63 "../../../../BitMap.ump"
   public int cardinality(){
     int count = 0;
 	Iterator iter = bitSegments.values().iterator();
@@ -94,7 +107,13 @@ public class BitMap
 	}
 	return count;
   }
-  
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "bitSegments" + "=" + (getBitSegments() != null ? !getBitSegments().equals(this)  ? getBitSegments().toString().replaceAll("  ","    ") : "this" : "null");
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
@@ -103,8 +122,6 @@ public class BitMap
   private static final int SEGMENT_SIZE = 16 ;
 // line 12 "../../../../BitMap.ump"
   private static final int SEGMENT_MASK = 0xffff ;
-// line 14 "../../../../BitMap.ump"
-  private Map bitSegments ;
 
   
 }

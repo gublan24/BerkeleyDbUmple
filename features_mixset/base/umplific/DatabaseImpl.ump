@@ -46,7 +46,7 @@ class DatabaseImpl
   depend java.io.PrintStream;
     private DatabaseId id;
 
-    Tree tree;
+    protected Tree tree;
 
     private EnvironmentImpl envImpl;
 

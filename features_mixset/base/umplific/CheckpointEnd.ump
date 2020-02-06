@@ -13,25 +13,28 @@ class CheckpointEnd
   depend java.util.Calendar;
   depend java.sql.Timestamp;
   depend java.nio.ByteBuffer;
-    private String invoker;
 
-    private Timestamp endTime;
+  private String invoker;
 
-    private long checkpointStartLsn;
+  private Timestamp endTime;
 
-    private boolean rootLsnExists;
+  long checkpointStartLsn = DbLsn.NULL_LSN;
 
-    private long rootLsn;
+  private boolean rootLsnExists;
 
-    private long firstActiveLsn;
+  long rootLsn = DbLsn.NULL_LSN;
 
-    private long lastNodeId;
+  long firstActiveLsn = DbLsn.NULL_LSN;
 
-    private int lastDbId;
+  private long lastNodeId;
 
-    private long lastTxnId;
+  private int lastDbId;
 
-    private long id;
+  private long lastTxnId;
+
+  private long id;
+
+
 
     public CheckpointEnd(String invoker, long checkpointStartLsn, long rootLsn, long firstActiveLsn, long lastNodeId,
 	    int lastDbId, long lastTxnId, long id) {
@@ -60,11 +63,11 @@ class CheckpointEnd
 	this.id = id;
     }
 
-    public CheckpointEnd() {
-	checkpointStartLsn = DbLsn.NULL_LSN;
-	rootLsn = DbLsn.NULL_LSN;
-	firstActiveLsn = DbLsn.NULL_LSN;
-    }
+  //  public CheckpointEnd() {
+	//checkpointStartLsn = DbLsn.NULL_LSN;
+//	rootLsn = DbLsn.NULL_LSN;
+//	firstActiveLsn = DbLsn.NULL_LSN;
+ //   }
 
     /** 
      * @see LoggableObject#getLogType

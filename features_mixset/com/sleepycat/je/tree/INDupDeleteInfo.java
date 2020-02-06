@@ -21,16 +21,34 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
   // MEMBER VARIABLES
   //------------------------
 
+  //INDupDeleteInfo Attributes
+  private DatabaseId dbId;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public INDupDeleteInfo()
-  {}
+  {
+    dbId = new DatabaseId();
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setDbId(DatabaseId aDbId)
+  {
+    boolean wasSet = false;
+    dbId = aDbId;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public DatabaseId getDbId()
+  {
+    return dbId;
+  }
 
   public void delete()
   {}
@@ -48,32 +66,22 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
 	this.dbId = dbId;
   }
 
-
-  /**
-   * 
-   * Used by logging system only.
-   */
-  // line 37 "../../../../INDupDeleteInfo.ump"
-   public  INDupDeleteInfo(){
-    dbId = new DatabaseId();
-  }
-
-  // line 41 "../../../../INDupDeleteInfo.ump"
+  // line 36 "../../../../INDupDeleteInfo.ump"
    public long getDeletedNodeId(){
     return deletedNodeId;
   }
 
-  // line 45 "../../../../INDupDeleteInfo.ump"
+  // line 40 "../../../../INDupDeleteInfo.ump"
    public byte[] getDeletedMainKey(){
     return deletedMainKey;
   }
 
-  // line 49 "../../../../INDupDeleteInfo.ump"
+  // line 44 "../../../../INDupDeleteInfo.ump"
    public byte[] getDeletedDupKey(){
     return deletedDupKey;
   }
 
-  // line 53 "../../../../INDupDeleteInfo.ump"
+  // line 48 "../../../../INDupDeleteInfo.ump"
    public DatabaseId getDatabaseId(){
     return dbId;
   }
@@ -83,7 +91,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#getLogType
    */
-  // line 60 "../../../../INDupDeleteInfo.ump"
+  // line 55 "../../../../INDupDeleteInfo.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_IN_DUPDELETE_INFO;
   }
@@ -93,7 +101,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#marshallOutsideWriteLatchCan be marshalled outside the log write latch.
    */
-  // line 67 "../../../../INDupDeleteInfo.ump"
+  // line 62 "../../../../INDupDeleteInfo.ump"
    public boolean marshallOutsideWriteLatch(){
     return true;
   }
@@ -103,7 +111,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 74 "../../../../INDupDeleteInfo.ump"
+  // line 69 "../../../../INDupDeleteInfo.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
@@ -113,7 +121,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#postLogWork
    */
-  // line 81 "../../../../INDupDeleteInfo.ump"
+  // line 76 "../../../../INDupDeleteInfo.ump"
    public void postLogWork(long justLoggedLsn){
     
   }
@@ -123,7 +131,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 87 "../../../../INDupDeleteInfo.ump"
+  // line 82 "../../../../INDupDeleteInfo.ump"
    public int getLogSize(){
     return LogUtils.LONG_BYTES + LogUtils.getByteArrayLogSize(deletedMainKey)
 		+ LogUtils.getByteArrayLogSize(deletedDupKey) + dbId.getLogSize();
@@ -134,7 +142,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogWritable#writeToLog
    */
-  // line 95 "../../../../INDupDeleteInfo.ump"
+  // line 90 "../../../../INDupDeleteInfo.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeLong(logBuffer, deletedNodeId);
 	LogUtils.writeByteArray(logBuffer, deletedMainKey);
@@ -147,7 +155,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 105 "../../../../INDupDeleteInfo.ump"
+  // line 100 "../../../../INDupDeleteInfo.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     deletedNodeId = LogUtils.readLong(itemBuffer);
 	deletedMainKey = LogUtils.readByteArray(itemBuffer);
@@ -160,7 +168,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 115 "../../../../INDupDeleteInfo.ump"
+  // line 110 "../../../../INDupDeleteInfo.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<INDupDeleteEntry node=\"").append(deletedNodeId);
 	sb.append("\">");
@@ -175,7 +183,7 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 127 "../../../../INDupDeleteInfo.ump"
+  // line 122 "../../../../INDupDeleteInfo.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -185,11 +193,17 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 134 "../../../../INDupDeleteInfo.ump"
+  // line 129 "../../../../INDupDeleteInfo.ump"
    public long getTransactionId(){
     return 0;
   }
-  
+
+
+  public String toString()
+  {
+    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "dbId" + "=" + (getDbId() != null ? !getDbId().equals(this)  ? getDbId().toString().replaceAll("  ","    ") : "this" : "null");
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
@@ -200,8 +214,6 @@ public class INDupDeleteInfo implements LoggableObject,LogReadable,LogWritable
   private byte[] deletedMainKey ;
 // line 19 "../../../../INDupDeleteInfo.ump"
   private byte[] deletedDupKey ;
-// line 21 "../../../../INDupDeleteInfo.ump"
-  private DatabaseId dbId ;
 
   
 }

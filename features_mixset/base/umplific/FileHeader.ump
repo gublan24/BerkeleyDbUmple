@@ -29,8 +29,8 @@ class FileHeader
     /** 
      * For logging only.
      */
-    public FileHeader() {
-    }
+  //  public FileHeader() {
+ //   }
 
     /** 
      * @return whether the file header has an old version number.

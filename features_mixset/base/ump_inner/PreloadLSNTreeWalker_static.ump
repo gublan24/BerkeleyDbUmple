@@ -5,9 +5,9 @@ class PreloadLSNTreeWalker {
       INEntry(    IN in,    int index){
         this.in=in;
         this.index=index;
-      }
-      IN in;
-      int index;
+     }
+      protected IN in;
+      protected int index;
     }
   inner class PreloadWithRootLatched  {
       isA WithRootLatched;

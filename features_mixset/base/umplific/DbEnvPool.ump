@@ -11,14 +11,14 @@ class DbEnvPool
   depend java.io.File;
     private static DbEnvPool pool = new DbEnvPool();
 
-    private Map envs;
+    private Map envs = new Hashtable();
 
     /** 
      * Enforce singleton behavior.
      */
-    private DbEnvPool() {
-	envs = new Hashtable();
-    }
+ //   private DbEnvPool() {
+//	envs = new Hashtable();
+ //   }
 
     /** 
      * Access the singleton instance.

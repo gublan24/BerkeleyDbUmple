@@ -16,7 +16,9 @@ class StatsFileReader
   depend java.text.NumberFormat;
   depend java.nio.ByteBuffer;
   depend java.io.IOException;
-    private Map entryInfoMap;
+  depend com.sleepycat.je.log.entry.LogEntry;
+   
+ private Map entryInfoMap;
 
     private long totalLogBytes;
 

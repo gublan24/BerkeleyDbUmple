@@ -189,8 +189,7 @@ public class DbLoad
 	return ret;
     }
 
-    public DbLoad() {
-    }
+
 
     /** 
      * If true, enables output of warning messages.  Command line behavior is not available via the public API.

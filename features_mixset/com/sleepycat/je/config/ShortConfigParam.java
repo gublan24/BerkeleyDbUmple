@@ -16,9 +16,9 @@ public class ShortConfigParam extends ConfigParam
   // CONSTRUCTOR
   //------------------------
 
-  public ShortConfigParam(String aName)
+  public ShortConfigParam()
   {
-    super(aName);
+    super();
   }
 
   //------------------------

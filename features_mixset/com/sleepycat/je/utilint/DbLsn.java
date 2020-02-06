@@ -30,17 +30,12 @@ public class DbLsn
   public void delete()
   {}
 
-  // line 17 "../../../../DbLsn.ump"
-   private  DbLsn(){
-    
-  }
-
-  // line 20 "../../../../DbLsn.ump"
+  // line 18 "../../../../DbLsn.ump"
    public static  long makeLsn(long fileNumber, long fileOffset){
     return fileOffset & INT_MASK | ((fileNumber & INT_MASK) << 32);
   }
 
-  // line 24 "../../../../DbLsn.ump"
+  // line 22 "../../../../DbLsn.ump"
    public static  long longToLsn(Long lsn){
     if (lsn == null) {
 	    return NULL_LSN;
@@ -54,7 +49,7 @@ public class DbLsn
    * Return the file number for this DbLsn.
    * @return the number for this DbLsn.
    */
-  // line 35 "../../../../DbLsn.ump"
+  // line 33 "../../../../DbLsn.ump"
    public static  long getFileNumber(long lsn){
     return (lsn >> 32) & INT_MASK;
   }
@@ -65,12 +60,12 @@ public class DbLsn
    * Return the file offset for this DbLsn.
    * @return the offset for this DbLsn.
    */
-  // line 43 "../../../../DbLsn.ump"
+  // line 41 "../../../../DbLsn.ump"
    public static  long getFileOffset(long lsn){
     return (lsn & INT_MASK);
   }
 
-  // line 47 "../../../../DbLsn.ump"
+  // line 45 "../../../../DbLsn.ump"
    private static  int compareLong(long l1, long l2){
     if (l1 < l2) {
 	    return -1;
@@ -81,7 +76,7 @@ public class DbLsn
 	}
   }
 
-  // line 57 "../../../../DbLsn.ump"
+  // line 55 "../../../../DbLsn.ump"
    public static  int compareTo(long lsn1, long lsn2){
     if (lsn1 == NULL_LSN || lsn2 == NULL_LSN) {
 	    throw new NullPointerException();
@@ -95,18 +90,18 @@ public class DbLsn
 	}
   }
 
-  // line 70 "../../../../DbLsn.ump"
+  // line 68 "../../../../DbLsn.ump"
    public static  String toString(long lsn){
     return "<DbLsn val=\"0x" + Long.toHexString(getFileNumber(lsn)) + "/0x" + Long.toHexString(getFileOffset(lsn))
 		+ "\"/>";
   }
 
-  // line 75 "../../../../DbLsn.ump"
+  // line 73 "../../../../DbLsn.ump"
    public static  String getNoFormatString(long lsn){
     return "0x" + Long.toHexString(getFileNumber(lsn)) + "/0x" + Long.toHexString(getFileOffset(lsn));
   }
 
-  // line 79 "../../../../DbLsn.ump"
+  // line 77 "../../../../DbLsn.ump"
    public static  String dumpString(long lsn, int nSpaces){
     StringBuffer sb = new StringBuffer();
 	sb.append(TreeUtils.indent(nSpaces));
@@ -119,7 +114,7 @@ public class DbLsn
    * 
    * Return the logsize in bytes between these two LSNs. This is an approximation; the logs might actually be a little more or less in size. This assumes that no log files have been cleaned.
    */
-  // line 89 "../../../../DbLsn.ump"
+  // line 87 "../../../../DbLsn.ump"
    public static  long getNoCleaningDistance(long thisLsn, long otherLsn, long logFileSize){
     long diff = 0;
 	assert thisLsn != NULL_LSN;
@@ -143,7 +138,7 @@ public class DbLsn
    * 
    * Return the logsize in bytes between these two LSNs. This is an approximation; the logs might actually be a little more or less in size. This assumes that log files might have been cleaned.
    */
-  // line 110 "../../../../DbLsn.ump"
+  // line 108 "../../../../DbLsn.ump"
    public static  long getWithCleaningDistance(long thisLsn, FileManager fileManager, long otherLsn, long logFileSize){
     long diff = 0;
 	assert thisLsn != NULL_LSN;
@@ -167,7 +162,7 @@ public class DbLsn
 	return diff;
   }
 
-  // line 133 "../../../../DbLsn.ump"
+  // line 131 "../../../../DbLsn.ump"
    private static  long calcDiff(long fileDistance, long logFileSize, long laterLsn, long earlierLsn){
     long diff = fileDistance * logFileSize;
 	diff += getFileOffset(laterLsn);
@@ -180,7 +175,7 @@ public class DbLsn
    * 
    * @see LogReadable#logEntryIsTransactional.
    */
-  // line 143 "../../../../DbLsn.ump"
+  // line 141 "../../../../DbLsn.ump"
    public boolean logEntryIsTransactionalX(){
     return false;
   }
@@ -190,7 +185,7 @@ public class DbLsn
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 150 "../../../../DbLsn.ump"
+  // line 148 "../../../../DbLsn.ump"
    public long getTransactionIdX(){
     return 0;
   }

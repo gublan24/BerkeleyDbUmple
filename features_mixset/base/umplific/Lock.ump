@@ -31,8 +31,7 @@ class Lock
 	this.nodeId = nodeId;
     }
 
-    public Lock() {
-    }
+
 
     Long getNodeId() {
 	return nodeId;
@@ -53,7 +52,7 @@ class Lock
 			  waiterList.add(waiter);
 		}
 		//this.hook760(mb, lockTableIndex);
-    Label760:
+    Label760:   ;
     }
 
     /** 
@@ -67,7 +66,7 @@ class Lock
 	    waiterList.add(0, firstWaiter);
 	}
 	firstWaiter = waiter;
-	Label761:
+	Label761:   ;
 //this.hook761(mb, lockTableIndex);
     }
 
@@ -92,7 +91,7 @@ class Lock
 	if ((firstWaiter != null) && (firstWaiter.getLocker() == locker)) {
 	    firstWaiter = null;
 	   // this.hook762(mb, lockTableIndex);
-Label762:
+Label762:   ;
 
 	} else if (waiterList != null) {
 	    Iterator iter = waiterList.iterator();
@@ -101,7 +100,7 @@ Label762:
 		if (info.getLocker() == locker) {
 		    iter.remove();
 		    //this.hook763(mb, lockTableIndex);
-        Label763:
+        Label763:   ;
 		    return;
 		}
 	    }
@@ -118,7 +117,7 @@ Label762:
 	    ownerSet.add(newLock);
 	}
 	//this.hook764(mb, lockTableIndex);
-  Label764:
+  Label764:   ;
     }
 
     /** 
@@ -152,7 +151,7 @@ Label762:
 	    }
 	}
   //	this.hook765(mb, lockTableIndex, removed);
-  Label765:
+  Label765:   ;
 	return removed;
     }
 
@@ -175,7 +174,7 @@ Label762:
 	    }
 	}
 //	this.hook766(mb, lockTableIndex, flushedInfo);
-  Label766:
+  Label766:   ;
 	return flushedInfo;
     }
 
@@ -368,7 +367,7 @@ Label762:
 		}
 		lockersToNotify.add(waiterLocker);
 		//this.hook767(mb, lockTableIndex);
-    Label767:
+    Label767:   ;
 	    } else {
 		assert grant == LockGrantType.WAIT_NEW || grant == LockGrantType.WAIT_PROMOTION
 			|| grant == LockGrantType.WAIT_RESTART;
@@ -545,7 +544,7 @@ Label762:
 	    }
 	}
 	//this.hook768(mb, lockTableIndex, numRemovedLockInfos);
-  Label768:
+  Label768:   ;
 	return lockType;
     }
 
@@ -725,6 +724,7 @@ Label762:
 	return sb.toString();
     }
 
+/*
     protected void hook760(MemoryBudget mb, int lockTableIndex) {
     }
 
@@ -751,5 +751,7 @@ Label762:
 
     protected void hook768(MemoryBudget mb, int lockTableIndex, int numRemovedLockInfos) throws DatabaseException {
     }
+
+*/
 
 }

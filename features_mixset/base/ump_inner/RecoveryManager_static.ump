@@ -4,10 +4,10 @@ class RecoveryManager {
   static class TxnNodeId {
       long nodeId;
       long txnId;
-      TxnNodeId(    long nodeId,    long txnId){
-        this.nodeId=nodeId;
-        this.txnId=txnId;
-      }
+ //     TxnNodeId(    long nodeId,    long txnId){
+ //       this.nodeId=nodeId;
+ //       this.txnId=txnId;
+ //     }
       /** 
    * Compare two TxnNodeId objects
    */
@@ -30,9 +30,9 @@ class RecoveryManager {
   static class RootDeleter {
       isA WithRootLatched;
       Tree tree;
-      RootDeleter(    Tree tree){
-        this.tree=tree;
-      }
+   //   RootDeleter(    Tree tree){
+   //     this.tree=tree;
+   //   }
       /** 
    * @return true if the in-memory root was replaced.
    */

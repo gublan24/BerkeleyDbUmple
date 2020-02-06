@@ -25,7 +25,7 @@ import java.io.IOException;
 
 // line 3 "../../../../LogManager.ump"
 // line 3 "../../../../LogManager_static.ump"
-public class LogManager
+public abstract class LogManager
 {
 
   //------------------------
@@ -46,10 +46,10 @@ public class LogManager
   public void delete()
   {}
 
-  // line 56 "../../../../LogManager.ump"
+  // line 59 "../../../../LogManager.ump"
    static  int HEADER_CONTENT_BYTES(){
     int r = HEADER_BYTES;
-			Label504: //r = hook504(r);
+			Label504:   ; //r = hook504(r);
 			return r;
   }
 
@@ -58,25 +58,25 @@ public class LogManager
    * 
    * There is a single log manager per database environment.
    */
-  // line 65 "../../../../LogManager.ump"
+  // line 68 "../../../../LogManager.ump"
    public  LogManager(EnvironmentImpl envImpl, boolean readOnly) throws DatabaseException{
     this.envImpl = envImpl;
 			this.fileManager = envImpl.getFileManager();
 			DbConfigManager configManager = envImpl.getConfigManager();
 			this.readOnly = readOnly;
 			logBufferPool = new LogBufferPool(fileManager, envImpl);
-			Label505: //this.hook505(configManager);
-			Label502: //this.hook502(envImpl);
+			Label505:   ; //this.hook505(configManager);
+			Label502:   ; //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-			Label498: //this.hook498(envImpl);
+			Label498:   ; //this.hook498(envImpl);
   }
 
-  // line 77 "../../../../LogManager.ump"
+  // line 80 "../../../../LogManager.ump"
    public long getLastLsnAtRecovery(){
     return lastLsnAtRecovery;
   }
 
-  // line 81 "../../../../LogManager.ump"
+  // line 84 "../../../../LogManager.ump"
    public void setLastLsnAtRecovery(long lastLsnAtRecovery){
     this.lastLsnAtRecovery = lastLsnAtRecovery;
   }
@@ -86,7 +86,7 @@ public class LogManager
    * 
    * Reset the pool when the cache is resized. This method is called after the memory budget has been calculated.
    */
-  // line 88 "../../../../LogManager.ump"
+  // line 91 "../../../../LogManager.ump"
    public void resetPool(DbConfigManager configManager) throws DatabaseException{
     logBufferPool.reset(configManager);
   }
@@ -99,7 +99,7 @@ public class LogManager
    * @param fsyncRequiredif true, log files should also be fsynced.
    * @return LSN of the new log entry
    */
-  // line 98 "../../../../LogManager.ump"
+  // line 101 "../../../../LogManager.ump"
    public long logForceFlush(LoggableObject item, boolean fsyncRequired) throws DatabaseException{
     return log(item, false, true, fsyncRequired, false, DbLsn.NULL_LSN);
   }
@@ -112,7 +112,7 @@ public class LogManager
    * @param fsyncRequiredif true, log files should also be fsynced.
    * @return LSN of the new log entry
    */
-  // line 108 "../../../../LogManager.ump"
+  // line 111 "../../../../LogManager.ump"
    public long logForceFlip(LoggableObject item) throws DatabaseException{
     return log(item, false, true, false, true, DbLsn.NULL_LSN);
   }
@@ -123,7 +123,7 @@ public class LogManager
    * Write a log entry.
    * @return LSN of the new log entry
    */
-  // line 116 "../../../../LogManager.ump"
+  // line 119 "../../../../LogManager.ump"
    public long log(LoggableObject item) throws DatabaseException{
     return log(item, false, false, false, false, DbLsn.NULL_LSN);
   }
@@ -134,7 +134,7 @@ public class LogManager
    * Write a log entry.
    * @return LSN of the new log entry
    */
-  // line 124 "../../../../LogManager.ump"
+  // line 127 "../../../../LogManager.ump"
    public long log(LoggableObject item, boolean isProvisional, long oldNodeLsn) throws DatabaseException{
     return log(item, isProvisional, false, false, false, oldNodeLsn);
   }
@@ -150,7 +150,7 @@ public class LogManager
    * @param oldNodeLsnis the previous version of the node to be counted as obsolete,or null if the item is not a node or has no old LSN.
    * @return LSN of the new log entry
    */
-  // line 138 "../../../../LogManager.ump"
+  // line 141 "../../../../LogManager.ump"
    private long log(LoggableObject item, boolean isProvisional, boolean flushRequired, boolean fsyncRequired, boolean forceNewLogFile, long oldNodeLsn) throws DatabaseException{
     if (readOnly) {
 	    return DbLsn.NULL_LSN;
@@ -172,8 +172,8 @@ public class LogManager
 	} catch (IOException e) {
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
-	Label501: //this.hook501(fsyncRequired);
-	Label499: //this.hook499(logResult);
+	Label501:   ; //this.hook501(fsyncRequired);
+	Label499:   ; //this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -185,7 +185,7 @@ public class LogManager
    * 
    * Called within the log write critical section.
    */
-  // line 176 "../../../../LogManager.ump"
+  // line 179 "../../../../LogManager.ump"
    protected LogResult logInternal(LoggableObject item, boolean isProvisional, boolean flushRequired, boolean forceNewLogFile, long oldNodeLsn, boolean marshallOutsideLatch, ByteBuffer marshalledBuffer, UtilizationTracker tracker) throws IOException,DatabaseException{
     LogEntryType entryType = item.getLogType();
 			if (oldNodeLsn != DbLsn.NULL_LSN) {
@@ -220,17 +220,17 @@ public class LogManager
 					}
 					LogBuffer useLogBuffer = logBufferPool.getWriteBuffer(entrySize, flippedFile);
 					marshalledBuffer = addPrevOffsetAndChecksum(marshalledBuffer, fileManager.getPrevEntryOffset(), entrySize);
-					Label503: //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
+					Label503:   ; //usedTemporaryBuffer = this.hook503(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer,useLogBuffer);
 					ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
 					if (useBuffer.capacity() - useBuffer.position() < entrySize) {
 							fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
 							usedTemporaryBuffer = true;
 							assert useBuffer.position() == 0;
-							Label509: //this.hook509();
+							Label509:   ; //this.hook509();
 					} else {
 							useBuffer.put(marshalledBuffer);
 					}
-					Label503_1:
+					Label503_1:   ;
 				 //End hook503
 			} catch (Exception e) {
 					fileManager.restoreLastPosition();
@@ -247,7 +247,7 @@ public class LogManager
 			}
 			item.postLogWork(currentLsn);
 			boolean wakeupCheckpointer = false;
-			Label500: //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			Label500:   ; //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
 			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
   }
 
@@ -256,7 +256,7 @@ public class LogManager
    * 
    * Serialize a loggable object into this buffer.
    */
-  // line 245 "../../../../LogManager.ump"
+  // line 248 "../../../../LogManager.ump"
    private ByteBuffer marshallIntoBuffer(LoggableObject item, int itemSize, boolean isProvisional, int entrySize) throws DatabaseException{
     ByteBuffer destBuffer = ByteBuffer.allocate(entrySize);
 	destBuffer.position(CHECKSUM_BYTES);
@@ -266,7 +266,7 @@ public class LogManager
 	return destBuffer;
   }
 
-  // line 254 "../../../../LogManager.ump"
+  // line 257 "../../../../LogManager.ump"
    private ByteBuffer addPrevOffsetAndChecksum(ByteBuffer destBuffer, long lastOffset, int entrySize){
     Checksum checksum = Adler32.makeChecksum();
 	destBuffer.position(HEADER_PREV_OFFSET);
@@ -283,7 +283,7 @@ public class LogManager
    * 
    * Serialize a loggable object into this buffer. Return it ready for a copy.
    */
-  // line 269 "../../../../LogManager.ump"
+  // line 272 "../../../../LogManager.ump"
   public ByteBuffer putIntoBuffer(LoggableObject item, int itemSize, long prevLogEntryOffset, boolean isProvisional, int entrySize) throws DatabaseException{
     ByteBuffer destBuffer = marshallIntoBuffer(item, itemSize, isProvisional, entrySize);
 	return addPrevOffsetAndChecksum(destBuffer, 0, entrySize);
@@ -297,7 +297,7 @@ public class LogManager
    * @param itemobject being logged
    * @param itemSizeWe could ask the item for this, but are passing it as aparameter for efficiency, because it's already available
    */
-  // line 280 "../../../../LogManager.ump"
+  // line 283 "../../../../LogManager.ump"
    private void writeHeader(ByteBuffer destBuffer, LogEntryType itemType, int itemSize, boolean isProvisional){
     byte typeNum = itemType.getTypeNum();
 	destBuffer.put(typeNum);
@@ -316,14 +316,14 @@ public class LogManager
    * @param lsnlocation of entry in log.
    * @return log entry that embodies all the objects in the log entry.
    */
-  // line 296 "../../../../LogManager.ump"
+  // line 299 "../../../../LogManager.ump"
    public LogEntry getLogEntry(long lsn) throws DatabaseException{
     envImpl.checkIfInvalid();
 	LogSource logSource = getLogSource(lsn);
 	return getLogEntryFromLogSource(lsn, logSource);
   }
 
-  // line 302 "../../../../LogManager.ump"
+  // line 305 "../../../../LogManager.ump"
   public LogEntry getLogEntry(long lsn, RandomAccessFile file) throws DatabaseException{
     return getLogEntryFromLogSource(lsn, new FileSource(file, readBufferSize, fileManager));
   }
@@ -335,7 +335,7 @@ public class LogManager
    * @param lsnlocation of entry in log
    * @return log entry that embodies all the objects in the log entry
    */
-  // line 311 "../../../../LogManager.ump"
+  // line 314 "../../../../LogManager.ump"
    private LogEntry getLogEntryFromLogSource(long lsn, LogSource logSource) throws DatabaseException{
     return new LogManager_getLogEntryFromLogSource(this, lsn, logSource).execute();
   }
@@ -347,7 +347,7 @@ public class LogManager
    * @param lsnlocation of object in log
    * @return the object in the log
    */
-  // line 320 "../../../../LogManager.ump"
+  // line 323 "../../../../LogManager.ump"
    public Object get(long lsn) throws DatabaseException{
     LogEntry entry = getLogEntry(lsn);
 	return entry.getMainItem();
@@ -358,7 +358,7 @@ public class LogManager
    * 
    * Find the LSN, whether in a file or still in the log buffers.
    */
-  // line 328 "../../../../LogManager.ump"
+  // line 331 "../../../../LogManager.ump"
    private LogSource getLogSource(long lsn) throws DatabaseException{
     LogBuffer logBuffer = logBufferPool.getReadBuffer(lsn);
 	if (logBuffer == null) {
@@ -378,7 +378,7 @@ public class LogManager
    * 
    * Flush all log entries, fsync the log file.
    */
-  // line 345 "../../../../LogManager.ump"
+  // line 348 "../../../../LogManager.ump"
    public void flush() throws DatabaseException{
     if (readOnly) {
 	    return;
@@ -387,17 +387,17 @@ public class LogManager
 	fileManager.syncLogEnd();
   }
 
-  // line 360 "../../../../LogManager.ump"
+  // line 363 "../../../../LogManager.ump"
    protected TrackedFileSummary getUnflushableTrackedSummaryInternal(long file) throws DatabaseException{
     return envImpl.getUtilizationTracker().getUnflushableTrackedSummary(file);
   }
 
-  // line 370 "../../../../LogManager.ump"
+  // line 373 "../../../../LogManager.ump"
    protected void countObsoleteNodeInternal(UtilizationTracker tracker, long lsn, LogEntryType type) throws DatabaseException{
     tracker.countObsoleteNode(lsn, type);
   }
 
-  // line 380 "../../../../LogManager.ump"
+  // line 383 "../../../../LogManager.ump"
    protected void countObsoleteNodesInternal(UtilizationTracker tracker, TrackedFileSummary [] summaries) throws DatabaseException{
     for (int i = 0; i < summaries.length; i += 1) {
 	    TrackedFileSummary summary = summaries[i];
@@ -405,7 +405,7 @@ public class LogManager
 	}
   }
 
-  // line 392 "../../../../LogManager.ump"
+  // line 395 "../../../../LogManager.ump"
    protected void countObsoleteINsInternal(List lsnList) throws DatabaseException{
     UtilizationTracker tracker = envImpl.getUtilizationTracker();
 	for (int i = 0; i < lsnList.size(); i += 1) {
@@ -414,46 +414,9 @@ public class LogManager
 	}
   }
 
-  // line 400 "../../../../LogManager.ump"
+  // line 403 "../../../../LogManager.ump"
    public void setReadHook(TestHook hook){
     readHook = hook;
-  }
-
-
-  /**
-   * protected void hook498(EnvironmentImpl envImpl) throws DatabaseException { }
-   * protected void hook499(LogResult logResult) throws DatabaseException { }
-   * protected boolean hook500(LoggableObject item, int entrySize, boolean wakeupCheckpointer)
-   * throws IOException, DatabaseException {	return wakeupCheckpointer; }
-   * protected void hook501(boolean fsyncRequired) throws DatabaseException { }
-   */
-  // line 413 "../../../../LogManager.ump"
-   protected void hook502(EnvironmentImpl envImpl) throws DatabaseException{
-    
-  }
-
-
-  /**
-   * protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer,
-   * LogBuffer useLogBuffer) throws IOException, DatabaseException, Exception {
-   * ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
-   * if (useBuffer.capacity() - useBuffer.position() < entrySize) {
-   * fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
-   * usedTemporaryBuffer = true;
-   * assert useBuffer.position() == 0;
-   * Label509: //this.hook509();
-   * } else {
-   * useBuffer.put(marshalledBuffer);
-   * }
-   * return usedTemporaryBuffer;
-   * }
-   * protected static int hook504(int r) {
-   * return r;
-   * }
-   */
-  // line 434 "../../../../LogManager.ump"
-   protected void hook505(DbConfigManager configManager) throws DatabaseException{
-    
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -494,16 +457,16 @@ public class LogManager
       try {
             fileOffset=DbLsn.getFileOffset(lsn);
             entryBuffer=logSource.getBytes(fileOffset);
-            Label507: //this.hook507();
+            Label507:   ; //this.hook507();
             loggableType=entryBuffer.get();
             version=entryBuffer.get();
             entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
             itemSize=LogUtils.readInt(entryBuffer);
             if (entryBuffer.remaining() < itemSize) {
               entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
-              Label508: //this.hook508();
+              Label508:   ; //this.hook508();
             }
-            Label506: //this.hook506();
+            Label506:   ; //this.hook506();
             assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
             logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
             logEntry.readEntry(entryBuffer,itemSize,version,true);
@@ -559,49 +522,49 @@ public class LogManager
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 25 "../../../../LogManager.ump"
+  // line 28 "../../../../LogManager.ump"
   private static final String DEBUG_NAME = LogManager.class.getName() ;
-// line 27 "../../../../LogManager.ump"
+// line 30 "../../../../LogManager.ump"
   static final int HEADER_BYTES = 14 ;
-// line 29 "../../../../LogManager.ump"
+// line 32 "../../../../LogManager.ump"
   static final int CHECKSUM_BYTES = 4 ;
-// line 31 "../../../../LogManager.ump"
+// line 34 "../../../../LogManager.ump"
   static final int PREV_BYTES = 4 ;
-// line 33 "../../../../LogManager.ump"
+// line 36 "../../../../LogManager.ump"
   static final int HEADER_ENTRY_TYPE_OFFSET = 4 ;
-// line 35 "../../../../LogManager.ump"
+// line 38 "../../../../LogManager.ump"
   static final int HEADER_VERSION_OFFSET = 5 ;
-// line 37 "../../../../LogManager.ump"
+// line 40 "../../../../LogManager.ump"
   static final int HEADER_PREV_OFFSET = 6 ;
-// line 39 "../../../../LogManager.ump"
+// line 42 "../../../../LogManager.ump"
   static final int HEADER_SIZE_OFFSET = 6 + 4 ;
-// line 41 "../../../../LogManager.ump"
+// line 44 "../../../../LogManager.ump"
   protected LogBufferPool logBufferPool ;
-// line 43 "../../../../LogManager.ump"
+// line 46 "../../../../LogManager.ump"
   private FileManager fileManager ;
-// line 45 "../../../../LogManager.ump"
+// line 48 "../../../../LogManager.ump"
   protected EnvironmentImpl envImpl ;
-// line 47 "../../../../LogManager.ump"
+// line 50 "../../../../LogManager.ump"
   private boolean readOnly ;
-// line 49 "../../../../LogManager.ump"
+// line 52 "../../../../LogManager.ump"
   private int readBufferSize ;
-// line 51 "../../../../LogManager.ump"
+// line 54 "../../../../LogManager.ump"
   private long lastLsnAtRecovery = DbLsn.NULL_LSN ;
-// line 53 "../../../../LogManager.ump"
+// line 56 "../../../../LogManager.ump"
   private TestHook readHook ;
-// line 166 "../../../../LogManager.ump"
+// line 169 "../../../../LogManager.ump"
   abstract protected LogResult logItem(LoggableObject item, boolean isProvisional, boolean flushRequired,
 	    boolean forceNewLogFile, long oldNodeLsn, boolean marshallOutsideLatch, ByteBuffer marshalledBuffer,
 	    UtilizationTracker tracker) throws IOException, DatabaseException ;
-// line 352 "../../../../LogManager.ump"
+// line 355 "../../../../LogManager.ump"
   abstract protected void flushInternal() throws LogException, DatabaseException ;
-// line 357 "../../../../LogManager.ump"
+// line 360 "../../../../LogManager.ump"
   abstract public TrackedFileSummary getUnflushableTrackedSummary(long file) throws DatabaseException ;
-// line 366 "../../../../LogManager.ump"
+// line 369 "../../../../LogManager.ump"
   abstract public void countObsoleteNode(long lsn, LogEntryType type) throws DatabaseException ;
-// line 376 "../../../../LogManager.ump"
+// line 379 "../../../../LogManager.ump"
   abstract public void countObsoleteNodes(TrackedFileSummary[] summaries) throws DatabaseException ;
-// line 389 "../../../../LogManager.ump"
+// line 392 "../../../../LogManager.ump"
   abstract public void countObsoleteINs(List lsnList) throws DatabaseException ;
 
   

@@ -8,6 +8,7 @@ import com.sleepycat.je.tree.BINDelta;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.dbi.DatabaseId;
 import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.log.LogReadable;
 
 // line 3 "../../../../../BINDeltaLogEntry.ump"
 public class BINDeltaLogEntry extends SingleItemLogEntry implements INContainingEntry
@@ -40,18 +41,18 @@ public class BINDeltaLogEntry extends SingleItemLogEntry implements INContaining
    * 
    * @param logClass
    */
-  // line 17 "../../../../../BINDeltaLogEntry.ump"
+  // line 18 "../../../../../BINDeltaLogEntry.ump"
    public  BINDeltaLogEntry(Class logClass){
     super(logClass);
   }
 
-  // line 21 "../../../../../BINDeltaLogEntry.ump"
+  // line 22 "../../../../../BINDeltaLogEntry.ump"
    public IN getIN(EnvironmentImpl env) throws DatabaseException{
     BINDelta delta = (BINDelta) getMainItem();
 	return delta.reconstituteBIN(env);
   }
 
-  // line 26 "../../../../../BINDeltaLogEntry.ump"
+  // line 27 "../../../../../BINDeltaLogEntry.ump"
    public DatabaseId getDbId(){
     BINDelta delta = (BINDelta) getMainItem();
 	return delta.getDbId();
@@ -62,7 +63,7 @@ public class BINDeltaLogEntry extends SingleItemLogEntry implements INContaining
    * 
    * @return the LSN that represents this IN. For this BINDelta, it'sthe last full version.
    */
-  // line 34 "../../../../../BINDeltaLogEntry.ump"
+  // line 35 "../../../../../BINDeltaLogEntry.ump"
    public long getLsnOfIN(long lastReadLsn){
     BINDelta delta = (BINDelta) getMainItem();
 	return delta.getLastFullLsn();
