@@ -1,5 +1,6 @@
 // //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/CursorImpl.java
 namespace com.sleepycat.je.dbi;
+
 class CursorImpl {
     static class CursorImpl_latchBIN {
         after Label244: execute() {
@@ -58,7 +59,7 @@ class CursorImpl {
         }
     }
     static class CursorImpl_lockNextKeyForInsert {
-        around Label248 - Label248_1: execute() {
+        around Label248-Label248_1: execute() {
             latched = true;
             try {
                 around_proceed:
@@ -75,14 +76,16 @@ class CursorImpl {
         }
     }
     static class CursorImpl_latchDBIN {
-        around Label246 - Label246_1: execute() {
+ 
+      strictness disable constructor;  
+        around Label246-Label246_1: execute() {
             while (_this.dupBin != null) {
                 around_proceed:
             }
             throw new ReturnObject(null);
         }
 
-        around Label247 - Label246_1: execute() {
+        around Label247-Label246_1: execute() {
             waitingOn = _this.dupBin;
             waitingOn.latch();
             if (_this.dupBin == waitingOn) {
@@ -93,7 +96,7 @@ class CursorImpl {
     }
     static class CursorImpl_fetchCurrent {
 
-        around Label258 - Label258_1: execute() {
+        around Label258-Label258_1: execute() {
             try {
                 around_proceed: //original();
             }
@@ -107,7 +110,7 @@ class CursorImpl {
             //original();
         }
 
-        around Label260 - Label260_1: execute() {
+        around Label260-Label260_1: execute() {
             try {
                 around_proceed: //original();
             }
@@ -125,7 +128,7 @@ class CursorImpl {
             _this.targetBin.releaseLatch();
             //original();
         }
-        around Label263 - Label263_1: execute() {
+        around Label263-Label263_1: execute() {
             try {
                 around_proceed: //original();
             }
