@@ -57,16 +57,19 @@ class DbTree
     private EnvironmentImpl envImpl;
 
 
+  strictness disable constructor;
+
     /** 
      * Create a dbTree from the log.
      */
-    after constructor  {
-			this.envImpl = null;
-			idDatabase = new DatabaseImpl();
-			idDatabase.setDebugDatabaseName(ID_DB_NAME);
-			nameDatabase = new DatabaseImpl();
-			nameDatabase.setDebugDatabaseName(NAME_DB_NAME);
-    }
+  public DbTree() throws DatabaseException
+  {
+    this.envImpl = null;
+    idDatabase = new DatabaseImpl();
+    idDatabase.setDebugDatabaseName(ID_DB_NAME);
+    nameDatabase = new DatabaseImpl();
+    nameDatabase.setDebugDatabaseName(NAME_DB_NAME);
+  }
 
     /** 
      * Create a new dbTree for a new environment.

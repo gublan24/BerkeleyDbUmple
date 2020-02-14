@@ -4,6 +4,10 @@ class CursorImpl {
 
     isA Cloneable;
 
+
+    strictness disable delete();
+
+
     depend de.ovgu.cide.jakutil.*;
     depend com.sleepycat.je.utilint.TestHookExecute;
     depend com.sleepycat.je.utilint.TestHook;
@@ -727,7 +731,7 @@ Label218_1: ;
         try {
             assert assertCursorState(true): dumpToString(true);
             Label221: //this.hook221(foundKey, foundData, lockType, first);
-            throw ReturnHack.returnObject;
+          //  throw ReturnHack.returnObject;
         } catch (ReturnObject r) {
             return (OperationStatus) r.value;
         }
@@ -915,10 +919,11 @@ Label223_1:
      * @return true if a first or last position is found, false if the treebeing searched is empty.
      */
     public boolean positionFirstOrLast(boolean first, DIN duplicateRoot) throws DatabaseException {
-        try {
+
             assert assertCursorState(false): dumpToString(true);
             IN in = null;
-            boolean found = false;
+            boolean found = false;        
+
             Label234: //this.hook234(first, duplicateRoot, in , found);
             if (duplicateRoot == null) {
             removeCursorBIN();
@@ -970,15 +975,11 @@ Label223_1:
             }
         }
         status = CURSOR_INITIALIZED;
-        //throw new ReturnBoolean(found);
+        return found;
 //End of hook234
 Label234_1: ;
-            throw ReturnHack.returnBoolean;
-        } 
 
-catch (ReturnBoolean r) {
-            return r.value;
-        }
+        
     }
 
     /** 
@@ -986,7 +987,7 @@ catch (ReturnBoolean r) {
      */
     public int searchAndPosition(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode,
         LockType lockType) throws DatabaseException {
-        try {
+
             assert assertCursorState(false): dumpToString(true);
             removeCursor();
             bin = null;
@@ -996,15 +997,9 @@ catch (ReturnBoolean r) {
             boolean foundLast = false;
             boolean exactSearch = searchMode.isExactSearch();
             BINBoundary binBoundary = new BINBoundary();
-            //this.hook235(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData,foundLast, exactSearch, binBoundary);
-            				Label235_1:  ;//extra catch statement will be addd.
-throw ReturnHack.returnInt;
+            Label235_1:  ;//extra catch statement will be addd.
+            return ((foundSomething ? FOUND : 0) | (foundExactKey ? EXACT_KEY : 0) | (foundExactData ? EXACT_DATA : 0) | (foundLast ? FOUND_LAST : 0));
 
-        }
-
-				catch (ReturnInt r) {
-            return r.value;
-        }
     }
 
     /** 

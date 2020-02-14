@@ -21,6 +21,9 @@ class Cursor {
     depend com.sleepycat.je.dbi.CursorImpl;
     depend java.util.logging.Logger;
     depend java.util.logging.Level;
+  
+    strictness disable delete();
+
     /** 
      * The underlying cursor.
      */

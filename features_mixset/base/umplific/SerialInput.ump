@@ -10,6 +10,9 @@ class SerialInput
   depend java.io.ObjectInputStream;
   depend java.io.InputStream;
   depend java.io.IOException;
+
+  strictness disable constructor;
+
     private ClassCatalog classCatalog;
 
     private ClassLoader classLoader;

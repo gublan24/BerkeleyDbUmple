@@ -160,41 +160,7 @@ class FileProcessor {
       protected DatabaseImpl db3;
       protected DatabaseId dbId;
       protected DatabaseImpl db;
-/*
-      protected void hook119() throws DatabaseException, IOException {
-      }
-      protected void hook120() throws DatabaseException, IOException {
-      }
-      protected void hook127() throws DatabaseException, IOException { }
-      protected void hook128() throws DatabaseException, IOException {
-      }
-      protected void hook129() throws DatabaseException, IOException {
-      }
 
-      protected void hook130() throws DatabaseException, IOException {
-        p=null;
-        this.hook131();
-        _this.processLN(fileNum,location,aLsn,aLninfo,p,dbCache);
-      }
-  //    protected void hook131() throws DatabaseException, IOException {}
-//      protected void hook137() throws DatabaseException, IOException {}
-   //   protected void hook145() throws DatabaseException, IOException {
-   //   }
-   //   protected void hook146() throws DatabaseException, IOException {
-   //   }
-   //   protected void hook147() throws DatabaseException, IOException {
-   //   }
-      protected void hook154() throws DatabaseException, IOException {
-      }
-      protected void hook155() throws DatabaseException, IOException {
-      }
-      protected void hook156() throws DatabaseException, IOException {
-      }
-      protected void hook161() throws DatabaseException, IOException {
-      }
-      protected void hook162() throws DatabaseException, IOException {
-      }
-*/
     }
    static class FileProcessor_processLN {
       FileProcessor_processLN(    FileProcessor _this,    Long fileNum,    TreeLocation location,    Long offset,    LNInfo info,    Object lookAheadCachep,    Map dbCache){
@@ -295,25 +261,6 @@ class FileProcessor {
       protected long lsn;
       protected Long myOffset;
       protected LNInfo myInfo;
-/*     
- protected void hook126() throws DatabaseException {
-      }
-      protected void hook132() throws DatabaseException {
-      }
-      protected void hook133() throws DatabaseException {
-      }
-      protected void hook135() throws DatabaseException {
-      }
-    //  protected void hook148() throws DatabaseException {
-     // }
-     // protected void hook149() throws DatabaseException {
-     // }
-   //   protected void hook150() throws DatabaseException {
-   //   }
-      protected void hook157() throws DatabaseException {
-      }
-      protected void hook158() throws DatabaseException {
-      }
-*/
+
     }
 }

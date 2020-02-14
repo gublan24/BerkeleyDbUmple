@@ -2,15 +2,18 @@ namespace com.sleepycat.je;
 
 class SecondaryCursor
 {
-  isA Cursor;
-  depend de.ovgu.cide.jakutil.*;
-  depend com.sleepycat.je.txn.Locker;
-  depend com.sleepycat.je.dbi.CursorImpl;
-  depend com.sleepycat.je.dbi.CursorImpl.SearchMode;
-  depend com.sleepycat.je.dbi.GetMode;
-  depend java.util.logging.Level;
-  depend java.util.Set;
-  depend java.util.HashSet;
+    isA Cursor;
+    depend de.ovgu.cide.jakutil.*;
+    depend com.sleepycat.je.txn.Locker;
+    depend com.sleepycat.je.dbi.CursorImpl;
+    depend com.sleepycat.je.dbi.CursorImpl.SearchMode;
+    depend com.sleepycat.je.dbi.GetMode;
+    depend java.util.logging.Level;
+    depend java.util.Set;
+    depend java.util.HashSet;
+ 
+    strictness disable delete();
+
     private SecondaryDatabase secondaryDb;
 
     private Database primaryDb;

@@ -3,6 +3,7 @@ namespace com.sleepycat.je.tree;
 class Node
 {
   isA LoggableObject,LogReadable,LogWritable;
+  depend com.sleepycat.je.latch.LatchNotHeldException;
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.log.LoggableObject;
   depend com.sleepycat.je.log.LogWritable;

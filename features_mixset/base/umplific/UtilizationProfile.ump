@@ -634,7 +634,8 @@ class UtilizationProfile
 	return ok;
     }
 
-    private boolean verifyLsnIsObsolete(long lsn) throws DatabaseException {
+  private boolean verifyLsnIsObsolete(long lsn) throws DatabaseException {
+    BIN bin = null;
 	try {
 	    Object o = env.getLogManager().getLogEntry(lsn);
 	    if (!(o instanceof LNLogEntry)) {
@@ -651,7 +652,7 @@ class UtilizationProfile
 	    if (b) {
 		return true;
 	    }
-	    BIN bin = null;
+
 	    Label180:           ;  //this.hook180(lsn, entry, db, bin);
 			Tree tree = db.getTree();
 			TreeLocation location = new TreeLocation();

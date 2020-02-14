@@ -27,3 +27,7 @@ external IOException	{	}
 external ObjectOutputStream	{	}
 external ObjectInputStream	{	}
 external  	  TreeMap	{	}
+
+external ReentrantReadWriteLock { }
+
+external ReentrantLock { }

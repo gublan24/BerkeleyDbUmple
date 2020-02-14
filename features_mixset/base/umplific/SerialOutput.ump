@@ -16,15 +16,19 @@ class SerialOutput
 
     private ClassCatalog classCatalog;
 
+    
+ 
+    strictness disable constructor;
+
     /** 
      * Creates a serial output stream.
      * @param outis the output stream to which the compact serialized objectswill be written.
      * @param classCatalogis the catalog to which the class descriptions for theserialized objects will be written.
      */
     public SerialOutput(OutputStream out, ClassCatalog classCatalog) throws IOException {
-	super(out);
-	this.classCatalog = classCatalog;
-	useProtocolVersion(ObjectStreamConstants.PROTOCOL_VERSION_2);
+	    super(out);
+	    this.classCatalog = classCatalog;
+	    useProtocolVersion(ObjectStreamConstants.PROTOCOL_VERSION_2);
     }
 
     protected void writeClassDescriptor(ObjectStreamClass classdesc) throws IOException {

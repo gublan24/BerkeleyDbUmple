@@ -7,13 +7,13 @@ class SearchResult
      public boolean keepSearching;
      public boolean childNotResident;
      public IN parent ;
-     int index =-1;
+     public int index ;
 
   after constructor {
 	exactParentFound = false;
 	keepSearching = true;
 	parent = null;
-//	index = -1;
+	index = -1;
 	childNotResident = false;
     }
     public String toString() {

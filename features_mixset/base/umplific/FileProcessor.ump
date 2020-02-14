@@ -301,18 +301,18 @@ class FileProcessor {
  /** 
   * Given a clone of an IN that has been taken out of the log, try to find it in the tree and verify that it is the current one in the log. Returns the node in the tree if it is found and it is current re: LSN's. Otherwise returns null if the clone is not found in the tree or it's not the latest version. Caller is responsible for unlatching the returned IN.
   */
- private IN findINInTree(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException {
-  try {
-   if (inClone.isDbRoot()) {
-    IN rootIN = isRoot(tree, db, inClone, lsn);
-    if (rootIN == null) {
-     return null;
-    } else {
-     return rootIN;
-    }
-   }
+  private IN findINInTree(Tree tree, DatabaseImpl db, IN inClone, long lsn) throws DatabaseException {
+    SearchResult result = null;
+    try {
+      if (inClone.isDbRoot()) {
+        IN rootIN = isRoot(tree, db, inClone, lsn);
+        if (rootIN == null) {
+        return null;
+        } else {
+        return rootIN;
+        }
+      }
    inClone.latch(Cleaner.UPDATE_GENERATION);
-   SearchResult result = null;
    Label134:   ; //this.hook134(tree, db, inClone, lsn, result);
     result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
    if (!result.exactParentFound) {

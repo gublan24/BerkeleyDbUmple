@@ -249,6 +249,9 @@ use BooleanBinding.ump;
 use TupleBase.ump;
 use TupleTupleBinding.ump;
 
+//use ../Latches_LatchException.ump;
+//use ../Latches_LatchNotHeldException.ump;
+
 use ../ump_inner/Base_Inner_Master.ump;
 use ../interfaces_required.ump;
 
