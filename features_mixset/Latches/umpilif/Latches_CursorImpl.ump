@@ -1,8 +1,10 @@
 namespace com.sleepycat.je.dbi;
 
 class CursorImpl {
+
     depend com.sleepycat.je.latch.LatchSupport;
     depend com.sleepycat.je.latch.LatchNotHeldException;
+
     public void releaseBIN() throws LatchNotHeldException {
         if (bin != null) {
             bin.releaseLatchIfOwner();
@@ -167,19 +169,19 @@ class CursorImpl {
         //original(alreadyLatched);
     }
 
-    protected boolean hook225: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+    after Label225: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
         assert checkAlreadyLatched(alreadyLatched): dumpToString(true);
         if (!alreadyLatched) {
             latchBIN();
         } else {
             alreadyLatched = false;
         }
-        return //original(alreadyLatched);
+        //return //original(alreadyLatched);
     }
 
-    protected boolean hook226:  getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
+    after Label226:  getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
         alreadyLatched = false;
-        return //original(alreadyLatched);
+        //return //original(alreadyLatched);
     }
 
     after Label227:getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,LockType , boolean, boolean ) {
@@ -213,6 +215,7 @@ class CursorImpl {
         //original();
     }
 
+
     after Label232:flushBINToBeRemoved() {
         binToBeRemoved.releaseLatch();
         //original();
@@ -228,10 +231,10 @@ class CursorImpl {
         //original();
     }
 
-    after Label234_1: positionFirstOrLast(boolean , DIN ) {
-        //try {
-            //original(first, duplicateRoot, in, found);
-       // } 
+    around Label234-Label234_1: positionFirstOrLast(boolean , DIN ) {
+        try {
+            around_proceed:  
+        } 
        catch (DatabaseException e) {
             if ( in != null) 
             { in .releaseLatch();
@@ -240,16 +243,19 @@ class CursorImpl {
         }
     }
 
-    after Label235_1:searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode ,        LockType ) {
 
-        //try {
-            //original(matchKey, matchData, searchMode, lockType, foundSomething, foundExactKey, foundExactData, foundLast,            exactSearch,            binBoundary);
-//    } 
+    around Label235-Label235_1: searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode , LockType ) {
+
+     try {
+            around_proceed:  
+        }  
 catch (DatabaseException e) {
         releaseBIN();
         throw e;
     }
 }
+
+
 
 after Label236: searchAndPositionBoth(boolean , Node , DatabaseEntry , boolean , LockType , long ){
     duplicateRoot.latch();
@@ -298,6 +304,8 @@ after Label242: getLatchedDupRoot(boolean ){
     }
     //original(isDBINLatched, dupRoot);
 }
+
+
 
 after Label243: getLatchedDupRoot(boolean ){
     assert bin.isLatchOwner();
@@ -361,4 +369,7 @@ after Label274: positionFirstOrLast(boolean , DIN ){
     //original(in, dupRoot);
 }
 
+
 }
+
+

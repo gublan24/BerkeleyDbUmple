@@ -29,7 +29,7 @@ use Latches_LatchSupport.ump;
 use Latches_LatchImpl.ump;
 use Latches_Java5LatchImpl.ump;
 use Latches_LatchTable.ump;
-//use Latches_LatchNotHeldException.ump;
+use Latches_LatchNotHeldException.ump;
 use Latches_Latch.ump;
 use Latches_SharedLatchImpl.ump;
 use Latches_LogBufferPool.ump;
