@@ -1,14 +1,23 @@
 namespace com.sleepycat.je.latch;
 
 class Java5SharedLatchImpl
-{
-  isA SharedLatch;
-  isA ReentrantReadWriteLock;
+{ 
+
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.concurrent.locks.ReentrantReadWriteLock;
+
+  isA ReentrantReadWriteLock;
+
+  isA SharedLatch;
+
+
+
+ 
     private String name;
+
+      strictness disable constructor;
 
     private boolean noteLatch;
 

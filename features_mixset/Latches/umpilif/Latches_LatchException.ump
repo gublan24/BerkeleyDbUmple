@@ -6,9 +6,7 @@ class LatchException
 
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
-    public LatchException() {
-	super();
-    }
+
 
     public LatchException(String message) {
 	super(message);

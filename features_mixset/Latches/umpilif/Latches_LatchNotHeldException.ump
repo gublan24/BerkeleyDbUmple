@@ -4,12 +4,10 @@ class LatchNotHeldException
 {
   isA LatchException;
   depend de.ovgu.cide.jakutil.*;
-    public LatchNotHeldException() {
-	super();
-    }
+   
 
     public LatchNotHeldException(String message) {
-	super(message);
+	  super(message);
     }
 
 }
