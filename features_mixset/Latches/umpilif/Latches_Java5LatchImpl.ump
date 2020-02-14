@@ -11,6 +11,8 @@ class Java5LatchImpl
 
     private String name;
 
+    strictness disable constructor;
+
     Java5LatchImpl() {
 	lock = new JEReentrantLock(EnvironmentImpl.getFairLatches());
     }
