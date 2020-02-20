@@ -23,11 +23,8 @@ public class SerialOutput extends ObjectOutputStream
   //------------------------
   // CONSTRUCTOR
   //------------------------
+  // Default constructor has been disabled.  
 
-  public SerialOutput()
-  {
-    super();
-  }
 
   //------------------------
   // INTERFACE
@@ -43,14 +40,14 @@ public class SerialOutput extends ObjectOutputStream
    * @param outis the output stream to which the compact serialized objectswill be written.
    * @param classCatalogis the catalog to which the class descriptions for theserialized objects will be written.
    */
-  // line 25 "../../../../SerialOutput.ump"
+  // line 29 "../../../../SerialOutput.ump"
    public  SerialOutput(OutputStream out, ClassCatalog classCatalog) throws IOException{
     super(out);
-	this.classCatalog = classCatalog;
-	useProtocolVersion(ObjectStreamConstants.PROTOCOL_VERSION_2);
+	    this.classCatalog = classCatalog;
+	    useProtocolVersion(ObjectStreamConstants.PROTOCOL_VERSION_2);
   }
 
-  // line 31 "../../../../SerialOutput.ump"
+  // line 35 "../../../../SerialOutput.ump"
    protected void writeClassDescriptor(ObjectStreamClass classdesc) throws IOException{
     try {
 	    byte[] id = classCatalog.getClassID(classdesc);
@@ -69,7 +66,7 @@ public class SerialOutput extends ObjectOutputStream
    * Returns the fixed stream header used for all serialized streams in PROTOCOL_VERSION_2 format. To save space this header can be removed and serialized streams before storage and inserted before deserializing. {@link SerialOutput} always uses PROTOCOL_VERSION_2 serialization formatto guarantee that this header is fixed.  {@link SerialBinding} removesthis header from serialized streams automatically.
    * @return the fixed stream header.
    */
-  // line 47 "../../../../SerialOutput.ump"
+  // line 51 "../../../../SerialOutput.ump"
    public static  byte[] getStreamHeader(){
     return STREAM_HEADER;
   }

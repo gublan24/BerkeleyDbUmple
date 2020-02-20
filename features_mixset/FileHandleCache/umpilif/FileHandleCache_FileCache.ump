@@ -48,7 +48,7 @@ class FileCache
 								throw new DatabaseException(e);
 						} 
 						finally {
-							Label441:
+							Label441: ;
 							//this.hook441(evictTarget);
 						}
 						done = true;
@@ -78,7 +78,7 @@ class FileCache
 									evictTarget.close();
 															}
 						finally {
-								Label439_1: //end of hook439
+								Label439_1: ;//end of hook439
 						}
 					}
 			}
@@ -93,7 +93,7 @@ class FileCache
 					Label443:
 					fileHandle.close();
 					iter.remove();
-					Label440_1: // end of hook440
+					Label440_1: ;// end of hook440
 			}
 			fileMap.clear();
 			fileList.clear();

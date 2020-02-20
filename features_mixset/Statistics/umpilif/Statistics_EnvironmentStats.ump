@@ -220,7 +220,8 @@ class EnvironmentStats
     /** 
      * Internal use only.
      */
-    public EnvironmentStats() {
+    after constructor {
+//public EnvironmentStats() {
 			reset();
     }
 

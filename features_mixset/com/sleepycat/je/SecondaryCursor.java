@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 // line 3 "../../../SecondaryCursor.ump"
+// line 3 "../../../LoggingFinest_SecondaryCursor.ump"
 public class SecondaryCursor extends Cursor
 {
 
@@ -31,18 +32,14 @@ public class SecondaryCursor extends Cursor
   //------------------------
   // INTERFACE
   //------------------------
-
-  public void delete()
-  {
-    super.delete();
-  }
+  // the method 'delete()' has been disabled.  
 
 
   /**
    * 
    * Cursor constructor. Not public. To get a cursor, the user should call SecondaryDatabase.cursor();
    */
-  // line 22 "../../../SecondaryCursor.ump"
+  // line 25 "../../../SecondaryCursor.ump"
   public  SecondaryCursor(SecondaryDatabase dbHandle, Transaction txn, CursorConfig cursorConfig) throws DatabaseException{
     super(dbHandle, txn, cursorConfig);
 	secondaryDb = dbHandle;
@@ -54,7 +51,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Copy constructor.
    */
-  // line 31 "../../../SecondaryCursor.ump"
+  // line 34 "../../../SecondaryCursor.ump"
    private  SecondaryCursor(SecondaryCursor cursor, boolean samePosition) throws DatabaseException{
     super(cursor, samePosition);
 	secondaryDb = cursor.secondaryDb;
@@ -66,7 +63,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 40 "../../../SecondaryCursor.ump"
+  // line 43 "../../../SecondaryCursor.ump"
    public Database getPrimaryDatabase(){
     return primaryDb;
   }
@@ -76,7 +73,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 47 "../../../SecondaryCursor.ump"
+  // line 50 "../../../SecondaryCursor.ump"
    public Cursor dup(boolean samePosition) throws DatabaseException{
     checkState(true);
 	return new SecondaryCursor(this, samePosition);
@@ -87,7 +84,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 55 "../../../SecondaryCursor.ump"
+  // line 58 "../../../SecondaryCursor.ump"
    public SecondaryCursor dupSecondary(boolean samePosition) throws DatabaseException{
     return (SecondaryCursor) dup(samePosition);
   }
@@ -97,11 +94,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 62 "../../../SecondaryCursor.ump"
+  // line 65 "../../../SecondaryCursor.ump"
    public OperationStatus delete() throws DatabaseException{
     checkState(true);
 	checkUpdatesAllowed("delete");
-	Label65:           ;  //this.hook65();
+	Label65:
+trace(Level.FINEST, "SecondaryCursor.delete: ", null);
+	//original();
+           ;  //this.hook65();
 	DatabaseEntry key = new DatabaseEntry();
 	DatabaseEntry pKey = new DatabaseEntry();
 	OperationStatus status = getCurrentInternal(key, pKey, LockMode.RMW);
@@ -116,7 +116,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 78 "../../../SecondaryCursor.ump"
+  // line 81 "../../../SecondaryCursor.ump"
    public OperationStatus put(DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     throw SecondaryDatabase.notAllowedException();
   }
@@ -126,7 +126,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 85 "../../../SecondaryCursor.ump"
+  // line 88 "../../../SecondaryCursor.ump"
    public OperationStatus putNoOverwrite(DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     throw SecondaryDatabase.notAllowedException();
   }
@@ -136,7 +136,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 92 "../../../SecondaryCursor.ump"
+  // line 95 "../../../SecondaryCursor.ump"
    public OperationStatus putNoDupData(DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     throw SecondaryDatabase.notAllowedException();
   }
@@ -146,7 +146,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 99 "../../../SecondaryCursor.ump"
+  // line 102 "../../../SecondaryCursor.ump"
    public OperationStatus putCurrent(DatabaseEntry data) throws DatabaseException{
     throw SecondaryDatabase.notAllowedException();
   }
@@ -156,7 +156,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 107 "../../../SecondaryCursor.ump"
+  // line 110 "../../../SecondaryCursor.ump"
    public OperationStatus getCurrent(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getCurrent(key, new DatabaseEntry(), data, lockMode);
   }
@@ -166,11 +166,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 115 "../../../SecondaryCursor.ump"
+  // line 118 "../../../SecondaryCursor.ump"
    public OperationStatus getCurrent(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	Label66:           ;  //this.hook66(lockMode);
+	Label66:
+trace(Level.FINEST, "SecondaryCursor.getCurrent: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook66(lockMode);
 	return getCurrentInternal(key, pKey, data, lockMode);
   }
 
@@ -179,7 +182,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 125 "../../../SecondaryCursor.ump"
+  // line 128 "../../../SecondaryCursor.ump"
    public OperationStatus getFirst(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getFirst(key, new DatabaseEntry(), data, lockMode);
   }
@@ -189,11 +192,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 133 "../../../SecondaryCursor.ump"
+  // line 136 "../../../SecondaryCursor.ump"
    public OperationStatus getFirst(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label67:           ;  //this.hook67(lockMode);
+	Label67:
+trace(Level.FINEST, "SecondaryCursor.getFirst: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook67(lockMode);
 	return position(key, pKey, data, lockMode, true);
   }
 
@@ -202,7 +208,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 143 "../../../SecondaryCursor.ump"
+  // line 146 "../../../SecondaryCursor.ump"
    public OperationStatus getLast(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getLast(key, new DatabaseEntry(), data, lockMode);
   }
@@ -212,11 +218,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 151 "../../../SecondaryCursor.ump"
+  // line 154 "../../../SecondaryCursor.ump"
    public OperationStatus getLast(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label68:           ;  //this.hook68(lockMode);
+	Label68:
+trace(Level.FINEST, "SecondaryCursor.getLast: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook68(lockMode);
 	return position(key, pKey, data, lockMode, false);
   }
 
@@ -225,7 +234,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 161 "../../../SecondaryCursor.ump"
+  // line 164 "../../../SecondaryCursor.ump"
    public OperationStatus getNext(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getNext(key, new DatabaseEntry(), data, lockMode);
   }
@@ -235,11 +244,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 169 "../../../SecondaryCursor.ump"
+  // line 172 "../../../SecondaryCursor.ump"
    public OperationStatus getNext(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label69:           ;  //this.hook69(lockMode);
+	Label69:
+trace(Level.FINEST, "SecondaryCursor.getNext: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook69(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, true);
 	} else {
@@ -252,7 +264,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 184 "../../../SecondaryCursor.ump"
+  // line 187 "../../../SecondaryCursor.ump"
    public OperationStatus getNextDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getNextDup(key, new DatabaseEntry(), data, lockMode);
   }
@@ -262,7 +274,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 192 "../../../SecondaryCursor.ump"
+  // line 195 "../../../SecondaryCursor.ump"
    public OperationStatus getNextDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
@@ -275,7 +287,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 203 "../../../SecondaryCursor.ump"
+  // line 206 "../../../SecondaryCursor.ump"
    public OperationStatus getNextNoDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getNextNoDup(key, new DatabaseEntry(), data, lockMode);
   }
@@ -285,11 +297,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 211 "../../../SecondaryCursor.ump"
+  // line 214 "../../../SecondaryCursor.ump"
    public OperationStatus getNextNoDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label71:           ;  //this.hook71(lockMode);
+	Label71:
+trace(Level.FINEST, "SecondaryCursor.getNextNoDup: ", null, null, lockMode);
+	//original(lockMode);
+           ;  //this.hook71(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, true);
 	} else {
@@ -302,7 +317,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 225 "../../../SecondaryCursor.ump"
+  // line 228 "../../../SecondaryCursor.ump"
    public OperationStatus getPrev(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getPrev(key, new DatabaseEntry(), data, lockMode);
   }
@@ -312,11 +327,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 233 "../../../SecondaryCursor.ump"
+  // line 236 "../../../SecondaryCursor.ump"
    public OperationStatus getPrev(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label72:           ;  //this.hook72(lockMode);
+	Label72:
+trace(Level.FINEST, "SecondaryCursor.getPrev: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook72(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, false);
 	} else {
@@ -329,7 +347,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 248 "../../../SecondaryCursor.ump"
+  // line 251 "../../../SecondaryCursor.ump"
    public OperationStatus getPrevDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getPrevDup(key, new DatabaseEntry(), data, lockMode);
   }
@@ -339,11 +357,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 256 "../../../SecondaryCursor.ump"
+  // line 259 "../../../SecondaryCursor.ump"
    public OperationStatus getPrevDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	Label73:           ;  //this.hook73(lockMode);
+	Label73:
+trace(Level.FINEST, "SecondaryCursor.getPrevDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook73(lockMode);
 	return retrieveNext(key, pKey, data, lockMode, GetMode.PREV_DUP);
   }
 
@@ -352,7 +373,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 267 "../../../SecondaryCursor.ump"
+  // line 270 "../../../SecondaryCursor.ump"
    public OperationStatus getPrevNoDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getPrevNoDup(key, new DatabaseEntry(), data, lockMode);
   }
@@ -362,11 +383,14 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 275 "../../../SecondaryCursor.ump"
+  // line 278 "../../../SecondaryCursor.ump"
    public OperationStatus getPrevNoDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label74:           ;  //this.hook74(lockMode);
+	Label74:
+trace(Level.FINEST, "SecondaryCursor.getPrevNoDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook74(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, false);
 	} else {
@@ -379,7 +403,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 290 "../../../SecondaryCursor.ump"
+  // line 293 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchKey(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getSearchKey(key, new DatabaseEntry(), data, lockMode);
   }
@@ -389,13 +413,16 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 298 "../../../SecondaryCursor.ump"
+  // line 301 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchKey(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label75:           ;  //this.hook75(key, lockMode);
+	Label75:
+trace(Level.FINEST, "SecondaryCursor.getSearchKey: ", key, null, lockMode);
+	//original(key, lockMode);
+           ;  //this.hook75(key, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.SET);
   }
 
@@ -404,7 +431,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 311 "../../../SecondaryCursor.ump"
+  // line 314 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchKeyRange(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return getSearchKeyRange(key, new DatabaseEntry(), data, lockMode);
   }
@@ -414,13 +441,16 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 319 "../../../SecondaryCursor.ump"
+  // line 322 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchKeyRange(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label76:           ;  //this.hook76(key, data, lockMode);
+	Label76:
+trace(Level.FINEST, "SecondaryCursor.getSearchKeyRange: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook76(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.SET_RANGE);
   }
 
@@ -429,7 +459,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 332 "../../../SecondaryCursor.ump"
+  // line 335 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchBoth(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     throw SecondaryDatabase.notAllowedException();
   }
@@ -439,13 +469,16 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 340 "../../../SecondaryCursor.ump"
+  // line 343 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchBoth(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label77:           ;  //this.hook77(key, data, lockMode);
+	Label77:
+trace(Level.FINEST, "SecondaryCursor.getSearchBoth: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook77(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.BOTH);
   }
 
@@ -454,7 +487,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 353 "../../../SecondaryCursor.ump"
+  // line 356 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchBothRange(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     throw SecondaryDatabase.notAllowedException();
   }
@@ -464,13 +497,16 @@ public class SecondaryCursor extends Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 361 "../../../SecondaryCursor.ump"
+  // line 364 "../../../SecondaryCursor.ump"
    public OperationStatus getSearchBothRange(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label78:           ;  //this.hook78(key, data, lockMode);
+	Label78:
+trace(Level.FINEST, "SecondaryCursor.getSearchBothRange: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook78(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.BOTH_RANGE);
   }
 
@@ -479,7 +515,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Returns the current key and data.
    */
-  // line 374 "../../../SecondaryCursor.ump"
+  // line 377 "../../../SecondaryCursor.ump"
    private OperationStatus getCurrentInternal(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     OperationStatus status = getCurrentInternal(key, pKey, lockMode);
 	if (status == OperationStatus.SUCCESS) {
@@ -493,7 +529,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Calls search() and retrieves primary data.
    */
-  // line 386 "../../../SecondaryCursor.ump"
+  // line 389 "../../../SecondaryCursor.ump"
   public OperationStatus search(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode, SearchMode searchMode) throws DatabaseException{
     while (true) {
 	    OperationStatus status = search(key, pKey, lockMode, searchMode);
@@ -512,7 +548,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Calls position() and retrieves primary data.
    */
-  // line 403 "../../../SecondaryCursor.ump"
+  // line 406 "../../../SecondaryCursor.ump"
   public OperationStatus position(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode, boolean first) throws DatabaseException{
     while (true) {
 	    OperationStatus status = position(key, pKey, lockMode, first);
@@ -531,7 +567,7 @@ public class SecondaryCursor extends Cursor
    * 
    * Calls retrieveNext() and retrieves primary data.
    */
-  // line 420 "../../../SecondaryCursor.ump"
+  // line 423 "../../../SecondaryCursor.ump"
   public OperationStatus retrieveNext(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode, GetMode getMode) throws DatabaseException{
     while (true) {
 	    OperationStatus status = retrieveNext(key, pKey, lockMode, getMode);
@@ -552,7 +588,7 @@ public class SecondaryCursor extends Cursor
    * @return SUCCESS if the primary was read succesfully, or KEYEMPTY ifusing read-uncommitted and the primary has been deleted, or KEYEMPTY if using read-uncommitted and the primary has been updated and no longer contains the secondary key.
    * @throws DatabaseException to indicate a corrupt secondary reference ifthe primary record is not found and read-uncommitted is not used (or read-uncommitted is used, but we cannot verify that a valid deletion has occured).
    */
-  // line 439 "../../../SecondaryCursor.ump"
+  // line 442 "../../../SecondaryCursor.ump"
    private OperationStatus readPrimaryAfterGet(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     Locker locker = cursorImpl.getLocker();
 	Cursor cursor = null;
@@ -599,79 +635,79 @@ public class SecondaryCursor extends Cursor
    * 
    * Note that this flavor of checkArgs doesn't require that the dbt data is set.
    */
-  // line 483 "../../../SecondaryCursor.ump"
+  // line 486 "../../../SecondaryCursor.ump"
    private void checkArgsNoValRequired(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data){
     DatabaseUtil.checkForNullDbt(key, "key", false);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
   }
 
-  // line 489 "../../../SecondaryCursor.ump"
+  // line 492 "../../../SecondaryCursor.ump"
    protected void hook65() throws DatabaseException{
     
   }
 
-  // line 492 "../../../SecondaryCursor.ump"
+  // line 495 "../../../SecondaryCursor.ump"
    protected void hook66(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 495 "../../../SecondaryCursor.ump"
+  // line 498 "../../../SecondaryCursor.ump"
    protected void hook67(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 498 "../../../SecondaryCursor.ump"
+  // line 501 "../../../SecondaryCursor.ump"
    protected void hook68(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 501 "../../../SecondaryCursor.ump"
+  // line 504 "../../../SecondaryCursor.ump"
    protected void hook69(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 504 "../../../SecondaryCursor.ump"
+  // line 507 "../../../SecondaryCursor.ump"
    protected void hook70(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 507 "../../../SecondaryCursor.ump"
+  // line 510 "../../../SecondaryCursor.ump"
    protected void hook71(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 510 "../../../SecondaryCursor.ump"
+  // line 513 "../../../SecondaryCursor.ump"
    protected void hook72(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 513 "../../../SecondaryCursor.ump"
+  // line 516 "../../../SecondaryCursor.ump"
    protected void hook73(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 516 "../../../SecondaryCursor.ump"
+  // line 519 "../../../SecondaryCursor.ump"
    protected void hook74(LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 519 "../../../SecondaryCursor.ump"
+  // line 522 "../../../SecondaryCursor.ump"
    protected void hook75(DatabaseEntry key, LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 522 "../../../SecondaryCursor.ump"
+  // line 525 "../../../SecondaryCursor.ump"
    protected void hook76(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 525 "../../../SecondaryCursor.ump"
+  // line 528 "../../../SecondaryCursor.ump"
    protected void hook77(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     
   }
 
-  // line 528 "../../../SecondaryCursor.ump"
+  // line 531 "../../../SecondaryCursor.ump"
    protected void hook78(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     
   }
@@ -680,9 +716,9 @@ public class SecondaryCursor extends Cursor
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 14 "../../../SecondaryCursor.ump"
+  // line 17 "../../../SecondaryCursor.ump"
   private SecondaryDatabase secondaryDb ;
-// line 16 "../../../SecondaryCursor.ump"
+// line 19 "../../../SecondaryCursor.ump"
   private Database primaryDb ;
 
   

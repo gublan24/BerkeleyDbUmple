@@ -12,6 +12,7 @@ import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.tree.*;
 
 // line 3 "../../../../RootUpdater.ump"
+// line 3 "../../../../Latches_RootUpdater.ump"
 public class RootUpdater implements WithRootLatched
 {
 
@@ -43,7 +44,10 @@ public class RootUpdater implements WithRootLatched
   // line 32 "../../../../RootUpdater.ump"
    public IN doWork(ChildReference root) throws DatabaseException{
     ChildReference newRoot = tree.makeRootChildReference(inFromLog, new byte[0], lsn);
-	Label600: //this.hook600();
+	Label600:
+inFromLog.releaseLatch();
+	//original();
+ //this.hook600();
 	if (root == null) {
 	    tree.setRoot(newRoot, false);
 	    inserted = true;

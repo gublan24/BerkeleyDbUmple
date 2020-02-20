@@ -15,6 +15,9 @@ class Tracer
   depend java.nio.ByteBuffer;
   depend java.io.StringWriter;
   depend java.io.PrintWriter;
+  
+  strictness disable constructor;
+
     public static final String INFO_FILES = "je.info";
 
     private Timestamp time;

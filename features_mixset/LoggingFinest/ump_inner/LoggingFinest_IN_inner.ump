@@ -17,7 +17,7 @@ class IN {
     }
    static class IN_deleteEntry {
 
-      protected void hook616: execute() {
+      after Label616: execute() {
         _this.traceDelete(Level.FINEST,index);
         //original();
       }

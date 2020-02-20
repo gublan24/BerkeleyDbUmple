@@ -9,9 +9,12 @@ import com.sleepycat.je.DatabaseException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.Latch;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../DaemonThread.ump"
+// line 3 "../../../../Latches_DaemonThread.ump"
 public abstract class DaemonThread implements DaemonRunner,Runnable
 {
 
@@ -44,7 +47,10 @@ public abstract class DaemonThread implements DaemonRunner,Runnable
 			this.name = name;
 			this.env = env;
 			workQueue = new HashSet();
-			Label856: ; //this.hook856(name, env);
+			Label856:
+workQueueLatch = LatchSupport.makeLatch(name + " work queue", env);
+	//original(name, env);
+ ; //this.hook856(name, env);
   }
 
 
@@ -114,14 +120,25 @@ public abstract class DaemonThread implements DaemonRunner,Runnable
 
   // line 107 "../../../../DaemonThread.ump"
    public void addToQueue(Object o) throws DatabaseException{
+    // line 15 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.acquire();
+    	//original(o);
+    // END OF UMPLE BEFORE INJECTION
     workQueue.add(o);
 	wakeup();
+    // line 20 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 112 "../../../../DaemonThread.ump"
    public int getQueueSize() throws DatabaseException{
+    // line 24 "../../../../Latches_DaemonThread.ump"
+    workQueueLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
     int count = workQueue.size();
 	return count;
+
   }
 
   // line 117 "../../../../DaemonThread.ump"
@@ -145,9 +162,15 @@ public abstract class DaemonThread implements DaemonRunner,Runnable
 		break;
 	    }
 	    try {
-		Label858: ; //this.hook858();
+		Label858:
+workQueueLatch.acquire();
+	//original();
+ ; //this.hook858();
 		boolean nothingToDo = workQueue.size() == 0;
-		Label857: ; //this.hook857();
+		Label857:
+workQueueLatch.release();
+	//original();
+ ; //this.hook857();
 		if (nothingToDo) {
 		    synchronized (synchronizer) {
 			if (waitTime == 0) {
@@ -275,6 +298,8 @@ public abstract class DaemonThread implements DaemonRunner,Runnable
   private boolean running = false ;
 // line 201 "../../../../DaemonThread.ump"
   abstract protected void onWakeup() throws DatabaseException ;
+// line 7 "../../../../Latches_DaemonThread.ump"
+  protected Latch workQueueLatch ;
 
   
 }

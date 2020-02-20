@@ -12,21 +12,17 @@ public class SearchResult
   // MEMBER VARIABLES
   //------------------------
 
-  //SearchResult Attributes
-  private int index;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
   public SearchResult()
   {
-    index = -1;
     // line 13 "../../../../SearchResult.ump"
     exactParentFound = false;
     	keepSearching = true;
     	parent = null;
-    //	index = -1;
+    	index = -1;
     	childNotResident = false;
     // END OF UMPLE AFTER INJECTION
   }
@@ -34,19 +30,6 @@ public class SearchResult
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setIndex(int aIndex)
-  {
-    boolean wasSet = false;
-    index = aIndex;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public int getIndex()
-  {
-    return index;
-  }
 
   public void delete()
   {}
@@ -70,6 +53,8 @@ public class SearchResult
   public boolean childNotResident ;
 // line 9 "../../../../SearchResult.ump"
   public IN parent ;
+// line 10 "../../../../SearchResult.ump"
+  public int index ;
 
   
 }

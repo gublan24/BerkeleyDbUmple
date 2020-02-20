@@ -1,6 +1,7 @@
 namespace com.sleepycat.je.log;
 
 class ChecksumValidator {
+
     depend de.ovgu.cide.jakutil.*;
     depend com.sleepycat.je.utilint.DbLsn;
     depend com.sleepycat.je.utilint.Adler32;
@@ -11,7 +12,10 @@ class ChecksumValidator {
 
     private Checksum cksum;
 
-    ChecksumValidator() {
+  // strictness disable constructor; 
+ 
+    after constructor{
+//ChecksumValidator() {
         cksum = Adler32.makeChecksum();
     }
 

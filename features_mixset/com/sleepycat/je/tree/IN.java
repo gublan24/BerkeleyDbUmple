@@ -29,11 +29,30 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.latch.LatchNotHeldException;
+import com.sleepycat.je.latch.Latch;
+import com.sleepycat.je.latch.SharedLatch;
 import com.sleepycat.bind.serial.*;
 import com.sleepycat.je.log.*;
 
 // line 2 "../../../../IN.ump"
 // line 3 "../../../../IN_static.ump"
+// line 3 "../../../../Latches_IN.ump"
+// line 3 "../../../../Latches_IN_inner.ump"
+// line 3 "../../../../MemoryBudget_IN.ump"
+// line 3 "../../../../MemoryBudget_IN_inner.ump"
+// line 3 "../../../../Evictor_IN.ump"
+// line 3 "../../../../INCompressor_IN.ump"
+// line 3 "../../../../INCompressor_IN_inner.ump"
+// line 3 "../../../../LoggingFine_IN.ump"
+// line 3 "../../../../LoggingFine_IN_inner.ump"
+// line 3 "../../../../LoggingFinest_IN.ump"
+// line 3 "../../../../LoggingFinest_IN_inner.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN.ump"
+// line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
+// line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN.ump"
+// line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -90,7 +109,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    protected void init(DatabaseImpl db, byte [] identifierKey, int initialCapacity, int level){
     setDatabase(db);
   EnvironmentImpl env = (databaseImpl == null) ? null : databaseImpl.getDbEnvironment();
-  Label618:   ; //this.hook618(env);
+  Label618:
+latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env);
+	//original(env);
+   ; //this.hook618(env);
    generation = 0;
   dirty = false;
   nEntries = 0;
@@ -103,6 +125,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   entryStates = new byte[initialCapacity];
   isRoot = false;
   this.level = level;
+    // line 151 "../../../../MemoryBudget_IN.ump"
+    // original(db, identifierKey, initialCapacity, level);
+          inListResident = false;
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 152 "../../../../IN.ump"
@@ -169,7 +195,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   setLastFullLsn(sourceLsn);
   EnvironmentImpl env = db.getDbEnvironment();
   //this.hook637();
-  Label637:   ;
+  Label637:
+initMemorySize();
+//	original();
+   ;
    env.getInMemoryINs().add(this);
   }
 
@@ -182,6 +211,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    public void postRecoveryInit(DatabaseImpl db, long sourceLsn){
     setDatabase(db);
   setLastFullLsn(sourceLsn);
+    // line 164 "../../../../MemoryBudget_IN.ump"
+    //original(db, sourceLsn);
+    	  initMemorySize();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -214,6 +247,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     if (updateGeneration) {
    setGeneration();
   }
+    // line 56 "../../../../Latches_IN.ump"
+    //original(updateGeneration);
+    	latch.acquire();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -223,7 +260,11 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    */
   // line 242 "../../../../IN.ump"
    public boolean latchNoWait(boolean updateGeneration) throws DatabaseException{
-    Label619:   ; 
+    Label619:
+if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
+            return false;
+      }
+   ; 
     if (updateGeneration) {
      setGeneration();
     }
@@ -774,7 +815,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
      node.postFetchInit(databaseImpl, lsn);
      entryTargets[idx] = node;
      // this.hook638(node);
-     Label638:   ;
+     Label638:
+updateMemorySize(null, node);
+//	original(node);
+   ;
 
     } catch (LogFileNotFoundException LNFE) {
      if (!isEntryKnownDeleted(idx) && !isEntryPendingDeleted(idx)) {
@@ -875,6 +919,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    */
   // line 759 "../../../../IN.ump"
    public void updateEntry(int idx, long lsn, long oldLNSize, long newLNSize){
+    // line 177 "../../../../MemoryBudget_IN.ump"
+    updateMemorySize(oldLNSize, newLNSize);
+    	//original(idx, lsn, oldLNSize, newLNSize);
+    // END OF UMPLE BEFORE INJECTION
     setLsn(idx, lsn);
   setDirty(true);
   }
@@ -1177,6 +1225,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    */
   // line 999 "../../../../IN.ump"
   public void rebuildINList(INList inList) throws DatabaseException{
+    // line 185 "../../../../MemoryBudget_IN.ump"
+    initMemorySize();
+    	//original(inList);
+    // END OF UMPLE BEFORE INJECTION
     inList.add(this);
   for (int i = 0; i < nEntries; i++) {
    Node n = getTarget(i);
@@ -1222,15 +1274,24 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   // line 1142 "../../../../IN.ump"
    protected void descendOnParentSearch(SearchResult result, boolean targetContainsDuplicates, boolean targetIsRoot, long targetNodeId, Node child, boolean requireExactMatch) throws DatabaseException{
     if (child.canBeAncestor(targetContainsDuplicates)) {
-   Label624:   ; //this.hook624();
+   Label624:
+releaseLatch();
+	//original();
+   ; //this.hook624();
     result.parent = (IN) child;
   }
   else {
-   Label625:   ; //this.hook625(child);
+   Label625:
+((IN) child).releaseLatch();
+	//original(child);
+   ; //this.hook625(child);
     result.exactParentFound = false;
    result.keepSearching = false;
    if (requireExactMatch) {
-    Label626:   ; //this.hook626();
+    Label626:
+releaseLatch();
+	//original();
+   ; //this.hook626();
      result.parent = null;
    }
    else {
@@ -1243,7 +1304,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException{
     latch(updateGeneration);
   if (getNodeId() == nid) {
-   Label627:   ; //this.hook627();
+   Label627:
+releaseLatch();
+	//original();
+   ; //this.hook627();
     return true;
   }
   else {
@@ -1493,6 +1557,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    }
    entryStates[i] = entryState;
   }
+    // line 125 "../../../../Latches_IN.ump"
+    //original(itemBuffer, entryTypeVersion);
+    	latch.setName(shortClassName() + getNodeId());
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -1738,12 +1806,291 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    protected void hook627() throws DatabaseException{
     
   }
+
+
+  /**
+   * 
+   * Latch this node and set the generation.
+   */
+  // line 15 "../../../../Latches_IN.ump"
+   public void latch() throws DatabaseException{
+    latch(true);
+  }
+
+
+  /**
+   * 
+   * Latch this node if it is not latched by another thread, and set the generation if the latch succeeds.
+   */
+  // line 22 "../../../../Latches_IN.ump"
+   public boolean latchNoWait() throws DatabaseException{
+    return latchNoWait(true);
+  }
+
+
+  /**
+   * 
+   * Release the latch on this node.
+   */
+  // line 29 "../../../../Latches_IN.ump"
+   public void releaseLatch() throws LatchNotHeldException{
+    latch.release();
+  }
+
+
+  /**
+   * 
+   * Release the latch on this node.
+   */
+  // line 36 "../../../../Latches_IN.ump"
+   public void releaseLatchIfOwner() throws LatchNotHeldException{
+    latch.releaseIfOwner();
+  }
+
+
+  /**
+   * 
+   * @return true if this thread holds the IN's latch
+   */
+  // line 43 "../../../../Latches_IN.ump"
+   public boolean isLatchOwner(){
+    return latch.isOwner();
+  }
+
+
+  /**
+   * 
+   * Initialize the per-node memory count by computing its memory usage.
+   */
+  // line 13 "../../../../MemoryBudget_IN.ump"
+   protected void initMemorySize(){
+    inMemorySize = computeMemorySize();
+  }
+
+  // line 17 "../../../../MemoryBudget_IN.ump"
+   public boolean verifyMemorySize(){
+    long calcMemorySize = computeMemorySize();
+			if (calcMemorySize != inMemorySize) {
+					String msg = "-Warning: Out of sync. " + "Should be " + calcMemorySize + " / actual: " + inMemorySize
+						+ " node: " + getNodeId();
+
+				  Label615:				 // this.hook615(msg);
+					System.out.println(msg);
+					return false;
+			} 
+      else {
+					return true;
+			}
+  }
+
+
+  /**
+   * 
+   * Return the number of bytes used by this IN.  Latching is up to the caller.
+   */
+  // line 35 "../../../../MemoryBudget_IN.ump"
+   public long getInMemorySize(){
+    return inMemorySize;
+  }
+
+  // line 39 "../../../../MemoryBudget_IN.ump"
+   private long getEntryInMemorySize(int idx){
+    return getEntryInMemorySize(entryKeyVals[idx], entryTargets[idx]);
+  }
+
+  // line 43 "../../../../MemoryBudget_IN.ump"
+   protected long getEntryInMemorySize(byte [] key, Node target){
+    long ret = 0;
+			if (key != null) {
+					ret += MemoryBudget.byteArraySize(key.length);
+			}
+			if (target != null) {
+					ret += target.getMemorySizeIncludedByParent();
+			}
+		return ret;
+  }
+
+
+  /**
+   * 
+   * Count up the memory usage attributable to this node alone. LNs children are counted by their BIN/DIN parents, but INs are not counted by their parents because they are resident on the IN list.
+   */
+  // line 57 "../../../../MemoryBudget_IN.ump"
+   protected long computeMemorySize(){
+    MemoryBudget mb = databaseImpl.getDbEnvironment().getMemoryBudget();
+		long calcMemorySize = getMemoryOverhead(mb);
+		calcMemorySize += computeLsnOverhead();
+		for (int i = 0; i < nEntries; i++) {
+			  calcMemorySize += getEntryInMemorySize(i);
+		}
+		if (provisionalObsolete != null) {
+			  calcMemorySize += provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+		}
+		return calcMemorySize;
+  }
+
+  // line 70 "../../../../MemoryBudget_IN.ump"
+   public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
+    return MemoryBudget.IN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
+  }
+
+  // line 74 "../../../../MemoryBudget_IN.ump"
+   private int computeLsnOverhead(){
+    if (entryLsnLongArray == null) {
+			  return MemoryBudget.byteArraySize(entryLsnByteArray.length);
+		} else {
+			  return MemoryBudget.BYTE_ARRAY_OVERHEAD + entryLsnLongArray.length * MemoryBudget.LONG_OVERHEAD;
+		}
+  }
+
+  // line 82 "../../../../MemoryBudget_IN.ump"
+   protected static  long computeArraysOverhead(DbConfigManager configManager) throws DatabaseException{
+    int capacity = configManager.getInt(EnvironmentParams.NODE_MAX);
+		return MemoryBudget.byteArraySize(capacity) + (capacity * (2 * MemoryBudget.ARRAY_ITEM_OVERHEAD));
+  }
+
+  // line 87 "../../../../MemoryBudget_IN.ump"
+   protected long getMemoryOverhead(MemoryBudget mb){
+    return mb.getINOverhead();
+  }
+
+  // line 91 "../../../../MemoryBudget_IN.ump"
+   protected void updateMemorySize(ChildReference oldRef, ChildReference newRef){
+    long delta = 0;
+		if (newRef != null) {
+			  delta = getEntryInMemorySize(newRef.getKey(), newRef.getTarget());
+		}
+		if (oldRef != null) {
+			  delta -= getEntryInMemorySize(oldRef.getKey(), oldRef.getTarget());
+		}
+		changeMemorySize(delta);
+  }
+
+  // line 102 "../../../../MemoryBudget_IN.ump"
+   protected void updateMemorySize(long oldSize, long newSize){
+    long delta = newSize - oldSize;
+		changeMemorySize(delta);
+  }
+
+  // line 107 "../../../../MemoryBudget_IN.ump"
+  public void updateMemorySize(Node oldNode, Node newNode){
+    long delta = 0;
+		if (newNode != null) {
+			  delta = newNode.getMemorySizeIncludedByParent();
+		}
+		if (oldNode != null) {
+			  delta -= oldNode.getMemorySizeIncludedByParent();
+		}
+		changeMemorySize(delta);
+  }
+
+  // line 118 "../../../../MemoryBudget_IN.ump"
+   private void changeMemorySize(long delta){
+    inMemorySize += delta;
+			if (inListResident) {
+					MemoryBudget mb = databaseImpl.getDbEnvironment().getMemoryBudget();
+					accumulatedDelta += delta;
+					if (accumulatedDelta > ACCUMULATED_LIMIT || accumulatedDelta < -ACCUMULATED_LIMIT) {
+				mb.updateTreeMemoryUsage(accumulatedDelta);
+				accumulatedDelta = 0;
+					}
+			}
+  }
+
+  // line 130 "../../../../MemoryBudget_IN.ump"
+   public int getAccumulatedDelta(){
+    return accumulatedDelta;
+  }
+
+  // line 134 "../../../../MemoryBudget_IN.ump"
+   public void setInListResident(boolean resident){
+    inListResident = resident;
+  }
+
+  // line 138 "../../../../MemoryBudget_IN.ump"
+   protected void hook615(String msg){
+    
+  }
+
+
+  /**
+   * 
+   * Returns whether this node can itself be evicted.  This is faster than (getEvictionType() == MAY_EVICT_NODE) and is used by the evictor after a node has been selected, to check that it is still evictable.
+   */
+  // line 15 "../../../../Evictor_IN.ump"
+   public boolean isEvictable(){
+    if (isEvictionProhibited()) {
+					return false;
+			}
+			if (hasNonLNChildren()) {
+					return false;
+			}
+			return true;
+  }
+
+
+  /**
+   * 
+   * Returns the eviction type for this IN, for use by the evictor.  Uses the internal isEvictionProhibited and getChildEvictionType methods that may be overridden by subclasses.
+   * @return MAY_EVICT_LNS if evictable LNs may be stripped; otherwise,MAY_EVICT_NODE if the node itself may be evicted; otherwise, MAY_NOT_EVICT.
+   */
+  // line 29 "../../../../Evictor_IN.ump"
+   public int getEvictionType(){
+    if (isEvictionProhibited()) {
+					return MAY_NOT_EVICT;
+			} else {
+					return getChildEvictionType();
+			}
+  }
+
+
+  /**
+   * 
+   * Returns whether the node is not evictable, irrespective of the status of the children nodes.
+   */
+  // line 40 "../../../../Evictor_IN.ump"
+  public boolean isEvictionProhibited(){
+    return isDbRoot();
+  }
+
+
+  /**
+   * 
+   * Returns the eviction type based on the status of child nodes, irrespective of isEvictionProhibited.
+   */
+  // line 47 "../../../../Evictor_IN.ump"
+  public int getChildEvictionType(){
+    return hasResidentChildren() ? MAY_NOT_EVICT : MAY_EVICT_NODE;
+  }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 10 "../../../../LoggingFine_IN.ump"
+   private void traceSplit(Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn, int splitIndex, int idKeyIndex, int childIndex){
+    new IN_traceSplit(this, level, parent, newSibling, parentLsn, myNewLsn, newSiblingLsn, splitIndex, idKeyIndex,
+		childIndex).execute();
+  }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 9 "../../../../LoggingFinest_IN.ump"
+   private void traceDelete(Level level, int index){
+    new IN_traceDelete(this, level, index).execute();
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
+  @MethodObject
   // line 4 "../../../../IN_static.ump"
+  // line 83 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_setLsn
   {
   
@@ -1774,9 +2121,16 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 11 "../../../../IN_static.ump"
     public void execute(){
+      // line 85 "../../../../MemoryBudget_IN_inner.ump"
+      oldSize=_this.computeLsnOverhead();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.setLsnElement(idx,lsn);
           //this.hook639();
-          Label639: ;
+          Label639:
+  _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
+          //original();
+   ;
           _this.entryStates[idx]|=_this.DIRTY_BIT;
     }
   
@@ -1804,7 +2158,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 23 "../../../../IN_static.ump"
+  // line 125 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_setEntry
   {
   
@@ -1838,18 +2194,29 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 33 "../../../../IN_static.ump"
     public void execute(){
+      // line 127 "../../../../MemoryBudget_IN_inner.ump"
+      oldSize=_this.getEntryInMemorySize(idx);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       newNEntries=idx + 1;
           if (newNEntries > _this.nEntries) {
             _this.nEntries=newNEntries;
             //this.hook641();
-            Label641:   ;
+            Label641:
+  oldSize=0;
+          //original();
+     ;
           }
           _this.entryTargets[idx]=target;
           _this.entryKeyVals[idx]=keyVal;
           _this.setLsnElement(idx,lsn);
           _this.entryStates[idx]=state;
           //this.hook640();
-          Label640:   ;
+          Label640:
+  newSize=_this.getEntryInMemorySize(idx);
+          _this.updateMemorySize(oldSize,newSize);
+          //original();
+     ;
           _this.setDirty(true);
     }
   
@@ -1887,7 +2254,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 61 "../../../../IN_static.ump"
+  // line 72 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry
   {
   
@@ -1918,7 +2287,15 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 68 "../../../../IN_static.ump"
     public void execute(){
+      // line 74 "../../../../MemoryBudget_IN_inner.ump"
+      oldSize=_this.getEntryInMemorySize(idx);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.setTarget(idx,node);
+      // line 79 "../../../../MemoryBudget_IN_inner.ump"
+      newSize=_this.getEntryInMemorySize(idx);
+              _this.updateMemorySize(oldSize,newSize);
+      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------
@@ -1942,7 +2319,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 76 "../../../../IN_static.ump"
+  // line 93 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry2
   {
   
@@ -1974,10 +2353,18 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 84 "../../../../IN_static.ump"
     public void execute(){
+      // line 95 "../../../../MemoryBudget_IN_inner.ump"
+      oldSize=_this.getEntryInMemorySize(idx);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.setLsn(idx,lsn);
           _this.setTarget(idx,node);
           //this.hook642();
-          Label642:   ;
+          Label642:
+  newSize=_this.getEntryInMemorySize(idx);
+          _this.updateMemorySize(oldSize,newSize);
+         // original();
+     ;
           _this.setDirty(true);
     }
   
@@ -2009,7 +2396,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 99 "../../../../IN_static.ump"
+  // line 114 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry3
   {
   
@@ -2042,11 +2431,19 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 108 "../../../../IN_static.ump"
     public void execute(){
+      // line 116 "../../../../MemoryBudget_IN_inner.ump"
+      oldSize=_this.getEntryInMemorySize(idx);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.setLsn(idx,lsn);
           _this.setTarget(idx,node);
           _this.setKey(idx,key);
           //this.hook643();
-          Label643:   ;
+          Label643:
+  newSize=_this.getEntryInMemorySize(idx);
+          _this.updateMemorySize(oldSize,newSize);
+          //original();
+     ;
           _this.setDirty(true);
     }
   
@@ -2080,7 +2477,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 125 "../../../../IN_static.ump"
+  // line 61 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntryCompareKey
   {
   
@@ -2113,6 +2512,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 134 "../../../../IN_static.ump"
     public void execute(){
+      // line 63 "../../../../MemoryBudget_IN_inner.ump"
+      oldSize=_this.getEntryInMemorySize(idx);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.setLsn(idx,lsn);
           _this.setTarget(idx,node);
           existingKey=_this.getKey(idx);
@@ -2121,7 +2524,11 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             _this.setKey(idx,key);
           }
           //this.hook644();
-         Label644:   ;
+         Label644:
+  newSize=_this.getEntryInMemorySize(idx);
+          _this.updateMemorySize(oldSize,newSize);
+          //original();
+     ;
           _this.setDirty(true);
     }
     
@@ -2154,7 +2561,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 157 "../../../../IN_static.ump"
+  // line 47 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_insertEntry1
   {
   
@@ -2198,10 +2607,16 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             }
             if (index < _this.nEntries) {
               //this.hook647();
-              Label647:   ;
+              Label647:
+  oldSize=_this.computeLsnOverhead();
+          //original();
+     ;
               _this.shiftEntriesRight(index);
               //this.hook646();
-              Label646:   ;
+              Label646:
+  _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
+          //original();
+     ;
             }
             _this.entryTargets[index]=entry.getTarget();
             _this.entryKeyVals[index]=entry.getKey();
@@ -2210,7 +2625,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             _this.nEntries++;
             _this.adjustCursorsForInsert(index);
            // this.hook645();
-           Label645:   ;
+           Label645:
+  _this.updateMemorySize(0,_this.getEntryInMemorySize(index));
+          //original();
+     ;
             _this.setDirty(true);
             return (index | _this.INSERT_SUCCESS);
           }
@@ -2240,7 +2658,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 207 "../../../../IN_static.ump"
+  // line 11 "../../../../MemoryBudget_IN_inner.ump"
+  // line 18 "../../../../LoggingFinest_IN_inner.ump"
   public static class IN_deleteEntry
   {
   
@@ -2277,17 +2698,27 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           assert maybeValidate ? _this.validateSubtreeBeforeDelete(index) : true;
           if (index < _this.nEntries) {
             //this.hook649();
-            Label649:   ;
+            Label649:
+  _this.updateMemorySize(_this.getEntryInMemorySize(index),0);
+          oldLSNArraySize=_this.computeLsnOverhead();
+          //original();
+     ;
             for (int i=index; i < _this.nEntries - 1; i++) {
               _this.setEntryInternal(i + 1,i);
             }
             _this.clearEntry(_this.nEntries - 1);
             //this.hook648();
-            Label648:   ;
+            Label648:
+  _this.updateMemorySize(oldLSNArraySize,_this.computeLsnOverhead());
+          //original();
+     ;
             _this.nEntries--;
             _this.setDirty(true);
             _this.setProhibitNextDelta();
-            Label616:   ; //this.hook616();
+            Label616:
+  _this.traceDelete(Level.FINEST,index);
+          //original();
+     ; //this.hook616();
             return true;
           }
      else {
@@ -2315,6 +2746,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   // line 247 "../../../../IN_static.ump"
+  // line 40 "../../../../Latches_IN_inner.ump"
   public static class IN_validateSubtreeBeforeDelete
   {
   
@@ -2345,7 +2777,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // line 253 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-            Label628:   ; //this.hook628();
+            Label628:
+  needToLatch=!_this.isLatchOwner();    
+  				//try {          //original();//      }
+     ; //this.hook628();
   	 			//	this.hook629();
   		      if (index >= _this.nEntries) {
   		        return true;
@@ -2357,7 +2792,11 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   // end hook628
           }
     finally {
-    Label628_1:   ;
+    Label628_1:
+  if (needToLatch) {
+              _this.releaseLatchIfOwner();
+            }
+     ;
      }
     }
     
@@ -2380,7 +2819,12 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 287 "../../../../IN_static.ump"
+  // line 5 "../../../../Latches_IN_inner.ump"
+  // line 4 "../../../../MemoryBudget_IN_inner.ump"
+  // line 4 "../../../../INCompressor_IN_inner.ump"
+  // line 32 "../../../../LoggingFine_IN_inner.ump"
   public static class IN_splitInternal
   {
   
@@ -2433,9 +2877,16 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
           newIdKey=_this.entryKeyVals[low];
           parentLsn=DbLsn.NULL_LSN;
           newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
-          Label631:   ; //this.hook631();
+          Label631:
+  newSibling.latch();
+          //original();
+     ; //this.hook631();
           oldMemorySize=_this.inMemorySize;
-          Label630:   ; 
+          Label630:
+  //     try {          //original();}//  finally {
+            newSibling.releaseLatch();
+      //    }
+     ; 
           toIdx=0;
           deletedEntrySeen=false;
           binRef=null;
@@ -2451,7 +2902,12 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
             _this.clearEntry(i);
           }
-          Label636:   ; //this.hook636();
+          Label636:
+  if (deletedEntrySeen) {
+            _this.databaseImpl.getDbEnvironment().addToCompressorQueue(binRef,false);
+          }
+  //        original();
+     ; //this.hook636();
           newSiblingNEntries=(high - low);
           if (low == 0) {
             _this.shiftEntriesLeft(newSiblingNEntries);
@@ -2490,9 +2946,16 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             parent.setDirty(true);
           }
           //this.hook650();
-          Label650:   ;
+          Label650:
+  newSize=_this.computeMemorySize();
+          _this.updateMemorySize(oldMemorySize,newSize);
+          //original();
+     ;
           inMemoryINs.add(newSibling);
-          Label617: ;//this.hook617();
+          Label617:
+  _this.traceSplit(Level.FINE,parent,newSibling,parentLsn,myNewLsn,newSiblingLsn,splitIndex,idKeyIndex,childIndex);
+         // original();
+   ;//this.hook617();
     }
     
     //------------------------
@@ -2557,6 +3020,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   // line 412 "../../../../IN_static.ump"
+  // line 61 "../../../../Latches_IN_inner.ump"
   public static class IN_verify
   {
   
@@ -2586,8 +3050,18 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
     // line 418 "../../../../IN_static.ump"
     public void execute() throws DatabaseException{
+      // line 63 "../../../../Latches_IN_inner.ump"
+      unlatchThis=false;
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       try {
-            Label632:   ; //this.hook632();
+            Label632:
+  if (!_this.isLatchOwner()) {
+            _this.latch();
+            unlatchThis=true;
+          }
+          //original();
+     ; //this.hook632();
             userCompareToFcn=(_this.databaseImpl == null ? null : _this.getKeyComparator());
             key1=null;
             for (int i=1; i < _this.nEntries; i++) {
@@ -2612,7 +3086,12 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             DE.printStackTrace(System.out);
           }
      finally {
-            Label633:   ; //this.hook633();
+            Label633:
+  if (unlatchThis) {
+            _this.releaseLatch();
+          }
+          //original();
+     ; //this.hook633();
           }
     }
     
@@ -2644,6 +3123,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   // line 458 "../../../../IN_static.ump"
+  // line 19 "../../../../Latches_IN_inner.ump"
   public static class IN_isValidForDelete
   {
   
@@ -2673,8 +3153,15 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     // line 463 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-  				      Label634:   ; //this.hook634();
-  							Label635:   ; //this.hook635();
+  				      Label634:
+  needToLatch=!_this.isLatchOwner();
+     ; //this.hook634();
+  							Label635:
+  if (needToLatch) {
+            _this.latch();
+          }
+          //original();
+     ; //this.hook635();
   						  if (_this.nEntries > 1) {
   						   return false;
   						  }
@@ -2687,7 +3174,13 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   						  }
           }
      finally {
-  					Label634_1:   ; 
+  					Label634_1:
+  //        try {          //original();} finally {
+            if (needToLatch) {
+              _this.releaseLatchIfOwner();
+            }
+    //      }
+     ; 
             
           }
     }
@@ -2709,7 +3202,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 504 "../../../../IN_static.ump"
+  // line 22 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_trackProvisionalObsolete
   {
   
@@ -2744,7 +3239,10 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
       memDelta=0;
           if (child.provisionalObsolete != null) {
             //this.hook652();
-            Label652:   ;
+            Label652:
+  childMemDelta=child.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+          //original();
+     ;
             if (_this.provisionalObsolete != null) {
               _this.provisionalObsolete.addAll(child.provisionalObsolete);
             }
@@ -2753,7 +3251,11 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             }
             child.provisionalObsolete=null;
             //this.hook651();
-            Label651:   ;
+            Label651:
+  child.changeMemorySize(0 - childMemDelta);
+          memDelta+=childMemDelta;
+          //original();
+     ;
           }
           if (obsoleteLsn1 != DbLsn.NULL_LSN || obsoleteLsn2 != DbLsn.NULL_LSN) {
             if (_this.provisionalObsolete == null) {
@@ -2762,14 +3264,26 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
             if (obsoleteLsn1 != DbLsn.NULL_LSN) {
               _this.provisionalObsolete.add(new Long(obsoleteLsn1));
               //this.hook653();
-              Label653:   ;
+              Label653:
+  memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+          //original();
+     ;
             }
             if (obsoleteLsn2 != DbLsn.NULL_LSN) {
               _this.provisionalObsolete.add(new Long(obsoleteLsn2));
               //this.hook654();
-              Label654:   ;
+              Label654:
+  memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+         // original();
+     ;
             }
           }
+      // line 24 "../../../../MemoryBudget_IN_inner.ump"
+      //original();
+              if (memDelta != 0) {
+                _this.changeMemorySize(memDelta);
+              }
+      // END OF UMPLE AFTER INJECTION
     }
   
     // line 549 "../../../../IN_static.ump"
@@ -2810,7 +3324,9 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
   
   
   
+  @MethodObject
   // line 557 "../../../../IN_static.ump"
+  // line 104 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_flushProvisionalObsolete
   {
   
@@ -2842,11 +3358,17 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     public void execute() throws DatabaseException{
       if (_this.provisionalObsolete != null) {
             //this.hook656();
-            Label656:   ;
+            Label656:
+  memDelta=_this.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
+          //original();
+     ;
             logManager.countObsoleteINs(_this.provisionalObsolete);
             _this.provisionalObsolete=null;
             //this.hook655();
-            Label655:   ;
+            Label655:
+  _this.changeMemorySize(0 - memDelta);
+          //original();
+     ;
           }
     }
   
@@ -2870,6 +3392,178 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     protected LogManager logManager ;
   // line 574 "../../../../IN_static.ump"
     protected int memDelta ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingFine_IN_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
+  public static class IN_traceSplit
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_traceSplit()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingFine_IN_inner.ump"
+    public  IN_traceSplit(IN _this, Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn, int splitIndex, int idKeyIndex, int childIndex){
+      this._this=_this;
+          this.level=level;
+          this.parent=parent;
+          this.newSibling=newSibling;
+          this.parentLsn=parentLsn;
+          this.myNewLsn=myNewLsn;
+          this.newSiblingLsn=newSiblingLsn;
+          this.splitIndex=splitIndex;
+          this.idKeyIndex=idKeyIndex;
+          this.childIndex=childIndex;
+    }
+  
+    // line 18 "../../../../LoggingFine_IN_inner.ump"
+    public void execute(){
+      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
+      logger=_this.databaseImpl.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_SPLIT);
+                sb.append(" parent=");
+                sb.append(parent.getNodeId());
+                sb.append(" child=");
+                sb.append(_this.getNodeId());
+                sb.append(" newSibling=");
+                sb.append(newSibling.getNodeId());
+                sb.append(" parentLsn = ");
+                sb.append(DbLsn.getNoFormatString(parentLsn));
+                sb.append(" childLsn = ");
+                sb.append(DbLsn.getNoFormatString(myNewLsn));
+                sb.append(" newSiblingLsn = ");
+                sb.append(DbLsn.getNoFormatString(newSiblingLsn));
+                sb.append(" splitIdx=");
+                sb.append(splitIndex);
+                sb.append(" idKeyIdx=");
+                sb.append(idKeyIndex);
+                sb.append(" childIdx=");
+                sb.append(childIndex);
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 19 "../../../../LoggingFine_IN_inner.ump"
+    protected IN _this ;
+  // line 20 "../../../../LoggingFine_IN_inner.ump"
+    protected Level level ;
+  // line 21 "../../../../LoggingFine_IN_inner.ump"
+    protected IN parent ;
+  // line 22 "../../../../LoggingFine_IN_inner.ump"
+    protected IN newSibling ;
+  // line 23 "../../../../LoggingFine_IN_inner.ump"
+    protected long parentLsn ;
+  // line 24 "../../../../LoggingFine_IN_inner.ump"
+    protected long myNewLsn ;
+  // line 25 "../../../../LoggingFine_IN_inner.ump"
+    protected long newSiblingLsn ;
+  // line 26 "../../../../LoggingFine_IN_inner.ump"
+    protected int splitIndex ;
+  // line 27 "../../../../LoggingFine_IN_inner.ump"
+    protected int idKeyIndex ;
+  // line 28 "../../../../LoggingFine_IN_inner.ump"
+    protected int childIndex ;
+  // line 29 "../../../../LoggingFine_IN_inner.ump"
+    protected Logger logger ;
+  // line 30 "../../../../LoggingFine_IN_inner.ump"
+    protected StringBuffer sb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingFinest_IN_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
+  public static class IN_traceDelete
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public IN_traceDelete()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingFinest_IN_inner.ump"
+    public  IN_traceDelete(IN _this, Level level, int index){
+      this._this=_this;
+          this.level=level;
+          this.index=index;
+    }
+  
+    // line 11 "../../../../LoggingFinest_IN_inner.ump"
+    public void execute(){
+      // line 6 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
+      logger=_this.databaseImpl.getDbEnvironment().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(_this.TRACE_DELETE);
+                sb.append(" in=").append(_this.getNodeId());
+                sb.append(" index=");
+                sb.append(index);
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 12 "../../../../LoggingFinest_IN_inner.ump"
+    protected IN _this ;
+  // line 13 "../../../../LoggingFinest_IN_inner.ump"
+    protected Level level ;
+  // line 14 "../../../../LoggingFinest_IN_inner.ump"
+    protected int index ;
+  // line 15 "../../../../LoggingFinest_IN_inner.ump"
+    protected Logger logger ;
+  // line 16 "../../../../LoggingFinest_IN_inner.ump"
+    protected StringBuffer sb ;
   
     
   }  
@@ -3062,6 +3756,18 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    }
   }
   }
+// line 9 "../../../../Latches_IN.ump"
+  private Latch latch ;
+// line 5 "../../../../MemoryBudget_IN.ump"
+  private boolean inListResident ;
+// line 7 "../../../../MemoryBudget_IN.ump"
+  private int accumulatedDelta = 0 ;
+// line 5 "../../../../Evictor_IN.ump"
+  public static final int MAY_NOT_EVICT = 0 ;
+// line 7 "../../../../Evictor_IN.ump"
+  public static final int MAY_EVICT_LNS = 1 ;
+// line 9 "../../../../Evictor_IN.ump"
+  public static final int MAY_EVICT_NODE = 2 ;
 
   
 }

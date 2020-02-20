@@ -2,7 +2,7 @@ namespace com.sleepycat.je.cleaner;
 
 class Cleaner
 {
-    int lookAheadCacheSize;
+    protected int lookAheadCacheSize;
 
     after Label94:  envConfigUpdate(DbConfigManager ) {
 	lookAheadCacheSize = cm.getInt(EnvironmentParams.CLEANER_LOOK_AHEAD_CACHE_SIZE);

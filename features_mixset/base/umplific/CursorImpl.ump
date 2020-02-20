@@ -975,9 +975,11 @@ Label223_1:
             }
         }
         status = CURSOR_INITIALIZED;
+
+Label234_1: ;
         return found;
 //End of hook234
-Label234_1: ;
+
 
         
     }
@@ -986,15 +988,16 @@ Label234_1: ;
      * Position the cursor at the key. This returns a three part value that's bitwise or'ed into the int. We find out if there was any kind of match and if the match was exact. Note that this match focuses on whether the searching criteria (key, or key and data, depending on the search type) is met. <p> Note this returns with the BIN latched! </p> <p> If this method returns without the FOUND bit set, the caller can assume that no match is possible. Otherwise, if the FOUND bit is set, the caller should check the EXACT_KEY and EXACT_DATA bits. If EXACT_KEY is not set (or for BOTH and BOTH_RANGE, if EXACT_DATA is not set), an approximate match was found. In an approximate match, the cursor is always positioned before the target key/data. This allows the caller to perform a 'next' operation to advance to the value that is equal or higher than the target key/data. </p> <p> Even if the search returns an exact result, the record may be deleted. The caller must therefore check for both an approximate match and for whether the cursor is positioned on a deleted record. </p> <p> If SET or BOTH is specified, the FOUND bit will only be returned if an exact match is found. However, the record found may be deleted. </p> <p> There is one special case where this method may be called without checking the EXACT_KEY (and EXACT_DATA) bits and without checking for a deleted record: If SearchMode.SET is specified then only the FOUND bit need be checked. When SET is specified and FOUND is returned, it is guaranteed to be an exact match on a non-deleted record. It is for this case only that this method is public. </p> <p> If FOUND is set, FOUND_LAST may also be set if the cursor is positioned on the last record in the database. Note that this state can only be counted on as long as the BIN is latched, so it is not set if this method must release the latch to lock the record. Therefore, it should only be used for optimizations. If FOUND_LAST is set, the cursor is positioned on the last record and the BIN is latched. If FOUND_LAST is not set, the cursor may or may not be positioned on the last record. Note that exact searches always perform an unlatch and a lock, so FOUND_LAST will only be set for inexact (range) searches. </p> <p> Be aware that when an approximate match is returned, the index or dupIndex may be set to -1. This is done intentionally so that a 'next' operation will increment it. </p>
      */
     public int searchAndPosition(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode,
-        LockType lockType) throws DatabaseException {
-
-            assert assertCursorState(false): dumpToString(true);
-            removeCursor();
-            bin = null;
+        LockType lockType) throws DatabaseException {   
             boolean foundSomething = false;
             boolean foundExactKey = false;
             boolean foundExactData = false;
             boolean foundLast = false;
+Label235:
+            assert assertCursorState(false): dumpToString(true);
+            removeCursor();
+            bin = null;
+        
             boolean exactSearch = searchMode.isExactSearch();
             BINBoundary binBoundary = new BINBoundary();
             Label235_1:  ;//extra catch statement will be addd.

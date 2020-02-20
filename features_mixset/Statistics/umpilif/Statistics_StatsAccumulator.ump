@@ -63,34 +63,34 @@ class StatsAccumulator
     public void processIN(IN node, Long nid, int level) {
 			if (inNodeIdsSeen.add(nid)) {
 					tallyLevel(level, insSeenByLevel);
-					Label363: //this.hook363(node);
+					Label363: ; //this.hook363(node);
 	}
     }
 
     public void processBIN(BIN node, Long nid, int level) {
 			if (binNodeIdsSeen.add(nid)) {
 					tallyLevel(level, binsSeenByLevel);
-					Label364: //this.hook364(node);
+					Label364: ; //this.hook364(node);
 			}
     }
 
     public void processDIN(DIN node, Long nid, int level) {
 			if (dinNodeIdsSeen.add(nid)) {
 					tallyLevel(level, dinsSeenByLevel);
-					Label365: //this.hook365(node);
+					Label365: ; //this.hook365(node);
 			}
     }
 
     public void processDBIN(DBIN node, Long nid, int level) {
 			if (dbinNodeIdsSeen.add(nid)) {
 					tallyLevel(level, dbinsSeenByLevel);
-					Label366: //this.hook366(node);
+					Label366: ; //this.hook366(node);
 			}
     }
 
     public void processDupCountLN(DupCountLN node, Long nid) {
 			dupCountLNsSeen.add(nid);
-			Label376: //this.hook367(node);
+			Label376: ; //this.hook367(node);
     }
 
     private void tallyLevel(int levelArg, long[] nodesSeenByLevel) {
@@ -194,19 +194,6 @@ class StatsAccumulator
 			bStats.setDBINsByLevel(getDBINsByLevel());
     }
 
- //   protected void hook363(IN node) {
- //   }
 
-//    protected void hook364(BIN node) {
-//    }
-
-//    protected void hook365(DIN node) {
-//    }
-
- //   protected void hook366(DBIN node) {
- //   }
-
-//    protected void hook367(DupCountLN node) {
-//    }
 
 }

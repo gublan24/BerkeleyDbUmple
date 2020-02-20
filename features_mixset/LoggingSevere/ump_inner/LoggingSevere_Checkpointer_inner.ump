@@ -1,15 +1,11 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingSevere/com/sleepycat/je/recovery/Checkpointer.java
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-  @MethodObject static class Checkpointer_doCheckpoint {
-      protected void hook525() throws DatabaseException {
-        try {
-          original();
-        }
-   catch (      DatabaseException e) {
+   static class Checkpointer_doCheckpoint {
+      after Label525: execute() {
           Tracer.trace(_this.envImpl,"Checkpointer","doCheckpoint","checkpointId=" + _this.checkpointId,e);
-          throw e;
-        }
+
+
       }
     }
 }

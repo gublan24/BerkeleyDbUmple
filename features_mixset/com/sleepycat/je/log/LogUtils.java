@@ -405,7 +405,6 @@ public class LogUtils
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import com.sleepycat.bind.serial.*;
   
   // line 6 "../../../../LogUtils_static.ump"
   public static class XidImpl implements Xid

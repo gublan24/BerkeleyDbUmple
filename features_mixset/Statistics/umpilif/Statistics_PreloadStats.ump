@@ -22,6 +22,8 @@ class PreloadStats
      */
     public PreloadStatus status;
 
+  strictness disable constructor;
+
     /** 
      * Resets all stats.
      */

@@ -189,10 +189,10 @@ class Tree {
      */
     public void delete(byte[] idKey, UtilizationTracker tracker)
     throws DatabaseException, NodeNotEmptyException, CursorsExistException {
-        try {
-            IN subtreeRootIN = null;
-            ArrayList nodeLadder = new ArrayList();
-            IN rootIN = null;
+      IN subtreeRootIN = null;
+      ArrayList nodeLadder = new ArrayList();
+      IN rootIN = null;        
+      try {
             boolean rootNeedsUpdating = false;
             Label672: ; //this.hook672(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
             if (root == null) {
@@ -229,9 +229,11 @@ class Tree {
                 }
             } 
 
-            finally {
+          catch (DatabaseException e) {
               Label672_1:  ;
-				    }
+            throw e;
+          }
+          
 
                 //End hook672
               
@@ -530,6 +532,7 @@ class Tree {
                 if (!location.bin.isEntryKnownDeleted(location.index)) {
                     if (database.getSortedDuplicates()) {
                         Node childNode = location.bin.fetchTarget(location.index);
+try {
                         Label683: ; 
                             if (childNode == null) {} else if (ln.containsDuplicates()) {
                                 return searchDupTreeForDupCountLNParent(location, mainKey, childNode);
@@ -543,9 +546,13 @@ class Tree {
                                 }
                             }
                         }
+   catch (DatabaseException e) {
                         Label683_1:   ;
-                         
+                        throw e;
                     }
+
+    }                       
+   }
            
                 location.childLsn = location.bin.getLsn(location.index);
             } else {
@@ -629,10 +636,13 @@ class Tree {
       } else {
         return false;
       }
-    } finally {
-      Label685_1: ;
+    } 
 
-    }
+    catch (DatabaseException e) {
+      Label685_1: ;
+            throw e;
+     }
+
   }
     /** 
      * Return a reference to the adjacent BIN.
@@ -658,8 +668,10 @@ class Tree {
      * Helper routine for above two routines to iterate through BIN's.
      */
      private BIN getNextBinInternal(boolean traverseWithinDupTree, BIN bin, boolean forward) throws DatabaseException {
-    try {
+
       byte[] idKey = null;
+      IN parent = null;
+      IN nextIN = null;
       if (bin.getNEntries() == 0) {
         idKey = bin.getIdentifierKey();
       } else if (forward) {
@@ -668,9 +680,9 @@ class Tree {
         idKey = bin.getKey(0);
       }
       IN next = bin;
+    try {
       Label687: ; // this.hook687();
-      IN parent = null;
-      IN nextIN = null;
+
       Label686: ; // this.hook686(traverseWithinDupTree, forward, idKey, next, parent, nextIN);
       while (true) {
         SearchResult result = null;
@@ -732,8 +744,9 @@ class Tree {
         next = parent;
       }
       // end hook686
-    } finally {
+    } catch (DatabaseException e) {
       Label686_1: ;
+                  throw e;
 
     }
   }
@@ -952,7 +965,7 @@ class Tree {
      */
     private IN searchSubTreeUntilSplit(IN parent, byte[] key, long nid, boolean updateGeneration)
     throws DatabaseException, SplitRequiredException {
-      //  try {
+      //  
             if (parent == null) {
                 return null;
             }
@@ -963,6 +976,7 @@ class Tree {
             }
             int index = 0;
             IN child = null;
+            try {
             Label698: ; //this.hook698(parent, key, nid, updateGeneration, index, child);
             do {
                 if (parent.getNEntries() == 0) {
@@ -986,7 +1000,11 @@ class Tree {
             } while (!(parent instanceof BIN));
 
             //hook698
-            Label698_1:            
+            } catch (DatabaseException e) {
+                       Label698_1:            
+            throw e;
+        }
+
             return parent; //throw new ReturnObject(parent);
                
 // throw ReturnHack.returnObject;

@@ -15,33 +15,33 @@ class Tree
      */
     private void traceMutate(Level level, BIN theBin, LN existingLn, LN newLn, long newLsn, DupCountLN dupCountLN,
 	    long dupRootLsn, DIN dupRoot, long ddinLsn, DBIN dupBin, long dbinLsn) {
+
 	new Tree_traceMutate(this, level, theBin, existingLn, newLn, newLsn, dupCountLN, dupRootLsn, dupRoot, ddinLsn,
 		dupBin, dbinLsn).execute();
     }
 
-    protected void hook661: delete(byte , UtilizationTracker ){
+    after Label661: delete(byte , UtilizationTracker ){
 	RecoveryManager.traceRootDeletion(Level.FINE, database);
 //	original();
     }
 
-    protected void hook662: splitRoot(){
+    after Label662: splitRoot(){
 	traceSplitRoot(Level.FINE, TRACE_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
 //	original(curRoot, curRootLsn, logLsn, newRoot);
     }
 
-    protected void hook663: maybeSplitDuplicateRoot(BIN , int ){
+    after Label663: maybeSplitDuplicateRoot(BIN , int ){
 	traceSplitRoot(Level.FINE, TRACE_DUP_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
 //	original(curRoot, newRoot, curRootLsn, logLsn);
     }
 
-    protected void hook664: createDuplicateTree(byte , LogManager , INList , LN , CursorImpl ) {
+    after Label664: createDuplicateTree(byte , LogManager , INList , LN , CursorImpl ) {
 	traceMutate(Level.FINE, bin, existingLN, newLN, newLsn, dupCountLN, dupCountLsn, dupRoot, dinLsn, dupBin,		dbinLsn);
 //	original(newLN, dupRoot, dupBin, bin, existingLN, dupCountLN, dbinLsn, dinLsn, dupCountLsn, newLsn);
     }
 
-    protected void hook665: accountForSubtreeRemoval(INList , IN , UtilizationTracker ){
-
-	Tracer.trace(Level.FINE, database.getDbEnvironment(),
+    after Label665: accountForSubtreeRemoval(INList , IN , UtilizationTracker ){
+    Tracer.trace(Level.FINE, database.getDbEnvironment(),
 		"SubtreeRemoval: subtreeRoot = " + subtreeRoot.getNodeId());
 	//original(subtreeRoot);
     }

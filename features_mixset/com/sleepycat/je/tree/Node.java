@@ -2,6 +2,7 @@
 /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.tree;
+import com.sleepycat.je.latch.LatchNotHeldException;
 import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.log.LoggableObject;
 import com.sleepycat.je.log.LogWritable;
@@ -56,7 +57,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
   public void delete()
   {}
 
-  // line 27 "../../../../Node.ump"
+  // line 28 "../../../../Node.ump"
    public static  synchronized  void setLastNodeId(long id){
     if (lastAllocatedId < id) {
 	    lastAllocatedId = id;
@@ -71,7 +72,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Create a new node, assigning it the next available node id.
    */
-  // line 41 "../../../../Node.ump"
+  // line 42 "../../../../Node.ump"
    protected  Node(boolean init){
     if (init) {
 	    nodeId = getNextNodeId();
@@ -83,7 +84,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Increment and return the next usable id. Must be synchronized.
    */
-  // line 50 "../../../../Node.ump"
+  // line 51 "../../../../Node.ump"
    public static  synchronized  long getNextNodeId(){
     return ++lastAllocatedId;
   }
@@ -93,7 +94,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Get the latest id, for checkpointing.
    */
-  // line 57 "../../../../Node.ump"
+  // line 58 "../../../../Node.ump"
    public static  synchronized  long getLastId(){
     return lastAllocatedId;
   }
@@ -103,12 +104,12 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Initialize a node that has been faulted in from the log
    */
-  // line 64 "../../../../Node.ump"
+  // line 65 "../../../../Node.ump"
    public void postFetchInit(DatabaseImpl db, long sourceLsn) throws DatabaseException{
     
   }
 
-  // line 75 "../../../../Node.ump"
+  // line 76 "../../../../Node.ump"
    public void verify(byte [] maxKey) throws DatabaseException{
     
   }
@@ -118,7 +119,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @return true if this node is a duplicate-bearing node type, falseif otherwise.
    */
-  // line 81 "../../../../Node.ump"
+  // line 82 "../../../../Node.ump"
    public boolean containsDuplicates(){
     return false;
   }
@@ -128,12 +129,12 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Cover for LN's and just return 0 since they'll always be at the bottom of the tree.
    */
-  // line 88 "../../../../Node.ump"
+  // line 89 "../../../../Node.ump"
   public int getLevel(){
     return 0;
   }
 
-  // line 92 "../../../../Node.ump"
+  // line 93 "../../../../Node.ump"
   public boolean matchLNByNodeId(TreeLocation location, long nodeId) throws DatabaseException{
     throw new DatabaseException("matchLNByNodeId called on non DIN/DBIN");
   }
@@ -164,7 +165,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Return the approximate size of this node in memory, if this size should be included in it's parents memory accounting.  For example, all INs return 0, because they are accounted for  individually. LNs must return a count, they're not counted on the INList.
    */
-  // line 124 "../../../../Node.ump"
+  // line 125 "../../../../Node.ump"
    protected long getMemorySizeIncludedByParent(){
     return 0;
   }
@@ -174,27 +175,27 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * Default toString method at the root of the tree.
    */
-  // line 131 "../../../../Node.ump"
+  // line 132 "../../../../Node.ump"
    public String toString(){
     return this.dumpString(0, true);
   }
 
-  // line 135 "../../../../Node.ump"
+  // line 136 "../../../../Node.ump"
    private String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 139 "../../../../Node.ump"
+  // line 140 "../../../../Node.ump"
    private String endTag(){
     return END_TAG;
   }
 
-  // line 143 "../../../../Node.ump"
+  // line 144 "../../../../Node.ump"
    public void dump(int nSpaces){
     System.out.print(dumpString(nSpaces, true));
   }
 
-  // line 147 "../../../../Node.ump"
+  // line 148 "../../../../Node.ump"
   public String dumpString(int nSpaces, boolean dumpTags){
     StringBuffer self = new StringBuffer();
 	self.append(TreeUtils.indent(nSpaces));
@@ -208,12 +209,12 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
 	return self.toString();
   }
 
-  // line 160 "../../../../Node.ump"
+  // line 161 "../../../../Node.ump"
    public String shortDescription(){
     return "<" + getType() + "/" + getNodeId();
   }
 
-  // line 164 "../../../../Node.ump"
+  // line 165 "../../../../Node.ump"
    public String getType(){
     return getClass().getName();
   }
@@ -230,7 +231,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#marshallOutsideWriteLatchBy default, nodes can be marshalled outside the log write latch.
    */
-  // line 176 "../../../../Node.ump"
+  // line 177 "../../../../Node.ump"
    public boolean marshallOutsideWriteLatch(){
     return true;
   }
@@ -240,7 +241,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#countAsObsoleteWhenLogged
    */
-  // line 183 "../../../../Node.ump"
+  // line 184 "../../../../Node.ump"
    public boolean countAsObsoleteWhenLogged(){
     return false;
   }
@@ -250,7 +251,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#postLogWork
    */
-  // line 190 "../../../../Node.ump"
+  // line 191 "../../../../Node.ump"
    public void postLogWork(long justLoggedLsn) throws DatabaseException{
     
   }
@@ -260,7 +261,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 196 "../../../../Node.ump"
+  // line 197 "../../../../Node.ump"
    public int getLogSize(){
     return LogUtils.LONG_BYTES;
   }
@@ -270,7 +271,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogWritable#writeToLog
    */
-  // line 203 "../../../../Node.ump"
+  // line 204 "../../../../Node.ump"
    public void writeToLog(ByteBuffer logBuffer){
     LogUtils.writeLong(logBuffer, nodeId);
   }
@@ -280,7 +281,7 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogReadable#readFromLog
    */
-  // line 210 "../../../../Node.ump"
+  // line 211 "../../../../Node.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     nodeId = LogUtils.readLong(itemBuffer);
   }
@@ -290,19 +291,19 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
    * 
    * @see LogReadable#dumpLog
    */
-  // line 217 "../../../../Node.ump"
+  // line 218 "../../../../Node.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append(BEGIN_TAG);
 	sb.append(nodeId);
 	sb.append(END_TAG);
   }
 
-  // line 225 "../../../../Node.ump"
+  // line 226 "../../../../Node.ump"
    public void latchShared() throws DatabaseException{
     
   }
 
-  // line 230 "../../../../Node.ump"
+  // line 231 "../../../../Node.ump"
    public void releaseLatch() throws LatchNotHeldException{
     
   }
@@ -311,15 +312,15 @@ public abstract class Node implements LoggableObject,LogReadable,LogWritable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 18 "../../../../Node.ump"
+  // line 19 "../../../../Node.ump"
   private static long lastAllocatedId = 0 ;
-// line 20 "../../../../Node.ump"
+// line 21 "../../../../Node.ump"
   private static final String BEGIN_TAG = "<node>" ;
-// line 22 "../../../../Node.ump"
+// line 23 "../../../../Node.ump"
   private static final String END_TAG = "</node>" ;
-// line 113 "../../../../Node.ump"
+// line 114 "../../../../Node.ump"
   abstract protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException ;
-// line 118 "../../../../Node.ump"
+// line 119 "../../../../Node.ump"
   abstract protected boolean canBeAncestor(boolean targetContainsDuplicates) ;
 
   

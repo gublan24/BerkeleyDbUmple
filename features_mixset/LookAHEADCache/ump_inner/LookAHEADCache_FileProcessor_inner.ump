@@ -1,6 +1,9 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LookAHEADCache/com/sleepycat/je/cleaner/FileProcessor.java
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
+
+LookAheadCache lookAheadCache;
+
    static class FileProcessor_processLN {
   	protected LookAheadCache lookAheadCache;
   	
@@ -37,7 +40,8 @@ class FileProcessor {
 
 
       after Label127:  execute(){
-        lookAheadCache=new LookAheadCache(lookAheadCacheSize);
+        ;
+        LookAheadCache lookAheadCache=new LookAheadCache(lookAheadCacheSize);
 //        original();
       }
 

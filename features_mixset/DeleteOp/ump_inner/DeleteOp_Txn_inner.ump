@@ -12,10 +12,10 @@ class Txn {
 						    Label797: //this.hook797();
 						    if (_this.deletedDatabases == null) {
 						      _this.deletedDatabases=new HashSet();
-						      Label789: //this.hook798();
+						      Label789: ;//this.hook798();
 						    }
 						    _this.deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,deleteAtCommit));
-						    Label796: //this.hook796();
+						    Label796: ; //this.hook796();
 						  }
       }
       protected Txn _this;

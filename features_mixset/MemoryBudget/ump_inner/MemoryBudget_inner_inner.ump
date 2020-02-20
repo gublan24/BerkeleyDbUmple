@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/dbi/MemoryBudget.java
 namespace com.sleepycat.je.dbi;
 class MemoryBudget {
-  @MethodObject static class MemoryBudget_sinit {
+   static class MemoryBudget_sinit {
     
     before execute(){
         is64=false;
@@ -100,7 +100,7 @@ class MemoryBudget {
         }
       }
     }
-  @MethodObject static class MemoryBudget_reset {
+   static class MemoryBudget_reset {
       after execute() {
         //original();
         _this.trackerBudget=true ? newTrackerBudget : newMaxMemory;

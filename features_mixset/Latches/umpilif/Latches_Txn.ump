@@ -2,7 +2,7 @@ namespace com.sleepycat.je.txn;
 
 class Txn
 {
-    protected void hook802_1: undo() {
+    after Label802_1: undo() {
 
 	    if (location.bin != null) {
 		location.bin.releaseLatchIfOwner();

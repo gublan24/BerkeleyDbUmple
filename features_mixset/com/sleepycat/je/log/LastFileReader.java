@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.File;
 
 // line 3 "../../../../LastFileReader.ump"
+// line 3 "../../../../Latches_LastFileReader.ump"
 public class LastFileReader extends FileReader
 {
 
@@ -95,14 +96,22 @@ public class LastFileReader extends FileReader
 		    fileLen = fileHandle.getFile().length();
 		    if (fileLen <= FileManager.firstLogEntryOffset()) {
 			lastNum = fileManager.getFollowingFileNum(lastNum.longValue(), false);
-			Label477:   ; //this.hook477(fileHandle);
+			Label477:
+fileHandle.release();
+	//original(fileHandle);
+   ; //this.hook477(fileHandle);
 			fileHandle = null;
 		    }
 		} catch (DatabaseException e) {
 		    lastNum = attemptToMoveBadFile(e);
 		    fileHandle = null;
 		} finally {
-		    Label478:   ; //this.hook478(fileHandle);
+		    Label478:
+if (fileHandle != null) {
+	    fileHandle.release();
+	}
+	//original(fileHandle);
+   ; //this.hook478(fileHandle);
 		}
 	    }
 	}

@@ -184,7 +184,7 @@ class INCompressor
 			if (env.isClosed()) {
 					return;
 			}
-			Label403: //this.hook403();
+			Label403: ; //this.hook403();
 			doCompress();
     }
 
@@ -205,9 +205,9 @@ class INCompressor
 					}
 			}
 			if (binQueueSize > 0) {
-					Label404: //this.hook404();
-					Label392: //this.hook392(binQueueSize);
-					Label393: //this.hook393();
+					Label404: ; //this.hook404();
+					Label392: ; //this.hook392(binQueueSize);
+					Label393: ; //this.hook393();
 					UtilizationTracker tracker = new UtilizationTracker(env);
 					Map dbCache = new HashMap();
 					DbTree dbTree = env.getDbMapTree();
@@ -235,7 +235,7 @@ class INCompressor
 					if (isDBIN) {
 							dupKey = ((DBIN) foundBin).getDupKey();
 					}
-					Label394: //this.hook394(foundBin);
+					Label394: ; //this.hook394(foundBin);
 					pruneBIN(binSearch.db, binRef, idKey, isDBIN, dupKey, tracker);
 						}
 				}
@@ -244,8 +244,8 @@ class INCompressor
 						env.getUtilizationProfile().countAndLogSummaries(summaries);
 				}
 					} finally {
-				Label395: //this.hook395();
-				Label405: //this.hook405();
+				Label395: ; //this.hook395();
+				Label405: ; //this.hook405();
 					}
 			}
     }
@@ -257,18 +257,19 @@ class INCompressor
      */
     private boolean compressBin(DatabaseImpl db, BIN bin, BINReference binRef, UtilizationTracker tracker)
 	    throws DatabaseException {
-	try {
+      boolean requeued = false;
+      try {
 			boolean empty = false;
-			boolean requeued = false;
+
 			byte[] idKey = bin.getIdentifierKey();
 			byte[] dupKey = null;
 			boolean isDBIN = bin.containsDuplicates();
-			Label396: //this.hook396(bin, binRef, empty, requeued, dupKey, isDBIN);
+			Label396: ; //this.hook396(bin, binRef, empty, requeued, dupKey, isDBIN);
 			int nCursors = bin.nCursors();
 			if (nCursors > 0) {
 					addBinRefToQueue(binRef, false);
 					requeued = true;
-					Label414: //this.hook414();
+					Label414: ; //this.hook414();
 			} else {
 					requeued = bin.compress(binRef, true);
 					if (!requeued) {
@@ -284,9 +285,10 @@ class INCompressor
 			if (empty) {
 					requeued = pruneBIN(db, binRef, idKey, isDBIN, dupKey, tracker);
 			}
-	} finally {
-Label396_1: //
-}
+	    } 
+      finally {
+        Label396_1: ; //
+      }
 
 			return requeued;
     }
@@ -305,12 +307,12 @@ Label396_1: //
 					} else {
 				tree.delete(idKey, tracker);
 					}
-					Label406: //this.hook406();
+					Label406: ; //this.hook406();
 			} catch (NodeNotEmptyException NNEE) {
-					Label407: //this.hook407();
+					Label407: ; //this.hook407();
 			} catch (CursorsExistException e) {
 					addBinRefToQueue(binRef, false);
-					Label408: //this.hook408();
+					Label408: ; //this.hook408();
 					requeued = true;
 			}
 			return requeued;
@@ -350,8 +352,7 @@ Label396_1: //
     private BIN searchForBIN(DatabaseImpl db, byte[] mainKey, byte[] dupKey) throws DatabaseException {
 	try {
 	    Tree tree = db.getTree();
-	    I
-N in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
+	    IN in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
 	    if (in == null) {
 		return null;
 	    }
@@ -361,7 +362,7 @@ N in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
 	    DIN duplicateRoot = null;
 	    DBIN duplicateBin = null;
 	    BIN bin = (BIN) in;
-	    Label397: //this.hook397(mainKey, dupKey, tree, duplicateRoot, duplicateBin, bin);
+	    Label397: ; //this.hook397(mainKey, dupKey, tree, duplicateRoot, duplicateBin, bin);
       int index = bin.findEntry(mainKey, false, true);
 			if (index >= 0) {
 					Node node = null;
@@ -369,25 +370,25 @@ N in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
 				node = bin.fetchTarget(index);
 					}
 					if (node == null) {
-				Label400: //this.hook400(bin);
+				Label400: ; //this.hook400(bin);
 				throw new ReturnObject(null);
 					}
 					if (node.containsDuplicates()) {
 				duplicateRoot = (DIN) node;
-				Label401: //this.hook401(duplicateRoot, bin);
+				Label401: ; //this.hook401(duplicateRoot, bin);
 				duplicateBin = (DBIN) tree.searchSubTree(duplicateRoot, dupKey, SearchType.NORMAL, -1, null, false);
 				throw new ReturnObject(duplicateBin);
 					} else {
 				throw new ReturnObject(bin);
 					}
 			} else {
-					Label402: //this.hook402(bin);
+					Label402: ; //this.hook402(bin);
 					throw new ReturnObject(null);
 			}
       //End of hook397
-	    throw ReturnHack.returnObject;
+
 	} catch (ReturnObject r) {
-hook397_1:
+hook397_1: ;
 	    return (BIN) r.value;
 	}
     }
@@ -399,7 +400,7 @@ hook397_1:
 			if (!in.isCompressible()) {
 					return;
 			}
-			Label398: //this.hook398(in);
+			Label398: ;//this.hook398(in);
 			BIN bin = (BIN) in;
 			int nCursors = bin.nCursors();
 			if (nCursors > 0) {
@@ -410,14 +411,14 @@ hook397_1:
 				return;
 					} else {
 				boolean requeued = bin.compress(binRef, false);
-				Label409://this.hook409();
+				Label409: ;//this.hook409();
 				if (!requeued && binRef.deletedKeysExist()) {
 						addBinRefToQueue(binRef, false);
-						Label410: //this.hook410();
+						Label410: ; //this.hook410();
 				} else {
 						if (bin.getNEntries() == 0) {
 					addBinRefToQueue(binRef, false);
-					Label411: //this.hook411();
+					Label411: ; //this.hook411();
 						}
 				}
 					}
@@ -428,16 +429,16 @@ hook397_1:
 	    throws DatabaseException {
 			binSearch.db = dbTree.getDb(binRef.getDatabaseId(), lockTimeout, dbCache);
 			boolean close = binSearch.db == null;
-			Label415: //close = this.hook415(binSearch, close);
+			Label415: ; //close = this.hook415(binSearch, close);
 			if (close) {
-					Label412: //this.hook412();
+					Label412: ; //this.hook412();
 					return false;
 			}
-			Label391: //this.hook391();
+			Label391: ; //this.hook391();
 			binSearch.bin = searchForBIN(binSearch.db, binRef);
 			if ((binSearch.bin == null) || binSearch.bin.getNodeId() != binRef.getNodeId()) {
-					Label399: //this.hook399(binSearch);
-					Label413: //this.hook413();
+					Label399: ; //this.hook399(binSearch);
+					Label413: ; //this.hook413();
 					return false;
 			}
 			return true;

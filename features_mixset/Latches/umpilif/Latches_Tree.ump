@@ -4,10 +4,11 @@ class Tree {
 
     depend com.sleepycat.je.latch.SharedLatch;
     depend com.sleepycat.je.latch.LatchSupport;
+    depend com.sleepycat.je.latch.LatchNotHeldException;
     
 private SharedLatch rootLatch;
 
-    private void releaseNodeLadderLatches(ArrayList nodeLadder) {
+    private void releaseNodeLadderLatches(ArrayList nodeLadder) throws LatchNotHeldException {
 
         ListIterator iter = nodeLadder.listIterator(nodeLadder.size());
         while (iter.hasPrevious()) {
@@ -126,10 +127,10 @@ private SharedLatch rootLatch;
     after Label683_1: getParentBINForChildLN(TreeLocation, byte, byte, LN, boolean, boolean, boolean, boolean) {
         //	try {	    //original(location, mainKey, dupKey, ln, splitsAllowed, findDeletedEntries, searchDupTree, updateGeneration,		    exactSearch, indicateIfExact, childNode);} 
 
-        catch (DatabaseException e) {
+
             location.bin.releaseLatchIfOwner();
-            throw e;
-        }
+    
+
     }
 
     after Label684: searchDupTreeByNodeId(TreeLocation, Node, LN, boolean, boolean) {
@@ -146,16 +147,15 @@ private SharedLatch rootLatch;
     after Label685_1: searchDupTreeForDBIN(TreeLocation, byte, DIN, LN, boolean, boolean, boolean, boolean, boolean) {
 
         //	try {	    //original(location, dupKey, dupRoot, ln, findDeletedEntries, indicateIfExact, exactSearch, splitsAllowed, updateGeneration);} 
-        catch (DatabaseException e) {
+
             dupRoot.releaseLatchIfOwner();
-            throw e;
-        }
+     
     }
 
     after Label686_1: getNextBinInternal(boolean, BIN, boolean) {
         //					try {							//original(traverseWithinDupTree, forward, idKey, next, parent, nextIN);} 
 
-        catch (DatabaseException e) {
+     //   catch (DatabaseException e) {
             next.releaseLatchIfOwner();
             if (parent != null) {
                 parent.releaseLatchIfOwner();
@@ -163,8 +163,8 @@ private SharedLatch rootLatch;
             if (nextIN != null) {
                 nextIN.releaseLatchIfOwner();
             }
-            throw e;
-        }
+
+      //  }
     }
 
     after Label687: getNextBinInternal(boolean, BIN, boolean) {
@@ -229,13 +229,13 @@ private SharedLatch rootLatch;
     }
 
     after Label698_1: searchSubTreeUntilSplit(IN, byte, long, boolean) {
-        catch (DatabaseException e) {
+      
             if (child != null) {
                 child.releaseLatchIfOwner();
             }
             parent.releaseLatchIfOwner();
-            throw e;
-        }
+
+        
     }
 
         after Label699: searchSubTreeUntilSplit(IN, byte, long, boolean) {

@@ -41,9 +41,9 @@ LabelEvict_1: ;//
 	//CursorImpl result = original(addCursor, usePosition);
 	if (allowEviction) {
 
-     Label203:	   // this.hook203();
+     Label203:	;  // this.hook203();
 	}
-	return result;
+//	return result;
     }
 
 }

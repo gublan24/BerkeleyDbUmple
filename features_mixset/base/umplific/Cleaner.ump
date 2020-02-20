@@ -225,7 +225,7 @@ class Cleaner {
        traceFileNotDeleted(e, fileNumValue);
       }
       if (deleted) {
-       this.hook88(fileNumValue);
+       Label88: ; //this.hook88(fileNumValue);
        try {
         profile.removeFile(fileNum);
        } finally {
@@ -333,7 +333,7 @@ class Cleaner {
   }
   catch (DatabaseException DBE) {
    DBE.printStackTrace();
-   this.hook89(DBE);
+   Label88: ; //this.hook89(DBE);
    throw DBE;
   } finally {
    Label95: //this.hook95(bin, parentDIN);
@@ -619,9 +619,9 @@ class Cleaner {
   }
  }
 
- protected void hook88(long fileNumValue) throws DatabaseException {}
+ //protected void hook88(long fileNumValue) throws DatabaseException {}
 
- protected void hook89(DatabaseException DBE) throws DatabaseException {}
+// protected void hook89(DatabaseException DBE) throws DatabaseException {}
 
  /*  protected void hook90() throws DatabaseException {
     }

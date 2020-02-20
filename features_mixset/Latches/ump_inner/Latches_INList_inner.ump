@@ -3,6 +3,7 @@ namespace com.sleepycat.je.dbi;
 class INList {
  static class INList_add {
   after Label343_1: execute() {
+   ;
    if (addToMajor) {
     _this.releaseMajorLatchIfHeld();
    }
@@ -23,7 +24,7 @@ class INList {
    if (addToMajor) //original(); // because its only one line 
   }
     //...
-  after Label345_1: execute() {
+  before Label345_1: execute() {
      else {
       _this.minorLatch.acquire();
       try {

@@ -28,7 +28,7 @@ class RecoveryManager
 
     after Label580: replaceOrInsertRoot(DatabaseImpl , IN , long ){
 	trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
-		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getoriginalLsn(), DbLsn.NULL_LSN, -1);
+		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getOriginalLsn(), DbLsn.NULL_LSN, -1);
 	//original(db, inFromLog, lsn, success, rootUpdater);
     }
 
@@ -51,14 +51,11 @@ class RecoveryManager
 	//original(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
     }
 
+
   after Label584: undo(Level , DatabaseImpl , TreeLocation , LN , byte ,
 	    byte , long , long , boolean , RecoveryInfo , boolean ){
-
-	try {
-	    //original(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
-	} finally {
-	    Label555: //hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
-	}
+	    Label555: ;//hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+	
     }
 
 }

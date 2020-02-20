@@ -8,9 +8,9 @@ class Checkpointer {
     after Label521: execute() {
 
         sb=new StringBuffer();
-  		{
+  
           Label517: //this.hook517();
-        }
+
         if (nextLsn != DbLsn.NULL_LSN) {
           sb.append(" " + "nextLsn=").append(DbLsn.getNoFormatString(nextLsn));
         }
@@ -18,9 +18,9 @@ class Checkpointer {
           sb.append(" lastCkpt=");
           sb.append(DbLsn.getNoFormatString(_this.lastCheckpointEnd));
         }
-  		{
+  	
           Label518: //this.hook518();
-        }
+ 
         sb.append(" force=").append(config.getForce());
         Tracer.trace(Level.FINEST,_this.envImpl,sb.toString());
         //original();

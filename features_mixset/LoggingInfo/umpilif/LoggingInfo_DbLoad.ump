@@ -8,7 +8,7 @@ class DbLoad
 	//return original();
     }
 
-    protected void hook835: load() {
+  after Label835: load() {
 	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbLoad.load of " + dbName + " ending.");
 	//original();
     }

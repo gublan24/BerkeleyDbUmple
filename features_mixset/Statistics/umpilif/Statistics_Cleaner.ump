@@ -4,45 +4,45 @@ class Cleaner
 {
   depend com.sleepycat.je.StatsConfig;
   depend com.sleepycat.je.EnvironmentStats;
-    int nBacklogFiles = 0;
+    protected int nBacklogFiles = 0;
 
-    int nCleanerDeletions = 0;
+    protected int nCleanerDeletions = 0;
 
-    int nINsObsolete = 0;
+    protected int nINsObsolete = 0;
 
-    int nINsCleaned = 0;
+    protected int nINsCleaned = 0;
 
-    int nINsDead = 0;
+    protected int nINsDead = 0;
 
-    int nINsMigrated = 0;
+    protected int nINsMigrated = 0;
 
-    int nLNsObsolete = 0;
+    protected int nLNsObsolete = 0;
 
-    int nLNsCleaned = 0;
+    protected int nLNsCleaned = 0;
 
-    int nLNsDead = 0;
+    protected int nLNsDead = 0;
 
-    int nLNsLocked = 0;
+    protected int nLNsLocked = 0;
 
-    int nLNsMigrated = 0;
+    protected int nLNsMigrated = 0;
 
-    int nLNsMarked = 0;
+    protected int nLNsMarked = 0;
 
-    int nLNQueueHits = 0;
+    protected int nLNQueueHits = 0;
 
-    int nPendingLNsProcessed = 0;
+    protected int nPendingLNsProcessed = 0;
 
-    int nMarkedLNsProcessed = 0;
+    protected int nMarkedLNsProcessed = 0;
 
-    int nToBeCleanedLNsProcessed = 0;
+    protected int nToBeCleanedLNsProcessed = 0;
 
-    int nClusterLNsProcessed = 0;
+    protected int nClusterLNsProcessed = 0;
 
-    int nPendingLNsLocked = 0;
+    protected int nPendingLNsLocked = 0;
 
-    int nEntriesRead = 0;
+    protected int nEntriesRead = 0;
 
-    long nRepeatIteratorReads = 0;
+    protected long nRepeatIteratorReads = 0;
 
     /** 
      * Load stats.

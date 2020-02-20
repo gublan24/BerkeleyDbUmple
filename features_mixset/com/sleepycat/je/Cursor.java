@@ -22,8 +22,15 @@ import com.sleepycat.je.dbi.DatabaseImpl;
 import com.sleepycat.je.dbi.CursorImpl;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../Cursor.ump"
+// line 3 "../../../loggingBase_Cursor.ump"
+// line 3 "../../../Latches_Cursor.ump"
+// line 3 "../../../LoggingFinest_Cursor.ump"
+// line 3 "../../../LoggingFinest_Cursor_inner.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Cursor.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
 public class Cursor
 {
 
@@ -63,16 +70,14 @@ public class Cursor
   {
     return config;
   }
-
-  public void delete()
-  {}
+  // the method 'delete()' has been disabled.  
 
 
   /**
    * 
    * Creates a cursor for a given user transaction. <p>If txn is null, a non-transactional cursor will be created that releases locks for the prior operation when the next operation suceeds.</p>
    */
-  // line 57 "../../../Cursor.ump"
+  // line 60 "../../../Cursor.ump"
   public  Cursor(Database dbHandle, Transaction txn, CursorConfig cursorConfig) throws DatabaseException{
     if (cursorConfig == null) {
             cursorConfig = CursorConfig.DEFAULT;
@@ -87,7 +92,7 @@ public class Cursor
    * 
    * Creates a cursor for a given locker. <p>If locker is null or is non-transactional, a non-transactional cursor will be created that releases locks for the prior operation when the next operation suceeds.</p>
    */
-  // line 69 "../../../Cursor.ump"
+  // line 72 "../../../Cursor.ump"
   public  Cursor(Database dbHandle, Locker locker, CursorConfig cursorConfig) throws DatabaseException{
     if (cursorConfig == null) {
             cursorConfig = CursorConfig.DEFAULT;
@@ -102,7 +107,7 @@ public class Cursor
    * 
    * Creates a cursor for a given locker and no db handle. <p>The locker parameter must be non-null.  With this constructor, we use the given locker without applying any special rules for different isolation levels -- the caller must supply the correct locker.</p>
    */
-  // line 81 "../../../Cursor.ump"
+  // line 84 "../../../Cursor.ump"
   public  Cursor(DatabaseImpl dbImpl, Locker locker, CursorConfig cursorConfig) throws DatabaseException{
     if (cursorConfig == null) {
             cursorConfig = CursorConfig.DEFAULT;
@@ -110,7 +115,7 @@ public class Cursor
         init(null, dbImpl, locker, true, cursorConfig);
   }
 
-  // line 89 "../../../Cursor.ump"
+  // line 92 "../../../Cursor.ump"
    private void init(Database dbHandle, DatabaseImpl dbImpl, Locker locker, boolean isWritable, CursorConfig cursorConfig) throws DatabaseException{
     assert locker != null;
         assert dbImpl != null;
@@ -125,7 +130,10 @@ public class Cursor
         }
         this.config = cursorConfig;
         //           ;  //this.hook36(dbImpl);
-        Label36: ;
+        Label36:
+this.logger = dbImpl.getDbEnvironment().getLogger();
+	//original(dbImpl);
+ ;
   }
 
 
@@ -133,7 +141,7 @@ public class Cursor
    * 
    * Copy constructor.
    */
-  // line 109 "../../../Cursor.ump"
+  // line 112 "../../../Cursor.ump"
   public  Cursor(Cursor cursor, boolean samePosition) throws DatabaseException{
     readUncommittedDefault = cursor.readUncommittedDefault;
         serializableIsolationDefault = cursor.serializableIsolationDefault;
@@ -152,7 +160,7 @@ public class Cursor
    * 
    * Internal entrypoint.
    */
-  // line 125 "../../../Cursor.ump"
+  // line 128 "../../../Cursor.ump"
   public CursorImpl getCursorImpl(){
     return cursorImpl;
   }
@@ -162,7 +170,7 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 132 "../../../Cursor.ump"
+  // line 135 "../../../Cursor.ump"
    public Database getDatabase(){
     return dbHandle;
   }
@@ -172,12 +180,12 @@ public class Cursor
    * 
    * Always returns non-null, while getDatabase() returns null if no handle is associated with this cursor.
    */
-  // line 139 "../../../Cursor.ump"
+  // line 142 "../../../Cursor.ump"
   public DatabaseImpl getDatabaseImpl(){
     return dbImpl;
   }
 
-  // line 150 "../../../Cursor.ump"
+  // line 153 "../../../Cursor.ump"
   public void setNonCloning(boolean nonCloning){
     cursorImpl.setNonCloning(nonCloning);
   }
@@ -187,7 +195,7 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 157 "../../../Cursor.ump"
+  // line 160 "../../../Cursor.ump"
    public synchronized  void close() throws DatabaseException{
     checkState(false);
         cursorImpl.close();
@@ -201,10 +209,13 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 168 "../../../Cursor.ump"
+  // line 171 "../../../Cursor.ump"
    public int count() throws DatabaseException{
     checkState(true);
-        Label0: ; //           ;  //this.hook0();
+        Label0:
+trace(Level.FINEST, "Cursor.count: ", null);
+	//original();
+ ; //           ;  //this.hook0();
         return countInternal(null);
   }
 
@@ -213,7 +224,7 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 177 "../../../Cursor.ump"
+  // line 180 "../../../Cursor.ump"
    public Cursor dup(boolean samePosition) throws DatabaseException{
     checkState(false);
         return new Cursor(this, samePosition);
@@ -224,11 +235,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 185 "../../../Cursor.ump"
+  // line 188 "../../../Cursor.ump"
    public OperationStatus delete() throws DatabaseException{
     checkState(true);
         checkUpdatesAllowed("delete");
-        Label1: ; //           ;  //this.hook1();
+        Label1:
+trace(Level.FINEST, "Cursor.delete: ", null);
+	//original();
+ ; //           ;  //this.hook1();
         return deleteInternal();
   }
 
@@ -237,14 +251,17 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 195 "../../../Cursor.ump"
+  // line 198 "../../../Cursor.ump"
    public OperationStatus put(DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("put");
-        Label2: ; //           ;  //this.hook2(key, data);
+        Label2:
+trace(Level.FINEST, "Cursor.put: ", key, data, null);
+	//original(key, data);
+ ; //           ;  //this.hook2(key, data);
         return putInternal(key, data, PutMode.OVERWRITE);
   }
 
@@ -253,14 +270,17 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 208 "../../../Cursor.ump"
+  // line 211 "../../../Cursor.ump"
    public OperationStatus putNoOverwrite(DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("putNoOverwrite");
-        Label3: ; //           ;  //this.hook3(key, data);
+        Label3:
+trace(Level.FINEST, "Cursor.putNoOverwrite: ", key, data, null);
+	//original(key, data);
+ ; //           ;  //this.hook3(key, data);
         return putInternal(key, data, PutMode.NOOVERWRITE);
   }
 
@@ -269,14 +289,17 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 221 "../../../Cursor.ump"
+  // line 224 "../../../Cursor.ump"
    public OperationStatus putNoDupData(DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", true);
         DatabaseUtil.checkForPartialKey(key);
         checkUpdatesAllowed("putNoDupData");
-        Label4: ;           ;  //this.hook4(key, data);
+        Label4:
+trace(Level.FINEST, "Cursor.putNoDupData: ", key, data, null);
+	//original(key, data);
+ ;           ;  //this.hook4(key, data);
         return putInternal(key, data, PutMode.NODUP);
   }
 
@@ -285,12 +308,15 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 234 "../../../Cursor.ump"
+  // line 237 "../../../Cursor.ump"
    public OperationStatus putCurrent(DatabaseEntry data) throws DatabaseException{
     checkState(true);
         DatabaseUtil.checkForNullDbt(data, "data", true);
         checkUpdatesAllowed("putCurrent");
-        Label5:           ;  //this.hook5(data);
+        Label5:
+trace(Level.FINEST, "Cursor.putCurrent: ", null, data, null);
+	//original(data);
+           ;  //this.hook5(data);
         return putInternal(null, data, PutMode.CURRENT);
   }
 
@@ -299,11 +325,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 246 "../../../Cursor.ump"
+  // line 249 "../../../Cursor.ump"
    public OperationStatus getCurrent(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
         checkArgsNoValRequired(key, data);
-        Label6:           ;  //this.hook6(lockMode);
+        Label6:
+trace(Level.FINEST, "Cursor.getCurrent: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook6(lockMode);
         return getCurrentInternal(key, data, lockMode);
   }
 
@@ -312,11 +341,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 256 "../../../Cursor.ump"
+  // line 259 "../../../Cursor.ump"
    public OperationStatus getFirst(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label7:           ;  //this.hook7(lockMode);
+        Label7:
+trace(Level.FINEST, "Cursor.getFirst: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook7(lockMode);
         return position(key, data, lockMode, true);
   }
 
@@ -325,11 +357,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 266 "../../../Cursor.ump"
+  // line 269 "../../../Cursor.ump"
    public OperationStatus getLast(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label8:           ;  //this.hook8(lockMode);
+        Label8:
+trace(Level.FINEST, "Cursor.getLast: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook8(lockMode);
         return position(key, data, lockMode, false);
   }
 
@@ -338,11 +373,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 276 "../../../Cursor.ump"
+  // line 279 "../../../Cursor.ump"
    public OperationStatus getNext(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label9:           ;  //this.hook9(lockMode);
+        Label9:
+trace(Level.FINEST, "Cursor.getNext: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook9(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, true);
         } else {
@@ -355,11 +393,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 291 "../../../Cursor.ump"
+  // line 294 "../../../Cursor.ump"
    public OperationStatus getNextDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
         checkArgsNoValRequired(key, data);
-        Label10:           ;  //this.hook10(lockMode);
+        Label10:
+trace(Level.FINEST, "Cursor.getNextDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook10(lockMode);
         return retrieveNext(key, data, lockMode, GetMode.NEXT_DUP);
   }
 
@@ -368,11 +409,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 302 "../../../Cursor.ump"
+  // line 305 "../../../Cursor.ump"
    public OperationStatus getNextNoDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label11:           ;  //this.hook11(lockMode);
+        Label11:
+trace(Level.FINEST, "Cursor.getNextNoDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook11(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, true);
         } else {
@@ -385,11 +429,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 316 "../../../Cursor.ump"
+  // line 319 "../../../Cursor.ump"
    public OperationStatus getPrev(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label12:           ;  //this.hook12(lockMode);
+        Label12:
+trace(Level.FINEST, "Cursor.getPrev: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook12(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, false);
         } else {
@@ -402,11 +449,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 331 "../../../Cursor.ump"
+  // line 334 "../../../Cursor.ump"
    public OperationStatus getPrevDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
         checkArgsNoValRequired(key, data);
-        Label13:           ;  //this.hook13(lockMode);
+        Label13:
+trace(Level.FINEST, "Cursor.getPrevDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook13(lockMode);
         return retrieveNext(key, data, lockMode, GetMode.PREV_DUP);
   }
 
@@ -415,11 +465,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 342 "../../../Cursor.ump"
+  // line 345 "../../../Cursor.ump"
    public OperationStatus getPrevNoDup(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsNoValRequired(key, data);
-        Label14:           ;  //this.hook14(lockMode);
+        Label14:
+trace(Level.FINEST, "Cursor.getPrevNoDup: ", lockMode);
+	//original(lockMode);
+           ;  //this.hook14(lockMode);
         if (cursorImpl.isNotInitialized()) {
             return position(key, data, lockMode, false);
         } else {
@@ -432,12 +485,15 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 357 "../../../Cursor.ump"
+  // line 360 "../../../Cursor.ump"
    public OperationStatus getSearchKey(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", false);
-        Label15:           ;  //this.hook15(key, lockMode);
+        Label15:
+trace(Level.FINEST, "Cursor.getSearchKey: ", key, null, lockMode);
+	//original(key, lockMode);
+           ;  //this.hook15(key, lockMode);
         return search(key, data, lockMode, SearchMode.SET);
   }
 
@@ -446,12 +502,15 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 369 "../../../Cursor.ump"
+  // line 372 "../../../Cursor.ump"
    public OperationStatus getSearchKeyRange(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", false);
-        Label16:           ;  //this.hook16(key, lockMode);
+        Label16:
+trace(Level.FINEST, "Cursor.getSearchKeyRange: ", key, null, lockMode);
+	//original(key, lockMode);
+           ;  //this.hook16(key, lockMode);
         return search(key, data, lockMode, SearchMode.SET_RANGE);
   }
 
@@ -460,11 +519,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 381 "../../../Cursor.ump"
+  // line 384 "../../../Cursor.ump"
    public OperationStatus getSearchBoth(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsValRequired(key, data);
-        Label17:           ;  //this.hook17(key, data, lockMode);
+        Label17:
+trace(Level.FINEST, "Cursor.getSearchBoth: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook17(key, data, lockMode);
         return search(key, data, lockMode, SearchMode.BOTH);
   }
 
@@ -473,11 +535,14 @@ public class Cursor
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 392 "../../../Cursor.ump"
+  // line 395 "../../../Cursor.ump"
    public OperationStatus getSearchBothRange(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
         checkArgsValRequired(key, data);
-        Label18:           ;  //this.hook18(key, data, lockMode);
+        Label18:
+trace(Level.FINEST, "Cursor.getSearchBothRange: ", key, data, lockMode);
+	//original(key, data, lockMode);
+           ;  //this.hook18(key, data, lockMode);
         return search(key, data, lockMode, SearchMode.BOTH_RANGE);
   }
 
@@ -486,7 +551,7 @@ public class Cursor
    * 
    * Counts duplicates without parameter checking.
    */
-  // line 402 "../../../Cursor.ump"
+  // line 405 "../../../Cursor.ump"
   public int countInternal(LockMode lockMode) throws DatabaseException{
     CursorImpl origCursor = null;
         CursorImpl dup = null;
@@ -506,7 +571,7 @@ public class Cursor
    * 
    * Internal version of delete() that does no parameter checking.  Calls deleteNoNotify() and notifies triggers (performs secondary updates).
    */
-  // line 419 "../../../Cursor.ump"
+  // line 422 "../../../Cursor.ump"
   public OperationStatus deleteInternal() throws DatabaseException{
     DatabaseEntry oldKey = null;
         DatabaseEntry oldData = null;
@@ -531,7 +596,7 @@ public class Cursor
    * 
    * Clone the cursor, delete at current position, and if successful, swap cursors.  Does not notify triggers (does not perform secondary updates).
    */
-  // line 441 "../../../Cursor.ump"
+  // line 444 "../../../Cursor.ump"
   public OperationStatus deleteNoNotify() throws DatabaseException{
     CursorImpl origCursor = null;
         CursorImpl dup = null;
@@ -539,11 +604,22 @@ public class Cursor
         try {
             origCursor = cursorImpl;
             dup = origCursor.cloneCursor(true);
-            Label19: //           ;  //this.hook19(dup);
+            Label19:
+dup.latchBINs();
+			//original(dup);
+ //           ;  //this.hook19(dup);
                 status = dup.delete();
             return status;
         } finally {
-            Label20: ; //           ;  //this.hook20(origCursor, dup);
+            Label20:
+if (origCursor != null) {
+					origCursor.releaseBINs();
+			}
+			if (dup != null) {
+					dup.releaseBINs();
+			}
+			//original(origCursor, dup);
+ ; //           ;  //this.hook20(origCursor, dup);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -565,7 +641,7 @@ public class Cursor
    * 
    * Internal version of put() that does no parameter checking.  Calls putNoNotify() and notifies triggers (performs secondary updates). Prevents phantoms.
    */
-  // line 472 "../../../Cursor.ump"
+  // line 475 "../../../Cursor.ump"
   public OperationStatus putInternal(DatabaseEntry key, DatabaseEntry data, PutMode putMode) throws DatabaseException{
     DatabaseEntry oldData = null;
         boolean doNotifyTriggers = dbHandle != null && dbHandle.hasTriggers();
@@ -590,7 +666,7 @@ public class Cursor
    * 
    * Performs the put operation but does not notify triggers (does not perform secondary updates).  Prevents phantoms.
    */
-  // line 495 "../../../Cursor.ump"
+  // line 498 "../../../Cursor.ump"
   public OperationStatus putNoNotify(DatabaseEntry key, DatabaseEntry data, PutMode putMode, DatabaseEntry returnOldData) throws DatabaseException{
     Locker nextKeyLocker = null;
         CursorImpl nextKeyCursor = null;
@@ -619,7 +695,7 @@ public class Cursor
    * Clone the cursor, put key/data according to PutMode, and if successful, swap cursors.  Does not notify triggers (does not perform secondary updates).  Does not prevent phantoms.
    * @param nextKeyCursor is the cursor used to lock the next key duringphantom prevention.  If this cursor is non-null and initialized, it's BIN will be used to initialize the dup cursor used to perform insertion. This enables an optimization that skips the search for the BIN.
    */
-  // line 522 "../../../Cursor.ump"
+  // line 525 "../../../Cursor.ump"
    private OperationStatus putAllowPhantoms(DatabaseEntry key, DatabaseEntry data, PutMode putMode, DatabaseEntry returnOldData, CursorImpl nextKeyCursor) throws DatabaseException{
     if (data == null) {
             throw new NullPointerException("put passed a null DatabaseEntry arg");
@@ -650,7 +726,12 @@ public class Cursor
             }
             return status;
         } finally {
-            Label21: ; //           ;  //this.hook21(origCursor);
+            Label21:
+if (origCursor != null) {
+					origCursor.releaseBINs();
+			}
+			//original(origCursor);
+ ; //           ;  //this.hook21(origCursor);
                 boolean success = (status == OperationStatus.SUCCESS);
             if (cursorImpl == dup) {
                 if (!success) {
@@ -674,7 +755,7 @@ public class Cursor
    * 
    * Position the cursor at the first or last record of the database. Prevents phantoms.
    */
-  // line 575 "../../../Cursor.ump"
+  // line 578 "../../../Cursor.ump"
   public OperationStatus position(DatabaseEntry key, DatabaseEntry data, LockMode lockMode, boolean first) throws DatabaseException{
     if (!isSerializableIsolation(lockMode)) {
             return positionAllowPhantoms(key, data, getLockType(lockMode, false), first);
@@ -701,7 +782,7 @@ public class Cursor
    * 
    * Position without preventing phantoms.
    */
-  // line 600 "../../../Cursor.ump"
+  // line 603 "../../../Cursor.ump"
    private OperationStatus positionAllowPhantoms(DatabaseEntry key, DatabaseEntry data, LockType lockType, boolean first) throws DatabaseException{
     assert(key != null && data != null);
         OperationStatus status = OperationStatus.NOTFOUND;
@@ -710,9 +791,15 @@ public class Cursor
             dup = beginRead(false);
             if (!dup.positionFirstOrLast(first, null)) {
                 status = OperationStatus.NOTFOUND;
-                Label22: ; //           ;  //this.hook22();
+                Label22:
+assert LatchSupport.countLatchesHeld() == 0 : LatchSupport.latchesHeldToString();
+      	//original();
+ ; //           ;  //this.hook22();
             } else {
-                Label23: ; //           ;  //this.hook23();
+                Label23:
+assert LatchSupport.countLatchesHeld() == 1 : LatchSupport.latchesHeldToString();
+				//original();
+ ; //           ;  //this.hook23();
                     status = dup.getCurrentAlreadyLatched(key, data, lockType, first);
                 if (status == OperationStatus.SUCCESS) {
                     if (dup.getDupBIN() != null) {
@@ -723,7 +810,10 @@ public class Cursor
                 }
             }
         } finally {
-            Label24: ; //           ;  //this.hook24();
+            Label24:
+cursorImpl.releaseBINs();
+			//original();
+ ; //           ;  //this.hook24();
                 endRead(dup, status == OperationStatus.SUCCESS);
         }
         return status;
@@ -734,7 +824,7 @@ public class Cursor
    * 
    * Perform search by key, data, or both.  Prevents phantoms.
    */
-  // line 631 "../../../Cursor.ump"
+  // line 634 "../../../Cursor.ump"
   public OperationStatus search(DatabaseEntry key, DatabaseEntry data, LockMode lockMode, SearchMode searchMode) throws DatabaseException{
     if (!isSerializableIsolation(lockMode)) {
             LockType lockType = getLockType(lockMode, false);
@@ -772,7 +862,7 @@ public class Cursor
    * 
    * For an exact search, perform a range search and return NOTFOUND if the key changes (or if the data changes for BOTH) during the search. If no exact match is found the range search will range lock the following key for phantom prevention.  Importantly, the cursor position is not changed if an exact match is not found, even though we advance to the following key in order to range lock it.
    */
-  // line 667 "../../../Cursor.ump"
+  // line 670 "../../../Cursor.ump"
    private KeyChangeStatus searchExactAndRangeLock(DatabaseEntry key, DatabaseEntry data, LockType searchLockType, LockType advanceLockType, SearchMode searchMode) throws DatabaseException{
     searchMode = (searchMode == SearchMode.SET) ? SearchMode.SET_RANGE : SearchMode.BOTH_RANGE;
         KeyChangeStatus result = null;
@@ -798,7 +888,7 @@ public class Cursor
    * 
    * Perform search without preventing phantoms.
    */
-  // line 691 "../../../Cursor.ump"
+  // line 694 "../../../Cursor.ump"
    private KeyChangeStatus searchAllowPhantoms(DatabaseEntry key, DatabaseEntry data, LockType searchLockType, LockType advanceLockType, SearchMode searchMode) throws DatabaseException{
     OperationStatus status = OperationStatus.NOTFOUND;
         CursorImpl dup = beginRead(false);
@@ -816,14 +906,19 @@ public class Cursor
    * 
    * Perform search for a given CursorImpl.
    */
-  // line 708 "../../../Cursor.ump"
+  // line 711 "../../../Cursor.ump"
    private KeyChangeStatus searchInternal(CursorImpl dup, DatabaseEntry key, DatabaseEntry data, LockType searchLockType, LockType advanceLockType, SearchMode searchMode, boolean advanceAfterRangeSearch) throws DatabaseException{
     OperationStatus status = OperationStatus.NOTFOUND;
         boolean keyChange = false;
         try {
             assert key != null && data != null;
         } finally {
-            Label25: ; //           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
+            Label25:
+cursorImpl.releaseBINs();
+			if (status != OperationStatus.SUCCESS && dup != cursorImpl) {
+				dup.releaseBINs();								
+			}
+ ; //           ;  //this.hook25(dup, key, data, searchLockType, advanceLockType, searchMode, advanceAfterRangeSearch, status,keyChange);
             //the label has been changed into the finally block.
         }
         return new KeyChangeStatus(status, keyChange);
@@ -834,7 +929,7 @@ public class Cursor
    * 
    * Retrieve the next or previous record.  Prevents phantoms.
    */
-  // line 724 "../../../Cursor.ump"
+  // line 727 "../../../Cursor.ump"
   public OperationStatus retrieveNext(DatabaseEntry key, DatabaseEntry data, LockMode lockMode, GetMode getMode) throws DatabaseException{
     if (!isSerializableIsolation(lockMode)) {
             return retrieveNextAllowPhantoms(key, data, getLockType(lockMode, false), getMode);
@@ -866,7 +961,7 @@ public class Cursor
    * 
    * Retrieve the next dup; if no next dup is found then range lock the following key for phantom prevention.  Importantly, the cursor position is not changed if there are no more dups, even though we advance to the following key in order to range lock it.
    */
-  // line 754 "../../../Cursor.ump"
+  // line 757 "../../../Cursor.ump"
    private OperationStatus getNextDupAndRangeLock(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     DatabaseEntry tryKey = new DatabaseEntry();
         DatabaseEntry tryData = new DatabaseEntry();
@@ -911,7 +1006,7 @@ public class Cursor
    * 
    * For 'prev' operations, upgrade to a range lock at the current position. For PREV_NODUP, range lock the first duplicate instead.  If there are no records at the current position, get a range lock on the next record or, if not found, on the logical EOF node.  Do not modify the current cursor position, use a separate cursor.
    */
-  // line 796 "../../../Cursor.ump"
+  // line 799 "../../../Cursor.ump"
    private void rangeLockCurrentPosition(GetMode getMode) throws DatabaseException{
     DatabaseEntry tempKey = new DatabaseEntry();
         DatabaseEntry tempData = new DatabaseEntry();
@@ -927,14 +1022,20 @@ public class Cursor
             }
             if (status != OperationStatus.SUCCESS) {
                 while (true) {
-                    Label28: ; //           ;  //this.hook28();
+                    Label28:
+assert LatchSupport.countLatchesHeld() == 0;
+		//original();
+ ; //           ;  //this.hook28();
                         status = dup.getNext(tempKey, tempData, LockType.RANGE_READ, true, false);
                     if (checkForInsertion(GetMode.NEXT, cursorImpl, dup)) {
                         dup.close();
                         dup = cursorImpl.cloneCursor(true);
                         continue;
                     } else {
-                        Label29: ; //           ;  //this.hook29();
+                        Label29:
+assert LatchSupport.countLatchesHeld() == 0;
+		//original();
+ ; //           ;  //this.hook29();
                             break;
                     }
                 }
@@ -956,12 +1057,15 @@ public class Cursor
    * 
    * Retrieve without preventing phantoms.
    */
-  // line 839 "../../../Cursor.ump"
+  // line 842 "../../../Cursor.ump"
    private OperationStatus retrieveNextAllowPhantoms(DatabaseEntry key, DatabaseEntry data, LockType lockType, GetMode getMode) throws DatabaseException{
     assert(key != null && data != null);
         OperationStatus status;
         while (true) {
-            Label30: ; //           ;  //this.hook30();
+            Label30:
+assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+ ; //           ;  //this.hook30();
                 CursorImpl dup = beginRead(true);
             try {
                 if (getMode == GetMode.NEXT) {
@@ -988,7 +1092,10 @@ public class Cursor
                 continue;
             } else {
                 endRead(dup, status == OperationStatus.SUCCESS);
-                Label31: ; //           ;  //this.hook31();
+                Label31:
+assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+ ; //           ;  //this.hook31();
                     break;
             }
         }
@@ -1000,13 +1107,13 @@ public class Cursor
    * 
    * Returns the current key and data.  There is no need to prevent phantoms.
    */
-  // line 881 "../../../Cursor.ump"
+  // line 884 "../../../Cursor.ump"
   public OperationStatus getCurrentInternal(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     LockType lockType = getLockType(lockMode, false);
         return cursorImpl.getCurrent(key, data, lockType);
   }
 
-  // line 887 "../../../Cursor.ump"
+  // line 890 "../../../Cursor.ump"
    private boolean checkForInsertion(GetMode getMode, CursorImpl origCursor, CursorImpl dupCursor) throws DatabaseException{
     BIN origBIN = origCursor.getBIN();
         BIN dupBIN = dupCursor.getBIN();
@@ -1017,7 +1124,10 @@ public class Cursor
         }
         boolean ret = false;
         if (origBIN != dupBIN) {
-            Label33: ; //           ;  //this.hook33(origCursor);
+            Label33:
+origCursor.latchBINs();
+	//original(origCursor);
+ ; //           ;  //this.hook33(origCursor);
             if (origDBIN == null) {
                 if (forward) {
                     if (origBIN.getNEntries() - 1 > origCursor.getIndex()) {
@@ -1051,12 +1161,18 @@ public class Cursor
                     }
                 }
             }
-            Label32: ; //           ;  //this.hook32(origCursor);
+            Label32:
+origCursor.releaseBINs();
+	//original(origCursor);
+ ; //           ;  //this.hook32(origCursor);
                 return ret;
         }
         if (origDBIN != dupCursor.getDupBIN() && origCursor.getIndex() == dupCursor.getIndex() &&
             getMode != GetMode.NEXT_NODUP && getMode != GetMode.PREV_NODUP) {
-            Label35: ; //           ;  //this.hook35(origCursor);
+            Label35:
+origCursor.latchBINs();
+	//original(origCursor);
+ ; //           ;  //this.hook35(origCursor);
             if (forward) {
                 if (origDBIN.getNEntries() - 1 > origCursor.getDupIndex()) {
                     for (int i = origCursor.getDupIndex() + 1; i < origDBIN.getNEntries(); i++) {
@@ -1084,7 +1200,10 @@ public class Cursor
                     }
                 }
             }
-            Label34: ; //           ;  //this.hook34(origCursor);
+            Label34:
+origCursor.releaseBINs();
+	//original(origCursor);
+ ; //           ;  //this.hook34(origCursor);
             return ret;
         }
         return false;
@@ -1095,7 +1214,7 @@ public class Cursor
    * 
    * If the cursor is initialized, dup it and return the dup; otherwise, return the original.  This avoids the overhead of duping when the original is uninitialized.  The cursor returned must be passed to endRead() to close the correct cursor.
    */
-  // line 973 "../../../Cursor.ump"
+  // line 976 "../../../Cursor.ump"
    private CursorImpl beginRead(boolean addCursor) throws DatabaseException{
     CursorImpl dup;
         if (cursorImpl.isNotInitialized()) {
@@ -1111,7 +1230,7 @@ public class Cursor
    * 
    * If the operation is successful, swaps cursors and closes the original cursor; otherwise, closes the duped cursor.  In the case where the original cursor was not duped by beginRead because it was uninitialized, just resets the original cursor if the operation did not succeed.
    */
-  // line 986 "../../../Cursor.ump"
+  // line 989 "../../../Cursor.ump"
    private void endRead(CursorImpl dup, boolean success) throws DatabaseException{
     if (dup == cursorImpl) {
             if (!success) {
@@ -1127,12 +1246,12 @@ public class Cursor
         }
   }
 
-  // line 1001 "../../../Cursor.ump"
+  // line 1004 "../../../Cursor.ump"
   public boolean advanceCursor(DatabaseEntry key, DatabaseEntry data){
     return cursorImpl.advanceCursor(key, data);
   }
 
-  // line 1005 "../../../Cursor.ump"
+  // line 1008 "../../../Cursor.ump"
    private LockType getLockType(LockMode lockMode, boolean rangeLock){
     if (isReadUncommittedMode(lockMode)) {
             return LockType.NONE;
@@ -1153,18 +1272,18 @@ public class Cursor
    * 
    * Returns whether the given lock mode will cause a read-uncommitted when used with this cursor, taking into account the default cursor configuration.
    */
-  // line 1023 "../../../Cursor.ump"
+  // line 1026 "../../../Cursor.ump"
   public boolean isReadUncommittedMode(LockMode lockMode){
     return (lockMode == LockMode.READ_UNCOMMITTED ||
             (readUncommittedDefault && (lockMode == null || lockMode == LockMode.DEFAULT)));
   }
 
-  // line 1028 "../../../Cursor.ump"
+  // line 1031 "../../../Cursor.ump"
    private boolean isSerializableIsolation(LockMode lockMode){
     return serializableIsolationDefault && !isReadUncommittedMode(lockMode);
   }
 
-  // line 1032 "../../../Cursor.ump"
+  // line 1035 "../../../Cursor.ump"
    protected void checkUpdatesAllowed(String operation) throws DatabaseException{
     if (updateOperationsProhibited) {
             throw new DatabaseException("A transaction was not supplied when opening this cursor: " + operation);
@@ -1176,7 +1295,7 @@ public class Cursor
    * 
    * Note that this flavor of checkArgs doesn't require that the dbt data is set.
    */
-  // line 1041 "../../../Cursor.ump"
+  // line 1044 "../../../Cursor.ump"
    private void checkArgsNoValRequired(DatabaseEntry key, DatabaseEntry data){
     DatabaseUtil.checkForNullDbt(key, "key", false);
         DatabaseUtil.checkForNullDbt(data, "data", false);
@@ -1187,7 +1306,7 @@ public class Cursor
    * 
    * Note that this flavor of checkArgs requires that the dbt data is set.
    */
-  // line 1049 "../../../Cursor.ump"
+  // line 1052 "../../../Cursor.ump"
    private void checkArgsValRequired(DatabaseEntry key, DatabaseEntry data){
     DatabaseUtil.checkForNullDbt(key, "key", true);
         DatabaseUtil.checkForNullDbt(data, "data", true);
@@ -1198,7 +1317,7 @@ public class Cursor
    * 
    * Check the environment and cursor state.
    */
-  // line 1057 "../../../Cursor.ump"
+  // line 1060 "../../../Cursor.ump"
   public void checkState(boolean mustBeInitialized) throws DatabaseException{
     checkEnv();
         cursorImpl.checkCursorState(mustBeInitialized);
@@ -1209,12 +1328,12 @@ public class Cursor
    * 
    * @throws RunRecoveryException if the underlying environment is invalid.
    */
-  // line 1065 "../../../Cursor.ump"
+  // line 1068 "../../../Cursor.ump"
   public void checkEnv() throws RunRecoveryException{
     cursorImpl.checkEnv();
   }
 
-  // line 1069 "../../../Cursor.ump"
+  // line 1072 "../../../Cursor.ump"
    private void traceCursorImpl(StringBuffer sb){
     sb.append(" locker=").append(cursorImpl.getLocker().getId());
         if (cursorImpl.getBIN() != null) {
@@ -1279,7 +1398,7 @@ public class Cursor
    * 
    * protected void hook24() throws DatabaseException {}
    */
-  // line 1134 "../../../Cursor.ump"
+  // line 1137 "../../../Cursor.ump"
    protected void hook25(CursorImpl dup, DatabaseEntry key, DatabaseEntry data, LockType searchLockType, LockType advanceLockType, SearchMode searchMode, boolean advanceAfterRangeSearch, OperationStatus status, boolean keyChange) throws DatabaseException{
     int searchResult = dup.searchAndPosition(key, data, searchMode, searchLockType);
         if ((searchResult & CursorImpl.FOUND) != 0) {
@@ -1332,27 +1451,199 @@ public class Cursor
   }
 
 
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 9 "../../../LoggingFinest_Cursor.ump"
+  public void trace(Level level, String methodName, DatabaseEntry key, DatabaseEntry data, LockMode lockMode){
+    new Cursor_trace(this, level, methodName, key, data, lockMode).execute();
+  }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 16 "../../../LoggingFinest_Cursor.ump"
+  public void trace(Level level, String methodName, LockMode lockMode){
+    new Cursor_trace2(this, level, methodName, lockMode).execute();
+  }
+
+
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "config" + "=" + (getConfig() != null ? !getConfig().equals(this)  ? getConfig().toString().replaceAll("  ","    ") : "this" : "null");
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../LoggingFinest_Cursor_inner.ump"
+  // line 24 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
+  public static class Cursor_trace2
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cursor_trace2()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../LoggingFinest_Cursor_inner.ump"
+    public  Cursor_trace2(Cursor _this, Level level, String methodName, LockMode lockMode){
+      this._this=_this;
+          this.level=level;
+          this.methodName=methodName;
+          this.lockMode=lockMode;
+    }
+  
+    // line 12 "../../../LoggingFinest_Cursor_inner.ump"
+    public void execute(){
+      // line 26 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
+      if (_this.logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                _this.traceCursorImpl(sb);
+                if (lockMode != null) {
+                  sb.append(" lockMode=").append(lockMode);
+                }
+                _this.logger.log(level,sb.toString());
+              }
+             // original();
+      // END OF UMPLE BEFORE INJECTION
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 13 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Cursor _this ;
+  // line 14 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Level level ;
+  // line 15 "../../../LoggingFinest_Cursor_inner.ump"
+    protected String methodName ;
+  // line 16 "../../../LoggingFinest_Cursor_inner.ump"
+    protected LockMode lockMode ;
+  // line 17 "../../../LoggingFinest_Cursor_inner.ump"
+    protected StringBuffer sb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 19 "../../../LoggingFinest_Cursor_inner.ump"
+  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
+  public static class Cursor_trace
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cursor_trace()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 21 "../../../LoggingFinest_Cursor_inner.ump"
+    public  Cursor_trace(Cursor _this, Level level, String methodName, DatabaseEntry key, DatabaseEntry data, LockMode lockMode){
+      this._this=_this;
+          this.level=level;
+          this.methodName=methodName;
+          this.key=key;
+          this.data=data;
+          this.lockMode=lockMode;
+    }
+  
+    // line 29 "../../../LoggingFinest_Cursor_inner.ump"
+    public void execute(){
+      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_Cursor_inner.ump"
+      if (_this.logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                _this.traceCursorImpl(sb);
+                if (key != null) {
+                  sb.append(" key=").append(key.dumpData());
+                }
+                if (data != null) {
+                  sb.append(" data=").append(data.dumpData());
+                }
+                if (lockMode != null) {
+                  sb.append(" lockMode=").append(lockMode);
+                }
+                _this.logger.log(level,sb.toString());
+              }
+             // original();
+      // END OF UMPLE BEFORE INJECTION
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 30 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Cursor _this ;
+  // line 31 "../../../LoggingFinest_Cursor_inner.ump"
+    protected Level level ;
+  // line 32 "../../../LoggingFinest_Cursor_inner.ump"
+    protected String methodName ;
+  // line 33 "../../../LoggingFinest_Cursor_inner.ump"
+    protected DatabaseEntry key ;
+  // line 34 "../../../LoggingFinest_Cursor_inner.ump"
+    protected DatabaseEntry data ;
+  // line 35 "../../../LoggingFinest_Cursor_inner.ump"
+    protected LockMode lockMode ;
+  // line 36 "../../../LoggingFinest_Cursor_inner.ump"
+    protected StringBuffer sb ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 27 "../../../Cursor.ump"
+  // line 30 "../../../Cursor.ump"
   protected CursorImpl cursorImpl ;
-// line 37 "../../../Cursor.ump"
+// line 40 "../../../Cursor.ump"
   private boolean updateOperationsProhibited ;
-// line 42 "../../../Cursor.ump"
+// line 45 "../../../Cursor.ump"
   private Database dbHandle ;
-// line 47 "../../../Cursor.ump"
+// line 50 "../../../Cursor.ump"
   private DatabaseImpl dbImpl ;
-// line 49 "../../../Cursor.ump"
+// line 52 "../../../Cursor.ump"
   private boolean readUncommittedDefault ;
-// line 51 "../../../Cursor.ump"
+// line 54 "../../../Cursor.ump"
   private boolean serializableIsolationDefault ;
+// line 5 "../../../loggingBase_Cursor.ump"
+  private Logger logger ;
 
   
 }

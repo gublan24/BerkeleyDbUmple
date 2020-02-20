@@ -79,7 +79,7 @@ class INList
 	//original(in);
     }
 
-    protected boolean hook341: removeLatchAlreadyHeld(IN ){
+  after Label341: removeLatchAlreadyHeld(IN ){
 		if (!removeDone) {
 			  minorLatch.acquire();
 			  try {

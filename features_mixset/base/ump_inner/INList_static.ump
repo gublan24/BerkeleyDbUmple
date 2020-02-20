@@ -11,7 +11,7 @@ class INList {
         addToMajor=true;
 try{
         Label343:   ; //this.hook343();
-  			Label345:   ; //this.hook345();
+  			Label345:    //this.hook345();
         _this.addAndSetMemory(_this.ins,in);
 Label345_1:   ;
 }

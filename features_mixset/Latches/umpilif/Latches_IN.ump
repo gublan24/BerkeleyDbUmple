@@ -5,6 +5,7 @@ class IN
   depend com.sleepycat.je.latch.LatchSupport;
   depend com.sleepycat.je.latch.LatchNotHeldException;
   depend com.sleepycat.je.latch.Latch;
+  depend  com.sleepycat.je.latch.SharedLatch;
     private Latch latch;
 
     /** 
@@ -42,7 +43,7 @@ class IN
 	return latch.isOwner();
     }
 
-    protected void hook618: init(DatabaseImpl , byte , int , int ) {
+    after Label618: init(DatabaseImpl , byte , int , int ) {
 	latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env);
 	//original(env);
     }
@@ -57,7 +58,8 @@ class IN
     }
 
   after Label619: latchNoWait(boolean ){
-      if (! latch.acquireExclusiveNoWait()) {
+
+      if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
             return false;
       }
   }
@@ -73,44 +75,44 @@ class IN
 	//original(searchType, targetNodeId, targetContainsDuplicates, targetIsRoot, targetMainTreeKey, targetDupTreeKey,result, requireExactMatch, updateGeneration, targetLevel, trackingList, doFetch);
     }
 
-    protected void hook620: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label620: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
 	//original();
     }
 
-    protected void hook621: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label621: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
 	//original();
     }
 
-    protected void hook622: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label622: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
 	//original();
     }
 
-    protected void hook623: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label623: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
 	//original();
     }
 
-    protected void hook624:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
+    after Label624:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
 
 	releaseLatch();
 	//original();
     }
 
-    protected void hook625:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
+    after Label625:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
 
 	((IN) child).releaseLatch();
 	//original(child);
     }
 
-    protected void hook626:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
+    after Label626:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
 	releaseLatch();
 	//original();
     }
 
-    protected void hook627: isSoughtNode(long , boolean ){
+    after Label627: isSoughtNode(long , boolean ){
 	releaseLatch();
 	//original();
     }

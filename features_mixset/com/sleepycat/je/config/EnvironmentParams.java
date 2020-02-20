@@ -11,6 +11,24 @@ import java.io.FileWriter;
 import java.io.File;
 
 // line 3 "../../../../EnvironmentParams.ump"
+// line 3 "../../../../loggingBase_EnvironmentParams.ump"
+// line 3 "../../../../loggingConsoleHandler_EnvironmentParams.ump"
+// line 3 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
+// line 3 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+// line 3 "../../../../Latches_EnvironmentParams.ump"
+// line 3 "../../../../Evictor_EnvironmentParams.ump"
+// line 3 "../../../../INCompressor_EnvironmentParams.ump"
+// line 3 "../../../../CPTime_EnvironmentParams.ump"
+// line 3 "../../../../CPBytes_EnvironmentParams.ump"
+// line 3 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
+// line 3 "../../../../Checksum_EnvironmentParams.ump"
+// line 3 "../../../../LookAHEADCache_EnvironmentParams.ump"
+// line 3 "../../../../FSync_EnvironmentParams.ump"
+// line 3 "../../../../LoggingCleaner_EnvironmentParams.ump"
+// line 3 "../../../../LoggingEvictor_EnvironmentParams.ump"
+// line 3 "../../../../LoggingRecovery_EnvironmentParams.ump"
+// line 3 "../../../../LoggingFine_EnvironmentParams.ump"
+// line 3 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentParams.ump"
 public class EnvironmentParams
 {
 
@@ -325,5 +343,121 @@ public class EnvironmentParams
     static void addSupportedParam(ConfigParam param) {
 	SUPPORTED_PARAMS.put(param.getName(), param);
     }
+// line 5 ../../../../loggingBase_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL = new ConfigParam("java.util.logging.level", "FINEST", false,
+	    "# Trace messages equal and above this level will be logged.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");// line 5 "../../../../loggingConsoleHandler_EnvironmentParams.ump"
+  public static final BooleanConfigParam JE_LOGGING_CONSOLE = new BooleanConfigParam(
+	    "java.util.logging.ConsoleHandler.on", false, false, "# Use ConsoleHandler in logging system.") ;
+// line 5 "../../../../LoggingDbLogHandler_EnvironmentParams.ump"
+  public static final BooleanConfigParam JE_LOGGING_DBLOG = new BooleanConfigParam(
+	    "java.util.logging.DbLogHandler.on", true, false, "# Use DbLogHandler in logging system.") ;
+// line 5 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+  public static final BooleanConfigParam JE_LOGGING_FILE = new BooleanConfigParam("java.util.logging.FileHandler.on",
+	    true, false, "# Use FileHandler in logging system.") ;
+// line 8 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+  public static final IntConfigParam JE_LOGGING_FILE_LIMIT = new IntConfigParam("java.util.logging.FileHandler.limit",
+	    new Integer(1000), new Integer(1000000000), new Integer(10000000), false,
+	    "# Log file limit for FileHandler.") ;
+// line 12 "../../../../LoggingFileHandler_EnvironmentParams.ump"
+  public static final IntConfigParam JE_LOGGING_FILE_COUNT = new IntConfigParam("java.util.logging.FileHandler.count",
+	    new Integer(1), null, new Integer(10), false, "# Log file count for FileHandler.") ;
+
+// line 5 ../../../../Latches_EnvironmentParams.ump
+  public static final BooleanConfigParam ENV_FAIR_LATCHES = new BooleanConfigParam("je.env.fairLatches", false, false,
+	    "# If true, use latches instead of synchronized blocks to\n"
+		    + "# implement the lock table and log write mutexes. Latches require\n"
+		    + "# that threads queue to obtain the mutex in question and\n"
+		    + "# therefore guarantee that there will be no mutex starvation, but \n"
+		    + "# do incur a performance penalty. Latches should not be necessary in\n"
+		    + "# most cases, so synchronized blocks are the default. An application\n"
+		    + "# that puts heavy load on JE with threads with different thread\n"
+		    + "# priorities might find it useful to use latches.  In a Java 5 JVM,\n"
+		    + "# where java.util.concurrent.locks.ReentrantLock is used for the\n"
+		    + "# latch implementation, this parameter will determine whether they\n"
+		    + "# are 'fair' or not.  This parameter is 'static' across all\n" + "# environments.\n");
+// line 5 ../../../../Evictor_EnvironmentParams.ump
+  public static final LongConfigParam EVICTOR_EVICT_BYTES = new LongConfigParam("je.evictor.evictBytes",
+	    new Long(1024), null, new Long(524288), false,
+	    "# When eviction happens, the evictor will push memory usage to this\n"
+		    + "# number of bytes below je.maxMemory.  The default is 512KB and the\n"
+		    + "# minimum is 1 KB (1024).");
+
+    public static final IntConfigParam EVICTOR_USEMEM_FLOOR = new IntConfigParam("je.evictor.useMemoryFloor",
+	    new Integer(50), new Integer(100), new Integer(95), false,
+	    "# When eviction happens, the evictor will push memory usage to this\n" + "# percentage of je.maxMemory."
+		    + "# (deprecated in favor of je.evictor.evictBytes");
+
+    public static final IntConfigParam EVICTOR_NODE_SCAN_PERCENTAGE = new IntConfigParam(
+	    "je.evictor.nodeScanPercentage", new Integer(1), new Integer(100), new Integer(10), false,
+	    "# The evictor percentage of total nodes to scan per wakeup.\n"
+		    + "# (deprecated in favor of je.evictor.nodesPerScan");
+
+    public static final IntConfigParam EVICTOR_EVICTION_BATCH_PERCENTAGE = new IntConfigParam(
+	    "je.evictor.evictionBatchPercentage", new Integer(1), new Integer(100), new Integer(10), false,
+	    "# The evictor percentage of scanned nodes to evict per wakeup.\n" + "# (deprecated)");
+
+    public static final IntConfigParam EVICTOR_NODES_PER_SCAN = new IntConfigParam("je.evictor.nodesPerScan",
+	    new Integer(1), new Integer(1000), new Integer(10), false, "# The number of nodes in one evictor scan");
+
+    public static final IntConfigParam EVICTOR_CRITICAL_PERCENTAGE = new IntConfigParam("je.evictor.criticalPercentage",
+	    new Integer(0), new Integer(1000), new Integer(0), false,
+	    "# At this percentage over the allotted cache, critical eviction\n" + "# will start."
+		    + "# (deprecated, eviction is performed in-line");
+
+    public static final BooleanConfigParam EVICTOR_LRU_ONLY = new BooleanConfigParam("je.evictor.lruOnly", true, false,
+	    "# If true (the default), use an LRU-only policy to select nodes for\n"
+		    + "# eviction.  If false, select by Btree level first, and then by LRU.");// line 5 "../../../../INCompressor_EnvironmentParams.ump"
+  public static final LongConfigParam COMPRESSOR_WAKEUP_INTERVAL = new LongConfigParam("je.compressor.wakeupInterval",
+	    new Long(1000000), new Long(4294967296L), new Long(5000000), false,
+	    "# The compressor wakeup interval in microseconds.") ;
+
+// line 5 ../../../../CPTime_EnvironmentParams.ump
+  public static final LongConfigParam CHECKPOINTER_WAKEUP_INTERVAL = new LongConfigParam(
+	    "je.checkpointer.wakeupInterval", new Long(1000000), new Long(4294967296L), new Long(0), false,
+	    "# The checkpointer wakeup interval in microseconds. By default, this\n"
+		    + "# is inactive and we wakeup the checkpointer as a function of the\n"
+		    + "# number of bytes written to the log. (je.checkpointer.bytesInterval)");
+// line 5 ../../../../CPBytes_EnvironmentParams.ump
+  public static final LongConfigParam CHECKPOINTER_BYTES_INTERVAL = new LongConfigParam(
+	    "je.checkpointer.bytesInterval", new Long(0), new Long(Long.MAX_VALUE), new Long(20000000), false,
+	    "# Ask the checkpointer to run every time we write this many bytes\n"
+		    + "# to the log. If set, supercedes je.checkpointer.wakeupInterval. To\n"
+		    + "# use time based checkpointing, set this to 0.");// line 5 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
+  public static final IntConfigParam CHECKPOINTER_RETRY = new IntConfigParam("je.checkpointer.deadlockRetry",
+	    new Integer(0), new Integer(Integer.MAX_VALUE), new Integer(3), false,
+	    "# The number of times to retry a checkpoint if it runs into a deadlock.") ;
+// line 5 "../../../../Checksum_EnvironmentParams.ump"
+  public static final BooleanConfigParam LOG_CHECKSUM_READ = new BooleanConfigParam("je.log.checksumRead", true,
+	    false, "# If true, perform a checksum check when reading entries from log.") ;
+
+// line 5 ../../../../LookAHEADCache_EnvironmentParams.ump
+  public static final IntConfigParam CLEANER_LOOK_AHEAD_CACHE_SIZE = new IntConfigParam(
+	    "je.cleaner.lookAheadCacheSize", new Integer(0), null, new Integer(8192), true,
+	    "# The look ahead cache size for cleaning in bytes.  Increasing this\n"
+		    + "# value can reduce the number of Btree lookups.");// line 5 "../../../../FSync_EnvironmentParams.ump"
+  public static final LongConfigParam LOG_FSYNC_TIMEOUT = new LongConfigParam("je.log.fsyncTimeout", new Long(10000L),
+	    null, new Long(500000L), false, "# Timeout limit for group file sync, in microseconds.") ;
+
+// line 5 ../../../../LoggingCleaner_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_CLEANER = new ConfigParam("java.util.logging.level.cleaner",
+	    "FINE", true, "# Cleaner specific detailed trace messages will be issued at this\n"
+		    + "# level. The Value should be one of the predefined \n" + "# java.util.logging.Level values");
+// line 5 ../../../../LoggingEvictor_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_EVICTOR = new ConfigParam("java.util.logging.level.evictor",
+	    "FINE", false, "# Evictor specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");
+// line 5 ../../../../LoggingRecovery_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_RECOVERY = new ConfigParam("java.util.logging.level.recovery",
+	    "FINE", false, "# Recovery specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");
+// line 5 ../../../../LoggingFine_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_LOCKMGR = new ConfigParam("java.util.logging.level.lockMgr",
+	    "FINE", false, "# Lock manager specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");// line 5 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentParams.ump"
+  public static final IntConfigParam EVICTOR_RETRY = new IntConfigParam("je.evictor.deadlockRetry", new Integer(0),
+	    new Integer(Integer.MAX_VALUE), new Integer(3), false,
+	    "# The number of times to retry the evictor if it runs into a deadlock.") ;
+
   
 }

@@ -2,7 +2,7 @@
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
    static class FileProcessor_processFile {
-      protected void hook118: execute(){ // Label118 introduced in MemoryBudget_FileProcessor.ump.
+      after Label118: execute(){ // Label118 introduced in MemoryBudget_FileProcessor.ump.
         adjustMem+=lookAheadCacheSize;
         //original();
       }

@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../BINDelta.ump"
+// line 3 "../../../../Latches_BINDelta.ump"
 public class BINDelta implements LoggableObject,LogReadable
 {
 
@@ -134,7 +135,10 @@ public class BINDelta implements LoggableObject,LogReadable
 	DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	fullBIN.setDatabase(db);
 	fullBIN.setLastFullLsn(lastFullLsn);
-	Label612:   ; //this.hook612(fullBIN);
+	Label612:
+fullBIN.latch();
+		//original(fullBIN);
+   ; //this.hook612(fullBIN);
 	for (int i = 0; i < deltas.size(); i++) {
 	    DeltaInfo info = (DeltaInfo) deltas.get(i);
 	    int foundIndex = fullBIN.findEntry(info.getKey(), true, false);
@@ -154,7 +158,10 @@ public class BINDelta implements LoggableObject,LogReadable
 	    }
 	}
 	fullBIN.setGeneration(0);
-	Label611:   ; //this.hook611(fullBIN);
+	Label611:
+fullBIN.releaseLatch();
+		//original(fullBIN);
+   ; //this.hook611(fullBIN);
 	return fullBIN;
   }
 

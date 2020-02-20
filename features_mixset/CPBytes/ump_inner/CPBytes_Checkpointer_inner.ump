@@ -20,10 +20,7 @@ class Checkpointer {
 		        if (DbLsn.getNoCleaningDistance(nextLsn,_this.lastCheckpointEnd,_this.logFileMax) >= useBytesInterval) {
 		                   return true; //throw new ReturnBoolean(true);
 		        }
-				 else {
-						               return false;
-
-						  }
+				 else {						               return false;}
 					}
 
 				//else {

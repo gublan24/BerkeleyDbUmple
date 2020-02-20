@@ -228,7 +228,7 @@ try {
 	} 
 
 finally {
-Label347_1:
+Label347_1: ;
 	}
 		//end of 347
 		return totalSize;

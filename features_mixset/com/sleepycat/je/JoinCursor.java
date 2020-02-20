@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Arrays;
 
 // line 3 "../../../JoinCursor.ump"
+// line 3 "../../../LoggingFinest_JoinCursor.ump"
 public class JoinCursor
 {
 
@@ -119,7 +120,10 @@ public class JoinCursor
    public OperationStatus getNext(DatabaseEntry key, LockMode lockMode) throws DatabaseException{
     priCursor.checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", false);
-	Label62:           ;  //this.hook62(lockMode);
+	Label62:
+priCursor.trace(Level.FINEST, "JoinCursor.getNext(key): ", lockMode);
+	//original(lockMode);
+           ;  //this.hook62(lockMode);
 	return retrieveNext(key, null, lockMode);
   }
 
@@ -133,7 +137,10 @@ public class JoinCursor
     priCursor.checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label63:           ;  //this.hook63(lockMode);
+	Label63:
+priCursor.trace(Level.FINEST, "JoinCursor.getNext(key,data): ", lockMode);
+	//original(lockMode);
+           ;  //this.hook63(lockMode);
 	return retrieveNext(key, data, lockMode);
   }
 

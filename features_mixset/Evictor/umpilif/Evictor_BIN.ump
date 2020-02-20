@@ -34,7 +34,7 @@ class BIN
 				removed += evictInternal(i, cleaner);
 					}
 
-					Label601:  					//this.hook601(removed);;
+					Label601:  		;			//this.hook601(removed);;
 
 			}
 			return removed;
@@ -47,7 +47,7 @@ class BIN
 			Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
 			long removed = evictInternal(index, cleaner);
 
-      Label602: 			//this.hook602(removed);
+      Label602: 	;		//this.hook602(removed);
     }
 
     /** 

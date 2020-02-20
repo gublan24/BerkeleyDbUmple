@@ -6,7 +6,6 @@ class DatabaseStats
   depend de.ovgu.cide.jakutil.*;
   depend java.io.Serializable;
 
-    protected DatabaseStats() {
-    }
+ //   protected DatabaseStats() {}
 
 }

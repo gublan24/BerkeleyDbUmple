@@ -15,10 +15,10 @@ class LogBufferPool
 					nCacheMiss = 0;
 					nNotResident = 0;
 			}
-			Label484: //this.hook484();
+			Label484: ; //this.hook484();
 			long bufferBytes = 0;
 			int nLogBuffers = 0;
-			Label483: //this.hook483(bufferBytes, nLogBuffers);
+			Label483: ; //this.hook483(bufferBytes, nLogBuffers);
 	try {
 			Iterator iter = bufferPool.iterator();
 				while (iter.hasNext()) {

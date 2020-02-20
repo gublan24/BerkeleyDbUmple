@@ -2,31 +2,31 @@ namespace com.sleepycat.je.cleaner;
 
 class FileProcessor
 {
-    private int nINsObsoleteThisRun = 0;
+    public int nINsObsoleteThisRun = 0;
 
-    private int nINsCleanedThisRun = 0;
+    public int nINsCleanedThisRun = 0;
 
-    private int nINsDeadThisRun = 0;
+    public int nINsDeadThisRun = 0;
 
-    private int nINsMigratedThisRun = 0;
+    public int nINsMigratedThisRun = 0;
 
-    private int nLNsObsoleteThisRun = 0;
+    public int nLNsObsoleteThisRun = 0;
 
-    private int nLNsCleanedThisRun = 0;
+    public int nLNsCleanedThisRun = 0;
 
-    private int nLNsDeadThisRun = 0;
+    public int nLNsDeadThisRun = 0;
 
-    private int nLNsLockedThisRun = 0;
+    public int nLNsLockedThisRun = 0;
 
-    private int nLNsMigratedThisRun = 0;
+    public int nLNsMigratedThisRun = 0;
 
-    private int nLNsMarkedThisRun = 0;
+    public int nLNsMarkedThisRun = 0;
 
-    private int nLNQueueHitsThisRun = 0;
+    public int nLNQueueHitsThisRun = 0;
 
-    private int nEntriesReadThisRun;
+    public int nEntriesReadThisRun;
 
-    private long nRepeatIteratorReadsThisRun;
+    public long nRepeatIteratorReadsThisRun;
 
     /** 
      * Reset per-run counters.

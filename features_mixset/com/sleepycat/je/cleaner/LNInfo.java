@@ -8,6 +8,7 @@ import com.sleepycat.je.dbi.MemoryBudget;
 import com.sleepycat.je.dbi.DatabaseId;
 
 // line 3 "../../../../LNInfo.ump"
+// line 3 "../../../../MemoryBudget_LNInfo.ump"
 public class LNInfo
 {
 
@@ -55,6 +56,21 @@ public class LNInfo
   // line 37 "../../../../LNInfo.ump"
   public byte[] getDupKey(){
     return dupKey;
+  }
+
+  // line 6 "../../../../MemoryBudget_LNInfo.ump"
+  public int getMemorySize(){
+    int size = MemoryBudget.LN_INFO_OVERHEAD;
+		if (ln != null) {
+			  size += ln.getMemorySizeIncludedByParent();
+		}
+		if (key != null) {
+			  size += MemoryBudget.byteArraySize(key.length);
+		}
+		if (dupKey != null) {
+			  size += MemoryBudget.byteArraySize(dupKey.length);
+		}
+	return size;
   }
   
   //------------------------

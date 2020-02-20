@@ -4,48 +4,54 @@ class FileManager
 {
     private Latch fileCacheLatch;
 
-    protected void hook449(EnvironmentImpl envImpl) throws DatabaseException {
+  after Label449:FileManager(EnvironmentImpl , File, boolean ) {
+//(EnvironmentImpl envImpl) throws DatabaseException {
 	fileCacheLatch = LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
-	original(envImpl);
+	//original(envImpl);
     }
 
-    protected FileHandle hook450(long fileNum, Long fileId, FileHandle fileHandle)
-	    throws LogException, DatabaseException {
+  after Label450:getFileHandle(long ) {
+
 	fileCacheLatch.acquire();
-	try {
-	    fileHandle = original(fileNum, fileId, fileHandle);
-	} finally {
+
+}
+
+ after getFileHandle(long ) {
+	//try {	    fileHandle = original(fileNum, fileId, fileHandle);} finally {
 	    fileCacheLatch.release();
-	}
-	return fileHandle;
+	//}return fileHandle;
     }
 
     /** 
      * Close all file handles and empty the cache.
      */
-    public void clear() throws IOException, DatabaseException {
+  before clear() {
+
 	fileCacheLatch.acquire();
-	original();
+	//original();
     }
 
-    protected void hook451() throws IOException, DatabaseException {
-	try {
-	    original();
-	} finally {
+   after clear() {
+//throws IOException, DatabaseException {
+	//try {    original();	} finally {
 	    fileCacheLatch.release();
-	}
+	//}
     }
 
     /** 
      * Clear a file out of the file cache regardless of mode type.
      */
-    private void clearFileCache(long fileNum) throws IOException, DatabaseException {
+  before clearFileCache(long ) {
+
 	fileCacheLatch.acquire();
-	try {
-	    original(fileNum);
-	} finally {
+//	try {	    original(fileNum);} finally {
 	    fileCacheLatch.release();
-	}
+    }
+
+  after clearFileCache(long ) {
+
+	    fileCacheLatch.release();
+	
     }
 
 }

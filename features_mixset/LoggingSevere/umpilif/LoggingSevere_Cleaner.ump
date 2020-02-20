@@ -2,9 +2,8 @@ namespace com.sleepycat.je.cleaner;
 
 class Cleaner
 {
-    protected void hook88(long fileNumValue) throws DatabaseException {
+    after Label88: deleteSafeToDeleteFiles() {
 	Tracer.trace(Level.SEVERE, env, "Cleaner deleted file 0x" + Long.toHexString(fileNumValue));
-	original(fileNumValue);
     }
 
     private void traceFileNotDeleted(Exception e, long fileNum) {
@@ -12,12 +11,13 @@ class Cleaner
 		"Log file 0x" + Long.toHexString(fileNum) + " could not be " + (expunge ? "deleted" : "renamed")
 			+ ".  This operation will be retried at the next checkpoint.",
 		e);
-	original(e, fileNum);
+
     }
 
-    protected void hook89(DatabaseException DBE) throws DatabaseException {
+    after Label89: processPendingLN(LN , DatabaseImpl , byte, byte, TreeLocation )
+{
 	Tracer.trace(env, "com.sleepycat.je.cleaner.Cleaner", "processLN", "Exception thrown: ", DBE);
-	original(DBE);
+
     }
 
 }

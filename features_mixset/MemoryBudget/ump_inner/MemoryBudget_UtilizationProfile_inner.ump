@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/cleaner/UtilizationProfile.java
 namespace com.sleepycat.je.cleaner;
 class UtilizationProfile {
-  @MethodObject static class UtilizationProfile_populateCache {
+   static class UtilizationProfile_populateCache {
       after Label194: execute()  {
         oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
         //original();
@@ -13,21 +13,21 @@ class UtilizationProfile {
         //original();
       }
     }
-  @MethodObject static class UtilizationProfile_removeFile {
+   static class UtilizationProfile_removeFile {
       after Label192: execute () {
         mb=_this.env.getMemoryBudget();
         mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
         //original();
       }
     }
-  @MethodObject static class UtilizationProfile_putFileSummary {
+   static class UtilizationProfile_putFileSummary {
       after Label193: execute() {
         mb=_this.env.getMemoryBudget();
         mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
         //original();
       }
     }
-  @MethodObject static class UtilizationProfile_clearCache {
+   static class UtilizationProfile_clearCache {
       before execute(){
         memorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
         mb=_this.env.getMemoryBudget();

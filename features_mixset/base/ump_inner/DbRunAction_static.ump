@@ -124,9 +124,9 @@ class DbRunAction {
     //  }
   //    protected void hook840() throws Exception {
    //   }
-      protected void hook841() throws Exception {
+   //   protected void hook841() throws Exception {
       
-      }
+     // }
     //  protected void hook842() throws Exception {
     //  }
    //   protected void hook843() throws Exception {
@@ -139,8 +139,8 @@ class DbRunAction {
   //    protected void hook846() throws Exception {
     //    this.hook843();
      // }
-      protected void hook847() throws Exception {
-      }
+    //  protected void hook847() throws Exception {
+    //  }
  //     protected void hook848() throws Exception {
  //     }
     }

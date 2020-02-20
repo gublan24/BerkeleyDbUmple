@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/cleaner/UtilizationProfile.java
 namespace com.sleepycat.je.cleaner;
 class UtilizationProfile {
-  @MethodObject static class UtilizationProfile_populateCache {
+   static class UtilizationProfile_populateCache {
       after Label191: execute(){
         cursor.evict();
         //original();

@@ -33,7 +33,7 @@ class TreeIterator
 	return ret;
     }
 
-   public Object next() {
+  public Object next() {
     Object ret = null;
     try {
       if (nextBin == null) {
@@ -41,7 +41,11 @@ class TreeIterator
       }
       Label758: ; // this.hook758();
       ret = nextBin.getKey(index);
-    } finally {
+    } 
+    catch (DatabaseException e) {
+
+    } 
+    finally {
       Label759: ; // this.hook759();
     }
     return ret;

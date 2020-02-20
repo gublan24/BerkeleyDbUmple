@@ -32,21 +32,15 @@ class LookAheadCache
     void add(Long lsnOffset, LNInfo info) {
 	map.put(lsnOffset, info);
 	usedMem++;
-	Label166: //this.hook166(info);
+	Label166: ;//this.hook166(info);
     }
 
     LNInfo remove(Long offset) {
 	LNInfo info = (LNInfo) map.remove(offset);
 	if (info != null) {
-	    Label167: //this.hook167(info);
+	    Label167: ;//this.hook167(info);
 	}
 	return info;
     }
-/*
-    protected void hook166(LNInfo info) {
-    }
 
-    protected void hook167(LNInfo info) {
-    }
-*/
 }

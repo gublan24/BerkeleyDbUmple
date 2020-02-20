@@ -17,6 +17,10 @@ import java.util.HashSet;
 import java.util.Collections;
 
 // line 3 "../../../SecondaryDatabase.ump"
+// line 3 "../../../LoggingFinest_SecondaryDatabase.ump"
+// line 3 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase.ump"
+// line 3 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
 public class SecondaryDatabase extends Database
 {
 
@@ -129,6 +133,10 @@ public class SecondaryDatabase extends Database
    */
   // line 104 "../../../SecondaryDatabase.ump"
    private void init(Locker locker) throws DatabaseException{
+    // line 16 "../../../LoggingFinest_SecondaryDatabase.ump"
+    trace(Level.FINEST, "SecondaryDatabase open");
+    	//original(locker);
+    // END OF UMPLE BEFORE INJECTION
     secondaryConfig = (SecondaryConfig) configuration;
 	primaryDb.addTrigger(secondaryTrigger, false);
 	Database foreignDb = secondaryConfig.getForeignKeyDatabase();
@@ -260,7 +268,10 @@ public class SecondaryDatabase extends Database
     checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.delete:");
-	Label79:           ;  //this.hook79(txn, key);
+	Label79:
+trace(Level.FINEST, "SecondaryDatabase.delete", txn, key, null, null);
+	//original(txn, key);
+           ;  //this.hook79(txn, key);
 	Locker locker = null;
 	Cursor cursor = null;
 	OperationStatus commitStatus = OperationStatus.NOTFOUND;
@@ -305,7 +316,10 @@ public class SecondaryDatabase extends Database
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.get:");
-	Label80:           ;  //this.hook80(txn, key, lockMode);
+	Label80:
+trace(Level.FINEST, "SecondaryDatabase.get", txn, key, null, lockMode);
+	//original(txn, key, lockMode);
+           ;  //this.hook80(txn, key, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -344,7 +358,10 @@ public class SecondaryDatabase extends Database
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.getSearchBoth:");
-	Label81:           ;  //this.hook81(txn, key, data, lockMode);
+	Label81:
+trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode);
+	//original(txn, key, data, lockMode);
+           ;  //this.hook81(txn, key, data, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -642,7 +659,84 @@ public class SecondaryDatabase extends Database
    static  UnsupportedOperationException notAllowedException(){
     throw new UnsupportedOperationException("Operation not allowed on a secondary");
   }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 9 "../../../LoggingFinest_SecondaryDatabase.ump"
+  public void trace(Level level, String methodName) throws DatabaseException{
+    new SecondaryDatabase_trace(this, level, methodName).execute();
+  }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
+  
+  
+  // line 4 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
+  public static class SecondaryDatabase_trace
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public SecondaryDatabase_trace()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    public  SecondaryDatabase_trace(SecondaryDatabase _this, Level level, String methodName){
+      this._this=_this;
+          this.level=level;
+          this.methodName=methodName;
+    }
+  
+    // line 11 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    public void execute() throws DatabaseException{
+      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
+      logger=envHandle.getEnvironmentImpl().getLogger();
+              if (logger.isLoggable(level)) {
+                sb=new StringBuffer();
+                sb.append(methodName);
+                sb.append(" name=").append(_this.getDebugName());
+                sb.append(" primary=").append(_this.primaryDb.getDebugName());
+                logger.log(level,sb.toString());
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 12 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    protected SecondaryDatabase _this ;
+  // line 13 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    protected Level level ;
+  // line 14 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    protected String methodName ;
+  // line 15 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    protected Logger logger ;
+  // line 16 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
+    protected StringBuffer sb ;
+  
+    
+  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------

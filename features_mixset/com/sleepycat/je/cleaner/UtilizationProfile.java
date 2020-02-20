@@ -45,6 +45,14 @@ import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../UtilizationProfile.ump"
 // line 3 "../../../../UtilizationProfile_static.ump"
+// line 3 "../../../../Latches_UtilizationProfile.ump"
+// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
+// line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
+// line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+// line 3 "../../../../Evictor_UtilizationProfile.ump"
+// line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
+// line 3 "../../../../DeleteOp_UtilizationProfile.ump"
+// line 3 "../../../../Derivative_LoggingSevere_LoggingBase_UtilizationProfile.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -500,7 +508,10 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	} finally {
 	    if (cursor != null) {
-		Label178:           ;  //this.hook178(cursor);
+		Label178:
+cursor.releaseBINs();
+//	original(cursor);
+           ;  //this.hook178(cursor);
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -569,12 +580,21 @@ public class UtilizationProfile implements EnvConfigObserver
 			list.add(offsets.toArray());
 		    }
 		    //           ;  //this.hook187(cursor);
-        Label187: ;
+        Label187:
+cursor.evict();
+//	original(cursor);
+ ;
 		}
 		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
 	    }
 	} finally {
-	    Label179:           ;  //this.hook179(cursor);
+	    Label179:
+if (cursor != null) {
+	    cursor.releaseBINs();
+	    cursor.close();
+	}
+	//original(cursor);
+           ;  //this.hook179(cursor);
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
@@ -688,11 +708,23 @@ public class UtilizationProfile implements EnvConfigObserver
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
 	    //           ;  //this.hook189(cursor);
-      Label189:   ;
+      Label189:
+// <<     private synchronized void insertFileSummary(...)
+	    cursor.setAllowEviction(false);
+//	original(cursor);
+   ;
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    Label177:           ;  //this.hook177(fileNum, sequence, status);
+	    Label177:
+//synchronized void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence)
+	    env.getLogger().log(Level.SEVERE, "Cleaner duplicate key sequence file=0x" + Long.toHexString(fileNum)
+		    + " sequence=0x" + Long.toHexString(sequence));
+           ;  //this.hook177(fileNum, sequence, status);
 	    //           ;  //this.hook188(cursor);
-      Label188:   ;
+      Label188:
+// <<     private synchronized void insertFileSummary(...)
+	    cursor.evict();
+//	original(cursor);
+   ;
 	} finally {
 	    if (cursor != null) {
 		cursor.close();
@@ -738,7 +770,10 @@ public class UtilizationProfile implements EnvConfigObserver
 			    }
 			}
 			//           ;  //this.hook190(cursor);
-      Label190:   ;
+      Label190:
+cursor.evict();
+//	original(cursor);
+   ;
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
 		}
@@ -756,7 +791,8 @@ public class UtilizationProfile implements EnvConfigObserver
 
   // line 638 "../../../../UtilizationProfile.ump"
    private boolean verifyLsnIsObsolete(long lsn) throws DatabaseException{
-    try {
+    BIN bin = null;
+	try {
 	    Object o = env.getLogManager().getLogEntry(lsn);
 	    if (!(o instanceof LNLogEntry)) {
 		return true;
@@ -768,11 +804,14 @@ public class UtilizationProfile implements EnvConfigObserver
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    Label186:   ; //b =            ;  //this.hook186(db, b);
+	    Label186:
+b |= db.isDeleted();
+			//return original(db, b);
+   ; //b =            ;  //this.hook186(db, b);
 	    if (b) {
 		return true;
 	    }
-	    BIN bin = null;
+
 	    Label180:           ;  //this.hook180(lsn, entry, db, bin);
 			Tree tree = db.getTree();
 			TreeLocation location = new TreeLocation();
@@ -794,7 +833,13 @@ public class UtilizationProfile implements EnvConfigObserver
 
 	   // throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
-	    Label180_1:   ;           ;
+	    Label180_1:
+//try {	    //original(lsn, entry, db, bin);} finally {
+	    if (bin != null) {
+		bin.releaseLatch();
+	    }
+	//}
+   ;           ;
 	    return r.value;
 	}
   }
@@ -846,12 +891,12 @@ public class UtilizationProfile implements EnvConfigObserver
    * protected void hook188(CursorImpl cursor) throws DatabaseException {
    * }
    */
-  // line 730 "../../../../UtilizationProfile.ump"
+  // line 731 "../../../../UtilizationProfile.ump"
    protected void hook189(CursorImpl cursor) throws DatabaseException{
     
   }
 
-  // line 733 "../../../../UtilizationProfile.ump"
+  // line 734 "../../../../UtilizationProfile.ump"
    protected void hook190(CursorImpl cursor) throws DatabaseException{
     
   }
@@ -869,6 +914,7 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   // line 4 "../../../../UtilizationProfile_static.ump"
+  // line 30 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_clearCache
   {
   
@@ -897,6 +943,12 @@ public class UtilizationProfile implements EnvConfigObserver
   
     // line 9 "../../../../UtilizationProfile_static.ump"
     public void execute(){
+      // line 32 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+      memorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+              mb=_this.env.getMemoryBudget();
+              mb.updateMiscMemoryUsage(0 - memorySize);
+              //original();
+      // END OF UMPLE BEFORE INJECTION
       _this.fileSummaryMap=new TreeMap();
           _this.cachePopulated=false;
     }
@@ -919,6 +971,7 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   // line 16 "../../../../UtilizationProfile_static.ump"
+  // line 16 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_removeFile
   {
   
@@ -952,7 +1005,11 @@ public class UtilizationProfile implements EnvConfigObserver
             assert _this.cachePopulated;
             if (_this.fileSummaryMap.remove(fileNum) != null) {
               //           ;  //this.hook192();
-              Label192:   ;
+              Label192:
+  mb=_this.env.getMemoryBudget();
+          mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+          //original();
+     ;
             }
           }
           _this.deleteFileSummary(fileNum);
@@ -976,6 +1033,7 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   // line 37 "../../../../UtilizationProfile_static.ump"
+  // line 23 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_putFileSummary
   {
   
@@ -1034,7 +1092,11 @@ public class UtilizationProfile implements EnvConfigObserver
           summary=ln.getBaseSummary();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
             //           ;  //this.hook193();
-            Label193:   ;
+            Label193:
+  mb=_this.env.getMemoryBudget();
+          mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+          //original();
+     ;
           }
           return ln.getObsoleteOffsets();
     }
@@ -1071,6 +1133,9 @@ public class UtilizationProfile implements EnvConfigObserver
   
   
   // line 89 "../../../../UtilizationProfile_static.ump"
+  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
+  // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+  // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1104,7 +1169,10 @@ public class UtilizationProfile implements EnvConfigObserver
             return false;
           }
           //           ;  //this.hook194();
-          Label194: ;
+          Label194:
+  oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+          //original();
+   ;
           existingFiles=_this.env.getFileManager().getAllFileNumbers();
           locker=null;
           cursor=null;
@@ -1133,21 +1201,36 @@ public class UtilizationProfile implements EnvConfigObserver
                   _this.fileSummaryMap.put(fileNumLong,ln.getBaseSummary());
                   if (isOldVersion) {
                     _this.insertFileSummary(ln,fileNum,0);
-                    Label182:           ;  //this.hook182();
+                    Label182:
+  cursor.latchBIN();
+          //original();
+             ;  //this.hook182();
                     cursor.delete();
-                    Label181:           ;  //this.hook181();
+                    Label181:
+  cursor.releaseBIN();
+          //original();
+             ;  //this.hook181();
                   }
      else {
                    //            ;  //this.hook191();
-                      Label191: ;
+                      Label191:
+  cursor.evict();
+          //original();
+   ;
                   }
                 }
      else {
                   _this.fileSummaryMap.remove(fileNumLong);
                   if (isOldVersion) {
-                    Label184:           ;  //this.hook184();
+                    Label184:
+  cursor.latchBIN();
+          //original();
+             ;  //this.hook184();
                     cursor.delete();
-                    Label183:           ;  //this.hook183();
+                    Label183:
+  cursor.releaseBIN();
+          //original();
+             ;  //this.hook183();
                   }
      else {
                     _this.deleteFileSummary(fileNumLong);
@@ -1166,14 +1249,22 @@ public class UtilizationProfile implements EnvConfigObserver
           }
       finally {
             if (cursor != null) {
-              Label185:           ;  //this.hook185();
+              Label185:
+  cursor.releaseBINs();
+          //original();
+             ;  //this.hook185();
               cursor.close();
             }
             if (locker != null) {
               locker.operationEnd();
             }
             //           ;  //this.hook195();
-            Label195: ;
+            Label195:
+  newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+          mb=_this.env.getMemoryBudget();
+          mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
+          //original();
+   ;
           }
           _this.cachePopulated=true;
           return true;

@@ -21,11 +21,8 @@ public class SerialInput extends ObjectInputStream
   //------------------------
   // CONSTRUCTOR
   //------------------------
+  // Default constructor has been disabled.  
 
-  public SerialInput()
-  {
-    super();
-  }
 
   //------------------------
   // INTERFACE
@@ -41,7 +38,7 @@ public class SerialInput extends ObjectInputStream
    * @param inis the input stream from which compact serialized objects willbe read.
    * @param classCatalogis the catalog containing the class descriptions for theserialized objects.
    */
-  // line 23 "../../../../SerialInput.ump"
+  // line 26 "../../../../SerialInput.ump"
    public  SerialInput(InputStream in, ClassCatalog classCatalog) throws IOException{
     this(in, classCatalog, null);
   }
@@ -54,14 +51,14 @@ public class SerialInput extends ObjectInputStream
    * @param classCatalogis the catalog containing the class descriptions for theserialized objects.
    * @param classLoaderis the class loader to use, or null if a default class loadershould be used.
    */
-  // line 33 "../../../../SerialInput.ump"
+  // line 36 "../../../../SerialInput.ump"
    public  SerialInput(InputStream in, ClassCatalog classCatalog, ClassLoader classLoader) throws IOException{
     super(in);
 	this.classCatalog = classCatalog;
 	this.classLoader = classLoader;
   }
 
-  // line 39 "../../../../SerialInput.ump"
+  // line 42 "../../../../SerialInput.ump"
    protected ObjectStreamClass readClassDescriptor() throws IOException,ClassNotFoundException{
     try {
 	    byte len = readByte();
@@ -73,7 +70,7 @@ public class SerialInput extends ObjectInputStream
 	}
   }
 
-  // line 50 "../../../../SerialInput.ump"
+  // line 53 "../../../../SerialInput.ump"
    protected Class resolveClass(ObjectStreamClass desc) throws IOException,ClassNotFoundException{
     if (classLoader != null) {
 	    try {
@@ -90,9 +87,9 @@ public class SerialInput extends ObjectInputStream
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 13 "../../../../SerialInput.ump"
+  // line 16 "../../../../SerialInput.ump"
   private ClassCatalog classCatalog ;
-// line 15 "../../../../SerialInput.ump"
+// line 18 "../../../../SerialInput.ump"
   private ClassLoader classLoader ;
 
   

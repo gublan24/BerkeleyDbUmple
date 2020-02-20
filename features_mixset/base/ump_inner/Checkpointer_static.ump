@@ -122,7 +122,7 @@ class Checkpointer {
     mb = _this.envImpl.getMemoryBudget();
    try {
     //this.hook525();
-    Label525:   ; checkpointStart = DbLsn.NULL_LSN;
+    checkpointStart = DbLsn.NULL_LSN;
     firstActiveLsn = DbLsn.NULL_LSN;
     dirtyMap = null;
     //this.hook547();
@@ -160,6 +160,10 @@ class Checkpointer {
     }
 
    }
+   catch (      DatabaseException e) {
+     Label525:   ;
+          throw e;
+        }
    finally {
     //this.hook549();
     Label549:   ; Label524:   ; //this.hook524();

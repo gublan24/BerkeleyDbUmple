@@ -76,6 +76,14 @@ public class TinyHashSet
   }
 
   // line 56 "../../../../TinyHashSet.ump"
+   public boolean contains(Object o){
+    if (set != null) {
+        return set.contains(o);
+    }
+    return false;
+  }
+
+  // line 63 "../../../../TinyHashSet.ump"
    public Set copy(){
     assert (single == null) || (set == null);
 	if (set != null) {
@@ -89,7 +97,7 @@ public class TinyHashSet
 	}
   }
 
-  // line 69 "../../../../TinyHashSet.ump"
+  // line 76 "../../../../TinyHashSet.ump"
    public Iterator iterator(){
     assert (single == null) || (set == null);
 	if (set != null) {
@@ -102,7 +110,6 @@ public class TinyHashSet
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import com.sleepycat.bind.serial.*;
   
   // line 4 "../../../../TinyHashSet_static.ump"
   public static class SingleElementIterator implements Iterator

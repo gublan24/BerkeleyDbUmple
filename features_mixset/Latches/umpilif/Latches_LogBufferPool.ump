@@ -39,13 +39,13 @@ class LogBufferPool
 	//original();
     }
 
-    protected LogBuffer hook489: getReadBuffer(long ) {
+  after Label489: getReadBuffer(long ) {
 	bufferPoolLatch.acquire();
 //	try {foundBuffer = //original(lsn, foundBuffer);} finally {	    bufferPoolLatch.releaseIfOwner();}
 	//return foundBuffer;
     }
 
-    protected LogBuffer Label489_1: getReadBuffer(long ) {
+    after Label489_1: getReadBuffer(long ) {
 
 	    bufferPoolLatch.releaseIfOwner();
 	//return foundBuffer;

@@ -20,8 +20,9 @@ class SyncedLockManager
   protected LockAttemptResult attemptLock(Long nodeId, Locker locker, LockType type, boolean nonBlockingRequest)
       throws DatabaseException {
     int lockTableIndex = getLockTableIndex(nodeId);
+    LockAttemptResult temp =null;
     Label782: ; // this.hook782(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
-    LockAttemptResult temp = attemptLockInternal(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+    temp= attemptLockInternal(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
     Label782_1: ; // end of hook782
     return temp;
 
@@ -33,8 +34,9 @@ class SyncedLockManager
   protected String makeTimeoutMsg(String lockOrTxn, Locker locker, long nodeId, LockType type, LockGrantType grantType,
       Lock useLock, long timeout, long start, long now, DatabaseImpl database) {
     int lockTableIndex = getLockTableIndex(nodeId);
+    String temp; 
     Label783: ; 
-    String temp = makeTimeoutMsgInternal(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now,
+    temp = makeTimeoutMsgInternal(lockOrTxn, locker, nodeId, type, grantType, useLock, timeout, start, now,
         database);
     Label783_1: ;// end of hook783
     return temp;
@@ -52,8 +54,9 @@ class SyncedLockManager
       nid = lock.getNodeId().longValue();
     }
     int lockTableIndex = getLockTableIndex(nid);
+    Set temp = null;
     Label784: ; // this.hook784(nodeId, lock, locker, removeFromLocker, lockTableIndex);
-    Set temp = releaseAndFindNotifyTargetsInternal(nodeId, lock, locker, removeFromLocker, lockTableIndex);
+    temp = releaseAndFindNotifyTargetsInternal(nodeId, lock, locker, removeFromLocker, lockTableIndex);
     Label784_1: ;// end hook784
     return temp;
 
@@ -94,8 +97,9 @@ class SyncedLockManager
      */
     boolean isLocked(Long nodeId) {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      boolean temp = true;
 	    Label788:           ;  //this.hook788(nodeId, lockTableIndex);
-	    boolean temp = isLockedInternal(nodeId, lockTableIndex);
+	    temp = isLockedInternal(nodeId, lockTableIndex);
       Label788_1: ;
       return temp;
     }
@@ -105,8 +109,9 @@ class SyncedLockManager
      */
     boolean isOwner(Long nodeId, Locker locker, LockType type) {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      boolean temp  = false;
 	    Label789:           ;  //this.hook789(nodeId, locker, type, lockTableIndex);
-	    boolean temp = isOwnerInternal(nodeId, locker, type, lockTableIndex);
+      temp = isOwnerInternal(nodeId, locker, type, lockTableIndex);
       Label789_1: ;//end hook789
       return temp;
     }
@@ -116,8 +121,9 @@ class SyncedLockManager
      */
     boolean isWaiter(Long nodeId, Locker locker) {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      boolean temp  = false;
 	    Label790:           ;  //this.hook790(nodeId, locker, lockTableIndex);
-	    boolean temp = isWaiterInternal(nodeId, locker, lockTableIndex);
+	    temp = isWaiterInternal(nodeId, locker, lockTableIndex);
       Label790_1: ;//end hook790
 	    return temp;
     }
@@ -127,8 +133,9 @@ class SyncedLockManager
      */
     int nWaiters(Long nodeId) {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      int temp = 0;
 	    Label791:           ;  //this.hook791(nodeId, lockTableIndex);
-	    int temp= nWaitersInternal(nodeId, lockTableIndex);
+	    temp= nWaitersInternal(nodeId, lockTableIndex);
       Label791_1: ;
       return temp;
     }
@@ -138,8 +145,9 @@ class SyncedLockManager
      */
     int nOwners(Long nodeId) {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      int temp =0;
 	    Label792:           ;  //this.hook792(nodeId, lockTableIndex);
-	    int temp = nOwnersInternal(nodeId, lockTableIndex);
+	    temp = nOwnersInternal(nodeId, lockTableIndex);
       Label792_1: ;
       return temp;
     }
@@ -149,8 +157,9 @@ class SyncedLockManager
      */
     Locker getWriteOwnerLocker(Long nodeId) throws DatabaseException {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      Locker temp = null;
 	    Label793:           ;  //this.hook793(nodeId, lockTableIndex);
-	    Locker temp = getWriteOwnerLockerInternal(nodeId, lockTableIndex);
+	    temp = getWriteOwnerLockerInternal(nodeId, lockTableIndex);
 	    Label793_1: ;
       return temp;
     }
@@ -161,8 +170,9 @@ class SyncedLockManager
     protected boolean validateOwnership(Long nodeId, Locker locker, LockType type, boolean flushFromWaiters,
 	    MemoryBudget mb) throws DatabaseException {
 	    int lockTableIndex = getLockTableIndex(nodeId);
+      boolean temp = true;
 	    Label794:           ;  //this.hook794(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
-	    boolean temp = validateOwnershipInternal(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
+	    temp = validateOwnershipInternal(nodeId, locker, type, flushFromWaiters, mb, lockTableIndex);
       Label794_1: ;
 
 	    return temp;

@@ -4,7 +4,7 @@ class ChildReference
 {
     
   after Label613: fetchTarget(DatabaseImpl , IN){
-    if (in != null) fetchTarget(DatabaseImpl, IN){
+    if (in != null) {
       in.updateMemorySize(null, target);
 	  }
       //	original(in);

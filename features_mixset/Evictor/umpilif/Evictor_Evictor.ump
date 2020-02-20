@@ -27,6 +27,9 @@ class Evictor
   depend java.util.Iterator;
   depend java.util.ArrayList;
   depend java.text.NumberFormat;
+
+  isA DaemonThread;
+
     public static final String SOURCE_DAEMON = "daemon";
 
     public static final String SOURCE_MANUAL = "manual";
@@ -233,10 +236,10 @@ class Evictor
      * Strip or evict this node.
      * @return number of bytes evicted.
      */
-    private long evict(INList inList, IN target, ScanIterator scanIter) throws DatabaseException {
-	try {	
-	boolean envIsReadOnly = envImpl.isReadOnly();
-			long evictedBytes = 0;
+  private long evict(INList inList, IN target, ScanIterator scanIter) throws DatabaseException {
+    long evictedBytes = 0;
+	  try {	
+	    boolean envIsReadOnly = envImpl.isReadOnly();
 			if (target.latchNoWait(false)) {
 					//evictedBytes = this.hook374(inList, target, scanIter, envIsReadOnly, evictedBytes);
          Label374:
@@ -245,7 +248,7 @@ class Evictor
               Label385:							//this.hook385(target);
 							evictedBytes = ((BIN) target).evictLNs();
 
-              Label383:							//this.hook383(evictedBytes);
+              Label383:	;						//this.hook383(evictedBytes);
 					}
 					if (evictedBytes == 0 && target.isEvictable()) {
 							Tree tree = target.getDatabase().getTree();
@@ -254,11 +257,12 @@ class Evictor
 						evictedBytes = evictIN(target, result.parent, result.index, inList, scanIter, envIsReadOnly);
 							}
 					}
-} finally {
-Label374_1: ;//		// end hook374
-}
+      } 
+    }
+    finally {
+      Label374_1: ;//		// end hook374
+    }
 
-			}
 			return evictedBytes;
     }
 
@@ -267,10 +271,11 @@ Label374_1: ;//		// end hook374
      */
     private long evictIN(IN child, IN parent, int index, INList inlist, ScanIterator scanIter, boolean envIsReadOnly)
 	    throws DatabaseException {
-try{
 			long evictBytes = 0;
+      try{
+
 			Label375:			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
-      Label378:			//this.hook378(parent);
+      Label378:	;		//this.hook378(parent);
 			long oldGenerationCount = child.getGeneration();
 			IN renewedChild = (IN) parent.getTarget(index);
 			if ((renewedChild != null) && (renewedChild.getGeneration() <= oldGenerationCount)
@@ -300,14 +305,15 @@ try{
 								parent.updateEntry(index, (Node) null);
 						}
 
-            Label384:						//this.hook384();
+            Label384:				;		//this.hook384();
 							}
 					}
 					// end of hook379
 			}
-}finally {
-Label375_1: ;//		// end hook375
-}
+    }
+    finally {
+      Label375_1: ;//		// end hook375
+    }
 
 			return evictBytes;
     }

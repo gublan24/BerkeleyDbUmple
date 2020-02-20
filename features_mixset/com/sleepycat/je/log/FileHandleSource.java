@@ -6,6 +6,7 @@ import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.DatabaseException;
 
 // line 3 "../../../../FileHandleSource.ump"
+// line 3 "../../../../Latches_FileHandleSource.ump"
 public class FileHandleSource extends FileSource
 {
 
@@ -35,6 +36,16 @@ public class FileHandleSource extends FileSource
   public  FileHandleSource(FileHandle fileHandle, int readBufferSize, FileManager fileManager){
     super(fileHandle.getFile(), readBufferSize, fileManager);
 	this.fileHandle = fileHandle;
+  }
+
+
+  /**
+   * 
+   * @see LogSource#release
+   */
+  // line 9 "../../../../Latches_FileHandleSource.ump"
+   public void release() throws DatabaseException{
+    fileHandle.release();
   }
   
   //------------------------

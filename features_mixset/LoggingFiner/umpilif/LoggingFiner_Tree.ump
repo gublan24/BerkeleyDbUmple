@@ -17,22 +17,22 @@ class Tree
 	new Tree_traceInsertDuplicate(this, level, env, insertingDBin, ln, lnLsn, binNid).execute();
     }
 
-    protected void hook657: insert(LN , byte , boolean , CursorImpl , LockResult ) {
+  after Label657: insert(LN , byte , boolean , CursorImpl , LockResult ) {
 	traceInsert(Level.FINER, env, bin, ln, newLsn, index);
 	//original(ln, env, bin, index, newLsn);
     }
 
-    protected void hook658: insert(LN , byte , boolean , CursorImpl , LockResult ) {
+  after Label658: insert(LN , byte , boolean , CursorImpl , LockResult ) {
 	traceInsert(Level.FINER, env, bin, ln, newLsn, index);
 	//original(ln, env, bin, index, newLsn);
     }
 
-    protected void hook659: insertDuplicate(byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) {
+  after Label659: insertDuplicate(byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) {
 	traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
 	//original(newLN, binNid, dupBin, newLsn);
     }
 
-    protected void hook660: insertDuplicate(byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) {
+  after Label660: insertDuplicate(byte , BIN , LN , LogManager , INList , CursorImpl , LockResult , boolean ) {
 	traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
 	//original(newLN, binNid, dupBin, newLsn);
     }

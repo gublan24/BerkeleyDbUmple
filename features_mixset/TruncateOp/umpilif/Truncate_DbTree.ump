@@ -103,7 +103,7 @@ class DbTree
 				count = oldDatabase.countRecords();
 					}
 
-          Label297:					//this.hook297(locker, oldDatabase);
+          Label297:	;				//this.hook297(locker, oldDatabase);
 					DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
 					nameCursor.putCurrent(dataDbt, null, null);
 					return new TruncateResult(newDb, (int) count);

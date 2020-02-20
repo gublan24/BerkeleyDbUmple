@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 // line 3 "../../../../PreloadLSNTreeWalker.ump"
 // line 3 "../../../../PreloadLSNTreeWalker_static.ump"
+// line 3 "../../../../Latches_PreloadLSNTreeWalker.ump"
 public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 {
 
@@ -68,13 +69,22 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
 	    INEntry inEntry = (INEntry) lsnINMap.remove(new Long(lsn));
 	    assert (inEntry != null);
 	    IN in = inEntry.in;
-	    Label352: ; //this.hook352(lsn, inEntry, in);
+	    Label352:
+in.latch();
+ ; //this.hook352(lsn, inEntry, in);
 			int index = inEntry.index;
 			if (in.isEntryKnownDeleted(inEntry.index) || in.getLsn(inEntry.index) != lsn) {
 					return null; //throw new ReturnObject(null);
 			}	    
-      Label352_1: ;// 
+      Label352_1:
+in.releaseLatch();
+ ;// 
 			return in.fetchTarget(inEntry.index);
+  }
+
+  // line 7 "../../../../Latches_PreloadLSNTreeWalker.ump"
+   protected void releaseRootIN(IN root) throws DatabaseException{
+    root.releaseLatch();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -123,7 +133,6 @@ public class PreloadLSNTreeWalker extends SortedLSNTreeWalker
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
-  import com.sleepycat.je.tree.*;
   
   // line 12 "../../../../PreloadLSNTreeWalker_static.ump"
   public class PreloadWithRootLatched implements WithRootLatched

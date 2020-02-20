@@ -47,8 +47,10 @@ class FileManager
   }
 
   around Label460-Label460_1:getFileHandle(long ){
+     ;
+     boolean flag= true;
 
-			while (true) {
+			while (flag) {
 			  around_proceed: //original(fileNum, fileId, fileHandle);
 			}
 		 }
@@ -74,6 +76,7 @@ class FileManager
 
   before clear()
   {
+   // Label451: ;
     fileCache.clear();
   }
 

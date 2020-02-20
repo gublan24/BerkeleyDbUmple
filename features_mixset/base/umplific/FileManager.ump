@@ -123,7 +123,7 @@ class FileManager {
         Label456:   ; //this.hook456(configManager);
         Label467:   ;
         Label457:   ;//this.hook457(configManager);
-       //this.hook449(envImpl);
+        Label449: ;//this.hook449(envImpl);
         if (!dbEnvHome.exists()) {
             throw new LogException("Environment home " + dbEnvHome + " doesn't exist");
         }
@@ -404,11 +404,11 @@ class FileManager {
      * @return the file handle for the existing or newly created file
      */
     FileHandle getFileHandle(long fileNum) throws LogException, DatabaseException {
-        try {
-            Long fileId = new Long(fileNum);
-            FileHandle fileHandle = null;
+      FileHandle fileHandle = null;        
+      
+      Long fileId = new Long(fileNum);
             // Start of hook460
-            Label460:   ;
+      Label460:   ;
                 Label463:   ;
                 Label450:   ;
                 Label462:   ;
@@ -419,14 +419,11 @@ class FileManager {
                     Label454: ;//
                 }
             else {
-                throw new ReturnObject(fileHandle);
+                return fileHandle;
             }
             Label460_1:   ;
             // End of hook460
-            throw ReturnHack.returnObject;
-        } catch (ReturnObject r) {
-            return (FileHandle) r.value;
-        }
+      return fileHandle;
     }
 
     private FileHandle makeFileHandle(long fileNum, FileMode mode) throws DatabaseException {

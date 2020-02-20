@@ -86,7 +86,7 @@ class SyncedLockManager
 	    }
     }
     around Label795-Label795_1: dumpLockTable(LockStats ) {
-	   synchronized (lockTableLatches[lockTableIndex]) { 
+	   synchronized (lockTableLatches[i]) { 
         around_proceed:
 	      // //original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
 	    }

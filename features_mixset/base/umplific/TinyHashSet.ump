@@ -51,7 +51,14 @@ class TinyHashSet
 	    return set.add(o);
 	}
     }
-
+ 
+ public boolean contains(Object o) { 
+    if (set != null) {
+        return set.contains(o);
+    }
+    return false;
+   
+  }
     public Set copy() {
 	assert (single == null) || (set == null);
 	if (set != null) {

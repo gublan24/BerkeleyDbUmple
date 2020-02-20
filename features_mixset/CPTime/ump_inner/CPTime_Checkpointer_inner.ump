@@ -20,9 +20,8 @@ class Checkpointer {
     } else {
      return false;//throw new ReturnBoolean(false);
     }
-   } else {
-    return false; //throw new ReturnBoolean(false); // added from hook542() 
-   }
+   } 
+//else {    return false; //throw new ReturnBoolean(false); // added from hook542()    }
   }
 
   after Label543: execute() {

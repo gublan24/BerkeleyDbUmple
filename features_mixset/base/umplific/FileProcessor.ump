@@ -49,7 +49,7 @@ class FileProcessor {
 
  private EnvironmentImpl env;
 
- private Cleaner cleaner;
+ protected Cleaner cleaner;
 
  private FileSelector fileSelector;
 
@@ -257,10 +257,11 @@ class FileProcessor {
   * If an IN is still in use in the in-memory tree, dirty it. The checkpoint invoked at the end of the cleaning run will end up rewriting it.
   */
  private void processIN(IN inClone, DatabaseImpl db, long lsn) throws DatabaseException {
-  try {
-   boolean obsolete = false;
-   boolean dirtied = false;
-   boolean completed = false;
+    boolean obsolete = false;
+    boolean dirtied = false;
+    boolean completed = false; 
+ try {
+  
    //this.hook125(inClone, db, lsn, obsolete, dirtied, completed);
    Label125:;
     boolean b = db == null;
