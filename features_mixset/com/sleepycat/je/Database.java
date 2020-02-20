@@ -36,6 +36,12 @@ import com.sleepycat.je.dbi.TruncateResult;
 // line 3 "../../../LoggingFinest_Database_inner.ump"
 // line 3 "../../../Derivative_LoggingFinest_LoggingBase_Database.ump"
 // line 3 "../../../Derivative_LoggingFinest_LoggingBase_Database_inner.ump"
+// line 3 "../../../Derivative_DeleteOp_TruncateOp_Database.ump"
+// line 3 "../../../Derivative_Latches_TruncateOp_Database_inner.ump"
+// line 3 "../../../Derivative_LoggingFinest_TruncateOp_Database_inner.ump"
+// line 3 "../../../Derivative_Statistics_DeleteOp_Database.ump"
+// line 3 "../../../Derivative_Statistics_Verifier_Database.ump"
+// line 3 "../../../Derivative_Statistics_Verifier_DeleteOp_Database.ump"
 public class Database
 {
 
@@ -856,7 +862,10 @@ databaseImpl.checkIsDeleted("preload");
 			checkRequiredDbState(OPEN, "Can't call Database.stat");
 			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
 			if (databaseImpl != null) {
-					Label38: //this.hook38();
+					Label38:
+databaseImpl.checkIsDeleted("stat");
+	//original();
+ //this.hook38();
 					return databaseImpl.stat(useConfig);
 			}
 			return null;
@@ -880,6 +889,20 @@ databaseImpl.checkIsDeleted("preload");
   // line 17 "../../../LoggingFinest_Database.ump"
   public void trace(Level level, String methodName, Transaction txn, CursorConfig config) throws DatabaseException{
     new Database_trace2(this, level, methodName, txn, config).execute();
+  }
+
+  // line 6 "../../../Derivative_Statistics_Verifier_Database.ump"
+   public DatabaseStats verify(VerifyConfig config) throws DatabaseException{
+    checkEnv();
+	checkRequiredDbState(OPEN, "Can't call Database.verify");
+	Label37:
+databaseImpl.checkIsDeleted("verify");
+//	original();
+ //this.hook37();
+	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
+	DatabaseStats stats = databaseImpl.getEmptyStats();
+	databaseImpl.verify(useConfig, stats);
+	return stats;
   }
 
 
@@ -1103,6 +1126,8 @@ databaseImpl.checkIsDeleted("preload");
   
   
   // line 4 "../../../Truncate_Database_inner.ump"
+  // line 4 "../../../Derivative_Latches_TruncateOp_Database_inner.ump"
+  // line 4 "../../../Derivative_LoggingFinest_TruncateOp_Database_inner.ump"
   public static class Database_truncate
   {
   
@@ -1138,15 +1163,24 @@ databaseImpl.checkIsDeleted("preload");
           _this.checkWritable("truncate");
           //this.hook39();
           Label39:
+  Tracer.trace(Level.FINEST,_this.envHandle.getEnvironmentImpl(),"Database.truncate" + ": txnId=" + ((txn == null) ? "null" : Long.toString(txn.getId())));
+         // original();
+  
           locker=null;
           //this.hook40();
           Label40:
+  triggerLock=false;
+          //original();
+  
           operationOk=false;
           try {
             locker=LockerFactory.getWritableLocker(_this.envHandle,txn,_this.isTransactional(),true,null);
             _this.acquireTriggerListReadLock();
             //this.hook41();
             Label41:
+  triggerLock=true;
+          //original();
+  
             count=_this.truncateInternal(locker,countRecords);
             for (int i=0; i < _this.triggerList.size(); i+=1) {
               obj=_this.triggerList.get(i);
@@ -1163,7 +1197,12 @@ databaseImpl.checkIsDeleted("preload");
               locker.operationEnd(operationOk);
             }
             //this.hook42();
-            Label42: ;
+            Label42:
+  if (triggerLock) {
+            _this.releaseTriggerListReadLock();
+          }
+          //original();
+   ;
           }
     }
     

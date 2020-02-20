@@ -31,10 +31,20 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.ArrayList;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
+import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../INCompressor_INCompressor.ump"
 // line 3 "../../../../INCompressor_INCompressor_inner.ump"
+// line 3 "../../../../Derivative_INCompressor_DeleteOp_INCompressor.ump"
+// line 3 "../../../../Derivative_Verifier_INCompressor_INCompressor.ump"
+// line 3 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+// line 3 "../../../../Derivative_Latches_INCompressor_INCompressor.ump"
+// line 3 "../../../../Derivative_LoggingFine_INCompressor_INCompressor.ump"
+// line 3 "../../../../Derivative_INCompressor_Evictor_CriticalEviction_INCompressor.ump"
+// line 3 "../../../../Derivative_Latches_Verifier_INCompressor_INCompressor.ump"
 public class INCompressor extends DaemonThread
 {
 
@@ -247,9 +257,19 @@ public class INCompressor extends DaemonThread
 					}
 			}
 			if (binQueueSize > 0) {
-					Label404: ; //this.hook404();
-					Label392: ; //this.hook392(binQueueSize);
-					Label393: ; //this.hook393();
+					Label404:
+resetPerRunCounters();
+	//original();
+ ; //this.hook404();
+					Label392:
+Tracer.trace(Level.FINE, env, "InCompress.doCompress called, queue size: " + binQueueSize);
+	//original(binQueueSize);
+ ; //this.hook392(binQueueSize);
+					Label393:
+//synchronized void doCompress()
+	assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+ ; //this.hook393();
 					UtilizationTracker tracker = new UtilizationTracker(env);
 					Map dbCache = new HashMap();
 					DbTree dbTree = env.getDbMapTree();
@@ -277,7 +297,10 @@ public class INCompressor extends DaemonThread
 					if (isDBIN) {
 							dupKey = ((DBIN) foundBin).getDupKey();
 					}
-					Label394: ; //this.hook394(foundBin);
+					Label394:
+foundBin.releaseLatch();
+	//original(foundBin);
+ ; //this.hook394(foundBin);
 					pruneBIN(binSearch.db, binRef, idKey, isDBIN, dupKey, tracker);
 						}
 				}
@@ -286,8 +309,16 @@ public class INCompressor extends DaemonThread
 						env.getUtilizationProfile().countAndLogSummaries(summaries);
 				}
 					} finally {
-				Label395: ; //this.hook395();
-				Label405: ; //this.hook405();
+				Label395:
+assert LatchSupport.countLatchesHeld() == 0;
+	//original();
+ ; //this.hook395();
+				Label405:
+// synchronized void doCompress()
+
+	accumulatePerRunCounters();
+	//original();
+ ; //this.hook405();
 					}
 			}
   }
@@ -313,7 +344,10 @@ public class INCompressor extends DaemonThread
 			if (nCursors > 0) {
 					addBinRefToQueue(binRef, false);
 					requeued = true;
-					Label414: ; //this.hook414();
+					Label414:
+cursorsBinsThisRun++;
+	//original();
+ ; //this.hook414();
 			} else {
 					requeued = bin.compress(binRef, true);
 					if (!requeued) {
@@ -331,7 +365,9 @@ public class INCompressor extends DaemonThread
 			}
 	    } 
       finally {
-        Label396_1: ; //
+        Label396_1:
+bin.releaseLatch();
+ ; //
       }
 
 			return requeued;
@@ -353,12 +389,21 @@ public class INCompressor extends DaemonThread
 					} else {
 				tree.delete(idKey, tracker);
 					}
-					Label406: ; //this.hook406();
+					Label406:
+processedBinsThisRun++;
+	//original();
+ ; //this.hook406();
 			} catch (NodeNotEmptyException NNEE) {
-					Label407: ; //this.hook407();
+					Label407:
+nonEmptyBinsThisRun++;
+	//original();
+ ; //this.hook407();
 			} catch (CursorsExistException e) {
 					addBinRefToQueue(binRef, false);
-					Label408: ; //this.hook408();
+					Label408:
+cursorsBinsThisRun++;
+	//original();
+ ; //this.hook408();
 					requeued = true;
 			}
 			return requeued;
@@ -421,19 +466,29 @@ public class INCompressor extends DaemonThread
 				node = bin.fetchTarget(index);
 					}
 					if (node == null) {
-				Label400: ; //this.hook400(bin);
+				Label400:
+bin.releaseLatch();
+	//original(bin);
+ ; //this.hook400(bin);
 				throw new ReturnObject(null);
 					}
 					if (node.containsDuplicates()) {
 				duplicateRoot = (DIN) node;
-				Label401: ; //this.hook401(duplicateRoot, bin);
+				Label401:
+duplicateRoot.latch();
+	bin.releaseLatch();
+	//original(duplicateRoot, bin);
+ ; //this.hook401(duplicateRoot, bin);
 				duplicateBin = (DBIN) tree.searchSubTree(duplicateRoot, dupKey, SearchType.NORMAL, -1, null, false);
 				throw new ReturnObject(duplicateBin);
 					} else {
 				throw new ReturnObject(bin);
 					}
 			} else {
-					Label402: ; //this.hook402(bin);
+					Label402:
+bin.releaseLatch();
+	//original(bin);
+ ; //this.hook402(bin);
 					throw new ReturnObject(null);
 			}
       //End of hook397
@@ -454,7 +509,10 @@ hook397_1: ;
     if (!in.isCompressible()) {
 					return;
 			}
-			Label398: ;//this.hook398(in);
+			Label398:
+assert in.isLatchOwner();
+	//original(in);
+ ;//this.hook398(in);
 			BIN bin = (BIN) in;
 			int nCursors = bin.nCursors();
 			if (nCursors > 0) {
@@ -465,14 +523,23 @@ hook397_1: ;
 				return;
 					} else {
 				boolean requeued = bin.compress(binRef, false);
-				Label409: ;//this.hook409();
+				Label409:
+lazyProcessed++;
+	//original();
+ ;//this.hook409();
 				if (!requeued && binRef.deletedKeysExist()) {
 						addBinRefToQueue(binRef, false);
-						Label410: ; //this.hook410();
+						Label410:
+lazySplit++;
+	//original();
+ ; //this.hook410();
 				} else {
 						if (bin.getNEntries() == 0) {
 					addBinRefToQueue(binRef, false);
-					Label411: ; //this.hook411();
+					Label411:
+lazyEmpty++;
+	//original();
+ ; //this.hook411();
 						}
 				}
 					}
@@ -483,19 +550,115 @@ hook397_1: ;
    private boolean findDBAndBIN(BINSearch binSearch, BINReference binRef, DbTree dbTree, Map dbCache) throws DatabaseException{
     binSearch.db = dbTree.getDb(binRef.getDatabaseId(), lockTimeout, dbCache);
 			boolean close = binSearch.db == null;
-			Label415: ; //close = this.hook415(binSearch, close);
+			Label415:
+close |= binSearch.db.isDeleted();
+	//return original(binSearch, close);
+ ; //close = this.hook415(binSearch, close);
 			if (close) {
-					Label412: ; //this.hook412();
+					Label412:
+dbClosedBinsThisRun++;
+	//original();
+ ; //this.hook412();
 					return false;
 			}
-			Label391: ; //this.hook391();
+			Label391:
+env.getEvictor().doCriticalEviction();
+	//original();
+ ; //this.hook391();
 			binSearch.bin = searchForBIN(binSearch.db, binRef);
 			if ((binSearch.bin == null) || binSearch.bin.getNodeId() != binRef.getNodeId()) {
-					Label399: ; //this.hook399(binSearch);
-					Label413: ; //this.hook413();
+					Label399:
+if (binSearch.bin != null) {
+	    binSearch.bin.releaseLatch();
+	}
+	//original(binSearch);
+ ; //this.hook399(binSearch);
+					Label413:
+splitBinsThisRun++;
+	//original();
+ ; //this.hook413();
 					return false;
 			}
 			return true;
+  }
+
+  // line 6 "../../../../Derivative_Verifier_INCompressor_INCompressor.ump"
+   public synchronized  void verifyCursors() throws DatabaseException{
+    if (env.isClosed()) {
+	    return;
+	}
+	List queueSnapshot = null;
+	synchronized (binRefQueueSync) {
+	    queueSnapshot = new ArrayList(binRefQueue.values());
+	}
+	Map dbCache = new HashMap();
+	Iterator it = queueSnapshot.iterator();
+	while (it.hasNext()) {
+	    BINReference binRef = (BINReference) it.next();
+	    DatabaseImpl db = env.getDbMapTree().getDb(binRef.getDatabaseId(), lockTimeout, dbCache);
+	    BIN bin = searchForBIN(db, binRef);
+	    if (bin != null) {
+		bin.verifyCursors();
+		Label390:
+bin.releaseLatch();
+ ;//this.hook390(bin);
+	    }
+	}
+  }
+
+
+  /**
+   * 
+   * Return stats
+   */
+  // line 39 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+   public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException{
+    stat.setSplitBins(splitBins);
+	stat.setDbClosedBins(dbClosedBins);
+	stat.setCursorsBins(cursorsBins);
+	stat.setNonEmptyBins(nonEmptyBins);
+	stat.setProcessedBins(processedBins);
+	stat.setInCompQueueSize(getBinRefQueueSize());
+	if (DEBUG) {
+	    System.out.println("lazyProcessed = " + lazyProcessed);
+	    System.out.println("lazyEmpty = " + lazyEmpty);
+	    System.out.println("lazySplit = " + lazySplit);
+	    System.out.println("wokenUp=" + wokenUp);
+	}
+	if (config.getClear()) {
+	    splitBins = 0;
+	    dbClosedBins = 0;
+	    cursorsBins = 0;
+	    nonEmptyBins = 0;
+	    processedBins = 0;
+	    lazyProcessed = 0;
+	    lazyEmpty = 0;
+	    lazySplit = 0;
+	    wokenUp = 0;
+	}
+  }
+
+
+  /**
+   * 
+   * Reset per-run counters.
+   */
+  // line 68 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+   private void resetPerRunCounters(){
+    splitBinsThisRun = 0;
+	dbClosedBinsThisRun = 0;
+	cursorsBinsThisRun = 0;
+	nonEmptyBinsThisRun = 0;
+	processedBinsThisRun = 0;
+  }
+
+  // line 76 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+   private void accumulatePerRunCounters(){
+    splitBins += splitBinsThisRun;
+	dbClosedBins += dbClosedBinsThisRun;
+	cursorsBins += cursorsBinsThisRun;
+	nonEmptyBins += nonEmptyBinsThisRun;
+	processedBins += processedBinsThisRun;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -557,6 +720,34 @@ hook397_1: ;
   {
     env = null;
   }
+// line 7 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int splitBins = 0 ;
+// line 9 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int dbClosedBins = 0 ;
+// line 11 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int cursorsBins = 0 ;
+// line 13 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int nonEmptyBins = 0 ;
+// line 15 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int processedBins = 0 ;
+// line 17 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int splitBinsThisRun = 0 ;
+// line 19 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int dbClosedBinsThisRun = 0 ;
+// line 21 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int cursorsBinsThisRun = 0 ;
+// line 23 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int nonEmptyBinsThisRun = 0 ;
+// line 25 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int processedBinsThisRun = 0 ;
+// line 27 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int lazyProcessed = 0 ;
+// line 29 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int lazyEmpty = 0 ;
+// line 31 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int lazySplit = 0 ;
+// line 33 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
+  private int wokenUp = 0 ;
 
   
 }

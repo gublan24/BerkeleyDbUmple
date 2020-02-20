@@ -2,12 +2,12 @@ namespace com.sleepycat.je.evictor;
 
 class Evictor
 {
-    protected boolean hook386: selectIN(INList , ScanIterator ){
+  after Label386: selectIN(INList , ScanIterator ){
 	b2 = db.isDeleted();
 	//return original(db, b2);
     }
 
-    protected boolean hook387: selectIN(INList , ScanIterator ){
+  after Label387: selectIN(INList , ScanIterator ){
 	b |= db.isDeleteFinished();
 	//return original(db, b);
     }

@@ -86,6 +86,12 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl.ump"
 // line 3 "../../../../Derivative_LoggingFileHandler_LoggingBase_EnvironmentImpl_inner.ump"
 // line 3 "../../../../Derivative_Evictor_EvictorDaemon_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_MemoryBudget_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_Evictor_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Verifier_INCompressor_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_INCompressor_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_Verifier_EnvironmentImpl.ump"
+// line 3 "../../../../Derivative_Statistics_CheckLeaks_EnvironmentImpl_inner.ump"
 public class EnvironmentImpl implements EnvConfigObserver
 {
 
@@ -1125,12 +1131,21 @@ checkpointer.shutdown();
   // line 12 "../../../../Statistics_EnvironmentImpl.ump"
    public synchronized  EnvironmentStats loadStats(StatsConfig config) throws DatabaseException{
     EnvironmentStats stats = new EnvironmentStats();
-			Label314: //this.hook314(config, stats);
-			Label315: //this.hook315(config, stats);
+			Label314:
+inCompressor.loadStats(config, stats);
+	//original(config, stats);
+ //this.hook314(config, stats);
+			Label315:
+evictor.loadStats(config, stats);
+	//original(config, stats);
+ //this.hook315(config, stats);
 			checkpointer.loadStats(config, stats);
 			cleaner.loadStats(config, stats);
 			logManager.loadStats(config, stats);
-			Label316: //this.hook316(config, stats);
+			Label316:
+memoryBudget.loadStats(config, stats);
+	//original(config, stats);
+ //this.hook316(config, stats);
 			return stats;
   }
 
@@ -1158,6 +1173,16 @@ checkpointer.shutdown();
    public long forceLogFileFlip() throws DatabaseException{
     Tracer newRec = new Tracer("File Flip");
 	return logManager.logForceFlip(newRec);
+  }
+
+  // line 6 "../../../../Derivative_Verifier_INCompressor_EnvironmentImpl.ump"
+   public void verifyCursors() throws DatabaseException{
+    inCompressor.verifyCursors();
+  }
+
+  // line 6 "../../../../Derivative_Statistics_Verifier_EnvironmentImpl.ump"
+   public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
+    return dbMapTree.verify(config, out);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1330,6 +1355,7 @@ checkpointer.shutdown();
   
   
   // line 7 "../../../../CheckLeaks_EnvironmentImpl_inner.ump"
+  // line 4 "../../../../Derivative_Statistics_CheckLeaks_EnvironmentImpl_inner.ump"
   public static class EnvironmentImpl_checkLeaks
   {
   
@@ -1362,7 +1388,29 @@ checkpointer.shutdown();
             return;
           }
           clean=true;
-          Label313: //this.hook313();
+          Label313:
+  // Label313 introduced in CheckLeaks_Environment.ump
+          statsConfig=new StatsConfig();
+          statsConfig.setFast(false);
+          lockStat=_this.lockStat(statsConfig);
+          if (lockStat.getNTotalLocks() != 0) {
+            clean=false;
+            System.out.println("Problem: " + lockStat.getNTotalLocks() + " locks left");
+            _this.txnManager.getLockManager().dump();
+          }
+          txnStat=_this.txnStat(statsConfig);
+          if (txnStat.getNActive() != 0) {
+            clean=false;
+            System.out.println("Problem: " + txnStat.getNActive() + " txns left");
+            active=txnStat.getActiveTxns();
+            if (active != null) {
+              for (int i=0; i < active.length; i+=1) {
+                System.out.println(active[i]);
+              }
+            }
+          }
+    //      original();
+   //this.hook313();
           Label312: //this.hook312();
           assert clean : "Lock, transaction, or latch left behind at environment close";
     }

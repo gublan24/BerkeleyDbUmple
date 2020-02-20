@@ -35,6 +35,8 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../Checksum_LogManager.ump"
 // line 3 "../../../../Checksum_LogManager_inner.ump"
 // line 3 "../../../../FSync_LogManager.ump"
+// line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
+// line 3 "../../../../Derivative_FSync_Statistics_LogManager.ump"
 public abstract class LogManager
 {
 
@@ -87,7 +89,10 @@ logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
 	//original(envImpl);
    ; //this.hook502(envImpl);
 			readBufferSize = configManager.getInt(EnvironmentParams.LOG_FAULT_READ_SIZE);
-			Label498:   ; //this.hook498(envImpl);
+			Label498:
+checkpointMonitor = new CheckpointMonitor(envImpl);
+	//original(envImpl);
+   ; //this.hook498(envImpl);
   }
 
   // line 80 "../../../../LogManager.ump"
@@ -197,7 +202,12 @@ if (fsyncRequired) {
 	}
 	//original(fsyncRequired);
    ; //this.hook501(fsyncRequired);
-	Label499:   ; //this.hook499(logResult);
+	Label499:
+if (logResult.wakeupCheckpointer) {
+	    checkpointMonitor.activate();
+	}
+	//original(logResult);
+   ; //this.hook499(logResult);
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -281,7 +291,10 @@ nTempBufferWrites++;
 			}
 			item.postLogWork(currentLsn);
 			boolean wakeupCheckpointer = false;
-			Label500:   ; //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
+			Label500:
+wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
+	//return //original(item, entrySize, wakeupCheckpointer);
+   ; //wakeupCheckpointer = this.hook500(item, entrySize, wakeupCheckpointer);
 			return new LogResult(currentLsn, wakeupCheckpointer, wakeupCleaner);
   }
 
@@ -462,7 +475,10 @@ nTempBufferWrites++;
 					nTempBufferWrites = 0;
 			}
 			logBufferPool.loadStats(config, stats);
-			Label497: ;//this.hook497(config, stats);
+			Label497:
+fileManager.loadStats(config, stats);
+//	original(config, stats);
+ ;//this.hook497(config, stats);
   }
 
   // line 12 "../../../../Checksum_LogManager.ump"
@@ -648,6 +664,8 @@ nTempBufferWrites++;
   private boolean doChecksumOnRead ;
 // line 9 "../../../../Checksum_LogManager.ump"
   protected static ChecksumValidator validator ;
+// line 5 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogManager.ump"
+  private CheckpointMonitor checkpointMonitor ;
 
   
 }

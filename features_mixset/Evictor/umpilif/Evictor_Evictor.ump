@@ -272,12 +272,11 @@ class Evictor
     private long evictIN(IN child, IN parent, int index, INList inlist, ScanIterator scanIter, boolean envIsReadOnly)
 	    throws DatabaseException {
 			long evictBytes = 0;
+			IN renewedChild = (IN) parent.getTarget(index);
       try{
-
 			Label375:			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
       Label378:	;		//this.hook378(parent);
 			long oldGenerationCount = child.getGeneration();
-			IN renewedChild = (IN) parent.getTarget(index);
 			if ((renewedChild != null) && (renewedChild.getGeneration() <= oldGenerationCount)
 				&& renewedChild.latchNoWait(false)) {
           Label379:					//evictBytes = this.hook379(parent, index, inlist, scanIter, envIsReadOnly, evictBytes, renewedChild);

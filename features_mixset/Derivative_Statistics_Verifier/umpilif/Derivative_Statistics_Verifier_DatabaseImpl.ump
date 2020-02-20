@@ -11,7 +11,7 @@ class DatabaseImpl
 	    out = System.err;
 	}
 	StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), emptyStats) {
-	    void verifyNode(Node node) {
+	   public void verifyNode(Node node) {
 		try {
 		    node.verify(null);
 		} catch (DatabaseException INE) {

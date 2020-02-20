@@ -51,6 +51,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../LoggingFine_Txn.ump"
 // line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn.ump"
 // line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
+// line 3 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
 
@@ -1291,6 +1292,7 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   
   // line 4 "../../../../DeleteOp_Txn_inner.ump"
+  // line 4 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
   public static class Txn_markDeleteAtTxnEnd
   {
   
@@ -1322,13 +1324,20 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
     // line 11 "../../../../DeleteOp_Txn_inner.ump"
     public void execute() throws DatabaseException{
       synchronized (_this) {
-  						    Label797: //this.hook797();
+  						    Label797:
+  delta=0;
+          //original();
+   //this.hook797();
   						    if (_this.deletedDatabases == null) {
   						      _this.deletedDatabases=new HashSet();
   						      Label789: ;//this.hook798();
   						    }
   						    _this.deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,deleteAtCommit));
-  						    Label796: ; //this.hook796();
+  						    Label796:
+  delta+=MemoryBudget.HASHSET_ENTRY_OVERHEAD + MemoryBudget.OBJECT_OVERHEAD;
+          _this.updateMemoryUsage(delta);
+          //original();
+   ; //this.hook796();
   						  }
     }
     

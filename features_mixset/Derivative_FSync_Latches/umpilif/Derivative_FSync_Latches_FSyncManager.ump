@@ -7,7 +7,7 @@ class FSyncManager
    
  private Latch fsyncLatch;
 
-    protected void hook434: FSyncManager(EnvironmentImpl ){
+  after Label434: FSyncManager(EnvironmentImpl ){
 	fsyncLatch = LatchSupport.makeLatch("fsyncLatch", envImpl);
 //	original(envImpl);
     }

@@ -28,7 +28,6 @@ import com.sleepycat.je.StatsConfig;
 // line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
 // line 3 "../../../../DbRunAction_inner.ump"
 // line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
 // line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
@@ -37,6 +36,8 @@ import com.sleepycat.je.StatsConfig;
 // line 3 "../../../../INCompressor_DbRunAction_inner.ump"
 // line 3 "../../../../Statistics_DbRunAction.ump"
 // line 3 "../../../../Statistics_DbRunAction_inner.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
 public class DbRunAction
 {
 
@@ -141,7 +142,6 @@ public class DbRunAction
   @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
   // line 4 "../../../../DbRunAction_inner.ump"
-  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
   // line 33 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
   // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
@@ -248,12 +248,6 @@ public class DbRunAction
   envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
           //original(); //@Abdulaziz aaa
    Label847:
-  if (readOnly) {
-            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
-            envConfig.setReadOnly(true);
-          }
-          //original();
-  
           // this.hook845();
           Label845:
   if (doAction == EVICT) {
@@ -380,6 +374,7 @@ public class DbRunAction
   
   
   // line 4 "../../../../Evictor_DbRunAction_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
   public static class DbRunAction_doEvict
   {
   
@@ -409,9 +404,15 @@ public class DbRunAction
     // line 9 "../../../../Evictor_DbRunAction_inner.ump"
     public void execute() throws DatabaseException{
       envImpl=DbInternal.envGetEnvironmentImpl(env);
-          Label837:        //this.hook837();
+          Label837:
+  cacheUsage=envImpl.getMemoryBudget().getCacheMemoryUsage();
+          //original();
+          //this.hook837();
           c=new EnvironmentMutableConfig();
-          Label836:        //this.hook836();
+          Label836:
+  c.setCacheSize(cacheUsage / 2);
+          //original();
+          //this.hook836();
           env.setMutableConfig(c);
           start=System.currentTimeMillis();
           env.evictMemory();

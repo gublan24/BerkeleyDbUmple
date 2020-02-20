@@ -60,6 +60,11 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../LoggingConfig_Checkpointer_inner.ump"
 // line 3 "../../../../LoggingFinest_Checkpointer.ump"
 // line 3 "../../../../LoggingFinest_Checkpointer_inner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_Checkpointer.ump"
+// line 3 "../../../../Derivative_CPBytes_CPTime_Checkpointer_inner.ump"
+// line 3 "../../../../Derivative_LoggingFinest_CPTime_Checkpointer_inner.ump"
+// line 3 "../../../../Derivative_LoggingFinest_CPBytes_Checkpointer_inner.ump"
+// line 3 "../../../../Derivative_LoggingConfig_Statistics_Checkpointer.ump"
 public class Checkpointer extends DaemonThread
 {
 
@@ -199,7 +204,10 @@ timeInterval = waitTime;
             Iterator iter = nodeSet.iterator();
             while (iter.hasNext()) {
                 CheckpointReference targetRef = (CheckpointReference) iter.next();
-                Label520:   ; //this.hook520();
+                Label520:
+envImpl.getEvictor().doCriticalEviction();
+	//original();
+   ; //this.hook520();
                 //this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
                 Label546:
 if (!(targetRef.db.isDeleted())) {
@@ -456,7 +464,11 @@ nFullINFlushThisRun++;
 			sb.append("Checkpoint ").append(checkpointId);
 			sb.append(": source=").append(invokingSource);
 			sb.append(" success=").append(success);
-			Label516: //this.hook516(sb);
+			Label516:
+sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
+	sb.append(" nDeltaINFlushThisRun=").append(nDeltaINFlushThisRun);
+//	original(sb);
+ //this.hook516(sb);
 			Tracer.trace(Level.CONFIG, envImpl, sb.toString());
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
@@ -600,6 +612,7 @@ nFullINFlushThisRun++;
   // line 30 "../../../../Checkpointer_static.ump"
   // line 3 "../../../../CPTime_Checkpointer_inner.ump"
   // line 4 "../../../../CPBytes_Checkpointer_inner.ump"
+  // line 4 "../../../../Derivative_CPBytes_CPTime_Checkpointer_inner.ump"
   public static class Checkpointer_getWakeupPeriod
   {
   
@@ -636,7 +649,12 @@ nFullINFlushThisRun++;
   bytePeriod=configManager.getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
           //original();
      ; //this.hook541();
-      Label519:   ; //this.hook519();
+      Label519:
+  if ((wakeupPeriod == 0) && (bytePeriod == 0)) {
+            throw new IllegalArgumentException(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL.getName() + " and " + EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL.getName()+ " cannot both be 0. ");
+          }
+       //   original();
+     ; //this.hook519();
       result = 0;
       Label540:
   if (bytePeriod == 0) {
@@ -687,6 +705,8 @@ nFullINFlushThisRun++;
   // line 13 "../../../../CPTime_Checkpointer_inner.ump"
   // line 16 "../../../../CPBytes_Checkpointer_inner.ump"
   // line 4 "../../../../LoggingFinest_Checkpointer_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFinest_CPTime_Checkpointer_inner.ump"
+  // line 4 "../../../../Derivative_LoggingFinest_CPBytes_Checkpointer_inner.ump"
   public static class Checkpointer_isRunnable
   {
   
@@ -775,7 +795,11 @@ nFullINFlushThisRun++;
       Label521:
   sb=new StringBuffer();
     
-            Label517: //this.hook517();
+            Label517:
+  // label introduced in loggingFinestCheckpointer_inner
+          sb.append("size interval=").append(useBytesInterval);
+    //      original();
+   //this.hook517();
   
           if (nextLsn != DbLsn.NULL_LSN) {
             sb.append(" " + "nextLsn=").append(DbLsn.getNoFormatString(nextLsn));
@@ -785,7 +809,11 @@ nFullINFlushThisRun++;
             sb.append(DbLsn.getNoFormatString(_this.lastCheckpointEnd));
           }
     	
-            Label518: //this.hook518();
+            Label518:
+  // introduced in LoggingFinest/Checkpointer_inner.ump
+          sb.append(" time interval=").append(useTimeInterval);
+         // original();
+   //this.hook518();
    
           sb.append(" force=").append(config.getForce());
           Tracer.trace(Level.FINEST,_this.envImpl,sb.toString());

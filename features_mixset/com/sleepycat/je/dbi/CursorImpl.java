@@ -52,6 +52,8 @@ import com.sleepycat.je.log.entry.*;
 // line 3 "../../../../LoggingFiner_CursorImpl_inner.ump"
 // line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl.ump"
 // line 3 "../../../../Derivative_LoggingFiner_LoggingBase_CursorImpl_inner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_CursorImpl.ump"
 // line 3 "../../../../Derivative_Latches_Statistics_CursorImpl.ump"
 // line 3 "../../../../Derivative_Latches_Statistics_CursorImpl_inner.ump"
 public class CursorImpl implements Cloneable
@@ -468,6 +470,12 @@ dupBin.releaseLatch();
         dupBin = null;
         dupIndex = -1;
         status = CURSOR_NOT_INITIALIZED;
+    // line 15 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
+    //original();
+    	if (allowEviction) {
+    	    database.getDbEnvironment().getEvictor().doCriticalEviction();
+    	}
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -485,6 +493,12 @@ dupBin.releaseLatch();
             locker.releaseNonTxnLocks();
         }
         status = CURSOR_CLOSED;
+    // line 26 "../../../../Derivative_Evictor_CriticalEviction_CursorImpl.ump"
+    //original();
+    	if (allowEviction) {
+    	    database.getDbEnvironment().getEvictor().doCriticalEviction();
+    	}
+    // END OF UMPLE AFTER INJECTION
   }
 
   // line 420 "../../../../CursorImpl.ump"
@@ -1736,13 +1750,19 @@ if (DEBUG) {
   // line 19 "../../../../Evictor_CursorImpl.ump"
    public void evict() throws DatabaseException{
     try {
-      Label202:			//this.hook202();
+      Label202:
+latchBINs();
+	//original();
+			//this.hook202();
 			setTargetBin();
 			targetBin.evictLN(targetIndex);
 
 	} finally {
 
-LabelEvict_1: ;//
+LabelEvict_1:
+releaseBINs();
+	//}
+ ;//
 
 }
   }

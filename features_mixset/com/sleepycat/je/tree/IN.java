@@ -53,6 +53,7 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
 // line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN.ump"
 // line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
+// line 3 "../../../../Derivative_LoggingInfo_MemoryBudget_IN.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -1874,7 +1875,10 @@ releaseLatch();
 					String msg = "-Warning: Out of sync. " + "Should be " + calcMemorySize + " / actual: " + inMemorySize
 						+ " node: " + getNodeId();
 
-				  Label615:				 // this.hook615(msg);
+				  Label615:
+Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
+	//original(msg);
+				 // this.hook615(msg);
 					System.out.println(msg);
 					return false;
 			} 

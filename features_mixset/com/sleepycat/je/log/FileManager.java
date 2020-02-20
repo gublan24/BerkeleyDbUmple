@@ -49,6 +49,9 @@ import com.sleepycat.je.EnvironmentStats;
 // line 3 "../../../../NIO_FileManager_inner.ump"
 // line 3 "../../../../FSync_FileManager.ump"
 // line 3 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+// line 3 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+// line 2 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+// line 3 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
 public class FileManager
 {
 
@@ -823,8 +826,12 @@ data.position(0);
     // Label451: ;
         fileCache.clear();
     // END OF UMPLE BEFORE INJECTION
+    // line 30 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.acquire();
+    	//original();
+    // END OF UMPLE BEFORE INJECTION
     endOfLog.close();
-    // line 34 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    // line 35 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
     //throws IOException, DatabaseException {
     	//try {    original();	} finally {
     	    fileCacheLatch.release();
@@ -1030,7 +1037,15 @@ data.position(0);
    */
   // line 15 "../../../../FileHandleCache_FileManager.ump"
    private void clearFileCache(long fileNum) throws IOException,DatabaseException{
+    // line 46 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.acquire();
+    //	try {	    original(fileNum);} finally {
+    	    fileCacheLatch.release();
+    // END OF UMPLE BEFORE INJECTION
     fileCache.remove(fileNum);
+    // line 53 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -1041,6 +1056,26 @@ data.position(0);
   // line 11 "../../../../FSync_FileManager.ump"
   public void groupSync() throws DatabaseException{
     syncManager.fsync();
+  }
+
+  // line 6 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+   public long getNFSyncs(){
+    return syncManager.getNFSyncs();
+  }
+
+  // line 10 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+   public long getNFSyncRequests(){
+    return syncManager.getNFSyncRequests();
+  }
+
+  // line 14 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+   public long getNFSyncTimeouts(){
+    return syncManager.getNTimeouts();
+  }
+
+  // line 18 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+  public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
+    syncManager.loadStats(config, stats);
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1204,6 +1239,8 @@ data.position(0);
   // line 75 "../../../../FileManager_static.ump"
   // line 4 "../../../../IO_FileManager_inner.ump"
   // line 4 "../../../../NIO_FileManager_inner.ump"
+  // line 3 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+  // line 4 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
   public static class FileManager_writeToFile
   {
   
@@ -1241,6 +1278,21 @@ data.position(0);
           //original();
    ;//this.hook455();
           Label445:
+  if (_this.chunkedNIOSize > 0) {
+            useData=data.duplicate();
+            origLimit=useData.limit();
+            useData.limit(useData.position());
+            while (useData.limit() < origLimit) {
+              useData.limit((int)(Math.min(useData.limit() + _this.chunkedNIOSize,origLimit)));
+              bytesWritten=channel.write(useData,destOffset);
+              destOffset+=bytesWritten;
+              totalBytesWritten+=bytesWritten;
+            }
+          }
+  //   else {
+   //         original();
+    //      }
+  
   totalBytesWritten=channel.write(data,destOffset);
           //original();
    ;//this.hook445();
@@ -1250,6 +1302,9 @@ data.position(0);
                 //  this.hook447();
               //}
               Label447:
+  synchronized (file) {
+  				
+  
               assert data.hasArray();
               assert data.arrayOffset() == 0;
               pos = data.position();
@@ -1258,7 +1313,10 @@ data.position(0);
               file.write(data.array(), pos, size);
               data.position(pos + size);
               totalBytesWritten = size;
-              Label447_1: ;//
+              
+  
+          }
+  Label447_1: ;//
               //end 
              // return result;
    ;//
@@ -1301,6 +1359,8 @@ data.position(0);
   // line 105 "../../../../FileManager_static.ump"
   // line 36 "../../../../IO_FileManager_inner.ump"
   // line 15 "../../../../NIO_FileManager_inner.ump"
+  // line 10 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+  // line 23 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
   public static class FileManager_readFromFile
   {
   
@@ -1337,14 +1397,33 @@ data.position(0);
               //original();
       // END OF UMPLE BEFORE INJECTION
       Label446:
+  if (_this.chunkedNIOSize > 0) {
+            readLength=readBuffer.limit();
+            currentPosition=offset;
+            while (readBuffer.position() < readLength) {
+              readBuffer.limit((int)(Math.min(readBuffer.limit() + _this.chunkedNIOSize,readLength)));
+              bytesRead1=channel.read(readBuffer,currentPosition);
+              if (bytesRead1 < 1)           break;
+              currentPosition+=bytesRead1;
+            }
+          }
+     else {
+            
+  
   channel.read(readBuffer,offset);
           //original();
    ;//this.hook446();
-          Label446_1:
+          
+   //original();
+          }
+  Label446_1:
   //original(); {
               //    this.hook448();
               //}
              Label448:
+  synchronized (file) {
+  					
+  
              assert readBuffer.hasArray();
              assert readBuffer.arrayOffset() == 0;
              pos = readBuffer.position();
@@ -1354,7 +1433,10 @@ data.position(0);
              if (bytesRead2 > 0) {
                   readBuffer.position(pos + bytesRead2);
              }
-             Label448_1: ;//
+             
+  
+          }
+  Label448_1: ;//
    ; //
     }
     

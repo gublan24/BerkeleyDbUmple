@@ -44,9 +44,9 @@ class StatsAccumulator
 
     private DatabaseStats useStats;
 
-    PrintStream progressStream;
+    protected PrintStream progressStream;
 
-    int progressInterval;
+    protected int progressInterval;
 
     private static final int MAX_LEVELS = 100;
 

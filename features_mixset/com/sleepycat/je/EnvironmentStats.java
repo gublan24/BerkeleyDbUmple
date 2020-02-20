@@ -8,6 +8,7 @@ import java.io.Serializable;
 import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../Statistics_EnvironmentStats.ump"
+// line 3 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
 public class EnvironmentStats implements Serializable
 {
 
@@ -85,7 +86,12 @@ public class EnvironmentStats implements Serializable
 			nCacheMiss = 0;
 			nLogBuffers = 0;
 			bufferBytes = 0;
-			Label60: //this.hook60();
+			Label60:
+nFSyncs = 0;
+	nFSyncRequests = 0;
+	nFSyncTimeouts = 0;
+	//original();
+ //this.hook60();
 			nRepeatFaultReads = 0;
 			nTempBufferWrites = 0;
 			nRepeatIteratorReads = 0;
@@ -1094,11 +1100,76 @@ public class EnvironmentStats implements Serializable
 			sb.append("bufferBytes=").append(bufferBytes).append('\n');
 			sb.append("cacheDataBytes=").append(cacheDataBytes).append('\n');
 			sb.append("cacheTotalBytes=").append(getCacheTotalBytes()).append('\n');
-			Label61: //this.hook61(sb);
+			Label61:
+sb.append("nFSyncs=").append(nFSyncs).append('\n');
+	sb.append("nFSyncRequests=").append(nFSyncRequests).append('\n');
+	sb.append("nFSyncTimeouts=").append(nFSyncTimeouts).append('\n');
+	//original(sb);
+ //this.hook61(sb);
 			sb.append("nRepeatFaultReads=").append(nRepeatFaultReads).append('\n');
 			sb.append("nTempBufferWrite=").append(nTempBufferWrites).append('\n');
 			sb.append("nRepeatIteratorReads=").append(nRepeatIteratorReads).append('\n');
 			return sb.toString();
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 15 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+   public long getNFSyncs(){
+    return nFSyncs;
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 22 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+   public long getNFSyncRequests(){
+    return nFSyncRequests;
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 29 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+   public long getNFSyncTimeouts(){
+    return nFSyncTimeouts;
+  }
+
+
+  /**
+   * 
+   * Internal use only.
+   */
+  // line 36 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+   public void setNFSyncs(long val){
+    nFSyncs = val;
+  }
+
+
+  /**
+   * 
+   * Internal use only.
+   */
+  // line 43 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+   public void setNFSyncRequests(long val){
+    nFSyncRequests = val;
+  }
+
+
+  /**
+   * 
+   * Internal use only.
+   */
+  // line 50 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+   public void setNFSyncTimeouts(long val){
+    nFSyncTimeouts = val;
   }
   
   //------------------------
@@ -1199,6 +1270,12 @@ public class EnvironmentStats implements Serializable
   private long nTempBufferWrites ;
 // line 218 "../../../Statistics_EnvironmentStats.ump"
   private long nRepeatIteratorReads ;
+// line 5 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+  private long nFSyncs ;
+// line 7 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+  private long nFSyncRequests ;
+// line 9 "../../../Derivative_FSync_Statistics_EnvironmentStats.ump"
+  private long nFSyncTimeouts ;
 
   
 }

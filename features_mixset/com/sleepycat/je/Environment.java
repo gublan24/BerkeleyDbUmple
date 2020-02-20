@@ -32,6 +32,7 @@ import java.io.File;
 // line 3 "../../../INCompressor_Environment.ump"
 // line 3 "../../../Statistics_Environment.ump"
 // line 3 "../../../LoggingFinest_Environment.ump"
+// line 3 "../../../Derivative_Statistics_Verifier_Environment.ump"
 public class Environment
 {
 
@@ -775,6 +776,19 @@ if (database != null && !database.isDeleted())
 			checkEnv();
 			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
 			return environmentImpl.txnStat(useConfig);
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
+  // line 9 "../../../Derivative_Statistics_Verifier_Environment.ump"
+   public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
+    checkHandleIsValid();
+	checkEnv();
+	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
+	return environmentImpl.verify(useConfig, out);
   }
   
   //------------------------

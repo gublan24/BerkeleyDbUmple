@@ -29,6 +29,8 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Evictor_BIN.ump"
 // line 3 "../../../../INCompressor_BIN.ump"
 // line 3 "../../../../Verifier_BIN.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_BIN.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -770,6 +772,10 @@ if (needToLatch && isLatchOwner()) {
    */
   // line 30 "../../../../Evictor_BIN.ump"
    public long evictLNs() throws DatabaseException{
+    // line 10 "../../../../Derivative_Latches_Evictor_BIN.ump"
+    assert isLatchOwner() : "BIN must be latched before evicting LNs";
+    	//return original();
+    // END OF UMPLE BEFORE INJECTION
     Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
 			long removed = 0;
 			if (nCursors() == 0) {
@@ -777,7 +783,11 @@ if (needToLatch && isLatchOwner()) {
 				removed += evictInternal(i, cleaner);
 					}
 
-					Label601:  		;			//this.hook601(removed);;
+					Label601:
+// Label601 from  Evictor_BIN.ump
+	updateMemorySize(removed, 0);
+//	original(removed);
+  		;			//this.hook601(removed);;
 
 			}
 			return removed;
@@ -793,7 +803,11 @@ if (needToLatch && isLatchOwner()) {
     Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
 			long removed = evictInternal(index, cleaner);
 
-      Label602: 	;		//this.hook602(removed);
+      Label602:
+// Label602 from  Evictor_BIN.ump
+	updateMemorySize(removed, 0);
+	//original(removed);
+ 	;		//this.hook602(removed);
   }
 
 

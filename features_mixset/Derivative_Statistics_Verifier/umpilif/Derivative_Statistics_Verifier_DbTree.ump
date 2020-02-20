@@ -2,9 +2,10 @@ namespace com.sleepycat.je.dbi;
 
 class DbTree
 {
-    public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException {
-	Label292_1: boolean ret = true;
-	try {
+  public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException {
+    boolean ret = true;	
+    Label292_1: 
+	  try {
 	    boolean ok = idDatabase.verify(config, idDatabase.getEmptyStats());
 	    if (!ok) {
 		ret = false;
@@ -16,7 +17,7 @@ class DbTree
 	} catch (DatabaseException DE) {
 	    ret = false;
 	}
-	Label292: //ret = this.hook292(config, out, ret);
+	Label292: ;//ret = this.hook292(config, out, ret);
 	Locker locker = null;
 	CursorImpl cursor = null;
 	LockType lockType = LockType.NONE;

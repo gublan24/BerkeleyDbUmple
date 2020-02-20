@@ -76,7 +76,7 @@ use LoggingFiner/umpilif/LoggingFiner_Master.ump;
 
 use LoggingFinest/umpilif/LoggingFinest_Master.ump;
 
-
+/*
 use Derivative_LoggingConsoleHandler_LoggingBase/umpilif/Derivative_LoggingConsoleHandler_LoggingBase_Master.ump;
 
 use Derivative_LoggingDbLogHandler_LoggingBase/umpilif/Derivative_LoggingDbLogHandler_LoggingBase_Master.ump;
@@ -98,6 +98,41 @@ use Derivative_LoggingSevere_EnvironmentLocking/umpilif/Derivative_LoggingSevere
 
 use Derivative_Latches_FileHandleCache/umpilif/Derivative_Latches_FileHandleCache_Master.ump;
 
+use Derivative_Evictor_CriticalEviction/umpilif/Derivative_Evictor_CriticalEviction_Master.ump;
+
+use Derivative_Evictor_MemoryBudget/umpilif/Derivative_Evictor_MemoryBudget_Master.ump;
+
+use Derivative_DeleteOp_MemoryBudget/umpilif/Derivative_DeleteOp_MemoryBudget_Master.ump;
+
+use Derivative_Statistics_MemoryBudget/umpilif/Derivative_Statistics_MemoryBudget_Master.ump;
+
+use Derivative_Latches_MemoryBudget/umpilif/Derivative_Latches_MemoryBudget_Master.ump;
+
+
+use Derivative_LoggingInfo_MemoryBudget/umpilif/Derivative_LoggingInfo_MemoryBudget_Master.ump;
+
+use Derivative_DeleteOp_Evictor/umpilif/Derivative_DeleteOp_Evictor_Master.ump;
+
+use Derivative_INCompressor_Evictor/umpilif/Derivative_INCompressor_Evictor_Master.ump;
+
+use Derivative_Statistics_Evictor/umpilif/Derivative_Statistics_Evictor_Master.ump;
+
+use Derivative_Latches_Evictor/umpilif/Derivative_Latches_Evictor_Master.ump;
+
+
+use Derivative_LoggingEvictor_Evictor/umpilif/Derivative_LoggingEvictor_Evictor_Master.ump;
+
+use Derivative_Latches_RenameOp/umpilif/Derivative_Latches_RenameOp_Master.ump;
+
+use Derivative_DeleteOp_TruncateOp/umpilif/Derivative_DeleteOp_TruncateOp_Master.ump;
+
+use Derivative_Latches_TruncateOp/umpilif/Derivative_Latches_TruncateOp_Master.ump;
+
+use Derivative_LoggingFinest_TruncateOp/umpilif/Derivative_LoggingFinest_TruncateOp_Master.ump;
+
+
+
+
 
 use Derivative_Evictor_EvictorDaemon/umpilif/Derivative_Evictor_EvictorDaemon_Master.ump;
 
@@ -107,7 +142,7 @@ use Derivative_Latches_Statistics/umpilif/Derivative_Latches_Statistics_Master.u
 use Derivative_LookAHEADCache_Statistics/umpilif/Derivative_LookAHEADCache_Statistics_Master.ump;
 
 use Derivative_LookAHEADCache_MemoryBudget/umpilif/Derivative_LookAHEADCache_MemoryBudget_Master.ump;
-
+*/
 
 /*
 
@@ -216,6 +251,7 @@ use LoggingFiner/umpilif/LoggingFiner_Master.ump;
 use LoggingFinest/umpilif/LoggingFinest_Master.ump;
 //
 
+*/
 use Derivative_LoggingConsoleHandler_LoggingBase/umpilif/Derivative_LoggingConsoleHandler_LoggingBase_Master.ump;
 
 use Derivative_LoggingDbLogHandler_LoggingBase/umpilif/Derivative_LoggingDbLogHandler_LoggingBase_Master.ump;
@@ -250,6 +286,8 @@ use Derivative_Statistics_MemoryBudget/umpilif/Derivative_Statistics_MemoryBudge
 
 use Derivative_Latches_MemoryBudget/umpilif/Derivative_Latches_MemoryBudget_Master.ump;
 
+
+
 use Derivative_LookAHEADCache_MemoryBudget/umpilif/Derivative_LookAHEADCache_MemoryBudget_Master.ump; //
 
 use Derivative_LoggingInfo_MemoryBudget/umpilif/Derivative_LoggingInfo_MemoryBudget_Master.ump;
@@ -262,6 +300,11 @@ use Derivative_Statistics_Evictor/umpilif/Derivative_Statistics_Evictor_Master.u
 
 use Derivative_Latches_Evictor/umpilif/Derivative_Latches_Evictor_Master.ump;
 
+
+
+
+
+
 use Derivative_LoggingEvictor_Evictor/umpilif/Derivative_LoggingEvictor_Evictor_Master.ump;
 
 use Derivative_Latches_RenameOp/umpilif/Derivative_Latches_RenameOp_Master.ump;
@@ -271,6 +314,9 @@ use Derivative_DeleteOp_TruncateOp/umpilif/Derivative_DeleteOp_TruncateOp_Master
 use Derivative_Latches_TruncateOp/umpilif/Derivative_Latches_TruncateOp_Master.ump;
 
 use Derivative_LoggingFinest_TruncateOp/umpilif/Derivative_LoggingFinest_TruncateOp_Master.ump;
+
+
+
 
 use Derivative_INCompressor_DeleteOp/umpilif/Derivative_INCompressor_DeleteOp_Master.ump;
 
@@ -340,4 +386,4 @@ use Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase/umpilif/Derivativ
 
 use Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase/umpilif/Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Master.ump;
 
-*/
+
