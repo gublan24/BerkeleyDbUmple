@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFine_LoggingBase/com/sleepycat/je/txn/Txn.java
 namespace com.sleepycat.je.txn;
 class Txn {
-   static class Txn_traceCommit {
+   inner class Txn_traceCommit {
       after execute(){
         //original();
         if (logger.isLoggable(Level.FINE)) {

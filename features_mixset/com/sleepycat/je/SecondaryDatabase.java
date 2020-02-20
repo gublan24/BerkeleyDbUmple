@@ -676,7 +676,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
   
   // line 4 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
   // line 4 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
-  public static class SecondaryDatabase_trace
+  public class SecondaryDatabase_trace
   {
   
     //------------------------
@@ -715,7 +715,6 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
                 sb.append(" primary=").append(_this.primaryDb.getDebugName());
                 logger.log(level,sb.toString());
               }
-              //original();
       // END OF UMPLE BEFORE INJECTION
       
     }

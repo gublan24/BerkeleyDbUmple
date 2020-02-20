@@ -300,10 +300,10 @@ nFSyncs++;
   private long nFSyncs = 0 ;
 // line 11 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
   private long nTimeouts = 0 ;
-// line 8 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
+// line 9 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
   private Latch fsyncLatch ;
-// line 8 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
-  //private Latch fsyncLatch ;
+// line 9 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
+  private Latch fsyncLatch ;
 
   
 }

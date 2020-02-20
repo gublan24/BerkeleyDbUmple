@@ -49,7 +49,7 @@ class Txn {
       protected int delta;
 
     }
-   static class Txn_traceCommit {
+    inner class Txn_traceCommit {
       Txn_traceCommit(    Txn _this,    int numWriteLocks,    int numReadLocks){
         this._this=_this;
         this.numWriteLocks=numWriteLocks;

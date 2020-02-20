@@ -1,7 +1,7 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/loggingBase_x/com/sleepycat/je/txn/Txn.java
 namespace com.sleepycat.je.txn;
 class Txn {
-  @MethodObject static class Txn_traceCommit {
+  inner class Txn_traceCommit {
       before execute(){
         logger=envImpl.getLogger();
       }

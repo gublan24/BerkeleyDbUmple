@@ -968,7 +968,10 @@ nameCursor.releaseBIN();
 					}
 			} finally {
 					if (nameCursor != null) {
-							Label293://this.hook293(nameCursor);
+							Label293:
+nameCursor.releaseBIN();
+	//original(nameCursor);
+//this.hook293(nameCursor);
 							nameCursor.close();
 					}
 			}
@@ -1255,9 +1258,6 @@ cursor.releaseBINs();
   private DatabaseImpl nameDatabase ;
 // line 57 "../../../../DbTree.ump"
   private EnvironmentImpl envImpl ;
-// line 5 "../../../../Derivative_Latches_DeleteOp_DbTree.ump"
-//  after Label293: bRemove(Locker , String) 
-	//nameCursor.releaseBIN() ;
 
   
 }
