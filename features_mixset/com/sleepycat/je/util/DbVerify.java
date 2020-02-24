@@ -99,8 +99,7 @@ public class DbVerify
 	}
     }
 
-    protected DbVerify() {
-    }
+
 
     public DbVerify(Environment env, String dbName, boolean quiet) {
 	this.env = env;
@@ -186,7 +185,7 @@ public class DbVerify
 	    }
 	    openEnv();
 	    EnvironmentImpl envImpl = DbInternal.envGetEnvironmentImpl(env);
-	    Label851: //this.hook851(envImpl);
+	    Label851:; //this.hook851(envImpl);
 	    DatabaseConfig dbConfig = new DatabaseConfig();
 	    dbConfig.setReadOnly(true);
 	    dbConfig.setAllowCreate(false);
@@ -198,17 +197,17 @@ public class DbVerify
 		    VerifyUtils.checkLsns(db);
 		} else {
 		    DatabaseImpl dbImpl = DbInternal.dbGetDatabaseImpl(db);
-		    DatabaseStats stats = dbImpl.getEmptyStats();
-		    ret = dbImpl.verify(verifyConfig, stats);
+		 //   DatabaseStats stats = dbImpl.getEmptyStats();
+		   // ret = dbImpl.verify(verifyConfig, stats);
 		    if (verifyConfig.getPrintInfo()) {
-			out.println(stats);
+		//	out.println(stats);
 		    }
 		}
 	    } finally {
 		if (db != null) {
 		    db.close();
 		}
-		Label852: //this.hook852(envImpl);
+		Label852: ;//this.hook852(envImpl);
 	    }
 	    closeEnv();
 	} catch (DatabaseException DE) {

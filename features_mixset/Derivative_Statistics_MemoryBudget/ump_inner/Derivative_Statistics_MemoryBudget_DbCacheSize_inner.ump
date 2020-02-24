@@ -2,7 +2,7 @@
 namespace com.sleepycat.je.util;
 class DbCacheSize {
    static class DbCacheSize_insertRecords {
-      after Label833:  execute() {
+      after Label833:  DbCacheSize_insertRecords(PrintStream , Environment , Database , long , int , int , boolean ) {
         stats=env.getStats(null);
         if (stats.getNNodesScanned() > 0) {
           out.println("*** Ran out of cache memory at record " + i + " -- try increasing the Java heap size ***");
@@ -12,3 +12,6 @@ class DbCacheSize {
       }
     }
 }
+
+
+   

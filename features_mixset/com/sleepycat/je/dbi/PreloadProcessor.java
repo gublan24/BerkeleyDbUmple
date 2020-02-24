@@ -11,7 +11,6 @@ import com.sleepycat.bind.serial.*;
 
 // line 3 "../../../../PreloadProcessor.ump"
 // line 3 "../../../../MemoryBudget_PreloadProcessor.ump"
-// line 3 "../../../../Statistics_PreloadProcessor.ump"
 public class PreloadProcessor implements TreeNodeProcessor
 {
 
@@ -33,15 +32,12 @@ public class PreloadProcessor implements TreeNodeProcessor
   public void delete()
   {}
 
-  // line 18 "../../../../PreloadProcessor.ump"
+  // line 24 "../../../../PreloadProcessor.ump"
   public  PreloadProcessor(EnvironmentImpl envImpl, long maxBytes, long targetTime, PreloadStats stats){
     this.envImpl = envImpl;
 			this.maxBytes = maxBytes;
 			this.targetTime = targetTime;
-			Label535:
-this.stats = stats;
-			//original(stats);
-   ; //this.hook353(stats);
+			Label535:   ; //this.hook353(stats);
   }
 
 
@@ -49,7 +45,7 @@ this.stats = stats;
    * 
    * Called for each LSN that the SortedLSNTreeWalker encounters.
    */
-  // line 28 "../../../../PreloadProcessor.ump"
+  // line 34 "../../../../PreloadProcessor.ump"
    public void processLSN(long childLsn, LogEntryType childType){
     assert childLsn != DbLsn.NULL_LSN;
 			if (System.currentTimeMillis() > targetTime) {
@@ -62,37 +58,19 @@ if (envImpl.getMemoryBudget().getCacheMemoryUsage() > maxBytes) {
 	}
 //	original();
    ;
-			Label354:
-if (childType.equals(LogEntryType.LOG_DUPCOUNTLN_TRANSACTIONAL)
-			|| childType.equals(LogEntryType.LOG_DUPCOUNTLN)) {
-			  stats.nDupCountLNsLoaded++;
-		} else if (childType.equals(LogEntryType.LOG_LN_TRANSACTIONAL) || childType.equals(LogEntryType.LOG_LN)) {
-			  stats.nLNsLoaded++;
-		} else if (childType.equals(LogEntryType.LOG_DBIN)) {
-			  stats.nDBINsLoaded++;
-		} else if (childType.equals(LogEntryType.LOG_BIN)) {
-			  stats.nBINsLoaded++;
-		} else if (childType.equals(LogEntryType.LOG_DIN)) {
-			  stats.nDINsLoaded++;
-		} else if (childType.equals(LogEntryType.LOG_IN)) {
-			  stats.nINsLoaded++;
-		}
-		//original(childType);
-   ; //this.hook354(childType);
+			Label354:   ; //this.hook354(childType);
   }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 11 "../../../../PreloadProcessor.ump"
+  // line 17 "../../../../PreloadProcessor.ump"
   private EnvironmentImpl envImpl ;
-// line 13 "../../../../PreloadProcessor.ump"
+// line 19 "../../../../PreloadProcessor.ump"
   private long maxBytes ;
-// line 15 "../../../../PreloadProcessor.ump"
+// line 21 "../../../../PreloadProcessor.ump"
   private long targetTime ;
-// line 5 "../../../../Statistics_PreloadProcessor.ump"
-  private PreloadStats stats ;
 
   
 }

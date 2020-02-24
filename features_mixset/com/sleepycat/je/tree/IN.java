@@ -38,22 +38,13 @@ import com.sleepycat.je.log.*;
 
 // line 2 "../../../../IN.ump"
 // line 3 "../../../../IN_static.ump"
-// line 3 "../../../../Latches_IN.ump"
-// line 3 "../../../../Latches_IN_inner.ump"
 // line 3 "../../../../MemoryBudget_IN.ump"
 // line 3 "../../../../MemoryBudget_IN_inner.ump"
 // line 3 "../../../../Evictor_IN.ump"
 // line 3 "../../../../INCompressor_IN.ump"
 // line 3 "../../../../INCompressor_IN_inner.ump"
-// line 3 "../../../../LoggingFine_IN.ump"
-// line 3 "../../../../LoggingFine_IN_inner.ump"
-// line 3 "../../../../LoggingFinest_IN.ump"
-// line 3 "../../../../LoggingFinest_IN_inner.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
-// line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN.ump"
-// line 3 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
-// line 3 "../../../../Derivative_LoggingInfo_MemoryBudget_IN.ump"
+// line 3 "../../../../Latches_IN.ump"
+// line 3 "../../../../Latches_IN_inner.ump"
 public class IN extends Node implements Comparable,LoggableObject,LogReadable
 {
 
@@ -1811,56 +1802,6 @@ releaseLatch();
 
   /**
    * 
-   * Latch this node and set the generation.
-   */
-  // line 15 "../../../../Latches_IN.ump"
-   public void latch() throws DatabaseException{
-    latch(true);
-  }
-
-
-  /**
-   * 
-   * Latch this node if it is not latched by another thread, and set the generation if the latch succeeds.
-   */
-  // line 22 "../../../../Latches_IN.ump"
-   public boolean latchNoWait() throws DatabaseException{
-    return latchNoWait(true);
-  }
-
-
-  /**
-   * 
-   * Release the latch on this node.
-   */
-  // line 29 "../../../../Latches_IN.ump"
-   public void releaseLatch() throws LatchNotHeldException{
-    latch.release();
-  }
-
-
-  /**
-   * 
-   * Release the latch on this node.
-   */
-  // line 36 "../../../../Latches_IN.ump"
-   public void releaseLatchIfOwner() throws LatchNotHeldException{
-    latch.releaseIfOwner();
-  }
-
-
-  /**
-   * 
-   * @return true if this thread holds the IN's latch
-   */
-  // line 43 "../../../../Latches_IN.ump"
-   public boolean isLatchOwner(){
-    return latch.isOwner();
-  }
-
-
-  /**
-   * 
    * Initialize the per-node memory count by computing its memory usage.
    */
   // line 13 "../../../../MemoryBudget_IN.ump"
@@ -1875,10 +1816,7 @@ releaseLatch();
 					String msg = "-Warning: Out of sync. " + "Should be " + calcMemorySize + " / actual: " + inMemorySize
 						+ " node: " + getNodeId();
 
-				  Label615:
-Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
-	//original(msg);
-				 // this.hook615(msg);
+				  Label615:				 // this.hook615(msg);
 					System.out.println(msg);
 					return false;
 			} 
@@ -2070,22 +2008,51 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
 
   /**
    * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   * Latch this node and set the generation.
    */
-  // line 10 "../../../../LoggingFine_IN.ump"
-   private void traceSplit(Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn, int splitIndex, int idKeyIndex, int childIndex){
-    new IN_traceSplit(this, level, parent, newSibling, parentLsn, myNewLsn, newSiblingLsn, splitIndex, idKeyIndex,
-		childIndex).execute();
+  // line 15 "../../../../Latches_IN.ump"
+   public void latch() throws DatabaseException{
+    latch(true);
   }
 
 
   /**
    * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   * Latch this node if it is not latched by another thread, and set the generation if the latch succeeds.
    */
-  // line 9 "../../../../LoggingFinest_IN.ump"
-   private void traceDelete(Level level, int index){
-    new IN_traceDelete(this, level, index).execute();
+  // line 22 "../../../../Latches_IN.ump"
+   public boolean latchNoWait() throws DatabaseException{
+    return latchNoWait(true);
+  }
+
+
+  /**
+   * 
+   * Release the latch on this node.
+   */
+  // line 29 "../../../../Latches_IN.ump"
+   public void releaseLatch() throws LatchNotHeldException{
+    latch.release();
+  }
+
+
+  /**
+   * 
+   * Release the latch on this node.
+   */
+  // line 36 "../../../../Latches_IN.ump"
+   public void releaseLatchIfOwner() throws LatchNotHeldException{
+    latch.releaseIfOwner();
+  }
+
+
+  /**
+   * 
+   * @return true if this thread holds the IN's latch
+   */
+  // line 43 "../../../../Latches_IN.ump"
+   public boolean isLatchOwner(){
+    return latch.isOwner();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -2665,7 +2632,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   @MethodObject
   // line 207 "../../../../IN_static.ump"
   // line 11 "../../../../MemoryBudget_IN_inner.ump"
-  // line 18 "../../../../LoggingFinest_IN_inner.ump"
   public static class IN_deleteEntry
   {
   
@@ -2719,10 +2685,7 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
             _this.nEntries--;
             _this.setDirty(true);
             _this.setProhibitNextDelta();
-            Label616:
-  _this.traceDelete(Level.FINEST,index);
-          //original();
-     ; //this.hook616();
+            Label616:   ; //this.hook616();
             return true;
           }
      else {
@@ -2825,10 +2788,9 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   
   @MethodObject
   // line 287 "../../../../IN_static.ump"
-  // line 5 "../../../../Latches_IN_inner.ump"
   // line 4 "../../../../MemoryBudget_IN_inner.ump"
   // line 4 "../../../../INCompressor_IN_inner.ump"
-  // line 32 "../../../../LoggingFine_IN_inner.ump"
+  // line 5 "../../../../Latches_IN_inner.ump"
   public static class IN_splitInternal
   {
   
@@ -2956,10 +2918,7 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
           //original();
      ;
           inMemoryINs.add(newSibling);
-          Label617:
-  _this.traceSplit(Level.FINE,parent,newSibling,parentLsn,myNewLsn,newSiblingLsn,splitIndex,idKeyIndex,childIndex);
-         // original();
-   ;//this.hook617();
+          Label617: ;//this.hook617();
     }
     
     //------------------------
@@ -3398,178 +3357,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
     protected int memDelta ;
   
     
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFine_IN_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
-  public static class IN_traceSplit
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public IN_traceSplit()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFine_IN_inner.ump"
-    public  IN_traceSplit(IN _this, Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn, int splitIndex, int idKeyIndex, int childIndex){
-      this._this=_this;
-          this.level=level;
-          this.parent=parent;
-          this.newSibling=newSibling;
-          this.parentLsn=parentLsn;
-          this.myNewLsn=myNewLsn;
-          this.newSiblingLsn=newSiblingLsn;
-          this.splitIndex=splitIndex;
-          this.idKeyIndex=idKeyIndex;
-          this.childIndex=childIndex;
-    }
-  
-    // line 18 "../../../../LoggingFine_IN_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_IN_inner.ump"
-      logger=_this.databaseImpl.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_SPLIT);
-                sb.append(" parent=");
-                sb.append(parent.getNodeId());
-                sb.append(" child=");
-                sb.append(_this.getNodeId());
-                sb.append(" newSibling=");
-                sb.append(newSibling.getNodeId());
-                sb.append(" parentLsn = ");
-                sb.append(DbLsn.getNoFormatString(parentLsn));
-                sb.append(" childLsn = ");
-                sb.append(DbLsn.getNoFormatString(myNewLsn));
-                sb.append(" newSiblingLsn = ");
-                sb.append(DbLsn.getNoFormatString(newSiblingLsn));
-                sb.append(" splitIdx=");
-                sb.append(splitIndex);
-                sb.append(" idKeyIdx=");
-                sb.append(idKeyIndex);
-                sb.append(" childIdx=");
-                sb.append(childIndex);
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 19 "../../../../LoggingFine_IN_inner.ump"
-    protected IN _this ;
-  // line 20 "../../../../LoggingFine_IN_inner.ump"
-    protected Level level ;
-  // line 21 "../../../../LoggingFine_IN_inner.ump"
-    protected IN parent ;
-  // line 22 "../../../../LoggingFine_IN_inner.ump"
-    protected IN newSibling ;
-  // line 23 "../../../../LoggingFine_IN_inner.ump"
-    protected long parentLsn ;
-  // line 24 "../../../../LoggingFine_IN_inner.ump"
-    protected long myNewLsn ;
-  // line 25 "../../../../LoggingFine_IN_inner.ump"
-    protected long newSiblingLsn ;
-  // line 26 "../../../../LoggingFine_IN_inner.ump"
-    protected int splitIndex ;
-  // line 27 "../../../../LoggingFine_IN_inner.ump"
-    protected int idKeyIndex ;
-  // line 28 "../../../../LoggingFine_IN_inner.ump"
-    protected int childIndex ;
-  // line 29 "../../../../LoggingFine_IN_inner.ump"
-    protected Logger logger ;
-  // line 30 "../../../../LoggingFine_IN_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFinest_IN_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
-  public static class IN_traceDelete
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public IN_traceDelete()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFinest_IN_inner.ump"
-    public  IN_traceDelete(IN _this, Level level, int index){
-      this._this=_this;
-          this.level=level;
-          this.index=index;
-    }
-  
-    // line 11 "../../../../LoggingFinest_IN_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFinest_LoggingBase_IN_inner.ump"
-      logger=_this.databaseImpl.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_DELETE);
-                sb.append(" in=").append(_this.getNodeId());
-                sb.append(" index=");
-                sb.append(index);
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 12 "../../../../LoggingFinest_IN_inner.ump"
-    protected IN _this ;
-  // line 13 "../../../../LoggingFinest_IN_inner.ump"
-    protected Level level ;
-  // line 14 "../../../../LoggingFinest_IN_inner.ump"
-    protected int index ;
-  // line 15 "../../../../LoggingFinest_IN_inner.ump"
-    protected Logger logger ;
-  // line 16 "../../../../LoggingFinest_IN_inner.ump"
-    protected StringBuffer sb ;
-  
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -3760,8 +3547,6 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
    }
   }
   }
-// line 9 "../../../../Latches_IN.ump"
-  private Latch latch ;
 // line 5 "../../../../MemoryBudget_IN.ump"
   private boolean inListResident ;
 // line 7 "../../../../MemoryBudget_IN.ump"
@@ -3772,6 +3557,8 @@ Tracer.trace(Level.INFO, databaseImpl.getDbEnvironment(), msg);
   public static final int MAY_EVICT_LNS = 1 ;
 // line 9 "../../../../Evictor_IN.ump"
   public static final int MAY_EVICT_NODE = 2 ;
+// line 9 "../../../../Latches_IN.ump"
+  private Latch latch ;
 
   
 }

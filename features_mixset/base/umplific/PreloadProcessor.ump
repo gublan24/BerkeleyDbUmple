@@ -2,12 +2,18 @@ namespace com.sleepycat.je.dbi;
 
 class PreloadProcessor
 {
-  isA TreeNodeProcessor;
+
+
+
+
   depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.log.LogEntryType;
   depend com.sleepycat.je.dbi.SortedLSNTreeWalker.TreeNodeProcessor;
   depend com.sleepycat.je.PreloadStats;
+
+  isA TreeNodeProcessor;
+
     private EnvironmentImpl envImpl;
 
     private long maxBytes;

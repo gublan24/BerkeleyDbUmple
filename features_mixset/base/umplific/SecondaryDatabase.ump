@@ -16,7 +16,8 @@ class SecondaryDatabase
   depend java.util.Iterator;
   depend java.util.HashSet;
   depend java.util.Collections;
-    private Database primaryDb;
+
+    protected Database primaryDb;
 
     private SecondaryConfig secondaryConfig;
 

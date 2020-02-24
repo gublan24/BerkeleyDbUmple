@@ -30,10 +30,7 @@ public class DbStat extends DbVerify
   // CONSTRUCTOR
   //------------------------
 
-  public DbStat()
-  {
-    super();
-  }
+
 
   //------------------------
   // INTERFACE
@@ -128,7 +125,7 @@ public class DbStat extends DbVerify
     public boolean stats(PrintStream out) throws DatabaseException {
 	try {
 	    openEnv();
-	    Label850: //this.hook850();
+	    Label850: ;//this.hook850();
 	    DatabaseConfig dbConfig = new DatabaseConfig();
 	    dbConfig.setReadOnly(true);
 	    dbConfig.setAllowCreate(false);
@@ -139,10 +136,10 @@ public class DbStat extends DbVerify
 		statsConfig.setShowProgressInterval(progressInterval);
 		statsConfig.setShowProgressStream(out);
 	    }
-	    DatabaseStats stats = db.getStats(statsConfig);
-	    out.println(stats);
+	//    DatabaseStats stats = db.getStats(statsConfig);
+	//    out.println(stats);
 	    db.close();
-	    Label849: //this.hook849();
+	    Label849: ;//this.hook849();
 	} catch (DatabaseException DE) {
 	    return false;
 	}

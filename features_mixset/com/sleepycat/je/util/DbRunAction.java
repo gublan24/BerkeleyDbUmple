@@ -21,22 +21,15 @@ import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CheckpointConfig;
 import java.text.DecimalFormat;
 import java.io.File;
-import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../DbRunAction.ump"
 // line 3 "../../../../DbRunAction_static.ump"
-// line 3 "../../../../loggingConsoleHandler_DbRunAction.ump"
-// line 3 "../../../../DbRunAction_inner.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction.ump"
-// line 3 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
-// line 3 "../../../../Evictor_DbRunAction.ump"
-// line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
 // line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
+// line 3 "../../../../Evictor_DbRunAction.ump"
+// line 3 "../../../../Evictor_DbRunAction_inner.ump"
 // line 3 "../../../../INCompressor_DbRunAction.ump"
 // line 3 "../../../../INCompressor_DbRunAction_inner.ump"
-// line 3 "../../../../Statistics_DbRunAction.ump"
-// line 3 "../../../../Statistics_DbRunAction_inner.ump"
 // line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction.ump"
 // line 3 "../../../../Derivative_Evictor_MemoryBudget_DbRunAction_inner.ump"
 public class DbRunAction
@@ -103,11 +96,6 @@ public class DbRunAction
 	System.out.println("  -s <dbName> (for preloading of evict or db remove)");
   }
 
-  // line 8 "../../../../Evictor_DbRunAction.ump"
-   private static  void doEvict(Environment env) throws DatabaseException{
-    new DbRunAction_doEvict(env).execute();
-  }
-
   // line 8 "../../../../DeleteOp_DbRunAction.ump"
    private static  void removeAndClean(Environment env, String name) throws DatabaseException{
     long a, b, c, d, e, f;
@@ -135,6 +123,11 @@ public class DbRunAction
 			System.out.println("Remove of " + name + " remove: " + getSecs(a, b) + " commit: " + getSecs(b, c) + " clean: "
 				+ getSecs(c, d) + " checkpoint: " + getSecs(e, f));
   }
+
+  // line 8 "../../../../Evictor_DbRunAction.ump"
+   private static  void doEvict(Environment env) throws DatabaseException{
+    new DbRunAction_doEvict(env).execute();
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -142,12 +135,9 @@ public class DbRunAction
   
   @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
-  // line 4 "../../../../DbRunAction_inner.ump"
-  // line 4 "../../../../LoggingDbLogHandler_DbRunAction_inner.ump"
-  // line 33 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
+  // line 33 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
-  // line 4 "../../../../Statistics_DbRunAction_inner.ump"
   public static class DbRunAction_main
   {
   
@@ -225,12 +215,7 @@ public class DbRunAction
             elseFlag = false; 
           }
    ;
-                 Label839:
-  if (action.equalsIgnoreCase("dbstats")) {
-            doAction=DBSTATS;
-            elseFlag = false; 
-          }
-   ;
+                 Label839: ;
                 if (elseFlag) {
                   usage();
                   System.exit(1);
@@ -246,16 +231,7 @@ public class DbRunAction
             whichArg++;
           }
           envConfig = new EnvironmentConfig();
-          Label848:
-  envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
-          //original(); //@Abdulaziz aaa
-   Label847:
-  if (readOnly) {
-            envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
-            envConfig.setReadOnly(true);
-          }
-          //original();
-  
+          Label848: Label847:
           // this.hook845();
           Label845:
   if (doAction == EVICT) {
@@ -297,20 +273,7 @@ public class DbRunAction
   if (doAction == REMOVEDB) {
             removeAndClean(env,dbName);}
    // this.hook842();
-          Label838:
-  if (doAction == DBSTATS) {
-            dbConfig=new DatabaseConfig();
-            dbConfig.setReadOnly(true);
-            DbInternal.setUseExistingConfig(dbConfig,true);
-            db=env.openDatabase(null,dbName,dbConfig);
-            try {
-              System.out.println(db.getStats(new StatsConfig()));
-            }
-      finally {
-              db.close();
-            }
-          }
-   // this.hook838();
+          Label838: // this.hook838();
           actionEnd = System.currentTimeMillis();
           env.close();
         } catch (Exception e) {
@@ -459,14 +422,12 @@ public class DbRunAction
   private static final int CLEAN = 1 ;
 // line 26 "../../../../DbRunAction.ump"
   private static final int CHECKPOINT = 4 ;
-// line 5 "../../../../Evictor_DbRunAction.ump"
-  private static final int EVICT = 3 ;
 // line 5 "../../../../DeleteOp_DbRunAction.ump"
   private static final int REMOVEDB = 5 ;
+// line 5 "../../../../Evictor_DbRunAction.ump"
+  private static final int EVICT = 3 ;
 // line 5 "../../../../INCompressor_DbRunAction.ump"
   private static final int COMPRESS = 2 ;
-// line 6 "../../../../Statistics_DbRunAction.ump"
-  private static final int DBSTATS = 6 ;
 
   
 }

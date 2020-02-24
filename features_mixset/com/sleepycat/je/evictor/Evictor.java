@@ -27,29 +27,21 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.text.NumberFormat;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../Evictor_Evictor.ump"
 // line 3 "../../../../Evictor_Evictor_inner.ump"
-// line 3 "../../../../Derivative_Evictor_EvictorDaemon_Evictor.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_Evictor.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_Evictor.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
-// line 3 "../../../../Derivative_DeleteOp_Evictor_Evictor.ump"
-// line 3 "../../../../Derivative_INCompressor_Evictor_Evictor.ump"
-// line 3 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-// line 3 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
-// line 3 "../../../../Derivative_Latches_Evictor_Evictor.ump"
-// line 3 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
 // line 3 "../../../../Derivative_LoggingEvictor_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
 // line 3 "../../../../Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase_Evictor_inner.ump"
-// line 3 "../../../../Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Evictor_inner.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_Evictor.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
+// line 3 "../../../../Derivative_INCompressor_Evictor_Evictor.ump"
+// line 3 "../../../../Derivative_DeleteOp_Evictor_Evictor.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_Evictor.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
+// line 3 "../../../../Derivative_Evictor_EvictorDaemon_Evictor.ump"
 public class Evictor extends DaemonThread
 {
 
@@ -269,13 +261,7 @@ b2 = db.isDeleted();
 					}
 			}
 
-      Label380:
-if (target != null) {
-	    nNodesSelectedThisRun++;
-	    nNodesSelected++;
-	}
-	//original(target);
-			//this.hook380(target);
+      Label380:			//this.hook380(target);
 			return target;
   }
 
@@ -315,13 +301,7 @@ envImpl.lazyCompress(target);
 							//this.hook385(target);
 							evictedBytes = ((BIN) target).evictLNs();
 
-              Label383:
-if (evictedBytes > 0) {
-	    nBINsStrippedThisRun++;
-	    nBINsStripped++;
-	}
-	//original(evictedBytes);
-	;						//this.hook383(evictedBytes);
+              Label383:	;						//this.hook383(evictedBytes);
 					}
 					if (evictedBytes == 0 && target.isEvictable()) {
 							Tree tree = target.getDatabase().getTree();
@@ -387,11 +367,7 @@ evictBytes = renewedChild.getInMemorySize();
 								parent.updateEntry(index, (Node) null);
 						}
 
-            Label384:
-nNodesEvictedThisRun++;
-	nNodesEvicted++;
-	//original();
-				;		//this.hook384();
+            Label384:				;		//this.hook384();
 							}
 					}
 					// end of hook379
@@ -455,38 +431,6 @@ parent.releaseLatch();
 	    return;
 	}
 	doEvict(SOURCE_DAEMON, false);
-  }
-
-
-  /**
-   * 
-   * Do a check on whether synchronous eviction is needed.
-   */
-  // line 9 "../../../../Derivative_Evictor_CriticalEviction_Evictor.ump"
-   public void doCriticalEviction() throws DatabaseException{
-    new Evictor_doCriticalEviction(this).execute();
-  }
-
-
-  /**
-   * 
-   * Load stats.
-   */
-  // line 27 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-   public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException{
-    stat.setNEvictPasses(nEvictPasses);
-	stat.setNNodesSelected(nNodesSelected);
-	stat.setNNodesScanned(nNodesScanned);
-	stat.setNNodesExplicitlyEvicted(nNodesEvicted);
-	stat.setNBINsStripped(nBINsStripped);
-	stat.setRequiredEvictBytes(currentRequiredEvictBytes);
-	if (config.getClear()) {
-	    nEvictPasses = 0;
-	    nNodesSelected = 0;
-	    nNodesScanned = 0;
-	    nNodesEvicted = 0;
-	    nBINsStripped = 0;
-	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -627,10 +571,8 @@ parent.releaseLatch();
   
   
   // line 51 "../../../../Evictor_Evictor_inner.ump"
-  // line 4 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
-  // line 4 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
   // line 4 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
-  // line 4 "../../../../Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_Latches_Evictor_Evictor_inner.ump"
   public static class Evictor_evictBatch
   {
   
@@ -661,18 +603,9 @@ parent.releaseLatch();
   
     // line 58 "../../../../Evictor_Evictor_inner.ump"
     public long execute() throws DatabaseException{
-      // line 6 "../../../../Derivative_Statistics_Evictor_Evictor_inner.ump"
-      _this.nNodesSelectedThisRun=0;
-              _this.nNodesEvictedThisRun=0;
-             // return original();
-      // END OF UMPLE BEFORE INJECTION
       _this.nNodesScannedThisRun=0;
   
-          Label381:
-  _this.nBINsStrippedThisRun=0;
-          _this.nEvictPasses++;
-         // original();
-          //this.hook381();
+          Label381:        //this.hook381();
           assert _this.evictProfile.clear();
           nBatchSets=0;
           finished=false;
@@ -717,10 +650,7 @@ parent.releaseLatch();
           }
       finally {
   
-           	Label382:
-  _this.nNodesScanned+=_this.nNodesScannedThisRun;
-          //original();
-      ;     // this.hook382();
+           	Label382:    ;     // this.hook382();
             Label377:
   inList.releaseMajorLatch();
           //original();
@@ -729,17 +659,9 @@ parent.releaseLatch();
   logger=_this.envImpl.getLogger();
           if (logger.isLoggable(_this.detailedTraceLevel)) {
             msg="Evictor: ";
-            Label369:
-  //     after Label371: execute(){
-          msg+="pass=" + _this.nEvictPasses;
-         // original();
-             ;  //this.hook369();
+            Label369:           ;  //this.hook369();
             msg+=" finished=" + finished + " source="+ source+ " requiredEvictBytes="+ _this.formatter.format(requiredEvictBytes)+ " evictBytes="+ _this.formatter.format(evictBytes)+ " inListSize="+ inListStartSize+ " nNodesScanned="+ _this.nNodesScannedThisRun;
-            Label368:
-  //     after Label371: execute(){
-          msg+=" nNodesSelected=" + _this.nNodesSelectedThisRun + " nEvicted="+ _this.nNodesEvictedThisRun+ " nBINsStripped="+ _this.nBINsStrippedThisRun;
-          //original();
-             ;  //this.hook368();
+            Label368:           ;  //this.hook368();
             msg+=" nBatchSets=" + nBatchSets;
             Tracer.trace(_this.detailedTraceLevel,_this.envImpl,msg);
           }
@@ -791,9 +713,9 @@ parent.releaseLatch();
   
   
   // line 117 "../../../../Evictor_Evictor_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
   // line 22 "../../../../Derivative_LoggingEvictor_Evictor_LoggingBase_Evictor_inner.ump"
   // line 4 "../../../../Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
   public static class Evictor_isRunnable
   {
   
@@ -909,73 +831,6 @@ parent.releaseLatch();
     protected boolean result ;
   
     
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
-  public static class Evictor_doCriticalEviction
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Evictor_doCriticalEviction()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    public  Evictor_doCriticalEviction(Evictor _this){
-      this._this=_this;
-    }
-  
-    // line 9 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    public void execute() throws DatabaseException{
-      // line 6 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
-      mb=_this.envImpl.getMemoryBudget();
-              currentUsage=mb.getCacheMemoryUsage();
-              maxMem=mb.getCacheBudget();
-              over=currentUsage - maxMem;
-              if (over > mb.getCriticalThreshold()) {
-                if (_this.DEBUG) {
-                  System.out.println("***critical detected:" + over);
-                }
-                _this.doEvict(_this.SOURCE_CRITICAL,true);
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 10 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    protected Evictor _this ;
-  // line 11 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    protected MemoryBudget mb ;
-  // line 12 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    protected long currentUsage ;
-  // line 13 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    protected long maxMem ;
-  // line 14 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
-    protected long over ;
-  
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -1017,22 +872,6 @@ parent.releaseLatch();
   {
     envImpl = null;
   }
-// line 7 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private int nEvictPasses = 0 ;
-// line 9 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private long nNodesSelected = 0 ;
-// line 11 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private long nNodesSelectedThisRun ;
-// line 13 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private int nNodesScanned = 0 ;
-// line 15 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private long nNodesEvicted = 0 ;
-// line 17 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private long nNodesEvictedThisRun ;
-// line 19 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private long nBINsStripped = 0 ;
-// line 21 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
-  private long nBINsStrippedThisRun ;
 // line 5 "../../../../Derivative_LoggingEvictor_Evictor_Evictor.ump"
   private Level detailedTraceLevel ;
 

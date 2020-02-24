@@ -9,7 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // line 3 "../../../../Latches_Java5LatchImpl.ump"
 // line 3 "../../../../Latches_Java5LatchImpl_inner.ump"
-// line 3 "../../../../Derivative_Latches_Statistics_Java5LatchImpl.ump"
 public class Java5LatchImpl implements Latch
 {
 
@@ -55,20 +54,10 @@ public class Java5LatchImpl implements Latch
    public void acquire() throws DatabaseException{
     try {
 	    if (lock.isHeldByCurrentThread()) {
-		Label417:
-stats.nAcquiresSelfOwned++;
-	//original();
-           ;  //this.hook417();
+		Label417:           ;  //this.hook417();
 		throw new LatchException(name + " already held");
 	    }
-	    Label416:
-if (lock.isLocked()) {
-	    stats.nAcquiresWithContention++;
-	} else {
-	    stats.nAcquiresNoWaiters++;
-	}
-	//original();
-           ;  //this.hook416();
+	    Label416:           ;  //this.hook416();
 	    lock.lock();
 	    assert noteLatch();
 	} finally {
@@ -87,24 +76,15 @@ if (lock.isLocked()) {
    public boolean acquireNoWait() throws LatchException{
     try {
 	    if (lock.isHeldByCurrentThread()) {
-		Label418:
-stats.nAcquiresSelfOwned++;
-	//original();
-           ;  //this.hook418();
+		Label418:           ;  //this.hook418();
 		throw new LatchException(name + " already held");
 	    }
 	    boolean ret = lock.tryLock();
 	    if (ret) {
 		assert noteLatch();
-		Label419:
-stats.nAcquireNoWaitSuccessful++;
-	//original();
-           ;  //this.hook419();
+		Label419:           ;  //this.hook419();
 	    } else {
-		Label420:
-stats.nAcquireNoWaitUnsuccessful++;
-	//original();
-           ;  //this.hook420();
+		Label420:           ;  //this.hook420();
 	    }
 	    return ret;
 	} finally {
@@ -148,10 +128,7 @@ stats.nAcquireNoWaitUnsuccessful++;
 		return true;
 	    }
 	    lock.unlock();
-	    Label421:
-stats.nReleases++;
-	//original();
-           ;  //this.hook421();
+	    Label421:           ;  //this.hook421();
 	    assert unNoteLatch(checkHeld);
 	} catch (IllegalMonitorStateException IMSE) {
 	    return true;
@@ -226,21 +203,6 @@ stats.nReleases++;
 	    return true;
 	}
   }
-
-
-  /**
-   * 
-   * @return a LatchStats object with information about this latch.
-   */
-  // line 11 "../../../../Derivative_Latches_Statistics_Java5LatchImpl.ump"
-   public LatchStats getLatchStats(){
-    LatchStats s = null;
-	try {
-	    s = (LatchStats) stats.clone();
-	} catch (CloneNotSupportedException e) {
-	}
-	return s;
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -289,8 +251,6 @@ stats.nReleases++;
   private JEReentrantLock lock ;
 // line 12 "../../../../Latches_Java5LatchImpl.ump"
   private String name ;
-// line 5 "../../../../Derivative_Latches_Statistics_Java5LatchImpl.ump"
-  private LatchStats stats = new LatchStats() ;
 
   
 }

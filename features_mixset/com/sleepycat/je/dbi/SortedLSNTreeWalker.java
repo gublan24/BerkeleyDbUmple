@@ -19,11 +19,11 @@ import java.util.Arrays;
 
 // line 3 "../../../../SortedLSNTreeWalker.ump"
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
-// line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
-// line 3 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
 // line 3 "../../../../DeleteOp_SortedLSNTreeWalker.ump"
+// line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
+// line 3 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -206,8 +206,8 @@ if (setDbState) {
   
   
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
-  // line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
   // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
+  // line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
   public static class SortedLSNTreeWalker_extractINsForDb
   {
   
@@ -240,7 +240,11 @@ if (setDbState) {
       foundSome=false;
           foundSet=new HashSet();
           //this.hook360();
-          Label360:   ;
+          Label360:
+  memoryChange=0;
+          mb=_this.envImpl.getMemoryBudget();
+          //original();
+     ;
           Label356:
   inList.latchMajor();
           //original();
@@ -255,7 +259,11 @@ if (setDbState) {
                 if (_this.removeINsFromINList) {
                   iter.remove();
                   //this.hook361();
-                  Label361:   ;
+                  Label361:
+  memoryChange+=(thisIN.getAccumulatedDelta() - thisIN.getInMemorySize());
+          thisIN.setInListResident(false);
+          //original();
+     ;
                 }
                 foundSet.add(thisIN);
               }
@@ -272,7 +280,10 @@ if (setDbState) {
             }
           }
           foundSet=null;          
-          Label362:   ;        
+          Label362:
+  mb.updateTreeMemoryUsage(memoryChange);
+         // original();
+     ;        
           // line 6 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
           //boolean result=original();
                   mb.updateTreeMemoryUsage(memoryChange);
@@ -339,7 +350,7 @@ if (setDbState) {
   protected boolean accumulateLNs = false ;
 
 // line 4 "../../../../SortedLSNTreeWalker_static.ump"
-  interface TreeNodeProcessor 
+  public interface TreeNodeProcessor 
   {
     void processLSN(    long childLSN,    LogEntryType childType);
   }

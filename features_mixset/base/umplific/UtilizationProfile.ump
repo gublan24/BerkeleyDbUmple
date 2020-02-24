@@ -670,7 +670,7 @@ class UtilizationProfile
 			}
 			System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
 		return false;
-//end hook180
+   //end hook180
 
 	   // throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
@@ -679,58 +679,5 @@ class UtilizationProfile
 	}
     }
 
-  /*  protected void hook173() throws DatabaseException {
-    }
-
-    protected void hook174() throws DatabaseException {
-    }
-
-    protected void hook175() throws DatabaseException {
-    }
-
-    protected void hook177(long fileNum, int sequence, OperationStatus status) throws DatabaseException {
-    }
-
-    protected void hook178(CursorImpl cursor) throws DatabaseException {
-    }
-
-    protected void hook179(CursorImpl cursor) throws DatabaseException {
-    }
-
-    protected void hook180(long lsn, LNLogEntry entry, DatabaseImpl db, BIN bin) throws DatabaseException {
-	Tree tree = db.getTree();
-	TreeLocation location = new TreeLocation();
-	boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(),
-		false, true, false, false);
-	bin = location.bin;
-	int index = location.index;
-	if (!parentFound) {
-	    throw new ReturnBoolean(true);
-	}
-	if (bin.isEntryKnownDeleted(index)) {
-	    throw new ReturnBoolean(true);
-	}
-	if (bin.getLsn(index) != lsn) {
-	    throw new ReturnBoolean(true);
-	}
-	System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
-	throw new ReturnBoolean(false);
-    }
-*/
-//    protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
-//	return b;
-//    }
-
-  //  protected void hook187(CursorImpl cursor) throws DatabaseException {
-  //  }
-
-//    protected void hook188(CursorImpl cursor) throws DatabaseException {
-//    }
-
-    protected void hook189(CursorImpl cursor) throws DatabaseException {
-    }
-
-    protected void hook190(CursorImpl cursor) throws DatabaseException {
-    }
 
 }

@@ -23,8 +23,11 @@ class Environment
     }
 
     after Label59: openDb(Transaction , Database , String , DatabaseConfig , boolean ){
-				if (database != null && !database.isDeleted())
-						databaseExists = true;
+      databaseExists =
+                (database == null) ? false : 
+                ((database.isDeleted()) ? false : true);
+			//	if (database != null && !database.isDeleted())
+				//		databaseExists = true;
 //			return original(database, databaseExists);
 		  }
 

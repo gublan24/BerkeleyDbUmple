@@ -217,6 +217,8 @@ public class TransactionRunner {
      */
     public void run(TransactionWorker worker)
         throws DatabaseException, Exception {
+      
+      
 
         if (currentTxn != null &&
             (allowNestedTxn || currentTxn.getTransaction() == null)) {

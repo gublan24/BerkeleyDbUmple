@@ -16,10 +16,6 @@ import java.io.IOException;
 // line 3 "../../../../FileReader.ump"
 // line 3 "../../../../FileReader_static.ump"
 // line 3 "../../../../Latches_FileReader.ump"
-// line 3 "../../../../Checksum_FileReader.ump"
-// line 3 "../../../../Checksum_FileReader_inner.ump"
-// line 3 "../../../../LoggingSevere_FileReader.ump"
-// line 3 "../../../../LoggingSevere_FileReader_inner.ump"
 public abstract class FileReader
 {
 
@@ -51,10 +47,7 @@ public abstract class FileReader
    public  FileReader(EnvironmentImpl env, int readBufferSize, boolean forward, long startLsn, Long singleFileNumber, long endOfFileLsn, long finishLsn) throws IOException,DatabaseException{
     this.env = env;
 	this.fileManager = env.getFileManager();
-	Label473:
-this.doValidateChecksum = env.getLogManager().getChecksumOnRead();
-        //original(env);
-   ; //this.hook473(env);
+	Label473:   ; //this.hook473(env);
 	this.singleFile = (singleFileNumber != null);
 	this.forward = forward;
 	readBuffer = ByteBuffer.allocate(readBufferSize);
@@ -66,12 +59,7 @@ this.doValidateChecksum = env.getLogManager().getChecksumOnRead();
 	this.finishLsn = finishLsn;
 	initStartingPosition(endOfFileLsn, singleFileNumber);
 	nRead = 0;
-	Label472:
-if (doValidateChecksum) {
-            cksumValidator = new ChecksumValidator();
-        }
-        ////original();
-   ; //this.hook472();
+	Label472:   ; //this.hook472();
 	anticipateChecksumErrors = false;
   }
 
@@ -443,50 +431,12 @@ if (fileHandle != null) {
 	    }
 	}
   }
-
-
-  /**
-   * 
-   * Whether to always validate the checksum, even for non-target entries.
-   */
-  // line 15 "../../../../Checksum_FileReader.ump"
-   public void setAlwaysValidateChecksum(boolean validate){
-    alwaysValidateChecksum = validate;
-  }
-
-
-  /**
-   * 
-   * Reset the checksum and add the header bytes. This method must be called with the entry header data at the buffer mark.
-   */
-  // line 22 "../../../../Checksum_FileReader.ump"
-   private void startChecksum(ByteBuffer dataBuffer) throws DatabaseException{
-    cksumValidator.reset();
-        int entryStart = threadSafeBufferPosition(dataBuffer);
-        dataBuffer.reset();
-        cksumValidator.update(env, dataBuffer, LogManager.HEADER_CONTENT_BYTES(), anticipateChecksumErrors);
-        threadSafeBufferPosition(dataBuffer, entryStart);
-  }
-
-
-  /**
-   * 
-   * Add the entry bytes to the checksum and check the value. This method must be called with the buffer positioned at the start of the entry.
-   */
-  // line 33 "../../../../Checksum_FileReader.ump"
-   private void validateChecksum(ByteBuffer entryBuffer) throws DatabaseException{
-    cksumValidator.update(env, entryBuffer, currentEntrySize, anticipateChecksumErrors);
-        cksumValidator.validate(env, currentEntryChecksum, readBufferFileNum, currentEntryOffset,
-            anticipateChecksumErrors);
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
   // line 6 "../../../../FileReader_static.ump"
-  // line 4 "../../../../Checksum_FileReader_inner.ump"
-  // line 4 "../../../../LoggingSevere_FileReader_inner.ump"
   public static class FileReader_readNextEntry
   {
   
@@ -522,29 +472,15 @@ if (fileHandle != null) {
               dataBuffer=_this.readData(LogManager.HEADER_BYTES,true);
               _this.readHeader(dataBuffer);
               isTargetEntry=_this.isTargetEntry(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
-              Label476:
-  doValidate=_this.doValidateChecksum && (isTargetEntry || _this.alwaysValidateChecksum);
-          //original();
-     ; //this.hook476();
+              Label476:   ; //this.hook476();
               collectData=isTargetEntry;
-              Label475:
-  collectData|=doValidate;
-          if (doValidate) {
-            _this.startChecksum(dataBuffer);
-          }
-          //original();
-     ; //this.hook475();
+              Label475:   ; //this.hook475();
               dataBuffer=_this.readData(_this.currentEntrySize,collectData);
               if (_this.forward) {
                 _this.currentEntryOffset=_this.nextEntryOffset;
                 _this.nextEntryOffset+=LogManager.HEADER_BYTES + _this.currentEntrySize;
               }
-              Label474:
-  if (doValidate) {
-            _this.validateChecksum(dataBuffer);
-          }
-          //original();
-     ; //this.hook474();
+              Label474:   ; //this.hook474();
               if (isTargetEntry) {
                 if (_this.processEntry(dataBuffer)) {
                   foundEntry=true;
@@ -560,12 +496,7 @@ if (fileHandle != null) {
             _this.eof=true;
           }
     catch (      DatabaseException e) {
-            Label468:
-  _this.eof=true;
-          problemType=LogEntryType.findType(_this.currentEntryTypeNum,_this.currentEntryTypeVersion);
-          Tracer.trace(_this.env,"FileReader","readNextEntry","Halted log file reading at file 0x" + Long.toHexString(_this.readBufferFileNum) + " offset 0x"+ Long.toHexString(_this.nextEntryOffset)+ " offset(decimal)="+ _this.nextEntryOffset+ ":\nentry="+ problemType+ "(typeNum="+ _this.currentEntryTypeNum+ ",version="+ _this.currentEntryTypeVersion+ ")\nprev=0x"+ Long.toHexString(_this.currentEntryPrevOffset)+ "\nsize="+ _this.currentEntrySize+ "\nNext entry should be at 0x"+ Long.toHexString((_this.nextEntryOffset + LogManager.HEADER_BYTES + _this.currentEntrySize))+ "\n:",e);
-    //      original();
-     ; //this.hook468();
+            Label468:   ; //this.hook468();
             throw e;
           }
           return foundEntry;
@@ -648,12 +579,6 @@ if (fileHandle != null) {
   {
     
   }
-// line 5 "../../../../Checksum_FileReader.ump"
-  protected ChecksumValidator cksumValidator ;
-// line 7 "../../../../Checksum_FileReader.ump"
-  private boolean doValidateChecksum ;
-// line 9 "../../../../Checksum_FileReader.ump"
-  private boolean alwaysValidateChecksum ;
 
   
 }

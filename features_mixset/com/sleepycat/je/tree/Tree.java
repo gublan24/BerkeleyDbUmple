@@ -40,17 +40,9 @@ import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Tree.ump"
 // line 3 "../../../../Tree_static.ump"
+// line 3 "../../../../INCompressor_Tree.ump"
 // line 3 "../../../../Latches_Tree.ump"
 // line 3 "../../../../Latches_Tree_inner.ump"
-// line 3 "../../../../INCompressor_Tree.ump"
-// line 3 "../../../../LoggingFine_Tree.ump"
-// line 3 "../../../../LoggingFine_Tree_inner.ump"
-// line 3 "../../../../LoggingFiner_Tree.ump"
-// line 3 "../../../../LoggingFiner_Tree_inner.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Tree.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_Tree.ump"
-// line 3 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
 public class Tree implements LogWritable,LogReadable
 {
 
@@ -298,10 +290,7 @@ rootLatch.acquireExclusive();
                     if (rootNeedsUpdating) {
                         DbTree dbTree = envImpl.getDbMapTree();
                         dbTree.modifyDbRoot(database);
-                        Label661:
-RecoveryManager.traceRootDeletion(Level.FINE, database);
-//	original();
- ; //this.hook661();
+                        Label661: ; //this.hook661();
                     }
                     INList inList = envImpl.getInMemoryINs();
                     accountForSubtreeRemoval(inList, subtreeRootIN, tracker);
@@ -455,7 +444,12 @@ assert in .isLatchOwner();
                     logManager.log(new INDupDeleteInfo(duplicateRoot.getNodeId(), duplicateRoot.getMainTreeKey(),
                         duplicateRoot.getDupTreeKey(), database.getId()));
                     subtreeRootIN = duplicateRoot;
-                    Label754: ; //this.hook754(bin);
+                    Label754:
+if (bin.getNEntries() == 0) {
+					database.getDbEnvironment().addToCompressorQueue(bin, null, false);
+			}
+			//original(bin);
+ ; //this.hook754(bin);
                 } else {
                     throw CursorsExistException.CURSORS_EXIST;
                 }
@@ -996,10 +990,7 @@ curRoot.releaseLatch();
 
             //end of hook688
             treeStats.nRootSplits++;
-        Label662:
-traceSplitRoot(Level.FINE, TRACE_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
-//	original(curRoot, curRootLsn, logLsn, newRoot);
- ; //this.hook662(curRoot, curRootLsn, logLsn, newRoot);
+        Label662: ; //this.hook662(curRoot, curRootLsn, logLsn, newRoot);
   }
 
 
@@ -1363,10 +1354,7 @@ assert bin.isLatchOwner();
         }
         lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
         bin.updateEntry(index, newLsn);
-        Label657:
-traceInsert(Level.FINER, env, bin, ln, newLsn, index);
-	//original(ln, env, bin, index, newLsn);
- ;
+        Label657: ;
         return true;
       } else {
         index &= ~IN.EXACT_MATCH;
@@ -1412,10 +1400,7 @@ traceInsert(Level.FINER, env, bin, ln, newLsn, index);
           bin.updateEntry(index, ln, newLsn, key);
           bin.clearKnownDeleted(index);
           bin.clearPendingDeleted(index);
-          Label658:
-traceInsert(Level.FINER, env, bin, ln, newLsn, index);
-	//original(ln, env, bin, index, newLsn);
- ; // this.hook658(ln, env, bin, index, newLsn);
+          Label658: ; // this.hook658(ln, env, bin, index, newLsn);
           return true;
         } else {
           return insertDuplicate(key, bin, ln, logManager, inMemoryINs, cursor, lnLock, allowDuplicates);
@@ -1494,10 +1479,7 @@ cursor.releaseBIN();
         }
         lnLock.setAbortLsn(DbLsn.NULL_LSN, true, true);
         dupBin.setLsn(dupIndex, newLsn);
-        Label659:
-traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
-	//original(newLN, binNid, dupBin, newLsn);
- ;
+        Label659: ;
         successfulInsert = true;
       } else {
         dupIndex &= ~IN.EXACT_MATCH;
@@ -1531,10 +1513,7 @@ traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, ne
           dupBin.updateEntry(dupIndex, newLN, newLsn, newLNKey);
           dupBin.clearKnownDeleted(dupIndex);
           dupBin.clearPendingDeleted(dupIndex);
-          Label660:
-traceInsertDuplicate(Level.FINER, database.getDbEnvironment(), dupBin, newLN, newLsn, binNid);
-	//original(newLN, binNid, dupBin, newLsn);
- ; // this.hook660(newLN, binNid, dupBin, newLsn);
+          Label660: ; // this.hook660(newLN, binNid, dupBin, newLsn);
           successfulInsert = true;
         } else {
           successfulInsert = false;
@@ -1617,10 +1596,7 @@ newRoot.latch();
             Label706_1:
 curRoot.releaseLatch();
 
-                Label663:
-traceSplitRoot(Level.FINE, TRACE_DUP_ROOT_SPLIT, newRoot, logLsn, curRoot, curRootLsn);
-//	original(curRoot, newRoot, curRootLsn, logLsn);
- ; //this.hook663(curRoot, newRoot, curRootLsn, logLsn);
+                Label663: ; //this.hook663(curRoot, newRoot, curRootLsn, logLsn);
             return true;
         } else {
             return false;
@@ -1817,11 +1793,7 @@ inList.releaseMajorLatch();
 
         //end
 
-        Label665:
-Tracer.trace(Level.FINE, database.getDbEnvironment(),
-		"SubtreeRemoval: subtreeRoot = " + subtreeRoot.getNodeId());
-	//original(subtreeRoot);
- ; //this.hook665(subtreeRoot);
+        Label665: ; //this.hook665(subtreeRoot);
   }
 
 
@@ -2023,47 +1995,6 @@ Tracer.trace(Level.FINE, database.getDbEnvironment(),
             SplitInfo info3 = (SplitInfo) iter.previous();
             info3.child.releaseLatch();
         }
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 10 "../../../../LoggingFine_Tree.ump"
-   private void traceSplitRoot(Level level, String splitType, IN newRoot, long newRootLsn, IN oldRoot, long oldRootLsn){
-    new Tree_traceSplitRoot(this, level, splitType, newRoot, newRootLsn, oldRoot, oldRootLsn).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 19 "../../../../LoggingFine_Tree.ump"
-   private void traceMutate(Level level, BIN theBin, LN existingLn, LN newLn, long newLsn, DupCountLN dupCountLN, long dupRootLsn, DIN dupRoot, long ddinLsn, DBIN dupBin, long dbinLsn){
-    new Tree_traceMutate(this, level, theBin, existingLn, newLn, newLsn, dupCountLN, dupRootLsn, dupRoot, ddinLsn,
-		dupBin, dbinLsn).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 9 "../../../../LoggingFiner_Tree.ump"
-   private void traceInsert(Level level, EnvironmentImpl env, BIN insertingBin, LN ln, long lnLsn, int index){
-    new Tree_traceInsert(this, level, env, insertingBin, ln, lnLsn, index).execute();
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 17 "../../../../LoggingFiner_Tree.ump"
-   private void traceInsertDuplicate(Level level, EnvironmentImpl env, BIN insertingDBin, LN ln, long lnLsn, long binNid){
-    new Tree_traceInsertDuplicate(this, level, env, insertingDBin, ln, lnLsn, binNid).execute();
   }
 
 
@@ -2589,369 +2520,6 @@ Tracer.trace(Level.FINE, database.getDbEnvironment(),
     protected long newLsn ;
   // line 248 "../../../../Tree_static.ump"
     protected SplitInfo info2 ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFine_Tree_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceMutate
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceMutate()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFine_Tree_inner.ump"
-    public  Tree_traceMutate(Tree _this, Level level, BIN theBin, LN existingLn, LN newLn, long newLsn, DupCountLN dupCountLN, long dupRootLsn, DIN dupRoot, long ddinLsn, DBIN dupBin, long dbinLsn){
-      this._this=_this;
-          this.level=level;
-          this.theBin=theBin;
-          this.existingLn=existingLn;
-          this.newLn=newLn;
-          this.newLsn=newLsn;
-          this.dupCountLN=dupCountLN;
-          this.dupRootLsn=dupRootLsn;
-          this.dupRoot=dupRoot;
-          this.ddinLsn=ddinLsn;
-          this.dupBin=dupBin;
-          this.dbinLsn=dbinLsn;
-    }
-  
-    // line 20 "../../../../LoggingFine_Tree_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-      logger=_this.database.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_MUTATE);
-                sb.append(" existingLn=");
-                sb.append(existingLn.getNodeId());
-                sb.append(" newLn=");
-                sb.append(newLn.getNodeId());
-                sb.append(" newLnLsn=");
-                sb.append(DbLsn.getNoFormatString(newLsn));
-                sb.append(" dupCountLN=");
-                sb.append(dupCountLN.getNodeId());
-                sb.append(" dupRootLsn=");
-                sb.append(DbLsn.getNoFormatString(dupRootLsn));
-                sb.append(" rootdin=");
-                sb.append(dupRoot.getNodeId());
-                sb.append(" ddinLsn=");
-                sb.append(DbLsn.getNoFormatString(ddinLsn));
-                sb.append(" dbin=");
-                sb.append(dupBin.getNodeId());
-                sb.append(" dbinLsn=");
-                sb.append(DbLsn.getNoFormatString(dbinLsn));
-                sb.append(" bin=");
-                sb.append(theBin.getNodeId());
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 21 "../../../../LoggingFine_Tree_inner.ump"
-    protected Tree _this ;
-  // line 22 "../../../../LoggingFine_Tree_inner.ump"
-    protected Level level ;
-  // line 23 "../../../../LoggingFine_Tree_inner.ump"
-    protected BIN theBin ;
-  // line 24 "../../../../LoggingFine_Tree_inner.ump"
-    protected LN existingLn ;
-  // line 25 "../../../../LoggingFine_Tree_inner.ump"
-    protected LN newLn ;
-  // line 26 "../../../../LoggingFine_Tree_inner.ump"
-    protected long newLsn ;
-  // line 27 "../../../../LoggingFine_Tree_inner.ump"
-    protected DupCountLN dupCountLN ;
-  // line 28 "../../../../LoggingFine_Tree_inner.ump"
-    protected long dupRootLsn ;
-  // line 29 "../../../../LoggingFine_Tree_inner.ump"
-    protected DIN dupRoot ;
-  // line 30 "../../../../LoggingFine_Tree_inner.ump"
-    protected long ddinLsn ;
-  // line 31 "../../../../LoggingFine_Tree_inner.ump"
-    protected DBIN dupBin ;
-  // line 32 "../../../../LoggingFine_Tree_inner.ump"
-    protected long dbinLsn ;
-  // line 33 "../../../../LoggingFine_Tree_inner.ump"
-    protected Logger logger ;
-  // line 34 "../../../../LoggingFine_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 36 "../../../../LoggingFine_Tree_inner.ump"
-  // line 35 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceSplitRoot
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceSplitRoot()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 38 "../../../../LoggingFine_Tree_inner.ump"
-    public  Tree_traceSplitRoot(Tree _this, Level level, String splitType, IN newRoot, long newRootLsn, IN oldRoot, long oldRootLsn){
-      this._this=_this;
-          this.level=level;
-          this.splitType=splitType;
-          this.newRoot=newRoot;
-          this.newRootLsn=newRootLsn;
-          this.oldRoot=oldRoot;
-          this.oldRootLsn=oldRootLsn;
-    }
-  
-    // line 47 "../../../../LoggingFine_Tree_inner.ump"
-    public void execute(){
-      // line 37 "../../../../Derivative_LoggingFine_LoggingBase_Tree_inner.ump"
-      logger=_this.database.getDbEnvironment().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(splitType);
-                sb.append(" newRoot=").append(newRoot.getNodeId());
-                sb.append(" newRootLsn=").append(DbLsn.getNoFormatString(newRootLsn));
-                sb.append(" oldRoot=").append(oldRoot.getNodeId());
-                sb.append(" oldRootLsn=").append(DbLsn.getNoFormatString(oldRootLsn));
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 48 "../../../../LoggingFine_Tree_inner.ump"
-    protected Tree _this ;
-  // line 49 "../../../../LoggingFine_Tree_inner.ump"
-    protected Level level ;
-  // line 50 "../../../../LoggingFine_Tree_inner.ump"
-    protected String splitType ;
-  // line 51 "../../../../LoggingFine_Tree_inner.ump"
-    protected IN newRoot ;
-  // line 52 "../../../../LoggingFine_Tree_inner.ump"
-    protected long newRootLsn ;
-  // line 53 "../../../../LoggingFine_Tree_inner.ump"
-    protected IN oldRoot ;
-  // line 54 "../../../../LoggingFine_Tree_inner.ump"
-    protected long oldRootLsn ;
-  // line 55 "../../../../LoggingFine_Tree_inner.ump"
-    protected Logger logger ;
-  // line 56 "../../../../LoggingFine_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingFiner_Tree_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceInsertDuplicate
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceInsertDuplicate()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingFiner_Tree_inner.ump"
-    public  Tree_traceInsertDuplicate(Tree _this, Level level, EnvironmentImpl env, BIN insertingDBin, LN ln, long lnLsn, long binNid){
-      this._this=_this;
-          this.level=level;
-          this.env=env;
-          this.insertingDBin=insertingDBin;
-          this.ln=ln;
-          this.lnLsn=lnLsn;
-          this.binNid=binNid;
-    }
-  
-    // line 15 "../../../../LoggingFiner_Tree_inner.ump"
-    public void execute(){
-      // line 6 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-      logger=env.getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_INSERT_DUPLICATE);
-                sb.append(" dbin=");
-                sb.append(insertingDBin.getNodeId());
-                sb.append(" bin=");
-                sb.append(binNid);
-                sb.append(" ln=");
-                sb.append(ln.getNodeId());
-                sb.append(" lnLsn=");
-                sb.append(DbLsn.getNoFormatString(lnLsn));
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 16 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Tree _this ;
-  // line 17 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Level level ;
-  // line 18 "../../../../LoggingFiner_Tree_inner.ump"
-    protected EnvironmentImpl env ;
-  // line 19 "../../../../LoggingFiner_Tree_inner.ump"
-    protected BIN insertingDBin ;
-  // line 20 "../../../../LoggingFiner_Tree_inner.ump"
-    protected LN ln ;
-  // line 21 "../../../../LoggingFiner_Tree_inner.ump"
-    protected long lnLsn ;
-  // line 22 "../../../../LoggingFiner_Tree_inner.ump"
-    protected long binNid ;
-  // line 23 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Logger logger ;
-  // line 24 "../../../../LoggingFiner_Tree_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 26 "../../../../LoggingFiner_Tree_inner.ump"
-  // line 23 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-  public static class Tree_traceInsert
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Tree_traceInsert()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 28 "../../../../LoggingFiner_Tree_inner.ump"
-    public  Tree_traceInsert(Tree _this, Level level, EnvironmentImpl env, BIN insertingBin, LN ln, long lnLsn, int index){
-      this._this=_this;
-          this.level=level;
-          this.env=env;
-          this.insertingBin=insertingBin;
-          this.ln=ln;
-          this.lnLsn=lnLsn;
-          this.index=index;
-    }
-  
-    // line 37 "../../../../LoggingFiner_Tree_inner.ump"
-    public void execute(){
-      // line 25 "../../../../Derivative_LoggingFiner_LoggingBase_Tree_inner.ump"
-      logger=env.getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(_this.TRACE_INSERT);
-                sb.append(" bin=");
-                sb.append(insertingBin.getNodeId());
-                sb.append(" ln=");
-                sb.append(ln.getNodeId());
-                sb.append(" lnLsn=");
-                sb.append(DbLsn.getNoFormatString(lnLsn));
-                sb.append(" index=");
-                sb.append(index);
-                logger.log(level,sb.toString());
-              }
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 38 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Tree _this ;
-  // line 39 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Level level ;
-  // line 40 "../../../../LoggingFiner_Tree_inner.ump"
-    protected EnvironmentImpl env ;
-  // line 41 "../../../../LoggingFiner_Tree_inner.ump"
-    protected BIN insertingBin ;
-  // line 42 "../../../../LoggingFiner_Tree_inner.ump"
-    protected LN ln ;
-  // line 43 "../../../../LoggingFiner_Tree_inner.ump"
-    protected long lnLsn ;
-  // line 44 "../../../../LoggingFiner_Tree_inner.ump"
-    protected int index ;
-  // line 45 "../../../../LoggingFiner_Tree_inner.ump"
-    protected Logger logger ;
-  // line 46 "../../../../LoggingFiner_Tree_inner.ump"
-    protected StringBuffer sb ;
   
     
   }  

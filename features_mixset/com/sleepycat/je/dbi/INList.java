@@ -15,10 +15,10 @@ import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../INList.ump"
 // line 3 "../../../../INList_static.ump"
-// line 3 "../../../../Latches_INList.ump"
-// line 3 "../../../../Latches_INList_inner.ump"
 // line 3 "../../../../MemoryBudget_INList.ump"
 // line 3 "../../../../MemoryBudget_INList_inner.ump"
+// line 3 "../../../../Latches_INList.ump"
+// line 3 "../../../../Latches_INList_inner.ump"
 public class INList
 {
 
@@ -197,17 +197,17 @@ releaseMajorLatch();
     // END OF UMPLE BEFORE INJECTION
     ins.clear();
 	//this.hook342();
-    // line 138 "../../../../Latches_INList.ump"
-    addedINs.clear();
-    	minorLatch.release();
-    	releaseMajorLatch();
-    	//original();
-    // END OF UMPLE AFTER INJECTION
     // line 30 "../../../../MemoryBudget_INList.ump"
     //		original();
     		if (updateMemoryUsage) {
     			  envImpl.getMemoryBudget().refreshTreeMemoryUsage(0);
     			}
+    // END OF UMPLE AFTER INJECTION
+    // line 138 "../../../../Latches_INList.ump"
+    addedINs.clear();
+    	minorLatch.release();
+    	releaseMajorLatch();
+    	//original();
     // END OF UMPLE AFTER INJECTION
   }
 
@@ -470,14 +470,14 @@ releaseMajorLatch();
   private SortedSet ins = null ;
 // line 17 "../../../../INList.ump"
   private EnvironmentImpl envImpl ;
+// line 5 "../../../../MemoryBudget_INList.ump"
+  private boolean updateMemoryUsage ;
 // line 7 "../../../../Latches_INList.ump"
   private Set addedINs = null ;
 // line 9 "../../../../Latches_INList.ump"
   private Latch majorLatch ;
 // line 11 "../../../../Latches_INList.ump"
   private Latch minorLatch ;
-// line 5 "../../../../MemoryBudget_INList.ump"
-  private boolean updateMemoryUsage ;
 
   
 }

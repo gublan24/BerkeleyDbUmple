@@ -65,40 +65,28 @@ class CursorImpl {
         }
         protected CursorImpl _this;
         protected BIN waitingOn;
-        /*
-          protected void hook244() throws DatabaseException {
-          Label245: //this.hook245();
-          }
-          protected void hook245() throws DatabaseException {
-          throw new ReturnObject(_this.bin);
-          }
-        */
+        
     }
     static class CursorImpl_latchDBIN {
         CursorImpl_latchDBIN(CursorImpl _this) {
             this._this = _this;
         }
         DBIN execute() throws DatabaseException {
-            try {
+  //          try {
                 Label246:; //this.hook246();
                 Label247: ;
                 Label246_1: ;
-                throw new ReturnObject(_this.dupBin);
+//                throw new ReturnObject(_this.dupBin);
 
 //throw ReturnHack.returnObject;
-            }
-            catch (ReturnObject r) {
-                return (DBIN) r.value;
-            }
+        //    }
+      //      catch (ReturnObject r) {
+                return null; //(DBIN) r.value;
+    //        }
         }
         protected CursorImpl _this;
         protected BIN waitingOn;
-        //protected void hook246() throws DatabaseException {
-        //this.hook247();
-        //}
-        //protected void hook247() throws DatabaseException {
-        //  throw new ReturnObject(_this.dupBin);
-        //}
+ 
     }
     static class CursorImpl_lockNextKeyForInsert {
         CursorImpl_lockNextKeyForInsert(CursorImpl _this, DatabaseEntry key, DatabaseEntry data) {
@@ -142,26 +130,7 @@ class CursorImpl {
         protected boolean latched;
         protected int searchResult;
         protected OperationStatus status;
-        /*protected void hook248() throws DatabaseException {
-  searchResult=_this.searchAndPosition(tempKey,tempData,searchMode,LockType.RANGE_INSERT);
-  if ((searchResult & _this.FOUND) != 0 && (searchResult & _this.FOUND_LAST) == 0) {
-  {
-  }
-  if ((searchResult & _this.EXACT_KEY) != 0) {
-    status=_this.getNext(tempKey,tempData,LockType.RANGE_INSERT,true,true);
-  }
-   else {
-    status=_this.getNextNoDup(tempKey,tempData,LockType.RANGE_INSERT,true,true);
-  }
-  if (status == OperationStatus.SUCCESS) {
-    lockedNextKey=true;
-  }
-  this.hook249();
-  }
-  }
-*/
-        //protected void hook249() throws DatabaseException {
-        //}
+
     }
     static class CursorImpl_getNextDuplicate {
         CursorImpl_getNextDuplicate(CursorImpl _this, DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean forward, boolean alreadyLatched) {
@@ -250,26 +219,7 @@ class CursorImpl {
         protected DIN duplicateRoot;
         protected DupCountLN dcl;
         protected DBIN newDupBin;
-        // protected void hook250() throws DatabaseException {
-        // }
-        // protected void hook251() throws DatabaseException {
-        // }
-        // protected void hook252() throws DatabaseException {
-        // }
-        // protected void hook253() throws DatabaseException {
-        // }
-        // protected void hook254() throws DatabaseException {
-        // }
-        // protected void hook255() throws DatabaseException {
-        // }
-        // protected void hook256() throws DatabaseException {
-        //}
-        //protected void hook257() throws DatabaseException {
-        //}
-        //protected void hook275() throws DatabaseException {
-        //}
-        //protected void hook279() throws DatabaseException {
-        //}
+       
     }
     static class CursorImpl_fetchCurrent {
         CursorImpl_fetchCurrent(CursorImpl _this, DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first) {
@@ -367,47 +317,6 @@ Label258_1: ;
         protected LN ln;
         protected LockResult lockResult;
         protected byte[] lnData;
-        /*protected void hook258() throws DatabaseException {
-  ln=lockResult.getLN();
-  lnData=(ln != null) ? ln.getData() : null;
-  if (ln == null || lnData == null) {
-  if (treeStatsAccumulator != null) {
-    treeStatsAccumulator.incrementDeletedLNCount();
-  }
-  throw new ReturnObject(OperationStatus.KEYEMPTY);
-  }
-  duplicateFetch=_this.setTargetBin();
-  if (duplicateFetch) {
-  if (foundData != null) {
-    _this.setDbt(foundData,_this.targetBin.getKey(_this.targetIndex));
-  }
-  if (foundKey != null) {
-    _this.setDbt(foundKey,_this.targetBin.getDupKey());
-  }
-  }
-   else {
-  if (foundData != null) {
-    _this.setDbt(foundData,lnData);
-  }
-  if (foundKey != null) {
-    _this.setDbt(foundKey,_this.targetBin.getKey(_this.targetIndex));
-  }
-  }
-  throw new ReturnObject(OperationStatus.SUCCESS);
-  }
-*/
-        //  protected void hook259() throws DatabaseException {
-        //  }
-        //  protected void hook260() throws DatabaseException {
-        //  n=_this.targetBin.fetchTarget(_this.targetIndex);
-        // }
-        // protected void hook261() throws DatabaseException {
-        // }
-        // protected void hook262() throws DatabaseException {
-        //  protected void hook263() throws DatabaseException {
-        // throw new ReturnObject(_this.fetchCurrent(foundKey,foundData,lockType,first));
-        // }
-        //  protected void hook280() throws DatabaseException {
-        //  }
+
     }
 }

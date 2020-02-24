@@ -17,10 +17,6 @@ import java.util.HashSet;
 import java.util.Collections;
 
 // line 3 "../../../SecondaryDatabase.ump"
-// line 3 "../../../LoggingFinest_SecondaryDatabase.ump"
-// line 3 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-// line 3 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase.ump"
-// line 3 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
 public class SecondaryDatabase extends Database
 {
 
@@ -51,7 +47,7 @@ public class SecondaryDatabase extends Database
    * 
    * Creates a secondary database but does not open or fully initialize it.
    */
-  // line 31 "../../../SecondaryDatabase.ump"
+  // line 32 "../../../SecondaryDatabase.ump"
   public  SecondaryDatabase(Environment env, SecondaryConfig secConfig, Database primaryDatabase) throws DatabaseException{
     super(env);
 	DatabaseUtil.checkForNullParam(primaryDatabase, "primaryDatabase");
@@ -104,7 +100,7 @@ public class SecondaryDatabase extends Database
    * 
    * Create a database, called by Environment
    */
-  // line 82 "../../../SecondaryDatabase.ump"
+  // line 83 "../../../SecondaryDatabase.ump"
   public void initNew(Environment env, Locker locker, String databaseName, DatabaseConfig dbConfig) throws DatabaseException{
     super.initNew(env, locker, databaseName, dbConfig);
 	init(locker);
@@ -115,7 +111,7 @@ public class SecondaryDatabase extends Database
    * 
    * Open a database, called by Environment
    */
-  // line 91 "../../../SecondaryDatabase.ump"
+  // line 92 "../../../SecondaryDatabase.ump"
   public void initExisting(Environment env, Locker locker, DatabaseImpl database, DatabaseConfig dbConfig) throws DatabaseException{
     Database otherPriDb = database.findPrimaryDatabase();
 	if (otherPriDb != null && otherPriDb.getDatabaseImpl() != primaryDb.getDatabaseImpl()) {
@@ -131,12 +127,8 @@ public class SecondaryDatabase extends Database
    * 
    * Adds secondary to primary's list, and populates the secondary if needed.
    */
-  // line 104 "../../../SecondaryDatabase.ump"
+  // line 105 "../../../SecondaryDatabase.ump"
    private void init(Locker locker) throws DatabaseException{
-    // line 16 "../../../LoggingFinest_SecondaryDatabase.ump"
-    trace(Level.FINEST, "SecondaryDatabase open");
-    	//original(locker);
-    // END OF UMPLE BEFORE INJECTION
     secondaryConfig = (SecondaryConfig) configuration;
 	primaryDb.addTrigger(secondaryTrigger, false);
 	Database foreignDb = secondaryConfig.getForeignKeyDatabase();
@@ -175,7 +167,7 @@ public class SecondaryDatabase extends Database
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 141 "../../../SecondaryDatabase.ump"
+  // line 142 "../../../SecondaryDatabase.ump"
    public synchronized  void close() throws DatabaseException{
     if (primaryDb != null && secondaryTrigger != null) {
 	    primaryDb.removeTrigger(secondaryTrigger);
@@ -192,7 +184,7 @@ public class SecondaryDatabase extends Database
    * 
    * Should be called by the secondaryTrigger while holding a write lock on the trigger list.
    */
-  // line 155 "../../../SecondaryDatabase.ump"
+  // line 156 "../../../SecondaryDatabase.ump"
   public void clearPrimary(){
     primaryDb = null;
 	secondaryTrigger = null;
@@ -203,7 +195,7 @@ public class SecondaryDatabase extends Database
    * 
    * Should be called by the foreignKeyTrigger while holding a write lock on the trigger list.
    */
-  // line 163 "../../../SecondaryDatabase.ump"
+  // line 164 "../../../SecondaryDatabase.ump"
   public void clearForeignKeyTrigger(){
     foreignKeyTrigger = null;
   }
@@ -213,7 +205,7 @@ public class SecondaryDatabase extends Database
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 170 "../../../SecondaryDatabase.ump"
+  // line 171 "../../../SecondaryDatabase.ump"
    public Database getPrimaryDatabase() throws DatabaseException{
     return primaryDb;
   }
@@ -223,7 +215,7 @@ public class SecondaryDatabase extends Database
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 177 "../../../SecondaryDatabase.ump"
+  // line 178 "../../../SecondaryDatabase.ump"
    public SecondaryConfig getSecondaryConfig() throws DatabaseException{
     return (SecondaryConfig) getConfig();
   }
@@ -233,7 +225,7 @@ public class SecondaryDatabase extends Database
    * 
    * Returns the secondary config without cloning, for internal use.
    */
-  // line 184 "../../../SecondaryDatabase.ump"
+  // line 185 "../../../SecondaryDatabase.ump"
    public SecondaryConfig getPrivateSecondaryConfig(){
     return secondaryConfig;
   }
@@ -243,7 +235,7 @@ public class SecondaryDatabase extends Database
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 191 "../../../SecondaryDatabase.ump"
+  // line 192 "../../../SecondaryDatabase.ump"
    public SecondaryCursor openSecondaryCursor(Transaction txn, CursorConfig cursorConfig) throws DatabaseException{
     return (SecondaryCursor) openCursor(txn, cursorConfig);
   }
@@ -253,7 +245,7 @@ public class SecondaryDatabase extends Database
    * 
    * Overrides Database method.
    */
-  // line 198 "../../../SecondaryDatabase.ump"
+  // line 199 "../../../SecondaryDatabase.ump"
   public Cursor newDbcInstance(Transaction txn, CursorConfig cursorConfig) throws DatabaseException{
     return new SecondaryCursor(this, txn, cursorConfig);
   }
@@ -263,15 +255,12 @@ public class SecondaryDatabase extends Database
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 205 "../../../SecondaryDatabase.ump"
+  // line 206 "../../../SecondaryDatabase.ump"
    public OperationStatus delete(Transaction txn, DatabaseEntry key) throws DatabaseException{
     checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.delete:");
-	Label79:
-trace(Level.FINEST, "SecondaryDatabase.delete", txn, key, null, null);
-	//original(txn, key);
-           ;  //this.hook79(txn, key);
+	Label79:           ;  //this.hook79(txn, key);
 	Locker locker = null;
 	Cursor cursor = null;
 	OperationStatus commitStatus = OperationStatus.NOTFOUND;
@@ -299,7 +288,7 @@ trace(Level.FINEST, "SecondaryDatabase.delete", txn, key, null, null);
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 236 "../../../SecondaryDatabase.ump"
+  // line 237 "../../../SecondaryDatabase.ump"
    public OperationStatus get(Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     return get(txn, key, new DatabaseEntry(), data, lockMode);
   }
@@ -309,17 +298,14 @@ trace(Level.FINEST, "SecondaryDatabase.delete", txn, key, null, null);
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 244 "../../../SecondaryDatabase.ump"
+  // line 245 "../../../SecondaryDatabase.ump"
    public OperationStatus get(Transaction txn, DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.get:");
-	Label80:
-trace(Level.FINEST, "SecondaryDatabase.get", txn, key, null, lockMode);
-	//original(txn, key, lockMode);
-           ;  //this.hook80(txn, key, lockMode);
+	Label80:           ;  //this.hook80(txn, key, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -341,7 +327,7 @@ trace(Level.FINEST, "SecondaryDatabase.get", txn, key, null, lockMode);
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 271 "../../../SecondaryDatabase.ump"
+  // line 272 "../../../SecondaryDatabase.ump"
    public OperationStatus getSearchBoth(Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     throw notAllowedException();
   }
@@ -351,17 +337,14 @@ trace(Level.FINEST, "SecondaryDatabase.get", txn, key, null, lockMode);
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 279 "../../../SecondaryDatabase.ump"
+  // line 280 "../../../SecondaryDatabase.ump"
    public OperationStatus getSearchBoth(Transaction txn, DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkEnv();
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
 	checkRequiredDbState(OPEN, "Can't call SecondaryDatabase.getSearchBoth:");
-	Label81:
-trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode);
-	//original(txn, key, data, lockMode);
-           ;  //this.hook81(txn, key, data, lockMode);
+	Label81:           ;  //this.hook81(txn, key, data, lockMode);
 	CursorConfig cursorConfig = CursorConfig.DEFAULT;
 	if (lockMode == LockMode.READ_COMMITTED) {
 	    cursorConfig = CursorConfig.READ_COMMITTED;
@@ -383,7 +366,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 305 "../../../SecondaryDatabase.ump"
+  // line 306 "../../../SecondaryDatabase.ump"
    public OperationStatus put(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     throw notAllowedException();
   }
@@ -393,7 +376,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 313 "../../../SecondaryDatabase.ump"
+  // line 314 "../../../SecondaryDatabase.ump"
    public OperationStatus putNoOverwrite(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     throw notAllowedException();
   }
@@ -403,7 +386,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 321 "../../../SecondaryDatabase.ump"
+  // line 322 "../../../SecondaryDatabase.ump"
    public OperationStatus putNoDupData(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException{
     throw notAllowedException();
   }
@@ -413,7 +396,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
-  // line 328 "../../../SecondaryDatabase.ump"
+  // line 329 "../../../SecondaryDatabase.ump"
    public JoinCursor join(Cursor [] cursors, JoinConfig config) throws DatabaseException{
     throw notAllowedException();
   }
@@ -424,7 +407,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    * @deprecated
    */
-  // line 336 "../../../SecondaryDatabase.ump"
+  // line 337 "../../../SecondaryDatabase.ump"
    public int truncate(Transaction txn, boolean countRecords) throws DatabaseException{
     throw notAllowedException();
   }
@@ -439,7 +422,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * @param oldData the primary data before the change, or null if the recorddid not previously exist.
    * @param newData the primary data after the change, or null if the recordhas been deleted.
    */
-  // line 349 "../../../SecondaryDatabase.ump"
+  // line 350 "../../../SecondaryDatabase.ump"
   public void updateSecondary(Locker locker, Cursor cursor, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData) throws DatabaseException{
     if (secondaryConfig.getImmutableSecondaryKey() && oldData != null && newData != null) {
 	    return;
@@ -529,7 +512,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * 
    * Deletes an old secondary key.
    */
-  // line 436 "../../../SecondaryDatabase.ump"
+  // line 437 "../../../SecondaryDatabase.ump"
    private void deleteKey(Cursor cursor, DatabaseEntry priKey, DatabaseEntry oldSecKey) throws DatabaseException{
     OperationStatus status = cursor.search(oldSecKey, priKey, LockMode.RMW, SearchMode.BOTH);
 	if (status == OperationStatus.SUCCESS) {
@@ -545,7 +528,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * 
    * Inserts a new secondary key.
    */
-  // line 450 "../../../SecondaryDatabase.ump"
+  // line 451 "../../../SecondaryDatabase.ump"
    private void insertKey(Locker locker, Cursor cursor, DatabaseEntry priKey, DatabaseEntry newSecKey) throws DatabaseException{
     Database foreignDb = secondaryConfig.getForeignKeyDatabase();
 	if (foreignDb != null) {
@@ -581,7 +564,7 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
    * Called by the ForeignKeyTrigger when a record in the foreign database is deleted.
    * @param secKey is the primary key of the foreign database, which is thesecondary key (ordinary key) of this secondary database.
    */
-  // line 483 "../../../SecondaryDatabase.ump"
+  // line 484 "../../../SecondaryDatabase.ump"
   public void onForeignKeyDelete(Locker locker, DatabaseEntry secKey) throws DatabaseException{
     ForeignKeyDeleteAction deleteAction = secondaryConfig.getForeignKeyDeleteAction();
 	LockMode lockMode = (deleteAction == ForeignKeyDeleteAction.ABORT) ? LockMode.DEFAULT : LockMode.RMW;
@@ -649,104 +632,28 @@ trace(Level.FINEST, "SecondaryDatabase.getSearchBoth", txn, key, data, lockMode)
 	}
   }
 
-  // line 550 "../../../SecondaryDatabase.ump"
+  // line 551 "../../../SecondaryDatabase.ump"
   public DatabaseException secondaryCorruptException() throws DatabaseException{
     throw new DatabaseException(
 		"Secondary " + getDebugName() + " is corrupt: it refers" + " to a missing key in the primary database");
   }
 
-  // line 555 "../../../SecondaryDatabase.ump"
+  // line 556 "../../../SecondaryDatabase.ump"
    static  UnsupportedOperationException notAllowedException(){
     throw new UnsupportedOperationException("Operation not allowed on a secondary");
   }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 9 "../../../LoggingFinest_SecondaryDatabase.ump"
-  public void trace(Level level, String methodName) throws DatabaseException{
-    new SecondaryDatabase_trace(this, level, methodName).execute();
-  }
-  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
-  
-  
-  // line 4 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-  // line 4 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
-  public class SecondaryDatabase_trace
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public SecondaryDatabase_trace()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    public  SecondaryDatabase_trace(SecondaryDatabase _this, Level level, String methodName){
-      this._this=_this;
-          this.level=level;
-          this.methodName=methodName;
-    }
-  
-    // line 11 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    public void execute() throws DatabaseException{
-      // line 6 "../../../Derivative_LoggingFinest_LoggingBase_SecondaryDatabase_inner.ump"
-      logger=envHandle.getEnvironmentImpl().getLogger();
-              if (logger.isLoggable(level)) {
-                sb=new StringBuffer();
-                sb.append(methodName);
-                sb.append(" name=").append(_this.getDebugName());
-                sb.append(" primary=").append(_this.primaryDb.getDebugName());
-                logger.log(level,sb.toString());
-              }
-      // END OF UMPLE BEFORE INJECTION
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 12 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    protected SecondaryDatabase _this ;
-  // line 13 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    protected Level level ;
-  // line 14 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    protected String methodName ;
-  // line 15 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    protected Logger logger ;
-  // line 16 "../../../LoggingFinest_SecondaryDatabase_inner.ump"
-    protected StringBuffer sb ;
-  
-    
-  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 19 "../../../SecondaryDatabase.ump"
-  private Database primaryDb ;
-// line 21 "../../../SecondaryDatabase.ump"
+  // line 20 "../../../SecondaryDatabase.ump"
+  protected Database primaryDb ;
+// line 22 "../../../SecondaryDatabase.ump"
   private SecondaryConfig secondaryConfig ;
-// line 23 "../../../SecondaryDatabase.ump"
+// line 24 "../../../SecondaryDatabase.ump"
   private SecondaryTrigger secondaryTrigger ;
-// line 25 "../../../SecondaryDatabase.ump"
+// line 26 "../../../SecondaryDatabase.ump"
   private ForeignKeyTrigger foreignKeyTrigger ;
 
   

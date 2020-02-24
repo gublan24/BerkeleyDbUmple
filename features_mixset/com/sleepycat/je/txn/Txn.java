@@ -40,17 +40,12 @@ import com.sleepycat.je.log.*;
 // line 3 "../../../../Txn_static.ump"
 // line 3 "../../../../loggingBase_Txn.ump"
 // line 3 "../../../../loggingBase_Txn_inner.ump"
-// line 3 "../../../../Latches_Txn.ump"
 // line 3 "../../../../MemoryBudget_Txn.ump"
 // line 3 "../../../../MemoryBudget_Txn_inner.ump"
 // line 3 "../../../../DeleteOp_Txn.ump"
 // line 3 "../../../../DeleteOp_Txn_inner.ump"
 // line 3 "../../../../INCompressor_Txn.ump"
-// line 3 "../../../../Statistics_Txn.ump"
-// line 3 "../../../../LoggingSevere_Txn.ump"
-// line 3 "../../../../LoggingFine_Txn.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn.ump"
-// line 3 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
+// line 3 "../../../../Latches_Txn.ump"
 // line 3 "../../../../Derivative_DeleteOp_MemoryBudget_Txn_inner.ump"
 public class Txn extends Locker implements LogWritable,LogReadable
 {
@@ -325,10 +320,7 @@ cleanupDatabaseImpls(true);
 			} catch (Throwable t) {
 					try {
 				abortInternal(flushSyncBehavior == TXN_SYNC, !(t instanceof DatabaseException));
-				Label800:
-Tracer.trace(envImpl, "Txn", "commit", "Commit of transaction " + id + " failed", t);
-	//original(t);
- ; //this.hook800(t);
+				Label800: ; //this.hook800(t);
 					} catch (Throwable abortT2) {
 				throw new DatabaseException("Failed while attempting to commit transaction " + id
 					+ ". The attempt to abort and clean up also failed. "
@@ -387,11 +379,7 @@ cleanupDatabaseImpls(false);
  ; //this.hook807();
 	    synchronized (this) {
 		boolean openCursors = checkCursorsForClose();
-		Label799:
-Tracer.trace(Level.FINE, envImpl, "Abort:id = " + id + " numWriteLocks= " + numWriteLocks + " numReadLocks= "
-		+ numReadLocks + " openCursors= " + openCursors);
-	//original(numReadLocks, numWriteLocks, openCursors);
- ; //this.hook799(numReadLocks, numWriteLocks, openCursors);
+		Label799: ; //this.hook799(numReadLocks, numWriteLocks, openCursors);
 		if (openCursors) {
 		    throw new DatabaseException("Transaction " + id + " detected open cursors while aborting");
 		}
@@ -449,10 +437,7 @@ if (location.bin != null) {
 	} catch (RuntimeException e) {
 	    throw new DatabaseException("Txn undo for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
 	} catch (DatabaseException e) {
-	    Label801:
-Tracer.trace(envImpl, "Txn", "undo", "for node=" + nodeId + " LSN=" + DbLsn.getNoFormatString(undoLsn), e);
-	//original(nodeId, undoLsn, e);
- ; //this.hook801(nodeId, undoLsn, e);
+	    Label801: ; //this.hook801(nodeId, undoLsn, e);
 	    throw e;
 	}
   }
@@ -1032,22 +1017,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
 					deletedDatabases = null;
 			}
   }
-
-
-  /**
-   * 
-   * stats
-   */
-  // line 8 "../../../../Statistics_Txn.ump"
-   public LockStats collectStats(LockStats stats) throws DatabaseException{
-    synchronized(this) {
-            int nReadLocks = (readLocks == null) ? 0 : readLocks.size();
-            stats.setNReadLocks(stats.getNReadLocks() + nReadLocks);
-            int nWriteLocks = (writeInfo == null) ? 0 : writeInfo.size();
-            stats.setNWriteLocks(stats.getNWriteLocks() + nWriteLocks);
-        }
-        return stats;
-  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -1222,7 +1191,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   
   // line 52 "../../../../Txn_static.ump"
   // line 4 "../../../../loggingBase_Txn_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
   public class Txn_traceCommit
   {
   
@@ -1257,16 +1225,6 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
       logger=envImpl.getLogger();
       // END OF UMPLE BEFORE INJECTION
       
-      // line 6 "../../../../Derivative_LoggingFine_LoggingBase_Txn_inner.ump"
-      //original();
-              if (logger.isLoggable(Level.FINE)) {
-                sb=new StringBuffer();
-                sb.append(" Commit:id = ").append(id);
-                sb.append(" numWriteLocks=").append(numWriteLocks);
-                sb.append(" numReadLocks = ").append(numReadLocks);
-                Tracer.trace(Level.FINE,envImpl,sb.toString());
-              }
-      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------

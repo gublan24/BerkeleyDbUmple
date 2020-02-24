@@ -40,7 +40,7 @@ public class TupleSerialMarshalledBinding extends TupleSerialBinding
    * @param classCatalogis the catalog to hold shared class information and for adatabase should be a  {@link StoredClassCatalog}.
    * @param baseClassis the base class for serialized objects stored using thisbinding -- all objects using this binding must be an instance of this class.
    */
-  // line 16 "../../../../TupleSerialMarshalledBinding.ump"
+  // line 18 "../../../../TupleSerialMarshalledBinding.ump"
    public  TupleSerialMarshalledBinding(ClassCatalog classCatalog, Class baseClass){
     this(new SerialBinding(classCatalog, baseClass));
   }
@@ -51,12 +51,12 @@ public class TupleSerialMarshalledBinding extends TupleSerialBinding
    * Creates a tuple-serial marshalled binding object.
    * @param dataBindingis the binding used for serializing and deserializing theentity object.
    */
-  // line 24 "../../../../TupleSerialMarshalledBinding.ump"
+  // line 26 "../../../../TupleSerialMarshalledBinding.ump"
    public  TupleSerialMarshalledBinding(SerialBinding dataBinding){
     super(dataBinding);
   }
 
-  // line 28 "../../../../TupleSerialMarshalledBinding.ump"
+  // line 30 "../../../../TupleSerialMarshalledBinding.ump"
    public Object entryToObject(TupleInput tupleInput, Object javaInput){
     MarshalledTupleKeyEntity entity = (MarshalledTupleKeyEntity) javaInput;
 	if (tupleInput != null) {
@@ -65,13 +65,13 @@ public class TupleSerialMarshalledBinding extends TupleSerialBinding
 	return entity;
   }
 
-  // line 36 "../../../../TupleSerialMarshalledBinding.ump"
+  // line 38 "../../../../TupleSerialMarshalledBinding.ump"
    public void objectToKey(Object object, TupleOutput output){
     MarshalledTupleKeyEntity entity = (MarshalledTupleKeyEntity) object;
 	entity.marshalPrimaryKey(output);
   }
 
-  // line 41 "../../../../TupleSerialMarshalledBinding.ump"
+  // line 43 "../../../../TupleSerialMarshalledBinding.ump"
    public Object objectToData(Object object){
     return object;
   }

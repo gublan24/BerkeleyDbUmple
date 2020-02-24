@@ -8,14 +8,11 @@ import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.config.EnvironmentParams;
 import com.sleepycat.je.RunRecoveryException;
 import com.sleepycat.je.DatabaseException;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../FSync_FSyncManager.ump"
 // line 3 "../../../../FSync_FSyncManager_inner.ump"
-// line 3 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
 // line 3 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
 public class FSyncManager
 {
@@ -45,9 +42,6 @@ public class FSyncManager
 	Label434:
 fsyncLatch = LatchSupport.makeLatch("fsyncLatch", envImpl);
 //	original(envImpl);
-
-fsyncLatch = LatchSupport.makeLatch("fsyncLatch", envImpl);
-//	original(envImpl);
            ;  //this.hook434(envImpl);
 	fsyncInProgress = false;
 	nextFSyncWaiters = new FSyncGroup(timeout, envImpl);
@@ -66,10 +60,7 @@ fsyncLatch = LatchSupport.makeLatch("fsyncLatch", envImpl);
 	FSyncGroup inProgressGroup = null;
 	FSyncGroup myGroup = null;
 	synchronized (this) {
-	    Label435:
-nFSyncRequests++;
-	//original();
-           ;  //this.hook435();
+	    Label435:           ;  //this.hook435();
 	    if (fsyncInProgress) {
 		needToWait = true;
 		myGroup = nextFSyncWaiters;
@@ -95,21 +86,13 @@ nFSyncRequests++;
 		}
 	    } else if (waitStatus == FSyncGroup.DO_TIMEOUT_FSYNC) {
 		doFsync = true;
-		Label436:
-synchronized (this) {
-	    nTimeouts++;
-	}
-	//original();
-           ;  //this.hook436();
+		Label436:           ;  //this.hook436();
 	    }
 	}
 	if (doFsync) {
 	    executeFSync();
 	    synchronized (this) {
-		Label437:
-nFSyncs++;
-	//original();
-           ;  //this.hook437();
+		Label437:           ;  //this.hook437();
 		if (isLeader) {
 		    inProgressGroup.wakeupAll();
 		    nextFSyncWaiters.wakeupOne();
@@ -127,33 +110,6 @@ nFSyncs++;
   // line 83 "../../../../FSync_FSyncManager.ump"
    protected void executeFSync() throws DatabaseException{
     envImpl.getFileManager().syncLogEnd();
-  }
-
-  // line 14 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  public long getNFSyncRequests(){
-    return nFSyncRequests;
-  }
-
-  // line 18 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  public long getNFSyncs(){
-    return nFSyncs;
-  }
-
-  // line 22 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  public long getNTimeouts(){
-    return nTimeouts;
-  }
-
-  // line 26 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
-    stats.setNFSyncs(nFSyncs);
-	stats.setNFSyncRequests(nFSyncRequests);
-	stats.setNFSyncTimeouts(nTimeouts);
-	if (config.getClear()) {
-	    nFSyncs = 0;
-	    nFSyncRequests = 0;
-	    nTimeouts = 0;
-	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -294,14 +250,6 @@ nFSyncs++;
   private volatile boolean fsyncInProgress ;
 // line 17 "../../../../FSync_FSyncManager.ump"
   private FSyncGroup nextFSyncWaiters ;
-// line 7 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  private long nFSyncRequests = 0 ;
-// line 9 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  private long nFSyncs = 0 ;
-// line 11 "../../../../Derivative_FSync_Statistics_FSyncManager.ump"
-  private long nTimeouts = 0 ;
-// line 9 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
-  private Latch fsyncLatch ;
 // line 9 "../../../../Derivative_FSync_Latches_FSyncManager.ump"
   private Latch fsyncLatch ;
 

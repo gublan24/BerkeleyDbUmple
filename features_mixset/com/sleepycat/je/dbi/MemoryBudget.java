@@ -11,22 +11,18 @@ import com.sleepycat.je.config.EnvironmentParams;
 import com.sleepycat.je.DatabaseException;
 import java.util.Iterator;
 import com.sleepycat.je.latch.LatchSupport;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
 
 // line 3 "../../../../MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_static.ump"
-// line 3 "../../../../Latches_MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_inner_inner.ump"
 // line 3 "../../../../Evictor_MemoryBudget.ump"
 // line 3 "../../../../Evictor_MemoryBudget_inner.ump"
-// line 3 "../../../../Statistics_MemoryBudget.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
-// line 3 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget_inner.ump"
-// line 3 "../../../../Derivative_Statistics_MemoryBudget_MemoryBudget.ump"
+// line 3 "../../../../Latches_MemoryBudget.ump"
 // line 3 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget.ump"
 // line 3 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget_inner.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget_inner.ump"
 public class MemoryBudget implements EnvConfigObserver
 {
 
@@ -299,11 +295,6 @@ Label347_1:
   // line 8 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
    public long getCriticalThreshold(){
     return criticalThreshold;
-  }
-
-  // line 6 "../../../../Derivative_Statistics_MemoryBudget_MemoryBudget.ump"
-  public void loadStats(StatsConfig config, EnvironmentStats stats){
-    stats.setCacheDataBytes(getCacheMemoryUsage());
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

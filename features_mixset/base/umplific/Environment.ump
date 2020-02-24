@@ -518,11 +518,6 @@ class Environment
 	environmentImpl.checkNotClosed();
     }
 
-    protected void hook58(String databaseName, DatabaseConfig dbConfig) throws DatabaseException {
-    }
 
-    protected boolean hook59(DatabaseImpl database, boolean databaseExists) throws DatabaseException {
-	return databaseExists;
-    }
 
 }

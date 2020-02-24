@@ -253,7 +253,7 @@ class DbCacheSize
 					db = openDatabase(env, nodeMax, false);
 					out.println("\nPreloading with cache size: " + INT_FORMAT.format(env.getConfig().getCacheSize()));
 					preloadRecords(out, db);
-				  Label831:					//hook831(out, env);
+				  Label831:			;		//hook831(out, env);
 			} finally {
 					try {
 				db.close();

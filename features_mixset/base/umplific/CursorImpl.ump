@@ -987,23 +987,73 @@ Label234_1: ;
     /** 
      * Position the cursor at the key. This returns a three part value that's bitwise or'ed into the int. We find out if there was any kind of match and if the match was exact. Note that this match focuses on whether the searching criteria (key, or key and data, depending on the search type) is met. <p> Note this returns with the BIN latched! </p> <p> If this method returns without the FOUND bit set, the caller can assume that no match is possible. Otherwise, if the FOUND bit is set, the caller should check the EXACT_KEY and EXACT_DATA bits. If EXACT_KEY is not set (or for BOTH and BOTH_RANGE, if EXACT_DATA is not set), an approximate match was found. In an approximate match, the cursor is always positioned before the target key/data. This allows the caller to perform a 'next' operation to advance to the value that is equal or higher than the target key/data. </p> <p> Even if the search returns an exact result, the record may be deleted. The caller must therefore check for both an approximate match and for whether the cursor is positioned on a deleted record. </p> <p> If SET or BOTH is specified, the FOUND bit will only be returned if an exact match is found. However, the record found may be deleted. </p> <p> There is one special case where this method may be called without checking the EXACT_KEY (and EXACT_DATA) bits and without checking for a deleted record: If SearchMode.SET is specified then only the FOUND bit need be checked. When SET is specified and FOUND is returned, it is guaranteed to be an exact match on a non-deleted record. It is for this case only that this method is public. </p> <p> If FOUND is set, FOUND_LAST may also be set if the cursor is positioned on the last record in the database. Note that this state can only be counted on as long as the BIN is latched, so it is not set if this method must release the latch to lock the record. Therefore, it should only be used for optimizations. If FOUND_LAST is set, the cursor is positioned on the last record and the BIN is latched. If FOUND_LAST is not set, the cursor may or may not be positioned on the last record. Note that exact searches always perform an unlatch and a lock, so FOUND_LAST will only be set for inexact (range) searches. </p> <p> Be aware that when an approximate match is returned, the index or dupIndex may be set to -1. This is done intentionally so that a 'next' operation will increment it. </p>
      */
-    public int searchAndPosition(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode,
+  public int searchAndPosition(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode,
         LockType lockType) throws DatabaseException {   
-            boolean foundSomething = false;
-            boolean foundExactKey = false;
-            boolean foundExactData = false;
-            boolean foundLast = false;
-Label235:
-            assert assertCursorState(false): dumpToString(true);
-            removeCursor();
-            bin = null;
-        
-            boolean exactSearch = searchMode.isExactSearch();
-            BINBoundary binBoundary = new BINBoundary();
-            Label235_1:  ;//extra catch statement will be addd.
-            return ((foundSomething ? FOUND : 0) | (foundExactKey ? EXACT_KEY : 0) | (foundExactData ? EXACT_DATA : 0) | (foundLast ? FOUND_LAST : 0));
+    boolean foundSomething = false;
+    boolean foundExactKey = false;
+    boolean foundExactData = false;
+    boolean foundLast = false;
+    boolean exactSearch = searchMode.isExactSearch();
+    BINBoundary binBoundary = new BINBoundary();
+    assert assertCursorState(false) : dumpToString(true);
+    removeCursor();
+    bin = null;
+    try {
+      Label235: ;
+      byte[] key = Key.makeKey(matchKey);
+      bin = (BIN) database.getTree().search(key, Tree.SearchType.NORMAL, -1, binBoundary, true);
+      if (bin != null) {
+        addCursor(bin);
+        index = bin.findEntry(key, true, exactSearch);
+        foundSomething = !exactSearch;
+        dupBin = null;
+        dupIndex = -1;
+        boolean containsDuplicates = false;
+        if (index >= 0) {
+          if ((index & IN.EXACT_MATCH) != 0) {
+            foundExactKey = true;
+            index &= ~IN.EXACT_MATCH;
+          }
+          Node n = null;
+          if (!bin.isEntryKnownDeleted(index)) {
+            n = bin.fetchTarget(index);
+          }
+          if (n != null) {
+            containsDuplicates = n.containsDuplicates();
+            if (searchMode.isDataSearch()) {
+              if (foundExactKey) {
+                int searchResult = searchAndPositionBoth(containsDuplicates, n, matchData, exactSearch, lockType,
+                    bin.getLsn(index));
+                foundSomething = (searchResult & FOUND) != 0;
+                foundExactData = (searchResult & EXACT_DATA) != 0;
+              }
+            } else {
+              foundSomething = true;
+              if (!containsDuplicates && exactSearch) {
+                LN ln = (LN) n;
+                LockResult lockResult = lockLN(ln, lockType);
+                ln = lockResult.getLN();
+                if (ln == null) {
+                  foundSomething = false;
+                }
+              }
+            }
+          }
+          foundLast = (searchMode == SearchMode.SET_RANGE && foundSomething && !containsDuplicates
+              && binBoundary.isLastBin && index == bin.getNEntries() - 1);
+        }
+      }
+      status = CURSOR_INITIALIZED;
 
+
+      return ((foundSomething ? FOUND : 0) | (foundExactKey ? EXACT_KEY : 0) | (foundExactData ? EXACT_DATA : 0)
+          | (foundLast ? FOUND_LAST : 0));
+
+    } catch (DatabaseException e) {
+      Label235_1: ;// extra catch statement will be addd.
+      throw e;
     }
+  }
 
     /** 
      * For this type of search, we need to match both key and data. This method is called after the key is matched to perform the data portion of the match. We may be matching just against an LN, or doing further searching into the dup tree. See searchAndPosition for more details.
@@ -1313,402 +1363,6 @@ Label235:
     public void setTestHook(TestHook hook) {
         testHook = hook;
     }
-/*
-    protected void hook204(LN ln, long oldLsn, long newLsn) throws DatabaseException {}
-
-    protected void hook205(LN ln, long oldLsn, long newLsn) throws DatabaseException {}
-
-    protected void hook206() throws DatabaseException, CloneNotSupportedException {}
-
-    protected void hook207() throws DatabaseException {}
-
-    protected void hook208(BIN bin) {}
-
-    protected void hook209(BIN abin) throws DatabaseException {}
-
-    protected void hook210(DBIN abin) throws DatabaseException {}
-
-    protected void hook211() throws DatabaseException {}
-*/
-   /* protected void hook212(LockType lockType) throws DatabaseException {
-        if (bin.getNEntries() <= index) {
-            throw new ReturnInt(0);
-        }
-        Node n = bin.fetchTarget(index);
-        if (n != null && n.containsDuplicates()) {
-            DIN dupRoot = (DIN) n;
-            Label265: //this.hook265(dupRoot);
-            DupCountLN dupCountLN = (DupCountLN) dupRoot.getDupCountLNRef().fetchTarget(database, dupRoot);
-            Label264: ////this.hook264(dupRoot);
-            if (lockType != LockType.NONE) {
-                locker.lock(dupCountLN.getNodeId(), lockType, false, database);
-            }
-            throw new ReturnInt(dupCountLN.getDupCount());
-        } else {
-            throw new ReturnInt(1);
-        }
-    }
-
-
-    protected void hook213(boolean isDup, LN ln, LockResult lockResult, LockResult dclLockResult, DIN dupRoot)
-    throws DatabaseException {
-        //
-        //	isDup = (dupBin != null);
-        //	if (isDup) {
-        //	    dupRoot = getLatchedDupRoot(true);
-        //	    dclLockResult = lockDupCountLN(dupRoot, LockType.WRITE);
-        //	    dupRoot = (DIN) bin.getTarget(index);
-        //	    this.hook267();
-        //	}
-        //	setTargetBin();
-        //	long oldLsn = targetBin.getLsn(targetIndex);
-        //	byte[] lnKey = targetBin.getKey(targetIndex);
-        //	lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
-        //	long oldLNSize = 0;
-        // //	oldLNSize = this.hook284(ln, oldLNSize);
-        //  Label284____:
-        //	long newLsn = ln.delete(database, lnKey, dupKey, oldLsn, locker);
-        //	long newLNSize = 0;
-        //  //	newLNSize = this.hook283(ln, newLNSize);
-        //  Label283____:
-        //	targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-        //	targetBin.setPendingDeleted(targetIndex);
-        //	this.hook266();
-        //	if (isDup) {
-        //	    dupRoot.incrementDuplicateCount(dclLockResult, dupKey, locker, false);
-        //	    this.hook268(dupRoot);
-        //	    dupRoot = null;
-        //	    this.hook281(lnKey);
-        //	} else {
-        //	    this.hook282(lnKey);
-        //	}
-        //	this.hook204(ln, oldLsn, newLsn);
-    }
-
- //   protected void hook214() throws DatabaseException {}
-
-   // protected void hook215() throws DatabaseException {}
-
-    //protected void hook216() throws DatabaseException {}
-
-    //protected void hook217() throws DatabaseException {}
-
-/*    protected void hook218(DatabaseEntry data, DatabaseEntry foundKey, DatabaseEntry foundData, boolean isDup)
-    throws DatabaseException {
-        LN ln = (LN) targetBin.fetchTarget(targetIndex);
-        byte[] lnKey = targetBin.getKey(targetIndex);
-        Comparator userComparisonFcn = targetBin.getKeyComparator();
-        if (targetBin.isEntryKnownDeleted(targetIndex) || ln == null) {
-            Label270: //this.hook270();
-            throw new ReturnObject(OperationStatus.NOTFOUND);
-        }
-        LockResult lockResult = lockLN(ln, LockType.WRITE);
-        ln = lockResult.getLN();
-        if (ln == null) {
-            Label271: //this.hook271();
-            throw new ReturnObject(OperationStatus.NOTFOUND);
-        }
-        byte[] foundDataBytes;
-        byte[] foundKeyBytes;
-        isDup = setTargetBin();
-        if (isDup) {
-            foundDataBytes = lnKey;
-            foundKeyBytes = targetBin.getDupKey();
-        } else {
-            foundDataBytes = ln.getData();
-            foundKeyBytes = lnKey;
-        }
-        byte[] newData;
-        if (data.getPartial()) {
-            int dlen = data.getPartialLength();
-            int doff = data.getPartialOffset();
-            int origlen = (foundDataBytes != null) ? foundDataBytes.length : 0;
-            int oldlen = (doff + dlen > origlen) ? doff + dlen : origlen;
-            int len = oldlen - dlen + data.getSize();
-            if (len == 0) {
-                newData = LogUtils.ZERO_LENGTH_BYTE_ARRAY;
-            } else {
-                newData = new byte[len];
-            }
-            int pos = 0;
-            int slicelen = (doff < origlen) ? doff : origlen;
-            if (slicelen > 0)
-                System.arraycopy(foundDataBytes, 0, newData, pos, slicelen);
-            pos += doff;
-            slicelen = data.getSize();
-            System.arraycopy(data.getData(), data.getOffset(), newData, pos, slicelen);
-            pos += slicelen;
-            slicelen = origlen - (doff + dlen);
-            if (slicelen > 0)
-                System.arraycopy(foundDataBytes, doff + dlen, newData, pos, slicelen);
-        } else {
-            int len = data.getSize();
-            if (len == 0) {
-                newData = LogUtils.ZERO_LENGTH_BYTE_ARRAY;
-            } else {
-                newData = new byte[len];
-            }
-            System.arraycopy(data.getData(), data.getOffset(), newData, 0, len);
-        }
-        if (database.getSortedDuplicates()) {
-            boolean keysEqual = false;
-            if (foundDataBytes != null) {
-                keysEqual = Key.compareKeys(foundDataBytes, newData, userComparisonFcn) == 0;
-            }
-            if (!keysEqual) {
-                revertLock(ln, lockResult);
-                throw new DatabaseException("Can't replace a duplicate with different data.");
-            }
-        }
-        if (foundData != null) {
-            setDbt(foundData, foundDataBytes);
-        }
-        if (foundKey != null) {
-            setDbt(foundKey, foundKeyBytes);
-        }
-        long oldLsn = targetBin.getLsn(targetIndex);
-        lockResult.setAbortLsn(oldLsn, targetBin.isEntryKnownDeleted(targetIndex));
-        long oldLNSize = 0;
-        //	oldLNSize = this.hook286(ln, oldLNSize);
-        Lable286:
-            byte[] newKey = (isDup ? targetBin.getDupKey() : lnKey);
-        long newLsn = ln.modify(newData, database, newKey, oldLsn, locker);
-        long newLNSize = 0;
-        //newLNSize = this.hook285(ln, newLNSize);
-        Label285:
-            targetBin.updateEntry(targetIndex, newLsn, oldLNSize, newLNSize);
-        this.hook269();
-        this.hook205(ln, oldLsn, newLsn);
-        status = CURSOR_INITIALIZED;
-        throw new ReturnObject(OperationStatus.SUCCESS);
-    }
-*/
-  //  protected void hook219() throws DatabaseException {}
-
-    //protected void hook220() throws DatabaseException {}
-
-   // protected void hook221(DatabaseEntry foundKey, DatabaseEntry foundData, LockType lockType, boolean first)
-    //throws DatabaseException {
- //       throw new ReturnObject(fetchCurrent(foundKey, foundData, lockType, first));
-    //}
-
-//    protected void hook222() throws DatabaseException {}
-
-/*    protected void hook223(LockType lockType) throws DatabaseException {
-        assert assertCursorState(true): dumpToString(true);
-        Label272: //this.hook272();
-        if (bin == null) {
-            throw new ReturnObject(null);
-        }
-        LN ln = null;
-        if (!bin.isEntryKnownDeleted(index)) {
-            ln = (LN) bin.fetchTarget(index);
-        }
-        if (ln == null) {
-            Label273: //this.hook273();
-            throw new ReturnObject(null);
-        }
-        addCursor(bin);
-        LockResult lockResult = lockLN(ln, lockType);
-        ln = lockResult.getLN();
-        throw new ReturnObject(ln);
-    }
-*/
-  //  protected void hook224(boolean alreadyLatched) throws DatabaseException {}
-
-   // protected boolean hook225(boolean alreadyLatched) throws DatabaseException {
-  //      return alreadyLatched;
-//    }
-
-//    protected boolean hook226(boolean alreadyLatched) throws DatabaseException {
-//        return alreadyLatched;
-  //  }
-/*
-    protected void hook227() throws DatabaseException {}
-
-    protected void hook228() throws DatabaseException {}
-
-    protected void hook229() throws DatabaseException {}
-
-    protected void hook230(boolean alreadyLatched) throws DatabaseException {}
-
-    protected void hook231() throws DatabaseException {}
-
-    protected void hook232() throws DatabaseException {}
-
-    protected void hook233() throws DatabaseException {}
-*/
-
-  /*  protected void hook234(boolean first, DIN duplicateRoot, IN in , boolean found) throws DatabaseException {
-        if (duplicateRoot == null) {
-            removeCursorBIN();
-            if (first) { in = database.getTree().getFirstNode();
-            } else { in = database.getTree().getLastNode();
-            }
-            if ( in != null) {
-                assert( in instanceof BIN);
-                dupBin = null;
-                dupIndex = -1;
-                bin = (BIN) in ;
-                index = (first ? 0 : (bin.getNEntries() - 1));
-                addCursor(bin);
-                TreeWalkerStatsAccumulator treeStatsAccumulator = getTreeStatsAccumulator();
-                if (bin.getNEntries() == 0) {
-                    found = true;
-                } else {
-                    Node n = null;
-                    if (! in .isEntryKnownDeleted(index)) {
-                        n = in .fetchTarget(index);
-                    }
-                    if (n != null && n.containsDuplicates()) {
-                        DIN dupRoot = (DIN) n;
-                        Label274: //this.hook274( in , dupRoot); in = null;
-                        found = positionFirstOrLast(first, dupRoot);
-                    } else {
-                        if (treeStatsAccumulator != null) {
-                            if (n == null || ((LN) n).isDeleted()) {
-                                treeStatsAccumulator.incrementDeletedLNCount();
-                            } else {
-                                treeStatsAccumulator.incrementLNCount();
-                            }
-                        }
-                        found = true;
-                    }
-                }
-            }
-        } else {
-            removeCursorDBIN();
-            if (first) { in = database.getTree().getFirstNode(duplicateRoot);
-            } else { in = database.getTree().getLastNode(duplicateRoot);
-            }
-            if ( in != null) {
-                assert( in instanceof DBIN);
-                dupBin = (DBIN) in ;
-                dupIndex = (first ? 0 : (dupBin.getNEntries() - 1));
-                addCursor(dupBin);
-                found = true;
-            }
-        }
-        status = CURSOR_INITIALIZED;
-        throw new ReturnBoolean(found);
-    }
-
-    protected void hook235(DatabaseEntry matchKey, DatabaseEntry matchData, SearchMode searchMode, LockType lockType,
-        boolean foundSomething, boolean foundExactKey, boolean foundExactData, boolean foundLast,
-        boolean exactSearch, BINBoundary binBoundary) throws DatabaseException {
-        byte[] key = Key.makeKey(matchKey);
-        bin = (BIN) database.getTree().search(key, Tree.SearchType.NORMAL, -1, binBoundary, true);
-        if (bin != null) {
-            addCursor(bin);
-            index = bin.findEntry(key, true, exactSearch);
-            foundSomething = !exactSearch;
-            dupBin = null;
-            dupIndex = -1;
-            boolean containsDuplicates = false;
-            if (index >= 0) {
-                if ((index & IN.EXACT_MATCH) != 0) {
-                    foundExactKey = true;
-                    index &= ~IN.EXACT_MATCH;
-                }
-                Node n = null;
-                if (!bin.isEntryKnownDeleted(index)) {
-                    n = bin.fetchTarget(index);
-                }
-                if (n != null) {
-                    containsDuplicates = n.containsDuplicates();
-                    if (searchMode.isDataSearch()) {
-                        if (foundExactKey) {
-                            int searchResult = searchAndPositionBoth(containsDuplicates, n, matchData, exactSearch,
-                                lockType, bin.getLsn(index));
-                            foundSomething = (searchResult & FOUND) != 0;
-                            foundExactData = (searchResult & EXACT_DATA) != 0;
-                        }
-                    } else {
-                        foundSomething = true;
-                        if (!containsDuplicates && exactSearch) {
-                            LN ln = (LN) n;
-                            LockResult lockResult = lockLN(ln, lockType);
-                            ln = lockResult.getLN();
-                            if (ln == null) {
-                                foundSomething = false;
-                            }
-                        }
-                    }
-                }
-                foundLast = (searchMode == SearchMode.SET_RANGE && foundSomething && !containsDuplicates &&
-                    binBoundary.isLastBin && index == bin.getNEntries() - 1);
-            }
-        }
-        status = CURSOR_INITIALIZED;
-        throw new ReturnInt((foundSomething ? FOUND : 0) | (foundExactKey ? EXACT_KEY : 0) |
-            (foundExactData ? EXACT_DATA : 0) | (foundLast ? FOUND_LAST : 0));
-    }
-*/
-   /* protected void hook236(DIN duplicateRoot) throws DatabaseException {}
-
-    protected void hook237() throws DatabaseException {}
-
-    protected void hook238() throws DatabaseException {}
-
-    protected void hook239(DIN dupRoot) throws DatabaseException {}
-
-    protected void hook240() throws DatabaseException {}
-
-    protected void hook241(DIN dupRoot) throws DatabaseException {}
-
-    protected void hook242(boolean isDBINLatched, DIN dupRoot) throws DatabaseException {}
-
-    protected void hook243() throws DatabaseException {}
-
-    protected void hook264(DIN dupRoot) throws DatabaseException {}
-
-    protected void hook265(DIN dupRoot) throws DatabaseException {}
-
-    protected void hook266() throws DatabaseException {}
-
-    protected void hook267() throws DatabaseException {}
-
-    protected void hook268(DIN dupRoot) throws DatabaseException {}
-
-    protected void hook269() throws DatabaseException {}
-
-    protected void hook270() throws DatabaseException {}
-
-    protected void hook271() throws DatabaseException {}
-
-    protected void hook272() throws DatabaseException {}
-
-    protected void hook273() throws DatabaseException {}
-
-    protected void hook274(IN in , DIN dupRoot) throws DatabaseException {}
-
-    //protected void hook276() throws DatabaseException {
-    //}
-
-    protected void hook277() throws DatabaseException {}
-
-    protected void hook278() throws DatabaseException {}
-
-    //protected void hook281(byte[] lnKey) throws DatabaseException {
-    //}
-
-    //protected void hook282(byte[] lnKey) throws DatabaseException {
-    //}
-
-    protected long hook283(LN ln, long newLNSize) throws DatabaseException {
-        return newLNSize;
-    }
-
-    protected long hook284(LN ln, long oldLNSize) throws DatabaseException {
-        return oldLNSize;
-    }
-
-    protected long hook285(LN ln, long newLNSize) throws DatabaseException {
-        return newLNSize;
-    }
-
-    protected long hook286(LN ln, long oldLNSize) throws DatabaseException {
-        return oldLNSize;
-    }
-*/
 }
+
+

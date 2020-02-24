@@ -33,39 +33,18 @@ import java.util.Set;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.HashSet;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
-import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../Checkpointer.ump"
 // line 3 "../../../../Checkpointer_static.ump"
-// line 3 "../../../../Latches_Checkpointer.ump"
-// line 3 "../../../../Latches_Checkpointer_inner.ump"
 // line 3 "../../../../MemoryBudget_Checkpointer.ump"
 // line 3 "../../../../MemoryBudget_Checkpointer_inner.ump"
+// line 3 "../../../../DeleteOp_Checkpointer.ump"
 // line 3 "../../../../Evictor_Checkpointer.ump"
 // line 3 "../../../../Evictor_Checkpointer_inner.ump"
-// line 3 "../../../../DeleteOp_Checkpointer.ump"
 // line 3 "../../../../INCompressor_Checkpointer.ump"
-// line 3 "../../../../CPTime_Checkpointer.ump"
-// line 2 "../../../../CPTime_Checkpointer_inner.ump"
-// line 3 "../../../../CPBytes_Checkpointer.ump"
-// line 3 "../../../../CPBytes_Checkpointer_inner.ump"
-// line 3 "../../../../CheckpointerDaemon_Checkpointer.ump"
-// line 3 "../../../../Statistics_Checkpointer.ump"
-// line 3 "../../../../Statistics_Checkpointer_inner.ump"
-// line 3 "../../../../LoggingSevere_Checkpointer.ump"
-// line 3 "../../../../LoggingSevere_Checkpointer_inner.ump"
-// line 3 "../../../../LoggingConfig_Checkpointer.ump"
-// line 3 "../../../../LoggingConfig_Checkpointer_inner.ump"
-// line 3 "../../../../LoggingFinest_Checkpointer.ump"
-// line 3 "../../../../LoggingFinest_Checkpointer_inner.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_Checkpointer.ump"
-// line 3 "../../../../Derivative_CPBytes_CPTime_Checkpointer_inner.ump"
-// line 3 "../../../../Derivative_LoggingFinest_CPTime_Checkpointer_inner.ump"
-// line 3 "../../../../Derivative_LoggingFinest_CPBytes_Checkpointer_inner.ump"
-// line 3 "../../../../Derivative_LoggingConfig_Statistics_Checkpointer.ump"
-public class Checkpointer extends DaemonThread
+// line 3 "../../../../Latches_Checkpointer.ump"
+// line 3 "../../../../Latches_Checkpointer_inner.ump"
+public class Checkpointer
 {
 
   //------------------------
@@ -77,39 +56,23 @@ public class Checkpointer extends DaemonThread
   //------------------------
 
   public Checkpointer()
-  {
-    super();
-  }
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {
-    super.delete();
-  }
+  {}
 
   // line 52 "../../../../Checkpointer.ump"
    public  Checkpointer(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException{
-    Label538:
-super.init(0 + waitTime, name, envImpl);
-			//original(envImpl, waitTime, name);
-   ; //this.hook538(envImpl, waitTime, name);
+    Label538:   ; //this.hook538(envImpl, waitTime, name);
             this.envImpl = envImpl;
-        Label539:
-logSizeBytesInterval = envImpl.getConfigManager().getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
-			//original(envImpl);
-   ; //this.hook539(envImpl);
+        Label539:   ; //this.hook539(envImpl);
             logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
-        Label531:
-nCheckpoints = 0;
-			//	original();
-   ; //this.hook531();
-            Label545:
-timeInterval = waitTime;
-//			original(waitTime);
-   ; //this.hook545(waitTime);
+        Label531:   ; //this.hook531();
+            Label545:   ; //this.hook545(waitTime);
             lastCheckpointMillis = 0;
         highestFlushLevel = IN.MIN_LEVEL;
         logManager = envImpl.getLogManager();
@@ -204,10 +167,7 @@ timeInterval = waitTime;
             Iterator iter = nodeSet.iterator();
             while (iter.hasNext()) {
                 CheckpointReference targetRef = (CheckpointReference) iter.next();
-                Label520:
-envImpl.getEvictor().doCriticalEviction();
-	//original();
-   ; //this.hook520();
+                Label520:   ; //this.hook520();
                 //this.hook546(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
                 Label546:
 if (!(targetRef.db.isDeleted())) {
@@ -251,11 +211,7 @@ if (!(targetRef.db.isDeleted())) {
             if (flushed) {
                 DbTree dbTree = targetRef.db.getDbEnvironment().getDbMapTree();
                 dbTree.modifyDbRoot(targetRef.db);
-                Label532:
-nFullINFlushThisRun++;
-			nFullINFlush++;
-			//original();
-   ; //this.hook532();
+                Label532:   ; //this.hook532();
             }
         }
         if (!targetWasRoot) {
@@ -350,11 +306,7 @@ envImpl.lazyCompress(target);
             if (target.getDirty()) {
                 newLsn = target.log(logManager, allowDeltas, logProvisionally, true, parent);
                 if (allowDeltas && newLsn == DbLsn.NULL_LSN) {
-                    Label537:
-nDeltaINFlushThisRun++;
-			nDeltaINFlush++;
-			//original();
-   ; //this.hook537();
+                    Label537:   ; //this.hook537();
                         long lastFullLsn = target.getLastFullVersion();
                     if (DbLsn.compareTo(lastFullLsn, checkpointStart) < 0) {
                         mustLogParent = false;
@@ -366,14 +318,7 @@ nDeltaINFlushThisRun++;
 target.releaseLatch();
    ; //;
         if (newLsn != DbLsn.NULL_LSN) {
-            Label533:
-nFullINFlushThisRun++;
-			nFullINFlush++;
-			if (target instanceof BIN) {
-					nFullBINFlush++;
-			}
-			//original(target);
-   ; //this.hook533(target);
+            Label533:   ; //this.hook533(target);
                 parent.updateEntry(index, newLsn);
         }
         return mustLogParent;
@@ -393,83 +338,6 @@ nFullINFlushThisRun++;
             dirtyMap.put(inLevel, inSet);
         }
         inSet.add(new CheckpointReference( in .getDatabase(), in .getNodeId(), in .containsDuplicates(), in .isDbRoot(), in .getMainTreeKey(), in .getDupTreeKey()));
-  }
-
-  // line 7 "../../../../CheckpointerDaemon_Checkpointer.ump"
-   public String toString(){
-    StringBuffer sb = new StringBuffer();
-			sb.append("<Checkpointer name=\"").append(name).append("\"/>");
-		return sb.toString();
-  }
-
-
-  /**
-   * 
-   * Return the number of retries when a deadlock exception occurs.
-   */
-  // line 20 "../../../../CheckpointerDaemon_Checkpointer.ump"
-   protected int nDeadlockRetries() throws DatabaseException{
-    return envImpl.getConfigManager().getInt(EnvironmentParams.CHECKPOINTER_RETRY);
-  }
-
-
-  /**
-   * 
-   * Called whenever the DaemonThread wakes up from a sleep.
-   */
-  // line 27 "../../../../CheckpointerDaemon_Checkpointer.ump"
-   protected void onWakeup() throws DatabaseException{
-    if (envImpl.isClosed()) {
-					return;
-			}
-			doCheckpoint(CheckpointConfig.DEFAULT, false, "daemon");
-  }
-
-
-  /**
-   * 
-   * Load stats.
-   */
-  // line 25 "../../../../Statistics_Checkpointer.ump"
-   public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException{
-    stat.setNCheckpoints(nCheckpoints);
-			stat.setLastCheckpointStart(lastCheckpointStart);
-			stat.setLastCheckpointEnd(lastCheckpointEnd);
-			stat.setLastCheckpointId(checkpointId);
-			stat.setNFullINFlush(nFullINFlush);
-			stat.setNFullBINFlush(nFullBINFlush);
-			stat.setNDeltaINFlush(nDeltaINFlush);
-			if (config.getClear()) {
-					nCheckpoints = 0;
-					nFullINFlush = 0;
-					nFullBINFlush = 0;
-					nDeltaINFlush = 0;
-			}
-  }
-
-
-  /**
-   * 
-   * Reset per-run counters.
-   */
-  // line 44 "../../../../Statistics_Checkpointer.ump"
-   private void resetPerRunCounters(){
-    nFullINFlushThisRun = 0;
-			nDeltaINFlushThisRun = 0;
-  }
-
-  // line 6 "../../../../LoggingConfig_Checkpointer.ump"
-   private void trace(EnvironmentImpl envImpl, String invokingSource, boolean success){
-    StringBuffer sb = new StringBuffer();
-			sb.append("Checkpoint ").append(checkpointId);
-			sb.append(": source=").append(invokingSource);
-			sb.append(" success=").append(success);
-			Label516:
-sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
-	sb.append(" nDeltaINFlushThisRun=").append(nDeltaINFlushThisRun);
-//	original(sb);
- //this.hook516(sb);
-			Tracer.trace(Level.CONFIG, envImpl, sb.toString());
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -610,9 +478,6 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   
   
   // line 30 "../../../../Checkpointer_static.ump"
-  // line 3 "../../../../CPTime_Checkpointer_inner.ump"
-  // line 4 "../../../../CPBytes_Checkpointer_inner.ump"
-  // line 4 "../../../../Derivative_CPBytes_CPTime_Checkpointer_inner.ump"
   public static class Checkpointer_getWakeupPeriod
   {
   
@@ -641,29 +506,10 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   
     // line 35 "../../../../Checkpointer_static.ump"
     public long execute() throws IllegalArgumentException,DatabaseException{
-      // line 5 "../../../../CPTime_Checkpointer_inner.ump"
-      wakeupPeriod = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
-         //return original();
-      // END OF UMPLE BEFORE INJECTION
-      Label541:
-  bytePeriod=configManager.getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
-          //original();
-     ; //this.hook541();
-      Label519:
-  if ((wakeupPeriod == 0) && (bytePeriod == 0)) {
-            throw new IllegalArgumentException(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL.getName() + " and " + EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL.getName()+ " cannot both be 0. ");
-          }
-       //   original();
-     ; //this.hook519();
+      Label541:   ; //this.hook541();
+      Label519:   ; //this.hook519();
       result = 0;
-      Label540:
-  if (bytePeriod == 0) {
-  		        //original();
-  		      }
-  
-  result += wakeupPeriod;
-     //original();
-     ; //this.hook540();
+      Label540:   ; //this.hook540();
       return result;
     }
   
@@ -702,11 +548,6 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   
   
   // line 50 "../../../../Checkpointer_static.ump"
-  // line 13 "../../../../CPTime_Checkpointer_inner.ump"
-  // line 16 "../../../../CPBytes_Checkpointer_inner.ump"
-  // line 4 "../../../../LoggingFinest_Checkpointer_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFinest_CPTime_Checkpointer_inner.ump"
-  // line 4 "../../../../Derivative_LoggingFinest_CPBytes_Checkpointer_inner.ump"
   public static class Checkpointer_isRunnable
   {
   
@@ -743,82 +584,14 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
       if (config.getForce()) {
        return true;
       } else {
-       Label543:
-  if (config.getKBytes() != 0) {
-  				      useBytesInterval=config.getKBytes() << 10;
-  				    }
-  					 else {
-  								  throw new ReturnBoolean(false); // add hook542
-  					 }
-  
-  if (config.getMinutes() != 0) {
-      useTimeInterval = config.getMinutes() * 60 * 1000;
-     } else {
-      Label544: useTimeInterval = _this.timeInterval; // from hook544() 
-     }
-     ; //this.hook543();
-       Label544:
-  if (_this.logSizeBytesInterval != 0) {
-            useBytesInterval=_this.logSizeBytesInterval;
-          }
-  //   else {
-  //          original();
-  //        }
-     ; //added from this.hook543();
+       Label543:   ; //this.hook543();
+       Label544:   ; //added from this.hook543();
       }
-      Label542:
-  if (useBytesInterval != 0) {
-  		        nextLsn=_this.envImpl.getFileManager().getNextLsn();
-  		        if (DbLsn.getNoCleaningDistance(nextLsn,_this.lastCheckpointEnd,_this.logFileMax) >= useBytesInterval) {
-  		                   return true; //throw new ReturnBoolean(true);
-  		        }
-  				 else {						               return false;}
-  					}
-  
-  				//else {
-  				//    original();
-  				//	  }
-  
-  if (useTimeInterval != 0) {
-      lastUsedLsn = _this.envImpl.getFileManager().getLastUsedLsn();
-      if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn, _this.lastCheckpointEnd) != 0)) {
-       return true;//throw new ReturnBoolean(true);
-      } else {
-       return false;//throw new ReturnBoolean(false);
-      }
-     } 
-  //else {    return false; //throw new ReturnBoolean(false); // added from hook542()    }
-     ; //this.hook542();
+      Label542:   ; //this.hook542();
       return false;
      } 
      finally {
-      Label521:
-  sb=new StringBuffer();
-    
-            Label517:
-  // label introduced in loggingFinestCheckpointer_inner
-          sb.append("size interval=").append(useBytesInterval);
-    //      original();
-   //this.hook517();
-  
-          if (nextLsn != DbLsn.NULL_LSN) {
-            sb.append(" " + "nextLsn=").append(DbLsn.getNoFormatString(nextLsn));
-          }
-          if (_this.lastCheckpointEnd != DbLsn.NULL_LSN) {
-            sb.append(" lastCkpt=");
-            sb.append(DbLsn.getNoFormatString(_this.lastCheckpointEnd));
-          }
-    	
-            Label518:
-  // introduced in LoggingFinest/Checkpointer_inner.ump
-          sb.append(" time interval=").append(useTimeInterval);
-         // original();
-   //this.hook518();
-   
-          sb.append(" force=").append(config.getForce());
-          Tracer.trace(Level.FINEST,_this.envImpl,sb.toString());
-          //original();
-     ; //this.hook521();
+      Label521:   ; //this.hook521();
      }
      //throw ReturnHack.returnBoolean;
   
@@ -854,9 +627,6 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   // line 94 "../../../../Checkpointer_static.ump"
   // line 21 "../../../../MemoryBudget_Checkpointer_inner.ump"
   // line 4 "../../../../Evictor_Checkpointer_inner.ump"
-  // line 4 "../../../../Statistics_Checkpointer_inner.ump"
-  // line 4 "../../../../LoggingSevere_Checkpointer_inner.ump"
-  // line 4 "../../../../LoggingConfig_Checkpointer_inner.ump"
   public static class Checkpointer_doCheckpoint
   {
   
@@ -901,20 +671,11 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
       flushExtraLevel = true;
      }
      _this.lastCheckpointMillis = System.currentTimeMillis();
-     Label535:
-  _this.resetPerRunCounters();
-          //original();
-     ; //this.hook535();
+     Label535:   ; //this.hook535();
       _this.checkpointId++;
-     Label534:
-  _this.nCheckpoints++;
-          //original();
-     ; //this.hook534();
+     Label534:   ; //this.hook534();
       success = false;
-     Label522:
-  traced=false;
-          //original();
-     ; //this.hook522();
+     Label522:   ; //this.hook522();
       //this.hook548();
       Label548:
   dirtyMapMemSize=0;
@@ -967,17 +728,10 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
       _this.flushDirtyNodes(dirtyMap, flushAll, allowDeltas, flushExtraLevel, checkpointStart);
       _this.flushUtilizationInfo();
       endEntry = new CheckpointEnd(invokingSource, checkpointStart, _this.envImpl.getRootLsn(), firstActiveLsn, Node.getLastId(), _this.envImpl.getDbMapTree().getLastDbId(), _this.envImpl.getTxnManager().getLastTxnId(), _this.checkpointId);
-      Label523:
-  _this.trace(_this.envImpl,invokingSource,true);
-          traced=true;
-  //        original();
-     ; //this.hook523();
+      Label523:   ; //this.hook523();
        _this.lastCheckpointEnd = _this.logManager.logForceFlush(endEntry, true);
       _this.lastFirstActiveLsn = firstActiveLsn;
-      Label536:
-  _this.lastCheckpointStart=checkpointStart;
-          //original();
-     ; //this.hook536();
+      Label536:   ; //this.hook536();
        _this.highestFlushLevel = IN.MIN_LEVEL;
       success = true;
       if (cleanerFiles != null) {
@@ -986,9 +740,7 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   
      }
      catch (      DatabaseException e) {
-       Label525:
-  Tracer.trace(_this.envImpl,"Checkpointer","doCheckpoint","checkpointId=" + _this.checkpointId,e);
-     ;
+       Label525:   ;
             throw e;
           }
      finally {
@@ -996,12 +748,7 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
       Label549:
   mb.updateMiscMemoryUsage(0 - dirtyMapMemSize);
           //original();
-     ; Label524:
-  if (!traced) {
-            _this.trace(_this.envImpl,invokingSource,success);
-          }
-          //original();
-     ; //this.hook524();
+     ; Label524:   ; //this.hook524();
      }
     }
   
@@ -1081,8 +828,8 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   
   @MethodObject
   // line 215 "../../../../Checkpointer_static.ump"
-  // line 4 "../../../../Latches_Checkpointer_inner.ump"
   // line 4 "../../../../MemoryBudget_Checkpointer_inner.ump"
+  // line 4 "../../../../Latches_Checkpointer_inner.ump"
   public static class Checkpointer_selectDirtyINs
   {
   
@@ -1232,30 +979,6 @@ sb.append(" nFullINFlushThisRun=").append(nFullINFlushThisRun);
   {
     checkpointId = lastCheckpointId;
   }
-// line 5 "../../../../CPTime_Checkpointer.ump"
-  private long timeInterval ;
-// line 5 "../../../../CPBytes_Checkpointer.ump"
-  private long logSizeBytesInterval ;
-
-// line 12 "../../../../CheckpointerDaemon_Checkpointer.ump"
-  synchronized public void clearEnv () 
-  {
-    envImpl = null;
-  }
-// line 7 "../../../../Statistics_Checkpointer.ump"
-  private int nCheckpoints ;
-// line 9 "../../../../Statistics_Checkpointer.ump"
-  private long lastCheckpointStart ;
-// line 11 "../../../../Statistics_Checkpointer.ump"
-  private int nFullINFlush ;
-// line 13 "../../../../Statistics_Checkpointer.ump"
-  private int nFullBINFlush ;
-// line 15 "../../../../Statistics_Checkpointer.ump"
-  private int nDeltaINFlush ;
-// line 17 "../../../../Statistics_Checkpointer.ump"
-  private int nFullINFlushThisRun ;
-// line 19 "../../../../Statistics_Checkpointer.ump"
-  private int nDeltaINFlushThisRun ;
 
   
 }

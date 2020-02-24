@@ -12,9 +12,7 @@ import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogBuffer.ump"
 // line 3 "../../../../Latches_LogBuffer.ump"
-// line 3 "../../../../DiskFullErro_LogBuffer.ump"
 // line 3 "../../../../IO_LogBuffer.ump"
-// line 3 "../../../../NIO_LogBuffer.ump"
 public class LogBuffer implements LogSource
 {
 
@@ -38,10 +36,7 @@ public class LogBuffer implements LogSource
 
   // line 19 "../../../../LogBuffer.ump"
   public  LogBuffer(int capacity, EnvironmentImpl env) throws DatabaseException{
-    Label481:
-buffer = ByteBuffer.allocateDirect(capacity);
-			//original(capacity);
- //this.hook481(capacity);
+    Label481: //this.hook481(capacity);
         Label482:
 buffer = ByteBuffer.allocate(capacity);
 			//original(capacity);
@@ -72,10 +67,6 @@ readLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
         lastLsn = DbLsn.NULL_LSN;
     // line 37 "../../../../Latches_LogBuffer.ump"
     readLatch.release();
-    // END OF UMPLE AFTER INJECTION
-    // line 20 "../../../../DiskFullErro_LogBuffer.ump"
-    //original();
-    	rewriteAllowed = false;
     // END OF UMPLE AFTER INJECTION
   }
 
@@ -223,16 +214,6 @@ readLatch.release();
    public void latchForWrite() throws DatabaseException{
     readLatch.acquire();
   }
-
-  // line 8 "../../../../DiskFullErro_LogBuffer.ump"
-  public boolean getRewriteAllowed(){
-    return rewriteAllowed;
-  }
-
-  // line 12 "../../../../DiskFullErro_LogBuffer.ump"
-  public void setRewriteAllowed(){
-    rewriteAllowed = true;
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -248,8 +229,6 @@ readLatch.release();
   private long lastLsn ;
 // line 7 "../../../../Latches_LogBuffer.ump"
   private Latch readLatch ;
-// line 5 "../../../../DiskFullErro_LogBuffer.ump"
-  private boolean rewriteAllowed ;
 
   
 }

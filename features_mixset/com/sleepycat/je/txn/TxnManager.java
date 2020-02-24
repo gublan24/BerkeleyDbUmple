@@ -19,14 +19,10 @@ import java.util.HashMap;
 import java.util.Collections;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.Latch;
-import com.sleepycat.je.TransactionStats;
-import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../TxnManager.ump"
-// line 3 "../../../../Latches_TxnManager.ump"
 // line 3 "../../../../MemoryBudget_TxnManager.ump"
-// line 3 "../../../../Statistics_TxnManager.ump"
-// line 3 "../../../../Derivative_Latches_Statistics_TxnManager.ump"
+// line 3 "../../../../Latches_TxnManager.ump"
 public class TxnManager
 {
 
@@ -68,14 +64,7 @@ allTxnLatch = LatchSupport.makeLatch(DEBUG_NAME, env);
 Label821:           ;  //this.hook821(env);
         allXATxns = Collections.synchronizedMap(new HashMap());
         thread2Txn = Collections.synchronizedMap(new HashMap());
-        Label824:
-numCommits = 0;
-        numAborts = 0;
-        numXAPrepares = 0;
-        numXACommits = 0;
-        numXAAborts = 0;
-        //original();
-            ;  //this.hook824();
+        Label824:            ;  //this.hook824();
         lastUsedTxnId = 0;
   }
 
@@ -162,14 +151,7 @@ numCommits = 0;
 env.getMemoryBudget().updateMiscMemoryUsage(txn.getAccumulatedDelta() - txn.getInMemorySize());
 //      original(txn);
   ;
-            Label825:
-if (isCommit) {
-            numCommits++;
-        } else {
-            numAborts++;
-        }
-        //original(isCommit);
-  ; //           ;  //this.hook825(isCommit);
+            Label825:  ; //           ;  //this.hook825(isCommit);
         if (txn.isSerializableIsolation()) {
             nActiveSerializable--;
         }
@@ -195,12 +177,7 @@ env.getMemoryBudget().updateMiscMemoryUsage(MemoryBudget.HASHMAP_ENTRY_OVERHEAD)
       //original();
   ;
         }
-        Label826:
-if (isPrepare) {
-            numXAPrepares++;
-        }
-        //original(isPrepare);
-  ; //           ;  //this.hook826(isPrepare);
+        Label826:  ; //           ;  //this.hook826(isPrepare);
   }
 
 
@@ -218,14 +195,7 @@ if (isPrepare) {
 env.getMemoryBudget().updateMiscMemoryUsage(0 - MemoryBudget.HASHMAP_ENTRY_OVERHEAD);
       //original();
   ;
-            Label827:
-if (isCommit) {
-            numXACommits++;
-        } else {
-            numXAAborts++;
-        }
-         //        original(isCommit);
-  ; //           ;  //this.hook827(isCommit);
+            Label827:  ; //           ;  //this.hook827(isCommit);
   }
 
 
@@ -321,58 +291,6 @@ allTxnLatch.release();
 			}
 //end of hook823
   }
-
-
-  /**
-   * 
-   * Collect transaction related stats.
-   */
-  // line 22 "../../../../Statistics_TxnManager.ump"
-   public TransactionStats txnStat(StatsConfig config) throws DatabaseException{
-    TransactionStats stats = new TransactionStats();
-        Label820://this.hook820(config, stats);
-	try {
-
-        stats.setNCommits(numCommits);
-        stats.setNAborts(numAborts);
-        stats.setNXAPrepares(numXAPrepares);
-        stats.setNXACommits(numXACommits);
-        stats.setNXAAborts(numXAAborts);
-        stats.setNActive(allTxns.size());
-        TransactionStats.Active[] activeSet = new TransactionStats.Active[stats.getNActive()];
-        stats.setActiveTxns(activeSet);
-        Iterator iter = allTxns.iterator();
-        int i = 0;
-        while (iter.hasNext()) {
-            Locker txn = (Locker) iter.next();
-            activeSet[i] = new TransactionStats.Active(txn.toString(), txn.getId(), 0);
-            i++;
-        }
-        if (config.getClear()) {
-            numCommits = 0;
-            numAborts = 0;
-            numXACommits = 0;
-            numXAAborts = 0;
-        }
-      //End hook820
-	} 
-finally {
-Label820_1:
-allTxnLatch.release();
- ; //
-}
-        return stats;
-  }
-
-
-  /**
-   * 
-   * Collect lock related stats.
-   */
-  // line 59 "../../../../Statistics_TxnManager.ump"
-   public LockStats lockStat(StatsConfig config) throws DatabaseException{
-    return lockManager.lockStat(config);
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -404,16 +322,6 @@ allTxnLatch.release();
   }
 // line 7 "../../../../Latches_TxnManager.ump"
   private Latch allTxnLatch ;
-// line 8 "../../../../Statistics_TxnManager.ump"
-  private int numCommits ;
-// line 10 "../../../../Statistics_TxnManager.ump"
-  private int numAborts ;
-// line 12 "../../../../Statistics_TxnManager.ump"
-  private int numXAPrepares ;
-// line 14 "../../../../Statistics_TxnManager.ump"
-  private int numXACommits ;
-// line 16 "../../../../Statistics_TxnManager.ump"
-  private int numXAAborts ;
 
   
 }

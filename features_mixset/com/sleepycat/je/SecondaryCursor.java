@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.HashSet;
 
 // line 3 "../../../SecondaryCursor.ump"
-// line 3 "../../../LoggingFinest_SecondaryCursor.ump"
 public class SecondaryCursor extends Cursor
 {
 
@@ -98,10 +97,7 @@ public class SecondaryCursor extends Cursor
    public OperationStatus delete() throws DatabaseException{
     checkState(true);
 	checkUpdatesAllowed("delete");
-	Label65:
-trace(Level.FINEST, "SecondaryCursor.delete: ", null);
-	//original();
-           ;  //this.hook65();
+	Label65:           ;  //this.hook65();
 	DatabaseEntry key = new DatabaseEntry();
 	DatabaseEntry pKey = new DatabaseEntry();
 	OperationStatus status = getCurrentInternal(key, pKey, LockMode.RMW);
@@ -170,10 +166,7 @@ trace(Level.FINEST, "SecondaryCursor.delete: ", null);
    public OperationStatus getCurrent(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	Label66:
-trace(Level.FINEST, "SecondaryCursor.getCurrent: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook66(lockMode);
+	Label66:           ;  //this.hook66(lockMode);
 	return getCurrentInternal(key, pKey, data, lockMode);
   }
 
@@ -196,10 +189,7 @@ trace(Level.FINEST, "SecondaryCursor.getCurrent: ", lockMode);
    public OperationStatus getFirst(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label67:
-trace(Level.FINEST, "SecondaryCursor.getFirst: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook67(lockMode);
+	Label67:           ;  //this.hook67(lockMode);
 	return position(key, pKey, data, lockMode, true);
   }
 
@@ -222,10 +212,7 @@ trace(Level.FINEST, "SecondaryCursor.getFirst: ", lockMode);
    public OperationStatus getLast(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label68:
-trace(Level.FINEST, "SecondaryCursor.getLast: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook68(lockMode);
+	Label68:           ;  //this.hook68(lockMode);
 	return position(key, pKey, data, lockMode, false);
   }
 
@@ -248,10 +235,7 @@ trace(Level.FINEST, "SecondaryCursor.getLast: ", lockMode);
    public OperationStatus getNext(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label69:
-trace(Level.FINEST, "SecondaryCursor.getNext: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook69(lockMode);
+	Label69:           ;  //this.hook69(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, true);
 	} else {
@@ -301,10 +285,7 @@ trace(Level.FINEST, "SecondaryCursor.getNext: ", lockMode);
    public OperationStatus getNextNoDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label71:
-trace(Level.FINEST, "SecondaryCursor.getNextNoDup: ", null, null, lockMode);
-	//original(lockMode);
-           ;  //this.hook71(lockMode);
+	Label71:           ;  //this.hook71(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, true);
 	} else {
@@ -331,10 +312,7 @@ trace(Level.FINEST, "SecondaryCursor.getNextNoDup: ", null, null, lockMode);
    public OperationStatus getPrev(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label72:
-trace(Level.FINEST, "SecondaryCursor.getPrev: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook72(lockMode);
+	Label72:           ;  //this.hook72(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, false);
 	} else {
@@ -361,10 +339,7 @@ trace(Level.FINEST, "SecondaryCursor.getPrev: ", lockMode);
    public OperationStatus getPrevDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(true);
 	checkArgsNoValRequired(key, pKey, data);
-	Label73:
-trace(Level.FINEST, "SecondaryCursor.getPrevDup: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook73(lockMode);
+	Label73:           ;  //this.hook73(lockMode);
 	return retrieveNext(key, pKey, data, lockMode, GetMode.PREV_DUP);
   }
 
@@ -387,10 +362,7 @@ trace(Level.FINEST, "SecondaryCursor.getPrevDup: ", lockMode);
    public OperationStatus getPrevNoDup(DatabaseEntry key, DatabaseEntry pKey, DatabaseEntry data, LockMode lockMode) throws DatabaseException{
     checkState(false);
 	checkArgsNoValRequired(key, pKey, data);
-	Label74:
-trace(Level.FINEST, "SecondaryCursor.getPrevNoDup: ", lockMode);
-	//original(lockMode);
-           ;  //this.hook74(lockMode);
+	Label74:           ;  //this.hook74(lockMode);
 	if (cursorImpl.isNotInitialized()) {
 	    return position(key, pKey, data, lockMode, false);
 	} else {
@@ -419,10 +391,7 @@ trace(Level.FINEST, "SecondaryCursor.getPrevNoDup: ", lockMode);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label75:
-trace(Level.FINEST, "SecondaryCursor.getSearchKey: ", key, null, lockMode);
-	//original(key, lockMode);
-           ;  //this.hook75(key, lockMode);
+	Label75:           ;  //this.hook75(key, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.SET);
   }
 
@@ -447,10 +416,7 @@ trace(Level.FINEST, "SecondaryCursor.getSearchKey: ", key, null, lockMode);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", false);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label76:
-trace(Level.FINEST, "SecondaryCursor.getSearchKeyRange: ", key, data, lockMode);
-	//original(key, data, lockMode);
-           ;  //this.hook76(key, data, lockMode);
+	Label76:           ;  //this.hook76(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.SET_RANGE);
   }
 
@@ -475,10 +441,7 @@ trace(Level.FINEST, "SecondaryCursor.getSearchKeyRange: ", key, data, lockMode);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label77:
-trace(Level.FINEST, "SecondaryCursor.getSearchBoth: ", key, data, lockMode);
-	//original(key, data, lockMode);
-           ;  //this.hook77(key, data, lockMode);
+	Label77:           ;  //this.hook77(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.BOTH);
   }
 
@@ -503,10 +466,7 @@ trace(Level.FINEST, "SecondaryCursor.getSearchBoth: ", key, data, lockMode);
 	DatabaseUtil.checkForNullDbt(key, "key", true);
 	DatabaseUtil.checkForNullDbt(pKey, "pKey", true);
 	DatabaseUtil.checkForNullDbt(data, "data", false);
-	Label78:
-trace(Level.FINEST, "SecondaryCursor.getSearchBothRange: ", key, data, lockMode);
-	//original(key, data, lockMode);
-           ;  //this.hook78(key, data, lockMode);
+	Label78:           ;  //this.hook78(key, data, lockMode);
 	return search(key, pKey, data, lockMode, SearchMode.BOTH_RANGE);
   }
 

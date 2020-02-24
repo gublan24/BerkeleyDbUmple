@@ -92,7 +92,9 @@ public class AccessExample
 
             // create the app and run it
             AccessExample app = new AccessExample(env, databaseName);
-            app.run();
+           
+            
+              app.run();
         } catch (DatabaseException e) {
             e.printStackTrace();
             System.exit(1);

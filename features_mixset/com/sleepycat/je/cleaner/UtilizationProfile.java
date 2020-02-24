@@ -45,16 +45,13 @@ import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../UtilizationProfile.ump"
 // line 3 "../../../../UtilizationProfile_static.ump"
-// line 3 "../../../../Latches_UtilizationProfile.ump"
-// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
 // line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
 // line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+// line 3 "../../../../DeleteOp_UtilizationProfile.ump"
 // line 3 "../../../../Evictor_UtilizationProfile.ump"
 // line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
-// line 3 "../../../../DeleteOp_UtilizationProfile.ump"
-// line 3 "../../../../Derivative_LoggingSevere_LoggingBase_UtilizationProfile.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
+// line 3 "../../../../Latches_UtilizationProfile.ump"
+// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -494,10 +491,7 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	    OperationStatus status = OperationStatus.SUCCESS;
 	    while (status == OperationStatus.SUCCESS) {
-		Label173:
-env.getEvictor().doCriticalEviction();
-	//original();
-           ;  //this.hook173();
+		Label173:           ;  //this.hook173();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -574,10 +568,7 @@ cursor.releaseBINs();
 		status = OperationStatus.NOTFOUND;
 	    }
 	    while (status == OperationStatus.SUCCESS) {
-		Label174:
-env.getEvictor().doCriticalEviction();
-	//original();
-           ;  //this.hook174();
+		Label174:           ;  //this.hook174();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -722,11 +713,7 @@ if (cursor != null) {
 //	original(cursor);
    ;
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    Label177:
-//synchronized void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence)
-	    env.getLogger().log(Level.SEVERE, "Cleaner duplicate key sequence file=0x" + Long.toHexString(fileNum)
-		    + " sequence=0x" + Long.toHexString(sequence));
-           ;  //this.hook177(fileNum, sequence, status);
+	    Label177:           ;  //this.hook177(fileNum, sequence, status);
 	    //           ;  //this.hook188(cursor);
       Label188:
 // <<     private synchronized void insertFileSummary(...)
@@ -763,10 +750,7 @@ if (cursor != null) {
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    Label175:
-env.getEvictor().doCriticalEviction();
-	//original();
-           ;  //this.hook175();
+		    Label175:           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());
@@ -840,7 +824,7 @@ b |= db.isDeleted();
 			}
 			System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
 		return false;
-//end hook180
+   //end hook180
 
 	   // throw ReturnHack.returnBoolean;
 	} catch (ReturnBoolean r) {
@@ -853,63 +837,6 @@ b |= db.isDeleted();
    ;           ;
 	    return r.value;
 	}
-  }
-
-
-  /**
-   * protected void hook173() throws DatabaseException {
-   * }
-   * 
-   * protected void hook174() throws DatabaseException {
-   * }
-   * 
-   * protected void hook175() throws DatabaseException {
-   * }
-   * 
-   * protected void hook177(long fileNum, int sequence, OperationStatus status) throws DatabaseException {
-   * }
-   * 
-   * protected void hook178(CursorImpl cursor) throws DatabaseException {
-   * }
-   * 
-   * protected void hook179(CursorImpl cursor) throws DatabaseException {
-   * }
-   * 
-   * protected void hook180(long lsn, LNLogEntry entry, DatabaseImpl db, BIN bin) throws DatabaseException {
-   * Tree tree = db.getTree();
-   * TreeLocation location = new TreeLocation();
-   * boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(),
-   * false, true, false, false);
-   * bin = location.bin;
-   * int index = location.index;
-   * if (!parentFound) {
-   * throw new ReturnBoolean(true);
-   * 
-   * if (bin.isEntryKnownDeleted(index)) {
-   * throw new ReturnBoolean(true);
-   * 
-   * if (bin.getLsn(index) != lsn) {
-   * throw new ReturnBoolean(true);
-   * 
-   * System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
-   * throw new ReturnBoolean(false);
-   * }
-   * protected boolean hook186(DatabaseImpl db, boolean b) throws DatabaseException {
-   * return b;
-   * }
-   * protected void hook187(CursorImpl cursor) throws DatabaseException {
-   * }
-   * protected void hook188(CursorImpl cursor) throws DatabaseException {
-   * }
-   */
-  // line 731 "../../../../UtilizationProfile.ump"
-   protected void hook189(CursorImpl cursor) throws DatabaseException{
-    
-  }
-
-  // line 734 "../../../../UtilizationProfile.ump"
-   protected void hook190(CursorImpl cursor) throws DatabaseException{
-    
   }
 
 
@@ -1144,10 +1071,9 @@ b |= db.isDeleted();
   
   
   // line 89 "../../../../UtilizationProfile_static.ump"
-  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
   // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
   // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
+  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1199,10 +1125,7 @@ b |= db.isDeleted();
                 status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);
               }
               while (status == OperationStatus.SUCCESS) {
-                Label176:
-  _this.env.getEvictor().doCriticalEviction();
-         // original();
-             ;  //this.hook176();
+                Label176:           ;  //this.hook176();
                 ln=(FileSummaryLN)cursor.getCurrentLN(LockType.NONE);
                 if (ln == null) {
                   status=cursor.getNext(keyEntry,dataEntry,LockType.NONE,true,false);

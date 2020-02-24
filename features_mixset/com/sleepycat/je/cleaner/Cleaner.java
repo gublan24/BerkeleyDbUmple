@@ -35,10 +35,7 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.util.Arrays;
 import java.io.IOException;
-import com.sleepycat.je.StatsConfig;
-import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.dbi.*;
-import com.sleepycat.je.utilint.*;
 
 /**
  * Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/cleaner/Cleaner.java
@@ -46,23 +43,11 @@ import com.sleepycat.je.utilint.*;
  */
 // line 3 "../../../../Cleaner.ump"
 // line 3 "../../../../Cleaner_static.ump"
-// line 3 "../../../../Latches_Cleaner.ump"
-// line 3 "../../../../EnvironmentLocking_Cleaner.ump"
-// line 3 "../../../../CriticalEviction_Cleaner.ump"
-// line 3 "../../../../Evictor_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner_inner.ump"
-// line 3 "../../../../CleanerDaemon_Cleaner.ump"
-// line 3 "../../../../Statistics_Cleaner.ump"
-// line 3 "../../../../LookAHEADCache_Cleaner.ump"
-// line 3 "../../../../LoggingCleaner_Cleaner.ump"
-// line 3 "../../../../LoggingCleaner_Cleaner_inner.ump"
-// line 3 "../../../../LoggingSevere_Cleaner.ump"
-// line 3 "../../../../Derivative_LoggingSevere_EnvironmentLocking_Cleaner.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_Cleaner.ump"
-// line 3 "../../../../Derivative_Evictor_CriticalEviction_Cleaner_inner.ump"
-// line 3 "../../../../Derivative_LoggingCleaner_DeleteOp_Cleaner.ump"
-public class Cleaner implements EnvConfigObserver,DaemonRunner
+// line 3 "../../../../Evictor_Cleaner.ump"
+// line 3 "../../../../Latches_Cleaner.ump"
+public class Cleaner implements EnvConfigObserver
 {
 
   //------------------------
@@ -150,19 +135,13 @@ public class Cleaner implements EnvConfigObserver,DaemonRunner
   if (readBufferSize <= 0) {
    readBufferSize = cm.getInt(EnvironmentParams.LOG_ITERATOR_READ_SIZE);
   }
-  Label94:
-lookAheadCacheSize = cm.getInt(EnvironmentParams.CLEANER_LOOK_AHEAD_CACHE_SIZE);
-//	original(cm);
- //this.hook94(cm);
+  Label94: //this.hook94(cm);
    nDeadlockRetries = cm.getInt(EnvironmentParams.CLEANER_DEADLOCK_RETRY);
   expunge = cm.getBoolean(EnvironmentParams.CLEANER_REMOVE);
   clusterResident = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER);
   clusterAll = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER_ALL);
   maxBatchFiles = cm.getInt(EnvironmentParams.CLEANER_MAX_BATCH_FILES);
-  Label90:
-detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_CLEANER);
-	//original();
- //this.hook90();
+  Label90: //this.hook90();
    if (clusterResident && clusterAll) {
     throw new IllegalArgumentException("Both " + EnvironmentParams.CLEANER_CLUSTER + " and " +
      EnvironmentParams.CLEANER_CLUSTER_ALL + " may not be set to true.");
@@ -255,16 +234,6 @@ detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_C
     }
     //this.hook115(safeFiles);
     Label115:
-if (!env.getFileManager().lockEnvironment(false, true)) {
-	    //bellow label introduced in EnvironmentLocking_Cleaner.ump
-      Label87:
-//>> Label87 introduced by EnviromentLocking_Cleaner.ump
-	Tracer.trace(Level.SEVERE, env,	"Cleaner has " + safeFiles.size() + " files not deleted because of read-only processes.");
-	//original(safeFiles);
- 
-	    return; //throw new ReturnVoid();
-	    }
-
      for (Iterator i = safeFiles.iterator(); i.hasNext();) {
       Long fileNum = (Long) i.next();
       long fileNumValue = fileNum.longValue();
@@ -282,37 +251,27 @@ if (!env.getFileManager().lockEnvironment(false, true)) {
        traceFileNotDeleted(e, fileNumValue);
       }
       if (deleted) {
-       Label88:
-Tracer.trace(Level.SEVERE, env, "Cleaner deleted file 0x" + Long.toHexString(fileNumValue));
- ; //this.hook88(fileNumValue);
+       Label88: ; //this.hook88(fileNumValue);
        try {
         profile.removeFile(fileNum);
        } finally {
         fileSelector.removeDeletedFile(fileNum);
        }
       }
-      Label96:
-nCleanerDeletions++;
-			//original();
- ;
+      Label96: ;
      }
 
 
    }
   }
   finally {
-    Label_115_1:
-env.getFileManager().releaseExclusiveLock();
- ;
+    Label_115_1: ;
   }
   }
 
   // line 246 "../../../../Cleaner.ump"
    private void traceFileNotDeleted(Exception e, long fileNum){
-    Tracer.trace(env, "Cleaner", "deleteSafeToDeleteFiles",
-		"Log file 0x" + Long.toHexString(fileNum) + " could not be " + (expunge ? "deleted" : "renamed")
-			+ ".  This operation will be retried at the next checkpoint.",
-		e);
+    
   }
 
 
@@ -346,10 +305,6 @@ env.getFileManager().releaseExclusiveLock();
    public void updateReadOnlyFileCollections(){
     mustBeCleanedFiles = fileSelector.getMustBeCleanedFiles();
   lowUtilizationFiles = fileSelector.getLowUtilizationFiles();
-    // line 106 "../../../../Statistics_Cleaner.ump"
-    //original();
-    			nBacklogFiles = fileSelector.getBacklog();
-    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -378,10 +333,7 @@ env.getFileManager().releaseExclusiveLock();
   BIN bin = null;
   DIN parentDIN = null;
   try {
-   Label97:
-nPendingLNsProcessed++;
-				//original();
- ;//this.hook97();
+   Label97: ;//this.hook97();
     boolean c = db == null;
    //c = this.hook112(db, c);
    Label112:
@@ -392,10 +344,7 @@ c = c || db.isDeleted();
     Label113:
 addPendingDB(db);
 			//original(db);
- Label98:
-nLNsDead++;
-			//original();
- //this.hook98();
+ Label98: //this.hook98();
      obsolete = true;
     completed = true;
     return;
@@ -405,10 +354,7 @@ nLNsDead++;
    locker = new BasicLocker(env);
    LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
    if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-    Label99:
-nPendingLNsLocked++;
-			//original();
- //this.hook99();
+    Label99: //this.hook99();
      lockDenied = true;
     completed = true;
     return;
@@ -417,10 +363,7 @@ nPendingLNsLocked++;
    bin = location.bin;
    int index = location.index;
    if (!parentFound) {
-    Label100:
-nLNsDead++;
-			//original();
- //this.hook100();
+    Label100: //this.hook100();
      obsolete = true;
     completed = true;
     return;
@@ -458,10 +401,7 @@ if (parentDIN != null) {
     if (completed && !lockDenied) {
      fileSelector.removePendingLN(ln.getNodeId());
     }
-    Label91:
-trace(detailedTraceLevel, CLEAN_PENDING_LN, ln, DbLsn.NULL_LSN, completed, obsolete, false);
-	//original(ln, obsolete, completed);
- ; //this.hook91(ln, obsolete, completed);
+    Label91: ; //this.hook91(ln, obsolete, completed);
    }
   }
   }
@@ -502,24 +442,15 @@ trace(detailedTraceLevel, CLEAN_PENDING_LN, ln, DbLsn.NULL_LSN, completed, obsol
     boolean doMigration = false;
   if (migrateFlag) {
    doMigration = true;
-   Label101:
-nMarkedLNsProcessed++;
-			//original();
- ;//this.hook101();
+   Label101: ;//this.hook101();
   } else if (!proactiveMigration || isBinInDupDb || env.isClosing()) {} else {
    Long fileNum = new Long(DbLsn.getFileNumber(childLsn));
    if ((PROACTIVE_MIGRATION || isResident) && mustBeCleanedFiles.contains(fileNum)) {
     doMigration = true;
-    Label102:
-nToBeCleanedLNsProcessed++;
-			//original();
- ;//this.hook102();
+    Label102: ;//this.hook102();
    } else if ((clusterAll || (clusterResident && isResident)) && lowUtilizationFiles.contains(fileNum)) {
     doMigration = true;
-    Label103:
-nClusterLNsProcessed++;
-			//original();
- ;//this.hook103();
+    Label103: ;//this.hook103();
    }
   }
   return doMigration;
@@ -548,12 +479,7 @@ nClusterLNsProcessed++;
     }
    }
    if (ln == null) {
-    Label105:
-if (wasCleaned) {
-					nLNsDead++;
-			}
-			//original(wasCleaned);
- //this.hook105(wasCleaned);
+    Label105: //this.hook105(wasCleaned);
      obsolete = true;
     completed = true;
     return;
@@ -562,12 +488,7 @@ if (wasCleaned) {
     locker = new BasicLocker(env);
     LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
     if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-     Label106:
-if (wasCleaned) {
-					nLNsLocked++;
-			}
-			//original(wasCleaned);
- //this.hook106(wasCleaned);
+     Label106: //this.hook106(wasCleaned);
       lockDenied = true;
      completed = true;
      return;
@@ -575,12 +496,7 @@ if (wasCleaned) {
    }
    if (ln.isDeleted()) {
     bin.setKnownDeletedLeaveTarget(index);
-    Label107:
-if (wasCleaned) {
-					nLNsDead++;
-			}
-			//original(wasCleaned);
- //this.hook107(wasCleaned);
+    Label107: //this.hook107(wasCleaned);
      obsolete = true;
     completed = true;
     return;
@@ -590,22 +506,14 @@ if (wasCleaned) {
     if (!fileSelector.isFileCleaningInProgress(fileNum)) {
      obsolete = true;
      completed = true;
-     Label108:
-if (wasCleaned) {
-					nLNsDead++;
-			}
-			//original(wasCleaned);
- //this.hook108(wasCleaned);
+     Label108: //this.hook108(wasCleaned);
       return;
     }
    }
    byte[] key = getLNMainKey(bin, index);
    long newLNLsn = ln.log(env, db.getId(), key, lsn, locker);
    bin.updateEntry(index, newLNLsn);
-   Label104:
-nLNsMigrated++;
-			//original();
- //this.hook104();
+   Label104: //this.hook104();
     migrated = true;
    completed = true;
    return;
@@ -632,10 +540,7 @@ nLNsMigrated++;
    if (locker != null) {
     locker.operationEnd();
    }
-   Label92:
-trace(detailedTraceLevel, cleanAction, ln, lsn, completed, obsolete, migrated);
-	//original(lsn, cleanAction, obsolete, migrated, completed, ln);
- ; //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
+   Label92: ; //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
   }
   }
 
@@ -664,12 +569,7 @@ trace(detailedTraceLevel, cleanAction, ln, lsn, completed, obsolete, migrated);
     locker = new BasicLocker(env);
     LockResult lockRet = locker.nonBlockingLock(ln.getNodeId(), LockType.READ, db);
     if (lockRet.getLockGrant() == LockGrantType.DENIED) {
-     Label110:
-if (wasCleaned) {
-					nLNsLocked++;
-			}
-			//original(wasCleaned);
- //this.hook110(wasCleaned);
+     Label110: //this.hook110(wasCleaned);
       lockDenied = true;
      completed = true;
      return;
@@ -679,21 +579,13 @@ if (wasCleaned) {
    if (!fileSelector.isFileCleaningInProgress(fileNum)) {
     obsolete = true;
     completed = true;
-    Label111:
-if (wasCleaned) {
-					nLNsDead++;
-			}
-			//original(wasCleaned);
- //this.hook111(wasCleaned);
+    Label111: //this.hook111(wasCleaned);
      return;
    }
    byte[] key = parentDIN.getDupKey();
    long newLNLsn = ln.log(env, db.getId(), key, lsn, locker);
    parentDIN.updateDupCountLNRef(newLNLsn);
-   Label109:
-nLNsMigrated++;
-	//original();
- //this.hook109();
+   Label109: //this.hook109();
     migrated = true;
    completed = true;
    return;
@@ -758,6 +650,22 @@ nLNsMigrated++;
 
   /**
    * 
+   * Adds the DB ID to the pending DB set if it is being deleted but deletion is not yet complete.
+   */
+  // line 9 "../../../../DeleteOp_Cleaner.ump"
+  public void addPendingDB(DatabaseImpl db){
+    if (db != null && db.isDeleted() && !db.isDeleteFinished()) {
+					DatabaseId id = db.getId();
+					if (fileSelector.addPendingDB(id)) {
+
+							Label85: ;							//this.hook85(id);
+					}
+			}
+  }
+
+
+  /**
+   * 
    * Returns whether the given BIN entry may be stripped by the evictor. True is always returned if the BIN is not dirty. False is returned if the BIN is dirty and the entry will be migrated soon.
    */
   // line 9 "../../../../Evictor_Cleaner.ump"
@@ -779,129 +687,6 @@ nLNsMigrated++;
   }
 
 
-  /**
-   * 
-   * Adds the DB ID to the pending DB set if it is being deleted but deletion is not yet complete.
-   */
-  // line 9 "../../../../DeleteOp_Cleaner.ump"
-  public void addPendingDB(DatabaseImpl db){
-    if (db != null && db.isDeleted() && !db.isDeleteFinished()) {
-					DatabaseId id = db.getId();
-					if (fileSelector.addPendingDB(id)) {
-
-							Label85:
-Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
-	//original(id);
- ;							//this.hook85(id);
-					}
-			}
-  }
-
-  // line 7 "../../../../CleanerDaemon_Cleaner.ump"
-   public void runOrPause(boolean run){
-    if (!env.isNoLocking()) {
-					for (int i = 0; i < threads.length; i += 1) {
-				if (threads[i] != null) {
-						threads[i].runOrPause(run);
-				}
-					}
-			}
-  }
-
-  // line 17 "../../../../CleanerDaemon_Cleaner.ump"
-   public void requestShutdown(){
-    for (int i = 0; i < threads.length; i += 1) {
-					if (threads[i] != null) {
-				threads[i].requestShutdown();
-					}
-			}
-  }
-
-  // line 25 "../../../../CleanerDaemon_Cleaner.ump"
-   public void shutdown(){
-    for (int i = 0; i < threads.length; i += 1) {
-					if (threads[i] != null) {
-				threads[i].shutdown();
-				threads[i].clearEnv();
-				threads[i] = null;
-					}
-			}
-  }
-
-  // line 35 "../../../../CleanerDaemon_Cleaner.ump"
-   public int getNWakeupRequests(){
-    int count = 0;
-			for (int i = 0; i < threads.length; i += 1) {
-					if (threads[i] != null) {
-				count += threads[i].getNWakeupRequests();
-					}
-			}
-			return count;
-  }
-
-
-  /**
-   * 
-   * Load stats.
-   */
-  // line 51 "../../../../Statistics_Cleaner.ump"
-   public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException{
-    stat.setCleanerBacklog(nBacklogFiles);
-			stat.setNCleanerRuns(nCleanerRuns);
-			stat.setNCleanerDeletions(nCleanerDeletions);
-			stat.setNINsObsolete(nINsObsolete);
-			stat.setNINsCleaned(nINsCleaned);
-			stat.setNINsDead(nINsDead);
-			stat.setNINsMigrated(nINsMigrated);
-			stat.setNLNsObsolete(nLNsObsolete);
-			stat.setNLNsCleaned(nLNsCleaned);
-			stat.setNLNsDead(nLNsDead);
-			stat.setNLNsLocked(nLNsLocked);
-			stat.setNLNsMigrated(nLNsMigrated);
-			stat.setNLNsMarked(nLNsMarked);
-			stat.setNLNQueueHits(nLNQueueHits);
-			stat.setNPendingLNsProcessed(nPendingLNsProcessed);
-			stat.setNMarkedLNsProcessed(nMarkedLNsProcessed);
-			stat.setNToBeCleanedLNsProcessed(nToBeCleanedLNsProcessed);
-			stat.setNClusterLNsProcessed(nClusterLNsProcessed);
-			stat.setNPendingLNsLocked(nPendingLNsLocked);
-			stat.setNCleanerEntriesRead(nEntriesRead);
-			stat.setNRepeatIteratorReads(nRepeatIteratorReads);
-			if (config.getClear()) {
-					nCleanerRuns = 0;
-					nCleanerDeletions = 0;
-					nINsObsolete = 0;
-					nINsCleaned = 0;
-					nINsDead = 0;
-					nINsMigrated = 0;
-					nLNsObsolete = 0;
-					nLNsCleaned = 0;
-					nLNsDead = 0;
-					nLNsLocked = 0;
-					nLNsMigrated = 0;
-					nLNsMarked = 0;
-					nLNQueueHits = 0;
-					nPendingLNsProcessed = 0;
-					nMarkedLNsProcessed = 0;
-					nToBeCleanedLNsProcessed = 0;
-					nClusterLNsProcessed = 0;
-					nPendingLNsLocked = 0;
-					nEntriesRead = 0;
-					nRepeatIteratorReads = 0;
-			}
-  }
-
-
-  /**
-   * 
-   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
-   */
-  // line 12 "../../../../LoggingCleaner_Cleaner.ump"
-  public void trace(Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete, boolean dirtiedMigrated){
-    new Cleaner_trace(this, level, action, node, logLsn, completed, obsolete, dirtiedMigrated).execute();
-  }
-
-
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
@@ -915,7 +700,6 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
   @MethodObject
   // line 4 "../../../../Cleaner_static.ump"
   // line 4 "../../../../DeleteOp_Cleaner_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_CriticalEviction_Cleaner_inner.ump"
   public static class Cleaner_processPending
   {
   
@@ -1012,76 +796,6 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
     protected DatabaseImpl db2 ;
   
     
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 4 "../../../../LoggingCleaner_Cleaner_inner.ump"
-  public static class Cleaner_trace
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Cleaner_trace()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    public  Cleaner_trace(Cleaner _this, Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete, boolean dirtiedMigrated){
-      this._this=_this;
-          this.level=level;
-          this.action=action;
-          this.node=node;
-          this.logLsn=logLsn;
-          this.completed=completed;
-          this.obsolete=obsolete;
-          this.dirtiedMigrated=dirtiedMigrated;
-    }
-  
-    // line 16 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    public void execute(){
-      
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 17 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected Cleaner _this ;
-  // line 18 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected Level level ;
-  // line 19 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected String action ;
-  // line 20 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected Node node ;
-  // line 21 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected long logLsn ;
-  // line 22 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected boolean completed ;
-  // line 23 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected boolean obsolete ;
-  // line 24 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected boolean dirtiedMigrated ;
-  // line 25 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected Logger logger ;
-  // line 26 "../../../../LoggingCleaner_Cleaner_inner.ump"
-    protected StringBuffer sb ;
-  
-    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -1173,52 +887,6 @@ Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
    }
   }
   }
-// line 8 "../../../../CriticalEviction_Cleaner.ump"
-  static final boolean DO_CRITICAL_EVICTION = true ;
-// line 7 "../../../../Statistics_Cleaner.ump"
-  protected int nBacklogFiles = 0 ;
-// line 9 "../../../../Statistics_Cleaner.ump"
-  protected int nCleanerDeletions = 0 ;
-// line 11 "../../../../Statistics_Cleaner.ump"
-  protected int nINsObsolete = 0 ;
-// line 13 "../../../../Statistics_Cleaner.ump"
-  protected int nINsCleaned = 0 ;
-// line 15 "../../../../Statistics_Cleaner.ump"
-  protected int nINsDead = 0 ;
-// line 17 "../../../../Statistics_Cleaner.ump"
-  protected int nINsMigrated = 0 ;
-// line 19 "../../../../Statistics_Cleaner.ump"
-  protected int nLNsObsolete = 0 ;
-// line 21 "../../../../Statistics_Cleaner.ump"
-  protected int nLNsCleaned = 0 ;
-// line 23 "../../../../Statistics_Cleaner.ump"
-  protected int nLNsDead = 0 ;
-// line 25 "../../../../Statistics_Cleaner.ump"
-  protected int nLNsLocked = 0 ;
-// line 27 "../../../../Statistics_Cleaner.ump"
-  protected int nLNsMigrated = 0 ;
-// line 29 "../../../../Statistics_Cleaner.ump"
-  protected int nLNsMarked = 0 ;
-// line 31 "../../../../Statistics_Cleaner.ump"
-  protected int nLNQueueHits = 0 ;
-// line 33 "../../../../Statistics_Cleaner.ump"
-  protected int nPendingLNsProcessed = 0 ;
-// line 35 "../../../../Statistics_Cleaner.ump"
-  protected int nMarkedLNsProcessed = 0 ;
-// line 37 "../../../../Statistics_Cleaner.ump"
-  protected int nToBeCleanedLNsProcessed = 0 ;
-// line 39 "../../../../Statistics_Cleaner.ump"
-  protected int nClusterLNsProcessed = 0 ;
-// line 41 "../../../../Statistics_Cleaner.ump"
-  protected int nPendingLNsLocked = 0 ;
-// line 43 "../../../../Statistics_Cleaner.ump"
-  protected int nEntriesRead = 0 ;
-// line 45 "../../../../Statistics_Cleaner.ump"
-  protected long nRepeatIteratorReads = 0 ;
-// line 5 "../../../../LookAHEADCache_Cleaner.ump"
-  protected int lookAheadCacheSize ;
-// line 5 "../../../../LoggingCleaner_Cleaner.ump"
-  public Level detailedTraceLevel ;
 
   
 }

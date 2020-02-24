@@ -32,7 +32,7 @@ public class CheckpointMonitor
   // line 16 "../../../../Derivative_CheckpointerDaemon_CPBytes_CheckpointMonitor.ump"
   public  CheckpointMonitor(EnvironmentImpl envImpl) throws DatabaseException{
     bytesWritten = 0;
-	periodInBytes = envImpl.getConfigManager().getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
+	//periodInBytes = envImpl.getConfigManager().getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
 	periodInBytes /= 10;
 	this.envImpl = envImpl;
   }
@@ -56,7 +56,7 @@ public class CheckpointMonitor
    */
   // line 35 "../../../../Derivative_CheckpointerDaemon_CPBytes_CheckpointMonitor.ump"
   public void activate(){
-    envImpl.getCheckpointer().wakeup();
+   // envImpl.getCheckpointer().wakeup();
 	bytesWritten = 0;
   }
   

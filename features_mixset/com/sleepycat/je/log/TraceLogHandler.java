@@ -51,15 +51,15 @@ public class TraceLogHandler extends Handler
 
   // line 29 "../../../../LoggingDbLogHandler_TraceLogHandler.ump"
    public void publish(LogRecord l){
-    if (!env.isReadOnly() && !env.mayNotWrite()) {
-	    try {
-		Tracer newRec = new Tracer(l.getMessage());
-		env.getLogManager().log(newRec);
-	    } catch (DatabaseException e) {
-		System.err.println("Problem seen while tracing into " + "the database log:");
-		e.printStackTrace();
-	    }
-	}
+//    if (!env.isReadOnly() && !env.mayNotWrite()) {
+//	    try {
+//		Tracer newRec = new Tracer(l.getMessage());
+//		;//env.getLogManager().log(newRec);
+//	    } catch (DatabaseException e) {
+//		System.err.println("Problem seen while tracing into " + "the database log:");
+//		e.printStackTrace();
+//	    }
+//	}
   }
   
   //------------------------

@@ -35,24 +35,14 @@ import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.io.UnsupportedEncodingException;
 import java.io.PrintStream;
-import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../DbTree.ump"
 // line 4 "../../../../DbTree_static.ump"
-// line 3 "../../../../Latches_DbTree.ump"
-// line 3 "../../../../Evictor_DbTree.ump"
-// line 3 "../../../../RenameOp_DbTree.ump"
-// line 3 "../../../../Truncate_DbTree.ump"
 // line 3 "../../../../DeleteOp_DbTree.ump"
-// line 3 "../../../../Verifier_DbTree.ump"
-// line 3 "../../../../Derivative_Latches_RenameOp_DbTree.ump"
-// line 3 "../../../../Derivative_DeleteOp_TruncateOp_DbTree.ump"
-// line 3 "../../../../Derivative_Latches_TruncateOp_DbTree.ump"
+// line 3 "../../../../Evictor_DbTree.ump"
+// line 3 "../../../../Latches_DbTree.ump"
 // line 3 "../../../../Derivative_Latches_DeleteOp_DbTree.ump"
-// line 3 "../../../../Derivative_Statistics_Verifier_DbTree.ump"
-// line 3 "../../../../Derivative_Statistics_Verifier_INCompressor_DbTree.ump"
-// line 3 "../../../../Derivative_Latches_Statistics_Verifier_DbTree.ump"
 public class DbTree implements LoggableObject,LogReadable
 {
 
@@ -790,168 +780,6 @@ cursor.releaseBINs();
 
   /**
    * 
-   * Return true if the operation succeeded, false otherwise.
-   */
-  // line 9 "../../../../RenameOp_DbTree.ump"
-  public boolean dbRename(Locker locker, String databaseName, String newName) throws DatabaseException{
-    CursorImpl nameCursor = null;
-			try {
-					NameLockResult result = lockNameLN(locker, databaseName, "rename");
-					nameCursor = result.nameCursor;
-					if (nameCursor == null) {
-				return false;
-					} else {
-				nameCursor.delete();
-				nameCursor.putLN(newName.getBytes("UTF-8"), new NameLN(result.dbImpl.getId()), false);
-				result.dbImpl.setDebugDatabaseName(newName);
-				return true;
-					}
-			} catch (UnsupportedEncodingException UEE) {
-					throw new DatabaseException(UEE);
-			} finally {
-					if (nameCursor != null) {
-				//this.hook298(nameCursor);
-        Label298:
-nameCursor.releaseBIN();
-//	original(nameCursor);
-
-				nameCursor.close();
-					}
-			}
-  }
-
-
-  /**
-   * 
-   * To truncate, remove the database named by databaseName and create a new database in its place.
-   * @param returnCountif true, must return the count of records in the database,which can be an expensive option.
-   */
-  // line 10 "../../../../Truncate_DbTree.ump"
-  public long truncate(Locker locker, String databaseName, boolean returnCount) throws DatabaseException{
-    CursorImpl nameCursor = null;
-			Locker autoTxn = null;
-			try {
-					NameLockResult result = lockNameLN(locker, databaseName, "truncate");
-					nameCursor = result.nameCursor;
-					if (nameCursor == null) {
-				return 0;
-					} else {
-				DatabaseId newId = new DatabaseId(getNextDbId());
-				DatabaseImpl newDb = (DatabaseImpl) result.dbImpl.clone();
-				newDb.setId(newId);
-				newDb.setTree(new Tree(newDb));
-				CursorImpl idCursor = null;
-				boolean operationOk = false;
-				try {
-						autoTxn = createLocker(envImpl);
-						idCursor = new CursorImpl(idDatabase, autoTxn);
-						idCursor.putLN(newId.getBytes(), new MapLN(newDb), false);
-						operationOk = true;
-				} finally {
-						if (idCursor != null) {
-					idCursor.close();
-						}
-						if (autoTxn != null) {
-					autoTxn.operationEnd(operationOk);
-						}
-				}
-				result.nameLN.setId(newDb.getId());
-				long recordCount = 0;
-				if (returnCount) {
-						recordCount = result.dbImpl.countRecords();
-				}
-				DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
-				nameCursor.putCurrent(dataDbt, null, null);
-
-        Label296:
-locker.markDeleteAtTxnEnd(result.dbImpl, true);
-	locker.markDeleteAtTxnEnd(newDb, false);
-//	original(locker, result, newDb);
-				//this.hook296(locker, result, newDb);
-				return recordCount;
-					}
-			} catch (CloneNotSupportedException CNSE) {
-					throw new DatabaseException(CNSE);
-			} finally {
-					if (nameCursor != null) {
-				    Label294:						//this.hook294(nameCursor);
-						nameCursor.close();
-					}
-			}
-  }
-
-
-  /**
-   * 
-   * Truncate a database named by databaseName. Return the new DatabaseImpl object that represents the truncated database. The old one is marked as deleted.
-   * @deprecated This method used by Database.truncate()
-   */
-  // line 63 "../../../../Truncate_DbTree.ump"
-  public TruncateResult truncate(Locker locker, DatabaseImpl oldDatabase, boolean returnCount) throws DatabaseException{
-    CursorImpl nameCursor = new CursorImpl(nameDatabase, locker);
-			try {
-					String databaseName = getDbName(oldDatabase.getId());
-					DatabaseEntry keyDbt = new DatabaseEntry(databaseName.getBytes("UTF-8"));
-					boolean found = (nameCursor.searchAndPosition(keyDbt, null, SearchMode.SET, LockType.WRITE)
-						& CursorImpl.FOUND) != 0;
-					if (!found) {
-				throw new DatabaseException("Database " + databaseName + " not found in map tree");
-					}
-					NameLN nameLN = (NameLN) nameCursor.getCurrentLNAlreadyLatched(LockType.WRITE);
-					assert nameLN != null;
-					int handleCount = oldDatabase.getReferringHandleCount();
-					if (handleCount > 1) {
-				throw new DatabaseException(
-					"Can't truncate database " + databaseName + "," + handleCount + " open databases exist");
-					}
-					DatabaseImpl newDb;
-					DatabaseId newId = new DatabaseId(getNextDbId());
-					newDb = (DatabaseImpl) oldDatabase.clone();
-					newDb.setId(newId);
-					newDb.setTree(new Tree(newDb));
-					CursorImpl idCursor = null;
-					boolean operationOk = false;
-					Locker autoTxn = null;
-					try {
-				autoTxn = createLocker(envImpl);
-				idCursor = new CursorImpl(idDatabase, autoTxn);
-				idCursor.putLN(newId.getBytes(), new MapLN(newDb), false);
-				operationOk = true;
-					} finally {
-				if (idCursor != null) {
-						idCursor.close();
-				}
-				if (autoTxn != null) {
-						autoTxn.operationEnd(operationOk);
-				}
-					}
-					nameLN.setId(newDb.getId());
-					long count = 0;
-					if (returnCount) {
-				count = oldDatabase.countRecords();
-					}
-
-          Label297:	;				//this.hook297(locker, oldDatabase);
-					DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
-					nameCursor.putCurrent(dataDbt, null, null);
-					return new TruncateResult(newDb, (int) count);
-			} catch (CloneNotSupportedException CNSE) {
-					throw new DatabaseException(CNSE);
-			} catch (UnsupportedEncodingException UEE) {
-					throw new DatabaseException(UEE);
-			} finally {
-
-					Label295:
-nameCursor.releaseBIN();
-//	original(nameCursor);
-					//this.hook295(nameCursor);
-					nameCursor.close();
-			}
-  }
-
-
-  /**
-   * 
    * Remove the database by deleting the nameLN.
    */
   // line 9 "../../../../DeleteOp_DbTree.ump"
@@ -975,73 +803,6 @@ nameCursor.releaseBIN();
 							nameCursor.close();
 					}
 			}
-  }
-
-  // line 6 "../../../../Derivative_Statistics_Verifier_DbTree.ump"
-   public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
-    boolean ret = true;	
-    Label292_1:
-synchronized (envImpl.getINCompressor()) {
-  	    
- 
-	  try {
-	    boolean ok = idDatabase.verify(config, idDatabase.getEmptyStats());
-	    if (!ok) {
-		ret = false;
-	    }
-	    ok = nameDatabase.verify(config, nameDatabase.getEmptyStats());
-	    if (!ok) {
-		ret = false;
-	    }
-	} catch (DatabaseException DE) {
-	    ret = false;
-	}
-	
- //ret = original(config, out, ret);
-			}
-Label292: ;//ret = this.hook292(config, out, ret);
-	Locker locker = null;
-	CursorImpl cursor = null;
-	LockType lockType = LockType.NONE;
-	try {
-	    locker = new BasicLocker(envImpl);
-	    cursor = new CursorImpl(idDatabase, locker);
-	    if (cursor.positionFirstOrLast(true, null)) {
-		MapLN mapLN = (MapLN) cursor.getCurrentLNAlreadyLatched(lockType);
-		DatabaseEntry keyDbt = new DatabaseEntry();
-		DatabaseEntry dataDbt = new DatabaseEntry();
-		while (true) {
-		    if (mapLN != null && !mapLN.isDeleted()) {
-			DatabaseImpl dbImpl = mapLN.getDatabase();
-			boolean ok = dbImpl.verify(config, dbImpl.getEmptyStats());
-			if (!ok) {
-			    ret = false;
-			}
-		    }
-		    OperationStatus status = cursor.getNext(keyDbt, dataDbt, lockType, true, false);
-		    if (status != OperationStatus.SUCCESS) {
-			break;
-		    }
-		    mapLN = (MapLN) cursor.getCurrentLN(lockType);
-		}
-	    }
-	} catch (DatabaseException e) {
-	    e.printStackTrace(out);
-	    ret = false;
-	} finally {
-	    if (cursor != null) {
-		Label291:
-cursor.releaseBINs();
-//	original(cursor);
- //this.hook291(cursor);
-		cursor.close();
-	    }
-	    if (locker != null) {
-		locker.operationEnd();
-	    }
-	}
-	//end of hook292
-	return ret;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/

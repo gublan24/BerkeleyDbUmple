@@ -25,14 +25,9 @@ import java.io.File;
 
 // line 3 "../../../Environment.ump"
 // line 3 "../../../MemoryBudget_Environment.ump"
-// line 3 "../../../Evictor_Environment.ump"
-// line 3 "../../../RenameOp_Environment.ump"
-// line 3 "../../../Truncate_Environment.ump"
 // line 3 "../../../DeleteOp_Environment.ump"
+// line 3 "../../../Evictor_Environment.ump"
 // line 3 "../../../INCompressor_Environment.ump"
-// line 3 "../../../Statistics_Environment.ump"
-// line 3 "../../../LoggingFinest_Environment.ump"
-// line 3 "../../../Derivative_Statistics_Verifier_Environment.ump"
 public class Environment
 {
 
@@ -269,10 +264,7 @@ public class Environment
    private void openDb(Transaction txn, Database newDb, String databaseName, DatabaseConfig dbConfig, boolean needWritableLockerForInit) throws DatabaseException{
     checkEnv();
 			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			Label58:
-Tracer.trace(Level.FINEST, environmentImpl,		"Environment.open: " + " name=" + databaseName + " dbConfig=" + dbConfig);
-	//original(databaseName, dbConfig);
- //this.hook58(databaseName, dbConfig);
+			Label58: //this.hook58(databaseName, dbConfig);
 			validateDbConfigAgainstEnv(dbConfig, databaseName);
 			Locker locker = null;
 			boolean operationOk = false;
@@ -289,8 +281,11 @@ Tracer.trace(Level.FINEST, environmentImpl,		"Environment.open: " + " name=" + d
 					DatabaseImpl database = environmentImpl.getDb(locker, databaseName, newDb);
 					boolean databaseExists = false;
 					Label59:
-if (database != null && !database.isDeleted())
-						databaseExists = true;
+databaseExists =
+                (database == null) ? false : 
+                ((database.isDeleted()) ? false : true);
+			//	if (database != null && !database.isDeleted())
+				//		databaseExists = true;
 //			return original(database, databaseExists);
  //databaseExists = this.hook59(database, databaseExists);
 					if (databaseExists) {
@@ -619,16 +614,6 @@ if (database != null && !database.isDeleted())
 	environmentImpl.checkNotClosed();
   }
 
-  // line 522 "../../../Environment.ump"
-   protected void hook58(String databaseName, DatabaseConfig dbConfig) throws DatabaseException{
-    
-  }
-
-  // line 525 "../../../Environment.ump"
-   protected boolean hook59(DatabaseImpl database, boolean databaseExists) throws DatabaseException{
-    return databaseExists;
-  }
-
 
   /**
    * 
@@ -639,67 +624,6 @@ if (database != null && !database.isDeleted())
     checkHandleIsValid();
 	    checkEnv();
 	    return environmentImpl.getMemoryBudget().getCacheMemoryUsage();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Evictor_Environment.ump"
-   public void evictMemory() throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			environmentImpl.invokeEvictor();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../RenameOp_Environment.ump"
-   public void renameDatabase(Transaction txn, String databaseName, String newName) throws DatabaseException{
-    DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			DatabaseUtil.checkForNullParam(newName, "newName");
-			checkHandleIsValid();
-			checkEnv();
-			Locker locker = null;
-			boolean operationOk = false;
-			try {
-					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
-					environmentImpl.dbRename(locker, databaseName, newName);
-					operationOk = true;
-			} finally {
-					if (locker != null) {
-				locker.operationEnd(operationOk);
-					}
-			}
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Truncate_Environment.ump"
-   public long truncateDatabase(Transaction txn, String databaseName, boolean returnCount) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			DatabaseUtil.checkForNullParam(databaseName, "databaseName");
-			Locker locker = null;
-			boolean operationOk = false;
-			long count = 0;
-			try {
-					locker = LockerFactory.getWritableLocker(this, txn, environmentImpl.isTransactional(), true, null);
-					count = environmentImpl.truncate(locker, databaseName, returnCount);
-					operationOk = true;
-			} finally {
-					if (locker != null) {
-				locker.operationEnd(operationOk);
-					}
-			}
-			return count;
   }
 
 
@@ -730,65 +654,23 @@ if (database != null && !database.isDeleted())
    * 
    * Javadoc for this public method is generated via the doc templates in the doc_src directory.
    */
+  // line 9 "../../../Evictor_Environment.ump"
+   public void evictMemory() throws DatabaseException{
+    checkHandleIsValid();
+			checkEnv();
+			environmentImpl.invokeEvictor();
+  }
+
+
+  /**
+   * 
+   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
+   */
   // line 9 "../../../INCompressor_Environment.ump"
    public void compress() throws DatabaseException{
     checkHandleIsValid();
 			checkEnv();
 			environmentImpl.invokeCompressor();
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Statistics_Environment.ump"
-   public EnvironmentStats getStats(StatsConfig config) throws DatabaseException{
-    StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			if (environmentImpl != null) {
-					return environmentImpl.loadStats(useConfig);
-			} else {
-					return new EnvironmentStats();
-			}
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 21 "../../../Statistics_Environment.ump"
-   public LockStats getLockStats(StatsConfig config) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			return environmentImpl.lockStat(useConfig);
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 31 "../../../Statistics_Environment.ump"
-   public TransactionStats getTransactionStats(StatsConfig config) throws DatabaseException{
-    checkHandleIsValid();
-			checkEnv();
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			return environmentImpl.txnStat(useConfig);
-  }
-
-
-  /**
-   * 
-   * Javadoc for this public method is generated via the doc templates in the doc_src directory.
-   */
-  // line 9 "../../../Derivative_Statistics_Verifier_Environment.ump"
-   public boolean verify(VerifyConfig config, PrintStream out) throws DatabaseException{
-    checkHandleIsValid();
-	checkEnv();
-	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
-	return environmentImpl.verify(useConfig, out);
   }
   
   //------------------------

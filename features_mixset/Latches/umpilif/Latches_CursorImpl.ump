@@ -244,15 +244,11 @@ class CursorImpl {
     }
 
 
-    around Label235-Label235_1: searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode , LockType ) {
+    after Label235_1: searchAndPosition(DatabaseEntry , DatabaseEntry , SearchMode , LockType ) {
 
-     try {
-            around_proceed:  
-        }  
-catch (DatabaseException e) {
         releaseBIN();
-        throw e;
-    }
+
+    
 }
 
 

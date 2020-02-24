@@ -1184,32 +1184,5 @@ class Cursor {
         }
     }
 
-    //  protected void hook26() throws DatabaseException {
-    //  }
 
-    //   protected void hook27() throws DatabaseException {
-    //  }
-
-    //   protected void hook28() throws DatabaseException {
-    //   }
-
-    //   protected void hook29() throws DatabaseException {
-    //   }
-
-/*
-
-    protected void hook30() throws DatabaseException {}
-
-    protected void hook31() throws DatabaseException {}
-
-    protected void hook32(CursorImpl origCursor) throws DatabaseException {}
-
-    protected void hook33(CursorImpl origCursor) throws DatabaseException {}
-
-    protected void hook34(CursorImpl origCursor) throws DatabaseException {}
-
-    protected void hook35(CursorImpl origCursor) throws DatabaseException {}
-
-    protected void hook36(DatabaseImpl dbImpl) throws DatabaseException {}
-*/
 }

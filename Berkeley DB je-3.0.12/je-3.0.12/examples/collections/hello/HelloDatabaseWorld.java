@@ -64,8 +64,14 @@ public class HelloDatabaseWorld implements TransactionWorker {
             runner.run(worker);
         } finally {
             // close the database outside the transaction
+           
+          
             worker.close();
         }
+        
+        
+      
+        
     }
 
     /** Creates the database for this application */

@@ -78,21 +78,24 @@ class CursorImpl {
     static class CursorImpl_latchDBIN {
  
       strictness disable constructor;  
-        around Label246-Label246_1: execute() {
-            while (_this.dupBin != null) {
-                around_proceed:
-            }
-            throw new ReturnObject(null);
-        }
 
-        around Label247-Label246_1: execute() {
-            waitingOn = _this.dupBin;
-            waitingOn.latch();
-            if (_this.dupBin == waitingOn) {
-                around_proceed: //original();
+        after Label246: execute() {
+            
+            while (_this.dupBin != null) 
+            {
+              waitingOn = _this.dupBin;
+              waitingOn.latch();
+              if (_this.dupBin == waitingOn) 
+              {
+                return _this.dupBin;
+              }
+              waitingOn.releaseLatch();
+               
             }
-            waitingOn.releaseLatch();
-        }
+
+       }
+
+   
     }
     static class CursorImpl_fetchCurrent {
 

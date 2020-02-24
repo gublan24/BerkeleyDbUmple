@@ -176,9 +176,10 @@ class EnvironmentImpl
 		try {
 		    fileManager.close();
 		} catch (IOException IOE) {
-		}
+throw e;
+		}	    
 	    }
-	    throw e;
+
 	}
     }
 
