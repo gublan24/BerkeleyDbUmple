@@ -50,6 +50,9 @@ import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../../RecoveryManager.ump"
 // line 3 "../../../../RecoveryManager_static.ump"
+// line 3 "../../../../Checksum_RecoveryManager.ump"
+// line 3 "../../../../LoggingRecovery_RecoveryManager.ump"
+// line 3 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
 // line 3 "../../../../loggingBase_RecoveryManager.ump"
 // line 3 "../../../../loggingBase_RecoveryManager_inner.ump"
 // line 3 "../../../../Evictor_RecoveryManager.ump"
@@ -91,7 +94,10 @@ public class RecoveryManager
 			preparedTxns = new HashMap();
 			inListRebuildDbIds = new HashSet();
 			fileSummaryLsns = new HashMap();
-			Label578:           ;  //this.hook578(env);
+			Label578:
+detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_RECOVERY);
+	//original(env);
+           ;  //this.hook578(env);
   }
 
 
@@ -304,7 +310,10 @@ env.invokeEvictor();
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	Label593://          ;  //this.hook593(reader);
+	Label593:
+reader.setAlwaysValidateChecksum(true);
+			//original(reader);
+//          ;  //this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();
@@ -679,7 +688,10 @@ if (result.parent != null) {
 	}
 	//original(result);
            ;  //this.hook588(result);
-	    Label579:           ;  //this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
+	    Label579:
+traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplicates);
+	//original(nodeId, containsDuplicates, logLsn, found, deleted, result);
+           ;  //this.hook579(nodeId, containsDuplicates, logLsn, found, deleted, result);
 	}
   }
 
@@ -703,7 +715,11 @@ if (result.parent != null) {
 	    success = false;
 	    throw new DatabaseException("lsnFromLog=" + DbLsn.getNoFormatString(lsn), e);
 	} finally {
-	    Label580:           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
+	    Label580:
+trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
+		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getOriginalLsn(), DbLsn.NULL_LSN, -1);
+	//original(db, inFromLog, lsn, success, rootUpdater);
+           ;  //this.hook580(db, inFromLog, lsn, success, rootUpdater);
 	}
   }
 
@@ -750,7 +766,11 @@ if (parent != null) {
 	}
 	//original(parent);
            ;  //this.hook589(parent);
-	    Label581:           ;  //this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
+	    Label581:
+trace(detailedTraceLevel, db, TRACE_DUP_ROOT_REPLACE, success, inFromLog, lsn, parent, found, replaced,
+		inserted, origLsn, DbLsn.NULL_LSN, index);
+	//original(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
+           ;  //this.hook581(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
 	}
   }
 
@@ -786,7 +806,11 @@ if (result.parent != null) {
 	}
 	//original(result);
            ;  //this.hook590(result);
-	    Label582:           ;  //this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
+	    Label582:
+trace(detailedTraceLevel, db, TRACE_IN_REPLACE, success, inFromLog, logLsn, result.parent,
+		result.exactParentFound, replaced, inserted, origLsn, DbLsn.NULL_LSN, result.index);
+	//original(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
+           ;  //this.hook582(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
 	}
   }
 
@@ -859,7 +883,11 @@ if (location.bin != null) {
 	}
 	//original(location);
            ;  //this.hook591(location);
-	    Label583:           ;  //this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
+	    Label583:
+trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, location.bin, found, replaced,
+		inserted, location.childLsn, DbLsn.NULL_LSN, location.index);
+	//original(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
+           ;  //this.hook583(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
 	}
   }
 
@@ -880,7 +908,9 @@ if (location.bin != null) {
     boolean found = false;
 	boolean replaced = false;
 	boolean success = false;
-	Label584:   ; //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
+	Label584:
+Label555: ;//hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+   ; //hook584(traceLevel, db, location, lnFromLog, mainKey, dupKey, logLsn, abortLsn, abortKnownDeleted, info, splitsAllowed, found, replaced, success);
 	location.reset();
 		found = db.getTree().getParentBINForChildLN(location, mainKey, dupKey, lnFromLog, splitsAllowed, true, false,
 			true);
@@ -1083,6 +1113,16 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
     String badLsnString = DbLsn.getNoFormatString(badLsn);
 	Label577:           ;  //this.hook577(method, origException, badLsnString);
 	throw new DatabaseException("last LSN=" + badLsnString, origException);
+  }
+
+
+  /**
+   * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 10 "../../../../LoggingRecovery_RecoveryManager.ump"
+   private void traceINDeleteReplay(long nodeId, long logLsn, boolean found, boolean deleted, int index, boolean isDuplicate){
+    new RecoveryManager_traceINDeleteReplay(this, nodeId, logLsn, found, deleted, index, isDuplicate).execute();
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1361,6 +1401,73 @@ db.getDbEnvironment().addToCompressorQueue(location.bin, new Key(deletedKey), fa
   // line 76 "../../../../RecoveryManager_static.ump"
     protected Level useLevel ;
   // line 77 "../../../../RecoveryManager_static.ump"
+    protected StringBuffer sb ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+  public static class RecoveryManager_traceINDeleteReplay
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public RecoveryManager_traceINDeleteReplay()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    public  RecoveryManager_traceINDeleteReplay(RecoveryManager _this, long nodeId, long logLsn, boolean found, boolean deleted, int index, boolean isDuplicate){
+      this._this=_this;
+          this.nodeId=nodeId;
+          this.logLsn=logLsn;
+          this.found=found;
+          this.deleted=deleted;
+          this.index=index;
+          this.isDuplicate=isDuplicate;
+    }
+  
+    // line 15 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 16 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected RecoveryManager _this ;
+  // line 17 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected long nodeId ;
+  // line 18 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected long logLsn ;
+  // line 19 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected boolean found ;
+  // line 20 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected boolean deleted ;
+  // line 21 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected int index ;
+  // line 22 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected boolean isDuplicate ;
+  // line 23 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+    protected Logger logger ;
+  // line 24 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
     protected StringBuffer sb ;
   
     

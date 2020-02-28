@@ -414,6 +414,7 @@ class FileManager {
                 Label462:   ;
                 fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
             Label464:   ;
+            Label464_1:   ;
                 Label453:   ;
                 if (fileHandle.getFile() == null) {
                     Label454: ;//
@@ -685,6 +686,7 @@ class FileManager {
      * Close all file handles and empty the cache.
      */
     public void clear() throws IOException, DatabaseException {
+        Label451: ;
         endOfLog.close();
     }
 

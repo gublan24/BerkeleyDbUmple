@@ -102,7 +102,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
     setDatabase(db);
   EnvironmentImpl env = (databaseImpl == null) ? null : databaseImpl.getDbEnvironment();
   Label618:
-latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env);
+latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix makeLatch into ==> makeSharedLatch
 	//original(env);
    ; //this.hook618(env);
    generation = 0;

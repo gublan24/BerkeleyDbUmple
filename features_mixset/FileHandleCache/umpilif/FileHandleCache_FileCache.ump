@@ -114,12 +114,12 @@ class FileCache
 //    }
 
 
-  after Label440: clear() {
+//  after Label440: clear() {
 	 // this.hook443(fileHandle);
-    Label443:
-	  fileHandle.close();
-	  iter.remove();
-  }
+///    Label443:
+//	  fileHandle.close();
+//	  iter.remove();
+//  }
  //   protected void hook440(Iterator iter, FileHandle fileHandle) throws IOException, DatabaseException {
 //	this.hook443(fileHandle);
 //	fileHandle.close();

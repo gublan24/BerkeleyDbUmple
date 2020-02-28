@@ -2,6 +2,8 @@ namespace com.sleepycat.je.tree;
 
 class BIN
 {
+    isA IN;
+
     public static long computeOverhead(DbConfigManager configManager) throws DatabaseException {
 	return MemoryBudget.BIN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
     }

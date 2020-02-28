@@ -138,6 +138,24 @@ class Tree {
         }
     }
 
+
+// --- ADDED
+
+  public boolean rootExists() {
+        if (root == null) {
+            return false;
+        } 
+        
+        if ((root.getTarget() == null) && 
+            (root.getLsn() == DbLsn.NULL_LSN)) {
+            return false;
+        }
+
+        return true;
+    }
+
+// --- 
+
     /** 
      * @return the TreeStats for this tree.
      */
@@ -1027,7 +1045,7 @@ try {
     Label702: ; // this.hook702();
     IN rootIN = null;
     Label701: ; // this.hook701(updateGeneration, rootIN);
-    if (root != null) {
+    if (rootExists()) {  // root != null
       rootIN = (IN) root.fetchTarget(database, null);
       rootIN.latch(updateGeneration);
     }

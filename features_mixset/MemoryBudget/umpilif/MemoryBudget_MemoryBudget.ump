@@ -2,205 +2,328 @@ namespace com.sleepycat.je.dbi;
 
 class MemoryBudget
 {
-    private final static int LONG_OVERHEAD_32 = 16;
-
+       private final static int LONG_OVERHEAD_32 = 16;
     private final static int LONG_OVERHEAD_64 = 24;
 
+    // 8 - 2560
     private final static int BYTE_ARRAY_OVERHEAD_32 = 16;
-
     private final static int BYTE_ARRAY_OVERHEAD_64 = 24;
 
+    // 2
     private final static int OBJECT_OVERHEAD_32 = 8;
-
     private final static int OBJECT_OVERHEAD_64 = 16;
 
+    // (4 - BYTE_ARRAY_OVERHEAD_32) / 256
     private final static int ARRAY_ITEM_OVERHEAD_32 = 4;
-
     private final static int ARRAY_ITEM_OVERHEAD_64 = 8;
 
+    // 20
     private final static int HASHMAP_OVERHEAD_32 = 120;
-
     private final static int HASHMAP_OVERHEAD_64 = 216;
 
+    // 21 - OBJECT_OVERHEAD_32 - HASHMAP_OVERHEAD_32
     private final static int HASHMAP_ENTRY_OVERHEAD_32 = 24;
-
     private final static int HASHMAP_ENTRY_OVERHEAD_64 = 48;
 
+    // 22
     private final static int HASHSET_OVERHEAD_32 = 136;
-
     private final static int HASHSET_OVERHEAD_64 = 240;
 
+    // 23 - OBJECT_OVERHEAD_32 - HASHSET_OVERHEAD_32
     private final static int HASHSET_ENTRY_OVERHEAD_32 = 24;
-
     private final static int HASHSET_ENTRY_OVERHEAD_64 = 48;
 
+    // 2 * HASHMAP_OVERHEAD_32
     private final static int TWOHASHMAPS_OVERHEAD_32 = 240;
-
     private final static int TWOHASHMAPS_OVERHEAD_64 = 432;
 
+    // 34
     private final static int TREEMAP_OVERHEAD_32 = 40;
-
     private final static int TREEMAP_OVERHEAD_64 = 64;
 
+    // 35 - OBJECT_OVERHEAD_32 - TREEMAP_OVERHEAD_32
     private final static int TREEMAP_ENTRY_OVERHEAD_32 = 32;
-
     private final static int TREEMAP_ENTRY_OVERHEAD_64 = 53;
 
-    private final static int LN_OVERHEAD_32 = 24;
+    // 36
+    private final static int MAPLN_OVERHEAD_32 = 464;
+    private final static int MAPLN_OVERHEAD_64 = 776;
 
+    // 9
+    private final static int LN_OVERHEAD_32 = 24;
     private final static int LN_OVERHEAD_64 = 32;
 
+    // 19
     private final static int DUPCOUNTLN_OVERHEAD_32 = 24;
-
     private final static int DUPCOUNTLN_OVERHEAD_64 = 40;
 
+    // 12
     private final static int BIN_FIXED_OVERHEAD_32_14 = 344;
-
     private final static int BIN_FIXED_OVERHEAD_32_15 = 360;
-
     private final static int BIN_FIXED_OVERHEAD_64_15 = 528;
 
+    // 18
     private final static int DIN_FIXED_OVERHEAD_32_14 = 352;
-
     private final static int DIN_FIXED_OVERHEAD_32_15 = 360;
-
     private final static int DIN_FIXED_OVERHEAD_64_15 = 536;
 
+    // 17
     private final static int DBIN_FIXED_OVERHEAD_32_14 = 352;
-
     private final static int DBIN_FIXED_OVERHEAD_32_15 = 368;
-
     private final static int DBIN_FIXED_OVERHEAD_64_15 = 544;
 
+    // 13
     private final static int IN_FIXED_OVERHEAD_32_14 = 312;
-
     private final static int IN_FIXED_OVERHEAD_32_15 = 320;
-
     private final static int IN_FIXED_OVERHEAD_64_15 = 472;
 
+    // 6
     private final static int KEY_OVERHEAD_32 = 16;
-
     private final static int KEY_OVERHEAD_64 = 24;
 
+    // 24
     private final static int LOCK_OVERHEAD_32 = 32;
-
     private final static int LOCK_OVERHEAD_64 = 56;
 
+    // 25
     private final static int LOCKINFO_OVERHEAD_32 = 16;
-
     private final static int LOCKINFO_OVERHEAD_64 = 32;
 
+    /* 
+     * Txn memory is the size for the Txn + a hashmap entry
+     * overhead for being part of the transaction table. 
+     */
+    // 15
     private final static int TXN_OVERHEAD_32_14 = 167;
-
     private final static int TXN_OVERHEAD_32_15 = 175;
-
     private final static int TXN_OVERHEAD_64_15 = 293;
 
-    private final static int CHECKPOINT_REFERENCE_SIZE_32_14 = 32 + HASHSET_ENTRY_OVERHEAD_32;
+    // 26
+    private final static int CHECKPOINT_REFERENCE_SIZE_32_14 = 32 +
+        HASHSET_ENTRY_OVERHEAD_32;
+    private final static int CHECKPOINT_REFERENCE_SIZE_32_15 = 40 +
+        HASHSET_ENTRY_OVERHEAD_32;
+    private final static int CHECKPOINT_REFERENCE_SIZE_64_15 = 56 +
+        HASHSET_ENTRY_OVERHEAD_64;
 
-    private final static int CHECKPOINT_REFERENCE_SIZE_32_15 = 40 + HASHSET_ENTRY_OVERHEAD_32;
-
-    private final static int CHECKPOINT_REFERENCE_SIZE_64_15 = 56 + HASHSET_ENTRY_OVERHEAD_64;
-
+    /* The per-log-file bytes used in UtilizationProfile. */
+    // 29 / 500
     private final static int UTILIZATION_PROFILE_ENTRY_32 = 88;
-
     private final static int UTILIZATION_PROFILE_ENTRY_64 = 136;
 
+    /* Tracked File Summary overheads. */
+    // 31
     private final static int TFS_LIST_INITIAL_OVERHEAD_32 = 464;
-
     private final static int TFS_LIST_INITIAL_OVERHEAD_64 = 504;
 
+    // 30
     private final static int TFS_LIST_SEGMENT_OVERHEAD_32 = 440;
-
     private final static int TFS_LIST_SEGMENT_OVERHEAD_64 = 464;
 
+    // 33
     private final static int LN_INFO_OVERHEAD_32 = 24;
-
     private final static int LN_INFO_OVERHEAD_64 = 48;
 
+    /* Approximate element size in an ArrayList of Long. */
+    // (28 - 27) / 100
     private final static int LONG_LIST_PER_ITEM_OVERHEAD_32 = 20;
-
     private final static int LONG_LIST_PER_ITEM_OVERHEAD_64 = 32;
 
-    public static int LONG_OVERHEAD;
-
-    public static int BYTE_ARRAY_OVERHEAD;
-
-    public static int OBJECT_OVERHEAD;
-
-    public static int ARRAY_ITEM_OVERHEAD;
-
-    public static int HASHMAP_OVERHEAD;
-
-    public static int HASHMAP_ENTRY_OVERHEAD;
-
-    public static int HASHSET_OVERHEAD;
-
-    public static int HASHSET_ENTRY_OVERHEAD;
-
-    public static int TWOHASHMAPS_OVERHEAD;
-
-    public static int TREEMAP_OVERHEAD;
-
-    public static int TREEMAP_ENTRY_OVERHEAD;
-
-    public static int LN_OVERHEAD;
-
-    public static int DUPCOUNTLN_OVERHEAD;
-
-    public static int BIN_FIXED_OVERHEAD;
-
-    public static int DIN_FIXED_OVERHEAD;
-
-    public static int DBIN_FIXED_OVERHEAD;
-
-    public static int IN_FIXED_OVERHEAD;
-
-    public static int KEY_OVERHEAD;
-
-    public static int LOCK_OVERHEAD;
-
-    public static int LOCKINFO_OVERHEAD;
-
-    public static int TXN_OVERHEAD;
-
-    public static int CHECKPOINT_REFERENCE_SIZE;
-
-    public static int UTILIZATION_PROFILE_ENTRY;
-
-    public static int TFS_LIST_INITIAL_OVERHEAD;
-
-    public static int TFS_LIST_SEGMENT_OVERHEAD;
-
-    public static int LN_INFO_OVERHEAD;
-
-    public static int LONG_LIST_PER_ITEM_OVERHEAD;
+    public final static int LONG_OVERHEAD;
+    public final static int BYTE_ARRAY_OVERHEAD;
+    public final static int OBJECT_OVERHEAD;
+    public final static int ARRAY_ITEM_OVERHEAD;
+    public final static int HASHMAP_OVERHEAD;
+    public final static int HASHMAP_ENTRY_OVERHEAD;
+    public final static int HASHSET_OVERHEAD;
+    public final static int HASHSET_ENTRY_OVERHEAD;
+    public final static int TWOHASHMAPS_OVERHEAD;
+    public final static int TREEMAP_OVERHEAD;
+    public final static int TREEMAP_ENTRY_OVERHEAD;
+    public final static int MAPLN_OVERHEAD;
+    public final static int LN_OVERHEAD;
+    public final static int DUPCOUNTLN_OVERHEAD;
+    public final static int BIN_FIXED_OVERHEAD;
+    public final static int DIN_FIXED_OVERHEAD;
+    public final static int DBIN_FIXED_OVERHEAD;
+    public final static int IN_FIXED_OVERHEAD;
+    public final static int KEY_OVERHEAD;
+    public final static int LOCK_OVERHEAD;
+    public final static int LOCKINFO_OVERHEAD;
+    public final static int TXN_OVERHEAD;
+    public final static int CHECKPOINT_REFERENCE_SIZE;
+    public final static int UTILIZATION_PROFILE_ENTRY;
+    public final static int TFS_LIST_INITIAL_OVERHEAD;
+    public final static int TFS_LIST_SEGMENT_OVERHEAD;
+    public final static int LN_INFO_OVERHEAD;
+    public final static int LONG_LIST_PER_ITEM_OVERHEAD;
 
     private final static String JVM_ARCH_PROPERTY = "sun.arch.data.model";
-
     private final static String FORCE_JVM_ARCH = "je.forceJVMArch";
 
+    static {
+	boolean is64 = false;
+	boolean isJVM14 = (LatchSupport.getJava5LatchClass() == null);
+	String overrideArch = System.getProperty(FORCE_JVM_ARCH);
+	try {
+	    if (overrideArch == null) {
+		String arch = System.getProperty(JVM_ARCH_PROPERTY);
+		if (arch != null) {
+		    is64 = Integer.parseInt(arch) == 64;
+		}
+	    } else {
+		is64 = Integer.parseInt(overrideArch) == 64;
+	    }
+	} catch (NumberFormatException NFE) {
+	    NFE.printStackTrace(System.err);
+	}
+
+	if (is64) {
+	    if (isJVM14) {
+		RuntimeException RE = new RuntimeException
+		    ("1.4 based 64 bit JVM not supported");
+		RE.printStackTrace(System.err);
+		throw RE;
+	    }
+	    LONG_OVERHEAD = LONG_OVERHEAD_64;
+	    BYTE_ARRAY_OVERHEAD = BYTE_ARRAY_OVERHEAD_64;
+	    OBJECT_OVERHEAD = OBJECT_OVERHEAD_64;
+	    ARRAY_ITEM_OVERHEAD = ARRAY_ITEM_OVERHEAD_64;
+	    HASHMAP_OVERHEAD = HASHMAP_OVERHEAD_64;
+	    HASHMAP_ENTRY_OVERHEAD = HASHMAP_ENTRY_OVERHEAD_64;
+	    HASHSET_OVERHEAD = HASHSET_OVERHEAD_64;
+	    HASHSET_ENTRY_OVERHEAD = HASHSET_ENTRY_OVERHEAD_64;
+	    TWOHASHMAPS_OVERHEAD = TWOHASHMAPS_OVERHEAD_64;
+	    TREEMAP_OVERHEAD = TREEMAP_OVERHEAD_64;
+	    TREEMAP_ENTRY_OVERHEAD = TREEMAP_ENTRY_OVERHEAD_64;
+	    MAPLN_OVERHEAD = MAPLN_OVERHEAD_64;
+	    LN_OVERHEAD = LN_OVERHEAD_64;
+	    DUPCOUNTLN_OVERHEAD = DUPCOUNTLN_OVERHEAD_64;
+	    BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_64_15;
+	    DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_64_15;
+	    DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_64_15;
+	    IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_64_15;
+	    TXN_OVERHEAD = TXN_OVERHEAD_64_15;
+	    CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_64_15;
+	    KEY_OVERHEAD = KEY_OVERHEAD_64;
+	    LOCK_OVERHEAD = LOCK_OVERHEAD_64;
+	    LOCKINFO_OVERHEAD = LOCKINFO_OVERHEAD_64;
+	    UTILIZATION_PROFILE_ENTRY = UTILIZATION_PROFILE_ENTRY_64;
+	    TFS_LIST_INITIAL_OVERHEAD = TFS_LIST_INITIAL_OVERHEAD_64;
+	    TFS_LIST_SEGMENT_OVERHEAD = TFS_LIST_SEGMENT_OVERHEAD_64;
+	    LN_INFO_OVERHEAD = LN_INFO_OVERHEAD_64;
+	    LONG_LIST_PER_ITEM_OVERHEAD = LONG_LIST_PER_ITEM_OVERHEAD_64;
+	} else {
+	    LONG_OVERHEAD = LONG_OVERHEAD_32;
+	    BYTE_ARRAY_OVERHEAD = BYTE_ARRAY_OVERHEAD_32;
+	    OBJECT_OVERHEAD = OBJECT_OVERHEAD_32;
+	    ARRAY_ITEM_OVERHEAD = ARRAY_ITEM_OVERHEAD_32;
+	    HASHMAP_OVERHEAD = HASHMAP_OVERHEAD_32;
+	    HASHMAP_ENTRY_OVERHEAD = HASHMAP_ENTRY_OVERHEAD_32;
+	    HASHSET_OVERHEAD = HASHSET_OVERHEAD_32;
+	    HASHSET_ENTRY_OVERHEAD = HASHSET_ENTRY_OVERHEAD_32;
+	    TWOHASHMAPS_OVERHEAD = TWOHASHMAPS_OVERHEAD_32;
+	    TREEMAP_OVERHEAD = TREEMAP_OVERHEAD_32;
+	    TREEMAP_ENTRY_OVERHEAD = TREEMAP_ENTRY_OVERHEAD_32;
+	    MAPLN_OVERHEAD = MAPLN_OVERHEAD_32;
+	    LN_OVERHEAD = LN_OVERHEAD_32;
+	    DUPCOUNTLN_OVERHEAD = DUPCOUNTLN_OVERHEAD_32;
+	    if (isJVM14) {
+		BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_32_14;
+		DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_32_14;
+		DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_32_14;
+		IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_32_14;
+		TXN_OVERHEAD = TXN_OVERHEAD_32_14;
+		CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_32_14;
+	    } else {
+		BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_32_15;
+		DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_32_15;
+		DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_32_15;
+		IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_32_15;
+		TXN_OVERHEAD = TXN_OVERHEAD_32_15;
+		CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_32_15;
+	    }
+	    KEY_OVERHEAD = KEY_OVERHEAD_32;
+	    LOCK_OVERHEAD = LOCK_OVERHEAD_32;
+	    LOCKINFO_OVERHEAD = LOCKINFO_OVERHEAD_32;
+	    UTILIZATION_PROFILE_ENTRY = UTILIZATION_PROFILE_ENTRY_32;
+	    TFS_LIST_INITIAL_OVERHEAD = TFS_LIST_INITIAL_OVERHEAD_32;
+	    TFS_LIST_SEGMENT_OVERHEAD = TFS_LIST_SEGMENT_OVERHEAD_32;
+	    LN_INFO_OVERHEAD = LN_INFO_OVERHEAD_32;
+	    LONG_LIST_PER_ITEM_OVERHEAD = LONG_LIST_PER_ITEM_OVERHEAD_32;
+	}
+    }
+
+    /* public for unit tests. */
+    public final static long MIN_MAX_MEMORY_SIZE = 96 * 1024;
+    public final static String MIN_MAX_MEMORY_SIZE_STRING =
+	Long.toString(MIN_MAX_MEMORY_SIZE);
+
+    private final static long N_64MB = (1 << 26);
+
+    /*
+     * Note that this class contains long fields that are accessed by multiple
+     * threads, and access to these fields is intentionally not synchronized.
+     * Although inaccuracies may result, correcting them is not worth the cost
+     * of synchronizing every time we adjust the treeMemoryUsage or
+     * miscMemoryUsage.
+     */
+
+    /* 
+     * Amount of memory cached for tree objects.
+     */
     private long treeMemoryUsage;
 
+    /*
+     * Amount of memory cached for Txn and other objects.
+     */
     private long miscMemoryUsage;
 
+    /*
+     * Used to protect treeMemoryUsage and miscMemoryUsage updates.
+     */
     private Object memoryUsageSynchronizer = new Object();
 
+    /*
+     * Number of lock tables (cache of EnvironmentParams.N_LOCK_TABLES).
+     */
     private int nLockTables;
 
+    /*
+     * Amount of memory cached for locks. Protected by the
+     * LockManager.lockTableLatches[lockTableIndex].  Individual elements of
+     * array may be negative, but the sum will be >= 0.
+     */
     private long[] lockMemoryUsage;
 
+    /* 
+     * Memory available to JE, based on je.maxMemory and the memory available
+     * to this process.
+     */
+    private long maxMemory;
+    private long criticalThreshold; // experimental mark for sync eviction.
+                           
+    /* Memory available to log buffers. */
+    private long logBufferBudget;
+                           
+    /* Maximum allowed use of the misc budget by the UtilizationTracker. */
     private long trackerBudget;
 
+    /*
+     * Memory to hold internal nodes and misc memory (locks), controlled by the
+     * evictor.  Does not include the log buffers.
+     */
     private long cacheBudget;
-
+    
+    /* 
+     * Overheads that are a function of node capacity.
+     */
     private long inOverhead;
-
     private long binOverhead;
-
     private long dinOverhead;
-
     private long dbinOverhead;
+
+    private EnvironmentImpl envImpl;
 
     /** 
      * Initialize the starting environment memory state

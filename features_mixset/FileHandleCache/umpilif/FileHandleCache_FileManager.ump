@@ -74,17 +74,21 @@ class FileManager
 //	original();
  //   }
 
-  before clear()
+  after Label451:clear()
   {
    // Label451: ;
     fileCache.clear();
   }
 
+      
 
-  after Label462: getFileHandle(long) 
+  around Label462-Label464_1: getFileHandle(long) 
   {
+
     fileHandle = fileCache.get(fileId);
-	  if (fileHandle == null) // continue 
+	  if (fileHandle == null) {
+      around_proceed:  
+    }
   }
  
 

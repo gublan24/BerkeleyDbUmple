@@ -72,7 +72,7 @@ class Evictor
 			evictBytesSetting = configManager.getLong(EnvironmentParams.EVICTOR_EVICT_BYTES);
 			evictByLruOnly = configManager.getBoolean(EnvironmentParams.EVICTOR_LRU_ONLY);
 
-      Label737:			//this.hook373(envImpl);
+      Label373:			//this.hook373(envImpl);
 			evictProfile = new EvictProfile();
 			formatter = NumberFormat.getNumberInstance();
 			active = false;

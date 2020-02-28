@@ -10,9 +10,13 @@ class FileManager
 	//original(envImpl);
     }
 
-  after Label450:getFileHandle(long ) {
 
-	fileCacheLatch.acquire();
+  around Label463-Label464_1: getFileHandle(long) {
+
+	  fileCacheLatch.acquire();
+     	if (fileHandle == null) {
+    around_proceed:
+    }
 
 }
 

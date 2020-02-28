@@ -39,6 +39,10 @@ import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../FileProcessor.ump"
 // line 3 "../../../../FileProcessor_static.ump"
+// line 3 "../../../../Checksum_FileProcessor.ump"
+// line 3 "../../../../Checksum_FileProcessor_inner.ump"
+// line 3 "../../../../LoggingCleaner_FileProcessor.ump"
+// line 3 "../../../../LoggingCleaner_FileProcessor_inner.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor_inner.ump"
 // line 3 "../../../../DeleteOp_FileProcessor.ump"
@@ -283,7 +287,10 @@ public class FileProcessor extends DaemonThread
    if (completed && lockDenied) {
     fileSelector.addPendingLN(ln, db.getId(), key, dupKey);
    }
-   Label124:   ; ;//this.hook124(logLsn, ln, obsolete, migrated, completed);
+   Label124:
+cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln, logLsn, completed, obsolete, migrated);
+			//original(logLsn, ln, obsolete, migrated, completed);
+   ; ;//this.hook124(logLsn, ln, obsolete, migrated, completed);
   }
   }
 
@@ -339,7 +346,9 @@ inInTree.releaseLatch();
    //End of hook125
   } 
   finally {
-    Label125_1: ; //;
+    Label125_1:
+cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, completed, obsolete, dirtied);
+ ; //;
   }
   }
 
@@ -482,6 +491,7 @@ if ((result != null) && (result.exactParentFound)) {
   
   @MethodObject
   // line 28 "../../../../FileProcessor_static.ump"
+  // line 4 "../../../../Checksum_FileProcessor_inner.ump"
   // line 4 "../../../../MemoryBudget_FileProcessor_inner.ump"
   // line 16 "../../../../DeleteOp_FileProcessor_inner.ump"
   public static class FileProcessor_processFile
@@ -539,7 +549,10 @@ if ((result != null) && (result.exactParentFound)) {
           dbCache=new HashMap();
           try {
             reader=new CleanerFileReader(_this.env,readBufferSize,DbLsn.NULL_LSN,fileNum);
-            Label137:   ; //this.hook137();
+            Label137:
+  reader.setAlwaysValidateChecksum(true);
+          //original();
+     ; //this.hook137();
             dbMapTree=_this.env.getDbMapTree();
             location=new TreeLocation();
             nProcessedLNs=0;
@@ -719,6 +732,7 @@ if ((result != null) && (result.exactParentFound)) {
   
   @MethodObject
   // line 165 "../../../../FileProcessor_static.ump"
+  // line 4 "../../../../LoggingCleaner_FileProcessor_inner.ump"
   // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
   // line 4 "../../../../Latches_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
@@ -827,7 +841,12 @@ if ((result != null) && (result.exactParentFound)) {
           }
           //original();
      ; //this.hook135();
-            Label126:   ; //this.hook126();
+            Label126:
+  if (processedHere) {
+            _this.cleaner.trace(_this.cleaner.detailedTraceLevel,Cleaner.CLEAN_LN,ln,logLsn,completed,obsolete,false);
+          }
+         // original();
+     ; //this.hook126();
           }
     }
     

@@ -27,6 +27,8 @@ import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../LogManager.ump"
 // line 3 "../../../../LogManager_static.ump"
+// line 3 "../../../../Checksum_LogManager.ump"
+// line 3 "../../../../Checksum_LogManager_inner.ump"
 // line 3 "../../../../Latches_LogManager.ump"
 // line 3 "../../../../FSync_LogManager.ump"
 public abstract class LogManager
@@ -53,7 +55,10 @@ public abstract class LogManager
   // line 59 "../../../../LogManager.ump"
    static  int HEADER_CONTENT_BYTES(){
     int r = HEADER_BYTES;
-			Label504:   ; //r = hook504(r);
+			Label504:
+r -= CHECKSUM_BYTES;
+        //return original(r);
+   ; //r = hook504(r);
 			return r;
   }
 
@@ -69,7 +74,10 @@ public abstract class LogManager
 			DbConfigManager configManager = envImpl.getConfigManager();
 			this.readOnly = readOnly;
 			logBufferPool = new LogBufferPool(fileManager, envImpl);
-			Label505:   ; //this.hook505(configManager);
+			Label505:
+doChecksumOnRead = configManager.getBoolean(EnvironmentParams.LOG_CHECKSUM_READ);
+        //original(configManager);
+   ; //this.hook505(configManager);
 			Label502:
 logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
 	//original(envImpl);
@@ -437,12 +445,18 @@ useLogBuffer.latchForWrite();
    public void setReadHook(TestHook hook){
     readHook = hook;
   }
+
+  // line 12 "../../../../Checksum_LogManager.ump"
+   public boolean getChecksumOnRead(){
+    return doChecksumOnRead;
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
   // line 4 "../../../../LogManager_static.ump"
+  // line 4 "../../../../Checksum_LogManager_inner.ump"
   public static class LogManager_getLogEntryFromLogSource
   {
   
@@ -476,7 +490,15 @@ useLogBuffer.latchForWrite();
       try {
             fileOffset=DbLsn.getFileOffset(lsn);
             entryBuffer=logSource.getBytes(fileOffset);
-            Label507:   ; //this.hook507();
+            Label507:
+  validator=null;
+          storedChecksum=LogUtils.getUnsignedInt(entryBuffer);
+          if (_this.doChecksumOnRead) {
+            validator=new ChecksumValidator();
+            validator.update(_this.envImpl,entryBuffer,_this.HEADER_CONTENT_BYTES(),false);
+          }
+          //original();
+     ; //this.hook507();
             loggableType=entryBuffer.get();
             version=entryBuffer.get();
             entryBuffer.position(entryBuffer.position() + _this.PREV_BYTES);
@@ -485,7 +507,13 @@ useLogBuffer.latchForWrite();
               entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
               Label508:   ; //this.hook508();
             }
-            Label506:   ; //this.hook506();
+            Label506:
+  if (_this.doChecksumOnRead) {
+            validator.update(_this.envImpl,entryBuffer,itemSize,false);
+            validator.validate(_this.envImpl,storedChecksum,lsn);
+          }
+          //original();
+     ; //this.hook506();
             assert LogEntryType.isValidType(loggableType) : "Read non-valid log entry type: " + loggableType;
             logEntry=LogEntryType.findType(loggableType,version).getNewLogEntry();
             logEntry.readEntry(entryBuffer,itemSize,version,true);
@@ -585,6 +613,12 @@ useLogBuffer.latchForWrite();
   abstract public void countObsoleteNodes(TrackedFileSummary[] summaries) throws DatabaseException ;
 // line 392 "../../../../LogManager.ump"
   abstract public void countObsoleteINs(List lsnList) throws DatabaseException ;
+// line 5 "../../../../Checksum_LogManager.ump"
+  static final int HEADER_CHECKSUM_OFFSET = 0 ;
+// line 7 "../../../../Checksum_LogManager.ump"
+  private boolean doChecksumOnRead ;
+// line 9 "../../../../Checksum_LogManager.ump"
+  protected static ChecksumValidator validator ;
 // line 7 "../../../../Latches_LogManager.ump"
   protected Latch logWriteLatch ;
 

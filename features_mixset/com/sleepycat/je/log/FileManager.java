@@ -35,10 +35,12 @@ import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../FileManager.ump"
 // line 3 "../../../../FileManager_static.ump"
+// line 3 "../../../../FileHandleCache_FileManager.ump"
 // line 3 "../../../../Latches_FileManager.ump"
 // line 3 "../../../../FSync_FileManager.ump"
 // line 3 "../../../../IO_FileManager.ump"
 // line 3 "../../../../IO_FileManager_inner.ump"
+// line 3 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
 // line 2 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
 public class FileManager
 {
@@ -77,8 +79,14 @@ public class FileManager
         maxFileSize = configManager.getLong(EnvironmentParams.LOG_FILE_MAX);
         Label456:   ; //this.hook456(configManager);
         Label467:   ;
-        Label457:   ;//this.hook457(configManager);
-        Label449: ;//this.hook449(envImpl);
+        Label457:
+fileCache = new FileCache(configManager);
+   ;//this.hook457(configManager);
+        Label449:
+//(EnvironmentImpl envImpl) throws DatabaseException {
+	fileCacheLatch = LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
+	//original(envImpl);
+ ;//this.hook449(envImpl);
         if (!dbEnvHome.exists()) {
             throw new LogException("Environment home " + dbEnvHome + " doesn't exist");
         }
@@ -382,7 +390,9 @@ syncManager = new FSyncManager(envImpl);
                 repeatNum++;
             } else {
                 String oldFileName = getFullFileNames(fileNum)[0];
-                Label458:   ;
+                Label458:
+clearFileCache(fileNum);
+   ;
                     //this.hook458(fileNum);
                     File oldFile = new File(oldFileName);
                 if (oldFile.renameTo(targetFile)) {
@@ -403,7 +413,9 @@ syncManager = new FSyncManager(envImpl);
   // line 391 "../../../../FileManager.ump"
    public void deleteFile(long fileNum) throws DatabaseException,IOException{
     String fileName = getFullFileNames(fileNum)[0];
-        Label459:   ;
+        Label459:
+clearFileCache(fileNum);
+   ;
             //this.hook459(fileNum);
             File file = new File(fileName);
         boolean done = file.delete();
@@ -425,12 +437,35 @@ syncManager = new FSyncManager(envImpl);
       
       Long fileId = new Long(fileNum);
             // Start of hook460
-      Label460:   ;
-                Label463:   ;
+      Label460:
+;
+     boolean flag= true;
+
+			while (flag) {
+			  
+   ;
+                Label463:
+fileCacheLatch.acquire();
+     	if (fileHandle == null) {
+    
+   ;
                 Label450:   ;
-                Label462:   ;
+                Label462:
+fileHandle = fileCache.get(fileId);
+	  if (fileHandle == null) {
+      
+   ;
                 fileHandle = makeFileHandle(fileNum, FileMode.READ_MODE);
-            Label464:   ;
+            Label464:
+fileCache.add(fileId, fileHandle);
+   ;
+            
+  
+    }
+
+
+    }
+Label464_1:   ;
                 
 fileHandle.latch();
 	//original(fileHandle);
@@ -441,15 +476,29 @@ fileHandle.release();
 //	original(fileHandle);
  ;//
                 }
-            else {
+            else {                
+                // line 24 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+                //try {	    fileHandle = original(fileNum, fileId, fileHandle);} finally {
+                	    fileCacheLatch.release();
+                	//}return fileHandle;
+                // END OF UMPLE AFTER INJECTION
                 return fileHandle;
             }
-            Label460_1:   ;
-            // End of hook460
+            
+ //original(fileNum, fileId, fileHandle);
+			}
+Label460_1:   ;
+            // End of hook460      
+      // line 24 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+      //try {	    fileHandle = original(fileNum, fileId, fileHandle);} finally {
+      	    fileCacheLatch.release();
+      	//}return fileHandle;
+      // END OF UMPLE AFTER INJECTION
       return fileHandle;
+
   }
 
-  // line 430 "../../../../FileManager.ump"
+  // line 431 "../../../../FileManager.ump"
    private FileHandle makeFileHandle(long fileNum, FileMode mode) throws DatabaseException{
     String[] fileNames = getFullFileNames(fileNum);
         RandomAccessFile newFile = null;
@@ -501,7 +550,7 @@ fileHandle.release();
    * 
    * Close this file and eat any exceptions. Used in catch clauses.
    */
-  // line 479 "../../../../FileManager.ump"
+  // line 480 "../../../../FileManager.ump"
    private void closeFileInErrorCase(RandomAccessFile file){
     try {
             if (file != null) {
@@ -517,7 +566,7 @@ fileHandle.release();
    * @throws DatabaseExceptionif the file header isn't valid
    * @return whether the file header has an old version number.
    */
-  // line 493 "../../../../FileManager.ump"
+  // line 494 "../../../../FileManager.ump"
    private boolean readAndValidateFileHeader(RandomAccessFile file, String fileName, long fileNum) throws DatabaseException,IOException{
     LogManager logManager = envImpl.getLogManager();
         LogEntry headerEntry = logManager.getLogEntry(DbLsn.makeLsn(fileNum, 0), file);
@@ -530,7 +579,7 @@ fileHandle.release();
    * 
    * Write a proper file header to the given file.
    */
-  // line 504 "../../../../FileManager.ump"
+  // line 505 "../../../../FileManager.ump"
    private void writeFileHeader(RandomAccessFile file, String fileName, FileHeader header) throws DatabaseException,IOException{
     envImpl.checkIfInvalid();
         if (envImpl.mayNotWrite()) {
@@ -564,7 +613,7 @@ fileHandle.release();
    * 
    * @return the prevOffset field stored in the file header.
    */
-  // line 535 "../../../../FileManager.ump"
+  // line 536 "../../../../FileManager.ump"
   public long getFileHeaderPrevOffset(long fileNum) throws IOException,DatabaseException{
     LogEntry headerEntry = envImpl.getLogManager().getLogEntry(DbLsn.makeLsn(fileNum, 0));
         FileHeader header = (FileHeader) headerEntry.getMainItem();
@@ -576,7 +625,7 @@ fileHandle.release();
    * 
    * @return the file offset of the last LSN that was used. For constructingthe headers of log entries. If the last LSN that was used was in a previous file, or this is the very first LSN of the whole system, return 0.
    */
-  // line 544 "../../../../FileManager.ump"
+  // line 545 "../../../../FileManager.ump"
   public long getPrevEntryOffset(){
     return prevOffset;
   }
@@ -588,7 +637,7 @@ fileHandle.release();
    * @param sizeis an unsigned int
    * @return true if we flipped to the next log file.
    */
-  // line 553 "../../../../FileManager.ump"
+  // line 554 "../../../../FileManager.ump"
   public boolean bumpLsn(long size){
     saveLastPosition();
         boolean flippedFiles = false;
@@ -619,7 +668,7 @@ fileHandle.release();
    * Write out a log buffer to the file.
    * @param fullBufferbuffer to write
    */
-  // line 581 "../../../../FileManager.ump"
+  // line 582 "../../../../FileManager.ump"
   public void writeLogBuffer(LogBuffer fullBuffer) throws DatabaseException{
     envImpl.checkIfInvalid();
         if (envImpl.mayNotWrite()) {
@@ -658,7 +707,7 @@ fileHandle.release();
    * 
    * Write a buffer to a file at a given offset, using NIO if so configured.
    */
-  // line 618 "../../../../FileManager.ump"
+  // line 619 "../../../../FileManager.ump"
    private int writeToFile(RandomAccessFile file, ByteBuffer data, long destOffset) throws IOException,DatabaseException{
     return new FileManager_writeToFile(this, file, data, destOffset).execute();
   }
@@ -668,17 +717,19 @@ fileHandle.release();
    * 
    * Read a buffer from a file at a given offset, using NIO if so configured.
    */
-  // line 625 "../../../../FileManager.ump"
+  // line 626 "../../../../FileManager.ump"
   public void readFromFile(RandomAccessFile file, ByteBuffer readBuffer, long offset) throws IOException{
     new FileManager_readFromFile(this, file, readBuffer, offset).execute();
   }
 
-  // line 629 "../../../../FileManager.ump"
+  // line 630 "../../../../FileManager.ump"
    private void abortCommittedTxns(ByteBuffer data){
     final byte commitType = LogEntryType.LOG_TXN_COMMIT.getTypeNum();
         final byte abortType = LogEntryType.LOG_TXN_ABORT.getTypeNum();
         //	this.hook461(data);
-        Label461:   ;
+        Label461:
+data.position(0);
+   ;
             while (data.remaining() > 0) {
                 int recStartPos = data.position();
                 data.position(recStartPos + LogManager.HEADER_ENTRY_TYPE_OFFSET);
@@ -714,7 +765,7 @@ fileHandle.release();
    * 
    * FSync the end of the log.
    */
-  // line 667 "../../../../FileManager.ump"
+  // line 668 "../../../../FileManager.ump"
   public void syncLogEnd() throws DatabaseException{
     try {
             endOfLog.force();
@@ -728,7 +779,7 @@ fileHandle.release();
    * 
    * Sync the end of the log, close off this log file. Should only be called under the log write latch.
    */
-  // line 678 "../../../../FileManager.ump"
+  // line 679 "../../../../FileManager.ump"
   public void syncLogEndAndFinishFile() throws DatabaseException,IOException{
     if (syncAtFileEnd) {
             syncLogEnd();
@@ -741,9 +792,23 @@ fileHandle.release();
    * 
    * Close all file handles and empty the cache.
    */
-  // line 688 "../../../../FileManager.ump"
+  // line 689 "../../../../FileManager.ump"
    public void clear() throws IOException,DatabaseException{
-    endOfLog.close();
+    // line 34 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.acquire();
+    	//original();
+    // END OF UMPLE BEFORE INJECTION
+    Label451:
+// Label451: ;
+    fileCache.clear();
+ ;
+        endOfLog.close();
+    // line 39 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    //throws IOException, DatabaseException {
+    	//try {    original();	} finally {
+    	    fileCacheLatch.release();
+    	//}
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -751,7 +816,7 @@ fileHandle.release();
    * 
    * Clear the file lock.
    */
-  // line 694 "../../../../FileManager.ump"
+  // line 696 "../../../../FileManager.ump"
    public void close() throws IOException,DatabaseException{
     
   }
@@ -762,7 +827,7 @@ fileHandle.release();
    * Ensure that if the environment home dir is on readonly media or in a readonly directory that the environment has been opened for readonly access.
    * @return true if the environment home dir is readonly.
    */
-  // line 701 "../../../../FileManager.ump"
+  // line 703 "../../../../FileManager.ump"
    private boolean checkEnvHomePermissions(boolean readOnly) throws DatabaseException{
     boolean envDirIsReadOnly = !dbEnvHome.canWrite();
         if (envDirIsReadOnly && !readOnly) {
@@ -777,7 +842,7 @@ fileHandle.release();
    * 
    * Truncate a log at this position. Used by recovery to a timestamp utilities and by recovery to set the end-of-log position. <p> This method forces a new log file to be written next, if the last file (the file truncated to) has an old version in its header. This ensures that when the log is opened by an old version of JE, a version incompatibility will be detected. [#11243] </p>
    */
-  // line 713 "../../../../FileManager.ump"
+  // line 715 "../../../../FileManager.ump"
    public void truncateLog(long fileNum, long offset) throws IOException,DatabaseException{
     FileHandle handle = makeFileHandle(fileNum, FileMode.READWRITE_MODE);
         RandomAccessFile file = handle.getFile();
@@ -796,7 +861,7 @@ fileHandle.release();
    * 
    * Set the flag that causes a new file to be written before the next write.
    */
-  // line 729 "../../../../FileManager.ump"
+  // line 731 "../../../../FileManager.ump"
   public void forceNewLogFile(){
     forceNewFile = true;
   }
@@ -806,7 +871,7 @@ fileHandle.release();
    * 
    * @return the size in bytes of the file header log entry.
    */
-  // line 736 "../../../../FileManager.ump"
+  // line 738 "../../../../FileManager.ump"
    public static  int firstLogEntryOffset(){
     return FileHeader.entrySize() + LogManager.HEADER_BYTES;
   }
@@ -816,7 +881,7 @@ fileHandle.release();
    * 
    * Return the next available LSN in the log. Note that this is unsynchronized, so is only valid as an approximation of log size.
    */
-  // line 743 "../../../../FileManager.ump"
+  // line 745 "../../../../FileManager.ump"
    public long getNextLsn(){
     return nextAvailableLsn;
   }
@@ -826,12 +891,12 @@ fileHandle.release();
    * 
    * Return the last allocated LSN in the log. Note that this is unsynchronized, so if it is called outside the log write latch it is only valid as an approximation of log size.
    */
-  // line 750 "../../../../FileManager.ump"
+  // line 752 "../../../../FileManager.ump"
    public long getLastUsedLsn(){
     return lastUsedLsn;
   }
 
-  // line 755 "../../../../FileManager.ump"
+  // line 757 "../../../../FileManager.ump"
    private void generateRunRecoveryException(RandomAccessFile file, ByteBuffer data, long destOffset) throws DatabaseException,IOException{
     if (runRecoveryExceptionThrown) {
             try {
@@ -858,6 +923,29 @@ fileHandle.release();
             runRecoveryExceptionThrown = true;
             throw new RunRecoveryException(envImpl, "Randomly generated for testing");
         }
+  }
+
+  // line 8 "../../../../FileHandleCache_FileManager.ump"
+  public Set getCacheKeys(){
+    return fileCache.getCacheKeys();
+  }
+
+
+  /**
+   * 
+   * Clear a file out of the file cache regardless of mode type.
+   */
+  // line 15 "../../../../FileHandleCache_FileManager.ump"
+   private void clearFileCache(long fileNum) throws IOException,DatabaseException{
+    // line 50 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.acquire();
+    //	try {	    original(fileNum);} finally {
+    	    fileCacheLatch.release();
+    // END OF UMPLE BEFORE INJECTION
+    fileCache.remove(fileNum);
+    // line 57 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.release();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -1288,8 +1376,12 @@ fileHandle.release();
   private boolean runRecoveryExceptionThrown = false ;
 // line 110 "../../../../FileManager.ump"
   private Random runRecoveryExceptionRandom = null ;
+// line 5 "../../../../FileHandleCache_FileManager.ump"
+  private FileCache fileCache ;
 // line 5 "../../../../FSync_FileManager.ump"
   private FSyncManager syncManager ;
+// line 5 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+  private Latch fileCacheLatch ;
 
   
 }

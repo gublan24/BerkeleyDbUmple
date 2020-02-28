@@ -730,12 +730,12 @@ if (needToLatch && isLatchOwner()) {
   }
   }
 
-  // line 6 "../../../../MemoryBudget_BIN.ump"
+  // line 8 "../../../../MemoryBudget_BIN.ump"
    public static  long computeOverhead(DbConfigManager configManager) throws DatabaseException{
     return MemoryBudget.BIN_FIXED_OVERHEAD + IN.computeArraysOverhead(configManager);
   }
 
-  // line 10 "../../../../MemoryBudget_BIN.ump"
+  // line 12 "../../../../MemoryBudget_BIN.ump"
    protected long getMemoryOverhead(MemoryBudget mb){
     return mb.getBINOverhead();
   }

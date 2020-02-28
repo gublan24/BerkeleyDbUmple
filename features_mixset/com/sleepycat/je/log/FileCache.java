@@ -127,12 +127,7 @@ evictTarget.release();
 			while (iter.hasNext()) {
 					FileHandle fileHandle = (FileHandle) iter.next();
 					//this.hook440(iter, fileHandle);
-				  Label440:
-// this.hook443(fileHandle);
-    Label443:
-	  fileHandle.close();
-	  iter.remove();
-	 // this.hook443(fileHandle);
+				  Label440:	 // this.hook443(fileHandle);
 					Label443:
 fileHandle.latch();
 	//original(fileHandle);

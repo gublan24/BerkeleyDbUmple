@@ -95,7 +95,10 @@ public class Evictor extends DaemonThread
 			evictBytesSetting = configManager.getLong(EnvironmentParams.EVICTOR_EVICT_BYTES);
 			evictByLruOnly = configManager.getBoolean(EnvironmentParams.EVICTOR_LRU_ONLY);
 
-      Label737:			//this.hook373(envImpl);
+      Label373:
+detailedTraceLevel = Tracer.parseLevel(envImpl, EnvironmentParams.JE_LOGGING_LEVEL_EVICTOR);
+	//original(envImpl);
+			//this.hook373(envImpl);
 			evictProfile = new EvictProfile();
 			formatter = NumberFormat.getNumberInstance();
 			active = false;

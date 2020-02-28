@@ -11,6 +11,9 @@ import java.io.FileWriter;
 import java.io.File;
 
 // line 3 "../../../../EnvironmentParams.ump"
+// line 3 "../../../../Checksum_EnvironmentParams.ump"
+// line 3 "../../../../LoggingRecovery_EnvironmentParams.ump"
+// line 3 "../../../../LoggingCleaner_EnvironmentParams.ump"
 // line 3 "../../../../loggingBase_EnvironmentParams.ump"
 // line 3 "../../../../LoggingEvictor_EnvironmentParams.ump"
 // line 3 "../../../../Evictor_EnvironmentParams.ump"
@@ -331,7 +334,18 @@ public class EnvironmentParams
 
     static void addSupportedParam(ConfigParam param) {
 	SUPPORTED_PARAMS.put(param.getName(), param);
-    }
+    }// line 5 "../../../../Checksum_EnvironmentParams.ump"
+  public static final BooleanConfigParam LOG_CHECKSUM_READ = new BooleanConfigParam("je.log.checksumRead", true,
+	    false, "# If true, perform a checksum check when reading entries from log.") ;
+
+// line 5 ../../../../LoggingRecovery_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_RECOVERY = new ConfigParam("java.util.logging.level.recovery",
+	    "FINE", false, "# Recovery specific trace messages will be issued at this level.\n"
+		    + "# Value should be one of the predefined java.util.logging.Level values");
+// line 5 ../../../../LoggingCleaner_EnvironmentParams.ump
+  public static final ConfigParam JE_LOGGING_LEVEL_CLEANER = new ConfigParam("java.util.logging.level.cleaner",
+	    "FINE", true, "# Cleaner specific detailed trace messages will be issued at this\n"
+		    + "# level. The Value should be one of the predefined \n" + "# java.util.logging.Level values");
 // line 5 ../../../../loggingBase_EnvironmentParams.ump
   public static final ConfigParam JE_LOGGING_LEVEL = new ConfigParam("java.util.logging.level", "FINEST", false,
 	    "# Trace messages equal and above this level will be logged.\n"

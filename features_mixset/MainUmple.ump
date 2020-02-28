@@ -1,12 +1,27 @@
 
 use base/umplific/Master.ump;
 
+use Checksum/umpilif/Master.ump;
+
+
+use LoggingRecovery/umpilif/LoggingRecovery_Master.ump;
+
+use LoggingCleaner/umpilif/LoggingCleaner_Master.ump;
+
+//LoggingCleaner
+
+use FileHandleCache/umpilif/Master.ump;
+
+
+
+
 use loggingBase/umplific/Master.ump;
 
 use LoggingEvictor/umpilif/LoggingEvictor_Master.ump;
 
 
 use MemoryBudget/umpilif/Master.ump;
+
 use DeleteOp/umpilif/Master.ump;
 
 
@@ -25,6 +40,11 @@ use FSync/umpilif/FSync_Master.ump;
 //use CheckpointerDaemon/umpilif/Master.ump;
 
 use IO/umpilif/Master.ump;
+
+
+use Derivative_Latches_FileHandleCache/umpilif/Derivative_Latches_FileHandleCache_Master.ump;
+
+use Derivative_LoggingEvictor_Evictor_LoggingBase/umpilif/Derivative_LoggingEvictor_Evictor_LoggingBase_Master.ump;
 
 
 use Derivative_FSync_Latches/umpilif/Derivative_FSync_Latches_Master.ump;
@@ -47,6 +67,11 @@ use Derivative_Evictor_MemoryBudget/umpilif/Derivative_Evictor_MemoryBudget_Mast
 
 use Derivative_Evictor_EvictorDaemon/umpilif/Derivative_Evictor_EvictorDaemon_Evictor.ump;
 use Derivative_Evictor_EvictorDaemon/umpilif/Derivative_Evictor_EvictorDaemon_EnvironmentParams.ump;
+
+use Derivative_LoggingCleaner_DeleteOp/umpilif/Derivative_LoggingCleaner_DeleteOp_Master.ump;
+
+
+
 
 
 /*

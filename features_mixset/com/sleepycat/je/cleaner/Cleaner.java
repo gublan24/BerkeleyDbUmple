@@ -43,10 +43,13 @@ import com.sleepycat.je.dbi.*;
  */
 // line 3 "../../../../Cleaner.ump"
 // line 3 "../../../../Cleaner_static.ump"
+// line 3 "../../../../LoggingCleaner_Cleaner.ump"
+// line 3 "../../../../LoggingCleaner_Cleaner_inner.ump"
 // line 3 "../../../../DeleteOp_Cleaner.ump"
 // line 3 "../../../../DeleteOp_Cleaner_inner.ump"
 // line 3 "../../../../Evictor_Cleaner.ump"
 // line 3 "../../../../Latches_Cleaner.ump"
+// line 3 "../../../../Derivative_LoggingCleaner_DeleteOp_Cleaner.ump"
 public class Cleaner implements EnvConfigObserver
 {
 
@@ -141,7 +144,10 @@ public class Cleaner implements EnvConfigObserver
   clusterResident = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER);
   clusterAll = cm.getBoolean(EnvironmentParams.CLEANER_CLUSTER_ALL);
   maxBatchFiles = cm.getInt(EnvironmentParams.CLEANER_MAX_BATCH_FILES);
-  Label90: //this.hook90();
+  Label90:
+detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_CLEANER);
+	//original();
+ //this.hook90();
    if (clusterResident && clusterAll) {
     throw new IllegalArgumentException("Both " + EnvironmentParams.CLEANER_CLUSTER + " and " +
      EnvironmentParams.CLEANER_CLUSTER_ALL + " may not be set to true.");
@@ -401,7 +407,10 @@ if (parentDIN != null) {
     if (completed && !lockDenied) {
      fileSelector.removePendingLN(ln.getNodeId());
     }
-    Label91: ; //this.hook91(ln, obsolete, completed);
+    Label91:
+trace(detailedTraceLevel, CLEAN_PENDING_LN, ln, DbLsn.NULL_LSN, completed, obsolete, false);
+	//original(ln, obsolete, completed);
+ ; //this.hook91(ln, obsolete, completed);
    }
   }
   }
@@ -540,7 +549,10 @@ if (parentDIN != null) {
    if (locker != null) {
     locker.operationEnd();
    }
-   Label92: ; //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
+   Label92:
+trace(detailedTraceLevel, cleanAction, ln, lsn, completed, obsolete, migrated);
+	//original(lsn, cleanAction, obsolete, migrated, completed, ln);
+ ; //this.hook92(lsn, cleanAction, obsolete, migrated, completed, ln);
   }
   }
 
@@ -650,6 +662,16 @@ if (parentDIN != null) {
 
   /**
    * 
+   * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
+   */
+  // line 12 "../../../../LoggingCleaner_Cleaner.ump"
+  public void trace(Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete, boolean dirtiedMigrated){
+    new Cleaner_trace(this, level, action, node, logLsn, completed, obsolete, dirtiedMigrated).execute();
+  }
+
+
+  /**
+   * 
    * Adds the DB ID to the pending DB set if it is being deleted but deletion is not yet complete.
    */
   // line 9 "../../../../DeleteOp_Cleaner.ump"
@@ -658,7 +680,10 @@ if (parentDIN != null) {
 					DatabaseId id = db.getId();
 					if (fileSelector.addPendingDB(id)) {
 
-							Label85: ;							//this.hook85(id);
+							Label85:
+Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
+	//original(id);
+ ;							//this.hook85(id);
 					}
 			}
   }
@@ -796,6 +821,76 @@ if (parentDIN != null) {
     protected DatabaseImpl db2 ;
   
     
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../LoggingCleaner_Cleaner_inner.ump"
+  public static class Cleaner_trace
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Cleaner_trace()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    public  Cleaner_trace(Cleaner _this, Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete, boolean dirtiedMigrated){
+      this._this=_this;
+          this.level=level;
+          this.action=action;
+          this.node=node;
+          this.logLsn=logLsn;
+          this.completed=completed;
+          this.obsolete=obsolete;
+          this.dirtiedMigrated=dirtiedMigrated;
+    }
+  
+    // line 16 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    public void execute(){
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 17 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Cleaner _this ;
+  // line 18 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Level level ;
+  // line 19 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected String action ;
+  // line 20 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Node node ;
+  // line 21 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected long logLsn ;
+  // line 22 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected boolean completed ;
+  // line 23 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected boolean obsolete ;
+  // line 24 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected boolean dirtiedMigrated ;
+  // line 25 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected Logger logger ;
+  // line 26 "../../../../LoggingCleaner_Cleaner_inner.ump"
+    protected StringBuffer sb ;
+  
+    
   }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -887,6 +982,8 @@ if (parentDIN != null) {
    }
   }
   }
+// line 5 "../../../../LoggingCleaner_Cleaner.ump"
+  public Level detailedTraceLevel ;
 
   
 }

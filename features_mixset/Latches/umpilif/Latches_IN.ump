@@ -44,7 +44,7 @@ class IN
     }
 
     after Label618: init(DatabaseImpl , byte , int , int ) {
-	latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env);
+	latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix makeLatch into ==> makeSharedLatch
 	//original(env);
     }
 
