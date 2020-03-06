@@ -10,14 +10,15 @@ import com.sleepycat.je.tree.BIN;
 import com.sleepycat.je.config.EnvironmentParams;
 import com.sleepycat.je.DatabaseException;
 import java.util.Iterator;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.latch.LatchSupport;
 
 // line 3 "../../../../MemoryBudget.ump"
-// line 3 "../../../../MemoryBudget_static.ump"
+// line 3 "../../../../Statistics_MemoryBudget.ump"
 // line 3 "../../../../MemoryBudget_MemoryBudget.ump"
-// line 3 "../../../../MemoryBudget_inner_inner.ump"
 // line 3 "../../../../Evictor_MemoryBudget.ump"
-// line 3 "../../../../Evictor_MemoryBudget_inner.ump"
+// line 4 "../../../../Evictor_MemoryBudget_inner.ump"
 // line 3 "../../../../Latches_MemoryBudget.ump"
 // line 3 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget.ump"
 // line 3 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget_inner.ump"
@@ -44,23 +45,22 @@ public class MemoryBudget implements EnvConfigObserver
   public void delete()
   {}
 
-  // line 27 "../../../../MemoryBudget.ump"
+  // line 28 "../../../../MemoryBudget.ump"
    private static  void sinit(){
-   // new MemoryBudget_sinit().execute();
+    
   }
 
   // line 31 "../../../../MemoryBudget.ump"
   public  MemoryBudget(EnvironmentImpl envImpl, DbConfigManager configManager) throws DatabaseException{
     this.envImpl = envImpl;
-            envImpl.addConfigObserver(this);
-            reset(configManager);
-            //this.hook351(configManager);
+			envImpl.addConfigObserver(this);
+			reset(configManager);
+			//this.hook351(configManager);
       Label351:
 inOverhead = IN.computeOverhead(configManager);
-            binOverhead = BIN.computeOverhead(configManager);
-            dinOverhead = DIN.computeOverhead(configManager);
-            dbinOverhead = DBIN.computeOverhead(configManager);
-            //original(configManager);
+			binOverhead = BIN.computeOverhead(configManager);
+			dinOverhead = DIN.computeOverhead(configManager);
+			dbinOverhead = DBIN.computeOverhead(configManager);
    ;
   }
 
@@ -72,10 +72,10 @@ inOverhead = IN.computeOverhead(configManager);
   // line 42 "../../../../MemoryBudget.ump"
    public void envConfigUpdate(DbConfigManager configManager) throws DatabaseException{
     long oldLogBufferBudget = logBufferBudget;
-    reset(configManager);
-    if (oldLogBufferBudget != logBufferBudget) {
-        envImpl.getLogManager().resetPool(configManager);
-    }
+	reset(configManager);
+	if (oldLogBufferBudget != logBufferBudget) {
+	    envImpl.getLogManager().resetPool(configManager);
+	}
   }
 
 
@@ -85,7 +85,118 @@ inOverhead = IN.computeOverhead(configManager);
    */
   // line 53 "../../../../MemoryBudget.ump"
    private void reset(DbConfigManager configManager) throws DatabaseException{
-    new MemoryBudget_reset(this, configManager).execute();
+    /* 
+         * Calculate the total memory allotted to JE.
+         * 1. If je.maxMemory is specified, use that. Check that it's
+         * not more than the jvm memory.
+         * 2. Otherwise, take je.maxMemoryPercent * JVM max memory.
+         */
+        long newMaxMemory =
+            configManager.getLong(EnvironmentParams.MAX_MEMORY);
+        long jvmMemory = getRuntimeMaxMemory();
+
+        if (newMaxMemory != 0) {
+            /* Application specified a cache size number, validate it. */
+            if (jvmMemory < newMaxMemory) {
+                throw new IllegalArgumentException
+                    (EnvironmentParams.MAX_MEMORY.getName() +
+                     " has a value of " + newMaxMemory +
+                     " but the JVM is only configured for " +
+                     jvmMemory +
+                     ". Consider using je.maxMemoryPercent.");
+            }
+            if (newMaxMemory < MIN_MAX_MEMORY_SIZE) {
+                throw new IllegalArgumentException
+                    (EnvironmentParams.MAX_MEMORY.getName() +
+                     " is " + newMaxMemory +
+                     " which is less than the minimum: " +
+                     MIN_MAX_MEMORY_SIZE);
+            }
+        } else {
+
+            /*
+             * When no explicit cache size is specified and the JVM memory size
+             * is unknown, assume a default sized (64 MB) heap.  This produces
+             * a reasonable cache size when no heap size is known.
+             */
+            if (jvmMemory == Long.MAX_VALUE) {
+                jvmMemory = N_64MB;
+            }
+
+            /* Use the configured percentage of the JVM memory size. */
+            int maxMemoryPercent =
+                configManager.getInt(EnvironmentParams.MAX_MEMORY_PERCENT);
+            newMaxMemory = (maxMemoryPercent * jvmMemory) / 100;
+        }
+
+        /*
+	 * Calculate the memory budget for log buffering.  If the LOG_MEM_SIZE
+	 * parameter is not set, start by using 7% (1/16th) of the cache
+	 * size. If it is set, use that explicit setting.
+	 * 
+	 * No point in having more log buffers than the maximum size. If
+	 * this starting point results in overly large log buffers,
+	 * reduce the log buffer budget again.
+         */
+        long newLogBufferBudget =
+            configManager.getLong(EnvironmentParams.LOG_MEM_SIZE);	    
+        if (newLogBufferBudget == 0) {
+	    newLogBufferBudget = newMaxMemory >> 4;
+	} else if (newLogBufferBudget > newMaxMemory / 2) {
+            newLogBufferBudget = newMaxMemory / 2;
+        }
+
+        /* 
+         * We have a first pass at the log buffer budget. See what
+         * size log buffers result. Don't let them be too big, it would
+         * be a waste.
+         */
+        int numBuffers =
+	    configManager.getInt(EnvironmentParams.NUM_LOG_BUFFERS);
+        long startingBufferSize = newLogBufferBudget / numBuffers; 
+        int logBufferSize =
+            configManager.getInt(EnvironmentParams.LOG_BUFFER_MAX_SIZE);
+        if (startingBufferSize > logBufferSize) {
+            startingBufferSize = logBufferSize;
+            newLogBufferBudget = numBuffers * startingBufferSize;
+        } else if (startingBufferSize <
+		   EnvironmentParams.MIN_LOG_BUFFER_SIZE) {
+            startingBufferSize = EnvironmentParams.MIN_LOG_BUFFER_SIZE;
+            newLogBufferBudget = numBuffers * startingBufferSize;
+	}
+
+        Label350:
+;
+						long newCriticalThreshold =
+            (newMaxMemory * 
+             envImpl.getConfigManager().getInt
+                (EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE))/100;
+ ;
+
+
+        long newTrackerBudget =
+            (newMaxMemory * 
+             envImpl.getConfigManager().getInt
+                (EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE))/100;
+
+        /* 
+         * If all has gone well, update the budget fields.  Once the log buffer
+         * budget is determined, the remainder of the memory is left for tree
+         * nodes.
+         */
+        maxMemory = newMaxMemory;
+        Label349:
+criticalThreshold = newCriticalThreshold;
+ ;
+
+        logBufferBudget = newLogBufferBudget;
+    // line 490 "../../../../MemoryBudget_MemoryBudget.ump"
+    trackerBudget = true?newTrackerBudget:newMaxMemory;
+            cacheBudget = newMaxMemory - newLogBufferBudget;
+    	nLockTables = 
+                configManager.getInt(EnvironmentParams.N_LOCK_TABLES);
+    	lockMemoryUsage = new long[nLockTables];
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -93,23 +204,23 @@ inOverhead = IN.computeOverhead(configManager);
    * 
    * Returns Runtime.maxMemory(), accounting for a MacOS bug. May return Long.MAX_VALUE if there is no inherent limit. Used by unit tests as well as by this class.
    */
-  // line 60 "../../../../MemoryBudget.ump"
+  // line 158 "../../../../MemoryBudget.ump"
    public static  long getRuntimeMaxMemory(){
     if ("Mac OS X".equals(System.getProperty("os.name"))) {
-        String jvmVersion = System.getProperty("java.version");
-        if (jvmVersion != null && jvmVersion.startsWith("1.4.2")) {
-        return Long.MAX_VALUE;
-        }
-    }
-    return Runtime.getRuntime().maxMemory();
+	    String jvmVersion = System.getProperty("java.version");
+	    if (jvmVersion != null && jvmVersion.startsWith("1.4.2")) {
+		return Long.MAX_VALUE;
+	    }
+	}
+	return Runtime.getRuntime().maxMemory();
   }
 
-  // line 70 "../../../../MemoryBudget.ump"
+  // line 168 "../../../../MemoryBudget.ump"
    public long getLogBufferBudget(){
     return logBufferBudget;
   }
 
-  // line 74 "../../../../MemoryBudget.ump"
+  // line 172 "../../../../MemoryBudget.ump"
    public long getMaxMemory(){
     return maxMemory;
   }
@@ -117,125 +228,122 @@ inOverhead = IN.computeOverhead(configManager);
 
   /**
    * 
-   * Initialize the starting environment memory state
-   */
-  // line 332 "../../../../MemoryBudget_MemoryBudget.ump"
-  public void initCacheMemoryUsage() throws DatabaseException{
-    synchronized (memoryUsageSynchronizer) {
-                    treeMemoryUsage = calcTreeCacheUsage();
-            }
-    // line 9 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget.ump"
-    //original();
-        assert LatchSupport.countLatchesHeld() == 0;
-    // END OF UMPLE AFTER INJECTION
-  }
-
-
-  /**
-   * 
    * Public for testing.
    */
-  // line 341 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 298 "../../../../MemoryBudget_MemoryBudget.ump"
    public long calcTreeCacheUsage() throws DatabaseException{
     long totalSize = 0;
-            INList inList = envImpl.getInMemoryINs();
-            Label347:
+			INList inList = envImpl.getInMemoryINs();
+			Label347:
 inList.latchMajor();
-            //  totalSize = this.hook347(totalSize, inList);
+			
 try {
-            Iterator iter = inList.iterator();
-            while (iter.hasNext()) {
-                    IN in = (IN) iter.next();
-                    long size = in.getInMemorySize();
-                    totalSize += size;
-            }
-    } 
+			Iterator iter = inList.iterator();
+			while (iter.hasNext()) {
+					IN in = (IN) iter.next();
+					long size = in.getInMemorySize();
+					totalSize += size;
+			}
+	} 
 
 finally {
 Label347_1:
-//try {
-      //  totalSize = original(totalSize, inList);} finally {
-        inList.releaseMajorLatch();
-    //}
-    //return totalSize;
+inList.releaseMajorLatch();
  ;
-    }
-        //end of 347
-        return totalSize;
+	}
+
+		return totalSize;
   }
 
 
   /**
    * 
-   * Update the environment wide tree memory count, wake up the evictor if necessary.
-   * @param incrementnote that increment may be negative.
+   * Initialize the starting environment memory state
    */
-  // line 365 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 334 "../../../../MemoryBudget_MemoryBudget.ump"
+  public void initCacheMemoryUsage() throws DatabaseException{
+    synchronized (memoryUsageSynchronizer) {
+	    treeMemoryUsage = calcTreeCacheUsage();
+	}
+    // line 10 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget.ump"
+    assert LatchSupport.countLatchesHeld() == 0;
+    // END OF UMPLE AFTER INJECTION
+  }
+
+
+  /**
+   * 
+   * Update the environment wide tree memory count, wake up the evictor if
+   * necessary.
+   * @param increment note that increment may be negative.
+   */
+  // line 369 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateTreeMemoryUsage(long increment){
     synchronized (memoryUsageSynchronizer) {
-                    treeMemoryUsage += increment;
-            }
+	    treeMemoryUsage += increment;
+	}
     // line 16 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
     //original(increment);
-                    if (getCacheMemoryUsage() > cacheBudget) {
-                            envImpl.alertEvictor();
-                    }
+    				if (getCacheMemoryUsage() > cacheBudget) {
+    						envImpl.alertEvictor();
+    				}
     // END OF UMPLE AFTER INJECTION
   }
 
 
   /**
    * 
-   * Update the environment wide misc memory count, wake up the evictor if necessary.
-   * @param incrementnote that increment may be negative.
+   * Update the environment wide misc memory count, wake up the evictor if
+   * necessary.
+   * @param increment note that increment may be negative.
    */
-  // line 375 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 381 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateMiscMemoryUsage(long increment){
     synchronized (memoryUsageSynchronizer) {
-                    miscMemoryUsage += increment;
-            }
+	    miscMemoryUsage += increment;
+	}
     // line 27 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
     //original(increment);
-                if (getCacheMemoryUsage() > cacheBudget) {
-                        envImpl.alertEvictor();
-                }
+    			if (getCacheMemoryUsage() > cacheBudget) {
+    					envImpl.alertEvictor();
+    			}
     // END OF UMPLE AFTER INJECTION
   }
 
-  // line 381 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 388 "../../../../MemoryBudget_MemoryBudget.ump"
    public void updateLockMemoryUsage(long increment, int lockTableIndex){
     lockMemoryUsage[lockTableIndex] += increment;
     // line 34 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
     //original(increment, lockTableIndex);
-                if (getCacheMemoryUsage() > cacheBudget) {
-                        envImpl.alertEvictor();
-                }
+    			if (getCacheMemoryUsage() > cacheBudget) {
+    					envImpl.alertEvictor();
+    			}
     // END OF UMPLE AFTER INJECTION
   }
 
-  // line 385 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 393 "../../../../MemoryBudget_MemoryBudget.ump"
    public long accumulateNewUsage(IN in, long newSize){
     return in.getInMemorySize() + newSize;
   }
 
-  // line 389 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 397 "../../../../MemoryBudget_MemoryBudget.ump"
    public void refreshTreeMemoryUsage(long newSize){
     synchronized (memoryUsageSynchronizer) {
-                    treeMemoryUsage = newSize;
-            }
+	    treeMemoryUsage = newSize;
+	}
   }
 
-  // line 395 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 403 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getCacheMemoryUsage(){
     long accLockMemoryUsage = 0;
-            if (nLockTables == 1) {
-                    accLockMemoryUsage = lockMemoryUsage[0];
-            } else {
-                    for (int i = 0; i < nLockTables; i++) {
-                accLockMemoryUsage += lockMemoryUsage[i];
-                    }
-            }
-            return treeMemoryUsage + miscMemoryUsage + accLockMemoryUsage;
+	if (nLockTables == 1) {
+	    accLockMemoryUsage = lockMemoryUsage[0];
+	} else {
+	    for (int i = 0; i < nLockTables; i++) {
+		accLockMemoryUsage += lockMemoryUsage[i];
+	    }
+	}
+	return treeMemoryUsage + miscMemoryUsage + accLockMemoryUsage;
   }
 
 
@@ -243,39 +351,9 @@ Label347_1:
    * 
    * Used for unit testing.
    */
-  // line 410 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 418 "../../../../MemoryBudget_MemoryBudget.ump"
    public long getTreeMemoryUsage(){
     return treeMemoryUsage;
-  }
-
-  // line 414 "../../../../MemoryBudget_MemoryBudget.ump"
-   public long getTrackerBudget(){
-    return trackerBudget;
-  }
-
-  // line 418 "../../../../MemoryBudget_MemoryBudget.ump"
-   public long getCacheBudget(){
-    return cacheBudget;
-  }
-
-  // line 422 "../../../../MemoryBudget_MemoryBudget.ump"
-   public long getINOverhead(){
-    return inOverhead;
-  }
-
-  // line 426 "../../../../MemoryBudget_MemoryBudget.ump"
-   public long getBINOverhead(){
-    return binOverhead;
-  }
-
-  // line 430 "../../../../MemoryBudget_MemoryBudget.ump"
-   public long getDINOverhead(){
-    return dinOverhead;
-  }
-
-  // line 434 "../../../../MemoryBudget_MemoryBudget.ump"
-   public long getDBINOverhead(){
-    return dbinOverhead;
   }
 
 
@@ -283,194 +361,71 @@ Label347_1:
    * 
    * Returns the memory size occupied by a byte array of a given length.
    */
-  // line 441 "../../../../MemoryBudget_MemoryBudget.ump"
+  // line 430 "../../../../MemoryBudget_MemoryBudget.ump"
+   public long getTrackerBudget(){
+    return trackerBudget;
+  }
+
+  // line 435 "../../../../MemoryBudget_MemoryBudget.ump"
    public static  int byteArraySize(int arrayLen){
-    int size = BYTE_ARRAY_OVERHEAD;
+    /*
+         * BYTE_ARRAY_OVERHEAD accounts for 4 bytes of data.  Data larger than
+         * 4 bytes is allocated in 8 byte increments.
+         */
+        int size = BYTE_ARRAY_OVERHEAD;
         if (arrayLen > 4) {
-              size += ((arrayLen - 4 + 7) / 8) * 8;
+            size += ((arrayLen - 4 + 7) / 8) * 8;
         }
+
         return size;
+  }
+
+  // line 448 "../../../../MemoryBudget_MemoryBudget.ump"
+   public long getCacheBudget(){
+    return cacheBudget;
+  }
+
+  // line 452 "../../../../MemoryBudget_MemoryBudget.ump"
+   public long getINOverhead(){
+    return inOverhead;
+  }
+
+  // line 456 "../../../../MemoryBudget_MemoryBudget.ump"
+   public long getBINOverhead(){
+    return binOverhead;
+  }
+
+  // line 460 "../../../../MemoryBudget_MemoryBudget.ump"
+   public long getDINOverhead(){
+    return dinOverhead;
+  }
+
+  // line 464 "../../../../MemoryBudget_MemoryBudget.ump"
+   public long getDBINOverhead(){
+    return dbinOverhead;
   }
 
   // line 8 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
    public long getCriticalThreshold(){
     return criticalThreshold;
   }
-  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
-  
-  
-  // line 4 "../../../../MemoryBudget_static.ump"
-  // line 4 "../../../../MemoryBudget_inner_inner.ump"
-  // line 4 "../../../../Derivative_Latches_MemoryBudget_MemoryBudget_inner.ump"
-  public static class MemoryBudget_sinit
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public MemoryBudget_sinit()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-  
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 8 "../../../../MemoryBudget_static.ump"
-    protected boolean is64 ;
-  // line 9 "../../../../MemoryBudget_static.ump"
-    protected boolean isJVM14 ;
-  // line 10 "../../../../MemoryBudget_static.ump"
-    protected String overrideArch ;
-  // line 11 "../../../../MemoryBudget_static.ump"
-    protected String arch ;
-  // line 12 "../../../../MemoryBudget_static.ump"
-    protected RuntimeException RE ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 15 "../../../../MemoryBudget_static.ump"
-  // line 103 "../../../../MemoryBudget_inner_inner.ump"
-  // line 4 "../../../../Evictor_MemoryBudget_inner.ump"
-  // line 4 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget_inner.ump"
-  public static class MemoryBudget_reset
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public MemoryBudget_reset()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 17 "../../../../MemoryBudget_static.ump"
-    public  MemoryBudget_reset(MemoryBudget _this, DbConfigManager configManager){
-      this._this=_this;
-          this.configManager=configManager;
-    }
-  
-    // line 21 "../../../../MemoryBudget_static.ump"
-    public void execute() throws DatabaseException{
-      newMaxMemory=configManager.getLong(EnvironmentParams.MAX_MEMORY);
-          jvmMemory=_this.getRuntimeMaxMemory();
-          if (newMaxMemory != 0) {
-            if (jvmMemory < newMaxMemory) {
-              throw new IllegalArgumentException(EnvironmentParams.MAX_MEMORY.getName() + " has a value of " + newMaxMemory+ " but the JVM is only configured for "+ jvmMemory+ ". Consider using je.maxMemoryPercent.");
-            }
-            if (newMaxMemory < _this.MIN_MAX_MEMORY_SIZE) {
-              throw new IllegalArgumentException(EnvironmentParams.MAX_MEMORY.getName() + " is " + newMaxMemory+ " which is less than the minimum: "+ _this.MIN_MAX_MEMORY_SIZE);
-            }
-          }
-     else {
-            if (jvmMemory == Long.MAX_VALUE) {
-              jvmMemory=_this.N_64MB;
-            }
-            maxMemoryPercent=configManager.getInt(EnvironmentParams.MAX_MEMORY_PERCENT);
-            newMaxMemory=(maxMemoryPercent * jvmMemory) / 100;
-          }
-          newLogBufferBudget=configManager.getLong(EnvironmentParams.LOG_MEM_SIZE);
-          if (newLogBufferBudget == 0) {
-            newLogBufferBudget=newMaxMemory >> 4;
-          }
-     else       if (newLogBufferBudget > newMaxMemory / 2) {
-            newLogBufferBudget=newMaxMemory / 2;
-          }
-          numBuffers=configManager.getInt(EnvironmentParams.NUM_LOG_BUFFERS);
-          startingBufferSize=newLogBufferBudget / numBuffers;
-          logBufferSize=configManager.getInt(EnvironmentParams.LOG_BUFFER_MAX_SIZE);
-          if (startingBufferSize > logBufferSize) {
-            startingBufferSize=logBufferSize;
-            newLogBufferBudget=numBuffers * startingBufferSize;
-          }
-     else       if (startingBufferSize < EnvironmentParams.MIN_LOG_BUFFER_SIZE) {
-            startingBufferSize=EnvironmentParams.MIN_LOG_BUFFER_SIZE;
-            newLogBufferBudget=numBuffers * startingBufferSize;
-          }
-  
-          Label350:
-  newCriticalThreshold=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE)) / 100;
-          //original();
-     ;        //this.hook350();
-          newTrackerBudget=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.CLEANER_DETAIL_MAX_MEMORY_PERCENTAGE)) / 100;
-          _this.maxMemory=newMaxMemory;
-          Label349:
-  _this.criticalThreshold=newCriticalThreshold;
-          //original();
-     ; //this.hook349();
-          _this.logBufferBudget=newLogBufferBudget;
-      // line 105 "../../../../MemoryBudget_inner_inner.ump"
-      //original();
-              _this.trackerBudget=true ? newTrackerBudget : newMaxMemory;
-              _this.cacheBudget=newMaxMemory - newLogBufferBudget;
-              _this.nLockTables=configManager.getInt(EnvironmentParams.N_LOCK_TABLES);
-              _this.lockMemoryUsage=new long[_this.nLockTables];
-      // END OF UMPLE AFTER INJECTION
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 63 "../../../../MemoryBudget_static.ump"
-    protected MemoryBudget _this ;
-  // line 64 "../../../../MemoryBudget_static.ump"
-    protected DbConfigManager configManager ;
-  // line 65 "../../../../MemoryBudget_static.ump"
-    protected long newMaxMemory ;
-  // line 66 "../../../../MemoryBudget_static.ump"
-    protected long jvmMemory ;
-  // line 67 "../../../../MemoryBudget_static.ump"
-    protected int maxMemoryPercent ;
-  // line 68 "../../../../MemoryBudget_static.ump"
-    protected long newLogBufferBudget ;
-  // line 69 "../../../../MemoryBudget_static.ump"
-    protected int numBuffers ;
-  // line 70 "../../../../MemoryBudget_static.ump"
-    protected long startingBufferSize ;
-  // line 71 "../../../../MemoryBudget_static.ump"
-    protected int logBufferSize ;
-  // line 72 "../../../../MemoryBudget_static.ump"
-    protected long newCriticalThreshold ;
-  // line 73 "../../../../MemoryBudget_static.ump"
-    protected long newTrackerBudget ;
-  
-    
-  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  
+  // line 14 "../../../../MemoryBudget.ump"
+  public final static long MIN_MAX_MEMORY_SIZE = 96 * 1024 ;
+// line 16 "../../../../MemoryBudget.ump"
+  public final static String MIN_MAX_MEMORY_SIZE_STRING = Long.toString(MIN_MAX_MEMORY_SIZE) ;
+// line 18 "../../../../MemoryBudget.ump"
+  private final static long N_64MB = (1 << 26) ;
+// line 20 "../../../../MemoryBudget.ump"
+  private long maxMemory ;
+// line 22 "../../../../MemoryBudget.ump"
+  private long logBufferBudget ;
+// line 24 "../../../../MemoryBudget.ump"
+  private EnvironmentImpl envImpl ;
 // line 5 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LONG_OVERHEAD_32 = 16 ;
 // line 6 "../../../../MemoryBudget_MemoryBudget.ump"
@@ -516,280 +471,257 @@ Label347_1:
 // line 46 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TREEMAP_ENTRY_OVERHEAD_64 = 53 ;
 // line 49 "../../../../MemoryBudget_MemoryBudget.ump"
-  private final static int MAPLN_OVERHEAD_32 = 464 ;
-// line 50 "../../../../MemoryBudget_MemoryBudget.ump"
-  private final static int MAPLN_OVERHEAD_64 = 776 ;
-// line 53 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LN_OVERHEAD_32 = 24 ;
-// line 54 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 50 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LN_OVERHEAD_64 = 32 ;
-// line 57 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 53 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DUPCOUNTLN_OVERHEAD_32 = 24 ;
-// line 58 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 54 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DUPCOUNTLN_OVERHEAD_64 = 40 ;
-// line 61 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 57 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int BIN_FIXED_OVERHEAD_32_14 = 344 ;
-// line 62 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 58 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int BIN_FIXED_OVERHEAD_32_15 = 360 ;
-// line 63 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 59 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int BIN_FIXED_OVERHEAD_64_15 = 528 ;
-// line 66 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 62 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DIN_FIXED_OVERHEAD_32_14 = 352 ;
-// line 67 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 63 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DIN_FIXED_OVERHEAD_32_15 = 360 ;
-// line 68 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 64 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DIN_FIXED_OVERHEAD_64_15 = 536 ;
-// line 71 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 67 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DBIN_FIXED_OVERHEAD_32_14 = 352 ;
-// line 72 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 68 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DBIN_FIXED_OVERHEAD_32_15 = 368 ;
-// line 73 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 69 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int DBIN_FIXED_OVERHEAD_64_15 = 544 ;
-// line 76 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 72 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int IN_FIXED_OVERHEAD_32_14 = 312 ;
-// line 77 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 73 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int IN_FIXED_OVERHEAD_32_15 = 320 ;
-// line 78 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 74 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int IN_FIXED_OVERHEAD_64_15 = 472 ;
-// line 81 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 77 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int KEY_OVERHEAD_32 = 16 ;
-// line 82 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 78 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int KEY_OVERHEAD_64 = 24 ;
-// line 85 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 81 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LOCK_OVERHEAD_32 = 32 ;
-// line 86 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 82 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LOCK_OVERHEAD_64 = 56 ;
-// line 89 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 85 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LOCKINFO_OVERHEAD_32 = 16 ;
-// line 90 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 86 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LOCKINFO_OVERHEAD_64 = 32 ;
-// line 97 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 93 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TXN_OVERHEAD_32_14 = 167 ;
-// line 98 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 94 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TXN_OVERHEAD_32_15 = 175 ;
-// line 99 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 95 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TXN_OVERHEAD_64_15 = 293 ;
-// line 102 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 98 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int CHECKPOINT_REFERENCE_SIZE_32_14 = 32 +
         HASHSET_ENTRY_OVERHEAD_32 ;
-// line 104 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 100 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int CHECKPOINT_REFERENCE_SIZE_32_15 = 40 +
         HASHSET_ENTRY_OVERHEAD_32 ;
-// line 106 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 102 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int CHECKPOINT_REFERENCE_SIZE_64_15 = 56 +
         HASHSET_ENTRY_OVERHEAD_64 ;
-// line 111 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 107 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int UTILIZATION_PROFILE_ENTRY_32 = 88 ;
-// line 112 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 108 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int UTILIZATION_PROFILE_ENTRY_64 = 136 ;
-// line 116 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 112 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TFS_LIST_INITIAL_OVERHEAD_32 = 464 ;
-// line 117 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 113 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TFS_LIST_INITIAL_OVERHEAD_64 = 504 ;
-// line 120 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 116 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TFS_LIST_SEGMENT_OVERHEAD_32 = 440 ;
-// line 121 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 117 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int TFS_LIST_SEGMENT_OVERHEAD_64 = 464 ;
-// line 124 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 120 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LN_INFO_OVERHEAD_32 = 24 ;
-// line 125 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 121 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LN_INFO_OVERHEAD_64 = 48 ;
-// line 129 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 125 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LONG_LIST_PER_ITEM_OVERHEAD_32 = 20 ;
-// line 130 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 126 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static int LONG_LIST_PER_ITEM_OVERHEAD_64 = 32 ;
-// line 132 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 128 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int LONG_OVERHEAD ;
-// line 133 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 129 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int BYTE_ARRAY_OVERHEAD ;
-// line 134 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 130 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int OBJECT_OVERHEAD ;
-// line 135 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 131 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int ARRAY_ITEM_OVERHEAD ;
-// line 136 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 132 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int HASHMAP_OVERHEAD ;
-// line 137 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 133 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int HASHMAP_ENTRY_OVERHEAD ;
-// line 138 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 134 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int HASHSET_OVERHEAD ;
-// line 139 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 135 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int HASHSET_ENTRY_OVERHEAD ;
-// line 140 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 136 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int TWOHASHMAPS_OVERHEAD ;
-// line 141 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 137 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int TREEMAP_OVERHEAD ;
-// line 142 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 138 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int TREEMAP_ENTRY_OVERHEAD ;
-// line 143 "../../../../MemoryBudget_MemoryBudget.ump"
-  public final static int MAPLN_OVERHEAD ;
-// line 144 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 139 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int LN_OVERHEAD ;
-// line 145 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 140 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int DUPCOUNTLN_OVERHEAD ;
-// line 146 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 141 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int BIN_FIXED_OVERHEAD ;
-// line 147 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 142 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int DIN_FIXED_OVERHEAD ;
-// line 148 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 143 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int DBIN_FIXED_OVERHEAD ;
-// line 149 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 144 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int IN_FIXED_OVERHEAD ;
-// line 150 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 145 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int KEY_OVERHEAD ;
-// line 151 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 146 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int LOCK_OVERHEAD ;
-// line 152 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 147 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int LOCKINFO_OVERHEAD ;
-// line 153 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 148 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int TXN_OVERHEAD ;
-// line 154 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 149 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int CHECKPOINT_REFERENCE_SIZE ;
-// line 155 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 150 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int UTILIZATION_PROFILE_ENTRY ;
-// line 156 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 151 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int TFS_LIST_INITIAL_OVERHEAD ;
-// line 157 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 152 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int TFS_LIST_SEGMENT_OVERHEAD ;
-// line 158 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 153 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int LN_INFO_OVERHEAD ;
-// line 159 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 154 "../../../../MemoryBudget_MemoryBudget.ump"
   public final static int LONG_LIST_PER_ITEM_OVERHEAD ;
-// line 161 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 156 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static String JVM_ARCH_PROPERTY = "sun.arch.data.model" ;
-// line 162 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 157 "../../../../MemoryBudget_MemoryBudget.ump"
   private final static String FORCE_JVM_ARCH = "je.forceJVMArch" ;
 
-// line 164 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 159 "../../../../MemoryBudget_MemoryBudget.ump"
   static 
   {
     boolean is64 = false;
-    boolean isJVM14 = (LatchSupport.getJava5LatchClass() == null);
-    String overrideArch = System.getProperty(FORCE_JVM_ARCH);
-    try {
-        if (overrideArch == null) {
-        String arch = System.getProperty(JVM_ARCH_PROPERTY);
-        if (arch != null) {
-            is64 = Integer.parseInt(arch) == 64;
-        }
-        } else {
-        is64 = Integer.parseInt(overrideArch) == 64;
-        }
-    } catch (NumberFormatException NFE) {
-        NFE.printStackTrace(System.err);
-    }
+	boolean isJVM14 = (LatchSupport.getJava5LatchClass() == null);//TODO default value necessary
+	String overrideArch = System.getProperty(FORCE_JVM_ARCH);
+	try {
+	    if (overrideArch == null) {
+		String arch = System.getProperty(JVM_ARCH_PROPERTY);
+		if (arch != null) {
+		    is64 = Integer.parseInt(arch) == 64;
+		}
+	    } else {
+		is64 = Integer.parseInt(overrideArch) == 64;
+	    }
+	} catch (NumberFormatException NFE) {
+	    NFE.printStackTrace(System.err);
+	}
 
-    if (is64) {
-        if (isJVM14) {
-        RuntimeException RE = new RuntimeException
-            ("1.4 based 64 bit JVM not supported");
-        RE.printStackTrace(System.err);
-        throw RE;
-        }
-        LONG_OVERHEAD = LONG_OVERHEAD_64;
-        BYTE_ARRAY_OVERHEAD = BYTE_ARRAY_OVERHEAD_64;
-        OBJECT_OVERHEAD = OBJECT_OVERHEAD_64;
-        ARRAY_ITEM_OVERHEAD = ARRAY_ITEM_OVERHEAD_64;
-        HASHMAP_OVERHEAD = HASHMAP_OVERHEAD_64;
-        HASHMAP_ENTRY_OVERHEAD = HASHMAP_ENTRY_OVERHEAD_64;
-        HASHSET_OVERHEAD = HASHSET_OVERHEAD_64;
-        HASHSET_ENTRY_OVERHEAD = HASHSET_ENTRY_OVERHEAD_64;
-        TWOHASHMAPS_OVERHEAD = TWOHASHMAPS_OVERHEAD_64;
-        TREEMAP_OVERHEAD = TREEMAP_OVERHEAD_64;
-        TREEMAP_ENTRY_OVERHEAD = TREEMAP_ENTRY_OVERHEAD_64;
-        MAPLN_OVERHEAD = MAPLN_OVERHEAD_64;
-        LN_OVERHEAD = LN_OVERHEAD_64;
-        DUPCOUNTLN_OVERHEAD = DUPCOUNTLN_OVERHEAD_64;
-        BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_64_15;
-        DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_64_15;
-        DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_64_15;
-        IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_64_15;
-        TXN_OVERHEAD = TXN_OVERHEAD_64_15;
-        CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_64_15;
-        KEY_OVERHEAD = KEY_OVERHEAD_64;
-        LOCK_OVERHEAD = LOCK_OVERHEAD_64;
-        LOCKINFO_OVERHEAD = LOCKINFO_OVERHEAD_64;
-        UTILIZATION_PROFILE_ENTRY = UTILIZATION_PROFILE_ENTRY_64;
-        TFS_LIST_INITIAL_OVERHEAD = TFS_LIST_INITIAL_OVERHEAD_64;
-        TFS_LIST_SEGMENT_OVERHEAD = TFS_LIST_SEGMENT_OVERHEAD_64;
-        LN_INFO_OVERHEAD = LN_INFO_OVERHEAD_64;
-        LONG_LIST_PER_ITEM_OVERHEAD = LONG_LIST_PER_ITEM_OVERHEAD_64;
-    } else {
-        LONG_OVERHEAD = LONG_OVERHEAD_32;
-        BYTE_ARRAY_OVERHEAD = BYTE_ARRAY_OVERHEAD_32;
-        OBJECT_OVERHEAD = OBJECT_OVERHEAD_32;
-        ARRAY_ITEM_OVERHEAD = ARRAY_ITEM_OVERHEAD_32;
-        HASHMAP_OVERHEAD = HASHMAP_OVERHEAD_32;
-        HASHMAP_ENTRY_OVERHEAD = HASHMAP_ENTRY_OVERHEAD_32;
-        HASHSET_OVERHEAD = HASHSET_OVERHEAD_32;
-        HASHSET_ENTRY_OVERHEAD = HASHSET_ENTRY_OVERHEAD_32;
-        TWOHASHMAPS_OVERHEAD = TWOHASHMAPS_OVERHEAD_32;
-        TREEMAP_OVERHEAD = TREEMAP_OVERHEAD_32;
-        TREEMAP_ENTRY_OVERHEAD = TREEMAP_ENTRY_OVERHEAD_32;
-        MAPLN_OVERHEAD = MAPLN_OVERHEAD_32;
-        LN_OVERHEAD = LN_OVERHEAD_32;
-        DUPCOUNTLN_OVERHEAD = DUPCOUNTLN_OVERHEAD_32;
-        if (isJVM14) {
-        BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_32_14;
-        DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_32_14;
-        DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_32_14;
-        IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_32_14;
-        TXN_OVERHEAD = TXN_OVERHEAD_32_14;
-        CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_32_14;
-        } else {
-        BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_32_15;
-        DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_32_15;
-        DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_32_15;
-        IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_32_15;
-        TXN_OVERHEAD = TXN_OVERHEAD_32_15;
-        CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_32_15;
-        }
-        KEY_OVERHEAD = KEY_OVERHEAD_32;
-        LOCK_OVERHEAD = LOCK_OVERHEAD_32;
-        LOCKINFO_OVERHEAD = LOCKINFO_OVERHEAD_32;
-        UTILIZATION_PROFILE_ENTRY = UTILIZATION_PROFILE_ENTRY_32;
-        TFS_LIST_INITIAL_OVERHEAD = TFS_LIST_INITIAL_OVERHEAD_32;
-        TFS_LIST_SEGMENT_OVERHEAD = TFS_LIST_SEGMENT_OVERHEAD_32;
-        LN_INFO_OVERHEAD = LN_INFO_OVERHEAD_32;
-        LONG_LIST_PER_ITEM_OVERHEAD = LONG_LIST_PER_ITEM_OVERHEAD_32;
-    }
+	if (is64) {
+	    if (isJVM14) {
+		RuntimeException RE = new RuntimeException
+		    ("1.4 based 64 bit JVM not supported");
+		RE.printStackTrace(System.err);
+		throw RE;
+	    }
+	    LONG_OVERHEAD = LONG_OVERHEAD_64;
+	    BYTE_ARRAY_OVERHEAD = BYTE_ARRAY_OVERHEAD_64;
+	    OBJECT_OVERHEAD = OBJECT_OVERHEAD_64;
+	    ARRAY_ITEM_OVERHEAD = ARRAY_ITEM_OVERHEAD_64;
+	    HASHMAP_OVERHEAD = HASHMAP_OVERHEAD_64;
+	    HASHMAP_ENTRY_OVERHEAD = HASHMAP_ENTRY_OVERHEAD_64;
+	    HASHSET_OVERHEAD = HASHSET_OVERHEAD_64;
+	    HASHSET_ENTRY_OVERHEAD = HASHSET_ENTRY_OVERHEAD_64;
+	    TWOHASHMAPS_OVERHEAD = TWOHASHMAPS_OVERHEAD_64;
+	    TREEMAP_OVERHEAD = TREEMAP_OVERHEAD_64;
+	    TREEMAP_ENTRY_OVERHEAD = TREEMAP_ENTRY_OVERHEAD_64;
+	    LN_OVERHEAD = LN_OVERHEAD_64;
+	    DUPCOUNTLN_OVERHEAD = DUPCOUNTLN_OVERHEAD_64;
+	    BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_64_15;
+	    DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_64_15;
+	    DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_64_15;
+	    IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_64_15;
+	    TXN_OVERHEAD = TXN_OVERHEAD_64_15;
+	    CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_64_15;
+	    KEY_OVERHEAD = KEY_OVERHEAD_64;
+	    LOCK_OVERHEAD = LOCK_OVERHEAD_64;
+	    LOCKINFO_OVERHEAD = LOCKINFO_OVERHEAD_64;
+	    UTILIZATION_PROFILE_ENTRY = UTILIZATION_PROFILE_ENTRY_64;
+	    TFS_LIST_INITIAL_OVERHEAD = TFS_LIST_INITIAL_OVERHEAD_64;
+	    TFS_LIST_SEGMENT_OVERHEAD = TFS_LIST_SEGMENT_OVERHEAD_64;
+	    LN_INFO_OVERHEAD = LN_INFO_OVERHEAD_64;
+	    LONG_LIST_PER_ITEM_OVERHEAD = LONG_LIST_PER_ITEM_OVERHEAD_64;
+	} else {
+	    LONG_OVERHEAD = LONG_OVERHEAD_32;
+	    BYTE_ARRAY_OVERHEAD = BYTE_ARRAY_OVERHEAD_32;
+	    OBJECT_OVERHEAD = OBJECT_OVERHEAD_32;
+	    ARRAY_ITEM_OVERHEAD = ARRAY_ITEM_OVERHEAD_32;
+	    HASHMAP_OVERHEAD = HASHMAP_OVERHEAD_32;
+	    HASHMAP_ENTRY_OVERHEAD = HASHMAP_ENTRY_OVERHEAD_32;
+	    HASHSET_OVERHEAD = HASHSET_OVERHEAD_32;
+	    HASHSET_ENTRY_OVERHEAD = HASHSET_ENTRY_OVERHEAD_32;
+	    TWOHASHMAPS_OVERHEAD = TWOHASHMAPS_OVERHEAD_32;
+	    TREEMAP_OVERHEAD = TREEMAP_OVERHEAD_32;
+	    TREEMAP_ENTRY_OVERHEAD = TREEMAP_ENTRY_OVERHEAD_32;
+	    LN_OVERHEAD = LN_OVERHEAD_32;
+	    DUPCOUNTLN_OVERHEAD = DUPCOUNTLN_OVERHEAD_32;
+	    if (isJVM14) {
+		BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_32_14;
+		DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_32_14;
+		DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_32_14;
+		IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_32_14;
+		TXN_OVERHEAD = TXN_OVERHEAD_32_14;
+		CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_32_14;
+	    } else {
+		BIN_FIXED_OVERHEAD = BIN_FIXED_OVERHEAD_32_15;
+		DIN_FIXED_OVERHEAD = DIN_FIXED_OVERHEAD_32_15;
+		DBIN_FIXED_OVERHEAD = DBIN_FIXED_OVERHEAD_32_15;
+		IN_FIXED_OVERHEAD = IN_FIXED_OVERHEAD_32_15;
+		TXN_OVERHEAD = TXN_OVERHEAD_32_15;
+		CHECKPOINT_REFERENCE_SIZE = CHECKPOINT_REFERENCE_SIZE_32_15;
+	    }
+	    KEY_OVERHEAD = KEY_OVERHEAD_32;
+	    LOCK_OVERHEAD = LOCK_OVERHEAD_32;
+	    LOCKINFO_OVERHEAD = LOCKINFO_OVERHEAD_32;
+	    UTILIZATION_PROFILE_ENTRY = UTILIZATION_PROFILE_ENTRY_32;
+	    TFS_LIST_INITIAL_OVERHEAD = TFS_LIST_INITIAL_OVERHEAD_32;
+	    TFS_LIST_SEGMENT_OVERHEAD = TFS_LIST_SEGMENT_OVERHEAD_32;
+	    LN_INFO_OVERHEAD = LN_INFO_OVERHEAD_32;
+	    LONG_LIST_PER_ITEM_OVERHEAD = LONG_LIST_PER_ITEM_OVERHEAD_32;
+	}
   }
-// line 258 "../../../../MemoryBudget_MemoryBudget.ump"
-  public final static long MIN_MAX_MEMORY_SIZE = 96 * 1024 ;
-// line 259 "../../../../MemoryBudget_MemoryBudget.ump"
-  public final static String MIN_MAX_MEMORY_SIZE_STRING =
-    Long.toString(MIN_MAX_MEMORY_SIZE) ;
-// line 262 "../../../../MemoryBudget_MemoryBudget.ump"
-  private final static long N_64MB = (1 << 26) ;
-// line 275 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 251 "../../../../MemoryBudget_MemoryBudget.ump"
   private long treeMemoryUsage ;
-// line 280 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 256 "../../../../MemoryBudget_MemoryBudget.ump"
   private long miscMemoryUsage ;
-// line 285 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 261 "../../../../MemoryBudget_MemoryBudget.ump"
   private Object memoryUsageSynchronizer = new Object() ;
-// line 290 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 266 "../../../../MemoryBudget_MemoryBudget.ump"
   private int nLockTables ;
-// line 297 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 273 "../../../../MemoryBudget_MemoryBudget.ump"
   private long[] lockMemoryUsage ;
-// line 303 "../../../../MemoryBudget_MemoryBudget.ump"
-  private long maxMemory ;
-// line 304 "../../../../MemoryBudget_MemoryBudget.ump"
- // private long criticalThreshold ;
-// line 307 "../../../../MemoryBudget_MemoryBudget.ump"
-  private long logBufferBudget ;
-// line 310 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 277 "../../../../MemoryBudget_MemoryBudget.ump"
   private long trackerBudget ;
-// line 316 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 283 "../../../../MemoryBudget_MemoryBudget.ump"
   private long cacheBudget ;
-// line 321 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 288 "../../../../MemoryBudget_MemoryBudget.ump"
   private long inOverhead ;
-// line 322 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 289 "../../../../MemoryBudget_MemoryBudget.ump"
   private long binOverhead ;
-// line 323 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 290 "../../../../MemoryBudget_MemoryBudget.ump"
   private long dinOverhead ;
-// line 324 "../../../../MemoryBudget_MemoryBudget.ump"
+// line 291 "../../../../MemoryBudget_MemoryBudget.ump"
   private long dbinOverhead ;
-// line 326 "../../../../MemoryBudget_MemoryBudget.ump"
-  private EnvironmentImpl envImpl ;
 // line 5 "../../../../Derivative_Evictor_MemoryBudget_MemoryBudget.ump"
   private long criticalThreshold ;
 

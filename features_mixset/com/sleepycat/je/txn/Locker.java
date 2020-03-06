@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 
 // line 3 "../../../../Locker.ump"
+// line 3 "../../../../Statistics_Locker.ump"
 // line 3 "../../../../DeleteOp_Locker.ump"
 // line 3 "../../../../INCompressor_Locker.ump"
 public abstract class Locker
@@ -507,6 +508,13 @@ public abstract class Locker
    public void dumpLockTable() throws DatabaseException{
     lockManager.dump();
   }
+
+
+  /**
+   * 
+   * Get lock count, for per transaction lock stats, for internal debugging.
+   */
+   public abstract LockStats collectStats(LockStats stats) throws DatabaseException;
 
 
   /**

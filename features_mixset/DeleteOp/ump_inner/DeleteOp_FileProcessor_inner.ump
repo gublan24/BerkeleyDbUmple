@@ -1,7 +1,8 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
+
 class FileProcessor {
-  @MethodObject static class FileProcessor_processLN {
+   static class FileProcessor_processLN {
       after Label157: execute() {
         b|=db.isDeleted();
         //original();
@@ -13,25 +14,24 @@ class FileProcessor {
       }
     }
    
-   static class FileProcessor_processFile {
-      after Label154: execute() { 
-        checkPendingDbSet=new HashSet();
-        //original();
+
+   
+      after Label155: processFile(Long ) {
+        	/* Update the pending DB set. */
+			for (Iterator i = checkPendingDbSet.iterator(); i.hasNext();) {
+				DatabaseId dbId = (DatabaseId) i.next();
+				DatabaseImpl db = dbMapTree.getDb(dbId, cleaner.lockTimeout,
+						dbCache);
+				cleaner.addPendingDB(db);
+			}
       }
-      after Label155: execute() { 
-        for (Iterator i=checkPendingDbSet.iterator(); i.hasNext(); ) {
-          dbId=(DatabaseId)i.next();
-          db=dbMapTree.getDb(dbId,_this.cleaner.lockTimeout,dbCache);
-          _this.cleaner.addPendingDB(db);
-        }
-        //original();
+      after Label156: processFile(Long ) {
+				;
+        DatabaseId dbId = reader.getDatabaseId();
+					if (dbId != null) {
+						checkPendingDbSet.add(dbId);
+					}
+
       }
-      after Label156: execute() { 
-        dbId1=reader.getDatabaseId();
-        if (dbId1 != null) {
-          checkPendingDbSet.add(dbId1);
-        }
-        //original();
-      }
-    }
+    
 }

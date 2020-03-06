@@ -22,6 +22,8 @@ import java.nio.ByteBuffer;
 import java.nio.BufferOverflowException;
 import java.io.RandomAccessFile;
 import java.io.IOException;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.Latch;
 
@@ -29,6 +31,8 @@ import com.sleepycat.je.latch.Latch;
 // line 3 "../../../../LogManager_static.ump"
 // line 3 "../../../../Checksum_LogManager.ump"
 // line 3 "../../../../Checksum_LogManager_inner.ump"
+// line 3 "../../../../Statistics_LogManager.ump"
+// line 3 "../../../../Statistics_LogManager_inner.ump"
 // line 3 "../../../../Latches_LogManager.ump"
 // line 3 "../../../../FSync_LogManager.ump"
 public abstract class LogManager
@@ -248,7 +252,10 @@ useLogBuffer.latchForWrite();
 							fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
 							usedTemporaryBuffer = true;
 							assert useBuffer.position() == 0;
-							Label509:   ; //this.hook509();
+							Label509:
+nTempBufferWrites++;
+		//	original();
+   ; //this.hook509();
 					} else {
 							useBuffer.put(marshalledBuffer);
 					}
@@ -450,6 +457,18 @@ useLogBuffer.latchForWrite();
    public boolean getChecksumOnRead(){
     return doChecksumOnRead;
   }
+
+  // line 12 "../../../../Statistics_LogManager.ump"
+   public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
+    stats.setNRepeatFaultReads(nRepeatFaultReads);
+			stats.setNTempBufferWrites(nTempBufferWrites);
+			if (config.getClear()) {
+					nRepeatFaultReads = 0;
+					nTempBufferWrites = 0;
+			}
+			logBufferPool.loadStats(config, stats);
+			Label497: ;//this.hook497(config, stats);
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
@@ -457,6 +476,7 @@ useLogBuffer.latchForWrite();
   
   // line 4 "../../../../LogManager_static.ump"
   // line 4 "../../../../Checksum_LogManager_inner.ump"
+  // line 4 "../../../../Statistics_LogManager_inner.ump"
   public static class LogManager_getLogEntryFromLogSource
   {
   
@@ -505,7 +525,10 @@ useLogBuffer.latchForWrite();
             itemSize=LogUtils.readInt(entryBuffer);
             if (entryBuffer.remaining() < itemSize) {
               entryBuffer=logSource.getBytes(fileOffset + _this.HEADER_BYTES,itemSize);
-              Label508:   ; //this.hook508();
+              Label508:
+  _this.nRepeatFaultReads++;
+          //original();
+     ; //this.hook508();
             }
             Label506:
   if (_this.doChecksumOnRead) {
@@ -619,6 +642,10 @@ useLogBuffer.latchForWrite();
   private boolean doChecksumOnRead ;
 // line 9 "../../../../Checksum_LogManager.ump"
   protected static ChecksumValidator validator ;
+// line 7 "../../../../Statistics_LogManager.ump"
+  private int nRepeatFaultReads ;
+// line 9 "../../../../Statistics_LogManager.ump"
+  private long nTempBufferWrites ;
 // line 7 "../../../../Latches_LogManager.ump"
   protected Latch logWriteLatch ;
 

@@ -29,8 +29,8 @@ public class JarMain
 
   // line 12 "../../../../JarMain.ump"
    public static  void main(String [] args){
-    Thread.currentThread().setUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
-    Thread.setDefaultUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
+  //  Thread.currentThread().setUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
+    //Thread.setDefaultUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
     try {
 	    if (args.length < 1) {
 		usage("Missing utility name");

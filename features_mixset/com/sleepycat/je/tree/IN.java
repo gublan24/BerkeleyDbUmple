@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
+import com.sleepycat.je.tree.Tree.SearchType;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.LatchNotHeldException;
 import com.sleepycat.je.latch.Latch;
@@ -75,7 +76,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    * 
    * Create an empty IN, with no node id, to be filled in from the log.
    */
-  // line 118 "../../../../IN.ump"
+  // line 120 "../../../../IN.ump"
    public  IN(){
     super(false);
   init(null, Key.EMPTY_KEY, 0, 0);
@@ -86,7 +87,7 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    * 
    * Create a new IN.
    */
-  // line 126 "../../../../IN.ump"
+  // line 128 "../../../../IN.ump"
    public  IN(DatabaseImpl db, byte [] identifierKey, int capacity, int level){
     super(true);
   init(db, identifierKey, capacity, generateLevel(db.getId(), level));
@@ -97,13 +98,12 @@ public class IN extends Node implements Comparable,LoggableObject,LogReadable
    * 
    * Initialize IN object.
    */
-  // line 134 "../../../../IN.ump"
+  // line 136 "../../../../IN.ump"
    protected void init(DatabaseImpl db, byte [] identifierKey, int initialCapacity, int level){
     setDatabase(db);
   EnvironmentImpl env = (databaseImpl == null) ? null : databaseImpl.getDbEnvironment();
   Label618:
-latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix makeLatch into ==> makeSharedLatch
-	//original(env);
+latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env);
    ; //this.hook618(env);
    generation = 0;
   dirty = false;
@@ -123,14 +123,14 @@ latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix make
     // END OF UMPLE AFTER INJECTION
   }
 
-  // line 152 "../../../../IN.ump"
+  // line 154 "../../../../IN.ump"
    private long getEqualityKey(){
     int hash = System.identityHashCode(this);
   long hash2 = (((long) hash) << 32) | hash;
   return hash2 ^ getNodeId();
   }
 
-  // line 158 "../../../../IN.ump"
+  // line 160 "../../../../IN.ump"
    public boolean equals(Object obj){
     if (!(obj instanceof IN)) {
    return false;
@@ -139,7 +139,7 @@ latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix make
   return (this.getEqualityKey() == in .getEqualityKey());
   }
 
-  // line 166 "../../../../IN.ump"
+  // line 168 "../../../../IN.ump"
    public int hashCode(){
     return (int) getEqualityKey();
   }
@@ -149,7 +149,7 @@ latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix make
    * 
    * Sort based on node id.
    */
-  // line 173 "../../../../IN.ump"
+  // line 175 "../../../../IN.ump"
    public int compareTo(Object o){
     if (o == null) {
    throw new NullPointerException();
@@ -171,7 +171,7 @@ latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix make
    * 
    * Create a new IN.  Need this because we can't call newInstance() without getting a 0 for nodeid.
    */
-  // line 192 "../../../../IN.ump"
+  // line 194 "../../../../IN.ump"
    protected IN createNewInstance(byte [] identifierKey, int maxEntries, int level){
     return new IN(databaseImpl, identifierKey, maxEntries, level);
   }
@@ -181,7 +181,7 @@ latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix make
    * 
    * Initialize a node that has been read in from the log.
    */
-  // line 199 "../../../../IN.ump"
+  // line 201 "../../../../IN.ump"
    public void postFetchInit(DatabaseImpl db, long sourceLsn) throws DatabaseException{
     setDatabase(db);
   setLastFullLsn(sourceLsn);
@@ -199,7 +199,7 @@ initMemorySize();
    * 
    * Initialize a node read in during recovery.
    */
-  // line 211 "../../../../IN.ump"
+  // line 213 "../../../../IN.ump"
    public void postRecoveryInit(DatabaseImpl db, long sourceLsn){
     setDatabase(db);
   setLastFullLsn(sourceLsn);
@@ -214,7 +214,7 @@ initMemorySize();
    * 
    * Sets the last logged LSN.
    */
-  // line 219 "../../../../IN.ump"
+  // line 221 "../../../../IN.ump"
   public void setLastFullLsn(long lsn){
     lastFullVersion = lsn;
   }
@@ -224,7 +224,7 @@ initMemorySize();
    * 
    * Returns the last logged LSN, or null if never logged.  Is public for unit testing.
    */
-  // line 226 "../../../../IN.ump"
+  // line 228 "../../../../IN.ump"
    public long getLastFullVersion(){
     return lastFullVersion;
   }
@@ -234,14 +234,13 @@ initMemorySize();
    * 
    * Latch this node, optionally setting the generation.
    */
-  // line 233 "../../../../IN.ump"
+  // line 235 "../../../../IN.ump"
    public void latch(boolean updateGeneration) throws DatabaseException{
     if (updateGeneration) {
    setGeneration();
   }
     // line 56 "../../../../Latches_IN.ump"
-    //original(updateGeneration);
-    	latch.acquire();
+    latch.acquire();
     // END OF UMPLE AFTER INJECTION
   }
 
@@ -250,12 +249,12 @@ initMemorySize();
    * 
    * Latch this node if it is not latched by another thread, optionally setting the generation if the latch succeeds.
    */
-  // line 242 "../../../../IN.ump"
+  // line 245 "../../../../IN.ump"
    public boolean latchNoWait(boolean updateGeneration) throws DatabaseException{
     Label619:
-if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
+if (!latch.acquireNoWait()) { 
             return false;
-      }
+        }
    ; 
     if (updateGeneration) {
      setGeneration();
@@ -263,27 +262,27 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
     return true;
   }
 
-  // line 250 "../../../../IN.ump"
+  // line 257 "../../../../IN.ump"
    public long getGeneration(){
     return generation;
   }
 
-  // line 254 "../../../../IN.ump"
+  // line 261 "../../../../IN.ump"
    public void setGeneration(){
     generation = Generation.getNextGeneration();
   }
 
-  // line 258 "../../../../IN.ump"
+  // line 265 "../../../../IN.ump"
    public void setGeneration(long newGeneration){
     generation = newGeneration;
   }
 
-  // line 262 "../../../../IN.ump"
+  // line 269 "../../../../IN.ump"
    public int getLevel(){
     return level;
   }
 
-  // line 266 "../../../../IN.ump"
+  // line 273 "../../../../IN.ump"
    protected int generateLevel(DatabaseId dbId, int newLevel){
     if (dbId.equals(DbTree.ID_DB_ID)) {
    return newLevel | DBMAP_LEVEL;
@@ -292,27 +291,27 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
   }
   }
 
-  // line 274 "../../../../IN.ump"
+  // line 281 "../../../../IN.ump"
    public boolean getDirty(){
     return dirty;
   }
 
-  // line 278 "../../../../IN.ump"
+  // line 285 "../../../../IN.ump"
    public void setDirty(boolean dirty){
     this.dirty = dirty;
   }
 
-  // line 282 "../../../../IN.ump"
+  // line 289 "../../../../IN.ump"
    public boolean isRoot(){
     return isRoot;
   }
 
-  // line 286 "../../../../IN.ump"
+  // line 293 "../../../../IN.ump"
    public boolean isDbRoot(){
     return isRoot;
   }
 
-  // line 290 "../../../../IN.ump"
+  // line 297 "../../../../IN.ump"
   public void setIsRoot(boolean isRoot){
     this.isRoot = isRoot;
   setDirty(true);
@@ -323,7 +322,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * @return the identifier key for this node.
    */
-  // line 298 "../../../../IN.ump"
+  // line 305 "../../../../IN.ump"
    public byte[] getIdentifierKey(){
     return identifierKey;
   }
@@ -334,7 +333,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * Set the identifier key for this node.
    * @param key - the new identifier key for this node.
    */
-  // line 306 "../../../../IN.ump"
+  // line 313 "../../../../IN.ump"
   public void setIdentifierKey(byte [] key){
     identifierKey = key;
   setDirty(true);
@@ -345,12 +344,12 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Get the key (dupe or identifier) in child that is used to locate it in 'this' node.
    */
-  // line 314 "../../../../IN.ump"
+  // line 321 "../../../../IN.ump"
    public byte[] getChildKey(IN child) throws DatabaseException{
     return child.getIdentifierKey();
   }
 
-  // line 318 "../../../../IN.ump"
+  // line 325 "../../../../IN.ump"
    public byte[] selectKey(byte [] mainTreeKey, byte [] dupTreeKey){
     return mainTreeKey;
   }
@@ -360,7 +359,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Return the key for this duplicate set.
    */
-  // line 325 "../../../../IN.ump"
+  // line 332 "../../../../IN.ump"
    public byte[] getDupKey() throws DatabaseException{
     throw new DatabaseException(shortClassName() + ".getDupKey() called");
   }
@@ -370,7 +369,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Return the key for navigating through the duplicate tree.
    */
-  // line 332 "../../../../IN.ump"
+  // line 339 "../../../../IN.ump"
    public byte[] getDupTreeKey(){
     return null;
   }
@@ -380,7 +379,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Return the key for navigating through the main tree.
    */
-  // line 339 "../../../../IN.ump"
+  // line 346 "../../../../IN.ump"
    public byte[] getMainTreeKey(){
     return getIdentifierKey();
   }
@@ -390,7 +389,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Get the database for this IN.
    */
-  // line 346 "../../../../IN.ump"
+  // line 353 "../../../../IN.ump"
    public DatabaseImpl getDatabase(){
     return databaseImpl;
   }
@@ -400,17 +399,17 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set the database reference for this node.
    */
-  // line 353 "../../../../IN.ump"
+  // line 360 "../../../../IN.ump"
    public void setDatabase(DatabaseImpl db){
     databaseImpl = db;
   }
 
-  // line 357 "../../../../IN.ump"
+  // line 364 "../../../../IN.ump"
    public DatabaseId getDatabaseId(){
     return databaseImpl.getId();
   }
 
-  // line 361 "../../../../IN.ump"
+  // line 368 "../../../../IN.ump"
    private void setEntryInternal(int from, int to){
     entryTargets[to] = entryTargets[from];
   entryKeyVals[to] = entryKeyVals[from];
@@ -427,7 +426,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
   }
   }
 
-  // line 377 "../../../../IN.ump"
+  // line 384 "../../../../IN.ump"
    private void clearEntry(int idx){
     entryTargets[idx] = null;
   entryKeyVals[idx] = null;
@@ -440,7 +439,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Return the idx'th key.
    */
-  // line 387 "../../../../IN.ump"
+  // line 394 "../../../../IN.ump"
    public byte[] getKey(int idx){
     return entryKeyVals[idx];
   }
@@ -450,7 +449,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set the idx'th key.
    */
-  // line 394 "../../../../IN.ump"
+  // line 401 "../../../../IN.ump"
    private void setKey(int idx, byte [] keyVal){
     entryKeyVals[idx] = keyVal;
   entryStates[idx] |= DIRTY_BIT;
@@ -461,7 +460,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Get the idx'th migrate status.
    */
-  // line 402 "../../../../IN.ump"
+  // line 409 "../../../../IN.ump"
    public boolean getMigrate(int idx){
     return (entryStates[idx] & MIGRATE_BIT) != 0;
   }
@@ -471,7 +470,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set the idx'th migrate status.
    */
-  // line 409 "../../../../IN.ump"
+  // line 416 "../../../../IN.ump"
    public void setMigrate(int idx, boolean migrate){
     if (migrate) {
    entryStates[idx] |= MIGRATE_BIT;
@@ -480,7 +479,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
   }
   }
 
-  // line 417 "../../../../IN.ump"
+  // line 424 "../../../../IN.ump"
    public byte getState(int idx){
     return entryStates[idx];
   }
@@ -490,7 +489,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Return the idx'th target.
    */
-  // line 424 "../../../../IN.ump"
+  // line 431 "../../../../IN.ump"
    public Node getTarget(int idx){
     return entryTargets[idx];
   }
@@ -500,7 +499,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Sets the idx'th target. No need to make dirty, that state only applies to key and LSN. <p>WARNING: This method does not update the memory budget.  The caller must update the budget.</p>
    */
-  // line 431 "../../../../IN.ump"
+  // line 438 "../../../../IN.ump"
   public void setTarget(int idx, Node target){
     entryTargets[idx] = target;
   }
@@ -511,7 +510,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * Return the idx'th LSN for this entry.
    * @return the idx'th LSN for this entry.
    */
-  // line 439 "../../../../IN.ump"
+  // line 446 "../../../../IN.ump"
    public long getLsn(int idx){
     if (entryLsnLongArray == null) {
    int offset = idx << 2;
@@ -531,29 +530,29 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Sets the idx'th target LSN.
    */
-  // line 456 "../../../../IN.ump"
+  // line 463 "../../../../IN.ump"
    public void setLsn(int idx, long lsn){
     new IN_setLsn(this, idx, lsn).execute();
   }
 
-  // line 460 "../../../../IN.ump"
+  // line 467 "../../../../IN.ump"
   public long[] getEntryLsnLongArray(){
     return entryLsnLongArray;
   }
 
-  // line 464 "../../../../IN.ump"
+  // line 471 "../../../../IN.ump"
   public byte[] getEntryLsnByteArray(){
     return entryLsnByteArray;
   }
 
-  // line 468 "../../../../IN.ump"
+  // line 475 "../../../../IN.ump"
   public void initEntryLsn(int capacity){
     entryLsnLongArray = null;
   entryLsnByteArray = new byte[capacity << 2];
   baseFileNumber = -1;
   }
 
-  // line 474 "../../../../IN.ump"
+  // line 481 "../../../../IN.ump"
   public void setLsnElement(int idx, long value){
     int offset = idx << 2;
   if (entryLsnLongArray != null) {
@@ -592,7 +591,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
   setFileOffset(offset, fileOffset);
   }
 
-  // line 512 "../../../../IN.ump"
+  // line 519 "../../../../IN.ump"
    private void mutateToLongArray(int idx, long value){
     int nElts = entryLsnByteArray.length >> 2;
   long[] newArr = new long[nElts];
@@ -609,7 +608,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * private void maybeAdjustCapacity(int offset) { if (entryLsnLongArray == null) { int bytesNeeded = offset + BYTES_PER_LSN_ENTRY; int currentBytes = entryLsnByteArray.length; if (currentBytes < bytesNeeded) { int newBytes = bytesNeeded + (GROWTH_INCREMENT * BYTES_PER_LSN_ENTRY); byte[] newArr = new byte[newBytes]; System.arraycopy(entryLsnByteArray, 0, newArr, 0, currentBytes); entryLsnByteArray = newArr; for (int i = currentBytes; i < newBytes; i += BYTES_PER_LSN_ENTRY) { setFileNumberOffset(i, (byte) 0); setFileOffset(i, -1); } } } else { int currentEntries = entryLsnLongArray.length; int idx = offset >> 2; if (currentEntries < idx + 1) { int newEntries = idx + GROWTH_INCREMENT; long[] newArr = new long[newEntries]; System.arraycopy(entryLsnLongArray, 0, newArr, 0, currentEntries); entryLsnLongArray = newArr; for (int i = currentEntries; i < newEntries; i++) { entryLsnLongArray[i] = DbLsn.NULL_LSN; } } } }
    */
-  // line 526 "../../../../IN.ump"
+  // line 533 "../../../../IN.ump"
    private boolean adjustFileNumbers(long newBaseFileNumber){
     long oldBaseFileNumber = baseFileNumber;
   for (int i = 0; i < entryLsnByteArray.length; i += BYTES_PER_LSN_ENTRY) {
@@ -633,34 +632,34 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
   return true;
   }
 
-  // line 549 "../../../../IN.ump"
+  // line 556 "../../../../IN.ump"
    private void setFileNumberOffset(int offset, byte fileNumberOffset){
     entryLsnByteArray[offset] = fileNumberOffset;
   }
 
-  // line 553 "../../../../IN.ump"
+  // line 560 "../../../../IN.ump"
    private byte getFileNumberOffset(int offset){
     return entryLsnByteArray[offset];
   }
 
-  // line 557 "../../../../IN.ump"
+  // line 564 "../../../../IN.ump"
    private void setFileOffset(int offset, int fileOffset){
     put3ByteInt(offset + 1, fileOffset);
   }
 
-  // line 561 "../../../../IN.ump"
+  // line 568 "../../../../IN.ump"
    private int getFileOffset(int offset){
     return get3ByteInt(offset + 1);
   }
 
-  // line 565 "../../../../IN.ump"
+  // line 572 "../../../../IN.ump"
    private void put3ByteInt(int offset, int value){
     entryLsnByteArray[offset++] = (byte)(value >>> 0);
   entryLsnByteArray[offset++] = (byte)(value >>> 8);
   entryLsnByteArray[offset] = (byte)(value >>> 16);
   }
 
-  // line 571 "../../../../IN.ump"
+  // line 578 "../../../../IN.ump"
    private int get3ByteInt(int offset){
     int ret = (entryLsnByteArray[offset++] & 0xFF) << 0;
   ret += (entryLsnByteArray[offset++] & 0xFF) << 8;
@@ -676,7 +675,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * @return true if the idx'th entry has been deleted, although thetransaction that performed the deletion may not be committed.
    */
-  // line 584 "../../../../IN.ump"
+  // line 591 "../../../../IN.ump"
    public boolean isEntryPendingDeleted(int idx){
     return ((entryStates[idx] & PENDING_DELETED_BIT) != 0);
   }
@@ -686,7 +685,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set pendingDeleted to true.
    */
-  // line 591 "../../../../IN.ump"
+  // line 598 "../../../../IN.ump"
    public void setPendingDeleted(int idx){
     entryStates[idx] |= PENDING_DELETED_BIT;
   entryStates[idx] |= DIRTY_BIT;
@@ -697,7 +696,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set pendingDeleted to false.
    */
-  // line 599 "../../../../IN.ump"
+  // line 606 "../../../../IN.ump"
    public void clearPendingDeleted(int idx){
     entryStates[idx] &= CLEAR_PENDING_DELETED_BIT;
   entryStates[idx] |= DIRTY_BIT;
@@ -708,7 +707,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * @return true if the idx'th entry is deleted for sure.  If a transactionperformed the deletion, it has been committed.
    */
-  // line 607 "../../../../IN.ump"
+  // line 614 "../../../../IN.ump"
    public boolean isEntryKnownDeleted(int idx){
     return ((entryStates[idx] & KNOWN_DELETED_BIT) != 0);
   }
@@ -718,7 +717,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set knownDeleted to true.
    */
-  // line 614 "../../../../IN.ump"
+  // line 621 "../../../../IN.ump"
   public void setKnownDeleted(int idx){
     entryStates[idx] |= KNOWN_DELETED_BIT;
   entryStates[idx] |= DIRTY_BIT;
@@ -729,7 +728,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Set knownDeleted to false.
    */
-  // line 622 "../../../../IN.ump"
+  // line 629 "../../../../IN.ump"
   public void clearKnownDeleted(int idx){
     entryStates[idx] &= CLEAR_KNOWN_DELETED_BIT;
   entryStates[idx] |= DIRTY_BIT;
@@ -740,7 +739,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * @return true if the object is dirty.
    */
-  // line 630 "../../../../IN.ump"
+  // line 637 "../../../../IN.ump"
   public boolean isDirty(int idx){
     return ((entryStates[idx] & DIRTY_BIT) != 0);
   }
@@ -750,7 +749,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * @return the number of entries in this node.
    */
-  // line 637 "../../../../IN.ump"
+  // line 644 "../../../../IN.ump"
    public int getNEntries(){
     return nEntries;
   }
@@ -760,7 +759,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Returns true if the given state is known deleted.
    */
-  // line 644 "../../../../IN.ump"
+  // line 651 "../../../../IN.ump"
    static  boolean isStateKnownDeleted(byte state){
     return ((state & KNOWN_DELETED_BIT) != 0);
   }
@@ -770,7 +769,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * Returns true if the given state is known deleted.
    */
-  // line 651 "../../../../IN.ump"
+  // line 658 "../../../../IN.ump"
    static  boolean isStatePendingDeleted(byte state){
     return ((state & KNOWN_DELETED_BIT) != 0);
   }
@@ -780,7 +779,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * 
    * @return the maximum number of entries in this node.
    */
-  // line 658 "../../../../IN.ump"
+  // line 665 "../../../../IN.ump"
   public int getMaxEntries(){
     return entryTargets.length;
   }
@@ -791,7 +790,7 @@ if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
    * Returns the target of the idx'th entry or null if a pendingDeleted or knownDeleted entry has been cleaned.  Note that null can only be returned for a slot that could contain a deleted LN, not other node types and not a DupCountLN since DupCountLNs are never deleted.  Null is also returned for a KnownDeleted slot with a NULL_LSN.
    * @return the target node or null.
    */
-  // line 666 "../../../../IN.ump"
+  // line 673 "../../../../IN.ump"
    public Node fetchTarget(int idx) throws DatabaseException{
     if (entryTargets[idx] == null) {
    long lsn = getLsn(idx);
@@ -824,7 +823,7 @@ updateMemorySize(null, node);
   return entryTargets[idx];
   }
 
-  // line 695 "../../../../IN.ump"
+  // line 702 "../../../../IN.ump"
    static  String makeFetchErrorMsg(String msg, IN in, long lsn, byte state){
     StringBuffer sb = new StringBuffer();
   sb.append("fetchTarget of ");
@@ -846,7 +845,7 @@ updateMemorySize(null, node);
    * 
    * Set the idx'th entry of this node.
    */
-  // line 714 "../../../../IN.ump"
+  // line 721 "../../../../IN.ump"
    public void setEntry(int idx, Node target, byte [] keyVal, long lsn, byte state){
     new IN_setEntry(this, idx, target, keyVal, lsn, state).execute();
   }
@@ -856,7 +855,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node. Note: does not dirty the node.
    */
-  // line 721 "../../../../IN.ump"
+  // line 728 "../../../../IN.ump"
    public void updateEntry(int idx, Node node){
     new IN_updateEntry(this, idx, node).execute();
   }
@@ -866,7 +865,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node.
    */
-  // line 728 "../../../../IN.ump"
+  // line 735 "../../../../IN.ump"
    public void updateEntry(int idx, Node node, long lsn){
     new IN_updateEntry2(this, idx, node, lsn).execute();
   }
@@ -876,7 +875,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node.
    */
-  // line 735 "../../../../IN.ump"
+  // line 742 "../../../../IN.ump"
    public void updateEntry(int idx, Node node, long lsn, byte [] key){
     new IN_updateEntry3(this, idx, node, lsn, key).execute();
   }
@@ -886,7 +885,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node.
    */
-  // line 742 "../../../../IN.ump"
+  // line 749 "../../../../IN.ump"
    public void updateEntry(int idx, long lsn){
     setLsn(idx, lsn);
   setDirty(true);
@@ -897,7 +896,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node.
    */
-  // line 750 "../../../../IN.ump"
+  // line 757 "../../../../IN.ump"
    public void updateEntry(int idx, long lsn, byte state){
     setLsn(idx, lsn);
   entryStates[idx] = state;
@@ -909,7 +908,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node. This flavor is used when the target LN is being modified, by an operation like a delete or update. We don't have to check whether the LSN has been nulled or not, because we know an LSN existed before. Also, the modification of the target is done in the caller, so instead of passing in the old and new nodes, we pass in the old and new node sizes.
    */
-  // line 759 "../../../../IN.ump"
+  // line 766 "../../../../IN.ump"
    public void updateEntry(int idx, long lsn, long oldLNSize, long newLNSize){
     // line 177 "../../../../MemoryBudget_IN.ump"
     updateMemorySize(oldLNSize, newLNSize);
@@ -924,7 +923,7 @@ updateMemorySize(null, node);
    * 
    * Update the idx'th entry of this node.  Only update the key if the new key is less than the existing key.
    */
-  // line 767 "../../../../IN.ump"
+  // line 774 "../../../../IN.ump"
    private void updateEntryCompareKey(int idx, Node node, long lsn, byte [] key){
     new IN_updateEntryCompareKey(this, idx, node, lsn, key).execute();
   }
@@ -934,7 +933,7 @@ updateMemorySize(null, node);
    * 
    * Returns whether the given key is greater than or equal to the first key in the IN and less than or equal to the last key in the IN.  This method is used to determine whether a key to be inserted belongs in this IN, without doing a tree search.  If false is returned it is still possible that the key belongs in this IN, but a tree search must be performed to find out.
    */
-  // line 774 "../../../../IN.ump"
+  // line 781 "../../../../IN.ump"
    public boolean isKeyInBounds(byte [] keyVal){
     if (nEntries < 2) {
    return false;
@@ -964,7 +963,7 @@ updateMemorySize(null, node);
    * @param exact - true if an exact match must be found.
    * @return offset for the entry that has a key >= the arg.  0 if keyis less than the 1st entry.  -1 if exact is true and no exact match is found.  If indicateIfDuplicate is true and an exact match was found then EXACT_MATCH is or'd onto the return value.
    */
-  // line 801 "../../../../IN.ump"
+  // line 808 "../../../../IN.ump"
    public int findEntry(byte [] key, boolean indicateIfDuplicate, boolean exact){
     int high = nEntries - 1;
   int low = 0;
@@ -1015,7 +1014,7 @@ updateMemorySize(null, node);
    * @return true if the entry was successfully inserted, falseif it was a duplicate.
    * @throws InconsistentNodeException if the node is full(it should have been split earlier).
    */
-  // line 849 "../../../../IN.ump"
+  // line 856 "../../../../IN.ump"
    public boolean insertEntry(ChildReference entry) throws DatabaseException{
     return (insertEntry1(entry) & INSERT_SUCCESS) != 0;
   }
@@ -1028,7 +1027,7 @@ updateMemorySize(null, node);
    * @return either (1) the index of location in the IN where the entry wasinserted |'d with INSERT_SUCCESS, or (2) the index of the duplicate in the IN |'d with EXACT_MATCH if the entry was found to be a duplicate.
    * @throws InconsistentNodeException if the node is full (it should havebeen split earlier).
    */
-  // line 859 "../../../../IN.ump"
+  // line 866 "../../../../IN.ump"
    public int insertEntry1(ChildReference entry) throws DatabaseException{
     return new IN_insertEntry1(this, entry).execute();
   }
@@ -1041,7 +1040,7 @@ updateMemorySize(null, node);
    * @param maybeValidate true if assert validation should occur prior todelete.  Set this to false during recovery.
    * @return true if the entry was successfully deleted, false if it was notfound.
    */
-  // line 869 "../../../../IN.ump"
+  // line 876 "../../../../IN.ump"
   public boolean deleteEntry(byte [] key, boolean maybeValidate) throws DatabaseException{
     if (nEntries == 0) {
    return false;
@@ -1061,7 +1060,7 @@ updateMemorySize(null, node);
    * @param maybeValidate true if asserts are enabled.
    * @return true if the entry was successfully deleted, false if it was notfound.
    */
-  // line 886 "../../../../IN.ump"
+  // line 893 "../../../../IN.ump"
    public boolean deleteEntry(int index, boolean maybeValidate) throws DatabaseException{
     return new IN_deleteEntry(this, index, maybeValidate).execute();
   }
@@ -1071,24 +1070,51 @@ updateMemorySize(null, node);
    * 
    * Do nothing since INs don't support deltas.
    */
-  // line 892 "../../../../IN.ump"
+  // line 899 "../../../../IN.ump"
    public void setProhibitNextDelta(){
     
   }
 
-  // line 895 "../../../../IN.ump"
+  // line 902 "../../../../IN.ump"
    public boolean compress(BINReference binRef, boolean canFetch) throws DatabaseException{
     return false;
   }
 
-  // line 899 "../../../../IN.ump"
+  // line 906 "../../../../IN.ump"
    public boolean isCompressible(){
     return false;
   }
 
-  // line 903 "../../../../IN.ump"
+  // line 910 "../../../../IN.ump"
   public boolean validateSubtreeBeforeDelete(int index) throws DatabaseException{
-    return new IN_validateSubtreeBeforeDelete(this, index).execute();
+    Label628:
+;
+				boolean needToLatch = !isLatchOwner();
+ ;
+
+	try {
+	  Label629:
+if (needToLatch) {
+						latch();
+	    			}
+ ;
+	    if (index >= nEntries) {
+
+		/* 
+		 * There's no entry here, so of course this entry is deletable.
+		 */
+		return true;
+	    } else {
+		Node child = fetchTarget(index);
+		return child != null && child.isValidForDelete();
+	    }
+	} finally {
+	Label628_1:
+if (needToLatch) {
+                     releaseLatchIfOwner();
+							}
+ ;
+	}
   }
 
 
@@ -1096,7 +1122,7 @@ updateMemorySize(null, node);
    * 
    * Return true if this node needs splitting.  For the moment, needing to be split is defined by there being no free entries available.
    */
-  // line 910 "../../../../IN.ump"
+  // line 934 "../../../../IN.ump"
    public boolean needsSplitting(){
     if ((entryTargets.length - nEntries) < 1) {
    return true;
@@ -1110,7 +1136,7 @@ updateMemorySize(null, node);
    * 
    * Indicates whether whether entry 0's key is "special" in that it always compares less than any other key.  BIN's don't have the special key, but IN's do.
    */
-  // line 921 "../../../../IN.ump"
+  // line 945 "../../../../IN.ump"
   public boolean entryZeroKeyComparesLow(){
     return true;
   }
@@ -1121,14 +1147,204 @@ updateMemorySize(null, node);
    * Split this into two nodes.  Parent IN is passed in parent and should be latched by the caller. childIndex is the index in parent of where "this" can be found.
    * @return lsn of the newly logged parent
    */
-  // line 929 "../../../../IN.ump"
+  // line 953 "../../../../IN.ump"
   public void split(IN parent, int childIndex, int maxEntries) throws DatabaseException{
     splitInternal(parent, childIndex, maxEntries, -1);
   }
 
-  // line 933 "../../../../IN.ump"
+  // line 957 "../../../../IN.ump"
    protected void splitInternal(IN parent, int childIndex, int maxEntries, int splitIndex) throws DatabaseException{
-    new IN_splitInternal(this, parent, childIndex, maxEntries, splitIndex).execute();
+    /* 
+         * Find the index of the existing identifierKey so we know which IN
+         * (new or old) to put it in.
+         */
+        if (identifierKey == null) {
+            throw new InconsistentNodeException("idkey is null");
+        }
+        int idKeyIndex = findEntry(identifierKey, false, false);
+
+	if (splitIndex < 0) {
+	    splitIndex = nEntries / 2;
+	}
+
+        int low, high;
+        IN newSibling = null;
+
+        if (idKeyIndex < splitIndex) {
+
+            /* 
+             * Current node (this) keeps left half entries.  Right half entries
+             * will go in the new node.
+             */
+            low = splitIndex;
+            high = nEntries;
+        } else {
+
+            /* 
+	     * Current node (this) keeps right half entries.  Left half entries
+	     * and entry[0] will go in the new node.
+	     */
+            low = 0;
+            high = splitIndex;
+        }
+
+        byte[] newIdKey = entryKeyVals[low];
+	long parentLsn = DbLsn.NULL_LSN;
+
+        newSibling = createNewInstance(newIdKey, maxEntries, level);
+        Label630:
+newSibling.latch();
+ ;
+        long oldMemorySize = inMemorySize;
+	try {
+        
+	    int toIdx = 0;
+	    boolean deletedEntrySeen = false;
+	    BINReference binRef = null;
+	    for (int i = low; i < high; i++) {
+		byte[] thisKey = entryKeyVals[i];
+		if (isEntryPendingDeleted(i)) {
+		    if (!deletedEntrySeen) {
+			deletedEntrySeen = true;
+			binRef = new BINReference(newSibling.getNodeId(),
+						  databaseImpl.getId(),
+						  newIdKey);
+		    }
+		    binRef.addDeletedKey(new Key(thisKey));
+		}
+		newSibling.setEntry(toIdx++,
+				    entryTargets[i],
+				    thisKey,
+				    getLsn(i),
+				    entryStates[i]);
+                clearEntry(i);
+	    }
+
+Label636:
+if (deletedEntrySeen) {
+		databaseImpl.getDbEnvironment().
+		    addToCompressorQueue(binRef, false);
+	    }
+ ;
+
+
+
+	    int newSiblingNEntries = (high - low);
+
+	    /* 
+	     * Remove the entries that we just copied into newSibling from this
+	     * node.
+	     */
+	    if (low == 0) {
+		shiftEntriesLeft(newSiblingNEntries);
+	    }
+
+	    newSibling.nEntries = toIdx;
+	    nEntries -= newSiblingNEntries;
+	    setDirty(true);
+
+	    adjustCursors(newSibling, low, high);
+
+	    /* 
+	     * Parent refers to child through an element of the entries array.
+	     * Depending on which half of the BIN we copied keys from, we
+	     * either have to adjust one pointer and add a new one, or we have
+	     * to just add a new pointer to the new sibling.
+	     *
+	     * Note that we must use the provisional form of logging because
+	     * all three log entries must be read atomically. The parent must
+	     * get logged last, as all referred-to children must preceed
+	     * it. Provisional entries guarantee that all three are processed
+	     * as a unit. Recovery skips provisional entries, so the changed
+	     * children are only used if the parent makes it out to the log.
+	     */
+	    EnvironmentImpl env = databaseImpl.getDbEnvironment();
+	    LogManager logManager = env.getLogManager();
+	    INList inMemoryINs = env.getInMemoryINs();
+
+	    long newSiblingLsn = newSibling.logProvisional(logManager, parent);
+	    long myNewLsn = logProvisional(logManager, parent);
+
+	    /*
+	     * When we update the parent entry, we use updateEntryCompareKey so
+	     * that we don't replace the parent's key that points at 'this'
+	     * with a key that is > than the existing one.  Replacing the
+	     * parent's key with something > would effectively render a piece
+	     * of the subtree inaccessible.  So only replace the parent key
+	     * with something <= the existing one.  See tree/SplitTest.java for
+	     * more details on the scenario.
+	     */
+	    if (low == 0) {
+
+		/* 
+		 * Change the original entry to point to the new child and add
+		 * an entry to point to the newly logged version of this
+		 * existing child.
+		 */
+                if (childIndex == 0) {
+                    parent.updateEntryCompareKey(childIndex, newSibling,
+                                                 newSiblingLsn, newIdKey);
+                } else {
+                    parent.updateEntry(childIndex, newSibling, newSiblingLsn);
+                }
+
+		boolean insertOk = parent.insertEntry
+		    (new ChildReference(this, entryKeyVals[0], myNewLsn));
+		assert insertOk;
+	    } else {
+
+		/* 
+		 * Update the existing child's LSN to reflect the newly logged
+		 * version and insert new child into parent.
+		 */
+		if (childIndex == 0) {
+
+		    /*
+		     * This's idkey may be < the parent's entry 0 so we need to
+		     * update parent's entry 0 with the key for 'this'.
+		     */
+		    parent.updateEntryCompareKey
+			(childIndex, this, myNewLsn, entryKeyVals[0]);
+		} else {
+		    parent.updateEntry(childIndex, this, myNewLsn);
+		}
+		boolean insertOk = parent.insertEntry
+		    (new ChildReference(newSibling, newIdKey, newSiblingLsn));
+		assert insertOk;
+	    }
+
+	    parentLsn = parent.log(logManager);
+            
+            /* 
+             * Maintain dirtiness if this is the root, so this parent
+             * will be checkpointed. Other parents who are not roots
+             * are logged as part of the propagation of splits
+             * upwards.
+             */
+            if (parent.isRoot()) {
+                parent.setDirty(true);
+            }
+
+            /* 
+             * Update size. newSibling and parent are correct, but this IN has
+             * had its entries shifted and is not correct.
+             */
+            Label650:
+;
+				long newSize = computeMemorySize();
+            updateMemorySize(oldMemorySize, newSize);
+ ;
+
+	    inMemoryINs.add(newSibling);
+        
+	    /* Debug log this information. */
+	    Label617: ;
+
+	} finally {
+							Label631:
+newSibling.releaseLatch();
+ ;
+	}
   }
 
 
@@ -1136,7 +1352,7 @@ updateMemorySize(null, node);
    * 
    * Called when we know we are about to split on behalf of a key that is the minimum (leftSide) or maximum (!leftSide) of this node.  This is achieved by just forcing the split to occur either one element in from the left or the right (i.e. splitIndex is 1 or nEntries - 1).
    */
-  // line 941 "../../../../IN.ump"
+  // line 1143 "../../../../IN.ump"
   public void splitSpecial(IN parent, int parentIndex, int maxEntriesPerNode, byte [] key, boolean leftSide) throws DatabaseException{
     int index = findEntry(key, false, false);
   if (leftSide && index == 0) {
@@ -1148,12 +1364,12 @@ updateMemorySize(null, node);
   }
   }
 
-  // line 951 "../../../../IN.ump"
+  // line 1153 "../../../../IN.ump"
   public void adjustCursors(IN newSibling, int newSiblingLow, int newSiblingHigh){
     
   }
 
-  // line 953 "../../../../IN.ump"
+  // line 1155 "../../../../IN.ump"
   public void adjustCursorsForInsert(int insertIndex){
     
   }
@@ -1163,7 +1379,7 @@ updateMemorySize(null, node);
    * 
    * Return the relevant user defined comparison function for this type of node.  For IN's and BIN's, this is the BTree Comparison function.
    */
-  // line 959 "../../../../IN.ump"
+  // line 1161 "../../../../IN.ump"
    public Comparator getKeyComparator(){
     return databaseImpl.getBtreeComparator();
   }
@@ -1174,7 +1390,7 @@ updateMemorySize(null, node);
    * Shift entries to the right starting with (and including) the entry at index. Caller is responsible for incrementing nEntries.
    * @param index - The position to start shifting from.
    */
-  // line 967 "../../../../IN.ump"
+  // line 1169 "../../../../IN.ump"
    private void shiftEntriesRight(int index){
     for (int i = nEntries; i > index; i--) {
    setEntryInternal(i - 1, i);
@@ -1189,7 +1405,7 @@ updateMemorySize(null, node);
    * Shift entries starting at the byHowMuch'th element to the left, thus removing the first byHowMuch'th elements of the entries array.  This always starts at the 0th entry.  Caller is responsible for decrementing nEntries.
    * @param byHowMuch - The number of entries to remove from the left sideof the entries array.
    */
-  // line 979 "../../../../IN.ump"
+  // line 1181 "../../../../IN.ump"
    private void shiftEntriesLeft(int byHowMuch){
     for (int i = 0; i < nEntries - byHowMuch; i++) {
    setEntryInternal(i + byHowMuch, i);
@@ -1205,9 +1421,60 @@ updateMemorySize(null, node);
    * 
    * Check that the IN is in a valid state.  For now, validity means that the keys are in sorted order and that there are more than 0 entries. maxKey, if non-null specifies that all keys in this node must be less than maxKey.
    */
-  // line 992 "../../../../IN.ump"
+  // line 1195 "../../../../IN.ump"
    public void verify(byte [] maxKey) throws DatabaseException{
-    new IN_verify(this, maxKey).execute();
+    // line 154 "../../../../Latches_IN.ump"
+    ;
+    						boolean unlatchThis = false;
+    // END OF UMPLE BEFORE INJECTION
+    try {
+	    Label632:
+if (!isLatchOwner()) {
+						latch();
+						unlatchThis = true;
+							}
+ ;
+
+	    Comparator userCompareToFcn =
+		(databaseImpl == null ? null : getKeyComparator());
+
+	    byte[] key1 = null;
+	    for (int i = 1; i < nEntries; i++) {
+		key1 = entryKeyVals[i];
+		byte[] key2 = entryKeyVals[i - 1];
+
+		int s = Key.compareKeys(key1, key2, userCompareToFcn);
+		if (s <= 0) {
+		    throw new InconsistentNodeException
+			("IN " + getNodeId() + " key " + (i-1) +
+			 " (" + Key.dumpString(key2, 0) +
+			 ") and " +
+			 i + " (" + Key.dumpString(key1, 0) +
+			 ") are out of order");
+		}
+	    }
+
+	    boolean inconsistent = false;
+	    if (maxKey != null && key1 != null) {
+                if (Key.compareKeys(key1, maxKey, userCompareToFcn) >= 0) {
+                    inconsistent = true;
+                }
+	    }
+
+	    if (inconsistent) {
+		throw new InconsistentNodeException
+		    ("IN " + getNodeId() +
+		     " has entry larger than next entry in parent.");
+	    }
+	} catch (DatabaseException DE) {
+	    DE.printStackTrace(System.out);
+	} finally {
+	Label633:
+if (unlatchThis) {
+				releaseLatch();
+					}
+ ;
+	}
   }
 
 
@@ -1215,7 +1482,7 @@ updateMemorySize(null, node);
    * 
    * Add self and children to this in-memory IN list. Called by recovery, can run with no latching.
    */
-  // line 999 "../../../../IN.ump"
+  // line 1241 "../../../../IN.ump"
   public void rebuildINList(INList inList) throws DatabaseException{
     // line 185 "../../../../MemoryBudget_IN.ump"
     initMemorySize();
@@ -1235,7 +1502,7 @@ updateMemorySize(null, node);
    * 
    * Remove self and children from the in-memory IN list. The INList latch is already held before this is called.  Also count removed nodes as obsolete.
    */
-  // line 1012 "../../../../IN.ump"
+  // line 1254 "../../../../IN.ump"
   public void accountForSubtreeRemoval(INList inList, UtilizationTracker tracker) throws DatabaseException{
     if (nEntries > 1) {
    throw new DatabaseException(
@@ -1258,32 +1525,175 @@ updateMemorySize(null, node);
    * 
    * Check if this node fits the qualifications for being part of a deletable subtree. It can only have one IN child and no LN children.
    */
-  // line 1032 "../../../../IN.ump"
+  // line 1274 "../../../../IN.ump"
   public boolean isValidForDelete() throws DatabaseException{
-    return new IN_isValidForDelete(this).execute();
+    Label634:
+;
+        boolean needToLatch = !isLatchOwner();
+ ;
+		try {
+
+	Label634_1:
+if (needToLatch) {
+				latch();
+					}
+ ;
+
+			  /* 
+			   * Can only have one valid child, and that child should be
+			   * deletable.
+			   */
+			  if (nEntries > 1) {            // more than 1 entry.
+			return false;
+			  } else if (nEntries == 1) {    // 1 entry, check child
+			Node child = fetchTarget(0);
+			return child != null && child.isValidForDelete();
+			  } else {                       // 0 entries.
+			return true;
+			  }
+		} finally {
+		Label635:
+if (needToLatch) {
+			releaseLatchIfOwner();
+			  }
+ ;
+		}
   }
 
-  // line 1142 "../../../../IN.ump"
+
+  /**
+   * 
+   * See if you are the parent of this child. If not, find a child of your's that may be the parent, and return it. If there are no possiblities, return null. Note that the keys of the target are passed in so we don't have to latch the target to look at them. Also, this node is latched upon entry.
+   * @param doFetch If true, fetch the child in the pursuit of this search.If false, give up if the child is not resident. In that case, we have a potential ancestor, but are not sure if this is the parent.
+   */
+  // line 1306 "../../../../IN.ump"
+  public void findParent(SearchType searchType, long targetNodeId, boolean targetContainsDuplicates, boolean targetIsRoot, byte [] targetMainTreeKey, byte [] targetDupTreeKey, SearchResult result, boolean requireExactMatch, boolean updateGeneration, int targetLevel, List trackingList, boolean doFetch) throws DatabaseException{
+    // line 76 "../../../../Latches_IN.ump"
+    assert isLatchOwner();
+    // END OF UMPLE BEFORE INJECTION
+    if (getNodeId() == targetNodeId) {
+   Label620:
+releaseLatch();
+   ; 
+    result.exactParentFound = false;
+   result.keepSearching = false;
+   result.parent = null;
+   return;
+  }
+  if (getNEntries() == 0) {
+   result.keepSearching = false;
+   result.exactParentFound = false;
+   if (requireExactMatch) {
+    Label621:
+releaseLatch();
+   ; 
+     result.parent = null;
+   }
+   else {
+    result.parent = this;
+    result.index = -1;
+   }
+   return;
+  } else {
+   if (searchType == Tree.SearchType.NORMAL) {
+    result.index = findEntry(selectKey(targetMainTreeKey, targetDupTreeKey), false, false);
+   } else if (searchType == Tree.SearchType.LEFT) {
+    result.index = 0;
+   } else if (searchType == Tree.SearchType.RIGHT) {
+    result.index = nEntries - 1;
+   } else {
+    throw new IllegalArgumentException("Invalid value of searchType: " + searchType);
+   }
+   if (result.index < 0) {
+    result.keepSearching = false;
+    result.exactParentFound = false;
+    if (requireExactMatch) {
+     Label622:
+releaseLatch();
+   ; 
+      result.parent = null;
+    }
+    else {
+     result.parent = this;
+    }
+    return;
+   }
+   Node child = null;
+   boolean isDeleted = false;
+   if (isEntryKnownDeleted(result.index)) {
+    isDeleted = true;
+   } else if (doFetch) {
+    child = fetchTarget(result.index);
+    if (child == null) {
+     isDeleted = true;
+    }
+   } else {
+    child = getTarget(result.index);
+   }
+   if (isDeleted) {
+    result.exactParentFound = false;
+    result.keepSearching = false;
+    if (requireExactMatch) {
+     result.parent = null;
+     Label623:
+releaseLatch();
+   ; 
+    } else {
+     result.parent = this;
+    }
+    return;
+   }
+   if (targetLevel >= 0 && level == targetLevel + 1) {
+    result.exactParentFound = true;
+    result.parent = this;
+    result.keepSearching = false;
+    return;
+   }
+   if (child == null) {
+    assert!doFetch;
+    result.keepSearching = false;
+    result.exactParentFound = false;
+    result.parent = this;
+    result.childNotResident = true;
+    return;
+   }
+   long childLsn = getLsn(result.index);
+   if (child.isSoughtNode(targetNodeId, updateGeneration)) {
+    result.exactParentFound = true;
+    result.parent = this;
+    result.keepSearching = false;
+    return;
+   } else {
+    descendOnParentSearch(result, targetContainsDuplicates, targetIsRoot, targetNodeId, child,
+     requireExactMatch);
+    if (trackingList != null) {
+     if ((result.parent != this) && (result.parent != null)) {
+      trackingList.add(new TrackingInfo(childLsn, child.getNodeId()));
+     }
+    }
+    return;
+   }
+  }
+  }
+
+  // line 1405 "../../../../IN.ump"
    protected void descendOnParentSearch(SearchResult result, boolean targetContainsDuplicates, boolean targetIsRoot, long targetNodeId, Node child, boolean requireExactMatch) throws DatabaseException{
     if (child.canBeAncestor(targetContainsDuplicates)) {
    Label624:
 releaseLatch();
-	//original();
-   ; //this.hook624();
+  
     result.parent = (IN) child;
   }
   else {
    Label625:
 ((IN) child).releaseLatch();
-	//original(child);
-   ; //this.hook625(child);
+   ; 
     result.exactParentFound = false;
    result.keepSearching = false;
    if (requireExactMatch) {
     Label626:
 releaseLatch();
-	//original();
-   ; //this.hook626();
+   ; 
      result.parent = null;
    }
    else {
@@ -1292,14 +1702,13 @@ releaseLatch();
   }
   }
 
-  // line 1161 "../../../../IN.ump"
+  // line 1424 "../../../../IN.ump"
    protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException{
     latch(updateGeneration);
   if (getNodeId() == nid) {
    Label627:
 releaseLatch();
-	//original();
-   ; //this.hook627();
+   ; 
     return true;
   }
   else {
@@ -1307,7 +1716,7 @@ releaseLatch();
   }
   }
 
-  // line 1172 "../../../../IN.ump"
+  // line 1435 "../../../../IN.ump"
    protected boolean canBeAncestor(boolean targetContainsDuplicates){
     return true;
   }
@@ -1317,7 +1726,7 @@ releaseLatch();
    * 
    * Returns whether any resident children are not LNs (are INs).
    */
-  // line 1179 "../../../../IN.ump"
+  // line 1442 "../../../../IN.ump"
   public boolean hasNonLNChildren(){
     return hasResidentChildren();
   }
@@ -1327,7 +1736,7 @@ releaseLatch();
    * 
    * Returns whether any child is non-null.
    */
-  // line 1186 "../../../../IN.ump"
+  // line 1449 "../../../../IN.ump"
    private boolean hasResidentChildren(){
     for (int i = 0; i < getNEntries(); i++) {
    if (getTarget(i) != null) {
@@ -1337,7 +1746,7 @@ releaseLatch();
   return false;
   }
 
-  // line 1195 "../../../../IN.ump"
+  // line 1458 "../../../../IN.ump"
   public void accumulateStats(TreeWalkerStatsAccumulator acc){
     acc.processIN(this, new Long(getNodeId()), getLevel());
   }
@@ -1347,7 +1756,7 @@ releaseLatch();
    * 
    * Log this IN and clear the dirty flag.
    */
-  // line 1202 "../../../../IN.ump"
+  // line 1465 "../../../../IN.ump"
    public long log(LogManager logManager) throws DatabaseException{
     return logInternal(logManager, false, false, false, null);
   }
@@ -1357,7 +1766,7 @@ releaseLatch();
    * 
    * Log this IN and clear the dirty flag.
    */
-  // line 1209 "../../../../IN.ump"
+  // line 1472 "../../../../IN.ump"
    public long log(LogManager logManager, boolean allowDeltas, boolean proactiveMigration) throws DatabaseException{
     return logInternal(logManager, allowDeltas, false, proactiveMigration, null);
   }
@@ -1369,7 +1778,7 @@ releaseLatch();
    * @param item object to be logged
    * @return LSN of the new log entry
    */
-  // line 1218 "../../../../IN.ump"
+  // line 1481 "../../../../IN.ump"
    public long logProvisional(LogManager logManager, IN parent) throws DatabaseException{
     return logInternal(logManager, false, true, false, parent);
   }
@@ -1379,7 +1788,7 @@ releaseLatch();
    * 
    * Log this node with all available options.
    */
-  // line 1226 "../../../../IN.ump"
+  // line 1489 "../../../../IN.ump"
    public long log(LogManager logManager, boolean allowDeltas, boolean isProvisional, boolean proactiveMigration, IN parent) throws DatabaseException{
     return logInternal(logManager, allowDeltas, isProvisional, proactiveMigration, parent);
   }
@@ -1389,7 +1798,7 @@ releaseLatch();
    * 
    * Decide how to log this node. INs are always logged in full.  Migration never performed since it only applies to BINs.
    */
-  // line 1234 "../../../../IN.ump"
+  // line 1497 "../../../../IN.ump"
    protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional, boolean proactiveMigration, IN parent) throws DatabaseException{
     long lsn = logManager.log(new INLogEntry(this), isProvisional,
    isProvisional ? DbLsn.NULL_LSN : lastFullVersion);
@@ -1410,7 +1819,7 @@ releaseLatch();
    * 
    * Adds the given obsolete LSNs and any tracked obsolete LSNs for the given child IN to this IN's tracking list.  This method is called to track obsolete LSNs when a child IN is logged provisionally.  Such LSNs cannot be considered obsolete until an ancestor IN is logged non-provisionally.
    */
-  // line 1252 "../../../../IN.ump"
+  // line 1515 "../../../../IN.ump"
   public void trackProvisionalObsolete(IN child, long obsoleteLsn1, long obsoleteLsn2){
     new IN_trackProvisionalObsolete(this, child, obsoleteLsn1, obsoleteLsn2).execute();
   }
@@ -1420,7 +1829,7 @@ releaseLatch();
    * 
    * Adds the provisional obsolete tracking information in this node to the live tracker.  This method is called when this node is logged non-provisionally.
    */
-  // line 1259 "../../../../IN.ump"
+  // line 1522 "../../../../IN.ump"
   public void flushProvisionalObsolete(LogManager logManager) throws DatabaseException{
     new IN_flushProvisionalObsolete(this, logManager).execute();
   }
@@ -1430,7 +1839,7 @@ releaseLatch();
    * 
    * @see LoggableObject#getLogType
    */
-  // line 1266 "../../../../IN.ump"
+  // line 1529 "../../../../IN.ump"
    public LogEntryType getLogType(){
     return LogEntryType.LOG_IN;
   }
@@ -1440,7 +1849,7 @@ releaseLatch();
    * 
    * @see LoggableObject#getLogSize
    */
-  // line 1273 "../../../../IN.ump"
+  // line 1536 "../../../../IN.ump"
    public int getLogSize(){
     int size = super.getLogSize();
   size += LogUtils.getByteArrayLogSize(identifierKey);
@@ -1465,7 +1874,7 @@ releaseLatch();
    * 
    * @see LoggableObject#writeToLog
    */
-  // line 1295 "../../../../IN.ump"
+  // line 1558 "../../../../IN.ump"
    public void writeToLog(ByteBuffer logBuffer){
     super.writeToLog(logBuffer);
   LogUtils.writeByteArray(logBuffer, identifierKey);
@@ -1501,7 +1910,7 @@ releaseLatch();
    * 
    * @see LogReadable#readFromLog
    */
-  // line 1328 "../../../../IN.ump"
+  // line 1591 "../../../../IN.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     super.readFromLog(itemBuffer, entryTypeVersion);
   identifierKey = LogUtils.readByteArray(itemBuffer);
@@ -1549,9 +1958,8 @@ releaseLatch();
    }
    entryStates[i] = entryState;
   }
-    // line 125 "../../../../Latches_IN.ump"
-    //original(itemBuffer, entryTypeVersion);
-    	latch.setName(shortClassName() + getNodeId());
+    // line 127 "../../../../Latches_IN.ump"
+    latch.setName(shortClassName() + getNodeId());
     // END OF UMPLE AFTER INJECTION
   }
 
@@ -1560,7 +1968,7 @@ releaseLatch();
    * 
    * @see LogReadable#dumpLog
    */
-  // line 1380 "../../../../IN.ump"
+  // line 1643 "../../../../IN.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append(beginTag());
   super.dumpLog(sb, verbose);
@@ -1601,7 +2009,7 @@ releaseLatch();
    * 
    * @see LogReadable#logEntryIsTransactional.
    */
-  // line 1418 "../../../../IN.ump"
+  // line 1681 "../../../../IN.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -1611,7 +2019,7 @@ releaseLatch();
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 1425 "../../../../IN.ump"
+  // line 1688 "../../../../IN.ump"
    public long getTransactionId(){
     return 0;
   }
@@ -1621,22 +2029,22 @@ releaseLatch();
    * 
    * Allows subclasses to add additional fields before the end tag. If they just overload dumpLog, the xml isn't nested.
    */
-  // line 1431 "../../../../IN.ump"
+  // line 1694 "../../../../IN.ump"
    protected void dumpLogAdditional(StringBuffer sb){
     
   }
 
-  // line 1434 "../../../../IN.ump"
+  // line 1697 "../../../../IN.ump"
    public String beginTag(){
     return BEGIN_TAG;
   }
 
-  // line 1438 "../../../../IN.ump"
+  // line 1701 "../../../../IN.ump"
    public String endTag(){
     return END_TAG;
   }
 
-  // line 1442 "../../../../IN.ump"
+  // line 1705 "../../../../IN.ump"
   public void dumpKeys() throws DatabaseException{
     for (int i = 0; i < nEntries; i++) {
    System.out.println(Key.dumpString(entryKeyVals[i], 0));
@@ -1649,7 +2057,7 @@ releaseLatch();
    * For unit test support:
    * @return a string that dumps information about this IN, without
    */
-  // line 1452 "../../../../IN.ump"
+  // line 1715 "../../../../IN.ump"
    public String dumpString(int nSpaces, boolean dumpTags){
     StringBuffer sb = new StringBuffer();
   if (dumpTags) {
@@ -1730,7 +2138,7 @@ releaseLatch();
    * 
    * Utility method for output of knownDeleted and pendingDelete.
    */
-  // line 1530 "../../../../IN.ump"
+  // line 1793 "../../../../IN.ump"
    static  void dumpDeletedState(StringBuffer sb, byte state){
     sb.append("<knownDeleted val=\"");
   sb.append(isStateKnownDeleted(state)).append("\"/>");
@@ -1738,12 +2146,12 @@ releaseLatch();
   sb.append(isStatePendingDeleted(state)).append("\"/>");
   }
 
-  // line 1537 "../../../../IN.ump"
+  // line 1800 "../../../../IN.ump"
    public String toString(){
     return dumpString(0, true);
   }
 
-  // line 1541 "../../../../IN.ump"
+  // line 1804 "../../../../IN.ump"
    public String shortClassName(){
     return "IN";
   }
@@ -1759,42 +2167,42 @@ releaseLatch();
    * throw new ReturnBoolean(true);
    * }
    */
-  // line 1554 "../../../../IN.ump"
+  // line 1817 "../../../../IN.ump"
    protected void hook620() throws DatabaseException{
     
   }
 
-  // line 1556 "../../../../IN.ump"
+  // line 1819 "../../../../IN.ump"
    protected void hook621() throws DatabaseException{
     
   }
 
-  // line 1558 "../../../../IN.ump"
+  // line 1821 "../../../../IN.ump"
    protected void hook622() throws DatabaseException{
     
   }
 
-  // line 1560 "../../../../IN.ump"
+  // line 1823 "../../../../IN.ump"
    protected void hook623() throws DatabaseException{
     
   }
 
-  // line 1562 "../../../../IN.ump"
+  // line 1825 "../../../../IN.ump"
    protected void hook624() throws DatabaseException{
     
   }
 
-  // line 1564 "../../../../IN.ump"
+  // line 1827 "../../../../IN.ump"
    protected void hook625(Node child) throws DatabaseException{
     
   }
 
-  // line 1566 "../../../../IN.ump"
+  // line 1829 "../../../../IN.ump"
    protected void hook626() throws DatabaseException{
     
   }
 
-  // line 1568 "../../../../IN.ump"
+  // line 1831 "../../../../IN.ump"
    protected void hook627() throws DatabaseException{
     
   }
@@ -2061,7 +2469,7 @@ releaseLatch();
   
   @MethodObject
   // line 4 "../../../../IN_static.ump"
-  // line 83 "../../../../MemoryBudget_IN_inner.ump"
+  // line 86 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_setLsn
   {
   
@@ -2092,7 +2500,7 @@ releaseLatch();
   
     // line 11 "../../../../IN_static.ump"
     public void execute(){
-      // line 85 "../../../../MemoryBudget_IN_inner.ump"
+      // line 88 "../../../../MemoryBudget_IN_inner.ump"
       oldSize=_this.computeLsnOverhead();
               //original();
       // END OF UMPLE BEFORE INJECTION
@@ -2131,7 +2539,7 @@ releaseLatch();
   
   @MethodObject
   // line 23 "../../../../IN_static.ump"
-  // line 125 "../../../../MemoryBudget_IN_inner.ump"
+  // line 128 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_setEntry
   {
   
@@ -2165,7 +2573,7 @@ releaseLatch();
   
     // line 33 "../../../../IN_static.ump"
     public void execute(){
-      // line 127 "../../../../MemoryBudget_IN_inner.ump"
+      // line 130 "../../../../MemoryBudget_IN_inner.ump"
       oldSize=_this.getEntryInMemorySize(idx);
               //original();
       // END OF UMPLE BEFORE INJECTION
@@ -2227,7 +2635,7 @@ releaseLatch();
   
   @MethodObject
   // line 61 "../../../../IN_static.ump"
-  // line 72 "../../../../MemoryBudget_IN_inner.ump"
+  // line 75 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry
   {
   
@@ -2258,12 +2666,12 @@ releaseLatch();
   
     // line 68 "../../../../IN_static.ump"
     public void execute(){
-      // line 74 "../../../../MemoryBudget_IN_inner.ump"
+      // line 77 "../../../../MemoryBudget_IN_inner.ump"
       oldSize=_this.getEntryInMemorySize(idx);
               //original();
       // END OF UMPLE BEFORE INJECTION
       _this.setTarget(idx,node);
-      // line 79 "../../../../MemoryBudget_IN_inner.ump"
+      // line 82 "../../../../MemoryBudget_IN_inner.ump"
       newSize=_this.getEntryInMemorySize(idx);
               _this.updateMemorySize(oldSize,newSize);
       // END OF UMPLE AFTER INJECTION
@@ -2292,7 +2700,7 @@ releaseLatch();
   
   @MethodObject
   // line 76 "../../../../IN_static.ump"
-  // line 93 "../../../../MemoryBudget_IN_inner.ump"
+  // line 96 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry2
   {
   
@@ -2324,7 +2732,7 @@ releaseLatch();
   
     // line 84 "../../../../IN_static.ump"
     public void execute(){
-      // line 95 "../../../../MemoryBudget_IN_inner.ump"
+      // line 98 "../../../../MemoryBudget_IN_inner.ump"
       oldSize=_this.getEntryInMemorySize(idx);
               //original();
       // END OF UMPLE BEFORE INJECTION
@@ -2369,7 +2777,7 @@ releaseLatch();
   
   @MethodObject
   // line 99 "../../../../IN_static.ump"
-  // line 114 "../../../../MemoryBudget_IN_inner.ump"
+  // line 117 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntry3
   {
   
@@ -2402,7 +2810,7 @@ releaseLatch();
   
     // line 108 "../../../../IN_static.ump"
     public void execute(){
-      // line 116 "../../../../MemoryBudget_IN_inner.ump"
+      // line 119 "../../../../MemoryBudget_IN_inner.ump"
       oldSize=_this.getEntryInMemorySize(idx);
               //original();
       // END OF UMPLE BEFORE INJECTION
@@ -2450,7 +2858,7 @@ releaseLatch();
   
   @MethodObject
   // line 125 "../../../../IN_static.ump"
-  // line 61 "../../../../MemoryBudget_IN_inner.ump"
+  // line 64 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_updateEntryCompareKey
   {
   
@@ -2483,7 +2891,7 @@ releaseLatch();
   
     // line 134 "../../../../IN_static.ump"
     public void execute(){
-      // line 63 "../../../../MemoryBudget_IN_inner.ump"
+      // line 66 "../../../../MemoryBudget_IN_inner.ump"
       oldSize=_this.getEntryInMemorySize(idx);
               //original();
       // END OF UMPLE BEFORE INJECTION
@@ -2534,7 +2942,7 @@ releaseLatch();
   
   @MethodObject
   // line 157 "../../../../IN_static.ump"
-  // line 47 "../../../../MemoryBudget_IN_inner.ump"
+  // line 50 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_insertEntry1
   {
   
@@ -2631,7 +3039,7 @@ releaseLatch();
   
   @MethodObject
   // line 207 "../../../../IN_static.ump"
-  // line 11 "../../../../MemoryBudget_IN_inner.ump"
+  // line 14 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_deleteEntry
   {
   
@@ -2713,7 +3121,6 @@ releaseLatch();
   
   
   // line 247 "../../../../IN_static.ump"
-  // line 40 "../../../../Latches_IN_inner.ump"
   public static class IN_validateSubtreeBeforeDelete
   {
   
@@ -2744,10 +3151,7 @@ releaseLatch();
     // line 253 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-            Label628:
-  needToLatch=!_this.isLatchOwner();    
-  				//try {          //original();//      }
-     ; //this.hook628();
+            Label628:   ; //this.hook628();
   	 			//	this.hook629();
   		      if (index >= _this.nEntries) {
   		        return true;
@@ -2759,11 +3163,7 @@ releaseLatch();
   // end hook628
           }
     finally {
-    Label628_1:
-  if (needToLatch) {
-              _this.releaseLatchIfOwner();
-            }
-     ;
+    Label628_1:   ;
      }
     }
     
@@ -2786,11 +3186,7 @@ releaseLatch();
   
   
   
-  @MethodObject
   // line 287 "../../../../IN_static.ump"
-  // line 4 "../../../../MemoryBudget_IN_inner.ump"
-  // line 4 "../../../../INCompressor_IN_inner.ump"
-  // line 5 "../../../../Latches_IN_inner.ump"
   public static class IN_splitInternal
   {
   
@@ -2843,16 +3239,9 @@ releaseLatch();
           newIdKey=_this.entryKeyVals[low];
           parentLsn=DbLsn.NULL_LSN;
           newSibling=_this.createNewInstance(newIdKey,maxEntries,_this.level);
-          Label631:
-  newSibling.latch();
-          //original();
-     ; //this.hook631();
+          Label631:   ; //this.hook631();
           oldMemorySize=_this.inMemorySize;
-          Label630:
-  //     try {          //original();}//  finally {
-            newSibling.releaseLatch();
-      //    }
-     ; 
+          Label630:   ; 
           toIdx=0;
           deletedEntrySeen=false;
           binRef=null;
@@ -2868,12 +3257,7 @@ releaseLatch();
             newSibling.setEntry(toIdx++,_this.entryTargets[i],thisKey,_this.getLsn(i),_this.entryStates[i]);
             _this.clearEntry(i);
           }
-          Label636:
-  if (deletedEntrySeen) {
-            _this.databaseImpl.getDbEnvironment().addToCompressorQueue(binRef,false);
-          }
-  //        original();
-     ; //this.hook636();
+          Label636:   ; //this.hook636();
           newSiblingNEntries=(high - low);
           if (low == 0) {
             _this.shiftEntriesLeft(newSiblingNEntries);
@@ -2912,11 +3296,7 @@ releaseLatch();
             parent.setDirty(true);
           }
           //this.hook650();
-          Label650:
-  newSize=_this.computeMemorySize();
-          _this.updateMemorySize(oldMemorySize,newSize);
-          //original();
-     ;
+          Label650:   ;
           inMemoryINs.add(newSibling);
           Label617: ;//this.hook617();
     }
@@ -2983,7 +3363,6 @@ releaseLatch();
   
   
   // line 412 "../../../../IN_static.ump"
-  // line 61 "../../../../Latches_IN_inner.ump"
   public static class IN_verify
   {
   
@@ -3013,18 +3392,8 @@ releaseLatch();
   
     // line 418 "../../../../IN_static.ump"
     public void execute() throws DatabaseException{
-      // line 63 "../../../../Latches_IN_inner.ump"
-      unlatchThis=false;
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       try {
-            Label632:
-  if (!_this.isLatchOwner()) {
-            _this.latch();
-            unlatchThis=true;
-          }
-          //original();
-     ; //this.hook632();
+            Label632:   ; //this.hook632();
             userCompareToFcn=(_this.databaseImpl == null ? null : _this.getKeyComparator());
             key1=null;
             for (int i=1; i < _this.nEntries; i++) {
@@ -3049,12 +3418,7 @@ releaseLatch();
             DE.printStackTrace(System.out);
           }
      finally {
-            Label633:
-  if (unlatchThis) {
-            _this.releaseLatch();
-          }
-          //original();
-     ; //this.hook633();
+            Label633:   ; //this.hook633();
           }
     }
     
@@ -3086,7 +3450,6 @@ releaseLatch();
   
   
   // line 458 "../../../../IN_static.ump"
-  // line 19 "../../../../Latches_IN_inner.ump"
   public static class IN_isValidForDelete
   {
   
@@ -3116,15 +3479,8 @@ releaseLatch();
     // line 463 "../../../../IN_static.ump"
     public boolean execute() throws DatabaseException{
       try {
-  				      Label634:
-  needToLatch=!_this.isLatchOwner();
-     ; //this.hook634();
-  							Label635:
-  if (needToLatch) {
-            _this.latch();
-          }
-          //original();
-     ; //this.hook635();
+  				      Label634:   ; //this.hook634();
+  							Label635:   ; //this.hook635();
   						  if (_this.nEntries > 1) {
   						   return false;
   						  }
@@ -3137,13 +3493,7 @@ releaseLatch();
   						  }
           }
      finally {
-  					Label634_1:
-  //        try {          //original();} finally {
-            if (needToLatch) {
-              _this.releaseLatchIfOwner();
-            }
-    //      }
-     ; 
+  					Label634_1:   ; 
             
           }
     }
@@ -3167,7 +3517,7 @@ releaseLatch();
   
   @MethodObject
   // line 504 "../../../../IN_static.ump"
-  // line 22 "../../../../MemoryBudget_IN_inner.ump"
+  // line 25 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_trackProvisionalObsolete
   {
   
@@ -3241,7 +3591,7 @@ releaseLatch();
      ;
             }
           }
-      // line 24 "../../../../MemoryBudget_IN_inner.ump"
+      // line 27 "../../../../MemoryBudget_IN_inner.ump"
       //original();
               if (memDelta != 0) {
                 _this.changeMemorySize(memDelta);
@@ -3289,7 +3639,7 @@ releaseLatch();
   
   @MethodObject
   // line 557 "../../../../IN_static.ump"
-  // line 104 "../../../../MemoryBudget_IN_inner.ump"
+  // line 107 "../../../../MemoryBudget_IN_inner.ump"
   public static class IN_flushProvisionalObsolete
   {
   
@@ -3362,191 +3712,88 @@ releaseLatch();
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 32 "../../../../IN.ump"
+  // line 34 "../../../../IN.ump"
   private static final String BEGIN_TAG = "<in>" ;
-// line 34 "../../../../IN.ump"
-  private static final String END_TAG = "</in>" ;
 // line 36 "../../../../IN.ump"
-  private static final String TRACE_SPLIT = "Split:" ;
+  private static final String END_TAG = "</in>" ;
 // line 38 "../../../../IN.ump"
-  private static final String TRACE_DELETE = "Delete:" ;
+  private static final String TRACE_SPLIT = "Split:" ;
 // line 40 "../../../../IN.ump"
-  private static final byte KNOWN_DELETED_BIT = 0x1 ;
+  private static final String TRACE_DELETE = "Delete:" ;
 // line 42 "../../../../IN.ump"
-  private static final byte CLEAR_KNOWN_DELETED_BIT = ~0x1 ;
+  private static final byte KNOWN_DELETED_BIT = 0x1 ;
 // line 44 "../../../../IN.ump"
-  private static final byte DIRTY_BIT = 0x2 ;
+  private static final byte CLEAR_KNOWN_DELETED_BIT = ~0x1 ;
 // line 46 "../../../../IN.ump"
-  private static final byte CLEAR_DIRTY_BIT = ~0x2 ;
+  private static final byte DIRTY_BIT = 0x2 ;
 // line 48 "../../../../IN.ump"
-  private static final byte MIGRATE_BIT = 0x4 ;
+  private static final byte CLEAR_DIRTY_BIT = ~0x2 ;
 // line 50 "../../../../IN.ump"
-  private static final byte CLEAR_MIGRATE_BIT = ~0x4 ;
+  private static final byte MIGRATE_BIT = 0x4 ;
 // line 52 "../../../../IN.ump"
-  private static final byte PENDING_DELETED_BIT = 0x8 ;
+  private static final byte CLEAR_MIGRATE_BIT = ~0x4 ;
 // line 54 "../../../../IN.ump"
-  private static final byte CLEAR_PENDING_DELETED_BIT = ~0x8 ;
+  private static final byte PENDING_DELETED_BIT = 0x8 ;
 // line 56 "../../../../IN.ump"
-  private static final int BYTES_PER_LSN_ENTRY = 4 ;
+  private static final byte CLEAR_PENDING_DELETED_BIT = ~0x8 ;
 // line 58 "../../../../IN.ump"
-  private static final int MAX_FILE_OFFSET = 0xfffffe ;
+  private static final int BYTES_PER_LSN_ENTRY = 4 ;
 // line 60 "../../../../IN.ump"
-  private static final int THREE_BYTE_NEGATIVE_ONE = 0xffffff ;
+  private static final int MAX_FILE_OFFSET = 0xfffffe ;
 // line 62 "../../../../IN.ump"
-  private static final int GROWTH_INCREMENT = 5 ;
+  private static final int THREE_BYTE_NEGATIVE_ONE = 0xffffff ;
 // line 64 "../../../../IN.ump"
-  public static final int DBMAP_LEVEL = 0x20000 ;
+  private static final int GROWTH_INCREMENT = 5 ;
 // line 66 "../../../../IN.ump"
-  public static final int MAIN_LEVEL = 0x10000 ;
+  public static final int DBMAP_LEVEL = 0x20000 ;
 // line 68 "../../../../IN.ump"
-  public static final int LEVEL_MASK = 0x0ffff ;
+  public static final int MAIN_LEVEL = 0x10000 ;
 // line 70 "../../../../IN.ump"
-  public static final int MIN_LEVEL = -1 ;
+  public static final int LEVEL_MASK = 0x0ffff ;
 // line 72 "../../../../IN.ump"
-  public static final int MAX_LEVEL = Integer.MAX_VALUE ;
+  public static final int MIN_LEVEL = -1 ;
 // line 74 "../../../../IN.ump"
-  public static final int BIN_LEVEL = MAIN_LEVEL | 1 ;
+  public static final int MAX_LEVEL = Integer.MAX_VALUE ;
 // line 76 "../../../../IN.ump"
-  private long generation ;
+  public static final int BIN_LEVEL = MAIN_LEVEL | 1 ;
 // line 78 "../../../../IN.ump"
-  private boolean dirty ;
+  private long generation ;
 // line 80 "../../../../IN.ump"
-  private int nEntries ;
+  private boolean dirty ;
 // line 82 "../../../../IN.ump"
-  private byte[] identifierKey ;
+  private int nEntries ;
 // line 84 "../../../../IN.ump"
-  private Node[] entryTargets ;
+  private byte[] identifierKey ;
 // line 86 "../../../../IN.ump"
-  private byte[][] entryKeyVals ;
+  private Node[] entryTargets ;
 // line 88 "../../../../IN.ump"
-  private long baseFileNumber ;
+  private byte[][] entryKeyVals ;
 // line 90 "../../../../IN.ump"
-  private byte[] entryLsnByteArray ;
+  private long baseFileNumber ;
 // line 92 "../../../../IN.ump"
-  private long[] entryLsnLongArray ;
+  private byte[] entryLsnByteArray ;
 // line 94 "../../../../IN.ump"
-  private byte[] entryStates ;
+  private long[] entryLsnLongArray ;
 // line 96 "../../../../IN.ump"
-  private DatabaseImpl databaseImpl ;
+  private byte[] entryStates ;
 // line 98 "../../../../IN.ump"
-  private boolean isRoot ;
+  private DatabaseImpl databaseImpl ;
 // line 100 "../../../../IN.ump"
-  private int level ;
+  private boolean isRoot ;
 // line 102 "../../../../IN.ump"
-  private long inMemorySize ;
+  private int level ;
 // line 104 "../../../../IN.ump"
-  private long lastFullVersion = DbLsn.NULL_LSN ;
+  private long inMemorySize ;
 // line 106 "../../../../IN.ump"
-  private List provisionalObsolete ;
+  private long lastFullVersion = DbLsn.NULL_LSN ;
 // line 108 "../../../../IN.ump"
-  public static final int EXACT_MATCH = (1 << 16) ;
+  private List provisionalObsolete ;
 // line 110 "../../../../IN.ump"
-  public static final int INSERT_SUCCESS = (1 << 17) ;
+  public static final int EXACT_MATCH = (1 << 16) ;
 // line 112 "../../../../IN.ump"
+  public static final int INSERT_SUCCESS = (1 << 17) ;
+// line 114 "../../../../IN.ump"
   public static int ACCUMULATED_LIMIT = 1000 ;
-
-// line 1039 "../../../../IN.ump"
-  void findParent (Tree.SearchType searchType, long targetNodeId, boolean targetContainsDuplicates,
-  boolean targetIsRoot, byte[] targetMainTreeKey, byte[] targetDupTreeKey, SearchResult result,
-  boolean requireExactMatch, boolean updateGeneration, int targetLevel, List trackingList, boolean doFetch)
- throws DatabaseException 
-  {
-    if (getNodeId() == targetNodeId) {
-   Label620:   ; //this.hook620();
-    result.exactParentFound = false;
-   result.keepSearching = false;
-   result.parent = null;
-   return;
-  }
-  if (getNEntries() == 0) {
-   result.keepSearching = false;
-   result.exactParentFound = false;
-   if (requireExactMatch) {
-    Label621:   ; //this.hook621();
-     result.parent = null;
-   }
-   else {
-    result.parent = this;
-    result.index = -1;
-   }
-   return;
-  } else {
-   if (searchType == Tree.SearchType.NORMAL) {
-    result.index = findEntry(selectKey(targetMainTreeKey, targetDupTreeKey), false, false);
-   } else if (searchType == Tree.SearchType.LEFT) {
-    result.index = 0;
-   } else if (searchType == Tree.SearchType.RIGHT) {
-    result.index = nEntries - 1;
-   } else {
-    throw new IllegalArgumentException("Invalid value of searchType: " + searchType);
-   }
-   if (result.index < 0) {
-    result.keepSearching = false;
-    result.exactParentFound = false;
-    if (requireExactMatch) {
-     Label622:   ; //this.hook622();
-      result.parent = null;
-    }
-    else {
-     result.parent = this;
-    }
-    return;
-   }
-   Node child = null;
-   boolean isDeleted = false;
-   if (isEntryKnownDeleted(result.index)) {
-    isDeleted = true;
-   } else if (doFetch) {
-    child = fetchTarget(result.index);
-    if (child == null) {
-     isDeleted = true;
-    }
-   } else {
-    child = getTarget(result.index);
-   }
-   if (isDeleted) {
-    result.exactParentFound = false;
-    result.keepSearching = false;
-    if (requireExactMatch) {
-     result.parent = null;
-     Label623:   ; //this.hook623();
-    } else {
-     result.parent = this;
-    }
-    return;
-   }
-   if (targetLevel >= 0 && level == targetLevel + 1) {
-    result.exactParentFound = true;
-    result.parent = this;
-    result.keepSearching = false;
-    return;
-   }
-   if (child == null) {
-    assert!doFetch;
-    result.keepSearching = false;
-    result.exactParentFound = false;
-    result.parent = this;
-    result.childNotResident = true;
-    return;
-   }
-   long childLsn = getLsn(result.index);
-   if (child.isSoughtNode(targetNodeId, updateGeneration)) {
-    result.exactParentFound = true;
-    result.parent = this;
-    result.keepSearching = false;
-    return;
-   } else {
-    descendOnParentSearch(result, targetContainsDuplicates, targetIsRoot, targetNodeId, child,
-     requireExactMatch);
-    if (trackingList != null) {
-     if ((result.parent != this) && (result.parent != null)) {
-      trackingList.add(new TrackingInfo(childLsn, child.getNodeId()));
-     }
-    }
-    return;
-   }
-  }
-  }
 // line 5 "../../../../MemoryBudget_IN.ump"
   private boolean inListResident ;
 // line 7 "../../../../MemoryBudget_IN.ump"

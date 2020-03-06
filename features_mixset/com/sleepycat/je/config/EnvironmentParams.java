@@ -17,6 +17,7 @@ import java.io.File;
 // line 3 "../../../../loggingBase_EnvironmentParams.ump"
 // line 3 "../../../../LoggingEvictor_EnvironmentParams.ump"
 // line 3 "../../../../Evictor_EnvironmentParams.ump"
+// line 3 "../../../../LookAHEADCache_EnvironmentParams.ump"
 // line 3 "../../../../INCompressor_EnvironmentParams.ump"
 // line 3 "../../../../Latches_EnvironmentParams.ump"
 // line 3 "../../../../FSync_EnvironmentParams.ump"
@@ -385,7 +386,12 @@ public class EnvironmentParams
 
     public static final BooleanConfigParam EVICTOR_LRU_ONLY = new BooleanConfigParam("je.evictor.lruOnly", true, false,
 	    "# If true (the default), use an LRU-only policy to select nodes for\n"
-		    + "# eviction.  If false, select by Btree level first, and then by LRU.");// line 5 "../../../../INCompressor_EnvironmentParams.ump"
+		    + "# eviction.  If false, select by Btree level first, and then by LRU.");
+// line 5 ../../../../LookAHEADCache_EnvironmentParams.ump
+  public static final IntConfigParam CLEANER_LOOK_AHEAD_CACHE_SIZE = new IntConfigParam(
+	    "je.cleaner.lookAheadCacheSize", new Integer(0), null, new Integer(8192), true,
+	    "# The look ahead cache size for cleaning in bytes.  Increasing this\n"
+		    + "# value can reduce the number of Btree lookups.");// line 5 "../../../../INCompressor_EnvironmentParams.ump"
   public static final LongConfigParam COMPRESSOR_WAKEUP_INTERVAL = new LongConfigParam("je.compressor.wakeupInterval",
 	    new Long(1000000), new Long(4294967296L), new Long(5000000), false,
 	    "# The compressor wakeup interval in microseconds.") ;

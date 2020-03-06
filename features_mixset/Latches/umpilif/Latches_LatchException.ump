@@ -4,7 +4,7 @@ class LatchException
 {
   isA DatabaseException;
 
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.DatabaseException;
 
 

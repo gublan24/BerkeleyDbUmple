@@ -44,8 +44,8 @@ class IN
     }
 
     after Label618: init(DatabaseImpl , byte , int , int ) {
-	latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); // fix makeLatch into ==> makeSharedLatch
-	//original(env);
+	latch = LatchSupport.makeLatch(shortClassName() + getNodeId(), env); 
+
     }
 
     /** 
@@ -53,15 +53,17 @@ class IN
      */
     after latch(boolean ) {
 
-	//original(updateGeneration);
 	latch.acquire();
     }
 
   after Label619: latchNoWait(boolean ){
 
-      if (! (((SharedLatch) latch).acquireExclusiveNoWait())) {
+			if (!latch.acquireNoWait()) { 
             return false;
-      }
+        }
+
+
+     
   }
 
     /** 
@@ -70,51 +72,50 @@ class IN
      */
 
 
-    before findParent(Tree.SearchType , long , boolean , boolean , byte, byte, SearchResult ,	boolean , boolean , int , List , boolean ) {
+    before findParent(SearchType , long , boolean , boolean , byte, byte, SearchResult ,	boolean , boolean , int , List , boolean ) {
 	assert isLatchOwner();
-	//original(searchType, targetNodeId, targetContainsDuplicates, targetIsRoot, targetMainTreeKey, targetDupTreeKey,result, requireExactMatch, updateGeneration, targetLevel, trackingList, doFetch);
+
     }
 
-    after Label620: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label620: findParent(SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
-	//original();
+
     }
 
-    after Label621: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label621: findParent(SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
-	//original();
+
     }
 
-    after Label622: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label622: findParent(SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
-	//original();
+
     }
 
-    after Label623: findParent(Tree.SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
+    after Label623: findParent(SearchType , long , boolean , boolean , byte , byte , SearchResult , boolean , boolean , int , List , boolean ) {
 	releaseLatch();
-	//original();
+
     }
 
     after Label624:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
-
 	releaseLatch();
-	//original();
+
     }
 
     after Label625:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
 
 	((IN) child).releaseLatch();
-	//original(child);
+
     }
 
     after Label626:  descendOnParentSearch(SearchResult , boolean , boolean , long , Node , boolean ) {
 	releaseLatch();
-	//original();
+
     }
 
     after Label627: isSoughtNode(long , boolean ){
 	releaseLatch();
-	//original();
+
     }
 
     /** 
@@ -122,8 +123,92 @@ class IN
      */
     after readFromLog(ByteBuffer , byte ) {
 
-	//original(itemBuffer, entryTypeVersion);
+
 	latch.setName(shortClassName() + getNodeId());
     }
+
+
+      
+  after Label634:isValidForDelete() {
+				;
+        boolean needToLatch = !isLatchOwner();
+
+		}
+
+   after Label634_1:isValidForDelete() {
+
+		if (needToLatch) {
+				latch();
+					}
+
+      }
+
+  after Label635: isValidForDelete() {
+        	  if (needToLatch) {
+			releaseLatchIfOwner();
+			  }
+
+   }
+    
+  before verify(byte )  {
+          	;
+						boolean unlatchThis = false;
+
+      }
+ after Label632: verify(byte )  {
+				if (!isLatchOwner()) {
+						latch();
+						unlatchThis = true;
+							}
+
+      }
+  after Label633: verify(byte )  {
+				 if (unlatchThis) {
+				releaseLatch();
+					}
+
+      }
+
+
+
+
+    
+  after Label630: splitInternal(IN , int , int , int ) {
+
+          newSibling.latch();
+
+      }
+
+      after Label631:  splitInternal(IN , int , int , int ) {
+
+	    newSibling.releaseLatch();
+
+
+      }
+    
+
+
+
+
+  after Label628:validateSubtreeBeforeDelete(int ) {
+				;
+				boolean needToLatch = !isLatchOwner();
+
+  }
+
+  after Label628_1: validateSubtreeBeforeDelete(int ) {
+              if (needToLatch) {
+                     releaseLatchIfOwner();
+							}
+  }
+
+  after Label629: validateSubtreeBeforeDelete(int ) {
+         if (needToLatch) {
+						latch();
+	    			}
+
+   }
+   
+  
 
 }

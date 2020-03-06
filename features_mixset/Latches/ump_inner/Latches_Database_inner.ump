@@ -1,25 +1,25 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/Database.java
 namespace com.sleepycat.je;
+
 class Database {
-   static class Database_acquireTriggerListReadLock {
-      before execute()  {
-        env=_this.envHandle.getEnvironmentImpl();
+
+      before acquireTriggerListReadLock()  {
+        EnvironmentImpl env = envHandle.getEnvironmentImpl();
         env.getTriggerLatch().acquireShared();
-        //original();
+
       }
-    }
-   static class Database_releaseTriggerListWriteLock {
-      after execute() {
-  //      original();
-        env=_this.envHandle.getEnvironmentImpl();
+   
+
+      after releaseTriggerListWriteLock() {
+
+        EnvironmentImpl env = envHandle.getEnvironmentImpl();
         env.getTriggerLatch().release();
       }
-    }
-   static class Database_acquireTriggerListWriteLock {
-      before execute() {
-        env=_this.envHandle.getEnvironmentImpl();
+    
+
+      before acquireTriggerListWriteLock() {
+			 EnvironmentImpl env = envHandle.getEnvironmentImpl();
         env.getTriggerLatch().acquireExclusive();
-        //original();
+
       }
-    }
+    
 }

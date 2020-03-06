@@ -1,18 +1,8 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/UtilizationProfile.java
 namespace com.sleepycat.je.cleaner;
 class UtilizationProfile {
-   static class UtilizationProfile_clearCache {
-      UtilizationProfile_clearCache(    UtilizationProfile _this){
-        this._this=_this;
-      }
-      void execute(){
-        _this.fileSummaryMap=new TreeMap();
-        _this.cachePopulated=false;
-      }
-      protected UtilizationProfile _this;
-      protected int memorySize;
-      protected MemoryBudget mb;
-    }
+
+
    static class UtilizationProfile_removeFile {
       UtilizationProfile_removeFile(    UtilizationProfile _this,    Long fileNum){
         this._this=_this;

@@ -6,7 +6,7 @@ class MemoryBudget
      * Initialize the starting environment memory state
      */
  after initCacheMemoryUsage()  {
-	//original();
+
 	assert LatchSupport.countLatchesHeld() == 0;
     }
 
@@ -15,11 +15,9 @@ class MemoryBudget
 }
 
     after Label347_1: calcTreeCacheUsage(){
-	//try {
-	  //  totalSize = original(totalSize, inList);} finally {
+
 	    inList.releaseMajorLatch();
-	//}
-	//return totalSize;
+
     }
 
 }

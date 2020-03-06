@@ -121,7 +121,7 @@ class EnvironmentImpl
 	    configObservers = new ArrayList();
 	    addConfigObserver(this);
 	    memoryBudget = new MemoryBudget(this, configManager);
-	    //this.hook336(envHome);
+
       Label336:   ;
 	    forcedYield = configManager.getBoolean(EnvironmentParams.ENV_FORCED_YIELD);
 	    isTransactional = configManager.getBoolean(EnvironmentParams.ENV_INIT_TXN);
@@ -142,7 +142,7 @@ class EnvironmentImpl
 			+ " environment in " + envHome);
 	    }
 	    Label321:   ; 	
-      logManager = new SyncedLogManager(this, isReadOnly); //this.hook321();
+
 	    inMemoryINs = new INList(this);
 	    txnManager = new TxnManager(this);
 	    createDaemons();

@@ -2,7 +2,8 @@ namespace com.sleepycat.je.tree;
 
 class Tree {
     isA LogWritable, LogReadable;
-    depend de.ovgu.cide.jakutil.*;
+
+
     depend com.sleepycat.je.utilint.Tracer;
     depend com.sleepycat.je.utilint.TestHookExecute;
     depend com.sleepycat.je.utilint.TestHook;
@@ -33,6 +34,7 @@ class Tree {
     depend java.util.List;
     depend java.util.ArrayList;
     depend java.nio.ByteBuffer;
+
     private static final String TRACE_ROOT_SPLIT = "RootSplit:";
 
     private static final String TRACE_DUP_ROOT_SPLIT = "DupRootSplit:";
@@ -58,6 +60,10 @@ class Tree {
     private ThreadLocal treeStatsAccumulatorTL = new ThreadLocal();
 
     private static SplitRequiredException splitRequiredException = new SplitRequiredException();
+
+
+
+
 
     /** 
      * Embodies an enum for the type of search being performed. NORMAL means do a regular search down the tree. LEFT/RIGHT means search down the left/right side to find the first/last node in the tree.
@@ -177,26 +183,23 @@ class Tree {
 
     public IN withRootLatchedExclusive(WithRootLatched wrl) throws DatabaseException {
         try {
-            Label670:; //this.hook670(wrl);
-            Label728:; //this.hook728();
-            return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root));
 
-            //throw ReturnHack.returnObject;
+            Label728: ; 
+            return wrl.doWork(root); 
+
         }
         finally  {
-            Label670_1:;
+            Label670:;
         }
     }
 
     public IN withRootLatchedShared(WithRootLatched wrl) throws DatabaseException {
         try {
-            Label671:; //this.hook671(wrl);
-            Label729:; //this.hook729();
-            return wrl.doWork(root); //throw new ReturnObject(wrl.doWork(root))
-            //throw ReturnHack.returnObject;
+            Label671: ; 
+            return wrl.doWork(root); 
         }
        finally  {
-            Label671_1:  ;
+            Label729: ; 
         }
     }
 
@@ -209,10 +212,11 @@ class Tree {
     throws DatabaseException, NodeNotEmptyException, CursorsExistException {
       IN subtreeRootIN = null;
       ArrayList nodeLadder = new ArrayList();
-      IN rootIN = null;        
+      IN rootIN = null;  
+      boolean rootNeedsUpdating = false;      
       try {
-            boolean rootNeedsUpdating = false;
-            Label672: ; //this.hook672(idKey, tracker, subtreeRootIN, nodeLadder, rootIN, rootNeedsUpdating);
+
+            Label672: ;
             if (root == null) {
                 return; //throw new ReturnVoid();
             }
@@ -247,13 +251,32 @@ class Tree {
                 }
             } 
 
-          catch (DatabaseException e) {
-              Label672_1:  ;
-            throw e;
-          }
-          
 
-                //End hook672
+			finally {
+            Label672_1:  ;
+        }
+
+     if (subtreeRootIN != null) {
+
+            EnvironmentImpl envImpl = database.getDbEnvironment();
+            if (rootNeedsUpdating) {
+                /*
+                 * modifyDbRoot will grab locks and we can't have the INList
+                 * latches or root latch held while it tries to acquire locks.
+                 */
+                DbTree dbTree = envImpl.getDbMapTree();
+                dbTree.modifyDbRoot(database);
+                Label661: ;
+            } 
+
+            /* 
+             * Count obsolete nodes after logging the delete. We can do
+             * this without having the nodes of the subtree latched because the
+             * subtree has been detached from the tree.
+             */
+            INList inList = envImpl.getInMemoryINs();
+            accountForSubtreeRemoval(inList, subtreeRootIN, tracker);
+        }
               
     }
 
@@ -296,7 +319,7 @@ class Tree {
         boolean rootNeedsUpdating = false;
         if (info4 != null) {
             if (info4.parent.isDbRoot()) {
-                Label673:; //this.hook673();
+                Label673:  ; 
                 root.setLsn(newLsn);
                 rootNeedsUpdating = true;
             }
@@ -320,16 +343,19 @@ class Tree {
     throws DatabaseException, NodeNotEmptyException, CursorsExistException {
         IN in = search(mainKey, SearchType.NORMAL, -1, null, false);
         IN deletedSubtreeRoot = null;
-        Label674: ; //deletedSubtreeRoot = this.hook674(idKey, mainKey, in, deletedSubtreeRoot);
-        Label730: ; //this.hook730(in);
+				try {
+
+        Label730: ; 
         assert in instanceof BIN;
         assert in .getNEntries() > 0;
         int index = in .findEntry(mainKey, false, true);
         if (index >= 0) {
             deletedSubtreeRoot = deleteDupSubtree(idKey, (BIN) in , index);
         }
-        Label674_1:   ;
-            //end hook674
+				}
+				finally {
+        Label674:   ;
+				}
 
             if (deletedSubtreeRoot != null) {
                 EnvironmentImpl envImpl = database.getDbEnvironment();
@@ -343,6 +369,7 @@ class Tree {
      */
     private IN deleteDupSubtree(byte[] idKey, BIN bin, int index)
     throws DatabaseException, NodeNotEmptyException, CursorsExistException {
+
         EnvironmentImpl envImpl = database.getDbEnvironment();
         boolean dupCountLNLocked = false;
         DupCountLN dcl = null;
@@ -381,11 +408,11 @@ class Tree {
                 subtreeRootIN = detachPoint.child;
             }
         } finally {
-            Label676:; //this.hook676(nodeLadder);
+            Label676:; 
             if (dupCountLNLocked) {
                 locker.releaseLock(dcl.getNodeId());
             }
-            Label675:; //this.hook675(duplicateRoot);
+            Label675:; 
         }
         return subtreeRootIN;
     }
@@ -781,7 +808,8 @@ try {
         long curRootLsn = 0;
         long logLsn = 0;
         IN newRoot = null;
-        Label688: ; //this.hook688(logManager, inMemoryINs, curRoot, curRootLsn, logLsn, newRoot);
+        Label688: ; 
+				try{
         byte[] rootIdKey = curRoot.getKey(0);
         newRoot = new IN(database, rootIdKey, maxMainTreeEntriesPerNode, curRoot.getLevel() + 1);
         newRoot.setIsRoot(true);
@@ -800,10 +828,11 @@ try {
         root.setLsn(logLsn);
         curRoot.split(newRoot, 0, maxMainTreeEntriesPerNode);
         root.setLsn(newRoot.getLastFullVersion());
-        Label688_1:
-            //end of hook688
+        }
+        finally { Label688_1: ;
+        }    
             treeStats.nRootSplits++;
-        Label662: ; //this.hook662(curRoot, curRootLsn, logLsn, newRoot);
+        Label662: ; 
     }
 
     /** 
@@ -828,7 +857,69 @@ try {
      * Do a key based search, permitting pre-emptive splits. Returns the target node's parent.
      */
     public IN searchSplitsAllowed(byte[] key, long nid, boolean updateGeneration) throws DatabaseException {
-        return new Tree_searchSplitsAllowed(this, key, nid, updateGeneration).execute();
+
+        IN insertTarget = null;
+        while (insertTarget == null) {
+    				Label717: ;
+            IN rootIN = null;
+	    try {
+		while (true) {
+		    if (root != null) {
+			rootIN = (IN) root.fetchTarget(database, null);
+
+			/* Check if root needs splitting. */
+			if (rootIN.needsSplitting()) {
+			    if (!rootLatchedExclusive) {
+						Label718: 
+			    }
+			    splitRoot();
+
+			    /*
+			     * We can't hold any latches while we lock.  If the
+			     * root splits again between latch release and
+			     * DbTree.db lock, no problem.  The latest root
+			     * will still get written out.
+			     */
+					Label719: ;
+			    EnvironmentImpl env = database.getDbEnvironment();
+			    env.getDbMapTree().modifyDbRoot(database);
+					Label720: ;
+			    rootIN = (IN) root.fetchTarget(database, null);
+			}
+				Label721: ;
+		    }
+		    break;
+		}
+	    } finally {
+Label716_1: ;
+
+
+	    }
+
+            /* Don't loop forever if the root is null. [#13897] */
+            if (rootIN == null) {
+                break;
+            } 
+
+            try {
+                insertTarget = searchSubTreeSplitsAllowed(rootIN, key, nid,
+                                                          updateGeneration);
+            } catch (SplitRequiredException e) {
+
+                /* 
+                 * The last slot in the root was used at the point when this
+                 * thread released the rootIN latch in order to force splits.
+                 * Retry. SR [#11147].
+                 */
+                continue;
+            }
+        }
+
+        return insertTarget;        
+
+
+
+//return new Tree_searchSplitsAllowed(this, key, nid, updateGeneration).execute();
     }
 
     /** 
@@ -1035,24 +1126,175 @@ try {
      * Do pre-emptive splitting in the subtree topped by the "parent" node. Search down the tree until we get to the BIN level, and split any nodes that fit the splittable requirement. Note that more than one node in the path may be splittable. For example, a tree might have a level2 IN and a BIN that are both splittable, and would be encountered by the same insert operation.
      */
     private void forceSplit(IN parent, byte[] key) throws DatabaseException, SplitRequiredException {
-        new Tree_forceSplit(this, parent, key).execute();
+        
+				ArrayList nodeLadder = new ArrayList();
+				boolean allLeftSideDescent = true;
+				boolean allRightSideDescent = true;
+        int index;
+        IN child = null;
+        IN originalParent = parent;
+        ListIterator iter = null;
+
+				Label722: ;	
+        boolean success = false;
+        try {
+
+            /*
+             * Latch the root in order to update the root LSN when we're done.
+             * Latch order must be: root, root IN.  We'll leave this method
+             * with the original parent latched.
+             */
+            Label723: ;
+
+            /* 
+             * Another thread may have crept in and 
+             *  - used the last free slot in the parent, making it impossible 
+             *    to correctly progagate the split. 
+             *  - actually split the root, in which case we may be looking at 
+             *    the wrong subtree for this search. 
+             * If so, throw and retry from above. SR [#11144]
+             */
+            if (originalParent.needsSplitting() || !originalParent.isRoot()) {
+                throw splitRequiredException;
+            }
+
+            /* 
+             * Search downward to the BIN level, saving the information
+             * needed to do a split if necessary.
+             */
+            do {
+                if (parent.getNEntries() == 0) {
+                    /* No more children, can't descend anymore. */
+                    break;
+                } else {
+                    /* Look for the entry matching key in the current node. */
+                    index = parent.findEntry(key, false, false);
+                    if (index != 0) {
+                        allLeftSideDescent = false;
+                    }
+                    if (index != (parent.getNEntries() - 1)) {
+                        allRightSideDescent = false;
+                    }
+                }
+
+                assert index >= 0;
+
+                /* 
+                 * Get the child node that matches. We only need to work on
+                 * nodes in residence.
+                 */
+                child = (IN) parent.getTarget(index);
+                if (child == null) {
+                    break;
+                } else {
+                   Label724: ;
+                    nodeLadder.add(new SplitInfo(parent, child, index));
+                } 
+
+                /* Continue down a level */
+                parent = child;
+            } while (!(parent instanceof BIN));
+
+            boolean startedSplits = false;
+            LogManager logManager =
+                database.getDbEnvironment().getLogManager();
+
+            /* 
+             * Process the accumulated nodes from the bottom up. Split each
+             * node if required. If the node should not split, we check if
+             * there have been any splits on the ladder yet. If there are none,
+             * we merely release the node, since there is no update.  If splits
+             * have started, we need to propagate new LSNs upward, so we log
+             * the node and update its parent.
+             *
+             * Start this iterator at the end of the list.
+             */
+            iter = nodeLadder.listIterator(nodeLadder.size());
+            long lastParentForSplit = -1;
+            while (iter.hasPrevious()) {
+                SplitInfo info = (SplitInfo) iter.previous();
+                child = info.child;
+                parent = info.parent;
+                index = info.index;
+
+                /* Opportunistically split the node if it is full. */
+                if (child.needsSplitting()) {
+		    int maxEntriesPerNode = (child.containsDuplicates() ?
+					     maxDupTreeEntriesPerNode :
+					     maxMainTreeEntriesPerNode);
+                    if (allLeftSideDescent || allRightSideDescent) {
+                        child.splitSpecial(parent,
+                                           index,
+                                           maxEntriesPerNode,
+                                           key,
+                                           allLeftSideDescent);
+                    } else {
+                        child.split(parent, index, maxEntriesPerNode);
+                    }
+                    lastParentForSplit = parent.getNodeId();
+                    startedSplits = true;
+
+                    /*
+                     * If the DB root IN was logged, update the DB tree's child
+                     * reference.  Now the MapLN is logically dirty, but the
+                     * change hasn't been logged. Set the rootIN to be dirty
+                     * again, to force flushing the rootIN and mapLN in the 
+                     * next checkpoint. Be sure to flush the MapLN
+                     * if we ever evict the root.
+                     */
+                    if (parent.isDbRoot()) {
+                        Label725: ;
+                        root.setLsn(parent.getLastFullVersion());
+                        parent.setDirty(true);
+                    }
+                } else {
+                    if (startedSplits) {
+                        long newLsn = 0;
+
+                        /* 
+                         * If this child was the parent of a split, it's
+                         * already logged by the split call. We just need to
+                         * propagate the logging upwards. If this child is just
+                         * a link in the chain upwards, log it.
+                         */
+                        if (lastParentForSplit == child.getNodeId()) {
+                            newLsn = child.getLastFullVersion();
+                        } else {
+                            newLsn = child.log(logManager);
+                        }
+                        parent.updateEntry(index, newLsn);
+                    } 
+                }
+								Label726: ;
+                child = null;
+                iter.remove();
+            }
+
+            success = true;
+        } finally {
+            Label727: ;
+        }
+    
     }
 
     /** 
      * Helper to obtain the root IN with proper root latching. Optionally updates the generation of the root when latching it.
      */
   public IN getRootIN(boolean updateGeneration) throws DatabaseException {
-    Label702: ; // this.hook702();
     IN rootIN = null;
-    Label701: ; // this.hook701(updateGeneration, rootIN);
-    if (rootExists()) {  // root != null
+    Label702: ; 
+    Label701: ; 
+    try{
+    if (root != null) {  
       rootIN = (IN) root.fetchTarget(database, null);
       rootIN.latch(updateGeneration);
     }
+    return rootIN;		
+	}
+	finally{
+    Label701_1:;
+	}
 
-    Label701_1:
-
-    return rootIN;
   }
 
     /** 
@@ -1284,19 +1526,59 @@ try {
      */
     private boolean maybeSplitDuplicateRoot(BIN bin, int index) throws DatabaseException {
         DIN curRoot = (DIN) bin.fetchTarget(index);
+
         if (curRoot.needsSplitting()) {
+
             EnvironmentImpl env = database.getDbEnvironment();
             LogManager logManager = env.getLogManager();
             INList inMemoryINs = env.getInMemoryINs();
+
+            /* 
+             * Make a new root DIN, giving it an id key from the previous root.
+             */
             byte[] rootIdKey = curRoot.getKey(0);
-            DIN newRoot = new DIN(database, rootIdKey, maxDupTreeEntriesPerNode, curRoot.getDupKey(),
-                curRoot.getDupCountLNRef(), curRoot.getLevel() + 1);
-            Label707: ; //this.hook707(newRoot);
+            DIN newRoot = new DIN(database,
+                                  rootIdKey,
+                                  maxDupTreeEntriesPerNode,
+                                  curRoot.getDupKey(),
+                                  curRoot.getDupCountLNRef(),
+                                  curRoot.getLevel() + 1);
+
+            Label707: ; 
             long curRootLsn = 0;
             long logLsn = 0;
-            Label706: ; //this.hook706(bin, index, curRoot, logManager, inMemoryINs, rootIdKey, newRoot, curRootLsn, logLsn);
-            Label706_1:
-                Label663: ; //this.hook663(curRoot, newRoot, curRootLsn, logLsn);
+            try {
+                newRoot.setIsRoot(true);
+                curRoot.setDupCountLN(null);
+                curRoot.setIsRoot(false);
+
+                /* 
+                 * Make the new root DIN point to the old root DIN, and then
+                 * log. We should be able to insert into the root because the
+                 * root is newly created.
+                 */
+                try {
+                    curRootLsn = curRoot.logProvisional(logManager, newRoot);
+                    boolean insertOk = newRoot.insertEntry
+                        (new ChildReference(curRoot, rootIdKey,
+                                            bin.getLsn(index)));
+                    assert insertOk;
+
+                    logLsn = newRoot.log(logManager);
+                } catch (DatabaseException e) {
+
+                    /* Something went wrong when we tried to log. */
+                    curRoot.setIsRoot(true);
+                    throw e;
+                }
+
+                inMemoryINs.add(newRoot);
+                bin.updateEntry(index, newRoot, logLsn);
+                curRoot.split(newRoot, 0, maxDupTreeEntriesPerNode);
+            } finally {
+            	Label706_1: ;
+            }
+             Label663: ;
             return true;
         } else {
             return false;
@@ -1315,59 +1597,181 @@ try {
       private DIN createDuplicateTree(byte[] key, LogManager logManager, INList inMemoryINs, LN newLN, CursorImpl cursor)
       throws DatabaseException {
 
-    EnvironmentImpl env = database.getDbEnvironment();
-    DIN dupRoot = null;
-    DBIN dupBin = null;
-    BIN bin = cursor.getBIN();
-    int index = cursor.getIndex();
-    LN existingLN = (LN) bin.fetchTarget(index);
-    boolean existingLNIsDeleted = bin.isEntryKnownDeleted(index) || existingLN.isDeleted();
-    assert existingLN != null;
-    byte[] existingKey = existingLN.getData();
-    byte[] newLNKey = newLN.getData();
-    boolean keysEqual = Key.compareKeys(newLNKey, existingKey, database.getDuplicateComparator()) == 0;
-    if (keysEqual) {
-      return null;
-    }
-    Locker locker = cursor.getLocker();
-    long nodeId = existingLN.getNodeId();
-    int startingCount = (locker.createdNode(nodeId) || existingLNIsDeleted
-        || locker.getWriteLockInfo(nodeId).getAbortKnownDeleted()) ? 0 : 1;
-    DupCountLN dupCountLN = new DupCountLN(startingCount);
-    long firstDupCountLNLsn = dupCountLN.logProvisional(env, database.getId(), key, DbLsn.NULL_LSN);
-    dupRoot = new DIN(database, existingKey, maxDupTreeEntriesPerNode, key,
-        new ChildReference(dupCountLN, key, firstDupCountLNLsn), 2);
-    Label710: ; // this.hook710(dupRoot);
-    dupRoot.setIsRoot(true);
-    dupBin = new DBIN(database, existingKey, maxDupTreeEntriesPerNode, key, 1);
-    Label709: ; // this.hook709(dupBin);
-    ChildReference newExistingLNRef = new ChildReference(existingLN, existingKey, bin.getLsn(index),
-        bin.getState(index));
-    boolean insertOk = dupBin.insertEntry(newExistingLNRef);
-    assert insertOk;
-    Label708: ; // this.hook708(key, logManager, inMemoryINs, newLN, cursor, env, dupRoot,
-                // dupBin, bin, index, existingLN, newLNKey, locker, dupCountLN,
-                // firstDupCountLNLsn);
-    long dbinLsn = dupBin.logProvisional(logManager, dupRoot);
-    inMemoryINs.add(dupBin);
-    dupRoot.setEntry(0, dupBin, dupBin.getKey(0), dbinLsn, dupBin.getState(0));
-    long dinLsn = dupRoot.log(logManager);
-    inMemoryINs.add(dupRoot);
-    LockResult lockResult = locker.lock(dupCountLN.getNodeId(), LockType.WRITE, false, database);
-    lockResult.setAbortLsn(firstDupCountLNLsn, false);
-    dupCountLN.setDupCount(2);
-    long dupCountLsn = dupCountLN.log(env, database.getId(), key, firstDupCountLNLsn, locker);
-    dupRoot.updateDupCountLNRef(dupCountLsn);
-    long newLsn = newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, locker);
-    int dupIndex = dupBin.insertEntry1(new ChildReference(newLN, newLNKey, newLsn));
-    dupIndex &= ~IN.INSERT_SUCCESS;
-    cursor.updateDBin(dupBin, dupIndex);
-    bin.adjustCursorsForMutation(index, dupBin, dupIndex ^ 1, cursor);
-    Label747: ; // this.hook747(dupBin);
-    bin.updateEntry(index, dupRoot, dinLsn);
-    bin.setMigrate(index, false);
-    Label664: ;
-    return dupRoot;
+
+        EnvironmentImpl env = database.getDbEnvironment();
+        DIN dupRoot = null;
+        DBIN dupBin = null;
+        BIN bin = cursor.getBIN();
+        int index = cursor.getIndex();
+
+        /*
+         * fetchTarget returned an LN before this method was called, and we're
+         * still latched, so the target should never be null here.
+         */
+        LN existingLN = (LN) bin.fetchTarget(index);
+ 	boolean existingLNIsDeleted = bin.isEntryKnownDeleted(index) ||
+ 	    existingLN.isDeleted();
+        assert existingLN != null;
+
+        byte[] existingKey = existingLN.getData();
+        byte[] newLNKey = newLN.getData();
+
+        /* Check for duplicate duplicates. */
+        boolean keysEqual = Key.compareKeys
+            (newLNKey, existingKey, database.getDuplicateComparator()) == 0;
+        if (keysEqual) {
+            return null;
+        }
+
+        /* 
+         * Replace the existing LN with a duplicate tree. 
+         * 
+         * Once we create a dup tree, we don't revert back to the LN.  Create
+         * a DupCountLN to hold the count for this dup tree. Since we don't
+         * roll back the internal nodes of a duplicate tree, we need to create
+         * a pre-transaction version of the DupCountLN. This version must hold
+         * a count of either 0 or 1, depending on whether the current
+         * transaction created the exising lN or not. If the former, the count
+         * must roll back to 0, if the latter, the count must roll back to 1.
+         *
+         * Note that we are logging a sequence of nodes and must make sure the
+         * log can be correctly recovered even if the entire sequence doesn't
+         * make it to the log. We need to make all children provisional to the
+         * DIN. This works:
+         *
+         * Entry 1: (provisional) DupCountLN (first version)
+         * Entry 2: (provisional) DupBIN 
+         * Entry 3: DIN
+         * Entry 4: DupCountLN (second version, incorporating the new count.
+         *           This can't be provisional because we need to possibly
+         *            roll it back.)
+         * Entry 5: new LN.
+         * See [SR #10203] for a description of the bug that existed before
+         * this change.
+         */
+
+        /* Create the first version of DupCountLN and log it. (Entry 1). */
+        Locker locker = cursor.getLocker();
+ 	long nodeId = existingLN.getNodeId();
+ 
+ 	/*
+ 	 * If the existing entry is known to be deleted or was created by this
+ 	 * transaction, then the DCL should get rolled back to 0, not 1.
+ 	 * [13726].
+ 	 */
+ 	int startingCount =
+ 	    (locker.createdNode(nodeId) ||
+ 	     existingLNIsDeleted ||
+ 	     locker.getWriteLockInfo(nodeId).getAbortKnownDeleted()) ?
+ 	    0 : 1;
+
+        DupCountLN dupCountLN = new DupCountLN(startingCount);
+        long firstDupCountLNLsn =
+            dupCountLN.logProvisional(env, database.getId(),
+				      key, DbLsn.NULL_LSN);
+
+        /* Make the duplicate root and DBIN. */
+        dupRoot = new DIN(database,
+                          existingKey,                   // idkey
+                          maxDupTreeEntriesPerNode,
+                          key,                           // dup key
+                          new ChildReference
+                          (dupCountLN, key, firstDupCountLNLsn),
+                          2);                            // level
+				Label710: ;
+        dupRoot.setIsRoot(true);
+
+        dupBin = new DBIN(database,
+                          existingKey,                   // idkey
+                          maxDupTreeEntriesPerNode,
+                          key,                           // dup key
+                          1);                            // level
+        Label709: ;
+
+        /* 
+         * Attach the existing LN child to the duplicate BIN. Since this is a
+         * newly created BIN, insertEntry will be successful.
+         */
+        ChildReference newExistingLNRef = new ChildReference
+            (existingLN, existingKey, bin.getLsn(index), bin.getState(index));
+
+        boolean insertOk = dupBin.insertEntry(newExistingLNRef);
+        assert insertOk;
+
+        try {
+
+            /* Entry 2: DBIN. */
+            long dbinLsn = dupBin.logProvisional(logManager, dupRoot);
+            inMemoryINs.add(dupBin);
+        
+            /* Attach the duplicate BIN to the duplicate IN root. */
+            dupRoot.setEntry(0, dupBin, dupBin.getKey(0),
+                             dbinLsn, dupBin.getState(0));
+
+            /* Entry 3:  DIN */
+            long dinLsn = dupRoot.log(logManager);
+            inMemoryINs.add(dupRoot);
+
+            /*
+             * Now that the DIN is logged, we've created a duplicate tree that
+             * holds the single, preexisting LN. We can safely create the non
+             * provisional LNs that pertain to this insert -- the new LN and
+             * the new DupCountLN.
+             *
+             * We request a lock while holding latches which is usually
+             * forbidden, but safe in this case since we know it will be
+             * immediately granted (we just created dupCountLN above).
+             */
+            LockResult lockResult = locker.lock
+                (dupCountLN.getNodeId(), LockType.WRITE, false /*noWait*/,
+                 database);
+            lockResult.setAbortLsn(firstDupCountLNLsn, false);
+
+            dupCountLN.setDupCount(2);
+            long dupCountLsn = dupCountLN.log(env, database.getId(), key,
+                                              firstDupCountLNLsn, locker);
+            dupRoot.updateDupCountLNRef(dupCountLsn);
+        
+            /* Add the newly created LN. */
+            long newLsn =
+                newLN.log(env, database.getId(), key, DbLsn.NULL_LSN, locker);
+            int dupIndex = dupBin.insertEntry1
+                (new ChildReference(newLN, newLNKey, newLsn));
+            dupIndex &= ~IN.INSERT_SUCCESS;
+            cursor.updateDBin(dupBin, dupIndex);
+
+            /*
+             * Adjust any cursors positioned on the mutated BIN entry to point
+             * to the DBIN at the location of the entry we moved there.  The
+             * index of the moved entry is 1 or 0, the XOR of the index of the
+             * new entry.
+             */
+            bin.adjustCursorsForMutation(index, dupBin, dupIndex ^ 1, cursor);
+            Label747: ;
+
+
+            /* 
+             * Update the "regular" BIN to point to the new duplicate tree
+             * instead of the existing LN.  Clear the MIGRATE flag since it
+             * applies only to the original LN.
+             */
+            bin.updateEntry(index, dupRoot, dinLsn);
+            bin.setMigrate(index, false);
+
+            Label664: ;
+
+        } catch (DatabaseException e) {
+
+            /* 
+             * Strictly speaking, not necessary to release latches, because if
+             * we fail to log the entries, we just throw them away, but our
+             * unit tests check for 0 latches held in the event of a logging
+             * error.
+             */
+            Label708_1: ;
+            throw e;
+        }
+        return dupRoot;
 
   }
 
@@ -1397,8 +1801,10 @@ try {
             }
         }
         boolean rootLatchIsHeld = false;
-        Label711:   ; //bin =            ;  //this.hook711(key, logManager, inMemoryINs, bin, rootLatchIsHeld);
+        Label711:   ; 
+
             long logLsn;
+try{
         while (true) {
             rootLatchIsHeld = true;
             Label748: ; //this.hook748();
@@ -1437,11 +1843,13 @@ try {
                 }
             }
         }
-        Label711_1:   ;
+}        finally
+{ Label711_1:   ;
             //end hook711
             if (ckptHook != null) {
                 ckptHook.doHook();
             }
+}
         return bin;
     }
 
@@ -1525,11 +1933,16 @@ try {
     public void rebuildINList() throws DatabaseException {
         INList inMemoryList = database.getDbEnvironment().getInMemoryINs();
         if (root != null) {
-            Label714:; //this.hook714(inMemoryList);
+            rebuildINList_1: ; 
+				try {
             Node rootIN = root.getTarget();
             if (rootIN != null) {
                 rootIN.rebuildINList(inMemoryList);
             }
+				}
+				finally{
+            rebuildINList_2: ; 
+				}
         }
     }
 
@@ -1562,15 +1975,13 @@ try {
      * Unit test support to validate subtree pruning. Didn't want to make root access public.
      */
     boolean validateDelete(int index) throws DatabaseException {
+            Label714: ; 
         try {
-            Label715:; //this.hook715(index);
             IN rootIN = (IN) root.fetchTarget(database, null);
-            Label715_1: throw new ReturnBoolean(rootIN.validateSubtreeBeforeDelete(index));
-            //end715
-            //throw ReturnHack.returnBoolean;
-        }
-        catch (ReturnBoolean r) {
-            return r.value;
+            return rootIN.validateSubtreeBeforeDelete(index);
+        } finally {
+            Label715: ;
+
         }
     }
 

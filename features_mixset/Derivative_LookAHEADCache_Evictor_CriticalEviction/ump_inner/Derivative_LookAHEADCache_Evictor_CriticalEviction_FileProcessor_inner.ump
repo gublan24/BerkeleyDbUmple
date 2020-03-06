@@ -1,12 +1,13 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LookAHEADCache_Evictor_CriticalEviction/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-   static class FileProcessor_processFile {
-      after Label116: execute() { //  Label129 introduced in LookAHEADCache FileProcessor_inner.ump ; after Label129: execute() {
-        if (Cleaner.DO_CRITICAL_EVICTION) {
-          _this.env.getEvictor().doCriticalEviction();
-        }
-       // original();
+
+      after Label116: processFile(Long ) { 
+        
+				if (Cleaner.DO_CRITICAL_EVICTION) {
+			env.getEvictor().doCriticalEviction();
+		}
+
       }
-    }
+    
 }

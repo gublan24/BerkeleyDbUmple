@@ -1,11 +1,11 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LookAHEADCache_Statistics/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-   static class FileProcessor_processLN {
-      after Label117:execute(){ //Label 117 introduced in LookAHEADCache FilePocessor.ump
-        _this.nLNQueueHitsThisRun++;
-        _this.nLNsCleanedThisRun++;
-     //   original();
-      }
+
+      after Label117: processLN(Long , TreeLocation , Long , LNInfo , LookAheadCache , Map ) {
+      	nLNQueueHitsThisRun++;
+							nLNsCleanedThisRun++;
+
+      
     }
 }

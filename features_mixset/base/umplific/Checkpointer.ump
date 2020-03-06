@@ -153,7 +153,80 @@ class Checkpointer {
      * Scan the INList for all dirty INs. Arrange them in level sorted map for level ordered flushing.
      */
     private SortedMap selectDirtyINs(boolean flushAll, boolean flushExtraLevel) throws DatabaseException {
-        return new Checkpointer_selectDirtyINs(this, flushAll, flushExtraLevel).execute();
+
+        SortedMap newDirtyMap = new TreeMap();
+
+        INList inMemINs = envImpl.getInMemoryINs();
+        Label529: ;
+
+        /* 
+	 * Opportunistically recalculate the environment wide memory count.
+	 * Incurs no extra cost because we're walking the IN list anyway.  Not
+	 * the best in terms of encapsulation as prefereably all memory
+	 * calculations are done in MemoryBudget, but done this way to avoid
+	 * any extra latching.
+	 */
+                long totalSize = 0;
+						Label553: ;
+
+        try {
+            Iterator iter = inMemINs.iterator();
+            while (iter.hasNext()) {
+                IN in = (IN) iter.next();
+                in.latch(false);
+                try {
+                    Label530: ;
+
+
+                    if (in.getDirty()) {
+                        Integer level = new Integer(in.getLevel());
+                        Set dirtySet;
+                        if (newDirtyMap.containsKey(level)) {
+                            dirtySet = (Set) newDirtyMap.get(level);
+                        } else {
+                            dirtySet = new HashSet();
+                            newDirtyMap.put(level, dirtySet);
+                        }
+                        dirtySet.add
+                             (new CheckpointReference(in.getDatabase(),
+                                                      in.getNodeId(),
+                                                      in.containsDuplicates(),
+                                                      in.isDbRoot(),
+                                                      in.getMainTreeKey(),
+                                                      in.getDupTreeKey()));
+                    }
+                } finally {
+                    afterLabel530_1: ;
+                }
+            }
+
+            /* Set the tree cache size. */
+						Label554: ;
+
+            /* 
+             * If we're flushing all for cleaning, we must flush to the point
+             * that there are no nodes with LSNs in the cleaned files. 
+             */
+            if (newDirtyMap.size() > 0) {
+                if (flushAll) {
+                    highestFlushLevel =
+			envImpl.getDbMapTree().getHighestLevel();
+                } else {
+                    highestFlushLevel =
+                        ((Integer) newDirtyMap.lastKey()).intValue();
+                    if (flushExtraLevel) {
+                        highestFlushLevel += 1;
+                    }
+                }
+            } else {
+		highestFlushLevel = IN.MAX_LEVEL;
+	    }
+        } finally {
+            Label528_1: ; 
+        }
+
+        return newDirtyMap;
+    
     }
 
     /** 

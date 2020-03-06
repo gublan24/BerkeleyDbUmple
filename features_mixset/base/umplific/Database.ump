@@ -557,21 +557,36 @@ class Database
      * Gets a read-lock on the list of triggers.  releaseTriggerListReadLock() must be called to release the lock.  Called by all primary put and delete operations.
      */
     private void acquireTriggerListReadLock() throws DatabaseException {
-	new Database_acquireTriggerListReadLock(this).execute();
+
+        
+			if (triggerList == null) {
+            triggerList = new ArrayList();
+        }
     }
 
     /** 
      * Gets a write lock on the list of triggers.  An empty list is created if necessary, so null is never returned.  releaseTriggerListWriteLock() must always be called to release the lock.
      */
     private void acquireTriggerListWriteLock() throws DatabaseException {
-	new Database_acquireTriggerListWriteLock(this).execute();
+     
+       
+				 if (triggerList == null) {
+            triggerList = new ArrayList();
+        }
     }
 
     /** 
      * Releases a lock acquired by calling acquireTriggerListWriteLock().  If the list is now empty then it is set to null, that is, hasTriggers() will subsequently return false.
      */
     private void releaseTriggerListWriteLock() throws DatabaseException {
-	new Database_releaseTriggerListWriteLock(this).execute();
+
+
+
+        if (triggerList.size() == 0) {
+            triggerList = null;
+        }
+
+    
     }
 
     /** 

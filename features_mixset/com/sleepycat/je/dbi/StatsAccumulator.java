@@ -18,7 +18,6 @@ import java.io.PrintStream;
 import com.sleepycat.je.tree.*;
 
 // line 3 "../../../../Statistics_StatsAccumulator.ump"
-// line 3 "../../../../Derivative_Statistics_Verifier_StatsAccumulator.ump"
 public class StatsAccumulator implements TreeWalkerStatsAccumulator
 {
 
@@ -55,10 +54,7 @@ public class StatsAccumulator implements TreeWalkerStatsAccumulator
    public void processIN(IN node, Long nid, int level){
     if (inNodeIdsSeen.add(nid)) {
 					tallyLevel(level, insSeenByLevel);
-					Label363:
-verifyNode(node);
-	//original(node);
- ; //this.hook363(node);
+					Label363: ; //this.hook363(node);
 	}
   }
 
@@ -66,10 +62,7 @@ verifyNode(node);
    public void processBIN(BIN node, Long nid, int level){
     if (binNodeIdsSeen.add(nid)) {
 					tallyLevel(level, binsSeenByLevel);
-					Label364:
-verifyNode(node);
-	//original(node);
- ; //this.hook364(node);
+					Label364: ; //this.hook364(node);
 			}
   }
 
@@ -77,10 +70,7 @@ verifyNode(node);
    public void processDIN(DIN node, Long nid, int level){
     if (dinNodeIdsSeen.add(nid)) {
 					tallyLevel(level, dinsSeenByLevel);
-					Label365:
-verifyNode(node);
-	//original(node);
- ; //this.hook365(node);
+					Label365: ; //this.hook365(node);
 			}
   }
 
@@ -88,10 +78,7 @@ verifyNode(node);
    public void processDBIN(DBIN node, Long nid, int level){
     if (dbinNodeIdsSeen.add(nid)) {
 					tallyLevel(level, dbinsSeenByLevel);
-					Label366:
-verifyNode(node);
-	//original(node);
- ; //this.hook366(node);
+					Label366: ; //this.hook366(node);
 			}
   }
 
@@ -217,11 +204,6 @@ verifyNode(node);
 			bStats.setBINsByLevel(getBINsByLevel());
 			bStats.setDINsByLevel(getDINsByLevel());
 			bStats.setDBINsByLevel(getDBINsByLevel());
-  }
-
-  // line 6 "../../../../Derivative_Statistics_Verifier_StatsAccumulator.ump"
-  public void verifyNode(Node node){
-    
   }
   
   //------------------------

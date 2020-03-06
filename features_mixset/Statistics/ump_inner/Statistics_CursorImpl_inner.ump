@@ -1,36 +1,44 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/dbi/CursorImpl.java
+
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
-   static class CursorImpl_getNextDuplicate {
 
-//       void hook200() throws DatabaseException {
-//        if (_this.index < 0) {
-//          throw new ReturnObject(OperationStatus.NOTFOUND);
-//        }
-//        duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
-//        this.hook201();
-//      }
-//      void hook201() throws DatabaseException {
-//        dcl=duplicateRoot.getDupCountLN();
-//        if (dcl != null) {
-//          dcl.accumulateStats(treeStatsAccumulator);
-//        }
-//      }
-      after Label275: execute() {
-        treeStatsAccumulator=_this.getTreeStatsAccumulator();
-        if (treeStatsAccumulator != null) {
-          Label200: //this.hook200();
-          if (_this.index < 0) {
-            return OperationStatus.NOTFOUND;//throw new ReturnObject(OperationStatus.NOTFOUND);
-        }
-        duplicateRoot=(DIN)_this.bin.fetchTarget(_this.index);
-        Label201: //this.hook201();
-        dcl=duplicateRoot.getDupCountLN();
-        	if (dcl != null) {
-        	  dcl.accumulateStats(treeStatsAccumulator);
-        	}
-        }
-        //original();
+
+
+      after Label275: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {       
+			;
+     TreeWalkerStatsAccumulator treeStatsAccumulator =
+								                getTreeStatsAccumulator();
+								            if (treeStatsAccumulator != null) {
+								                Label200: ; //latchBIN();
+								                try {
+								                    if (index < 0) {
+								                        /* This duplicate tree has been deleted. */
+								                        return OperationStatus.NOTFOUND;
+								                    }
+
+								                    DIN duplicateRoot = (DIN) bin.fetchTarget(index);
+								                     Label201: ; //duplicateRoot.latch();
+								                    try {
+								                        DupCountLN dcl = duplicateRoot.getDupCountLN();
+								                        if (dcl != null) {
+								                            dcl.accumulateStats(treeStatsAccumulator);
+								                        }
+								                    } finally {
+								                        Label201_1: ;
+								                    }
+								                } finally {
+								                    Label200_1: ; //releaseBIN();
+								                }
+								            }
+
+
+
+
+
+
+
       }
-    }
+
+
+    
 }

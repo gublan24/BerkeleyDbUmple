@@ -1,23 +1,25 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-  @MethodObject static class FileProcessor_processFile {
-     // protected void hook118() throws DatabaseException, IOException {
-     // }
-      after Label161:execute(){
-        adjustMem=(2 * readBufferSize) + obsoleteOffsets.getLogSize();
-        budget=_this.env.getMemoryBudget();
-        {
-          //this.hook118();
-          Label118:
-          budget.updateMiscMemoryUsage(adjustMem);
-        }
-        //original();
+
+
+
+  after Label161: processFile(Long ) { 
+		;
+		int adjustMem = (2 * readBufferSize) + obsoleteOffsets.getLogSize();
+		Label118: ;
+		MemoryBudget budget = env.getMemoryBudget();
+
+		budget.updateMiscMemoryUsage(adjustMem);
+
+      
+        
+
       }
 
-      after Label162:execute() {
-        budget.updateMiscMemoryUsage(0 - adjustMem);
-        //original();
+      after Label162: processFile(Long ) { 
+			budget.updateMiscMemoryUsage(0 - adjustMem);
+
       }
-    }
+    
 }

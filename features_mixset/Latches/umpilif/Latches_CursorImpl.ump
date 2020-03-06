@@ -41,18 +41,18 @@ class CursorImpl {
     after Label206:  cloneCursor(boolean , CursorImpl ){
 
         latchBINs();
-        //original();
+
     }
 
     after Label207:  cloneCursor(boolean , CursorImpl ) {
         releaseBINs();
-        //original();
+
     }
 
     after Label208:  addCursor(BIN ) {
 
         assert bin.isLatchOwner();
-        //original(bin);
+
     }
 
     after Label209: removeCursorBIN()  {
@@ -70,48 +70,53 @@ class CursorImpl {
         //original();
     }
 
-		before  count(LockType)
-		{
-				    latchBIN();
-		}
 
-    after Label212: {
+
+//    after Label212: {
      //   latchBIN();
  //       try {
             //original(lockType);
-  //      } finally {
-            releaseBIN();
-   //     }
-    }
+  //      } finally {           releaseBIN();
+   //     }    }
 
-    after Label213_1: delete() {
+    after Label213_1: delete(boolean ) {
 
-        //try {original(isDup, ln, lockResult, dclLockResult, dupRoot);} finally {
 
             if (dupRoot != null) {
                 dupRoot.releaseLatchIfOwner();
             }
-      //  }
+
     }
 
-    after Label214: delete() {
+    after Label214: delete(boolean ) {
+        releaseBINs();
 
+    }
+
+    after Label215: delete(boolean ) {
 
         releaseBINs();
-        //original();
+
     }
 
-    after Label215: delete() {
-
+    after Label216:  delete(boolean ) {
         releaseBINs();
-        //original();
-    }
 
-    after Label216:  delete() {
-        releaseBINs();
-        //original();
     }
+after Label266: delete(boolean ) {
+    releaseBINs();
 
+}
+
+after Label267: delete(boolean ) {
+    releaseBIN();
+
+}
+
+after Label268: delete(boolean ) {
+    dupRoot.releaseLatch();
+
+}
     after Label217: putLN(byte, LN , boolean ) { 
         assert LatchSupport.countLatchesHeld() == 0;
         //original();
@@ -141,13 +146,9 @@ class CursorImpl {
     }
 
     after Label221: getCurrentAlreadyLatched(DatabaseEntry , DatabaseEntry , LockType ,        boolean ){
-        assert checkAlreadyLatched(true): dumpToString(true);
-        try {
-                    throw new ReturnObject(fetchCurrent(foundKey, foundData, lockType, first));
-										//original(foundKey, foundData, lockType, first);
-        } finally {
+
             releaseBINs();
-        }
+        
     }
 
     after Label222:getCurrentLN(LockType ){
@@ -308,32 +309,31 @@ after Label243: getLatchedDupRoot(boolean ){
     //original();
 }
 
+		before  Label212: count(LockType)
+		{
+				    latchBIN();
+		}
+
 after Label264: count(LockType ) {
     dupRoot.releaseLatch();
-    //original(dupRoot);
+
 }
 
 after Label265: count(LockType ) {
 
     dupRoot.latch();
     releaseBIN();
-    //original(dupRoot);
+
 }
 
-after Label266: delete() {
-    releaseBINs();
-    //original();
+after Label265_1: count(LockType ) {
+
+	    releaseBIN();
+
+
 }
 
-after Label267:: delete() {
-    releaseBIN();
-    //original();
-}
 
-after Label268: delete() {
-    dupRoot.releaseLatch();
-    //original(dupRoot);
-}
 
 after Label269:putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
     releaseBINs();

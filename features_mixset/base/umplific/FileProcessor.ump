@@ -166,9 +166,122 @@ class FileProcessor {
   * Process all log entries in the given file. Note that we check for obsolete entries using the active TFS (TrackedFileSummary) for a file while it is being processed, and we prohibit flushing (eviction) of that offset information until file processing is complete. An entry could become obsolete because: 1- normal application activity deletes or updates the entry, 2- proactive migration migrates the entry before we process it, or 3- if trackDetail is false. However, checking the TFS is expensive if it has many entries, because we perform a linear search. There is a tradeoff between the cost of the TFS lookup and its benefit, which is to avoid a tree search if the entry is obsolete. Note that many more lookups for non-obsolete entries than obsolete entries will typically be done. In spite of that we check the tracked summary to avoid the situation where eviction does proactive migration, and evicts a BIN that is very soon afterward fetched during cleaning.
   * @return false if we aborted file processing because the environment isbeing closed.
   */
- private boolean processFile(Long fileNum) throws DatabaseException, IOException {
-  return new FileProcessor_processFile(this, fileNum).execute();
- }
+
+private void processLN(Long fileNum, TreeLocation location, Long offset,
+			LNInfo info, LookAheadCache lookAheadCache, Map dbCache)
+			throws DatabaseException {
+
+
+
+		/* Get the first LN from the queue. */
+		Label132: ;
+
+		LN ln = info.getLN();
+		byte[] key = info.getKey();
+		byte[] dupKey = info.getDupKey();
+
+		long logLsn = DbLsn.makeLsn(fileNum.longValue(), offset.longValue());
+
+		DatabaseImpl db = env.getDbMapTree().getDb(info.getDbId(),
+				cleaner.lockTimeout, dbCache);
+
+		/* Status variables are used to generate debug tracing info. */
+		boolean processedHere = true; // The LN was cleaned here.
+		boolean obsolete = false; // The LN is no longer in use.
+		boolean completed = false; // This method completed.
+
+		BIN bin = null;
+		DIN parentDIN = null; // for DupCountLNs
+		try {
+
+			/*
+			 * If the DB is gone, this LN is obsolete. If delete cleanup is in
+			 * progress, put the DB into the DB pending set; this LN will be
+			 * declared deleted after the delete cleanup is finished.
+			 */
+			if (db == null || db.isDeleted()) {
+				cleaner.addPendingDB(db);
+				Label148: ; 
+
+				obsolete = true;
+				completed = true;
+				return;
+			}
+
+			Tree tree = db.getTree();
+			assert tree != null;
+
+			/*
+			 * Search down to the bottom most level for the parent of this LN.
+			 */
+			boolean parentFound = tree.getParentBINForChildLN(location, key,
+					dupKey, ln, false, // splitsAllowed
+					true, // findDeletedEntries
+					false, // searchDupTree
+					Cleaner.UPDATE_GENERATION);
+			bin = location.bin;
+			int index = location.index;
+
+			if (!parentFound) {
+				Label150: ;
+				obsolete = true;
+				completed = true;
+				return;
+			}
+
+			/*
+			 * Now we're at the parent for this LN, whether BIN, DBIN or DIN. If
+			 * knownDeleted, LN is deleted and can be purged.
+			 */
+			if (bin.isEntryKnownDeleted(index)) {
+				Label149: ; 
+				obsolete = true;
+				completed = true;
+				return;
+			}
+
+			/*
+			 * Determine whether the parent is the current BIN, or in the case
+			 * of a DupCountLN, a DIN. Get the tree LSN in either case.
+			 */
+			boolean isDupCountLN = ln.containsDuplicates();
+			long treeLsn;
+			if (isDupCountLN) {
+				parentDIN = (DIN) bin.fetchTarget(index);
+				parentDIN.latch(Cleaner.UPDATE_GENERATION);
+				ChildReference dclRef = parentDIN.getDupCountLNRef();
+				treeLsn = dclRef.getLsn();
+			} else {
+				treeLsn = bin.getLsn(index);
+			}
+
+			/* Process this LN that was found in the tree. */
+			processedHere = false;
+			processFoundLN(info, logLsn, treeLsn, bin, index, parentDIN);
+			completed = true;
+
+			/*
+			 * For all other non-deleted LNs in this BIN, lookup their LSN in
+			 * the LN queue and process any matches.
+			 */
+		Label133: ;
+
+			return;
+		} finally {
+			Label135:;
+			if (processedHere) {
+				cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln,
+						logLsn, completed, obsolete, false /* migrated */);
+			}
+		}
+	}
+
+
+
+
+
+
+ 
 
  /** 
   * Processes the first LN in the look ahead cache and removes it from the cache. While the BIN is latched, look through the BIN for other LNs in the cache; if any match, process them to avoid a tree search later.
@@ -299,6 +412,174 @@ class FileProcessor {
 
  }
 
+
+	private boolean processFile(Long fileNum) throws DatabaseException,
+			IOException {
+
+		/* Get the current obsolete offsets for this file. */
+		PackedOffsets obsoleteOffsets = new PackedOffsets();
+		TrackedFileSummary tfs = profile.getObsoleteDetail(fileNum,
+				obsoleteOffsets, true /* logUpdate */);
+		PackedOffsets.Iterator obsoleteIter = obsoleteOffsets.iterator();
+		long nextObsolete = -1;
+
+		/* Keep in local variables because they are mutable properties. */
+		final int readBufferSize = cleaner.readBufferSize;
+		Label128: ;
+
+		/*
+		 * Add the overhead of this method to the budget. Two read buffers are
+		 * allocated by the file reader. The log size of the offsets happens to
+		 * be the same as the memory overhead.
+		 */
+		Label161: ;
+
+		/* Evict after updating the budget. */
+		Label116: ;
+
+		/*
+		 * We keep a look ahead cache of non-obsolete LNs. When we lookup a BIN
+		 * in processLN, we also process any other LNs in that BIN that are in
+		 * the cache. This can reduce the number of tree lookups.
+		 */
+		Label127: ;
+
+		/*
+		 * For obsolete entries we must check for pending deleted DBs. To avoid
+		 * the overhead of DbTree.getDb on every entry we keep a set of all DB
+		 * IDs encountered and do the check once per DB at the end.
+		 */
+		Set checkPendingDbSet = new HashSet();
+
+		/* Use local caching to reduce DbTree.getDb overhead. */
+		Map dbCache = new HashMap();
+
+		try {
+			/* Create the file reader. */
+			CleanerFileReader reader = new CleanerFileReader(env,
+					readBufferSize, DbLsn.NULL_LSN, fileNum);
+			/* Validate all entries before ever deleting a file. */
+			Label137: ;
+
+			DbTree dbMapTree = env.getDbMapTree();
+			TreeLocation location = new TreeLocation();
+
+			int nProcessedLNs = 0;
+			while (reader.readNextEntry()) {
+				Label146: ;
+				long lsn = reader.getLastLsn();
+				long fileOffset = DbLsn.getFileOffset(lsn);
+				boolean isLN = reader.isLN();
+				boolean isIN = reader.isIN();
+				boolean isRoot = reader.isRoot();
+				boolean isObsolete = false;
+
+				/* Stop if the daemon is shut down. */
+				if (env.isClosing()) {
+					return false;
+				}
+
+				/* Check for a known obsolete node. */
+				while (nextObsolete < fileOffset && obsoleteIter.hasNext()) {
+					nextObsolete = obsoleteIter.next();
+				}
+				if (nextObsolete == fileOffset) {
+					isObsolete = true;
+				}
+
+				/* Check for the entry type next because it is very cheap. */
+				if (!isObsolete && !isLN && !isIN && !isRoot) {
+					/* Consider all entries we do not process as obsolete. */
+					isObsolete = true;
+				}
+
+				/* Check for a deleted LN next because it is very cheap. */
+				if (!isObsolete && isLN && reader.getLN().isDeleted()) {
+					/* Deleted LNs are always obsolete. */
+					isObsolete = true;
+				}
+
+				/* Check the current tracker last, as it is more expensive. */
+				if (!isObsolete && tfs != null
+						&& tfs.containsObsoleteOffset(fileOffset)) {
+					isObsolete = true;
+				}
+
+				/* Skip known obsolete nodes. */
+				if (isObsolete) {
+					/* Count obsolete stats. */
+			Label147: ;
+					/* Must update the pending DB set for obsolete entries. */
+					Label156: ;
+					continue;
+				}
+
+				/* Evict before processing each entry. */
+				Label119: ;
+
+				/* The entry is not known to be obsolete -- process it now. */
+				if (isLN) {
+
+					LN targetLN = reader.getLN();
+					DatabaseId dbId = reader.getDatabaseId();
+					byte[] key = reader.getKey();
+					byte[] dupKey = reader.getDupTreeKey();
+
+					Long aLsn = new Long(DbLsn.getFileOffset(lsn));
+					LNInfo aLninfo = new LNInfo(targetLN, dbId, key, dupKey);
+
+          Label130: ;
+
+    
+
+					/*
+					 * Process pending LNs before proceeding in order to prevent
+					 * the pending list from growing too large.
+					 */
+					nProcessedLNs += 1;
+					if (nProcessedLNs % PROCESS_PENDING_EVERY_N_LNS == 0) {
+						cleaner.processPending();
+					}
+
+				} else if (isIN) {
+
+					IN targetIN = reader.getIN();
+					DatabaseId dbId = reader.getDatabaseId();
+					DatabaseImpl db = dbMapTree.getDb(dbId,
+							cleaner.lockTimeout, dbCache);
+					targetIN.setDatabase(db);
+
+					processIN(targetIN, db, lsn);
+
+				} else if (isRoot) {
+
+					env.rewriteMapTreeRoot(lsn);
+				} else {
+					assert false;
+				}
+			}
+
+			/* Process remaining queued LNs. */
+		Label129: ;
+
+		Label155: ;
+
+			/* Update reader stats. */
+			 Label145: ;
+
+		} finally {
+			/* Subtract the overhead of this method from the budget. */
+			Label162: ;
+
+			/* Allow flushing of TFS when cleaning is complete. */
+			if (tfs != null) {
+				tfs.setAllowFlush(true);
+			}
+		}
+
+		return true;
+	}
+
  /** 
   * Given a clone of an IN that has been taken out of the log, try to find it in the tree and verify that it is the current one in the log. Returns the node in the tree if it is found and it is current re: LSN's. Otherwise returns null if the clone is not found in the tree or it's not the latest version. Caller is responsible for unlatching the returned IN.
   */
@@ -358,85 +639,4 @@ class FileProcessor {
   return sb.toString();
  }
 
- //protected void hook121(String traceMsg) throws DatabaseException, IOException {}
-
- // protected void hook122(IOException IOE) throws DatabaseException {}
-
- //  protected void hook123(String traceMsg) throws DatabaseException {}
-
- // protected void hook124(long logLsn, LN ln, boolean obsolete, boolean migrated, boolean completed)
- // throws DatabaseException {}
-
- //   protected void hook125(IN inClone, DatabaseImpl db, long lsn, boolean obsolete, boolean dirtied, boolean completed)
- //   throws DatabaseException {
- //    }
-
- /*
-     protected void hook134(Tree tree, DatabaseImpl db, IN inClone, long lsn, SearchResult result)
- 	    throws DatabaseException {
-
- 	result = tree.getParentINForChildIN(inClone, true, Cleaner.UPDATE_GENERATION, inClone.getLevel(), null);
- 	if (!result.exactParentFound) {
- 	    throw new ReturnObject(null);
- 	}
- 	int compareVal = DbLsn.compareTo(result.parent.getLsn(result.index), lsn);
- 	if (compareVal > 0) {
- 	    throw new ReturnObject(null);
- 	} else {
- 	    IN in;
- 	    if (compareVal == 0) {
- 		in = (IN) result.parent.getTarget(result.index);
- 		if (in == null) {
- 		    in = inClone;
- 		    in.postFetchInit(db, lsn);
- 		    result.parent.updateEntry(result.index, in);
- 		}
- 	    } else {
- 		in = (IN) result.parent.fetchTarget(result.index);
- 	    }
- 	    in.latch(Cleaner.UPDATE_GENERATION);
- 	    throw new ReturnObject(in);
- 	}
-     }
-
- // protected void hook136(IN inInTree) throws DatabaseException {
- // }
-
- //  protected void hook138() throws DatabaseException {
- //  }
-
- protected String hook139(String traceMsg) throws DatabaseException, IOException {
-  return traceMsg;
- }
-
- protected void hook140() throws DatabaseException, IOException {}
-
- protected String hook141(String traceMsg) throws DatabaseException {
-  return traceMsg;
- }
-
- //  protected void hook142() throws DatabaseException {
- //  }
-
- //    protected void hook143() throws DatabaseException {
- //    }
-
- //    protected void hook144() throws DatabaseException {
- //    }
-
- //  protected void hook151() throws DatabaseException {
- //  }
-
- //  protected void hook152() throws DatabaseException {
- // }
-
- // protected void hook153() throws DatabaseException {
- // }
-
- protected boolean hook159(DatabaseImpl db, boolean b) throws DatabaseException {
-  return b;
- }
-
- protected void hook160(DatabaseImpl db) throws DatabaseException {}
-*/
 }

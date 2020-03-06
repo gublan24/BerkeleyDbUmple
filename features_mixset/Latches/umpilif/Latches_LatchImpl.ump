@@ -3,12 +3,13 @@ namespace com.sleepycat.je.latch;
 class LatchImpl
 {
   isA Latch;
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.RunRecoveryException;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.List;
   depend java.util.ArrayList;
+
     private static final String DEFAULT_LATCH_NAME = "LatchImpl";
 
     private String name = null;
@@ -53,11 +54,11 @@ class LatchImpl
 	    LatchWaiter waitTarget = null;
 	    synchronized (this) {
 		if (thread == owner) {
-		    Label422:           ;  //this.hook422();
+		    Label422:           ;  
 		    throw new LatchException(getNameString() + " already held");
 		}
 		if (owner == null) {
-		    Label423:           ;  //this.hook423();
+		    Label423:           ;  
 		    owner = thread;
 		} else {
 		    if (waiters == null) {
@@ -65,7 +66,7 @@ class LatchImpl
 		    }
 		    waitTarget = new LatchWaiter(thread);
 		    waiters.add(waitTarget);
-		    Label424:           ;  //this.hook424();
+		    Label424:           ;  
 		}
 	    }
 	    if (waitTarget != null) {
@@ -105,16 +106,16 @@ class LatchImpl
 	try {
 	    Thread thread = Thread.currentThread();
 	    if (thread == owner) {
-		Label425:           ;  //this.hook425();
+		Label425:           ;  
 		throw new LatchException(getNameString() + " already held");
 	    }
 	    if (owner == null) {
 		owner = thread;
-		Label426:           ;  //this.hook426();
+		Label426:           ;  
 		assert noteLatch();
 		return true;
 	    } else {
-		Label427:           ;  //this.hook427();
+		Label427:           ;  
 		return false;
 	    }
 	} finally {
@@ -196,6 +197,8 @@ class LatchImpl
 	return (waiters != null) ? waiters.size() : 0;
     }
 
+
+
     /** 
      * Formats a latch owner and waiters.
      */
@@ -232,25 +235,22 @@ class LatchImpl
     /** 
      * Simple class that encapsulates a Thread to be 'notify()ed'.
      */
- /*   protected void hook422() throws DatabaseException, InterruptedException {
+
+    /**
+     * Simple class that encapsulates a Thread to be 'notify()ed'.
+     */
+    static private class LatchWaiter {
+	boolean active;
+	Thread thread;
+
+	LatchWaiter(Thread thread) {
+	    this.thread = thread;
+	    active = false;
+	}
+
+	public String toString() {
+	    return "<LatchWaiter: " + thread + ">";
+	}
     }
 
-    protected void hook423() throws DatabaseException, InterruptedException {
-    }
-
-    protected void hook424() throws DatabaseException, InterruptedException {
-    }
-
-    protected void hook425() throws LatchException {
-    }
-
-    protected void hook426() throws LatchException {
-    }
-
-    protected void hook427() throws LatchException {
-    }
-
-    protected void hook428() {
-    }
-*/
 }

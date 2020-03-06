@@ -6,7 +6,7 @@ class Tree {
     depend com.sleepycat.je.latch.LatchSupport;
     depend com.sleepycat.je.latch.LatchNotHeldException;
     
-private SharedLatch rootLatch;
+		private SharedLatch rootLatch;
 
     private void releaseNodeLadderLatches(ArrayList nodeLadder) throws LatchNotHeldException {
 
@@ -21,8 +21,8 @@ private SharedLatch rootLatch;
      * constructor helper
      */
     before init(DatabaseImpl) {
-        rootLatch = LatchSupport.makeSharedLatch("RootLatch", (database != null) ? database.getDbEnvironment() : null);
-        ////original(database);
+
+       rootLatch =	    LatchSupport.makeSharedLatch	    ("RootLatch",	     (database != null) ? database.getDbEnvironment() : null);
     }
 
     /** 
@@ -30,20 +30,22 @@ private SharedLatch rootLatch;
      */
     before setRoot(ChildReference, boolean) {
         assert(notLatched || rootLatch.isWriteLockedByCurrentThread());
-        ////original(newRoot, notLatched);
+
     }
 
-    after Label670_1: withRootLatchedExclusive(WithRootLatched ) {
-        //	try {	    //original(wrl);} finally {
-        rootLatch.release();
-        //	}
+    after Label728: withRootLatchedExclusive(WithRootLatched ) {
+
+				rootLatch.acquireExclusive();
+
     }
 
-    after Label671_1: withRootLatchedExclusive(WithRootLatched ) {
-        //	try {   //original(wrl);	} finally {
+
+    after Label670: withRootLatchedExclusive(WithRootLatched ) {
+
         rootLatch.release();
-        //}
+
     }
+
 
     after Label672: delete(byte , UtilizationTracker ){
         rootLatch.acquireExclusive();
@@ -52,11 +54,13 @@ private SharedLatch rootLatch;
 
     after Label672_1: delete(byte , UtilizationTracker  ){
 
-        releaseNodeLadderLatches(nodeLadder);
-        if (rootIN != null) {
-            rootIN.releaseLatch();
-        }
-        rootLatch.release();
+ 					releaseNodeLadderLatches(nodeLadder);
+
+            if (rootIN != null) {
+                rootIN.releaseLatch();
+            }
+
+            rootLatch.release();
     }
 
     /** 
@@ -65,19 +69,19 @@ private SharedLatch rootLatch;
      */
     before logTreeRemoval(IN, UtilizationTracker) {
         assert rootLatch.isWriteLockedByCurrentThread();
-        //	return //original(rootIN, tracker);
+
     }
 
     after Label673: cascadeUpdates(ArrayList, BIN, int) {
         assert rootLatch.isWriteLockedByCurrentThread();
-        //original();
+
     }
 
-    after Label674_1: deleteDupSubtree(byte, BIN, int) {
-        //try {// deletedSubtreeRoot = //original(idKey, mainKey, in, deletedSubtreeRoot);} finally {
-        in .releaseLatch();
-        //}
-        //return deletedSubtreeRoot;
+    after Label674: deleteDup(byte , byte , UtilizationTracker ) {
+
+			in.releaseLatch();
+
+
     }
 
     after Label675: deleteDupSubtree(byte, BIN, int) {
@@ -125,9 +129,6 @@ private SharedLatch rootLatch;
     }
 
     after Label683_1: getParentBINForChildLN(TreeLocation, byte, byte, LN, boolean, boolean, boolean, boolean) {
-        //	try {	    //original(location, mainKey, dupKey, ln, splitsAllowed, findDeletedEntries, searchDupTree, updateGeneration,		    exactSearch, indicateIfExact, childNode);} 
-
-
             location.bin.releaseLatchIfOwner();
     
 
@@ -293,21 +294,21 @@ private SharedLatch rootLatch;
 
         after Label708_1: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
 
-            catch (DatabaseException e) {
+
                 dupBin.releaseLatchIfOwner();
                 dupRoot.releaseLatchIfOwner();
-                throw e;
-            }
+
+            
         }
 
         after Label709: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
             dupBin.latch();
-            //original(dupBin);
+
         }
 
         after Label710: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
             dupRoot.latch();
-            //original(dupRoot);
+
         }
 
         after Label711_1: findBinForInsert(byte, LogManager, INList, CursorImpl) {
@@ -333,38 +334,45 @@ private SharedLatch rootLatch;
 
         }
 
+
+after rebuildINList_1: rebuildINList()
+{            
+
+rootLatch.acquireShared();
+
+}
+
+after rebuildINList_2: rebuildINList()
+{            
+
+                rootLatch.release();
+
+
+}
         after Label714: validateDelete(int ) {
             rootLatch.acquireShared();
-            try {
-                //original(inMemoryList);
-            } finally {
-                rootLatch.release();
-            }
+     
         }
 
         after Label715: validateDelete(int ) {
+						rootLatch.release();		
+        }
+  
+
+        after Label671: withRootLatchedShared(WithRootLatched ) {
             rootLatch.acquireShared();
-        }
-        after Label715_1: validateDelete(int ) {
 
-            //	try {    //original(index);	} finally {
-            rootLatch.release();
-            //}
-        }
 
-        after Label728: withRootLatchedShared(WithRootLatched ) {
-            rootLatch.acquireExclusive();
-            //original();
         }
 
         after Label729: withRootLatchedShared(WithRootLatched ) {
-            rootLatch.acquireShared();
-            //original();
+            rootLatch.release();
+
         }
 
-        after Label730: deleteDup(byte, byte, UtilizationTracker) {
-            assert in .isLatchOwner();
-            //original(in);
+        after Label730: deleteDup(byte, byte, UtilizationTracker ) {
+            assert in.isLatchOwner();
+          
         }
 
         after Label731: searchDupTreeForDBIN(TreeLocation, byte, DIN, LN, boolean, boolean, boolean, boolean, boolean) {
@@ -387,10 +395,13 @@ private SharedLatch rootLatch;
             //original(next);
         }
 
-        after Label735(IN  ) {
+        after Label735: getNextBinInternal(boolean ,
+				   BIN ,
+				   boolean ){
+
             nextIN.latch();
             assert(LatchSupport.countLatchesHeld() == 2): LatchSupport.latchesHeldToString();
-            //original(nextIN);
+
         }
 
         after Label736: getNextBinInternal(boolean, BIN, boolean) {
@@ -450,9 +461,10 @@ private SharedLatch rootLatch;
             //original(cursor);
         }
 
-        after Label747: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl) {
+
+        after Label747: createDuplicateTree(byte, LogManager, INList, LN, CursorImpl ) {
+
             dupBin.releaseLatch();
-            //original(dupBin);
         }
 
         after Label748: findBinForInsert(byte, LogManager, INList, CursorImpl) {

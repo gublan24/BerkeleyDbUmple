@@ -4,72 +4,152 @@ class INList
 {
   depend com.sleepycat.je.latch.LatchSupport;
   depend com.sleepycat.je.latch.Latch;
+
     private Set addedINs = null;
 
     private Latch majorLatch;
 
     private Latch minorLatch;
 
-    /** 
-     * The locking hierarchy is: 1. INList major latch. 2. IN latch. In other words, the INList major latch must be taken before any IN latches to avoid deadlock. 
+    /**
+     * The locking hierarchy is:
+     *   1. INList major latch.
+     *   2. IN latch.
+     * In other words, the INList major latch must be taken before any IN
+     * latches to avoid deadlock. 
      */
-    public void latchMajor() throws DatabaseException {
-	assert LatchSupport.countLatchesHeld() == 0;
+    public void latchMajor()
+	throws DatabaseException {
+
+        assert LatchSupport.countLatchesHeld() == 0;
 	majorLatch.acquire();
     }
 
-    public void releaseMajorLatchIfHeld() throws DatabaseException {
-			if (majorLatch.isOwner()) {
-					releaseMajorLatch();
-			}
-				}
+    public void releaseMajorLatchIfHeld()
+	throws DatabaseException {
 
-				public void releaseMajorLatch() throws DatabaseException {
-			latchMinorAndDumpAddedINs();
-			majorLatch.release();
-				}
-
-				private void dumpAddedINsIntoMajorSet() {
-			if (addedINs.size() > 0) {
-					ins.addAll(addedINs);
-					addedINs.clear();
-			}
-    }
-
-    void latchMinorAndDumpAddedINs() throws DatabaseException {
-	latchMinor();
-	try {
-	    dumpAddedINsIntoMajorSet();
-	} finally {
-	    releaseMinorLatch();
+	if (majorLatch.isOwner()) {
+	    releaseMajorLatch();
 	}
     }
 
-    private void latchMinor() throws DatabaseException {
+    public void releaseMajorLatch()
+	throws DatabaseException {
+
+	/*
+	 * Before we release the major latch, take a look at addedINs and see
+	 * if anything has been added to it while we held the major latch.  If
+	 * so, added it to ins.
+	 */
+        latchMinorAndDumpAddedINs();
+	majorLatch.release();
+    }
+
+    private void dumpAddedINsIntoMajorSet() {
+	if (addedINs.size() > 0) {
+	    ins.addAll(addedINs);
+	    addedINs.clear();
+	}
+    }
+
+    void latchMinorAndDumpAddedINs() 
+        throws DatabaseException {
+
+	latchMinor();
+        try {
+            dumpAddedINsIntoMajorSet();
+        } finally {
+            releaseMinorLatch();
+        }
+    }
+
+    private void latchMinor()
+	throws DatabaseException {
+
 	minorLatch.acquire();
     }
 
-    private void releaseMinorLatch() throws DatabaseException {
+    private void releaseMinorLatch()
+	throws DatabaseException {
+
 	minorLatch.release();
     }
+
 
     after Label338: INList(EnvironmentImpl ) {
 	addedINs = new HashSet();
 	majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
 	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
-	//original(envImpl);
+
     }
 
     after Label339: INList(INList , EnvironmentImpl ) {
 	majorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Major Latch", envImpl);
 	minorLatch = LatchSupport.makeLatch(DEBUG_NAME + " Minor Latch", envImpl);
-	//original(envImpl);
+
     }
 
     after Label340: INList(INList , EnvironmentImpl ) {
 	addedINs = new HashSet();
-	//original();
+
     }
+
+////////
+
+		around add1-add2:add(IN ) 
+		{
+			;
+			boolean enteredWithLatchHeld = majorLatch.isOwner();
+				    boolean addToMajor = true;
+				    try {
+            if (enteredWithLatchHeld) {
+
+                /* 
+                 * Don't try to acquire the major latch twice, that's not
+                 * supported. If we do hold the latch, don't modify the major
+                 * list, we may be faulting in an IN while iterating over the
+                 * list from the evictor.
+                 */
+                addToMajor = false;
+            } else {
+                if (!(majorLatch.acquireNoWait())) {
+                    /* We couldn't acquire the latch. */
+                    addToMajor = false;
+                }
+            }
+
+            if (addToMajor) {
+                around_proceed:
+            } else {
+                minorLatch.acquire();
+                try {
+                    addAndSetMemory(addedINs, in);
+                } finally {
+                    minorLatch.release();
+                }
+
+                /*
+                 * The holder of the majorLatch may have released it.  If so,
+                 * try to put the minor list into the major list so no INs are
+                 * orphaned.
+                 */
+                if (!enteredWithLatchHeld) {
+                    if (majorLatch.acquireNoWait()) {
+                        try {
+                            latchMinorAndDumpAddedINs();
+                        } finally {
+                            releaseMajorLatch();
+                        }
+                    }
+                }
+            }
+        } finally {
+            if (addToMajor) {
+                releaseMajorLatchIfHeld();
+            }
+        }
+    }
+
 
     /** 
      * An IN is getting evicted or is displaced by recovery.  Caller is responsible for acquiring the major latch before calling this and releasing it when they're done.
@@ -134,11 +214,11 @@ class INList
 	//original();
     }
 
-    after clear(){
-	addedINs.clear();
-	minorLatch.release();
-	releaseMajorLatch();
-	//original();
+    after  clear_1:clear(){
+				addedINs.clear();
+				minorLatch.release();
+				releaseMajorLatch();
+	
     }
 
 }

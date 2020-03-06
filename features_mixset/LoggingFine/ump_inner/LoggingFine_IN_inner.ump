@@ -1,38 +1,10 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFine/com/sleepycat/je/tree/IN.java
 namespace com.sleepycat.je.tree;
 class IN {
-   static class IN_traceSplit {
-      IN_traceSplit(    IN _this,    Level level,    IN parent,    IN newSibling,    long parentLsn,    long myNewLsn,    long newSiblingLsn,    int splitIndex,    int idKeyIndex,    int childIndex){
-        this._this=_this;
-        this.level=level;
-        this.parent=parent;
-        this.newSibling=newSibling;
-        this.parentLsn=parentLsn;
-        this.myNewLsn=myNewLsn;
-        this.newSiblingLsn=newSiblingLsn;
-        this.splitIndex=splitIndex;
-        this.idKeyIndex=idKeyIndex;
-        this.childIndex=childIndex;
-      }
-      void execute(){
-      }
-      protected IN _this;
-      protected Level level;
-      protected IN parent;
-      protected IN newSibling;
-      protected long parentLsn;
-      protected long myNewLsn;
-      protected long newSiblingLsn;
-      protected int splitIndex;
-      protected int idKeyIndex;
-      protected int childIndex;
-      protected Logger logger;
-      protected StringBuffer sb;
-    }
-   static class IN_splitInternal {
-      after Label617: execute(){
-        _this.traceSplit(Level.FINE,parent,newSibling,parentLsn,myNewLsn,newSiblingLsn,splitIndex,idKeyIndex,childIndex);
-       // original();
-      }
+
+      after Label617: splitInternal(IN , int , int , int ) {
+        traceSplit(Level.FINE,parent,newSibling,parentLsn,myNewLsn,newSiblingLsn,splitIndex,idKeyIndex,childIndex);
+
+      
     }
 }

@@ -1,15 +1,17 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
+
 class FileProcessor {
-   static class FileProcessor_processLN {
-      after Label135: execute() {
-        if (parentDIN != null) {
-          parentDIN.releaseLatchIfOwner();
-        }
-        if (bin != null) {
-          bin.releaseLatchIfOwner();
-        }
-        //original();
+
+      after Label135: processLN(Long , TreeLocation , Long , LNInfo , LookAheadCache , Map ) {
+        			if (parentDIN != null) {
+				parentDIN.releaseLatchIfOwner();
+			}
+
+			if (bin != null) {
+				bin.releaseLatchIfOwner();
+			}
+
       }
-    }
+    
 }

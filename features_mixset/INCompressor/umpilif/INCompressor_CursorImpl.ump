@@ -2,14 +2,14 @@ namespace com.sleepycat.je.dbi;
 
 class CursorImpl
 {
-    after Label281: delete() {
+    after Label281: delete(boolean ) {
 			locker.addDeleteInfo(dupBin, new Key(lnKey));
-			//original(lnKey);
+
     }
 
-    after Label282: delete() {
+    after Label282: delete(boolean ) {
 			locker.addDeleteInfo(bin, new Key(lnKey));
-			//original(lnKey);
+
     }
 
 }

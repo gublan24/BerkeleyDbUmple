@@ -1,24 +1,23 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Latches_Statistics/com/sleepycat/je/dbi/CursorImpl.java
+
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
-   static class CursorImpl_getNextDuplicate {
-      after Label200: execute() {
-        _this.latchBIN();
-        try {
-          //original();
-        }
-    finally {
-          _this.releaseBIN();
-        }
+
+      after Label200: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {   
+        latchBIN();
+        
+        
       }
-      after Label201: execute() {
+
+			after Label200_1: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {  
+						    releaseBIN();
+
+			}
+      after Label201: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {  
         duplicateRoot.latch();
-        try {
-          //original();
         }
-    finally {
+
+      after Label201_1: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {  
           duplicateRoot.releaseLatch();
-        }
-      }
-    }
+			}
+    
 }

@@ -1,101 +1,100 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/tree/Tree.java
+
 namespace com.sleepycat.je.tree;
+
 class Tree {
 
-   static class Tree_forceSplit {
-      after Label722: execute()   {
-        isRootLatched=false;
-        //original();
+
+      after Label722: forceSplit(IN , byte )   {
+        ;
+				boolean isRootLatched = false;
+
       }
 
-      after Label723:execute()   {
-        if (origParent.isDbRoot()) {
-          _this.rootLatch.acquireExclusive();
-          isRootLatched=true;
-        }
-        origParent.latch();
-        //original();
+      after Label723: forceSplit(IN , byte )   {
+       if (originalParent.isDbRoot()) {
+                rootLatch.acquireExclusive();
+                isRootLatched = true;
+            }
+            originalParent.latch();
       }
 
-      after Label724:execute()    {
-        child.latch();
-        //original();
+      after Label724: forceSplit(IN , byte )   {
+         child.latch();
       }
 
-      after Label725: execute()    {
-        child.releaseLatch();
-        //original();
-      }
-
-      after Label726:execute()    {
+      after Label725:  forceSplit(IN , byte )   {
         assert isRootLatched;
-        //original();
+
       }
 
-      after Label727: execute()   {
+      after Label726:  forceSplit(IN , byte )   {
+                        child.releaseLatch();
+
+      }
+
+      after Label727:  forceSplit(IN , byte )   {
         if (!success) {
-          if (child != null) {
-            child.releaseLatchIfOwner();
-          }
-          origParent.releaseLatchIfOwner();
-        }
-        if (nodeLadder.size() > 0) {
-          iter=nodeLadder.listIterator(nodeLadder.size());
-          while (iter.hasPrevious()) {
-            info2=(SplitInfo)iter.previous();
-            info2.child.releaseLatchIfOwner();
-          }
-        }
-        if (isRootLatched) {
-          _this.rootLatch.release();
-        }
-        //original();
-      }
-    }
+                if (child != null) {
+                    child.releaseLatchIfOwner();
+                }
+                originalParent.releaseLatchIfOwner();
+            }
 
-   static class Tree_searchSplitsAllowed {
-      after Label716_1:execute()   {
-          if (rootLatched) {
-            _this.rootLatch.release();
-          }
+            /*
+             * Unlatch any remaining children. There should only be remainders
+             * in the event of an exception.
+             */
+            if (nodeLadder.size() > 0) {
+                iter = nodeLadder.listIterator(nodeLadder.size());
+                while (iter.hasPrevious()) {
+                    SplitInfo info = (SplitInfo) iter.previous();
+                    info.child.releaseLatchIfOwner();
+                }
+            }
+
+            if (isRootLatched) {
+                rootLatch.release();
+            }
+      }
+    
+
+
+      after Label716_1: searchSplitsAllowed(byte, long , boolean )   {
+			 		if (rootLatched) {
+						rootLatch.release();	
+				}
         
       }
-      after Label717:execute()    {
-        _this.rootLatch.acquireShared();
-        rootLatched=true;
-        rootLatchedExclusive=false;
-        //original();
+      after Label717:  searchSplitsAllowed(byte, long , boolean )   {
+				;
+        rootLatch.acquireShared();
+        boolean rootLatched = true;
+	      boolean rootLatchedExclusive = false;
       }
 
-      after Label718:execute()    {
-        rootIN.latch();
-        //original();
+      after Label718: searchSplitsAllowed(byte, long , boolean )   {
+       	rootIN = null;
+				rootLatch.release();
+				rootLatch.acquireExclusive();
+				rootLatchedExclusive = true;
+				continue;
       }
 
-      after Label719:execute()    {
-        rootLatched=true;
-        _this.rootLatch.acquireExclusive();
-        //original();
+      after Label719: searchSplitsAllowed(byte, long , boolean )   {
+			    rootLatch.release();
+			    rootLatched = false;
       }
 
-      after Label720:execute()    {
-        _this.splitRoot();
-        _this.rootLatch.release();
-        rootLatched=false;
-        //original();
+      after Label720: searchSplitsAllowed(byte, long , boolean )   {
+			    rootLatched = true;
+			    rootLatch.acquireExclusive();
       }
 
-      after Label721:execute()    {
-        b=!rootLatchedExclusive;
-        if (b) {
-          rootIN=null;
-          _this.rootLatch.release();
-          _this.rootLatch.acquireExclusive();
-          rootLatchedExclusive=true;
-        }
-        //original();
+      after Label721: searchSplitsAllowed(byte, long , boolean )   {
+   			rootIN.latch();
+
       }
-    }
+    
 
 
   inner class RootChildReference {
@@ -105,19 +104,19 @@ class Tree {
           rootLatch.release();
           rootLatch.acquireExclusive();
         }
-        //original();
+
       }
       after Label667: setTarget(    Node ){
         assert rootLatch.isWriteLockedByCurrentThread();
-        //original();
+
       }
       after Label668: clearTarget(){
         assert rootLatch.isWriteLockedByCurrentThread();
-        //original();
+
       }
       after Label669: setLsn(    long ){
         assert rootLatch.isWriteLockedByCurrentThread();
-        //original();
+
       }
     }
 }

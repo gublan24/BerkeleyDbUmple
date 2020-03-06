@@ -32,6 +32,10 @@ class EnvironmentImpl
 			if (fairLatches) {
 					logManager = new LatchedLogManager(this, isReadOnly);
 			} else 
+			{
+      logManager = new SyncedLogManager(this, isReadOnly); 
+
+			}
     }
 
     after Label322: EnvironmentImpl(File , EnvironmentConfig ) { 

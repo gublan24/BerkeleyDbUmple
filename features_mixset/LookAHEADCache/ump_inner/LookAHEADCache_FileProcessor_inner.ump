@@ -1,73 +1,77 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LookAHEADCache/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
 
-LookAheadCache lookAheadCache;
+ 
+      after Label132: processLN(Long , TreeLocation , Long , LNInfo , LookAheadCache , Map ) {
 
-   static class FileProcessor_processLN {
-  	protected LookAheadCache lookAheadCache;
-  	
-      before execute() {
-        lookAheadCache=(LookAheadCache)lookAheadCachep;
-        //original();
-      }
-      after Label132: execute(){
+        offset = lookAheadCache.nextOffset();
+				info = lookAheadCache.remove(offset);
 
-        offset=lookAheadCache.nextOffset();
-        info=lookAheadCache.remove(offset);
-       // original();
       }
 
-      after Label133:execute(){
+      after Label133:processLN(Long , TreeLocation , Long , LNInfo , LookAheadCache , Map ) {
 
-        if (!isDupCountLN) {
-          for (int i=0; i < bin.getNEntries(); i+=1) {
-            lsn=bin.getLsn(i);
-            if (i != index && !bin.isEntryKnownDeleted(i) && !bin.isEntryPendingDeleted(i) && DbLsn.getFileNumber(lsn) == fileNum.longValue()) {
-              myOffset=new Long(DbLsn.getFileOffset(lsn));
-              myInfo=lookAheadCache.remove(myOffset);
-              if (myInfo != null) {
-                Label117: //this.hook117();
-                _this.processFoundLN(myInfo,lsn,lsn,bin,i,null);
-              }
-            }
-          }
-        }
-        //original();
+					if (!isDupCountLN) {
+								for (int i = 0; i < bin.getNEntries(); i += 1) {
+									long lsn = bin.getLsn(i);
+									if (i != index && !bin.isEntryKnownDeleted(i)
+											&& !bin.isEntryPendingDeleted(i)
+											&& DbLsn.getFileNumber(lsn) == fileNum.longValue()) {
+
+										Long myOffset = new Long(DbLsn.getFileOffset(lsn));
+										LNInfo myInfo = lookAheadCache.remove(myOffset);
+
+										if (myInfo != null) {
+										Label117: ;
+											processFoundLN(myInfo, lsn, lsn, bin, i, null);
+										}
+									}
+								}
+							}
+       
       }
-    }
-   static class FileProcessor_processFile {
+    
 
 
-      after Label127:  execute(){
+
+
+
+      after Label127:  processFile(Long ) {
         ;
-        LookAheadCache lookAheadCache=new LookAheadCache(lookAheadCacheSize);
-//        original();
+        		LookAheadCache lookAheadCache = new LookAheadCache(lookAheadCacheSize);
+
       }
 
 
-      after Label128:  execute(){
-        lookAheadCacheSize=_this.cleaner.lookAheadCacheSize;
-        //original();
+      after Label128:  processFile(Long ) {
+				;
+				int lookAheadCacheSize = cleaner.lookAheadCacheSize;
+
       }
 
-      after Label129: execute() {
-        while (!lookAheadCache.isEmpty()) {
-          Label116: //this.hook116();
-          _this.processLN(fileNum,location,null,null,lookAheadCache,dbCache);
-        }
-        //original();
-      }
-      after Label130: execute() {
+      after Label129:  processFile(Long ) {
+        	while (!lookAheadCache.isEmpty()) {
+			Label120: ;
+				processLN(fileNum, location, null,null,lookAheadCache, dbCache);
+			}
 
-        lookAheadCache.add(aLsn,aLninfo);
-        if (lookAheadCache.isFull()) {
-          //original();
-        }
+		
+
+      }
+
+      after Label130:  processFile(Long ) {
+			lookAheadCache.add(aLsn, aLninfo);
+
+      if (lookAheadCache.isFull()) {
+						processLN(fileNum, location, aLsn, aLninfo,
+								lookAheadCache, dbCache);
+					}
+
       }
       after Label131: execute() {
         p=lookAheadCache;
         //original();
       }
-    }
+    
 }

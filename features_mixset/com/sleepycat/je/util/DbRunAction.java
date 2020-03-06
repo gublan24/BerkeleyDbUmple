@@ -21,9 +21,12 @@ import com.sleepycat.je.Cursor;
 import com.sleepycat.je.CheckpointConfig;
 import java.text.DecimalFormat;
 import java.io.File;
+import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../DbRunAction.ump"
 // line 3 "../../../../DbRunAction_static.ump"
+// line 3 "../../../../Statistics_DbRunAction.ump"
+// line 3 "../../../../Statistics_DbRunAction_inner.ump"
 // line 3 "../../../../DeleteOp_DbRunAction.ump"
 // line 3 "../../../../DeleteOp_DbRunAction_inner.ump"
 // line 3 "../../../../Evictor_DbRunAction.ump"
@@ -55,8 +58,8 @@ public class DbRunAction
 
   // line 29 "../../../../DbRunAction.ump"
    public static  void main(String [] argv){
-    Thread.currentThread().setUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
-    Thread.setDefaultUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
+  //  Thread.currentThread().setUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
+    //Thread.setDefaultUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
     new DbRunAction_main(argv).execute();
   }
 
@@ -135,6 +138,7 @@ public class DbRunAction
   
   @MethodObject
   // line 4 "../../../../DbRunAction_static.ump"
+  // line 4 "../../../../Statistics_DbRunAction_inner.ump"
   // line 4 "../../../../DeleteOp_DbRunAction_inner.ump"
   // line 33 "../../../../Evictor_DbRunAction_inner.ump"
   // line 4 "../../../../INCompressor_DbRunAction_inner.ump"
@@ -215,7 +219,12 @@ public class DbRunAction
             elseFlag = false; 
           }
    ;
-                 Label839: ;
+                 Label839:
+  if (action.equalsIgnoreCase("dbstats")) {
+            doAction=DBSTATS;
+            elseFlag = false; 
+          }
+   ;
                 if (elseFlag) {
                   usage();
                   System.exit(1);
@@ -273,7 +282,20 @@ public class DbRunAction
   if (doAction == REMOVEDB) {
             removeAndClean(env,dbName);}
    // this.hook842();
-          Label838: // this.hook838();
+          Label838:
+  if (doAction == DBSTATS) {
+            dbConfig=new DatabaseConfig();
+            dbConfig.setReadOnly(true);
+            DbInternal.setUseExistingConfig(dbConfig,true);
+            db=env.openDatabase(null,dbName,dbConfig);
+            try {
+              System.out.println(db.getStats(new StatsConfig()));
+            }
+      finally {
+              db.close();
+            }
+          }
+   // this.hook838();
           actionEnd = System.currentTimeMillis();
           env.close();
         } catch (Exception e) {
@@ -422,6 +444,8 @@ public class DbRunAction
   private static final int CLEAN = 1 ;
 // line 26 "../../../../DbRunAction.ump"
   private static final int CHECKPOINT = 4 ;
+// line 6 "../../../../Statistics_DbRunAction.ump"
+  private static final int DBSTATS = 6 ;
 // line 5 "../../../../DeleteOp_DbRunAction.ump"
   private static final int REMOVEDB = 5 ;
 // line 5 "../../../../Evictor_DbRunAction.ump"

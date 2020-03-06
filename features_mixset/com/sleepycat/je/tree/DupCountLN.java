@@ -10,6 +10,7 @@ import com.sleepycat.je.dbi.MemoryBudget;
 import java.nio.ByteBuffer;
 
 // line 3 "../../../../DupCountLN.ump"
+// line 3 "../../../../Statistics_DupCountLN.ump"
 // line 3 "../../../../MemoryBudget_DupCountLN.ump"
 public class DupCountLN extends LN
 {
@@ -188,6 +189,11 @@ public class DupCountLN extends LN
    protected void dumpLogAdditional(StringBuffer sb, boolean verbose){
     super.dumpLogAdditional(sb, verbose);
 	sb.append("<count v=\"").append(dupCount).append("\"/>");
+  }
+
+  // line 6 "../../../../Statistics_DupCountLN.ump"
+   public void accumulateStats(TreeWalkerStatsAccumulator acc){
+    acc.processDupCountLN(this, new Long(getNodeId()));
   }
 
 

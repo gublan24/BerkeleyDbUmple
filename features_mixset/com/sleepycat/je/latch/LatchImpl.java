@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.latch;
-import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.RunRecoveryException;
 import com.sleepycat.je.DatabaseException;
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 // line 3 "../../../../Latches_LatchImpl.ump"
-// line 3 "../../../../Latches_LatchImpl_inner.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
 public class LatchImpl implements Latch
 {
 
@@ -37,7 +36,7 @@ public class LatchImpl implements Latch
    * 
    * Create a latch.
    */
-  // line 26 "../../../../Latches_LatchImpl.ump"
+  // line 27 "../../../../Latches_LatchImpl.ump"
    public  LatchImpl(String name, EnvironmentImpl env){
     this.name = name;
 	this.env = env;
@@ -48,7 +47,7 @@ public class LatchImpl implements Latch
    * 
    * Create a latch with no name, more optimal for shortlived latches.
    */
-  // line 34 "../../../../Latches_LatchImpl.ump"
+  // line 35 "../../../../Latches_LatchImpl.ump"
    public  LatchImpl(EnvironmentImpl env){
     this.env = env;
 	this.name = DEFAULT_LATCH_NAME;
@@ -61,18 +60,24 @@ public class LatchImpl implements Latch
    * @throws LatchException if the latch is already held by the callingthread.
    * @throws RunRecoveryException if an InterruptedException exceptionoccurs.
    */
-  // line 51 "../../../../Latches_LatchImpl.ump"
+  // line 52 "../../../../Latches_LatchImpl.ump"
    public void acquire() throws DatabaseException{
     try {
 	    Thread thread = Thread.currentThread();
 	    LatchWaiter waitTarget = null;
 	    synchronized (this) {
 		if (thread == owner) {
-		    Label422:           ;  //this.hook422();
+		    Label422:
+stats.nAcquiresSelfOwned++;
+	//original();
+           ;  
 		    throw new LatchException(getNameString() + " already held");
 		}
 		if (owner == null) {
-		    Label423:           ;  //this.hook423();
+		    Label423:
+stats.nAcquiresNoWaiters++;
+	//original();
+           ;  
 		    owner = thread;
 		} else {
 		    if (waiters == null) {
@@ -80,7 +85,10 @@ public class LatchImpl implements Latch
 		    }
 		    waitTarget = new LatchWaiter(thread);
 		    waiters.add(waitTarget);
-		    Label424:           ;  //this.hook424();
+		    Label424:
+stats.nAcquiresWithContention++;
+	//original();
+           ;  
 		}
 	    }
 	    if (waitTarget != null) {
@@ -118,21 +126,33 @@ public class LatchImpl implements Latch
    * @return true if the latch was acquired, false if it is not available.
    * @throws LatchException if the latch is already held by the callingthread.
    */
-  // line 105 "../../../../Latches_LatchImpl.ump"
+  // line 106 "../../../../Latches_LatchImpl.ump"
    public synchronized  boolean acquireNoWait() throws LatchException{
     try {
 	    Thread thread = Thread.currentThread();
 	    if (thread == owner) {
-		Label425:           ;  //this.hook425();
+		Label425:
+//synchronized boolean acquireNoWait()
+	stats.nAcquiresSelfOwned++;
+	//original();
+           ;  
 		throw new LatchException(getNameString() + " already held");
 	    }
 	    if (owner == null) {
 		owner = thread;
-		Label426:           ;  //this.hook426();
+		Label426:
+//synchronized boolean acquireNoWait()
+	stats.nAcquireNoWaitSuccessful++;
+	//original();
+           ;  
 		assert noteLatch();
 		return true;
 	    } else {
-		Label427:           ;  //this.hook427();
+		Label427:
+//synchronized boolean acquireNoWait()
+	stats.nAcquireNoWaitUnsuccessful++;
+	//original();
+           ;  
 		return false;
 	    }
 	} finally {
@@ -145,7 +165,7 @@ public class LatchImpl implements Latch
    * 
    * Release the latch.  If there are other thread(s) waiting for the latch, one is woken up and granted the latch. If the latch was not owned by  the caller, just return;
    */
-  // line 129 "../../../../Latches_LatchImpl.ump"
+  // line 130 "../../../../Latches_LatchImpl.ump"
    public void releaseIfOwner(){
     doRelease(false);
   }
@@ -156,7 +176,7 @@ public class LatchImpl implements Latch
    * Release the latch.  If there are other thread(s) waiting for the latch, they are woken up and granted the latch.
    * @throws LatchNotHeldException if the latch is not currently held.
    */
-  // line 137 "../../../../Latches_LatchImpl.ump"
+  // line 138 "../../../../Latches_LatchImpl.ump"
    public void release() throws LatchNotHeldException{
     if (doRelease(true)) {
 	    throw new LatchNotHeldException(getNameString() + " not held");
@@ -169,7 +189,7 @@ public class LatchImpl implements Latch
    * Do the work of releasing the latch. Wake up any waiters.
    * @returns true if this latch was not owned by the caller.
    */
-  // line 147 "../../../../Latches_LatchImpl.ump"
+  // line 148 "../../../../Latches_LatchImpl.ump"
    private boolean doRelease(boolean checkHeld){
     LatchWaiter newOwner = null;
 	try {
@@ -184,7 +204,10 @@ public class LatchImpl implements Latch
 		} else {
 		    owner = null;
 		}
-		Label428:           ;  //this.hook428();
+		Label428:
+stats.nReleases++;
+	//original();
+           ;  //this.hook428();
 		assert unNoteLatch(checkHeld);
 	    }
 	} finally {
@@ -205,7 +228,7 @@ public class LatchImpl implements Latch
    * Return true if the current thread holds this latch.
    * @return true if we hold this latch.  False otherwise.
    */
-  // line 180 "../../../../Latches_LatchImpl.ump"
+  // line 181 "../../../../Latches_LatchImpl.ump"
    public boolean isOwner(){
     return Thread.currentThread() == owner;
   }
@@ -216,7 +239,7 @@ public class LatchImpl implements Latch
    * Used only for unit tests.
    * @return the thread that currently holds the latch for exclusive access.
    */
-  // line 188 "../../../../Latches_LatchImpl.ump"
+  // line 189 "../../../../Latches_LatchImpl.ump"
    public Thread owner(){
     return owner;
   }
@@ -227,7 +250,7 @@ public class LatchImpl implements Latch
    * Return the number of threads waiting.
    * @return the number of threads waiting for the latch.
    */
-  // line 196 "../../../../Latches_LatchImpl.ump"
+  // line 197 "../../../../Latches_LatchImpl.ump"
    public synchronized  int nWaiters(){
     return (waiters != null) ? waiters.size() : 0;
   }
@@ -237,7 +260,7 @@ public class LatchImpl implements Latch
    * 
    * Formats a latch owner and waiters.
    */
-  // line 203 "../../../../Latches_LatchImpl.ump"
+  // line 206 "../../../../Latches_LatchImpl.ump"
    public synchronized  String toString(){
     return LatchSupport.latchTable.toString(name, owner, waiters, 0);
   }
@@ -247,7 +270,7 @@ public class LatchImpl implements Latch
    * 
    * For concocting exception messages
    */
-  // line 210 "../../../../Latches_LatchImpl.ump"
+  // line 213 "../../../../Latches_LatchImpl.ump"
    private String getNameString(){
     return LatchSupport.latchTable.getNameString(name);
   }
@@ -257,7 +280,7 @@ public class LatchImpl implements Latch
    * 
    * Only call under the assert system. This records latching by thread.
    */
-  // line 217 "../../../../Latches_LatchImpl.ump"
+  // line 220 "../../../../Latches_LatchImpl.ump"
    private boolean noteLatch() throws LatchException{
     return LatchSupport.latchTable.noteLatch(this);
   }
@@ -267,7 +290,7 @@ public class LatchImpl implements Latch
    * 
    * Only call under the assert system. This records latching by thread.
    */
-  // line 224 "../../../../Latches_LatchImpl.ump"
+  // line 227 "../../../../Latches_LatchImpl.ump"
    private boolean unNoteLatch(boolean checkHeld){
     if (checkHeld) {
 	    return LatchSupport.latchTable.unNoteLatch(this, name);
@@ -276,98 +299,60 @@ public class LatchImpl implements Latch
 	    return true;
 	}
   }
-  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+
+
+  /**
+   * 
+   * @return a LatchStats object with information about this latch.
+   */
+  // line 11 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
+   public LatchStats getLatchStats(){
+    LatchStats s = null;
+	try {
+	    s = (LatchStats) stats.clone();
+	} catch (CloneNotSupportedException e) {
+	}
+	return s;
+  }
   
-  
-  
-  // line 4 "../../../../Latches_LatchImpl_inner.ump"
-  public static class LatchWaiter
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //LatchWaiter Attributes
-    private boolean active;
-    private Thread thread;
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public LatchWaiter(boolean aActive, Thread aThread)
-    {
-      active = aActive;
-      thread = aThread;
-    }
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public boolean setActive(boolean aActive)
-    {
-      boolean wasSet = false;
-      active = aActive;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public boolean setThread(Thread aThread)
-    {
-      boolean wasSet = false;
-      thread = aThread;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public boolean getActive()
-    {
-      return active;
-    }
-  
-    public Thread getThread()
-    {
-      return thread;
-    }
-  
-    public void delete()
-    {}
-  
-    // line 8 "../../../../Latches_LatchImpl_inner.ump"
-    public  LatchWaiter(Thread thread){
-      this.thread=thread;
-          active=false;
-    }
-  
-    // line 12 "../../../../Latches_LatchImpl_inner.ump"
-     public String toString(){
-      return "<LatchWaiter: " + thread + ">";
-    }
-  
-  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 12 "../../../../Latches_LatchImpl.ump"
+  // line 13 "../../../../Latches_LatchImpl.ump"
   private static final String DEFAULT_LATCH_NAME = "LatchImpl" ;
-// line 14 "../../../../Latches_LatchImpl.ump"
+// line 15 "../../../../Latches_LatchImpl.ump"
   private String name = null ;
-// line 16 "../../../../Latches_LatchImpl.ump"
+// line 17 "../../../../Latches_LatchImpl.ump"
   private List waiters = null ;
-// line 18 "../../../../Latches_LatchImpl.ump"
+// line 19 "../../../../Latches_LatchImpl.ump"
   private EnvironmentImpl env = null ;
-// line 20 "../../../../Latches_LatchImpl.ump"
+// line 21 "../../../../Latches_LatchImpl.ump"
   private Thread owner = null ;
 
-// line 41 "../../../../Latches_LatchImpl.ump"
+// line 42 "../../../../Latches_LatchImpl.ump"
   synchronized public void setName (String name) 
   {
     this.name = name;
   }
+
+// line 242 "../../../../Latches_LatchImpl.ump"
+  static private class LatchWaiter 
+  {
+    boolean active;
+	Thread thread;
+
+	LatchWaiter(Thread thread) {
+	    this.thread = thread;
+	    active = false;
+	}
+
+	public String toString() {
+	    return "<LatchWaiter: " + thread + ">";
+	}
+  }
+// line 5 "../../../../Derivative_Latches_Statistics_LatchImpl.ump"
+  private LatchStats stats = new LatchStats() ;
 
   
 }

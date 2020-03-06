@@ -1,6 +1,8 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/tree/Tree.java
+
 namespace com.sleepycat.je.tree;
+
 class Tree {
+
   static class SearchType {
       public static final SearchType NORMAL=new SearchType();
       public static final SearchType LEFT=new SearchType();
@@ -8,7 +10,7 @@ class Tree {
 
     
     }
-  inner class RootChildReference{
+  static class RootChildReference{
       isA ChildReference;
   
       private RootChildReference(    Node target,    byte[] key,    long lsn){
@@ -18,25 +20,22 @@ class Tree {
         super(target,key,lsn,existingState);
       }
       public Node fetchTarget(    DatabaseImpl database,    IN in) throws DatabaseException {
-        Label666:           ;  //this.hook666();
+        Label666:           ;  
         return super.fetchTarget(database,in);
       }
       public void setTarget(    Node target){
-        Label667:           ;  //this.hook667();
+        Label667:           ;  
         super.setTarget(target);
       }
       public void clearTarget(){
-        Label668:           ;  //this.hook668();
+        Label668:           ;  
         super.clearTarget();
       }
       public void setLsn(    long lsn){
-        Label669:           ;  //this.hook669();
+        Label669:           ;  
         super.setLsn(lsn);
       }
-//      protected void hook666() throws DatabaseException {}
-      //protected void hook667(){}
-      //protected void hook668(){}
-      //protected void hook669(){}
+
     }
   static  class SplitInfo {
       IN parent;
@@ -99,39 +98,7 @@ class Tree {
       protected IN rootIN;
       protected boolean b;
       protected EnvironmentImpl env;
-/*
-      protected void hook716() throws DatabaseException {
-        while (true) {
-          if (_this.root != null) {
-            rootIN=(IN)_this.root.fetchTarget(_this.database,null);
-            if (rootIN.needsSplitting()) {
-              b=true;
-              Label721:           ;  //this.hook721();
-              if (b)             continue;
-              Label720:           ;  //this.hook720();
-              env=_this.database.getDbEnvironment();
-              env.getDbMapTree().modifyDbRoot(_this.database);
-              Label719:           ;  //this.hook719();
-              rootIN=(IN)_this.root.fetchTarget(_this.database,null);
-            }
-            Label718:           ;  //this.hook718();
-          }
-          break;
-        }
-      }
-*/
-/*
-      protected void hook717() throws DatabaseException {
-      }
-      protected void hook718() throws DatabaseException {
-      }
-      protected void hook719() throws DatabaseException {
-      }
-      protected void hook720() throws DatabaseException {
-      }
-      protected void hook721() throws DatabaseException {
-      }
-*/
+
     }
    static class Tree_forceSplit {
       Tree_forceSplit(    Tree _this,    IN parent,    byte[] key){

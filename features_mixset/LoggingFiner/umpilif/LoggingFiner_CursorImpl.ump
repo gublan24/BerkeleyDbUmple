@@ -9,15 +9,15 @@ class CursorImpl
 	new CursorImpl_trace(this, level, changeType, theBin, ln, lnIndex, oldLsn, newLsn).execute();
     }
 
-    after Label204: delete(){
+    after Label204: delete(boolean ) {
 
 	trace(Level.FINER, TRACE_DELETE, targetBin, ln, targetIndex, oldLsn, newLsn);
-	//original(ln, oldLsn, newLsn);
+
     }
 
     after Label205: putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
 	trace(Level.FINER, TRACE_MOD, targetBin, ln, targetIndex, oldLsn, newLsn);
-//	original(ln, oldLsn, newLsn);
+
     }
 
 }

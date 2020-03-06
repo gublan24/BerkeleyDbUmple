@@ -1,18 +1,20 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/SortedLSNTreeWalker.java
+
 namespace com.sleepycat.je.dbi;
+
 class SortedLSNTreeWalker {
-   static class SortedLSNTreeWalker_extractINsForDb {
-      after Label356:execute(){
+
+
+      after Label356: extractINsForDb(INList ) {
         inList.latchMajor();
-        //original();
+
       }
-      after Label357:execute() {
+      after Label357: extractINsForDb(INList ) {
         inList.latchMinorAndDumpAddedINs();
-        //original();
+
       }
-      after Label358: execute(){
+      after Label358: extractINsForDb(INList ) {
         inList.releaseMajorLatch();
-        //original();
+
       }
-    }
+    
 }

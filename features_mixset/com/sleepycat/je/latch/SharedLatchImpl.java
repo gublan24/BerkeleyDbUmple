@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.latch;
-import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 import com.sleepycat.je.RunRecoveryException;
 import com.sleepycat.je.DatabaseException;
@@ -11,7 +10,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 // line 3 "../../../../Latches_SharedLatchImpl.ump"
-// line 3 "../../../../Latches_SharedLatchImpl_inner.ump"
+// line 3 "../../../../Derivative_Latches_Statistics_SharedLatchImpl.ump"
 public class SharedLatchImpl implements SharedLatch
 {
 
@@ -38,7 +37,7 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Create a shared latch.
    */
-  // line 25 "../../../../Latches_SharedLatchImpl.ump"
+  // line 26 "../../../../Latches_SharedLatchImpl.ump"
    public  SharedLatchImpl(String name, EnvironmentImpl env){
     this.name = name;
 	this.env = env;
@@ -51,7 +50,7 @@ public class SharedLatchImpl implements SharedLatch
    * @throws LatchException if the latch is already held by the currentthread for shared access.
    * @throws RunRecoveryException if an InterruptedException exceptionoccurs.
    */
-  // line 49 "../../../../Latches_SharedLatchImpl.ump"
+  // line 50 "../../../../Latches_SharedLatchImpl.ump"
    public synchronized  void acquireExclusive() throws DatabaseException{
     try {
 	    Thread thread = Thread.currentThread();
@@ -64,9 +63,18 @@ public class SharedLatchImpl implements SharedLatch
 		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
 	    }
 	    if (waiters.size() == 1) {
-		Label429:           ;  //this.hook429();
+		Label429:
+//synchronized void acquireExclusive()
+
+	stats.nAcquiresNoWaiters++;
+	//original();
+           ;  
 	    } else {
-		Label430:           ;  //this.hook430();
+		Label430:
+//synchronized void acquireExclusive()
+	stats.nAcquiresWithContention++;
+	//original();
+           ;  
 		while (waiters.get(0) != owner) {
 		    wait();
 		}
@@ -80,7 +88,7 @@ public class SharedLatchImpl implements SharedLatch
 	}
   }
 
-  // line 77 "../../../../Latches_SharedLatchImpl.ump"
+  // line 78 "../../../../Latches_SharedLatchImpl.ump"
    public boolean acquireExclusiveNoWait() throws DatabaseException{
     try {
 	    Thread thread = Thread.currentThread();
@@ -90,7 +98,10 @@ public class SharedLatchImpl implements SharedLatch
 		    Owner owner = new Owner(thread, Owner.EXCLUSIVE);
 		    waiters.add(owner);
 		    owner.nAcquires += 1;
-		    Label431:           ;  //this.hook431();
+		    Label431:
+stats.nAcquiresNoWaiters++;
+	//original();
+           ;  //this.hook431();
 		    assert (noteLatch ? noteLatch() : true);
 		    return true;
 		} else {
@@ -110,7 +121,7 @@ public class SharedLatchImpl implements SharedLatch
    * Acquire a latch for shared/read access.  Nesting is allowed, that is, the latch may be acquired more than once by the same thread.
    * @throws RunRecoveryException if an InterruptedException exceptionoccurs.
    */
-  // line 104 "../../../../Latches_SharedLatchImpl.ump"
+  // line 105 "../../../../Latches_SharedLatchImpl.ump"
    public synchronized  void acquireShared() throws DatabaseException{
     try {
 	    Thread thread = Thread.currentThread();
@@ -126,7 +137,10 @@ public class SharedLatchImpl implements SharedLatch
 		wait();
 	    }
 	    owner.nAcquires += 1;
-	    Label432:           ;  //this.hook432();
+	    Label432:
+stats.nAcquireSharedSuccessful++;
+	//original();
+           ;  
 	    assert (noteLatch ? noteLatch() : true);
 	} catch (InterruptedException e) {
 	    throw new RunRecoveryException(env, e);
@@ -140,7 +154,7 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Release an exclusive or shared latch.  If there are other thread(s) waiting for the latch, they are woken up and granted the latch.
    */
-  // line 131 "../../../../Latches_SharedLatchImpl.ump"
+  // line 132 "../../../../Latches_SharedLatchImpl.ump"
    public synchronized  void release() throws LatchNotHeldException{
     try {
 	    Thread thread = Thread.currentThread();
@@ -155,7 +169,11 @@ public class SharedLatchImpl implements SharedLatch
 		assert (noteLatch ? unNoteLatch() : true);
 		notifyAll();
 	    }
-	    Label433:           ;  //this.hook433();
+	    Label433:
+// synchronized void release() 
+	stats.nReleases++;
+	//original();
+           ;  
 	} finally {
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -166,7 +184,7 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Returns the index of the first Owner for the given thread, or -1 if none.
    */
-  // line 154 "../../../../Latches_SharedLatchImpl.ump"
+  // line 155 "../../../../Latches_SharedLatchImpl.ump"
    private int indexOf(Thread thread){
     Iterator i = waiters.iterator();
 	for (int index = 0; i.hasNext(); index += 1) {
@@ -183,7 +201,7 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Returns the index of the first Owner waiting for a write lock, or Integer.MAX_VALUE if none.
    */
-  // line 168 "../../../../Latches_SharedLatchImpl.ump"
+  // line 169 "../../../../Latches_SharedLatchImpl.ump"
    private int firstWriter(){
     Iterator i = waiters.iterator();
 	for (int index = 0; i.hasNext(); index += 1) {
@@ -200,7 +218,7 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Holds the state of a single owner thread.
    */
-  // line 182 "../../../../Latches_SharedLatchImpl.ump"
+  // line 183 "../../../../Latches_SharedLatchImpl.ump"
    private String getNameString(){
     return LatchSupport.latchTable.getNameString(name);
   }
@@ -210,7 +228,7 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Only call under the assert system. This records latching by thread.
    */
-  // line 189 "../../../../Latches_SharedLatchImpl.ump"
+  // line 208 "../../../../Latches_SharedLatchImpl.ump"
    private boolean noteLatch() throws LatchException{
     return LatchSupport.latchTable.noteLatch(this);
   }
@@ -220,12 +238,12 @@ public class SharedLatchImpl implements SharedLatch
    * 
    * Only call under the assert system. This records latching by thread.
    */
-  // line 196 "../../../../Latches_SharedLatchImpl.ump"
+  // line 215 "../../../../Latches_SharedLatchImpl.ump"
    private boolean unNoteLatch() throws LatchNotHeldException{
     return LatchSupport.latchTable.unNoteLatch(this, name);
   }
 
-  // line 200 "../../../../Latches_SharedLatchImpl.ump"
+  // line 219 "../../../../Latches_SharedLatchImpl.ump"
    public synchronized  boolean isWriteLockedByCurrentThread(){
     if (waiters.size() > 0) {
 	    Owner curOwner = (Owner) waiters.get(0);
@@ -234,130 +252,49 @@ public class SharedLatchImpl implements SharedLatch
 	    return false;
 	}
   }
-  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
-  
-  
-  // line 4 "../../../../Latches_SharedLatchImpl_inner.ump"
-  public static class Owner
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //Owner Attributes
-    private Thread thread;
-    private int type;
-    private int nAcquires;
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public Owner(Thread aThread, int aType, int aNAcquires)
-    {
-      thread = aThread;
-      type = aType;
-      nAcquires = aNAcquires;
-    }
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public boolean setThread(Thread aThread)
-    {
-      boolean wasSet = false;
-      thread = aThread;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public boolean setType(int aType)
-    {
-      boolean wasSet = false;
-      type = aType;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public boolean setNAcquires(int aNAcquires)
-    {
-      boolean wasSet = false;
-      nAcquires = aNAcquires;
-      wasSet = true;
-      return wasSet;
-    }
-  
-    public Thread getThread()
-    {
-      return thread;
-    }
-  
-    public int getType()
-    {
-      return type;
-    }
-  
-    public int getNAcquires()
-    {
-      return nAcquires;
-    }
-  
-    public void delete()
-    {}
-  
-    // line 11 "../../../../Latches_SharedLatchImpl_inner.ump"
-    public  Owner(Thread thread, int type){
-      this.thread=thread;
-          this.type=type;
-    }
-  
-  
-    public String toString()
-    {
-      return super.toString() + "["+
-              "type" + ":" + getType()+ "," +
-              "nAcquires" + ":" + getNAcquires()+ "]" + System.getProperties().getProperty("line.separator") +
-              "  " + "thread" + "=" + (getThread() != null ? !getThread().equals(this)  ? getThread().toString().replaceAll("  ","    ") : "this" : "null");
-    }  
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 5 "../../../../Latches_SharedLatchImpl_inner.ump"
-    static final int SHARED=0 ;
-  // line 6 "../../../../Latches_SharedLatchImpl_inner.ump"
-    static final int EXCLUSIVE=1 ;
-  
-    
-  }  
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 13 "../../../../Latches_SharedLatchImpl.ump"
+  // line 14 "../../../../Latches_SharedLatchImpl.ump"
   private String name = null ;
-// line 15 "../../../../Latches_SharedLatchImpl.ump"
+// line 16 "../../../../Latches_SharedLatchImpl.ump"
   private List waiters = new ArrayList() ;
-// line 17 "../../../../Latches_SharedLatchImpl.ump"
+// line 18 "../../../../Latches_SharedLatchImpl.ump"
   private EnvironmentImpl env = null ;
-// line 19 "../../../../Latches_SharedLatchImpl.ump"
+// line 20 "../../../../Latches_SharedLatchImpl.ump"
   private boolean noteLatch ;
 
-// line 32 "../../../../Latches_SharedLatchImpl.ump"
+// line 33 "../../../../Latches_SharedLatchImpl.ump"
   synchronized public void setName (String name) 
   {
     this.name = name;
   }
 
-// line 39 "../../../../Latches_SharedLatchImpl.ump"
+// line 40 "../../../../Latches_SharedLatchImpl.ump"
   synchronized public void setNoteLatch (boolean noteLatch) 
   {
     this.noteLatch = noteLatch;
   }
+
+// line 188 "../../../../Latches_SharedLatchImpl.ump"
+  private static class Owner 
+  {
+    static final int SHARED = 0;
+        static final int EXCLUSIVE = 1;
+
+        Thread thread;
+        int type;
+        int nAcquires;
+
+        Owner(Thread thread, int type) {
+            this.thread = thread;
+            this.type = type;
+        }
+  }
+// line 5 "../../../../Derivative_Latches_Statistics_SharedLatchImpl.ump"
+  private LatchStats stats = new LatchStats() ;
 
   
 }

@@ -2,10 +2,15 @@
 /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.latch;
-import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.dbi.EnvironmentImpl;
 
-// line 3 "../../../../Latches_LatchSupport.ump"
+/**
+ * 
+ * Various constructs to support Latches.  Switch hitting for 1.4 vs Java 5
+ * JVM latch implementation (i.e. our's vs the JVM's), and assert-based
+ * latch counting code.
+ */
+// line 19 "../../../../Latches_LatchSupport.ump"
 public class LatchSupport
 {
 
@@ -27,127 +32,126 @@ public class LatchSupport
   public void delete()
   {}
 
-  // line 35 "../../../../Latches_LatchSupport.ump"
+  // line 53 "../../../../Latches_LatchSupport.ump"
    public static  Class getJava5LatchClass(){
     return JAVA5_LATCH_CLASS;
   }
 
-  // line 38 "../../../../Latches_LatchSupport.ump"
+  // line 57 "../../../../Latches_LatchSupport.ump"
    public static  Latch makeLatch(String name, EnvironmentImpl env){
     if (JAVA5_LATCH_CLASS == null) {
-      return new LatchImpl(name,env);
-    }
- else {
-      try {
-        Latch ret=(Latch)JAVA5_LATCH_CLASS.newInstance();
-        ret.setName(name);
-        return ret;
-      }
- catch (      InstantiationException IE) {
-      }
-catch (      IllegalAccessException IAE) {
-      }
-      JAVA5_LATCH_CLASS=null;
-      return new LatchImpl(name,env);
-    }
+	    return new LatchImpl(name, env);
+	} else {
+	    try {
+		Latch ret = (Latch) JAVA5_LATCH_CLASS.newInstance();
+		ret.setName(name);
+		return ret;
+	    } catch (InstantiationException IE) {
+	    } catch (IllegalAccessException IAE) {
+	    }
+
+	    /* Something bad happened.  Revert back to our 1.4 latches. */
+	    JAVA5_LATCH_CLASS = null;
+	    return new LatchImpl(name, env);
+	}
   }
 
-  // line 56 "../../../../Latches_LatchSupport.ump"
+  // line 75 "../../../../Latches_LatchSupport.ump"
    public static  Latch makeLatch(EnvironmentImpl env){
     if (JAVA5_LATCH_CLASS == null) {
-      return new LatchImpl(env);
-    }
- else {
-      try {
-        return (Latch)JAVA5_LATCH_CLASS.newInstance();
-      }
- catch (      InstantiationException IE) {
-      }
-catch (      IllegalAccessException IAE) {
-      }
-      JAVA5_LATCH_CLASS=null;
-      return new LatchImpl(env);
-    }
+	    return new LatchImpl(env);
+	} else {
+	    try {
+		return (Latch) JAVA5_LATCH_CLASS.newInstance();
+	    } catch (InstantiationException IE) {
+	    } catch (IllegalAccessException IAE) {
+	    }
+
+	    /* Something bad happened.  Revert back to our 1.4 latches. */
+	    JAVA5_LATCH_CLASS = null;
+	    return new LatchImpl(env);
+	}
   }
 
-  // line 72 "../../../../Latches_LatchSupport.ump"
+  // line 92 "../../../../Latches_LatchSupport.ump"
    public static  SharedLatch makeSharedLatch(String name, EnvironmentImpl env){
     if (JAVA5_SHARED_LATCH_CLASS == null) {
-      return new SharedLatchImpl(name,env);
-    }
- else {
-      try {
-        SharedLatch ret=(SharedLatch)JAVA5_SHARED_LATCH_CLASS.newInstance();
-        ret.setName(name);
-        return ret;
-      }
- catch (      InstantiationException IE) {
-      }
-catch (      IllegalAccessException IAE) {
-      }
-      JAVA5_SHARED_LATCH_CLASS=null;
-      return new SharedLatchImpl(name,env);
-    }
+	    return new SharedLatchImpl(name, env);
+	} else {
+	    try {
+		SharedLatch ret = (SharedLatch)
+		    JAVA5_SHARED_LATCH_CLASS.newInstance();
+		ret.setName(name);
+		return ret;
+	    } catch (InstantiationException IE) {
+	    } catch (IllegalAccessException IAE) {
+	    }
+
+	    /* Something bad happened.  Revert back to our 1.4 latches. */
+	    JAVA5_SHARED_LATCH_CLASS = null;
+	    return new SharedLatchImpl(name, env);
+	}
   }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 8 "../../../../Latches_LatchSupport.ump"
-  private static String DISABLE_JAVA5_LATCHES="je.disable.java5.latches" ;
-// line 9 "../../../../Latches_LatchSupport.ump"
-  private static Class JAVA5_LATCH_CLASS=null ;
-// line 10 "../../../../Latches_LatchSupport.ump"
-  private static Class JAVA5_SHARED_LATCH_CLASS=null ;
+  // line 23 "../../../../Latches_LatchSupport.ump"
+  private static String DISABLE_JAVA5_LATCHES = "je.disable.java5.latches" ;
+// line 25 "../../../../Latches_LatchSupport.ump"
+  private static Class JAVA5_LATCH_CLASS = null ;
+// line 27 "../../../../Latches_LatchSupport.ump"
+  private static Class JAVA5_SHARED_LATCH_CLASS = null ;
 
-// line 12 "../../../../Latches_LatchSupport.ump"
+// line 29 "../../../../Latches_LatchSupport.ump"
   static 
   {
     try {
-      if (System.getProperty(DISABLE_JAVA5_LATCHES) == null) {
-        Class.forName("java.util.concurrent.locks.ReentrantLock");
-        JAVA5_LATCH_CLASS=Class.forName("com.sleepycat.je.latch.Java5LatchImpl");
-      }
-    }
- catch (    ClassNotFoundException CNFE) {
-    }
+	    if (System.getProperty(DISABLE_JAVA5_LATCHES) == null) {
+		Class.forName("java.util.concurrent.locks.ReentrantLock");
+		JAVA5_LATCH_CLASS = Class.forName
+		    ("com.sleepycat.je.latch.Java5LatchImpl");
+	    }
+	} catch (ClassNotFoundException CNFE) {
+	}
   }
 
-// line 23 "../../../../Latches_LatchSupport.ump"
+// line 40 "../../../../Latches_LatchSupport.ump"
   static 
   {
     try {
-      if (System.getProperty(DISABLE_JAVA5_LATCHES) == null) {
-        Class.forName("java.util.concurrent.locks.ReentrantReadWriteLock");
-        JAVA5_SHARED_LATCH_CLASS=Class.forName("com.sleepycat.je.latch.Java5SharedLatchImpl");
-      }
-    }
- catch (    ClassNotFoundException CNFE) {
-    }
+	    if (System.getProperty(DISABLE_JAVA5_LATCHES) == null) {
+		Class.forName
+		    ("java.util.concurrent.locks.ReentrantReadWriteLock");
+		JAVA5_SHARED_LATCH_CLASS = Class.forName
+		    ("com.sleepycat.je.latch.Java5SharedLatchImpl");
+	    }
+	} catch (ClassNotFoundException CNFE) {
+	}
   }
-// line 89 "../../../../Latches_LatchSupport.ump"
-  static LatchTable latchTable=new LatchTable("LatchImpl") ;
+// line 111 "../../../../Latches_LatchSupport.ump"
+  static LatchTable latchTable = new LatchTable("LatchImpl") ;
 
-// line 93 "../../../../Latches_LatchSupport.ump"
+// line 116 "../../../../Latches_LatchSupport.ump"
   static public int countLatchesHeld () 
   {
     return latchTable.countLatchesHeld();
   }
 
-// line 96 "../../../../Latches_LatchSupport.ump"
+// line 121 "../../../../Latches_LatchSupport.ump"
   static public void dumpLatchesHeld () 
   {
     System.out.println(latchesHeldToString());
   }
 
-// line 99 "../../../../Latches_LatchSupport.ump"
+// line 126 "../../../../Latches_LatchSupport.ump"
   static public String latchesHeldToString () 
   {
     return latchTable.latchesHeldToString();
   }
 
-// line 102 "../../../../Latches_LatchSupport.ump"
+// line 131 "../../../../Latches_LatchSupport.ump"
   static public void clearNotes () 
   {
     latchTable.clearNotes();

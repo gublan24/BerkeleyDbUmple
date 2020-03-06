@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.dbi;
-import de.ovgu.cide.jakutil.*;
 import com.sleepycat.je.utilint.DbLsn;
 import com.sleepycat.je.tree.Node;
 import com.sleepycat.je.tree.IN;
@@ -20,10 +19,10 @@ import java.util.Arrays;
 // line 3 "../../../../SortedLSNTreeWalker.ump"
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
-// line 3 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
+// line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
 // line 3 "../../../../DeleteOp_SortedLSNTreeWalker.ump"
 // line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
-// line 3 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
+// line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 public class SortedLSNTreeWalker
 {
 
@@ -61,22 +60,95 @@ public class SortedLSNTreeWalker
 	currentLSNIdx = 0;
   }
 
-  // line 60 "../../../../SortedLSNTreeWalker.ump"
+  // line 61 "../../../../SortedLSNTreeWalker.ump"
    private boolean extractINsForDb(INList inList) throws DatabaseException{
-    return new SortedLSNTreeWalker_extractINsForDb(this, inList).execute();
+    boolean foundSome = false;
+
+        /* Search the INList and put all qualifying INs into another list. */
+        Set foundSet = new HashSet();
+        Label360:
+;
+      long memoryChange = 0;
+        MemoryBudget mb = envImpl.getMemoryBudget();
+;
+				Label356:
+inList.latchMajor();
+;
+	try {
+            /* consolidate the INList first. */
+            Label357:
+inList.latchMinorAndDumpAddedINs();
+ ;
+
+
+	    Iterator iter = inList.iterator();
+	    while (iter.hasNext()) {
+		IN thisIN = (IN) iter.next();
+		if (thisIN.getDatabase() == dbImpl) {
+		    foundSome = true;
+		    if (removeINsFromINList) {
+			iter.remove();
+                        Label361:
+;
+        memoryChange += (thisIN.getAccumulatedDelta() -
+                                         thisIN.getInMemorySize());
+                        thisIN.setInListResident(false);
+ ;
+		    }
+                    foundSet.add(thisIN);
+		}
+	    }
+        } catch (DatabaseException e) {
+            /* Update the memory budget with any changes. */
+            Label362:
+mb.updateTreeMemoryUsage(memoryChange);
+ ;
+
+            throw e;
+	} finally {
+	    Label358:
+inList.releaseMajorLatch();
+ ;
+	}
+
+        /* 
+         * Do processing outside of INList latch in order to reduce lockout
+         * of checkpointing and eviction. 
+         */
+        if (foundSome) {
+            Iterator iter = foundSet.iterator();
+            while (iter.hasNext()) {
+                IN thisIN = (IN) iter.next();
+                accumulateLSNs(thisIN);
+            }
+        }
+
+        /* 
+         * Update the memory in one fell swoop after releasing all references
+         * to INs in order to reduce contention on memory budget contention
+         * latch. Wait until all references to INs are released.
+         */
+        foundSet = null;
+
+	    Label358_1:
+mb.updateTreeMemoryUsage(memoryChange);
+ ;
+	return foundSome;
   }
 
 
   /**
+   * return new SortedLSNTreeWalker_extractINsForDb(this, inList).execute();
+   * }
    * 
    * Find all non-resident nodes, and execute the callback. The root IN's LSN is not returned to the callback.
    */
-  // line 67 "../../../../SortedLSNTreeWalker.ump"
+  // line 122 "../../../../SortedLSNTreeWalker.ump"
    public void walk() throws DatabaseException{
     walkInternal();
   }
 
-  // line 71 "../../../../SortedLSNTreeWalker.ump"
+  // line 126 "../../../../SortedLSNTreeWalker.ump"
    protected void walkInternal() throws DatabaseException{
     INList inList = envImpl.getInMemoryINs();
 	IN root = null;
@@ -104,7 +176,7 @@ if (setDbState) {
 	}
   }
 
-  // line 93 "../../../../SortedLSNTreeWalker.ump"
+  // line 148 "../../../../SortedLSNTreeWalker.ump"
    private void maybeGetMoreINs(){
     if ((currentLSNs != null && currentLSNIdx >= currentLSNs.length)) {
 	    if (accumulatedLSNFileNumbers == null || accumulatedLSNFileNumbers.size() == 0) {
@@ -126,7 +198,7 @@ if (setDbState) {
 	}
   }
 
-  // line 114 "../../../../SortedLSNTreeWalker.ump"
+  // line 169 "../../../../SortedLSNTreeWalker.ump"
    private void accumulateLSNs(IN in) throws DatabaseException{
     boolean accumulate = true;
 	if (!accumulateLNs) {
@@ -160,7 +232,7 @@ if (setDbState) {
 	}
   }
 
-  // line 147 "../../../../SortedLSNTreeWalker.ump"
+  // line 202 "../../../../SortedLSNTreeWalker.ump"
    private void fetchAndProcessLSN(long lsn) throws DatabaseException{
     Node node = fetchLSN(lsn);
 	if (node != null) {
@@ -176,27 +248,27 @@ if (setDbState) {
    * 
    * The default behavior fetches the rootIN from the log, but classes extending this may fetch the root from the tree.
    */
-  // line 160 "../../../../SortedLSNTreeWalker.ump"
+  // line 215 "../../../../SortedLSNTreeWalker.ump"
    protected IN getRootIN(long rootLsn) throws DatabaseException{
     return (IN) envImpl.getLogManager().get(rootLsn);
   }
 
-  // line 164 "../../../../SortedLSNTreeWalker.ump"
+  // line 219 "../../../../SortedLSNTreeWalker.ump"
    protected void releaseRootIN(IN ignore) throws DatabaseException{
     
   }
 
-  // line 167 "../../../../SortedLSNTreeWalker.ump"
+  // line 222 "../../../../SortedLSNTreeWalker.ump"
    protected void addToLsnINMap(Long lsn, IN in, int index){
     
   }
 
-  // line 170 "../../../../SortedLSNTreeWalker.ump"
+  // line 225 "../../../../SortedLSNTreeWalker.ump"
    protected Node fetchLSN(long lsn) throws DatabaseException{
     return (Node) envImpl.getLogManager().get(lsn);
   }
 
-  // line 174 "../../../../SortedLSNTreeWalker.ump"
+  // line 229 "../../../../SortedLSNTreeWalker.ump"
    protected void hook359() throws DatabaseException{
     
   }
@@ -206,8 +278,6 @@ if (setDbState) {
   
   
   // line 7 "../../../../SortedLSNTreeWalker_static.ump"
-  // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
-  // line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
   public static class SortedLSNTreeWalker_extractINsForDb
   {
   
@@ -240,15 +310,8 @@ if (setDbState) {
       foundSome=false;
           foundSet=new HashSet();
           //this.hook360();
-          Label360:
-  memoryChange=0;
-          mb=_this.envImpl.getMemoryBudget();
-          //original();
-     ;
-          Label356:
-  inList.latchMajor();
-          //original();
-     ;//this.hook356();
+          Label360:   ;
+          Label356:   ;//this.hook356();
           try {
           //  this.hook357();
             iter=inList.iterator();
@@ -259,11 +322,7 @@ if (setDbState) {
                 if (_this.removeINsFromINList) {
                   iter.remove();
                   //this.hook361();
-                  Label361:
-  memoryChange+=(thisIN.getAccumulatedDelta() - thisIN.getInMemorySize());
-          thisIN.setInListResident(false);
-          //original();
-     ;
+                  Label361:   ;
                 }
                 foundSet.add(thisIN);
               }
@@ -280,17 +339,8 @@ if (setDbState) {
             }
           }
           foundSet=null;          
-          Label362:
-  mb.updateTreeMemoryUsage(memoryChange);
-         // original();
-     ;        
-          // line 6 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
-          //boolean result=original();
-                  mb.updateTreeMemoryUsage(memoryChange);
-                 // return result;
-          // END OF UMPLE AFTER INJECTION
+          Label362:   ;
           return foundSome;
-  
     }
     
     //------------------------

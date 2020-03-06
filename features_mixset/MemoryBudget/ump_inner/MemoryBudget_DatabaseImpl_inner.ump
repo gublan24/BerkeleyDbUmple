@@ -1,20 +1,20 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/dbi/DatabaseImpl.java
+
 namespace com.sleepycat.je.dbi;
 class DatabaseImpl {
-  @MethodObject static class DatabaseImpl_preload {
 
-      after Label290: execute() { 
 
-        cacheBudget=_this.envImpl.getMemoryBudget().getCacheBudget();
-        if (maxBytes == 0) {
-          maxBytes=cacheBudget;
-        }
-   			else 
-      			if (maxBytes > cacheBudget) {
-						throw new IllegalArgumentException("maxBytes parameter to Database.preload() was specified as " + maxBytes + " bytes \nbut the cache is only "+ cacheBudget+ " bytes.");
-						}
+      after Label290: preload(PreloadConfig ) {
+			;
+       long cacheBudget = envImpl.getMemoryBudget().getCacheBudget();
+				if (maxBytes == 0) {
+				        maxBytes = cacheBudget;
+				} else if (maxBytes > cacheBudget) {
+					throw new IllegalArgumentException
+				("maxBytes parameter to Database.preload() was specified as " +
+				 maxBytes + " bytes \nbut the cache is only " +
+				 cacheBudget + " bytes.");
+				}
 
-        //original();
       }
-    }
+    
 }

@@ -1,24 +1,25 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
+
 class Checkpointer {
-  @MethodObject static class Checkpointer_selectDirtyINs {
-      after Label553:execute(){
-        totalSize=0;
-        mb=_this.envImpl.getMemoryBudget();
-        //original();
+
+      after Label553: selectDirtyINs(boolean , boolean ) {
+        ;
+			 MemoryBudget mb = envImpl.getMemoryBudget();
+
       }
       
-      after Label554: execute(){
-        mb.refreshTreeMemoryUsage(totalSize);
-        //   original();
+      after Label554: selectDirtyINs(boolean , boolean ) {
+            mb.refreshTreeMemoryUsage(totalSize);
+
       }
 
-      after Label530:execute(){
-        totalSize=mb.accumulateNewUsage(in,totalSize);
-        //original();
+      after Label530: selectDirtyINs(boolean , boolean ) {
+                    totalSize = mb.accumulateNewUsage(in, totalSize);
+
       }
-    }
-  @MethodObject static class Checkpointer_doCheckpoint {
+    
+   static class Checkpointer_doCheckpoint {
 
       after Label548:execute(){
         dirtyMapMemSize=0;

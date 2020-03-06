@@ -43,17 +43,22 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.nio.ByteBuffer;
 import java.io.PrintStream;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.DatabaseStats;
+import com.sleepycat.je.BtreeStats;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../DatabaseImpl.ump"
 // line 3 "../../../../DatabaseImpl_static.ump"
+// line 3 "../../../../Statistics_DatabaseImpl.ump"
+// line 3 "../../../../Statistics_DatabaseImpl_inner.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
 // line 3 "../../../../DeleteOp_DatabaseImpl.ump"
 // line 3 "../../../../Latches_DatabaseImpl.ump"
-// line 3 "../../../../Latches_DatabaseImpl_inner.ump"
+// line 4 "../../../../Latches_DatabaseImpl_inner.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -454,12 +459,54 @@ deleteState = NOT_DELETED;
    * 
    * Preload the cache, using up to maxBytes bytes or maxMillsecs msec.
    */
-  // line 392 "../../../../DatabaseImpl.ump"
+  // line 393 "../../../../DatabaseImpl.ump"
    public PreloadStats preload(PreloadConfig config) throws DatabaseException{
-    return new DatabaseImpl_preload(this, config).execute();
+    long maxBytes = config.getMaxBytes();
+			long maxMillisecs = config.getMaxMillisecs();
+			long targetTime = Long.MAX_VALUE;
+			if (maxMillisecs > 0) {
+					targetTime = System.currentTimeMillis() + maxMillisecs;
+			}
+
+			Label290:
+;
+       long cacheBudget = envImpl.getMemoryBudget().getCacheBudget();
+				if (maxBytes == 0) {
+				        maxBytes = cacheBudget;
+				} else if (maxBytes > cacheBudget) {
+					throw new IllegalArgumentException
+				("maxBytes parameter to Database.preload() was specified as " +
+				 maxBytes + " bytes \nbut the cache is only " +
+				 cacheBudget + " bytes.");
+				}
+ ;
+
+			PreloadStats ret = null;
+			Label287:
+ret= new PreloadStats();
+        try {
+              
+ ;
+			PreloadProcessor callback =
+					new PreloadProcessor(envImpl, maxBytes, targetTime, ret);
+			SortedLSNTreeWalker walker =
+					new PreloadLSNTreeWalker(this, callback, config);
+	
+					walker.walk();
+			
+
+        }
+   catch (   HaltPreloadException HPE) {
+          ret.status=HPE.getStatus();
+        }
+Label287_1: ;
+
+
+			return ret;
+
   }
 
-  // line 396 "../../../../DatabaseImpl.ump"
+  // line 418 "../../../../DatabaseImpl.ump"
    public String dumpString(int nSpaces){
     StringBuffer sb = new StringBuffer();
 	sb.append(TreeUtils.indent(nSpaces));
@@ -485,7 +532,7 @@ deleteState = NOT_DELETED;
    * 
    * @see LogWritable#getLogSize
    */
-  // line 419 "../../../../DatabaseImpl.ump"
+  // line 441 "../../../../DatabaseImpl.ump"
    public int getLogSize(){
     return id.getLogSize() + tree.getLogSize() + LogUtils.getBooleanLogSize()
 		+ LogUtils.getStringLogSize(serializeComparator(btreeComparator))
@@ -497,7 +544,7 @@ deleteState = NOT_DELETED;
    * 
    * @see LogWritable#writeToLog
    */
-  // line 428 "../../../../DatabaseImpl.ump"
+  // line 450 "../../../../DatabaseImpl.ump"
    public void writeToLog(ByteBuffer logBuffer){
     id.writeToLog(logBuffer);
 	tree.writeToLog(logBuffer);
@@ -513,7 +560,7 @@ deleteState = NOT_DELETED;
    * 
    * @see LogReadable#readFromLog
    */
-  // line 441 "../../../../DatabaseImpl.ump"
+  // line 463 "../../../../DatabaseImpl.ump"
    public void readFromLog(ByteBuffer itemBuffer, byte entryTypeVersion) throws LogException{
     id.readFromLog(itemBuffer, entryTypeVersion);
 	tree.readFromLog(itemBuffer, entryTypeVersion);
@@ -545,7 +592,7 @@ deleteState = NOT_DELETED;
    * 
    * @see LogReadable#dumpLog
    */
-  // line 470 "../../../../DatabaseImpl.ump"
+  // line 492 "../../../../DatabaseImpl.ump"
    public void dumpLog(StringBuffer sb, boolean verbose){
     sb.append("<database>");
 	id.dumpLog(sb, verbose);
@@ -566,7 +613,7 @@ deleteState = NOT_DELETED;
    * 
    * @see LogReadable#logEntryIsTransactional
    */
-  // line 488 "../../../../DatabaseImpl.ump"
+  // line 510 "../../../../DatabaseImpl.ump"
    public boolean logEntryIsTransactional(){
     return false;
   }
@@ -576,7 +623,7 @@ deleteState = NOT_DELETED;
    * 
    * @see LogReadable#getTransactionId
    */
-  // line 495 "../../../../DatabaseImpl.ump"
+  // line 517 "../../../../DatabaseImpl.ump"
    public long getTransactionId(){
     return 0;
   }
@@ -586,7 +633,7 @@ deleteState = NOT_DELETED;
    * 
    * Used both to write to the log and to validate a comparator when set in DatabaseConfig.
    */
-  // line 502 "../../../../DatabaseImpl.ump"
+  // line 524 "../../../../DatabaseImpl.ump"
    public static  String serializeComparator(Comparator comparator){
     if (comparator != null) {
 	    return comparator.getClass().getName();
@@ -600,7 +647,7 @@ deleteState = NOT_DELETED;
    * 
    * Used both to read from the log and to validate a comparator when set in DatabaseConfig.
    */
-  // line 513 "../../../../DatabaseImpl.ump"
+  // line 535 "../../../../DatabaseImpl.ump"
    public static  Comparator instantiateComparator(Class comparator, String comparatorType) throws LogException{
     if (comparator == null) {
 	    return null;
@@ -614,14 +661,39 @@ deleteState = NOT_DELETED;
 	}
   }
 
-  // line 526 "../../../../DatabaseImpl.ump"
+  // line 548 "../../../../DatabaseImpl.ump"
    public int getBinDeltaPercent(){
     return binDeltaPercent;
   }
 
-  // line 530 "../../../../DatabaseImpl.ump"
+  // line 552 "../../../../DatabaseImpl.ump"
    public int getBinMaxDeltas(){
     return binMaxDeltas;
+  }
+
+  // line 11 "../../../../Statistics_DatabaseImpl.ump"
+   public DatabaseStats stat(StatsConfig config) throws DatabaseException{
+    if (stats == null) {
+					stats = new BtreeStats();
+			}
+			if (!config.getFast()) {
+					if (tree == null) {
+				return new BtreeStats();
+					}
+					PrintStream out = config.getShowProgressStream();
+					if (out == null) {
+				out = System.err;
+					}
+					StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), getEmptyStats());
+					walkDatabaseTree(statsAcc, out, true);
+					statsAcc.copyToStats(stats);
+			}
+			return stats;
+  }
+
+  // line 30 "../../../../Statistics_DatabaseImpl.ump"
+   public DatabaseStats getEmptyStats(){
+    return new BtreeStats();
   }
 
   // line 16 "../../../../DeleteOp_DatabaseImpl.ump"
@@ -833,10 +905,7 @@ deleteState = NOT_DELETED;
   
   
   
-  @MethodObject
   // line 39 "../../../../DatabaseImpl_static.ump"
-  // line 4 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
-  // line 4 "../../../../Latches_DatabaseImpl_inner.ump"
   public static class DatabaseImpl_preload
   {
   
@@ -874,17 +943,6 @@ deleteState = NOT_DELETED;
           }
           //this.hook290();
           Label290:
-  cacheBudget=_this.envImpl.getMemoryBudget().getCacheBudget();
-          if (maxBytes == 0) {
-            maxBytes=cacheBudget;
-          }
-     			else 
-        			if (maxBytes > cacheBudget) {
-  						throw new IllegalArgumentException("maxBytes parameter to Database.preload() was specified as " + maxBytes + " bytes \nbut the cache is only "+ cacheBudget+ " bytes.");
-  						}
-  
-          //original();
-  
           ret=new PreloadStats();
           callback=new PreloadProcessor(_this.envImpl,maxBytes,targetTime,ret);
           walker=new PreloadLSNTreeWalker(_this,callback,config);
@@ -964,6 +1022,8 @@ deleteState = NOT_DELETED;
 // line 90 "../../../../DatabaseImpl.ump"
   static final HaltPreloadException memoryExceededPreloadException = new HaltPreloadException(
 	    PreloadStatus.FILLED_CACHE) ;
+// line 8 "../../../../Statistics_DatabaseImpl.ump"
+  private BtreeStats stats ;
 // line 5 "../../../../DeleteOp_DatabaseImpl.ump"
   private static final short NOT_DELETED = 1 ;
 // line 7 "../../../../DeleteOp_DatabaseImpl.ump"

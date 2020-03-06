@@ -389,8 +389,30 @@ class DatabaseImpl
      * Preload the cache, using up to maxBytes bytes or maxMillsecs msec.
      */
     public PreloadStats preload(PreloadConfig config) throws DatabaseException {
-	return new DatabaseImpl_preload(this, config).execute();
+
+			long maxBytes = config.getMaxBytes();
+			long maxMillisecs = config.getMaxMillisecs();
+			long targetTime = Long.MAX_VALUE;
+			if (maxMillisecs > 0) {
+					targetTime = System.currentTimeMillis() + maxMillisecs;
+			}
+
+			Label290: ;
+
+			PreloadStats ret = null;
+			Label287: ;
+			PreloadProcessor callback =
+					new PreloadProcessor(envImpl, maxBytes, targetTime, ret);
+			SortedLSNTreeWalker walker =
+					new PreloadLSNTreeWalker(this, callback, config);
+	
+					walker.walk();
+			Label287_1: ;
+
+
+			return ret;
     }
+
 
     public String dumpString(int nSpaces) {
 	StringBuffer sb = new StringBuffer();

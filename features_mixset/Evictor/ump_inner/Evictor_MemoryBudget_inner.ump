@@ -1,10 +1,15 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/dbi/MemoryBudget.java
+
 namespace com.sleepycat.je.dbi;
+
 class MemoryBudget {
-   static class MemoryBudget_reset {
-      after Label350:execute() {
-        newCriticalThreshold=(newMaxMemory * _this.envImpl.getConfigManager().getInt(EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE)) / 100;
-        //original();
-      }
+
+      after Label350:reset(DbConfigManager ) {
+						;
+						long newCriticalThreshold =
+            (newMaxMemory * 
+             envImpl.getConfigManager().getInt
+                (EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE))/100;
+
+      
     }
 }

@@ -46,12 +46,12 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../UtilizationProfile.ump"
 // line 3 "../../../../UtilizationProfile_static.ump"
 // line 3 "../../../../MemoryBudget_UtilizationProfile.ump"
-// line 3 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+// line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
 // line 3 "../../../../DeleteOp_UtilizationProfile.ump"
 // line 3 "../../../../Evictor_UtilizationProfile.ump"
-// line 3 "../../../../Evictor_UtilizationProfile_inner.ump"
+// line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
 // line 3 "../../../../Latches_UtilizationProfile.ump"
-// line 3 "../../../../Latches_UtilizationProfile_inner.ump"
+// line 4 "../../../../Latches_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -456,9 +456,17 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Clears the cache of file summary info.  The cache starts out unpopulated and is populated on the first call to getBestFileForCleaning.
    */
-  // line 362 "../../../../UtilizationProfile.ump"
+  // line 367 "../../../../UtilizationProfile.ump"
    public synchronized  void clearCache(){
-    new UtilizationProfile_clearCache(this).execute();
+    // line 43 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+    ;
+          int memorySize = fileSummaryMap.size() *
+                MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+            MemoryBudget mb = env.getMemoryBudget();
+            mb.updateMiscMemoryUsage(0 - memorySize);
+    // END OF UMPLE BEFORE INJECTION
+    fileSummaryMap = new TreeMap();
+        cachePopulated = false;
   }
 
 
@@ -466,9 +474,23 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * Removes a file from the utilization database and the profile, after it has been deleted by the cleaner.
    */
-  // line 369 "../../../../UtilizationProfile.ump"
+  // line 377 "../../../../UtilizationProfile.ump"
   public void removeFile(Long fileNum) throws DatabaseException{
-    new UtilizationProfile_removeFile(this, fileNum).execute();
+    /* Synchronize to update the cache. */
+        synchronized (this) {
+            assert cachePopulated;
+
+            /* Remove from the cache. */
+            if (fileSummaryMap.remove(fileNum) != null) {
+						Label192:
+;
+					MemoryBudget mb = env.getMemoryBudget();
+                mb.updateMiscMemoryUsage
+                    (0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+ ;
+             
+            }
+        }
   }
 
 
@@ -476,7 +498,7 @@ public class UtilizationProfile implements EnvConfigObserver
    * 
    * For the LN at the cursor position deletes all LNs for the file.  This method performs eviction and is not synchronized.
    */
-  // line 376 "../../../../UtilizationProfile.ump"
+  // line 392 "../../../../UtilizationProfile.ump"
    private void deleteFileSummary(Long fileNum) throws DatabaseException{
     Locker locker = null;
 	CursorImpl cursor = null;
@@ -509,8 +531,7 @@ public class UtilizationProfile implements EnvConfigObserver
 	    if (cursor != null) {
 		Label178:
 cursor.releaseBINs();
-//	original(cursor);
-           ;  //this.hook178(cursor);
+           ;  
 		cursor.close();
 	    }
 	    if (locker != null) {
@@ -524,7 +545,7 @@ cursor.releaseBINs();
    * 
    * Updates and stores the FileSummary for a given tracked file, if flushing of the summary is allowed.
    */
-  // line 418 "../../../../UtilizationProfile.ump"
+  // line 436 "../../../../UtilizationProfile.ump"
    public void flushFileSummary(TrackedFileSummary tfs) throws DatabaseException{
     if (tfs.getAllowFlush()) {
 	    putFileSummary(tfs);
@@ -536,9 +557,71 @@ cursor.releaseBINs();
    * 
    * Updates and stores the FileSummary for a given tracked file.  This method is synchronized and may not perform eviction.
    */
-  // line 427 "../../../../UtilizationProfile.ump"
+  // line 445 "../../../../UtilizationProfile.ump"
    private synchronized  PackedOffsets putFileSummary(TrackedFileSummary tfs) throws DatabaseException{
-    return new UtilizationProfile_putFileSummary(this, tfs).execute();
+    if (env.isReadOnly()) {
+            throw new DatabaseException
+                ("Cannot write file summary in a read-only environment");
+        }
+
+        if (tfs.isEmpty()) {
+            return null; // no delta
+        }
+
+        if (!cachePopulated) {
+            /* Db does not exist and this is a read-only environment. */
+            return null;
+        }
+
+        long fileNum = tfs.getFileNumber();
+        Long fileNumLong = new Long(fileNum);
+
+        /* Get existing file summary or create an empty one. */
+        FileSummary summary = (FileSummary) fileSummaryMap.get(fileNumLong);
+        if (summary == null) {
+
+            /*
+             * An obsolete node may have been counted after its file was
+             * deleted, for example, when compressing a BIN.  Do not insert
+             * a new profile record if no corresponding log file exists.
+             */
+            File file = new File
+                (env.getFileManager().getFullFileName
+                    (fileNum, FileManager.JE_SUFFIX));
+            if (!file.exists()) {
+                return null;
+            }
+
+            summary = new FileSummary();
+        }
+
+        /*
+         * The key discriminator is a sequence that must be increasing over the
+         * life of the file.  We use the sum of all entries counted.  We must
+         * add the tracked and current summaries here to calculate the key.
+         */
+        FileSummary tmp = new FileSummary();
+        tmp.add(summary);
+        tmp.add(tfs);
+        int sequence = tmp.getEntriesCounted();
+
+        /* Insert an LN with the existing and tracked summary info. */
+        FileSummaryLN ln = new FileSummaryLN(summary);
+        ln.setTrackedSummary(tfs);
+        insertFileSummary(ln, fileNum, sequence);
+
+        /* Cache the updated summary object.  */
+        summary = ln.getBaseSummary();
+        if (fileSummaryMap.put(fileNumLong, summary) == null) {
+           Label193:
+;
+					MemoryBudget mb = env.getMemoryBudget();
+            mb.updateMiscMemoryUsage
+                (MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+ ;
+        }
+
+        return ln.getObsoleteOffsets();
   }
 
 
@@ -547,86 +630,122 @@ cursor.releaseBINs();
    * Returns the stored/packed obsolete offsets and the tracked obsolete offsets for the given file.  The tracked summary object returned can be used to test for obsolete offsets that are being added during cleaning by other threads participating in lazy migration.  The caller must call TrackedFileSummary.setAllowFlush(true) when cleaning is complete. This method performs eviction and is not synchronized.
    * @param logUpdate if true, log any updates to the utilization profile. Iffalse, only retrieve the new information.
    */
-  // line 436 "../../../../UtilizationProfile.ump"
+  // line 512 "../../../../UtilizationProfile.ump"
   public TrackedFileSummary getObsoleteDetail(Long fileNum, PackedOffsets packedOffsets, boolean logUpdate) throws DatabaseException{
-    if (!env.getCleaner().trackDetail) {
-	    return null;
-	}
-	assert cachePopulated;
-	long fileNumVal = fileNum.longValue();
-	List list = new ArrayList();
-	TrackedFileSummary tfs = env.getLogManager().getUnflushableTrackedSummary(fileNumVal);
-	Locker locker = null;
-	CursorImpl cursor = null;
-	try {
-	    locker = new BasicLocker(env);
-	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    DatabaseEntry keyEntry = new DatabaseEntry();
-	    DatabaseEntry dataEntry = new DatabaseEntry();
-	    OperationStatus status = OperationStatus.SUCCESS;
-	    if (!getFirstFSLN(cursor, fileNumVal, keyEntry, dataEntry, LockType.NONE)) {
-		status = OperationStatus.NOTFOUND;
-	    }
-	    while (status == OperationStatus.SUCCESS) {
-		Label174:           ;  //this.hook174();
-		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
-		if (ln != null) {
-		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
-			break;
-		    }
-		    PackedOffsets offsets = ln.getObsoleteOffsets();
-		    if (offsets != null) {
-			list.add(offsets.toArray());
-		    }
-		    //           ;  //this.hook187(cursor);
-        Label187:
+    /* Return if no detail is being tracked. */
+        if (!env.getCleaner().trackDetail) {
+            return null;
+        }
+
+        assert cachePopulated;
+
+        long fileNumVal = fileNum.longValue();
+        List list = new ArrayList();
+
+        /*
+         * Get an unflushable summary that will remain valid for the duration
+         * of file cleaning.
+         */
+        TrackedFileSummary tfs =
+            env.getLogManager().getUnflushableTrackedSummary(fileNumVal);
+
+        /* Read the summary db. */
+        Locker locker = null;
+        CursorImpl cursor = null;
+        try {
+            locker = new BasicLocker(env);
+            cursor = new CursorImpl(fileSummaryDb, locker);
+
+            DatabaseEntry keyEntry = new DatabaseEntry();
+            DatabaseEntry dataEntry = new DatabaseEntry();
+
+            /* Search by file number. */
+            OperationStatus status = OperationStatus.SUCCESS;
+            if (!getFirstFSLN
+                (cursor, fileNumVal, keyEntry, dataEntry, LockType.NONE)) {
+                status = OperationStatus.NOTFOUND;
+            }
+
+            /* Read all LNs for this file number. */
+            while (status == OperationStatus.SUCCESS) {
+
+                /* Perform eviction once per operation. */
+        		Label174:           ;  
+
+                FileSummaryLN ln = (FileSummaryLN)
+                    cursor.getCurrentLN(LockType.NONE);
+                if (ln != null) {
+                    /* Stop if the file number changes. */
+                    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
+                        break;
+                    }
+
+                    PackedOffsets offsets = ln.getObsoleteOffsets();
+                    if (offsets != null) {
+                        list.add(offsets.toArray());
+                    }
+
+                    /* Always evict after using a file summary LN. */
+                    Label187:
 cursor.evict();
 //	original(cursor);
  ;
-		}
-		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
-	    }
-	} finally {
-	    Label179:
+                }
+
+                status = cursor.getNext
+                    (keyEntry, dataEntry, LockType.NONE,
+                     true,    // forward
+                     false);  // alreadyLatched
+            }
+        } finally {
+    	    Label179:
 if (cursor != null) {
 	    cursor.releaseBINs();
 	    cursor.close();
 	}
 	//original(cursor);
-           ;  //this.hook179(cursor);
-	    if (locker != null) {
-		locker.operationEnd();
-	    }
-	}
-	if (!tfs.isEmpty()) {
-	    PackedOffsets offsets = null;
-	    if (logUpdate) {
-		offsets = putFileSummary(tfs);
-		if (offsets != null) {
-		    list.add(offsets.toArray());
-		}
-	    } else {
-		long[] offsetList = tfs.getObsoleteOffsets();
-		if (offsetList != null) {
-		    list.add(offsetList);
-		}
-	    }
-	}
-	int size = 0;
-	for (int i = 0; i < list.size(); i += 1) {
-	    long[] a = (long[]) list.get(i);
-	    size += a.length;
-	}
-	long[] offsets = new long[size];
-	int index = 0;
-	for (int i = 0; i < list.size(); i += 1) {
-	    long[] a = (long[]) list.get(i);
-	    System.arraycopy(a, 0, offsets, index, a.length);
-	    index += a.length;
-	}
-	assert index == offsets.length;
-	packedOffsets.pack(offsets);
-	return tfs;
+           ; 
+            if (locker != null) {
+                locker.operationEnd();
+            }
+        }
+
+        /*
+         * Write out tracked detail, if any, and add its offsets to the list.
+         */
+        if (!tfs.isEmpty()) {
+            PackedOffsets offsets = null;
+            if (logUpdate) {
+                offsets = putFileSummary(tfs);
+                if (offsets != null) {
+                    list.add(offsets.toArray());
+                }
+            } else {
+                long [] offsetList = tfs.getObsoleteOffsets();
+                if (offsetList != null) {
+                    list.add(offsetList);
+                }
+            }
+        }
+
+        /* Merge all offsets into a single array and pack the result. */
+        int size = 0;
+        for (int i = 0; i < list.size(); i += 1) {
+            long[] a = (long[]) list.get(i);
+            size += a.length;
+        }
+        long[] offsets = new long[size];
+        int index = 0;
+        for (int i = 0; i < list.size(); i += 1) {
+            long[] a = (long[]) list.get(i);
+            System.arraycopy(a, 0, offsets, index, a.length);
+            index += a.length;
+        }
+        assert index == offsets.length;
+
+        packedOffsets.pack(offsets);
+
+        return tfs;
   }
 
 
@@ -634,9 +753,177 @@ if (cursor != null) {
    * 
    * Populate the profile for file selection.  This method performs eviction and is not synchronized.  It must be called before recovery is complete so that synchronization is unnecessary.  It must be called before the recovery checkpoint so that the checkpoint can flush file summary information.
    */
-  // line 511 "../../../../UtilizationProfile.ump"
+  // line 625 "../../../../UtilizationProfile.ump"
    public boolean populateCache() throws DatabaseException{
-    return new UtilizationProfile_populateCache(this).execute();
+    assert !cachePopulated;
+
+        /* Open the file summary db on first use. */
+        if (!openFileSummaryDatabase()) {
+            /* Db does not exist and this is a read-only environment. */
+            return false;
+        }
+Label194:
+;
+			     int oldMemorySize = fileSummaryMap.size() *
+            MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+ ;
+
+   
+        /*
+         * It is possible to have an undeleted FileSummaryLN in the database
+         * for a deleted log file if we crash after deleting a file but before
+         * deleting the FileSummaryLN.  Iterate through all FileSummaryLNs and
+         * add them to the cache if their corresponding log file exists.  But
+         * delete those records that have no corresponding log file.
+         */
+        Long[] existingFiles = env.getFileManager().getAllFileNumbers();
+        Locker locker = null;
+        CursorImpl cursor = null;
+        try {
+            locker = new BasicLocker(env);
+            cursor = new CursorImpl(fileSummaryDb, locker);
+
+            DatabaseEntry keyEntry = new DatabaseEntry();
+            DatabaseEntry dataEntry = new DatabaseEntry();
+
+            if (cursor.positionFirstOrLast(true, null)) {
+
+                /* Retrieve the first record. */
+                OperationStatus status =
+                    cursor.getCurrentAlreadyLatched(keyEntry, dataEntry,
+                                                    LockType.NONE, true);
+                if (status != OperationStatus.SUCCESS) {
+                    /* The record we're pointing at may be deleted. */
+                    status = cursor.getNext(keyEntry, dataEntry, LockType.NONE,
+                                            true,   // go forward
+                                            false); // do need to latch
+                }
+
+                while (status == OperationStatus.SUCCESS) {
+
+                    /* Perform eviction once per operation. */
+                    Label176: ;
+
+
+                    FileSummaryLN ln = (FileSummaryLN)
+                        cursor.getCurrentLN(LockType.NONE);
+
+                    if (ln == null) {
+                        /* Advance past a cleaned record. */
+                        status = cursor.getNext
+                            (keyEntry, dataEntry, LockType.NONE,
+                             true,   // go forward
+                             false); // do need to latch
+                        continue;
+                    }
+
+                    byte[] keyBytes = keyEntry.getData();
+                    boolean isOldVersion = ln.hasStringKey(keyBytes);
+                    long fileNum = ln.getFileNumber(keyBytes);
+                    Long fileNumLong = new Long(fileNum);
+
+                    if (Arrays.binarySearch(existingFiles, fileNumLong) >= 0) {
+
+                        /* File exists, cache the FileSummaryLN. */
+                        fileSummaryMap.put(fileNumLong, ln.getBaseSummary());
+
+                        /*
+                         * Update old version records to the new version.  A
+                         * zero sequence number is used to distinguish the
+                         * converted records and to ensure that later records
+                         * will have a greater sequence number.
+                         */
+                        if (isOldVersion) {
+                            insertFileSummary(ln, fileNum, 0);
+                            Label182:
+cursor.latchBIN();
+ ;
+                            cursor.delete();
+                            Label181:
+cursor.releaseBIN();
+ ;
+                        } else {
+                            /* Always evict after using a file summary LN. */
+                            Label191:
+cursor.evict();
+ ;
+
+                        }
+                    } else {
+
+                        /*
+                         * File does not exist, remove the summary from the map
+                         * and delete all FileSummaryLN records.
+                         */
+                        fileSummaryMap.remove(fileNumLong);
+
+                        if (isOldVersion) {
+														Label183:
+cursor.latchBIN();
+ ;
+                            cursor.delete();
+                            Label184:
+cursor.releaseBIN();
+ ;
+                        } else {
+                            deleteFileSummary(fileNumLong);
+                        }
+
+                        /*
+                         * Do not evict after deleting since the compressor
+                         * would have to fetch it again.
+                         */
+                    }
+
+                    /* Go on to the next entry. */
+                    if (isOldVersion) {
+
+                        /* Advance past the single old version record. */
+                        status = cursor.getNext
+                            (keyEntry, dataEntry, LockType.NONE,
+                             true,   // go forward
+                             false); // do need to latch
+                    } else {
+
+                        /*
+                         * Skip over other records for this file by adding one
+                         * to the file number and doing a range search.
+                         */
+                        if (!getFirstFSLN
+                            (cursor,
+                             fileNum + 1,
+                             keyEntry, dataEntry,
+                             LockType.NONE)) {
+                            status = OperationStatus.NOTFOUND;
+                        }
+                    }
+                }
+            }
+        } finally {
+            if (cursor != null) {
+               Label185:
+cursor.releaseBINs();
+  ;
+                cursor.close();
+            }
+            if (locker != null) {
+                locker.operationEnd();
+            }
+
+            Label195:
+;
+				int newMemorySize = fileSummaryMap.size() *
+                MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+            MemoryBudget mb = env.getMemoryBudget();
+            mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
+ ;
+
+        }
+
+        cachePopulated = true;
+        return true;
+
+	//return new UtilizationProfile_populateCache(this).execute();
   }
 
 
@@ -644,7 +931,7 @@ if (cursor != null) {
    * 
    * Positions at the most recent LN for the given file number.
    */
-  // line 519 "../../../../UtilizationProfile.ump"
+  // line 779 "../../../../UtilizationProfile.ump"
    private boolean getFirstFSLN(CursorImpl cursor, long fileNum, DatabaseEntry keyEntry, DatabaseEntry dataEntry, LockType lockType) throws DatabaseException{
     byte[] keyBytes = FileSummaryLN.makePartialKey(fileNum);
 	keyEntry.setData(keyBytes);
@@ -666,7 +953,7 @@ if (cursor != null) {
    * 
    * If the file summary db is already open, return, otherwise attempt to open it.  If the environment is read-only and the database doesn't exist, return false.  If the environment is read-write the database will be created if it doesn't exist.
    */
-  // line 538 "../../../../UtilizationProfile.ump"
+  // line 798 "../../../../UtilizationProfile.ump"
    private boolean openFileSummaryDatabase() throws DatabaseException{
     if (fileSummaryDb != null) {
 	    return true;
@@ -698,7 +985,7 @@ if (cursor != null) {
    * 
    * Insert the given LN with the given key values.  This method is synchronized and may not perform eviction.
    */
-  // line 567 "../../../../UtilizationProfile.ump"
+  // line 827 "../../../../UtilizationProfile.ump"
    private synchronized  void insertFileSummary(FileSummaryLN ln, long fileNum, int sequence) throws DatabaseException{
     byte[] keyBytes = FileSummaryLN.makeFullKey(fileNum, sequence);
 	Locker locker = null;
@@ -736,7 +1023,7 @@ if (cursor != null) {
    * Checks that all FSLN offsets are indeed obsolete.  Assumes that the system is quiesent (does not lock LNs).  This method is not synchronized (because it doesn't access fileSummaryMap) and eviction is allowed.
    * @return true if no verification failures.
    */
-  // line 594 "../../../../UtilizationProfile.ump"
+  // line 854 "../../../../UtilizationProfile.ump"
    public boolean verifyFileSummaryDatabase() throws DatabaseException{
     DatabaseEntry key = new DatabaseEntry();
 	DatabaseEntry data = new DatabaseEntry();
@@ -784,7 +1071,7 @@ cursor.evict();
 	return ok;
   }
 
-  // line 638 "../../../../UtilizationProfile.ump"
+  // line 898 "../../../../UtilizationProfile.ump"
    private boolean verifyLsnIsObsolete(long lsn) throws DatabaseException{
     BIN bin = null;
 	try {
@@ -851,65 +1138,7 @@ b |= db.isDeleted();
   
   
   
-  // line 4 "../../../../UtilizationProfile_static.ump"
-  // line 30 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
-  public static class UtilizationProfile_clearCache
-  {
-  
-    //------------------------
-    // MEMBER VARIABLES
-    //------------------------
-  
-    //------------------------
-    // CONSTRUCTOR
-    //------------------------
-  
-    public UtilizationProfile_clearCache()
-    {}
-  
-    //------------------------
-    // INTERFACE
-    //------------------------
-  
-    public void delete()
-    {}
-  
-    // line 6 "../../../../UtilizationProfile_static.ump"
-    public  UtilizationProfile_clearCache(UtilizationProfile _this){
-      this._this=_this;
-    }
-  
-    // line 9 "../../../../UtilizationProfile_static.ump"
-    public void execute(){
-      // line 32 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
-      memorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-              mb=_this.env.getMemoryBudget();
-              mb.updateMiscMemoryUsage(0 - memorySize);
-              //original();
-      // END OF UMPLE BEFORE INJECTION
-      _this.fileSummaryMap=new TreeMap();
-          _this.cachePopulated=false;
-    }
-    
-    //------------------------
-    // DEVELOPER CODE - PROVIDED AS-IS
-    //------------------------
-    
-    // line 12 "../../../../UtilizationProfile_static.ump"
-    protected UtilizationProfile _this ;
-  // line 13 "../../../../UtilizationProfile_static.ump"
-    protected int memorySize ;
-  // line 14 "../../../../UtilizationProfile_static.ump"
-    protected MemoryBudget mb ;
-  
-    
-  }  /*PLEASE DO NOT EDIT THIS CODE*/
-  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
-  
-  
-  
-  // line 16 "../../../../UtilizationProfile_static.ump"
-  // line 16 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+  // line 6 "../../../../UtilizationProfile_static.ump"
   public static class UtilizationProfile_removeFile
   {
   
@@ -931,23 +1160,19 @@ b |= db.isDeleted();
     public void delete()
     {}
   
-    // line 18 "../../../../UtilizationProfile_static.ump"
+    // line 8 "../../../../UtilizationProfile_static.ump"
     public  UtilizationProfile_removeFile(UtilizationProfile _this, Long fileNum){
       this._this=_this;
           this.fileNum=fileNum;
     }
   
-    // line 22 "../../../../UtilizationProfile_static.ump"
+    // line 12 "../../../../UtilizationProfile_static.ump"
     public void execute() throws DatabaseException{
       synchronized (_this) {
             assert _this.cachePopulated;
             if (_this.fileSummaryMap.remove(fileNum) != null) {
               //           ;  //this.hook192();
-              Label192:
-  mb=_this.env.getMemoryBudget();
-          mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
-          //original();
-     ;
+              Label192:   ;
             }
           }
           _this.deleteFileSummary(fileNum);
@@ -957,11 +1182,11 @@ b |= db.isDeleted();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 31 "../../../../UtilizationProfile_static.ump"
+    // line 21 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 32 "../../../../UtilizationProfile_static.ump"
+  // line 22 "../../../../UtilizationProfile_static.ump"
     protected Long fileNum ;
-  // line 33 "../../../../UtilizationProfile_static.ump"
+  // line 23 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     
@@ -970,8 +1195,7 @@ b |= db.isDeleted();
   
   
   
-  // line 37 "../../../../UtilizationProfile_static.ump"
-  // line 23 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
+  // line 27 "../../../../UtilizationProfile_static.ump"
   public static class UtilizationProfile_putFileSummary
   {
   
@@ -993,13 +1217,13 @@ b |= db.isDeleted();
     public void delete()
     {}
   
-    // line 39 "../../../../UtilizationProfile_static.ump"
+    // line 29 "../../../../UtilizationProfile_static.ump"
     public  UtilizationProfile_putFileSummary(UtilizationProfile _this, TrackedFileSummary tfs){
       this._this=_this;
           this.tfs=tfs;
     }
   
-    // line 43 "../../../../UtilizationProfile_static.ump"
+    // line 33 "../../../../UtilizationProfile_static.ump"
     public PackedOffsets execute() throws DatabaseException{
       if (_this.env.isReadOnly()) {
             throw new DatabaseException("Cannot write file summary in a read-only environment");
@@ -1030,11 +1254,7 @@ b |= db.isDeleted();
           summary=ln.getBaseSummary();
           if (_this.fileSummaryMap.put(fileNumLong,summary) == null) {
             //           ;  //this.hook193();
-            Label193:
-  mb=_this.env.getMemoryBudget();
-          mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
-          //original();
-     ;
+            Label193:   ;
           }
           return ln.getObsoleteOffsets();
     }
@@ -1043,25 +1263,25 @@ b |= db.isDeleted();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 76 "../../../../UtilizationProfile_static.ump"
+    // line 66 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 77 "../../../../UtilizationProfile_static.ump"
+  // line 67 "../../../../UtilizationProfile_static.ump"
     protected TrackedFileSummary tfs ;
-  // line 78 "../../../../UtilizationProfile_static.ump"
+  // line 68 "../../../../UtilizationProfile_static.ump"
     protected long fileNum ;
-  // line 79 "../../../../UtilizationProfile_static.ump"
+  // line 69 "../../../../UtilizationProfile_static.ump"
     protected Long fileNumLong ;
-  // line 80 "../../../../UtilizationProfile_static.ump"
+  // line 70 "../../../../UtilizationProfile_static.ump"
     protected FileSummary summary ;
-  // line 81 "../../../../UtilizationProfile_static.ump"
+  // line 71 "../../../../UtilizationProfile_static.ump"
     protected File file ;
-  // line 82 "../../../../UtilizationProfile_static.ump"
+  // line 72 "../../../../UtilizationProfile_static.ump"
     protected FileSummary tmp ;
-  // line 83 "../../../../UtilizationProfile_static.ump"
+  // line 73 "../../../../UtilizationProfile_static.ump"
     protected int sequence ;
-  // line 84 "../../../../UtilizationProfile_static.ump"
+  // line 74 "../../../../UtilizationProfile_static.ump"
     protected FileSummaryLN ln ;
-  // line 85 "../../../../UtilizationProfile_static.ump"
+  // line 75 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     
@@ -1070,10 +1290,7 @@ b |= db.isDeleted();
   
   
   
-  // line 89 "../../../../UtilizationProfile_static.ump"
-  // line 4 "../../../../MemoryBudget_UtilizationProfile_inner.ump"
-  // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
-  // line 4 "../../../../Latches_UtilizationProfile_inner.ump"
+  // line 79 "../../../../UtilizationProfile_static.ump"
   public static class UtilizationProfile_populateCache
   {
   
@@ -1095,22 +1312,19 @@ b |= db.isDeleted();
     public void delete()
     {}
   
-    // line 91 "../../../../UtilizationProfile_static.ump"
+    // line 81 "../../../../UtilizationProfile_static.ump"
     public  UtilizationProfile_populateCache(UtilizationProfile _this){
       this._this=_this;
     }
   
-    // line 94 "../../../../UtilizationProfile_static.ump"
+    // line 84 "../../../../UtilizationProfile_static.ump"
     public boolean execute() throws DatabaseException{
       assert !_this.cachePopulated;
           if (!_this.openFileSummaryDatabase()) {
             return false;
           }
           //           ;  //this.hook194();
-          Label194:
-  oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-          //original();
-   ;
+          Label194: ;
           existingFiles=_this.env.getFileManager().getAllFileNumbers();
           locker=null;
           cursor=null;
@@ -1139,36 +1353,21 @@ b |= db.isDeleted();
                   _this.fileSummaryMap.put(fileNumLong,ln.getBaseSummary());
                   if (isOldVersion) {
                     _this.insertFileSummary(ln,fileNum,0);
-                    Label182:
-  cursor.latchBIN();
-          //original();
-             ;  //this.hook182();
+                    Label182:           ;  //this.hook182();
                     cursor.delete();
-                    Label181:
-  cursor.releaseBIN();
-          //original();
-             ;  //this.hook181();
+                    Label181:           ;  //this.hook181();
                   }
      else {
                    //            ;  //this.hook191();
-                      Label191:
-  cursor.evict();
-          //original();
-   ;
+                      Label191: ;
                   }
                 }
      else {
                   _this.fileSummaryMap.remove(fileNumLong);
                   if (isOldVersion) {
-                    Label184:
-  cursor.latchBIN();
-          //original();
-             ;  //this.hook184();
+                    Label184:           ;  //this.hook184();
                     cursor.delete();
-                    Label183:
-  cursor.releaseBIN();
-          //original();
-             ;  //this.hook183();
+                    Label183:           ;  //this.hook183();
                   }
      else {
                     _this.deleteFileSummary(fileNumLong);
@@ -1187,22 +1386,14 @@ b |= db.isDeleted();
           }
       finally {
             if (cursor != null) {
-              Label185:
-  cursor.releaseBINs();
-          //original();
-             ;  //this.hook185();
+              Label185:           ;  //this.hook185();
               cursor.close();
             }
             if (locker != null) {
               locker.operationEnd();
             }
             //           ;  //this.hook195();
-            Label195:
-  newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-          mb=_this.env.getMemoryBudget();
-          mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
-          //original();
-   ;
+            Label195: ;
           }
           _this.cachePopulated=true;
           return true;
@@ -1212,35 +1403,35 @@ b |= db.isDeleted();
     // DEVELOPER CODE - PROVIDED AS-IS
     //------------------------
     
-    // line 173 "../../../../UtilizationProfile_static.ump"
+    // line 163 "../../../../UtilizationProfile_static.ump"
     protected UtilizationProfile _this ;
-  // line 174 "../../../../UtilizationProfile_static.ump"
+  // line 164 "../../../../UtilizationProfile_static.ump"
     protected int oldMemorySize ;
-  // line 175 "../../../../UtilizationProfile_static.ump"
+  // line 165 "../../../../UtilizationProfile_static.ump"
     protected Long[] existingFiles ;
-  // line 176 "../../../../UtilizationProfile_static.ump"
+  // line 166 "../../../../UtilizationProfile_static.ump"
     protected Locker locker ;
-  // line 177 "../../../../UtilizationProfile_static.ump"
+  // line 167 "../../../../UtilizationProfile_static.ump"
     protected CursorImpl cursor ;
-  // line 178 "../../../../UtilizationProfile_static.ump"
+  // line 168 "../../../../UtilizationProfile_static.ump"
     protected DatabaseEntry keyEntry ;
-  // line 179 "../../../../UtilizationProfile_static.ump"
+  // line 169 "../../../../UtilizationProfile_static.ump"
     protected DatabaseEntry dataEntry ;
-  // line 180 "../../../../UtilizationProfile_static.ump"
+  // line 170 "../../../../UtilizationProfile_static.ump"
     protected OperationStatus status ;
-  // line 181 "../../../../UtilizationProfile_static.ump"
+  // line 171 "../../../../UtilizationProfile_static.ump"
     protected FileSummaryLN ln ;
-  // line 182 "../../../../UtilizationProfile_static.ump"
+  // line 172 "../../../../UtilizationProfile_static.ump"
     protected byte[] keyBytes ;
-  // line 183 "../../../../UtilizationProfile_static.ump"
+  // line 173 "../../../../UtilizationProfile_static.ump"
     protected boolean isOldVersion ;
-  // line 184 "../../../../UtilizationProfile_static.ump"
+  // line 174 "../../../../UtilizationProfile_static.ump"
     protected long fileNum ;
-  // line 185 "../../../../UtilizationProfile_static.ump"
+  // line 175 "../../../../UtilizationProfile_static.ump"
     protected Long fileNumLong ;
-  // line 186 "../../../../UtilizationProfile_static.ump"
+  // line 176 "../../../../UtilizationProfile_static.ump"
     protected int newMemorySize ;
-  // line 187 "../../../../UtilizationProfile_static.ump"
+  // line 177 "../../../../UtilizationProfile_static.ump"
     protected MemoryBudget mb ;
   
     

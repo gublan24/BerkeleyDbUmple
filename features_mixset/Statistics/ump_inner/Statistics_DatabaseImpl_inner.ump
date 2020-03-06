@@ -1,8 +1,9 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/dbi/DatabaseImpl.java
+
 namespace com.sleepycat.je.dbi;
 class DatabaseImpl {
-  static class DatabaseImpl_preload {
-      around Label287-Label287_1:execute() {
+
+      around Label287-Label287_1:  preload(PreloadConfig ) {
+			ret= new PreloadStats();
         try {
               around_proceed:
         }
@@ -10,5 +11,5 @@ class DatabaseImpl {
           ret.status=HPE.getStatus();
         }
       }
-    }
+    
 }

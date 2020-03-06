@@ -53,6 +53,7 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../../Checksum_RecoveryManager.ump"
 // line 3 "../../../../LoggingRecovery_RecoveryManager.ump"
 // line 3 "../../../../LoggingRecovery_RecoveryManager_inner.ump"
+// line 3 "../../../../LoggingConfig_RecoveryManager.ump"
 // line 3 "../../../../loggingBase_RecoveryManager.ump"
 // line 3 "../../../../loggingBase_RecoveryManager_inner.ump"
 // line 3 "../../../../Evictor_RecoveryManager.ump"
@@ -115,15 +116,24 @@ detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_R
 					boolean forceCheckpoint = configManager.getBoolean(EnvironmentParams.ENV_RECOVERY_FORCE_CHECKPOINT);
 					if (fileManager.filesExist()) {
 				findEndOfLog(readOnly);
-				Label559:           ;  //this.hook559();
+				Label559:
+Tracer.trace(Level.CONFIG, env, "Recovery underway, found end of log");
+	//original();
+           ;  //this.hook559();
 				findLastCheckpoint();
 				env.getLogManager().setLastLsnAtRecovery(fileManager.getLastUsedLsn());
-				Label558:           ;  //this.hook558();
+				Label558:
+Tracer.trace(Level.CONFIG, env, "Recovery checkpoint search, " + info);
+			//original();
+           ;  //this.hook558();
 				env.readMapTreeFromLog(info.useRootLsn);
 				buildTree();
 					} else {
 				Label556:           ;  //this.hook556();
-				Label560:           ;  //this.hook560();
+				Label560:
+Tracer.trace(Level.CONFIG, env, "Recovery w/no files.");
+	//original();
+           ;  //this.hook560();
 				env.logMapTreeRoot();
 				forceCheckpoint = true;
 					}
@@ -235,15 +245,26 @@ detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_R
   // line 224 "../../../../RecoveryManager.ump"
    private void buildTree() throws IOException,DatabaseException{
     inListClearCounter = 0;
-	Label572:           ;  //this.hook572();
+	Label572:
+Tracer.trace(Level.CONFIG, env, passStartHeader(1) + "read map INs");
+	//original();
+           ;  //this.hook572();
 	long start = System.currentTimeMillis();
 	readINsAndTrackIds(info.checkpointStartLsn);
 	long end = System.currentTimeMillis();
-	Label571:           ;  //this.hook571(start, end);
+	Label571:
+Tracer.trace(Level.CONFIG, env, passEndHeader(1, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(2) + "read map BINDeltas");
+	//original(start, end);
+           ;  //this.hook571(start, end);
 	start = System.currentTimeMillis();
 	info.numOtherINs += readINs(info.checkpointStartLsn, true, LogEntryType.LOG_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label570:           ;  //this.hook570(start, end);
+	Label570:
+Tracer.trace(Level.CONFIG, env, passEndHeader(2, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(3) + "undo map LNs");
+	//original(start, end);
+           ;  //this.hook570(start, end);
 	start = System.currentTimeMillis();
 	Set mapLNSet = new HashSet();
 	mapLNSet.add(LogEntryType.LOG_MAPLN_TRANSACTIONAL);
@@ -252,37 +273,63 @@ detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_R
 	mapLNSet.add(LogEntryType.LOG_TXN_PREPARE);
 	undoLNs(info, mapLNSet);
 	end = System.currentTimeMillis();
-	Label569:           ;  //this.hook569(start, end);
+	Label569:
+Tracer.trace(Level.CONFIG, env, passEndHeader(3, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(4) + "redo map LNs");
+	//original(start, end);
+           ;  //this.hook569(start, end);
 	start = System.currentTimeMillis();
 	mapLNSet.add(LogEntryType.LOG_MAPLN);
 	redoLNs(info, mapLNSet);
 	end = System.currentTimeMillis();
-	Label568:           ;  //this.hook568(start, end);
+	Label568:
+Tracer.trace(Level.CONFIG, env, passEndHeader(4, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(5) + "read other INs");
+	//original(start, end);
+           ;  //this.hook568(start, end);
 	start = System.currentTimeMillis();
 	info.numOtherINs += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_IN, LogEntryType.LOG_BIN,
 		LogEntryType.LOG_IN_DELETE_INFO, false);
 	end = System.currentTimeMillis();
-	Label567:           ;  //this.hook567(start, end);
+	Label567:
+Tracer.trace(Level.CONFIG, env, passEndHeader(5, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(6) + "read BINDeltas");
+	//original(start, end);
+           ;  //this.hook567(start, end);
 	start = System.currentTimeMillis();
 	info.numBinDeltas = readINs(info.checkpointStartLsn, false, LogEntryType.LOG_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label566:           ;  //this.hook566(start, end);
+	Label566:
+Tracer.trace(Level.CONFIG, env, passEndHeader(6, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(7) + "read dup INs");
+	//original(start, end);
+           ;  //this.hook566(start, end);
 	start = System.currentTimeMillis();
 	info.numDuplicateINs += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DIN, LogEntryType.LOG_DBIN,
 		LogEntryType.LOG_IN_DUPDELETE_INFO, true);
 	end = System.currentTimeMillis();
-	Label565:           ;  //this.hook565(start, end);
+	Label565:
+Tracer.trace(Level.CONFIG, env, passEndHeader(7, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(8) + "read dup BINDeltas");
+	//original(start, end);
+           ;  //this.hook565(start, end);
 	start = System.currentTimeMillis();
 	info.numBinDeltas += readINs(info.checkpointStartLsn, false, LogEntryType.LOG_DUP_BIN_DELTA, null, null, true);
 	end = System.currentTimeMillis();
-	Label564:           ;  //this.hook564(start, end);
+	Label564:
+Tracer.trace(Level.CONFIG, env, passEndHeader(8, start, end) + info.toString());
+	//original(start, end);
+           ;  //this.hook564(start, end);
 	rebuildINList();
 
   Label596:
 env.invokeEvictor();
 			//original();
    ;
-	Label563:           ;  //this.hook563();
+	Label563:
+Tracer.trace(Level.CONFIG, env, passStartHeader(9) + "undo LNs");
+	//original();
+           ;  //this.hook563();
 	start = System.currentTimeMillis();
 	Set lnSet = new HashSet();
 	lnSet.add(LogEntryType.LOG_LN_TRANSACTIONAL);
@@ -291,7 +338,11 @@ env.invokeEvictor();
 	lnSet.add(LogEntryType.LOG_DUPCOUNTLN_TRANSACTIONAL);
 	undoLNs(info, lnSet);
 	end = System.currentTimeMillis();
-	Label562:           ;  //this.hook562(start, end);
+	Label562:
+Tracer.trace(Level.CONFIG, env, passEndHeader(9, start, end) + info.toString());
+	Tracer.trace(Level.CONFIG, env, passStartHeader(10) + "redo LNs");
+	//original(start, end);
+           ;  //this.hook562(start, end);
 	start = System.currentTimeMillis();
 	lnSet.add(LogEntryType.LOG_LN);
 	lnSet.add(LogEntryType.LOG_NAMELN);
@@ -300,7 +351,10 @@ env.invokeEvictor();
 	lnSet.add(LogEntryType.LOG_FILESUMMARYLN);
 	redoLNs(info, lnSet);
 	end = System.currentTimeMillis();
-	Label561:           ;  //this.hook561(start, end);
+	Label561:
+Tracer.trace(Level.CONFIG, env, passEndHeader(10, start, end) + info.toString());
+	//original(start, end);
+           ;  //this.hook561(start, end);
   }
 
   // line 291 "../../../../RecoveryManager.ump"

@@ -2,19 +2,19 @@ namespace com.sleepycat.je.dbi;
 
 class CursorImpl
 {
-    after Label283:delete(){
+    after Label283: delete(boolean ) {
       newLNSize = ln.getMemorySizeIncludedByParent();
     }
 
-    after Label284:delete(){
+    after Label284: delete(boolean ) {
       oldLNSize = ln.getMemorySizeIncludedByParent();
     }
 
-    after Label285:delete(){
+    after Label285: delete(boolean ) {
       newLNSize = ln.getMemorySizeIncludedByParent();
     }
 
-    after Label286:delete(){
+    after Label286: delete(boolean ) {
       oldLNSize = ln.getMemorySizeIncludedByParent();
     }
 

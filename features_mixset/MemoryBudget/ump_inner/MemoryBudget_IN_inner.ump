@@ -1,13 +1,16 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/tree/IN.java
 namespace com.sleepycat.je.tree;
 class IN {
-  @MethodObject static class IN_splitInternal {
-      after Label650: execute() {
-        newSize=_this.computeMemorySize();
-        _this.updateMemorySize(oldMemorySize,newSize);
-        //original();
+  
+
+      after Label650: splitInternal(IN , int , int , int ) {
+        ;
+				long newSize = computeMemorySize();
+            updateMemorySize(oldMemorySize, newSize);
+
       }
-    }
+    
+
   @MethodObject static class IN_deleteEntry {
       after Label648:execute(){
         _this.updateMemorySize(oldLSNArraySize,_this.computeLsnOverhead());

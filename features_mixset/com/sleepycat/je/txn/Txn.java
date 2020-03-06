@@ -38,6 +38,7 @@ import com.sleepycat.je.log.*;
 
 // line 3 "../../../../Txn.ump"
 // line 3 "../../../../Txn_static.ump"
+// line 3 "../../../../Statistics_Txn.ump"
 // line 3 "../../../../loggingBase_Txn.ump"
 // line 3 "../../../../loggingBase_Txn_inner.ump"
 // line 3 "../../../../MemoryBudget_Txn.ump"
@@ -953,6 +954,22 @@ updateMemoryUsage(0 - WRITE_LOCK_OVERHEAD);
   // line 772 "../../../../Txn.ump"
   public int getInMemorySize(){
     return inMemorySize;
+  }
+
+
+  /**
+   * 
+   * stats
+   */
+  // line 8 "../../../../Statistics_Txn.ump"
+   public LockStats collectStats(LockStats stats) throws DatabaseException{
+    synchronized(this) {
+            int nReadLocks = (readLocks == null) ? 0 : readLocks.size();
+            stats.setNReadLocks(stats.getNReadLocks() + nReadLocks);
+            int nWriteLocks = (writeInfo == null) ? 0 : writeInfo.size();
+            stats.setNWriteLocks(stats.getNWriteLocks() + nWriteLocks);
+        }
+        return stats;
   }
 
   // line 12 "../../../../MemoryBudget_Txn.ump"

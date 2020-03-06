@@ -46,6 +46,9 @@ import java.util.ArrayList;
 import java.io.PrintStream;
 import java.io.IOException;
 import java.io.File;
+import com.sleepycat.je.TransactionStats;
+import com.sleepycat.je.StatsConfig;
+import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.evictor.Evictor;
 import com.sleepycat.je.incomp.INCompressor;
 import com.sleepycat.je.log.LatchedLogManager;
@@ -55,6 +58,7 @@ import com.sleepycat.je.latch.Latch;
 
 // line 3 "../../../../EnvironmentImpl.ump"
 // line 3 "../../../../EnvironmentImpl_static.ump"
+// line 3 "../../../../Statistics_EnvironmentImpl.ump"
 // line 3 "../../../../loggingBase_EnvironmentImpl.ump"
 // line 3 "../../../../loggingBase_EnvironmentImpl_inner.ump"
 // line 3 "../../../../MemoryBudget_EnvironmentImpl.ump"
@@ -106,7 +110,7 @@ mapTreeRootLatch = LatchSupport.makeLatch("MapTreeRoot", this);
 	    configObservers = new ArrayList();
 	    addConfigObserver(this);
 	    memoryBudget = new MemoryBudget(this, configManager);
-	    //this.hook336(envHome);
+
       Label336:
 envLogger = initLogger(envHome);
 //	original(envHome);
@@ -135,9 +139,13 @@ fairLatches = configManager.getBoolean(EnvironmentParams.ENV_FAIR_LATCHES);
 	    Label321:
 if (fairLatches) {
 					logManager = new LatchedLogManager(this, isReadOnly);
-			} else
+			} else 
+			{
+      logManager = new SyncedLogManager(this, isReadOnly); 
+
+			}
    ; 	
-      logManager = new SyncedLogManager(this, isReadOnly); //this.hook321();
+
 	    inMemoryINs = new INList(this);
 	    txnManager = new TxnManager(this);
 	    createDaemons();
@@ -249,7 +257,7 @@ inCompressor.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_INCOMPRESSOR));
    */
   // line 230 "../../../../EnvironmentImpl.ump"
    public void logMapTreeRoot() throws DatabaseException{
-    // line 52 "../../../../Latches_EnvironmentImpl.ump"
+    // line 56 "../../../../Latches_EnvironmentImpl.ump"
     mapTreeRootLatch.acquire();
     // END OF UMPLE BEFORE INJECTION
     try {
@@ -270,7 +278,7 @@ inCompressor.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_INCOMPRESSOR));
    */
   // line 241 "../../../../EnvironmentImpl.ump"
    public void rewriteMapTreeRoot(long cleanerTargetLsn) throws DatabaseException{
-    // line 66 "../../../../Latches_EnvironmentImpl.ump"
+    // line 70 "../../../../Latches_EnvironmentImpl.ump"
     mapTreeRootLatch.acquire();
     // END OF UMPLE BEFORE INJECTION
     try{
@@ -821,6 +829,23 @@ if (evictor != null) {
 
   /**
    * 
+   * Retrieve and return stat information.
+   */
+  // line 12 "../../../../Statistics_EnvironmentImpl.ump"
+   public synchronized  EnvironmentStats loadStats(StatsConfig config) throws DatabaseException{
+    EnvironmentStats stats = new EnvironmentStats();
+			Label314: //this.hook314(config, stats);
+			Label315: //this.hook315(config, stats);
+			checkpointer.loadStats(config, stats);
+			cleaner.loadStats(config, stats);
+			logManager.loadStats(config, stats);
+			Label316: //this.hook316(config, stats);
+			return stats;
+  }
+
+
+  /**
+   * 
    * Initialize the debugging logging system. Note that publishing to the database log is not permitted until we've initialized the file manager in recovery. We can't log safely before that.
    */
   // line 11 "../../../../loggingBase_EnvironmentImpl.ump"
@@ -1189,6 +1214,18 @@ if (evictor != null) {
   public static  boolean JAVA5_AVAILABLE ;
 // line 107 "../../../../EnvironmentImpl.ump"
   private static final String DISABLE_JAVA_ADLER32 = "je.disable.java.adler32" ;
+
+// line 25 "../../../../Statistics_EnvironmentImpl.ump"
+  synchronized public LockStats lockStat (StatsConfig config) throws DatabaseException 
+  {
+    return txnManager.lockStat(config);
+  }
+
+// line 32 "../../../../Statistics_EnvironmentImpl.ump"
+  synchronized public TransactionStats txnStat (StatsConfig config) throws DatabaseException 
+  {
+    return txnManager.txnStat(config);
+  }
 // line 5 "../../../../loggingBase_EnvironmentImpl.ump"
   private Logger envLogger ;
 // line 6 "../../../../Evictor_EnvironmentImpl.ump"

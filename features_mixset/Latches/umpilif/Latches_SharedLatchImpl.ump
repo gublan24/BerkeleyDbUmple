@@ -3,13 +3,14 @@ namespace com.sleepycat.je.latch;
 class SharedLatchImpl
 {
   isA SharedLatch;
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.RunRecoveryException;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.List;
   depend java.util.Iterator;
   depend java.util.ArrayList;
+
     private String name = null;
 
     private List waiters = new ArrayList();
@@ -57,9 +58,9 @@ class SharedLatchImpl
 		throw new LatchException(getNameString() + " reentrancy/upgrade not allowed");
 	    }
 	    if (waiters.size() == 1) {
-		Label429:           ;  //this.hook429();
+		Label429:           ;  
 	    } else {
-		Label430:           ;  //this.hook430();
+		Label430:           ;  
 		while (waiters.get(0) != owner) {
 		    wait();
 		}
@@ -115,7 +116,7 @@ class SharedLatchImpl
 		wait();
 	    }
 	    owner.nAcquires += 1;
-	    Label432:           ;  //this.hook432();
+	    Label432:           ;  
 	    assert (noteLatch ? noteLatch() : true);
 	} catch (InterruptedException e) {
 	    throw new RunRecoveryException(env, e);
@@ -141,7 +142,7 @@ class SharedLatchImpl
 		assert (noteLatch ? unNoteLatch() : true);
 		notifyAll();
 	    }
-	    Label433:           ;  //this.hook433();
+	    Label433:           ;  
 	} finally {
 	    assert EnvironmentImpl.maybeForceYield();
 	}
@@ -182,6 +183,24 @@ class SharedLatchImpl
 	return LatchSupport.latchTable.getNameString(name);
     }
 
+
+     
+    private static class Owner {
+
+        static final int SHARED = 0;
+        static final int EXCLUSIVE = 1;
+
+        Thread thread;
+        int type;
+        int nAcquires;
+
+        Owner(Thread thread, int type) {
+            this.thread = thread;
+            this.type = type;
+        }
+    }
+
+
     /** 
      * Only call under the assert system. This records latching by thread.
      */
@@ -204,20 +223,5 @@ class SharedLatchImpl
 	    return false;
 	}
     }
-/*
-    protected void hook429() throws DatabaseException, InterruptedException {
-    }
 
-    protected void hook430() throws DatabaseException, InterruptedException {
-    }
-
-    protected void hook431() throws DatabaseException {
-    }
-
-    protected void hook432() throws DatabaseException, InterruptedException {
-    }
-
-    protected void hook433() throws LatchNotHeldException {
-    }
-*/
 }

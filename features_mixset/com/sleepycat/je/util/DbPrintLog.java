@@ -70,8 +70,8 @@ public class DbPrintLog
    */
   // line 45 "../../../../DbPrintLog.ump"
    public static  void main(String [] argv){
-    Thread.currentThread().setUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
-    Thread.setDefaultUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
+  //  Thread.currentThread().setUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
+    //Thread.setDefaultUncaughtExceptionHandler(new com.sleepycat.je.util.DbRecover.UmpleExceptionHandler());
     try {
 	    int whichArg = 0;
 	    String entryTypes = null;

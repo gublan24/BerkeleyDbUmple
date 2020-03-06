@@ -1,38 +1,51 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/cleaner/UtilizationProfile.java
+
 namespace com.sleepycat.je.cleaner;
+
 class UtilizationProfile {
-   static class UtilizationProfile_populateCache {
-      after Label194: execute()  {
-        oldMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-        //original();
+
+
+      after Label194: populateCache()  {
+						;
+			     int oldMemorySize = fileSummaryMap.size() *
+            MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+
+
       }
-      after Label195: execute() {
-        newMemorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-        mb=_this.env.getMemoryBudget();
-        mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
-        //original();
+      after Label195: populateCache() {
+      ;
+				int newMemorySize = fileSummaryMap.size() *
+                MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+            MemoryBudget mb = env.getMemoryBudget();
+            mb.updateMiscMemoryUsage(newMemorySize - oldMemorySize);
+
       }
+    
+
+      after Label192: removeFile(Long ) {
+          ;
+					MemoryBudget mb = env.getMemoryBudget();
+                mb.updateMiscMemoryUsage
+                    (0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
+
+      
     }
-   static class UtilizationProfile_removeFile {
-      after Label192: execute () {
-        mb=_this.env.getMemoryBudget();
-        mb.updateMiscMemoryUsage(0 - MemoryBudget.UTILIZATION_PROFILE_ENTRY);
-        //original();
+
+
+      after Label193: putFileSummary(TrackedFileSummary ) {
+         ;
+					MemoryBudget mb = env.getMemoryBudget();
+            mb.updateMiscMemoryUsage
+                (MemoryBudget.UTILIZATION_PROFILE_ENTRY);
       }
-    }
-   static class UtilizationProfile_putFileSummary {
-      after Label193: execute() {
-        mb=_this.env.getMemoryBudget();
-        mb.updateMiscMemoryUsage(MemoryBudget.UTILIZATION_PROFILE_ENTRY);
-        //original();
-      }
-    }
-   static class UtilizationProfile_clearCache {
-      before execute(){
-        memorySize=_this.fileSummaryMap.size() * MemoryBudget.UTILIZATION_PROFILE_ENTRY;
-        mb=_this.env.getMemoryBudget();
+    
+
+      before clearCache(){
+			;
+      int memorySize = fileSummaryMap.size() *
+            MemoryBudget.UTILIZATION_PROFILE_ENTRY;
+        MemoryBudget mb = env.getMemoryBudget();
         mb.updateMiscMemoryUsage(0 - memorySize);
-        //original();
-      }
+
+      
     }
 }

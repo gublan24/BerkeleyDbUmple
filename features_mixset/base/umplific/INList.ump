@@ -44,8 +44,11 @@ class INList
      * An IN has just come into memory, add it to the list.
      */
     public void add(IN in) throws DatabaseException {
-	new INList_add(this, in).execute();
+					add1: ;
+          addAndSetMemory(addedINs, in);
+          add2: ;
     }
+    
 
     private void addAndSetMemory(Set set, IN in) {
 	new INList_addAndSetMemory(this, set, in).execute();
@@ -56,9 +59,9 @@ class INList
      */
     public void removeLatchAlreadyHeld(IN in) throws DatabaseException {
 		boolean removeDone = ins.remove(in);
-		Label341:   ; //removeDone = this.hook341(in, removeDone);
+		Label341:   ;
 		assert removeDone;
-		//this.hook346(in);
+
     Label346:   ;
     }
 
@@ -94,7 +97,7 @@ class INList
      */
     public void clear() throws DatabaseException {
 	ins.clear();
-	//this.hook342();
+  clear_1:;
     }
 
     public void dump() {
@@ -107,23 +110,6 @@ class INList
 	}
     }
 
- //   protected void hook338(EnvironmentImpl envImpl) {
-   // }
 
- //   protected void hook339(EnvironmentImpl envImpl) throws DatabaseException {
-  //  }
-
-   // protected void hook340() throws DatabaseException {
-   // }
-
-//    protected boolean hook341(IN in, boolean removeDone) throws DatabaseException {
-//	return removeDone;
- //   }
-
-  //  protected void hook342() throws DatabaseException {
-  //  }
-
-    protected void hook346(IN in) throws DatabaseException {
-    }
 
 }

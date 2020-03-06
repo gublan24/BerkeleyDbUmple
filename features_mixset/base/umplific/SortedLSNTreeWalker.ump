@@ -2,7 +2,7 @@ namespace com.sleepycat.je.dbi;
 
 class SortedLSNTreeWalker
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.tree.Node;
   depend com.sleepycat.je.tree.IN;
@@ -57,8 +57,63 @@ class SortedLSNTreeWalker
     }
 
     private boolean extractINsForDb(INList inList) throws DatabaseException {
-	return new SortedLSNTreeWalker_extractINsForDb(this, inList).execute();
+
+	boolean foundSome = false;
+
+        /* Search the INList and put all qualifying INs into another list. */
+        Set foundSet = new HashSet();
+        Label360:;
+				Label356:;
+	try {
+            /* consolidate the INList first. */
+            Label357: ;
+
+
+	    Iterator iter = inList.iterator();
+	    while (iter.hasNext()) {
+		IN thisIN = (IN) iter.next();
+		if (thisIN.getDatabase() == dbImpl) {
+		    foundSome = true;
+		    if (removeINsFromINList) {
+			iter.remove();
+                        Label361: ;
+		    }
+                    foundSet.add(thisIN);
+		}
+	    }
+        } catch (DatabaseException e) {
+            /* Update the memory budget with any changes. */
+            Label362: ;
+
+            throw e;
+	} finally {
+	    Label358: ;
+	}
+
+        /* 
+         * Do processing outside of INList latch in order to reduce lockout
+         * of checkpointing and eviction. 
+         */
+        if (foundSome) {
+            Iterator iter = foundSet.iterator();
+            while (iter.hasNext()) {
+                IN thisIN = (IN) iter.next();
+                accumulateLSNs(thisIN);
+            }
+        }
+
+        /* 
+         * Update the memory in one fell swoop after releasing all references
+         * to INs in order to reduce contention on memory budget contention
+         * latch. Wait until all references to INs are released.
+         */
+        foundSet = null;
+
+	    Label358_1: ;
+	return foundSome;
     }
+//	return new SortedLSNTreeWalker_extractINsForDb(this, inList).execute();
+ //   }
 
     /** 
      * Find all non-resident nodes, and execute the callback. The root IN's LSN is not returned to the callback.

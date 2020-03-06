@@ -1,5 +1,6 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/dbi/INList.java
+
 namespace com.sleepycat.je.dbi;
+
 class INList {
  static class INList_add {
   after Label343_1: execute() {
@@ -43,7 +44,6 @@ class INList {
       }
      }
     }
-
 
   }
  }

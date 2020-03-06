@@ -22,7 +22,7 @@ class Tree
 
     after Label661: delete(byte , UtilizationTracker ){
 	RecoveryManager.traceRootDeletion(Level.FINE, database);
-//	original();
+
     }
 
     after Label662: splitRoot(){

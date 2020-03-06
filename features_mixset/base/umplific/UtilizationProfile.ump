@@ -358,17 +358,33 @@ class UtilizationProfile
     /** 
      * Clears the cache of file summary info.  The cache starts out unpopulated and is populated on the first call to getBestFileForCleaning.
      */
-    public synchronized void clearCache() {
-	new UtilizationProfile_clearCache(this).execute();
+
+
+		 public synchronized void clearCache() {
+
+
+
+        fileSummaryMap = new TreeMap();
+        cachePopulated = false;
     }
 
     /** 
      * Removes a file from the utilization database and the profile, after it has been deleted by the cleaner.
      */
     void removeFile(Long fileNum) throws DatabaseException {
-	new UtilizationProfile_removeFile(this, fileNum).execute();
-    }
+	
 
+  /* Synchronize to update the cache. */
+        synchronized (this) {
+            assert cachePopulated;
+
+            /* Remove from the cache. */
+            if (fileSummaryMap.remove(fileNum) != null) {
+						Label192: ;
+             
+            }
+        }
+}
     /** 
      * For the LN at the cursor position deletes all LNs for the file.  This method performs eviction and is not synchronized.
      */
@@ -402,14 +418,16 @@ class UtilizationProfile
 	    }
 	} finally {
 	    if (cursor != null) {
-		Label178:           ;  //this.hook178(cursor);
+		Label178:           ;  
 		cursor.close();
 	    }
 	    if (locker != null) {
 		locker.operationEnd();
 	    }
 	}
-    }
+}
+
+
 
     /** 
      * Updates and stores the FileSummary for a given tracked file, if flushing of the summary is allowed.
@@ -424,7 +442,65 @@ class UtilizationProfile
      * Updates and stores the FileSummary for a given tracked file.  This method is synchronized and may not perform eviction.
      */
     private synchronized PackedOffsets putFileSummary(TrackedFileSummary tfs) throws DatabaseException {
-	return new UtilizationProfile_putFileSummary(this, tfs).execute();
+	if (env.isReadOnly()) {
+            throw new DatabaseException
+                ("Cannot write file summary in a read-only environment");
+        }
+
+        if (tfs.isEmpty()) {
+            return null; // no delta
+        }
+
+        if (!cachePopulated) {
+            /* Db does not exist and this is a read-only environment. */
+            return null;
+        }
+
+        long fileNum = tfs.getFileNumber();
+        Long fileNumLong = new Long(fileNum);
+
+        /* Get existing file summary or create an empty one. */
+        FileSummary summary = (FileSummary) fileSummaryMap.get(fileNumLong);
+        if (summary == null) {
+
+            /*
+             * An obsolete node may have been counted after its file was
+             * deleted, for example, when compressing a BIN.  Do not insert
+             * a new profile record if no corresponding log file exists.
+             */
+            File file = new File
+                (env.getFileManager().getFullFileName
+                    (fileNum, FileManager.JE_SUFFIX));
+            if (!file.exists()) {
+                return null;
+            }
+
+            summary = new FileSummary();
+        }
+
+        /*
+         * The key discriminator is a sequence that must be increasing over the
+         * life of the file.  We use the sum of all entries counted.  We must
+         * add the tracked and current summaries here to calculate the key.
+         */
+        FileSummary tmp = new FileSummary();
+        tmp.add(summary);
+        tmp.add(tfs);
+        int sequence = tmp.getEntriesCounted();
+
+        /* Insert an LN with the existing and tracked summary info. */
+        FileSummaryLN ln = new FileSummaryLN(summary);
+        ln.setTrackedSummary(tfs);
+        insertFileSummary(ln, fileNum, sequence);
+
+        /* Cache the updated summary object.  */
+        summary = ln.getBaseSummary();
+        if (fileSummaryMap.put(fileNumLong, summary) == null) {
+           Label193: ;
+        }
+
+        return ln.getObsoleteOffsets();
+
     }
 
     /** 
@@ -433,82 +509,266 @@ class UtilizationProfile
      */
     TrackedFileSummary getObsoleteDetail(Long fileNum, PackedOffsets packedOffsets, boolean logUpdate)
 	    throws DatabaseException {
-	if (!env.getCleaner().trackDetail) {
-	    return null;
-	}
-	assert cachePopulated;
-	long fileNumVal = fileNum.longValue();
-	List list = new ArrayList();
-	TrackedFileSummary tfs = env.getLogManager().getUnflushableTrackedSummary(fileNumVal);
-	Locker locker = null;
-	CursorImpl cursor = null;
-	try {
-	    locker = new BasicLocker(env);
-	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    DatabaseEntry keyEntry = new DatabaseEntry();
-	    DatabaseEntry dataEntry = new DatabaseEntry();
-	    OperationStatus status = OperationStatus.SUCCESS;
-	    if (!getFirstFSLN(cursor, fileNumVal, keyEntry, dataEntry, LockType.NONE)) {
-		status = OperationStatus.NOTFOUND;
-	    }
-	    while (status == OperationStatus.SUCCESS) {
-		Label174:           ;  //this.hook174();
-		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
-		if (ln != null) {
-		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
-			break;
-		    }
-		    PackedOffsets offsets = ln.getObsoleteOffsets();
-		    if (offsets != null) {
-			list.add(offsets.toArray());
-		    }
-		    //           ;  //this.hook187(cursor);
-        Label187: ;
-		}
-		status = cursor.getNext(keyEntry, dataEntry, LockType.NONE, true, false);
-	    }
-	} finally {
-	    Label179:           ;  //this.hook179(cursor);
-	    if (locker != null) {
-		locker.operationEnd();
-	    }
-	}
-	if (!tfs.isEmpty()) {
-	    PackedOffsets offsets = null;
-	    if (logUpdate) {
-		offsets = putFileSummary(tfs);
-		if (offsets != null) {
-		    list.add(offsets.toArray());
-		}
-	    } else {
-		long[] offsetList = tfs.getObsoleteOffsets();
-		if (offsetList != null) {
-		    list.add(offsetList);
-		}
-	    }
-	}
-	int size = 0;
-	for (int i = 0; i < list.size(); i += 1) {
-	    long[] a = (long[]) list.get(i);
-	    size += a.length;
-	}
-	long[] offsets = new long[size];
-	int index = 0;
-	for (int i = 0; i < list.size(); i += 1) {
-	    long[] a = (long[]) list.get(i);
-	    System.arraycopy(a, 0, offsets, index, a.length);
-	    index += a.length;
-	}
-	assert index == offsets.length;
-	packedOffsets.pack(offsets);
-	return tfs;
+      /* Return if no detail is being tracked. */
+        if (!env.getCleaner().trackDetail) {
+            return null;
+        }
+
+        assert cachePopulated;
+
+        long fileNumVal = fileNum.longValue();
+        List list = new ArrayList();
+
+        /*
+         * Get an unflushable summary that will remain valid for the duration
+         * of file cleaning.
+         */
+        TrackedFileSummary tfs =
+            env.getLogManager().getUnflushableTrackedSummary(fileNumVal);
+
+        /* Read the summary db. */
+        Locker locker = null;
+        CursorImpl cursor = null;
+        try {
+            locker = new BasicLocker(env);
+            cursor = new CursorImpl(fileSummaryDb, locker);
+
+            DatabaseEntry keyEntry = new DatabaseEntry();
+            DatabaseEntry dataEntry = new DatabaseEntry();
+
+            /* Search by file number. */
+            OperationStatus status = OperationStatus.SUCCESS;
+            if (!getFirstFSLN
+                (cursor, fileNumVal, keyEntry, dataEntry, LockType.NONE)) {
+                status = OperationStatus.NOTFOUND;
+            }
+
+            /* Read all LNs for this file number. */
+            while (status == OperationStatus.SUCCESS) {
+
+                /* Perform eviction once per operation. */
+        		Label174:           ;  
+
+                FileSummaryLN ln = (FileSummaryLN)
+                    cursor.getCurrentLN(LockType.NONE);
+                if (ln != null) {
+                    /* Stop if the file number changes. */
+                    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
+                        break;
+                    }
+
+                    PackedOffsets offsets = ln.getObsoleteOffsets();
+                    if (offsets != null) {
+                        list.add(offsets.toArray());
+                    }
+
+                    /* Always evict after using a file summary LN. */
+                    Label187: ;
+                }
+
+                status = cursor.getNext
+                    (keyEntry, dataEntry, LockType.NONE,
+                     true,    // forward
+                     false);  // alreadyLatched
+            }
+        } finally {
+    	    Label179:           ; 
+            if (locker != null) {
+                locker.operationEnd();
+            }
+        }
+
+        /*
+         * Write out tracked detail, if any, and add its offsets to the list.
+         */
+        if (!tfs.isEmpty()) {
+            PackedOffsets offsets = null;
+            if (logUpdate) {
+                offsets = putFileSummary(tfs);
+                if (offsets != null) {
+                    list.add(offsets.toArray());
+                }
+            } else {
+                long [] offsetList = tfs.getObsoleteOffsets();
+                if (offsetList != null) {
+                    list.add(offsetList);
+                }
+            }
+        }
+
+        /* Merge all offsets into a single array and pack the result. */
+        int size = 0;
+        for (int i = 0; i < list.size(); i += 1) {
+            long[] a = (long[]) list.get(i);
+            size += a.length;
+        }
+        long[] offsets = new long[size];
+        int index = 0;
+        for (int i = 0; i < list.size(); i += 1) {
+            long[] a = (long[]) list.get(i);
+            System.arraycopy(a, 0, offsets, index, a.length);
+            index += a.length;
+        }
+        assert index == offsets.length;
+
+        packedOffsets.pack(offsets);
+
+        return tfs;
+    
     }
 
     /** 
      * Populate the profile for file selection.  This method performs eviction and is not synchronized.  It must be called before recovery is complete so that synchronization is unnecessary.  It must be called before the recovery checkpoint so that the checkpoint can flush file summary information.
      */
     public boolean populateCache() throws DatabaseException {
-	return new UtilizationProfile_populateCache(this).execute();
+
+     assert !cachePopulated;
+
+        /* Open the file summary db on first use. */
+        if (!openFileSummaryDatabase()) {
+            /* Db does not exist and this is a read-only environment. */
+            return false;
+        }
+Label194: ;
+
+   
+        /*
+         * It is possible to have an undeleted FileSummaryLN in the database
+         * for a deleted log file if we crash after deleting a file but before
+         * deleting the FileSummaryLN.  Iterate through all FileSummaryLNs and
+         * add them to the cache if their corresponding log file exists.  But
+         * delete those records that have no corresponding log file.
+         */
+        Long[] existingFiles = env.getFileManager().getAllFileNumbers();
+        Locker locker = null;
+        CursorImpl cursor = null;
+        try {
+            locker = new BasicLocker(env);
+            cursor = new CursorImpl(fileSummaryDb, locker);
+
+            DatabaseEntry keyEntry = new DatabaseEntry();
+            DatabaseEntry dataEntry = new DatabaseEntry();
+
+            if (cursor.positionFirstOrLast(true, null)) {
+
+                /* Retrieve the first record. */
+                OperationStatus status =
+                    cursor.getCurrentAlreadyLatched(keyEntry, dataEntry,
+                                                    LockType.NONE, true);
+                if (status != OperationStatus.SUCCESS) {
+                    /* The record we're pointing at may be deleted. */
+                    status = cursor.getNext(keyEntry, dataEntry, LockType.NONE,
+                                            true,   // go forward
+                                            false); // do need to latch
+                }
+
+                while (status == OperationStatus.SUCCESS) {
+
+                    /* Perform eviction once per operation. */
+                    Label176: ;
+
+
+                    FileSummaryLN ln = (FileSummaryLN)
+                        cursor.getCurrentLN(LockType.NONE);
+
+                    if (ln == null) {
+                        /* Advance past a cleaned record. */
+                        status = cursor.getNext
+                            (keyEntry, dataEntry, LockType.NONE,
+                             true,   // go forward
+                             false); // do need to latch
+                        continue;
+                    }
+
+                    byte[] keyBytes = keyEntry.getData();
+                    boolean isOldVersion = ln.hasStringKey(keyBytes);
+                    long fileNum = ln.getFileNumber(keyBytes);
+                    Long fileNumLong = new Long(fileNum);
+
+                    if (Arrays.binarySearch(existingFiles, fileNumLong) >= 0) {
+
+                        /* File exists, cache the FileSummaryLN. */
+                        fileSummaryMap.put(fileNumLong, ln.getBaseSummary());
+
+                        /*
+                         * Update old version records to the new version.  A
+                         * zero sequence number is used to distinguish the
+                         * converted records and to ensure that later records
+                         * will have a greater sequence number.
+                         */
+                        if (isOldVersion) {
+                            insertFileSummary(ln, fileNum, 0);
+                            Label182: ;
+                            cursor.delete();
+                            Label181: ;
+                        } else {
+                            /* Always evict after using a file summary LN. */
+                            Label191: ;
+
+                        }
+                    } else {
+
+                        /*
+                         * File does not exist, remove the summary from the map
+                         * and delete all FileSummaryLN records.
+                         */
+                        fileSummaryMap.remove(fileNumLong);
+
+                        if (isOldVersion) {
+														Label183: ;
+                            cursor.delete();
+                            Label184: ;
+                        } else {
+                            deleteFileSummary(fileNumLong);
+                        }
+
+                        /*
+                         * Do not evict after deleting since the compressor
+                         * would have to fetch it again.
+                         */
+                    }
+
+                    /* Go on to the next entry. */
+                    if (isOldVersion) {
+
+                        /* Advance past the single old version record. */
+                        status = cursor.getNext
+                            (keyEntry, dataEntry, LockType.NONE,
+                             true,   // go forward
+                             false); // do need to latch
+                    } else {
+
+                        /*
+                         * Skip over other records for this file by adding one
+                         * to the file number and doing a range search.
+                         */
+                        if (!getFirstFSLN
+                            (cursor,
+                             fileNum + 1,
+                             keyEntry, dataEntry,
+                             LockType.NONE)) {
+                            status = OperationStatus.NOTFOUND;
+                        }
+                    }
+                }
+            }
+        } finally {
+            if (cursor != null) {
+               Label185:  ;
+                cursor.close();
+            }
+            if (locker != null) {
+                locker.operationEnd();
+            }
+
+            Label195: ;
+
+        }
+
+        cachePopulated = true;
+        return true;
+
+	//return new UtilizationProfile_populateCache(this).execute();
     }
 
     /** 

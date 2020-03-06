@@ -1,30 +1,30 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/cleaner/UtilizationProfile.java
+
 namespace com.sleepycat.je.cleaner;
+
 class UtilizationProfile {
-   static class UtilizationProfile_populateCache {
-      after Label181:  execute() {
+
+      after Label181:  populateCache() {
 
         cursor.releaseBIN();
-        //original();
+
       }
-      after Label182:  execute() {
+      after Label182:  populateCache() {
 
         cursor.latchBIN();
-        //original();
+
       }
-      after Label183:  execute() {
+      after Label183:  populateCache() {
+                            cursor.latchBIN();
+
+      }
+      after Label184:  populateCache() {
 
         cursor.releaseBIN();
-        //original();
-      }
-      after Label184:  execute() {
 
-        cursor.latchBIN();
-        //original();
       }
-      after Label185:  execute() {
+      after Label185:  populateCache() {
         cursor.releaseBINs();
-        //original();
+
       }
-    }
+    
 }

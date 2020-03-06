@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 // line 3 "../../../Database.ump"
 // line 3 "../../../Database_static.ump"
+// line 3 "../../../Statistics_Database.ump"
 // line 3 "../../../loggingBase_Database.ump"
 // line 3 "../../../DeleteOp_Database.ump"
 // line 3 "../../../Latches_Database.ump"
@@ -658,9 +659,15 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Gets a read-lock on the list of triggers.  releaseTriggerListReadLock() must be called to release the lock.  Called by all primary put and delete operations.
    */
-  // line 560 "../../../Database.ump"
+  // line 562 "../../../Database.ump"
    private void acquireTriggerListReadLock() throws DatabaseException{
-    new Database_acquireTriggerListReadLock(this).execute();
+    // line 6 "../../../Latches_Database_inner.ump"
+    EnvironmentImpl env = envHandle.getEnvironmentImpl();
+            env.getTriggerLatch().acquireShared();
+    // END OF UMPLE BEFORE INJECTION
+    if (triggerList == null) {
+            triggerList = new ArrayList();
+        }
   }
 
 
@@ -668,9 +675,15 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Gets a write lock on the list of triggers.  An empty list is created if necessary, so null is never returned.  releaseTriggerListWriteLock() must always be called to release the lock.
    */
-  // line 567 "../../../Database.ump"
+  // line 573 "../../../Database.ump"
    private void acquireTriggerListWriteLock() throws DatabaseException{
-    new Database_acquireTriggerListWriteLock(this).execute();
+    // line 20 "../../../Latches_Database_inner.ump"
+    EnvironmentImpl env = envHandle.getEnvironmentImpl();
+            env.getTriggerLatch().acquireExclusive();
+    // END OF UMPLE BEFORE INJECTION
+    if (triggerList == null) {
+            triggerList = new ArrayList();
+        }
   }
 
 
@@ -678,9 +691,15 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Releases a lock acquired by calling acquireTriggerListWriteLock().  If the list is now empty then it is set to null, that is, hasTriggers() will subsequently return false.
    */
-  // line 574 "../../../Database.ump"
+  // line 585 "../../../Database.ump"
    private void releaseTriggerListWriteLock() throws DatabaseException{
-    new Database_releaseTriggerListWriteLock(this).execute();
+    if (triggerList.size() == 0) {
+            triggerList = null;
+        }
+    // line 14 "../../../Latches_Database_inner.ump"
+    EnvironmentImpl env = envHandle.getEnvironmentImpl();
+            env.getTriggerLatch().release();
+    // END OF UMPLE AFTER INJECTION
   }
 
 
@@ -689,7 +708,7 @@ databaseImpl.checkIsDeleted("preload");
    * Adds a given trigger to the list of triggers.  Called while opening a SecondaryDatabase.
    * @param insertAtFront true to insert at the front, or false to append.
    */
-  // line 582 "../../../Database.ump"
+  // line 597 "../../../Database.ump"
   public void addTrigger(DatabaseTrigger trigger, boolean insertAtFront) throws DatabaseException{
     acquireTriggerListWriteLock();
 	try {
@@ -709,7 +728,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Removes a given trigger from the list of triggers.  Called by SecondaryDatabase.close().
    */
-  // line 599 "../../../Database.ump"
+  // line 614 "../../../Database.ump"
   public void removeTrigger(DatabaseTrigger trigger) throws DatabaseException{
     acquireTriggerListWriteLock();
 	try {
@@ -725,7 +744,7 @@ databaseImpl.checkIsDeleted("preload");
    * 
    * Clears the list of triggers.  Called by close(), this allows closing the primary before its secondaries, although we document that secondaries should be closed first.
    */
-  // line 612 "../../../Database.ump"
+  // line 627 "../../../Database.ump"
    private void removeAllTriggers() throws DatabaseException{
     acquireTriggerListWriteLock();
 	try {
@@ -748,7 +767,7 @@ databaseImpl.checkIsDeleted("preload");
    * @param oldData the primary data before the change, or null if the recorddid not previously exist.
    * @param newData the primary data after the change, or null if the recordhas been deleted.
    */
-  // line 633 "../../../Database.ump"
+  // line 648 "../../../Database.ump"
   public void notifyTriggers(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData) throws DatabaseException{
     acquireTriggerListReadLock();
 				try {	
@@ -761,6 +780,18 @@ databaseImpl.checkIsDeleted("preload");
 									hook54_1: ;//releaseTriggerListReadLock();
 							}
     //End of hook54
+  }
+
+  // line 6 "../../../Statistics_Database.ump"
+   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
+    checkEnv();
+			checkRequiredDbState(OPEN, "Can't call Database.stat");
+			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
+			if (databaseImpl != null) {
+					Label38: //this.hook38();
+					return databaseImpl.stat(useConfig);
+			}
+			return null;
   }
 
 
@@ -830,7 +861,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   // line 13 "../../../Database_static.ump"
-  // line 4 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListReadLock
   {
   
@@ -859,11 +889,6 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 18 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
-      // line 6 "../../../Latches_Database_inner.ump"
-      env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().acquireShared();
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -885,7 +910,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   // line 25 "../../../Database_static.ump"
-  // line 18 "../../../Latches_Database_inner.ump"
   public static class Database_acquireTriggerListWriteLock
   {
   
@@ -914,11 +938,6 @@ databaseImpl.checkIsDeleted("preload");
   
     // line 30 "../../../Database_static.ump"
     public void execute() throws DatabaseException{
-      // line 20 "../../../Latches_Database_inner.ump"
-      env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().acquireExclusive();
-              //original();
-      // END OF UMPLE BEFORE INJECTION
       if (_this.triggerList == null) {
             _this.triggerList=new ArrayList();
           }
@@ -940,7 +959,6 @@ databaseImpl.checkIsDeleted("preload");
   
   
   // line 37 "../../../Database_static.ump"
-  // line 11 "../../../Latches_Database_inner.ump"
   public static class Database_releaseTriggerListWriteLock
   {
   
@@ -972,11 +990,6 @@ databaseImpl.checkIsDeleted("preload");
       if (_this.triggerList.size() == 0) {
             _this.triggerList=null;
           }
-      // line 13 "../../../Latches_Database_inner.ump"
-      //      original();
-              env=_this.envHandle.getEnvironmentImpl();
-              env.getTriggerLatch().release();
-      // END OF UMPLE AFTER INJECTION
     }
     
     //------------------------

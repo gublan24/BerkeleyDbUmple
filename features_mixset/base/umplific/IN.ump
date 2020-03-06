@@ -29,6 +29,8 @@ class IN {
  depend java.util.Comparator;
  depend java.util.ArrayList;
  depend java.nio.ByteBuffer;
+ depend com.sleepycat.je.tree.Tree.SearchType;
+
  private static final String BEGIN_TAG = "<in>";
 
  private static final String END_TAG = "</in>";
@@ -239,12 +241,17 @@ class IN {
   * Latch this node if it is not latched by another thread, optionally setting the generation if the latch succeeds.
   */
   public boolean latchNoWait(boolean updateGeneration) throws DatabaseException {
+    
     Label619:   ; 
     if (updateGeneration) {
      setGeneration();
     }
     return true;
   }
+
+
+
+
 
  public long getGeneration() {
   return generation;
@@ -900,7 +907,24 @@ class IN {
  }
 
  boolean validateSubtreeBeforeDelete(int index) throws DatabaseException {
-  return new IN_validateSubtreeBeforeDelete(this, index).execute();
+  	Label628: ;
+
+	try {
+	  Label629: ;
+	    if (index >= nEntries) {
+
+		/* 
+		 * There's no entry here, so of course this entry is deletable.
+		 */
+		return true;
+	    } else {
+		Node child = fetchTarget(index);
+		return child != null && child.isValidForDelete();
+	    }
+	} finally {
+	Label628_1: ;
+	}
+    
  }
 
  /** 
@@ -930,7 +954,185 @@ class IN {
  }
 
  protected void splitInternal(IN parent, int childIndex, int maxEntries, int splitIndex) throws DatabaseException {
-  new IN_splitInternal(this, parent, childIndex, maxEntries, splitIndex).execute();
+       /* 
+         * Find the index of the existing identifierKey so we know which IN
+         * (new or old) to put it in.
+         */
+        if (identifierKey == null) {
+            throw new InconsistentNodeException("idkey is null");
+        }
+        int idKeyIndex = findEntry(identifierKey, false, false);
+
+	if (splitIndex < 0) {
+	    splitIndex = nEntries / 2;
+	}
+
+        int low, high;
+        IN newSibling = null;
+
+        if (idKeyIndex < splitIndex) {
+
+            /* 
+             * Current node (this) keeps left half entries.  Right half entries
+             * will go in the new node.
+             */
+            low = splitIndex;
+            high = nEntries;
+        } else {
+
+            /* 
+	     * Current node (this) keeps right half entries.  Left half entries
+	     * and entry[0] will go in the new node.
+	     */
+            low = 0;
+            high = splitIndex;
+        }
+
+        byte[] newIdKey = entryKeyVals[low];
+	long parentLsn = DbLsn.NULL_LSN;
+
+        newSibling = createNewInstance(newIdKey, maxEntries, level);
+        Label630: ;
+        long oldMemorySize = inMemorySize;
+	try {
+        
+	    int toIdx = 0;
+	    boolean deletedEntrySeen = false;
+	    BINReference binRef = null;
+	    for (int i = low; i < high; i++) {
+		byte[] thisKey = entryKeyVals[i];
+		if (isEntryPendingDeleted(i)) {
+		    if (!deletedEntrySeen) {
+			deletedEntrySeen = true;
+			binRef = new BINReference(newSibling.getNodeId(),
+						  databaseImpl.getId(),
+						  newIdKey);
+		    }
+		    binRef.addDeletedKey(new Key(thisKey));
+		}
+		newSibling.setEntry(toIdx++,
+				    entryTargets[i],
+				    thisKey,
+				    getLsn(i),
+				    entryStates[i]);
+                clearEntry(i);
+	    }
+
+Label636: ;
+
+
+
+	    int newSiblingNEntries = (high - low);
+
+	    /* 
+	     * Remove the entries that we just copied into newSibling from this
+	     * node.
+	     */
+	    if (low == 0) {
+		shiftEntriesLeft(newSiblingNEntries);
+	    }
+
+	    newSibling.nEntries = toIdx;
+	    nEntries -= newSiblingNEntries;
+	    setDirty(true);
+
+	    adjustCursors(newSibling, low, high);
+
+	    /* 
+	     * Parent refers to child through an element of the entries array.
+	     * Depending on which half of the BIN we copied keys from, we
+	     * either have to adjust one pointer and add a new one, or we have
+	     * to just add a new pointer to the new sibling.
+	     *
+	     * Note that we must use the provisional form of logging because
+	     * all three log entries must be read atomically. The parent must
+	     * get logged last, as all referred-to children must preceed
+	     * it. Provisional entries guarantee that all three are processed
+	     * as a unit. Recovery skips provisional entries, so the changed
+	     * children are only used if the parent makes it out to the log.
+	     */
+	    EnvironmentImpl env = databaseImpl.getDbEnvironment();
+	    LogManager logManager = env.getLogManager();
+	    INList inMemoryINs = env.getInMemoryINs();
+
+	    long newSiblingLsn = newSibling.logProvisional(logManager, parent);
+	    long myNewLsn = logProvisional(logManager, parent);
+
+	    /*
+	     * When we update the parent entry, we use updateEntryCompareKey so
+	     * that we don't replace the parent's key that points at 'this'
+	     * with a key that is > than the existing one.  Replacing the
+	     * parent's key with something > would effectively render a piece
+	     * of the subtree inaccessible.  So only replace the parent key
+	     * with something <= the existing one.  See tree/SplitTest.java for
+	     * more details on the scenario.
+	     */
+	    if (low == 0) {
+
+		/* 
+		 * Change the original entry to point to the new child and add
+		 * an entry to point to the newly logged version of this
+		 * existing child.
+		 */
+                if (childIndex == 0) {
+                    parent.updateEntryCompareKey(childIndex, newSibling,
+                                                 newSiblingLsn, newIdKey);
+                } else {
+                    parent.updateEntry(childIndex, newSibling, newSiblingLsn);
+                }
+
+		boolean insertOk = parent.insertEntry
+		    (new ChildReference(this, entryKeyVals[0], myNewLsn));
+		assert insertOk;
+	    } else {
+
+		/* 
+		 * Update the existing child's LSN to reflect the newly logged
+		 * version and insert new child into parent.
+		 */
+		if (childIndex == 0) {
+
+		    /*
+		     * This's idkey may be < the parent's entry 0 so we need to
+		     * update parent's entry 0 with the key for 'this'.
+		     */
+		    parent.updateEntryCompareKey
+			(childIndex, this, myNewLsn, entryKeyVals[0]);
+		} else {
+		    parent.updateEntry(childIndex, this, myNewLsn);
+		}
+		boolean insertOk = parent.insertEntry
+		    (new ChildReference(newSibling, newIdKey, newSiblingLsn));
+		assert insertOk;
+	    }
+
+	    parentLsn = parent.log(logManager);
+            
+            /* 
+             * Maintain dirtiness if this is the root, so this parent
+             * will be checkpointed. Other parents who are not roots
+             * are logged as part of the propagation of splits
+             * upwards.
+             */
+            if (parent.isRoot()) {
+                parent.setDirty(true);
+            }
+
+            /* 
+             * Update size. newSibling and parent are correct, but this IN has
+             * had its entries shifted and is not correct.
+             */
+            Label650: ;
+
+	    inMemoryINs.add(newSibling);
+        
+	    /* Debug log this information. */
+	    Label617: ;
+
+	} finally {
+							Label631: ;
+	}
+    
  }
 
  /** 
@@ -989,7 +1191,47 @@ class IN {
   * Check that the IN is in a valid state.  For now, validity means that the keys are in sorted order and that there are more than 0 entries. maxKey, if non-null specifies that all keys in this node must be less than maxKey.
   */
  public void verify(byte[] maxKey) throws DatabaseException {
-  new IN_verify(this, maxKey).execute();
+
+	try {
+	    Label632: ;
+
+	    Comparator userCompareToFcn =
+		(databaseImpl == null ? null : getKeyComparator());
+
+	    byte[] key1 = null;
+	    for (int i = 1; i < nEntries; i++) {
+		key1 = entryKeyVals[i];
+		byte[] key2 = entryKeyVals[i - 1];
+
+		int s = Key.compareKeys(key1, key2, userCompareToFcn);
+		if (s <= 0) {
+		    throw new InconsistentNodeException
+			("IN " + getNodeId() + " key " + (i-1) +
+			 " (" + Key.dumpString(key2, 0) +
+			 ") and " +
+			 i + " (" + Key.dumpString(key1, 0) +
+			 ") are out of order");
+		}
+	    }
+
+	    boolean inconsistent = false;
+	    if (maxKey != null && key1 != null) {
+                if (Key.compareKeys(key1, maxKey, userCompareToFcn) >= 0) {
+                    inconsistent = true;
+                }
+	    }
+
+	    if (inconsistent) {
+		throw new InconsistentNodeException
+		    ("IN " + getNodeId() +
+		     " has entry larger than next entry in parent.");
+	    }
+	} catch (DatabaseException DE) {
+	    DE.printStackTrace(System.out);
+	} finally {
+	Label633: ;
+	}
+    
  }
 
  /** 
@@ -1029,19 +1271,40 @@ class IN {
   * Check if this node fits the qualifications for being part of a deletable subtree. It can only have one IN child and no LN children.
   */
  boolean isValidForDelete() throws DatabaseException {
-  return new IN_isValidForDelete(this).execute();
+	Label634: ;
+		try {
+
+	Label634_1: ;
+
+			  /* 
+			   * Can only have one valid child, and that child should be
+			   * deletable.
+			   */
+			  if (nEntries > 1) {            // more than 1 entry.
+			return false;
+			  } else if (nEntries == 1) {    // 1 entry, check child
+			Node child = fetchTarget(0);
+			return child != null && child.isValidForDelete();
+			  } else {                       // 0 entries.
+			return true;
+			  }
+		} finally {
+		Label635: ;
+		}
+  
+
  }
 
  /** 
   * See if you are the parent of this child. If not, find a child of your's that may be the parent, and return it. If there are no possiblities, return null. Note that the keys of the target are passed in so we don't have to latch the target to look at them. Also, this node is latched upon entry.
   * @param doFetch If true, fetch the child in the pursuit of this search.If false, give up if the child is not resident. In that case, we have a potential ancestor, but are not sure if this is the parent.
   */
- void findParent(Tree.SearchType searchType, long targetNodeId, boolean targetContainsDuplicates,
+ void findParent(SearchType searchType, long targetNodeId, boolean targetContainsDuplicates,
   boolean targetIsRoot, byte[] targetMainTreeKey, byte[] targetDupTreeKey, SearchResult result,
   boolean requireExactMatch, boolean updateGeneration, int targetLevel, List trackingList, boolean doFetch)
  throws DatabaseException {
   if (getNodeId() == targetNodeId) {
-   Label620:   ; //this.hook620();
+   Label620:   ; 
     result.exactParentFound = false;
    result.keepSearching = false;
    result.parent = null;
@@ -1051,7 +1314,7 @@ class IN {
    result.keepSearching = false;
    result.exactParentFound = false;
    if (requireExactMatch) {
-    Label621:   ; //this.hook621();
+    Label621:   ; 
      result.parent = null;
    }
    else {
@@ -1073,7 +1336,7 @@ class IN {
     result.keepSearching = false;
     result.exactParentFound = false;
     if (requireExactMatch) {
-     Label622:   ; //this.hook622();
+     Label622:   ; 
       result.parent = null;
     }
     else {
@@ -1098,7 +1361,7 @@ class IN {
     result.keepSearching = false;
     if (requireExactMatch) {
      result.parent = null;
-     Label623:   ; //this.hook623();
+     Label623:   ; 
     } else {
      result.parent = this;
     }
@@ -1140,15 +1403,15 @@ class IN {
  protected void descendOnParentSearch(SearchResult result, boolean targetContainsDuplicates, boolean targetIsRoot,
   long targetNodeId, Node child, boolean requireExactMatch) throws DatabaseException {
   if (child.canBeAncestor(targetContainsDuplicates)) {
-   Label624:   ; //this.hook624();
+   Label624:  
     result.parent = (IN) child;
   }
   else {
-   Label625:   ; //this.hook625(child);
+   Label625:   ; 
     result.exactParentFound = false;
    result.keepSearching = false;
    if (requireExactMatch) {
-    Label626:   ; //this.hook626();
+    Label626:   ; 
      result.parent = null;
    }
    else {
@@ -1160,7 +1423,7 @@ class IN {
  protected boolean isSoughtNode(long nid, boolean updateGeneration) throws DatabaseException {
   latch(updateGeneration);
   if (getNodeId() == nid) {
-   Label627:   ; //this.hook627();
+   Label627:   ; 
     return true;
   }
   else {

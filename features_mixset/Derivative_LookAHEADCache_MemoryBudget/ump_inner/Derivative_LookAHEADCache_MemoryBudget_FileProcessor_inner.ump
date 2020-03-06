@@ -1,10 +1,10 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LookAHEADCache_MemoryBudget/com/sleepycat/je/cleaner/FileProcessor.java
+
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-   static class FileProcessor_processFile {
-      after Label118: execute(){ // Label118 introduced in MemoryBudget_FileProcessor.ump.
+
+      after Label118: processFile(Long ) {
         adjustMem+=lookAheadCacheSize;
-        //original();
+
       }
-    }
+    
 }

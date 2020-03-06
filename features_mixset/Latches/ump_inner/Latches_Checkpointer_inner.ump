@@ -1,20 +1,21 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Latches/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
+
 class Checkpointer {
-   static class Checkpointer_selectDirtyINs {
-      after Label528_1: execute(){
-          inMemINs.releaseMajorLatchIfHeld();
+
+      after Label528_1: selectDirtyINs(boolean , boolean ) {
+				inMemINs.releaseMajorLatchIfHeld();		
         
       }
-     after Label529:execute(){
+     after Label529: selectDirtyINs(boolean , boolean ) {
         inMemINs.latchMajor();
-        //original();
+
       }
 
-      afterLabel530_1: execute(){
+      after Label530_1: selectDirtyINs(boolean , boolean ) {
 
-          in.releaseLatch();
+                    in.releaseLatch();
         
       }
-    }
+    
 }
