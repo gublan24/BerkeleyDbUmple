@@ -11,9 +11,9 @@ class FileManager
 	syncManager.fsync();
     }
 
-   after Label452:FileManager(EnvironmentImpl , File , boolean ){
-	syncManager = new FSyncManager(envImpl);
-	//original(envImpl);
+   after Label452: FileManager(EnvironmentImpl , File , boolean ){
+				syncManager = new FSyncManager(envImpl);
+
     }
 
 }

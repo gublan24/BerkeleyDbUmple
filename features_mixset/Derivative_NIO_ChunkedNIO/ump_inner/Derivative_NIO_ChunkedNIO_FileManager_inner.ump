@@ -1,40 +1,82 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_NIO_ChunkedNIO/com/sleepycat/je/log/FileManager.java
+
 namespace com.sleepycat.je.log;
 class FileManager {
-   static class FileManager_writeToFile {
-      after Label445: execute(){
 
-        if (_this.chunkedNIOSize > 0) {
-          useData=data.duplicate();
-          origLimit=useData.limit();
-          useData.limit(useData.position());
-          while (useData.limit() < origLimit) {
-            useData.limit((int)(Math.min(useData.limit() + _this.chunkedNIOSize,origLimit)));
-            bytesWritten=channel.write(useData,destOffset);
-            destOffset+=bytesWritten;
-            totalBytesWritten+=bytesWritten;
-          }
-        }
-//   else {
- //         original();
-  //      }
-      }
+      after Label445: readFromFile(RandomAccessFile ,  ByteBuffer ,  long ) {
+
+      if (chunkedNIOSize > 0) {
+
+                /*
+                 * Read a chunk at a time to prevent large direct memory
+                 * allocations by NIO.
+                 */
+                int readLength = readBuffer.limit();
+                long currentPosition = offset;
+                while (readBuffer.position() < readLength) {
+                    readBuffer.limit((int)
+                                     (Math.min(readBuffer.limit() +
+                                               chunkedNIOSize,
+                                               readLength)));
+                    int bytesRead = channel.read(readBuffer, currentPosition);
+      
+                    if (bytesRead < 1)
+                        break;
+      
+                    currentPosition += bytesRead;
+                }
+            } else {
+
+                /*
+                 * Perform a single read using NIO.
+                 */
+                channel.read(readBuffer, offset);
+            }
+      
     }
-   static class FileManager_readFromFile {
-      around Label446-Label446_1: execute(){
-        if (_this.chunkedNIOSize > 0) {
-          readLength=readBuffer.limit();
-          currentPosition=offset;
-          while (readBuffer.position() < readLength) {
-            readBuffer.limit((int)(Math.min(readBuffer.limit() + _this.chunkedNIOSize,readLength)));
-            bytesRead1=channel.read(readBuffer,currentPosition);
-            if (bytesRead1 < 1)           break;
-            currentPosition+=bytesRead1;
-          }
-        }
-   else {
-          around_proceed: //original();
-        }
+
+      after Label446: writeToFile(RandomAccessFile , ByteBuffer ,  long ) {
+    if (chunkedNIOSize > 0) {
+
+                /*
+                 * We can't change the limit without impacting readers that
+                 * might find this buffer in the buffer pool.  Duplicate the
+                 * buffer so we can set the limit independently.
+                 */
+                ByteBuffer useData = data.duplicate();
+
+                /*
+                 * Write small chunks of data by manipulating the position and
+                 * limit properties of the buffer, and submitting it for
+                 * writing repeatedly.
+                 *
+                 * For each chunk, the limit is set to the position +
+                 * chunkedNIOSize, capped by the original limit of the buffer.
+                 *
+                 * Preconditions: data to be written is betweek data.position()
+                 * and data.limit()
+
+                 * Postconditions: data.limit() has not changed,
+                 * data.position() == data.limit(), offset of the channel has
+                 * not been modified.
+                 */
+                int originalLimit = useData.limit();
+                useData.limit(useData.position());
+                while (useData.limit() < originalLimit) {
+                    useData.limit((int)
+                                  (Math.min(useData.limit() + chunkedNIOSize,
+                                            originalLimit)));
+                    int bytesWritten = channel.write(useData, destOffset);
+                    destOffset += bytesWritten;
+                    totalBytesWritten += bytesWritten;
+                }
+            } else {
+
+                /*
+                 * Perform a single write using NIO.
+                 */
+                totalBytesWritten = channel.write(data, destOffset);
+            }
+    
       }
-    }
+    
 }

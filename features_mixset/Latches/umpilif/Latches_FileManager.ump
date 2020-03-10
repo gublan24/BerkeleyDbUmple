@@ -4,15 +4,15 @@ class FileManager
 {
   depend com.sleepycat.je.latch.LatchSupport;
   depend com.sleepycat.je.latch.Latch;
-    before Label453:getFileHandle(long ) {
 
-	fileHandle.latch();
-	//original(fileHandle);
+    before Label453:getFileHandle(long ) {
+			fileHandle.latch();
+
     }
 
     after Label454: getFileHandle(long ){
-	fileHandle.release();
-//	original(fileHandle);
+		fileHandle.release();
+
     }
 
 }

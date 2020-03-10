@@ -1,17 +1,8 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/FileManager.java
+
 namespace com.sleepycat.je.log;
+
 class FileManager {
-  static class FileMode {
-      public static final FileMode READ_MODE=new FileMode("r");
-      public static final FileMode READWRITE_MODE=new FileMode("rw");
-      private String fileModeValue;
-      private FileMode(    String fileModeValue){
-        this.fileModeValue=fileModeValue;
-      }
-      public String getModeValue(){
-        return fileModeValue;
-      }
-    }
+  
   inner class LogEndFileDescriptor {
       private RandomAccessFile endOfLogRWFile=null;
       private RandomAccessFile endOfLogSyncFile=null;

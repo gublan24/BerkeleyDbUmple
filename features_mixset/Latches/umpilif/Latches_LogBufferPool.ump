@@ -8,7 +8,7 @@ class LogBufferPool
 
     after Label485: LogBufferPool(FileManager , EnvironmentImpl ) {
 	bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
-	//original(envImpl);
+
     }
 
     /** 

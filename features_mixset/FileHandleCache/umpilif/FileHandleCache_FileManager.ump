@@ -15,80 +15,48 @@ class FileManager
 			fileCache.remove(fileNum);
     }
 
-  //  protected void hook451() throws IOException, DatabaseException {
-	//		fileCache.clear();
-  //  }
+
 
   after Label457: FileManager(EnvironmentImpl, File , boolean )
   {
     		fileCache = new FileCache(configManager);
   }
- //   protected void hook457(DbConfigManager configManager) throws DatabaseException {
-		//	fileCache = new FileCache(configManager);
-//			original(configManager);
-    //}
-
-  //  protected void hook458(long fileNum) throws DatabaseException, IOException {
-	//		clearFileCache(fileNum);
-	//		original(fileNum);
-   // }
+ 
   after Label458:renameFile(long, String )
   {
     clearFileCache(fileNum);
   }
 
-//    protected void hook459(long fileNum) throws DatabaseException, IOException {
-//			clearFileCache(fileNum);
-//			original(fileNum);
-//    }
-  after Label459: deleteFile(long)
+
+  after Label459: deleteFile(long )
   {
 			clearFileCache(fileNum);
   }
 
-  around Label460-Label460_1:getFileHandle(long ){
-     ;
-     boolean flag= true;
-
-			while (flag) {
-			  around_proceed: //original(fileNum, fileId, fileHandle);
-			}
+  after Label460:getFileHandle(long ){
+			while (true) 
 		 }
-
+  after Label460_1: getFileHandle(long ){
+			 break;
+		 }
   after Label461: abortCommittedTxns(ByteBuffer ) {
-	data.position(0);
+			data.position(0);
 
   }
- //   protected void hook461(ByteBuffer data) {
-//	data.position(0);
-//	original(data);
- //   }
 
-    /** 
-     * Close all file handles and empty the cache.
-     */
-//    public void clear() throws IOException, DatabaseException {
-//	{
-//	    this.hook451();
-//	}
-//	original();
- //   }
 
   after Label451:clear()
   {
-   // Label451: ;
     fileCache.clear();
   }
 
       
 
-  around Label462-Label464_1: getFileHandle(long) 
+  after Label462: getFileHandle(long) 
   {
 
-    fileHandle = fileCache.get(fileId);
-	  if (fileHandle == null) {
-      around_proceed:  
-    }
+			fileHandle = fileCache.get(fileId);
+	 
   }
  
 
@@ -98,10 +66,7 @@ class FileManager
 	fileCache.add(fileId, fileHandle);
 	}    
 
- //protected void hook464(Long fileId, FileHandle fileHandle) throws LogException, DatabaseException {
-	//fileCache.add(fileId, fileHandle);
-	//original(fileId, fileHandle);
-    //}
+
 
 	
 

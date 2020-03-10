@@ -1,65 +1,39 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/IO/com/sleepycat/je/log/FileManager.java
+
 namespace com.sleepycat.je.log;
 class FileManager {
-     static class FileManager_writeToFile {
-    
-  //    protected void hook447() throws IOException, DatabaseException {
-//            assert data.hasArray();
-//            assert data.arrayOffset() == 0;
-//            pos = data.position();
-//            size = data.limit() - pos;
-//            file.seek(destOffset);
-//            file.write(data.array(), pos, size);
-//            data.position(pos + size);
-//            totalBytesWritten = size;
-//        }
 
-        after Label445_1: execute() {
-//            int result = original(); 
-//{
-              //  this.hook447();
-            //}
+
+        after Label445_1: writeToFile(RandomAccessFile , ByteBuffer ,  long ) {
+
             Label447:
             assert data.hasArray();
-            assert data.arrayOffset() == 0;
-            pos = data.position();
-            size = data.limit() - pos;
-            file.seek(destOffset);
-            file.write(data.array(), pos, size);
-            data.position(pos + size);
-            totalBytesWritten = size;
+                assert data.arrayOffset() == 0;
+
+                int pos = data.position();
+                int size = data.limit() - pos;
+                file.seek(destOffset);
+                file.write(data.array(), pos, size);
+                data.position(pos + size);
+                totalBytesWritten = size;
             Label447_1: ;//
-            //end 
-           // return result;
+          
         }
-    }
-     static class FileManager_readFromFile {
-        //protected void hook448() throws IOException {
-        //    assert readBuffer.hasArray();
-        //    assert readBuffer.arrayOffset() == 0;
-        //    pos = readBuffer.position();
-        //    size = readBuffer.limit() - pos;
-        //    file.seek(offset);
-        //    bytesRead2 = file.read(readBuffer.array(), pos, size);
-        //    if (bytesRead2 > 0) {
-        //        readBuffer.position(pos + bytesRead2);
-        //    }
-       // }
-        after Label446_1: execute() {
-            //original(); {
-            //    this.hook448();
-            //}
+    
+
+        after Label446_1: readFromFile(RandomAccessFile ,  ByteBuffer ,  long ) {
+ 
            Label448:
-           assert readBuffer.hasArray();
-           assert readBuffer.arrayOffset() == 0;
-           pos = readBuffer.position();
-           size = readBuffer.limit() - pos;
-           file.seek(offset);
-           bytesRead2 = file.read(readBuffer.array(), pos, size);
-           if (bytesRead2 > 0) {
-                readBuffer.position(pos + bytesRead2);
-           }
-           Label448_1: ;//
+       					assert readBuffer.hasArray();
+                assert readBuffer.arrayOffset() == 0;
+
+                int pos = readBuffer.position();
+                int size = readBuffer.limit() - pos;
+                file.seek(offset);
+                int bytesRead = file.read(readBuffer.array(), pos, size);
+                if (bytesRead > 0) {
+                    readBuffer.position(pos + bytesRead);
+                }
+           Label448_1: ;
         }
-    }
+    
 }

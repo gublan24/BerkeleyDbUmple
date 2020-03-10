@@ -35,6 +35,8 @@ use EvictorDaemon;
 use LoggingCleaner;
 use Verifier;
 use LoggingDbLogHandler;
+use FileHandleCache;
+use EnvironmentLocking;
 
 
 mixset Base {    use base/umplific/Master.ump;    }      

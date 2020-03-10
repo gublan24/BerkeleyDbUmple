@@ -3,29 +3,30 @@ namespace com.sleepycat.je.log;
 class FileManager
 {
     after Label465:writeLogBuffer(LogBuffer) { 
+
 	assert fullBuffer.getRewriteAllowed() || (DbLsn.getFileOffset(firstLsn) >= file.length()
 		|| file.length() == firstLogEntryOffset()) : "FileManager would overwrite non-empty file 0x"
 			+ Long.toHexString(DbLsn.getFileNumber(firstLsn)) + " lsnOffset=0x"
 			+ Long.toHexString(DbLsn.getFileOffset(firstLsn)) + " fileLength=0x"
 			+ Long.toHexString(file.length());
-//	original(fullBuffer, firstLsn, file);
+
     }
 
-// ---
+
     after Label466:writeLogBuffer(LogBuffer) {
-	try {
-	      if (IO_EXCEPTION_TESTING) {
-          throw new IOException("generated for testing");
-	      }
-	    writeToFile(file, data, DbLsn.getFileOffset(firstLsn));
-	    } 
-catch (IOException IOE2) {
-	    fullBuffer.setRewriteAllowed();
-	    throw new DatabaseException(IOE2);
-	}
-	if (false) //THIS IS DEAD CODE
-//	    original(fullBuffer, firstLsn, file, data, IOE);
-	throw new DatabaseException(IOE);
-    }
+				try {
+							if (IO_EXCEPTION_TESTING) {
+						    throw new IOException("generated for testing");
+							}
+						writeToFile(file, data, DbLsn.getFileOffset(firstLsn));
+						} 
+			catch (IOException IOE2) {
+						fullBuffer.setRewriteAllowed();
+						throw new DatabaseException(IOE2);
+				}
+			if (false) //THIS IS DEAD CODE
+
+			throw new DatabaseException(IOE);
+		}
 
 }

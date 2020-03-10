@@ -64,9 +64,9 @@ class FileManager
 	}
     }
 
-    after Label467:FileManager(EnvironmentImpl , File , boolean)  {
-	lockEnvironment(readOnly, false);
-//	original(readOnly);
+    after Label467: FileManager(EnvironmentImpl , File , boolean)  {
+						lockEnvironment(readOnly, false);
+
 //
     }
 

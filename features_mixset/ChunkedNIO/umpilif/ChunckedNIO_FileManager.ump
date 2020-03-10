@@ -6,8 +6,8 @@ class FileManager
 
     after Label456:FileManager(EnvironmentImpl , File , boolean ) {
 
-			chunkedNIOSize = configManager.getLong(EnvironmentParams.LOG_CHUNKED_NIO);
-			//original(configManager);
+			chunkedNIOSize =    configManager.getLong(EnvironmentParams.LOG_CHUNKED_NIO);
+
     }
 
 }

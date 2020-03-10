@@ -5,25 +5,23 @@ class FileManager
     private Latch fileCacheLatch;
 
   after Label449:FileManager(EnvironmentImpl , File, boolean ) {
-//(EnvironmentImpl envImpl) throws DatabaseException {
-	fileCacheLatch = LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
-	//original(envImpl);
+
+				fileCacheLatch =LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
+
     }
 
 
-  around Label463-Label464_1: getFileHandle(long) {
+  after Label463: getFileHandle(long) {
 
 	  fileCacheLatch.acquire();
-     	if (fileHandle == null) {
-    around_proceed:
-    }
+    
 
 }
 
- after getFileHandle(long ) {
-	//try {	    fileHandle = original(fileNum, fileId, fileHandle);} finally {
-	    fileCacheLatch.release();
-	//}return fileHandle;
+ after Label463_1: getFileHandle(long ) {
+
+	     fileHandle.release();
+
     }
 
     /** 
@@ -31,16 +29,19 @@ class FileManager
      */
   before clear() {
 
-	fileCacheLatch.acquire();
-	//original();
+				fileCacheLatch.acquire();
+      
+        
     }
 
-   after clear() {
-//throws IOException, DatabaseException {
-	//try {    original();	} finally {
-	    fileCacheLatch.release();
-	//}
+
+ after  Label451_1: clear() {
+       
+            fileCacheLatch.release();
+        
     }
+
+ 
 
     /** 
      * Clear a file out of the file cache regardless of mode type.
@@ -48,7 +49,14 @@ class FileManager
   before clearFileCache(long ) {
 
 	fileCacheLatch.acquire();
-//	try {	    original(fileNum);} finally {
+
+
+    }
+ 
+after clearFileCache(long ) {
+
+
+
 	    fileCacheLatch.release();
     }
 
