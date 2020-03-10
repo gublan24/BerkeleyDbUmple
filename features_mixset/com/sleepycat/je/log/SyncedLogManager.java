@@ -24,19 +24,6 @@ public class SyncedLogManager extends LogManager
   // CONSTRUCTOR
   //------------------------
 
-  public SyncedLogManager()
-  {
-    super();
-  }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public void delete()
-  {
-    super.delete();
-  }
 
 
   /**
@@ -50,12 +37,13 @@ public class SyncedLogManager extends LogManager
 
   // line 24 "../../../../SyncedLogManager.ump"
    protected LogResult logItem(LoggableObject item, boolean isProvisional, boolean flushRequired, boolean forceNewLogFile, long oldNodeLsn, boolean marshallOutsideLatch, ByteBuffer marshalledBuffer, UtilizationTracker tracker) throws IOException,DatabaseException{
-     synchronized (logWriteLatch) {
-       return logInternal(item, isProvisional,
-                          flushRequired, forceNewLogFile, oldNodeLsn, 
-                          marshallOutsideLatch, marshalledBuffer,
-                          tracker);
-   }
+    try {
+	    this.hook511(item, isProvisional, flushRequired, forceNewLogFile, oldNodeLsn, marshallOutsideLatch,
+		    marshalledBuffer, tracker);
+	    throw ReturnHack.returnObject;
+	} catch (ReturnObject r) {
+	    return (LogResult) r.value;
+	}
   }
 
   // line 34 "../../../../SyncedLogManager.ump"

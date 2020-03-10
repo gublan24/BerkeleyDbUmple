@@ -23,19 +23,6 @@ public class LatchedLogManager extends LogManager
   // CONSTRUCTOR
   //------------------------
 
-  public LatchedLogManager()
-  {
-    super();
-  }
-
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public void delete()
-  {
-    super.delete();
-  }
 
 
   /**
