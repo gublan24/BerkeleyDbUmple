@@ -92,14 +92,9 @@ class FileManager {
     private boolean includeDeletedFiles = false;
 
     /* File cache */
-    private FileCache fileCache;
- //   private Latch fileCacheLatch;
 
     /* The channel and lock for the je.lck file. */
-    private RandomAccessFile lockFile;
-    private FileChannel channel;
-    private FileLock envLock;
-    private FileLock exclLock;
+
 
     /* True if all files should be opened readonly. */
     private boolean readOnly;
@@ -557,7 +552,9 @@ class FileManager {
 
             /* The file wasn't in the cache. */
             if (fileHandle == null) {
-                Label463: ;
+
+LabelGetFileHandle: ;
+
                 try {
                     /* Check the file cache again under the latch. */
                     fileHandle = fileCache.get(fileId);
@@ -566,7 +563,7 @@ class FileManager {
                         fileHandle =		    makeFileHandle(fileNum, FileMode.READ_MODE);
 
                         /* Put it into the cache. */
-                        fileCache.add(fileId, fileHandle);
+                        Label464: ;
                     }
                 } finally {
                     Label454: ;
@@ -582,9 +579,9 @@ class FileManager {
              * it's not, then loop back and try again.
              */
             if (fileHandle.getFile() == null) {
-               Label463_1: ;
+               LabelGetFileHandle_2: ;
             } else {
-                Label460_1:;
+                Label460_1:
             }
         }
 

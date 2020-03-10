@@ -1,28 +1,19 @@
 namespace com.sleepycat.je.log;
 
+
+
 class FileManager
 {
     private Latch fileCacheLatch;
 
-  after Label449:FileManager(EnvironmentImpl , File, boolean ) {
+  	after Label449:FileManager(EnvironmentImpl , File, boolean ) {
 
 				fileCacheLatch =LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
 
     }
 
 
-  after Label463: getFileHandle(long) {
-
-	  fileCacheLatch.acquire();
-    
-
-}
-
- after Label463_1: getFileHandle(long ) {
-
-	     fileHandle.release();
-
-    }
+  
 
     /** 
      * Close all file handles and empty the cache.
@@ -53,12 +44,15 @@ class FileManager
 
     }
  
-after clearFileCache(long ) {
 
+after LabelGetFileHandle:  getFileHandle( long ) {
+					fileCacheLatch.acquire();				 
+				}
 
-
-	    fileCacheLatch.release();
+		 after LabelGetFileHandle_2: getFileHandle( long ) {
+	     fileHandle.release();
     }
+
 
   after clearFileCache(long ) {
 

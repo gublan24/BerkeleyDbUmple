@@ -150,7 +150,7 @@ mixset      LoggingFinest {
 mixset      LoggingSevere { mixset EnvironmentLocking {    
 																				use Derivative_LoggingSevere_EnvironmentLocking/umpilif/Derivative_LoggingSevere_EnvironmentLocking_Master.ump; }     }
 
-mixset      Latches { mixset FileHandleCache {    use Derivative_Latches_FileHandleCache/umpilif/Derivative_Latches_FileHandleCache_Master.ump;    }     }
+mixset      Latches { mixset FileHandleCache {    use Derivative_Latches_FileHandleCache/umpilif/Derivative_Latches_FileHandleCache_Master.ump;   }     }
 
 mixset      Evictor { 
 
