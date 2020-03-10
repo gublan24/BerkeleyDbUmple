@@ -19,32 +19,40 @@ class CursorImpl {
 
 
         after Label250: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
+
                     	assert checkAlreadyLatched(alreadyLatched) : dumpToString(true);
         }
 
         after Label251:  getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
+
 					 	if (!alreadyLatched) {
 												latchDBIN();
 										} else {
 												alreadyLatched = false;
 										}
         }
+
         after Label252: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
 							releaseDBIN();
         }
+
         after Label253: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
             assert LatchSupport.countLatchesHeld() == 0;
         }
+
         after Label254:  getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
          assert (LatchSupport.countLatchesHeld() == 0);
 								dupBinToBeRemoved.latch();
         }
+
         after Label255:  getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
             dupBinToBeRemoved.releaseLatch();
         }
+
         after Label256: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
             alreadyLatched = true;
         }
+
         after Label257: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {
             assert LatchSupport.countLatchesHeld() == 0;
 
@@ -86,33 +94,32 @@ class CursorImpl {
 
 
 
-        around Label258: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
+        after Label258: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
      
                 releaseBINs();
-            
         }
 
         after Label259: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
 						  assert targetBin.isLatchOwner();
-
         }
 
-        around Label260: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
+        after Label260: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
        					targetBin.releaseLatchIfOwner();
         }
+
         after Label261: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
 						      targetBin.releaseLatchIfOwner();
 
         }
+
         after Label262: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
 								duplicateRoot.latch();
 						    targetBin.releaseLatch();
-
         }
-        around Label263: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
 
+        after Label263: fetchCurrent(DatabaseEntry , DatabaseEntry , LockType , boolean ) {
                 releaseBINs();
-       
+   
         }
     
 }

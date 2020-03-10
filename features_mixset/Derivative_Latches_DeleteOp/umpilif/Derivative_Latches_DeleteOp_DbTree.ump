@@ -4,7 +4,7 @@ class DbTree
 {
   after Label293: dbRemove(Locker , String) {
 	nameCursor.releaseBIN();
-	//original(nameCursor);
+
     }
 
 }

@@ -8,7 +8,7 @@ class BIN
      */
   before evictLNs() {
 	assert isLatchOwner() : "BIN must be latched before evicting LNs";
-	//return original();
+
     }
 
 }

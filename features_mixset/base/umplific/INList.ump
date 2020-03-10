@@ -2,7 +2,7 @@ namespace com.sleepycat.je.dbi;
 
 class INList
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.TreeSet;
@@ -10,6 +10,7 @@ class INList
   depend java.util.Set;
   depend java.util.Iterator;
   depend java.util.HashSet;
+
     private static final String DEBUG_NAME = INList.class.getName();
 
     private SortedSet ins = null;
@@ -17,19 +18,19 @@ class INList
     private EnvironmentImpl envImpl;
 
     INList(EnvironmentImpl envImpl) {
-	this.envImpl = envImpl;
-	ins = new TreeSet();
-	Label338: ;//this.hook338(envImpl);
+			this.envImpl = envImpl;
+			ins = new TreeSet();
+			Label338: ;//this.hook338(envImpl);
     }
 
     /** 
      * Used only by tree verifier when validating INList. Must be called with orig.majorLatch acquired.
      */
     public INList(INList orig, EnvironmentImpl envImpl) throws DatabaseException {
-	ins = new TreeSet(orig.getINs());
-	Lanbel340:   ; //this.hook340();
-	this.envImpl = envImpl;
-	Label339:   ; //this.hook339(envImpl);
+			ins = new TreeSet(orig.getINs());
+			Lanbel340:   ; //this.hook340();
+			this.envImpl = envImpl;
+			Label339:   ; //this.hook339(envImpl);
     }
 
     public SortedSet getINs() {
@@ -44,25 +45,25 @@ class INList
      * An IN has just come into memory, add it to the list.
      */
     public void add(IN in) throws DatabaseException {
-					add1: ;
+					Label343: ;
           addAndSetMemory(addedINs, in);
-          add2: ;
+          Label344: ;
     }
     
 
     private void addAndSetMemory(Set set, IN in) {
-	new INList_addAndSetMemory(this, set, in).execute();
+			new INList_addAndSetMemory(this, set, in).execute();
     }
 
     /** 
      * An IN is getting evicted or is displaced by recovery.  Caller is responsible for acquiring the major latch before calling this and releasing it when they're done.
      */
     public void removeLatchAlreadyHeld(IN in) throws DatabaseException {
-		boolean removeDone = ins.remove(in);
-		Label341:   ;
-		assert removeDone;
+			boolean removeDone = ins.remove(in);
+			Label341:   ;
+			assert removeDone;
 
-    Label346:   ;
+		  Label346:   ;
     }
 
     /** 
@@ -96,18 +97,18 @@ class INList
      * Clear the entire list during recovery and at shutdown.
      */
     public void clear() throws DatabaseException {
-	ins.clear();
-  clear_1:;
+			ins.clear();
+			clear_1:;
     }
 
     public void dump() {
-	System.out.println("size=" + getSize());
-	Iterator iter = ins.iterator();
-	while (iter.hasNext()) {
-	    IN theIN = (IN) iter.next();
-	    System.out.println(
-		    "db=" + theIN.getDatabase().getId() + " nid=: " + theIN.getNodeId() + "/" + theIN.getLevel());
-	}
+			System.out.println("size=" + getSize());
+			Iterator iter = ins.iterator();
+			while (iter.hasNext()) {
+					IN theIN = (IN) iter.next();
+					System.out.println(
+						"db=" + theIN.getDatabase().getId() + " nid=: " + theIN.getNodeId() + "/" + theIN.getLevel());
+			}
     }
 
 

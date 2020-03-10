@@ -12,8 +12,8 @@ import java.nio.ByteBuffer;
 import java.math.BigInteger;
 
 // line 3 "../../../Sequence.ump"
-// line 3 "../../../Statistics_Sequence.ump"
 // line 3 "../../../loggingBase_Sequence.ump"
+// line 3 "../../../Statistics_Sequence.ump"
 public class Sequence
 {
 
@@ -372,12 +372,12 @@ nGets += 1;
   private long cacheLast ;
 // line 45 "../../../Sequence.ump"
   private TransactionConfig autoCommitConfig ;
+// line 5 "../../../loggingBase_Sequence.ump"
+  private Logger logger ;
 // line 5 "../../../Statistics_Sequence.ump"
   private int nGets ;
 // line 7 "../../../Statistics_Sequence.ump"
   private int nCachedGets ;
-// line 5 "../../../loggingBase_Sequence.ump"
-  private Logger logger ;
 
   
 }

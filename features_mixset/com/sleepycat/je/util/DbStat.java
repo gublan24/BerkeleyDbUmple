@@ -18,7 +18,6 @@ import java.io.PrintStream;
 import java.io.File;
 
 // line 3 "../../../../Derivative_Statistics_Verifier_DbStat.ump"
-// line 3 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbStat.ump"
 public class DbStat extends DbVerify
 {
 
@@ -30,7 +29,10 @@ public class DbStat extends DbVerify
   // CONSTRUCTOR
   //------------------------
 
-
+  public DbStat()
+  {
+    super();
+  }
 
   //------------------------
   // INTERFACE
@@ -45,7 +47,7 @@ public class DbStat extends DbVerify
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 20 ../../../../Derivative_Statistics_Verifier_DbStat.ump
+  // line 24 ../../../../Derivative_Statistics_Verifier_DbStat.ump
   private String usageString = "usage: " + CmdUtil.getJavaCommand(DbStat.class) + "\n"
 	    + "               [-V] -s database -h dbEnvHome [-v progressInterval]\n";
 
@@ -70,8 +72,7 @@ public class DbStat extends DbVerify
 	System.exit(ret);
     }
 
-    protected DbStat() {
-    }
+
 
     public DbStat(Environment env, String dbName) {
 	super(env, dbName, false);
@@ -136,8 +137,8 @@ public class DbStat extends DbVerify
 		statsConfig.setShowProgressInterval(progressInterval);
 		statsConfig.setShowProgressStream(out);
 	    }
-	//    DatabaseStats stats = db.getStats(statsConfig);
-	//    out.println(stats);
+	    DatabaseStats stats = db.getStats(statsConfig);
+	    out.println(stats);
 	    db.close();
 	    Label849: ;//this.hook849();
 	} catch (DatabaseException DE) {
@@ -145,9 +146,5 @@ public class DbStat extends DbVerify
 	}
 	return true;
     }
-
-//    protected void hook849() throws DatabaseException {  }
-
-//    protected void hook850() throws DatabaseException { }
   
 }

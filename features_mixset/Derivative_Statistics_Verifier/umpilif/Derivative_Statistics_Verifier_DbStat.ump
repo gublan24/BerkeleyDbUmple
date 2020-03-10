@@ -45,8 +45,7 @@ class DbStat
 	System.exit(ret);
     }
 
-    protected DbStat() {
-    }
+
 
     public DbStat(Environment env, String dbName) {
 	super(env, dbName, false);
@@ -121,8 +120,10 @@ class DbStat
 	return true;
     }
 
-//    protected void hook849() throws DatabaseException {  }
 
-//    protected void hook850() throws DatabaseException { }
+
+
+
+
 
 }

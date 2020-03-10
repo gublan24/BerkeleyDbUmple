@@ -2,7 +2,7 @@ namespace com.sleepycat.je.utilint;
 
 class Tracer
 {
-  isA LoggableObject,LogReadable;
+  isA LoggableObject; isA LogReadable;
     /** 
      * @see LoggableObject#getLogType
      */

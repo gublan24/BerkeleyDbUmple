@@ -51,17 +51,17 @@ class EnvironmentStats
     }
 
     after Label60: reset() {
-	nFSyncs = 0;
-	nFSyncRequests = 0;
-	nFSyncTimeouts = 0;
-	//original();
+			nFSyncs = 0;
+			nFSyncRequests = 0;
+			nFSyncTimeouts = 0;
+
     }
 
     after Label61: toString() {
-	sb.append("nFSyncs=").append(nFSyncs).append('\n');
-	sb.append("nFSyncRequests=").append(nFSyncRequests).append('\n');
-	sb.append("nFSyncTimeouts=").append(nFSyncTimeouts).append('\n');
-	//original(sb);
+			sb.append("nFSyncs=").append(nFSyncs).append('\n');
+			sb.append("nFSyncRequests=").append(nFSyncRequests).append('\n');
+			sb.append("nFSyncTimeouts=").append(nFSyncTimeouts).append('\n');
+			//original(sb);
     }
 
 }

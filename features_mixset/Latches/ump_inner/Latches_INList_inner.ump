@@ -1,4 +1,4 @@
-
+/*
 namespace com.sleepycat.je.dbi;
 
 class INList {
@@ -47,3 +47,5 @@ class INList {
 
   }
  }
+
+*/

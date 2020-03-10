@@ -22,7 +22,6 @@ import java.io.PrintStream;
 import java.io.File;
 
 // line 3 "../../../../Derivative_Statistics_Verifier_DbVerify.ump"
-// line 3 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbVerify.ump"
 public class DbVerify
 {
 
@@ -43,18 +42,6 @@ public class DbVerify
 
   public void delete()
   {}
-
-  // line 6 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbVerify.ump"
-   protected void hook851(EnvironmentImpl envImpl) throws DatabaseException{
-    Tracer.trace(Level.INFO, envImpl, "DbVerify.verify of " + dbName + " starting");
-	//original(envImpl);
-  }
-
-  // line 11 "../../../../Derivative_LoggingInfo_Statistics_Verifier_DbVerify.ump"
-   protected void hook852(EnvironmentImpl envImpl) throws DatabaseException{
-    Tracer.trace(Level.INFO, envImpl, "DbVerify.verify of " + dbName + " ending");
-	//original(envImpl);
-  }
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
@@ -185,7 +172,7 @@ public class DbVerify
 	    }
 	    openEnv();
 	    EnvironmentImpl envImpl = DbInternal.envGetEnvironmentImpl(env);
-	    Label851:; //this.hook851(envImpl);
+	    Label851: ;
 	    DatabaseConfig dbConfig = new DatabaseConfig();
 	    dbConfig.setReadOnly(true);
 	    dbConfig.setAllowCreate(false);
@@ -197,10 +184,10 @@ public class DbVerify
 		    VerifyUtils.checkLsns(db);
 		} else {
 		    DatabaseImpl dbImpl = DbInternal.dbGetDatabaseImpl(db);
-		 //   DatabaseStats stats = dbImpl.getEmptyStats();
-		   // ret = dbImpl.verify(verifyConfig, stats);
+		    DatabaseStats stats = dbImpl.getEmptyStats();
+		    ret = dbImpl.verify(verifyConfig, stats);
 		    if (verifyConfig.getPrintInfo()) {
-		//	out.println(stats);
+			out.println(stats);
 		    }
 		}
 	    } finally {

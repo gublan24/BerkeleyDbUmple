@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Latches_CheckLeaks/com/sleepycat/je/dbi/EnvironmentImpl.java
+
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
    static class EnvironmentImpl_checkLeaks {
@@ -8,7 +8,7 @@ class EnvironmentImpl {
           System.out.println("Some latches held at env close.");
           LatchSupport.dumpLatchesHeld();
         }
-        //original();
+
       }
     }
 }

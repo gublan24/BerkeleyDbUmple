@@ -24,12 +24,13 @@ import java.util.Comparator;
 import com.sleepycat.je.log.*;
 
 // line 3 "../../../../BIN.ump"
+// line 2 "../../../../Latches_BIN.ump"
 // line 3 "../../../../MemoryBudget_BIN.ump"
 // line 3 "../../../../Evictor_BIN.ump"
 // line 3 "../../../../INCompressor_BIN.ump"
-// line 2 "../../../../Latches_BIN.ump"
-// line 3 "../../../../Derivative_Latches_Evictor_BIN.ump"
+// line 3 "../../../../Verifier_BIN.ump"
 // line 3 "../../../../Derivative_Evictor_MemoryBudget_BIN.ump"
+// line 3 "../../../../Derivative_Latches_Evictor_BIN.ump"
 public class BIN extends IN implements LoggableObject
 {
 
@@ -773,7 +774,6 @@ if (needToLatch && isLatchOwner()) {
    public long evictLNs() throws DatabaseException{
     // line 10 "../../../../Derivative_Latches_Evictor_BIN.ump"
     assert isLatchOwner() : "BIN must be latched before evicting LNs";
-    	//return original();
     // END OF UMPLE BEFORE INJECTION
     Cleaner cleaner = getDatabase().getDbEnvironment().getCleaner();
 			long removed = 0;
@@ -822,6 +822,25 @@ if (needToLatch && isLatchOwner()) {
 					return n.getMemorySizeIncludedByParent();
 			} else {
 					return 0;
+			}
+  }
+
+
+  /**
+   * 
+   * For each cursor in this BIN's cursor set, ensure that the cursor is actually referring to this BIN.
+   */
+  // line 9 "../../../../Verifier_BIN.ump"
+   public void verifyCursors(){
+    if (cursorSet != null) {
+					Iterator iter = cursorSet.iterator();
+					while (iter.hasNext()) {
+				CursorImpl cursor = (CursorImpl) iter.next();
+				if (getCursorBINToBeRemoved(cursor) != this) {
+						BIN cBin = getCursorBIN(cursor);
+						assert cBin == this;
+				}
+					}
 			}
   }
   

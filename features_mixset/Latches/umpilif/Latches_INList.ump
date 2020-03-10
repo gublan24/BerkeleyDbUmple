@@ -96,7 +96,7 @@ class INList
 
 ////////
 
-		around add1-add2:add(IN ) 
+		around Label343-Label344:add(IN ) 
 		{
 			;
 			boolean enteredWithLatchHeld = majorLatch.isOwner();

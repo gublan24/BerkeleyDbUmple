@@ -50,13 +50,12 @@ public class SyncedLogManager extends LogManager
 
   // line 24 "../../../../SyncedLogManager.ump"
    protected LogResult logItem(LoggableObject item, boolean isProvisional, boolean flushRequired, boolean forceNewLogFile, long oldNodeLsn, boolean marshallOutsideLatch, ByteBuffer marshalledBuffer, UtilizationTracker tracker) throws IOException,DatabaseException{
-    try {
-	    this.hook511(item, isProvisional, flushRequired, forceNewLogFile, oldNodeLsn, marshallOutsideLatch,
-		    marshalledBuffer, tracker);
-	    throw ReturnHack.returnObject;
-	} catch (ReturnObject r) {
-	    return (LogResult) r.value;
-	}
+     synchronized (logWriteLatch) {
+       return logInternal(item, isProvisional,
+                          flushRequired, forceNewLogFile, oldNodeLsn, 
+                          marshallOutsideLatch, marshalledBuffer,
+                          tracker);
+   }
   }
 
   // line 34 "../../../../SyncedLogManager.ump"

@@ -19,31 +19,33 @@ class Checkpointer {
 
       }
     
-   static class Checkpointer_doCheckpoint {
 
-      after Label548:execute(){
+
+      after Label548: doCheckpoint(CheckpointConfig , boolean , String ) {
         dirtyMapMemSize=0;
-        //original();
+
       }
 
-      after Label549:execute(){
+      after Label549: doCheckpoint(CheckpointConfig , boolean , String ) {
         mb.updateMiscMemoryUsage(0 - dirtyMapMemSize);
-        //original();
+
       }
 
-      after Label550:execute(){
+      after Label550: doCheckpoint(CheckpointConfig , boolean , String ) {
         mb.updateMiscMemoryUsage(totalSize);
-        //original();
+
       }
-      after Label551:execute(){
+      after Label551: doCheckpoint(CheckpointConfig , boolean , String ) {
         totalSize=0;
-        //original();
+
       }
-      after Label552:execute(){
-        size=nodeSet.size() * MemoryBudget.CHECKPOINT_REFERENCE_SIZE;
-        totalSize+=size;
-        dirtyMapMemSize+=size;
-        //original();
+      before Label552: doCheckpoint(CheckpointConfig , boolean , String ) {        
+		      int size = nodeSet.size() * MemoryBudget.CHECKPOINT_REFERENCE_SIZE;
+					totalSize += size;
+				  dirtyMapMemSize += size;
+
+
+
       }
-    }
+    
 }

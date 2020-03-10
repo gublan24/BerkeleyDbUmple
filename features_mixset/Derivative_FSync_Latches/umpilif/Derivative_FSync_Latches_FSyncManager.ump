@@ -10,7 +10,7 @@ class FSyncManager
 
   after Label434: FSyncManager(EnvironmentImpl ){
 	fsyncLatch = LatchSupport.makeLatch("fsyncLatch", envImpl);
-//	original(envImpl);
+
     }
 
 }

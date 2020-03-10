@@ -19,11 +19,11 @@ class Evictor
 
     after Label378: evictIN(IN , IN , int , INList , ScanIterator , boolean ){
 
-	assert parent.isLatchOwner();
-//	original(parent);
+				assert parent.isLatchOwner();
+
     }
 
-    after Label375_1: evictIN(IN , IN , int , INList , ScanIterator , boolean ){ // Label379_1 reuses Label375_1
+    after Label379_1: evictIN(IN , IN , int , INList , ScanIterator , boolean ){ 
 	    renewedChild.releaseLatch();
 	
     }

@@ -18,11 +18,11 @@ import java.util.Arrays;
 
 // line 3 "../../../../SortedLSNTreeWalker.ump"
 // line 3 "../../../../SortedLSNTreeWalker_static.ump"
+// line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
+// line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 // line 3 "../../../../MemoryBudget_SortedLSNTreeWalker.ump"
 // line 4 "../../../../MemoryBudget_SortedLSNTreeWalker_inner.ump"
 // line 3 "../../../../DeleteOp_SortedLSNTreeWalker.ump"
-// line 3 "../../../../Latches_SortedLSNTreeWalker.ump"
-// line 4 "../../../../Latches_SortedLSNTreeWalker_inner.ump"
 public class SortedLSNTreeWalker
 {
 

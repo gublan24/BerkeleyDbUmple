@@ -58,8 +58,7 @@ class DbVerify
 	}
     }
 
-    protected DbVerify() {
-    }
+
 
     public DbVerify(Environment env, String dbName, boolean quiet) {
 	this.env = env;
@@ -145,7 +144,7 @@ class DbVerify
 	    }
 	    openEnv();
 	    EnvironmentImpl envImpl = DbInternal.envGetEnvironmentImpl(env);
-	    Label851: //this.hook851(envImpl);
+	    Label851: ;
 	    DatabaseConfig dbConfig = new DatabaseConfig();
 	    dbConfig.setReadOnly(true);
 	    dbConfig.setAllowCreate(false);
@@ -167,7 +166,7 @@ class DbVerify
 		if (db != null) {
 		    db.close();
 		}
-		Label852: //this.hook852(envImpl);
+		Label852: ;//this.hook852(envImpl);
 	    }
 	    closeEnv();
 	} catch (DatabaseException DE) {

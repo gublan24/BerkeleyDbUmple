@@ -43,22 +43,25 @@ import java.util.Comparator;
 import java.util.Collections;
 import java.nio.ByteBuffer;
 import java.io.PrintStream;
+import com.sleepycat.je.latch.LatchSupport;
+import com.sleepycat.je.VerifyConfig;
 import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.DatabaseStats;
 import com.sleepycat.je.BtreeStats;
-import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.log.*;
 import com.sleepycat.je.log.entry.*;
 
 // line 3 "../../../../DatabaseImpl.ump"
 // line 3 "../../../../DatabaseImpl_static.ump"
-// line 3 "../../../../Statistics_DatabaseImpl.ump"
-// line 3 "../../../../Statistics_DatabaseImpl_inner.ump"
+// line 3 "../../../../Latches_DatabaseImpl.ump"
+// line 3 "../../../../Latches_DatabaseImpl_inner.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl.ump"
 // line 3 "../../../../MemoryBudget_DatabaseImpl_inner.ump"
 // line 3 "../../../../DeleteOp_DatabaseImpl.ump"
-// line 3 "../../../../Latches_DatabaseImpl.ump"
-// line 4 "../../../../Latches_DatabaseImpl_inner.ump"
+// line 3 "../../../../Verifier_DatabaseImpl.ump"
+// line 3 "../../../../Statistics_DatabaseImpl.ump"
+// line 3 "../../../../Statistics_DatabaseImpl_inner.ump"
+// line 3 "../../../../Derivative_Statistics_Verifier_DatabaseImpl.ump"
 public class DatabaseImpl implements LogWritable,LogReadable,Cloneable
 {
 
@@ -671,31 +674,6 @@ Label287_1: ;
     return binMaxDeltas;
   }
 
-  // line 11 "../../../../Statistics_DatabaseImpl.ump"
-   public DatabaseStats stat(StatsConfig config) throws DatabaseException{
-    if (stats == null) {
-					stats = new BtreeStats();
-			}
-			if (!config.getFast()) {
-					if (tree == null) {
-				return new BtreeStats();
-					}
-					PrintStream out = config.getShowProgressStream();
-					if (out == null) {
-				out = System.err;
-					}
-					StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), getEmptyStats());
-					walkDatabaseTree(statsAcc, out, true);
-					statsAcc.copyToStats(stats);
-			}
-			return stats;
-  }
-
-  // line 30 "../../../../Statistics_DatabaseImpl.ump"
-   public DatabaseStats getEmptyStats(){
-    return new BtreeStats();
-  }
-
   // line 16 "../../../../DeleteOp_DatabaseImpl.ump"
    public boolean isDeleted(){
     return !(deleteState == NOT_DELETED);
@@ -757,6 +735,54 @@ Label287_1: ;
     if (isDeleted()) {
 	    throw new DatabaseException("Attempt to " + operation + " a deleted database");
 	}
+  }
+
+  // line 11 "../../../../Statistics_DatabaseImpl.ump"
+   public DatabaseStats stat(StatsConfig config) throws DatabaseException{
+    if (stats == null) {
+					stats = new BtreeStats();
+			}
+			if (!config.getFast()) {
+					if (tree == null) {
+				return new BtreeStats();
+					}
+					PrintStream out = config.getShowProgressStream();
+					if (out == null) {
+				out = System.err;
+					}
+					StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), getEmptyStats());
+					walkDatabaseTree(statsAcc, out, true);
+					statsAcc.copyToStats(stats);
+			}
+			return stats;
+  }
+
+  // line 30 "../../../../Statistics_DatabaseImpl.ump"
+   public DatabaseStats getEmptyStats(){
+    return new BtreeStats();
+  }
+
+  // line 6 "../../../../Derivative_Statistics_Verifier_DatabaseImpl.ump"
+   public boolean verify(VerifyConfig config, DatabaseStats emptyStats) throws DatabaseException{
+    if (tree == null) {
+	    return true;
+	}
+	PrintStream out = config.getShowProgressStream();
+	if (out == null) {
+	    out = System.err;
+	}
+	StatsAccumulator statsAcc = new StatsAccumulator(out, config.getShowProgressInterval(), emptyStats) {
+	   public void verifyNode(Node node) {
+		try {
+		    node.verify(null);
+		} catch (DatabaseException INE) {
+		    progressStream.println(INE);
+		}
+	    }
+	};
+	boolean ok = walkDatabaseTree(statsAcc, out, config.getPrintInfo());
+	statsAcc.copyToStats(emptyStats);
+	return ok;
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -1022,8 +1048,6 @@ Label287_1: ;
 // line 90 "../../../../DatabaseImpl.ump"
   static final HaltPreloadException memoryExceededPreloadException = new HaltPreloadException(
 	    PreloadStatus.FILLED_CACHE) ;
-// line 8 "../../../../Statistics_DatabaseImpl.ump"
-  private BtreeStats stats ;
 // line 5 "../../../../DeleteOp_DatabaseImpl.ump"
   private static final short NOT_DELETED = 1 ;
 // line 7 "../../../../DeleteOp_DatabaseImpl.ump"
@@ -1034,6 +1058,8 @@ Label287_1: ;
   private static final short DELETED = 4 ;
 // line 13 "../../../../DeleteOp_DatabaseImpl.ump"
   private short deleteState ;
+// line 8 "../../../../Statistics_DatabaseImpl.ump"
+  private BtreeStats stats ;
 
   
 }

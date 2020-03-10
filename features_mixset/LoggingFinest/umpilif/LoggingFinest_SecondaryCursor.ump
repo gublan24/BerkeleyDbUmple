@@ -4,7 +4,7 @@ class SecondaryCursor
 {
     after Label65:  delete() {
 	trace(Level.FINEST, "SecondaryCursor.delete: ", null);
-	//original();
+
     }
 
     after Label66: getCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry , LockMode ){

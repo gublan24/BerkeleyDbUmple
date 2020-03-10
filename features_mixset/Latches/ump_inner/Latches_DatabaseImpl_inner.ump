@@ -1,13 +1,10 @@
-
 namespace com.sleepycat.je.dbi;
 
 class DatabaseImpl {
 
-
-      after  preload(PreloadConfig ) {
-
+  after preload(PreloadConfig ) {
 				    assert LatchSupport.countLatchesHeld() == 0;
-
       
     }
 }
+

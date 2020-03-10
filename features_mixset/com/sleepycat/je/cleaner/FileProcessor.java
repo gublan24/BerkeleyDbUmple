@@ -39,22 +39,16 @@ import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../FileProcessor.ump"
 // line 3 "../../../../FileProcessor_static.ump"
-// line 3 "../../../../Checksum_FileProcessor.ump"
-// line 3 "../../../../Checksum_FileProcessor_inner.ump"
-// line 3 "../../../../LoggingCleaner_FileProcessor.ump"
-// line 3 "../../../../LoggingCleaner_FileProcessor_inner.ump"
-// line 3 "../../../../Statistics_FileProcessor.ump"
-// line 3 "../../../../Statistics_FileProcessor_inner.ump"
+// line 3 "../../../../Latches_FileProcessor.ump"
+// line 4 "../../../../Latches_FileProcessor_inner.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor.ump"
 // line 3 "../../../../MemoryBudget_FileProcessor_inner.ump"
 // line 3 "../../../../DeleteOp_FileProcessor.ump"
 // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
-// line 3 "../../../../LookAHEADCache_FileProcessor.ump"
-// line 3 "../../../../LookAHEADCache_FileProcessor_inner.ump"
-// line 3 "../../../../Latches_FileProcessor.ump"
-// line 4 "../../../../Latches_FileProcessor_inner.ump"
-// line 3 "../../../../Derivative_LookAHEADCache_MemoryBudget_FileProcessor_inner.ump"
-// line 3 "../../../../Derivative_LookAHEADCache_Statistics_FileProcessor_inner.ump"
+// line 3 "../../../../Statistics_FileProcessor.ump"
+// line 3 "../../../../Statistics_FileProcessor_inner.ump"
+// line 3 "../../../../LoggingCleaner_FileProcessor.ump"
+// line 3 "../../../../LoggingCleaner_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -227,10 +221,7 @@ traceMsg += " nEntriesRead=" + nEntriesReadThisRun + " nINsObsolete=" + nINsObso
     nLNsCleanedThisRun++;
     // END OF UMPLE BEFORE INJECTION
     /* Get the first LN from the queue. */
-		Label132:
-offset = lookAheadCache.nextOffset();
-				info = lookAheadCache.remove(offset);
- ;
+		Label132: ;
 
 		LN ln = info.getLN();
 		byte[] key = info.getKey();
@@ -326,28 +317,7 @@ nLNsDeadThisRun++;
 			 * For all other non-deleted LNs in this BIN, lookup their LSN in
 			 * the LN queue and process any matches.
 			 */
-		Label133:
-if (!isDupCountLN) {
-								for (int i = 0; i < bin.getNEntries(); i += 1) {
-									long lsn = bin.getLsn(i);
-									if (i != index && !bin.isEntryKnownDeleted(i)
-											&& !bin.isEntryPendingDeleted(i)
-											&& DbLsn.getFileNumber(lsn) == fileNum.longValue()) {
-
-										Long myOffset = new Long(DbLsn.getFileOffset(lsn));
-										LNInfo myInfo = lookAheadCache.remove(myOffset);
-
-										if (myInfo != null) {
-										Label117:
-nLNQueueHitsThisRun++;
-							nLNsCleanedThisRun++;
- ;
-											processFoundLN(myInfo, lsn, lsn, bin, i, null);
-										}
-									}
-								}
-							}
- ;
+		Label133: ;
 
 			return;
 		} finally {
@@ -546,10 +516,7 @@ cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, comple
 
 		/* Keep in local variables because they are mutable properties. */
 		final int readBufferSize = cleaner.readBufferSize;
-		Label128:
-;
-				int lookAheadCacheSize = cleaner.lookAheadCacheSize;
- ;
+		Label128: ;
 
 		/*
 		 * Add the overhead of this method to the budget. Two read buffers are
@@ -559,9 +526,7 @@ cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, comple
 		Label161:
 ;
 		int adjustMem = (2 * readBufferSize) + obsoleteOffsets.getLogSize();
-		Label118:
-adjustMem+=lookAheadCacheSize;
- ;
+		Label118: ;
 		MemoryBudget budget = env.getMemoryBudget();
 
 		budget.updateMiscMemoryUsage(adjustMem);
@@ -575,10 +540,7 @@ adjustMem+=lookAheadCacheSize;
 		 * in processLN, we also process any other LNs in that BIN that are in
 		 * the cache. This can reduce the number of tree lookups.
 		 */
-		Label127:
-;
-        		LookAheadCache lookAheadCache = new LookAheadCache(lookAheadCacheSize);
- ;
+		Label127: ;
 
 		/*
 		 * For obsolete entries we must check for pending deleted DBs. To avoid
@@ -595,9 +557,7 @@ adjustMem+=lookAheadCacheSize;
 			CleanerFileReader reader = new CleanerFileReader(env,
 					readBufferSize, DbLsn.NULL_LSN, fileNum);
 			/* Validate all entries before ever deleting a file. */
-			Label137:
-reader.setAlwaysValidateChecksum(true);
- ;
+			Label137: ;
 
 			DbTree dbMapTree = env.getDbMapTree();
 			TreeLocation location = new TreeLocation();
@@ -680,14 +640,7 @@ if (isLN) {
 					Long aLsn = new Long(DbLsn.getFileOffset(lsn));
 					LNInfo aLninfo = new LNInfo(targetLN, dbId, key, dupKey);
 
-          Label130:
-lookAheadCache.add(aLsn, aLninfo);
-
-      if (lookAheadCache.isFull()) {
-						processLN(fileNum, location, aLsn, aLninfo,
-								lookAheadCache, dbCache);
-					}
- ;
+          Label130: ;
 
     
 
@@ -719,12 +672,7 @@ lookAheadCache.add(aLsn, aLninfo);
 			}
 
 			/* Process remaining queued LNs. */
-		Label129:
-while (!lookAheadCache.isEmpty()) {
-			Label120: ;
-				processLN(fileNum, location, null,null,lookAheadCache, dbCache);
-			}
- ;
+		Label129: ;
 
 		Label155:
 /* Update the pending DB set. */
@@ -1144,8 +1092,8 @@ if ((result != null) && (result.exactParentFound)) {
   
   
   // line 165 "../../../../FileProcessor_static.ump"
-  // line 4 "../../../../LoggingCleaner_FileProcessor_inner.ump"
   // line 5 "../../../../DeleteOp_FileProcessor_inner.ump"
+  // line 4 "../../../../LoggingCleaner_FileProcessor_inner.ump"
   public static class FileProcessor_processLN
   {
   

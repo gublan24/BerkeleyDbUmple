@@ -188,7 +188,6 @@ public class LockStats implements Serializable
 			sb.append("nWaits=").append(nWaits).append('\n');
 			Label64:
 sb.append("lockTableLatch:\n").append(lockTableLatchStats);
-	//original(sb);
  //this.hook64(sb);
 			return sb.toString();
   }
@@ -201,16 +200,16 @@ sb.append("lockTableLatch:\n").append(lockTableLatchStats);
   // line 15 "../../../Derivative_Latches_Statistics_LockStats.ump"
    public void accumulateLockTableLatchStats(LatchStats latchStats){
     if (lockTableLatchStats == null) {
-	    lockTableLatchStats = latchStats;
-	    return;
-	}
-	lockTableLatchStats.nAcquiresNoWaiters += latchStats.nAcquiresNoWaiters;
-	lockTableLatchStats.nAcquiresSelfOwned += latchStats.nAcquiresSelfOwned;
-	lockTableLatchStats.nAcquiresUpgrade += latchStats.nAcquiresUpgrade;
-	lockTableLatchStats.nAcquiresWithContention += latchStats.nAcquiresWithContention;
-	lockTableLatchStats.nAcquireNoWaitSuccessful += latchStats.nAcquireNoWaitSuccessful;
-	lockTableLatchStats.nAcquireNoWaitUnsuccessful += latchStats.nAcquireNoWaitUnsuccessful;
-	lockTableLatchStats.nAcquireSharedSuccessful += latchStats.nAcquireSharedSuccessful;
+					lockTableLatchStats = latchStats;
+					return;
+			}
+			lockTableLatchStats.nAcquiresNoWaiters += latchStats.nAcquiresNoWaiters;
+			lockTableLatchStats.nAcquiresSelfOwned += latchStats.nAcquiresSelfOwned;
+			lockTableLatchStats.nAcquiresUpgrade += latchStats.nAcquiresUpgrade;
+			lockTableLatchStats.nAcquiresWithContention += latchStats.nAcquiresWithContention;
+			lockTableLatchStats.nAcquireNoWaitSuccessful += latchStats.nAcquireNoWaitSuccessful;
+			lockTableLatchStats.nAcquireNoWaitUnsuccessful += latchStats.nAcquireNoWaitUnsuccessful;
+			lockTableLatchStats.nAcquireSharedSuccessful += latchStats.nAcquireSharedSuccessful;
   }
   
   //------------------------

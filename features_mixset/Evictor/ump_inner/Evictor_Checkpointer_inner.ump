@@ -1,11 +1,11 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-   static class Checkpointer_doCheckpoint {
-      around Label547-Label551:execute() {    
-        synchronized (_this.envImpl.getEvictor()) {
-          around_proceed:
+
+      after Label547: doCheckpoint(CheckpointConfig , boolean , String ) {
+					synchronized (envImpl.getEvictor())
+
         }
-      }
+      
     }
 }

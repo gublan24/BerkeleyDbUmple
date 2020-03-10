@@ -21,11 +21,14 @@ import java.util.ArrayList;
 
 // line 3 "../../../Database.ump"
 // line 3 "../../../Database_static.ump"
-// line 3 "../../../Statistics_Database.ump"
 // line 3 "../../../loggingBase_Database.ump"
-// line 3 "../../../DeleteOp_Database.ump"
 // line 3 "../../../Latches_Database.ump"
 // line 3 "../../../Latches_Database_inner.ump"
+// line 3 "../../../DeleteOp_Database.ump"
+// line 3 "../../../Statistics_Database.ump"
+// line 3 "../../../Derivative_Statistics_DeleteOp_Database.ump"
+// line 3 "../../../Derivative_Statistics_Verifier_Database.ump"
+// line 3 "../../../Derivative_Statistics_Verifier_DeleteOp_Database.ump"
 public class Database
 {
 
@@ -782,18 +785,6 @@ databaseImpl.checkIsDeleted("preload");
     //End of hook54
   }
 
-  // line 6 "../../../Statistics_Database.ump"
-   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
-    checkEnv();
-			checkRequiredDbState(OPEN, "Can't call Database.stat");
-			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
-			if (databaseImpl != null) {
-					Label38: //this.hook38();
-					return databaseImpl.stat(useConfig);
-			}
-			return null;
-  }
-
 
   /**
    * 
@@ -803,6 +794,35 @@ databaseImpl.checkIsDeleted("preload");
    private void releaseTriggerListReadLock() throws DatabaseException{
     EnvironmentImpl env = envHandle.getEnvironmentImpl();
 	env.getTriggerLatch().release();
+  }
+
+  // line 6 "../../../Statistics_Database.ump"
+   public DatabaseStats getStats(StatsConfig config) throws DatabaseException{
+    checkEnv();
+			checkRequiredDbState(OPEN, "Can't call Database.stat");
+			StatsConfig useConfig = (config == null) ? StatsConfig.DEFAULT : config;
+			if (databaseImpl != null) {
+					Label38:
+databaseImpl.checkIsDeleted("stat");
+	//original();
+ //this.hook38();
+					return databaseImpl.stat(useConfig);
+			}
+			return null;
+  }
+
+  // line 6 "../../../Derivative_Statistics_Verifier_Database.ump"
+   public DatabaseStats verify(VerifyConfig config) throws DatabaseException{
+    checkEnv();
+	checkRequiredDbState(OPEN, "Can't call Database.verify");
+	Label37:
+databaseImpl.checkIsDeleted("verify");
+//	original();
+ //this.hook37();
+	VerifyConfig useConfig = (config == null) ? VerifyConfig.DEFAULT : config;
+	DatabaseStats stats = databaseImpl.getEmptyStats();
+	databaseImpl.verify(useConfig, stats);
+	return stats;
   }
 
 

@@ -17,15 +17,15 @@ import java.util.Iterator;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Collections;
-import com.sleepycat.je.TransactionStats;
-import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.Latch;
+import com.sleepycat.je.TransactionStats;
+import com.sleepycat.je.StatsConfig;
 
 // line 3 "../../../../TxnManager.ump"
-// line 3 "../../../../Statistics_TxnManager.ump"
-// line 3 "../../../../MemoryBudget_TxnManager.ump"
 // line 3 "../../../../Latches_TxnManager.ump"
+// line 3 "../../../../MemoryBudget_TxnManager.ump"
+// line 3 "../../../../Statistics_TxnManager.ump"
 // line 3 "../../../../Derivative_Latches_Statistics_TxnManager.ump"
 public class TxnManager
 {
@@ -402,6 +402,8 @@ allTxnLatch.release();
   {
     this.lastUsedTxnId = lastId;
   }
+// line 7 "../../../../Latches_TxnManager.ump"
+  private Latch allTxnLatch ;
 // line 8 "../../../../Statistics_TxnManager.ump"
   private int numCommits ;
 // line 10 "../../../../Statistics_TxnManager.ump"
@@ -412,8 +414,6 @@ allTxnLatch.release();
   private int numXACommits ;
 // line 16 "../../../../Statistics_TxnManager.ump"
   private int numXAAborts ;
-// line 7 "../../../../Latches_TxnManager.ump"
-  private Latch allTxnLatch ;
 
   
 }

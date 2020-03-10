@@ -2,21 +2,21 @@
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
    static class Checkpointer_doCheckpoint {
-      after Label522: execute() {
+      after Label522: doCheckpoint(CheckpointConfig , boolean , String ) {
         traced=false;
-        //original();
+
       }
-      after Label523: execute() {
-        _this.trace(_this.envImpl,invokingSource,true);
+      after Label523: doCheckpoint(CheckpointConfig , boolean , String ) {
+        trace(envImpl,invokingSource,true);
         traced=true;
-//        original();
+
       }
-      after Label524: execute() {
+      after Label524: doCheckpoint(CheckpointConfig , boolean , String ) {
 
         if (!traced) {
-          _this.trace(_this.envImpl,invokingSource,success);
+          trace(envImpl,invokingSource,success);
         }
-        //original();
+
       }
     }
 }

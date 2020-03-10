@@ -21,6 +21,8 @@ import com.sleepycat.je.EnvironmentStats;
 
 // line 3 "../../../../MemoryBudget_DbCacheSize.ump"
 // line 3 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+// line 3 "../../../../Derivative_Statistics_MemoryBudget_DbCacheSize.ump"
+// line 3 "../../../../Derivative_Statistics_MemoryBudget_DbCacheSize_inner.ump"
 public class DbCacheSize
 {
 
@@ -41,12 +43,25 @@ public class DbCacheSize
 
   public void delete()
   {}
+
+  // line 8 "../../../../Derivative_Statistics_MemoryBudget_DbCacheSize.ump"
+   private static  void printStats(PrintStream out, Environment env, String msg) throws DatabaseException{
+    out.println();
+			out.println(msg + ':');
+			EnvironmentStats stats = env.getStats(null);
+			out.println("CacheSize=" + INT_FORMAT.format(stats.getCacheTotalBytes()) + " BtreeSize="
+				+ INT_FORMAT.format(stats.getCacheDataBytes()));
+			if (stats.getNNodesScanned() > 0) {
+					out.println("*** All records did not fit in the cache ***");
+			}
+  }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
   
   
   
   // line 7 "../../../../MemoryBudget_DbCacheSize_inner.ump"
+  // line 4 "../../../../Derivative_Statistics_MemoryBudget_DbCacheSize_inner.ump"
   public static class DbCacheSize_insertRecords
   {
   
@@ -108,7 +123,14 @@ public class DbCacheSize
             }
   
             if (i % 10000 == 0) {
-              Label833: //this.hook833();
+              Label833:
+  stats=env.getStats(null);
+          if (stats.getNNodesScanned() > 0) {
+            out.println("*** Ran out of cache memory at record " + i + " -- try increasing the Java heap size ***");
+            return; //throw new ReturnVoid();
+          }
+         // original();
+   //this.hook833();
       
                 out.print(".");
                 out.flush();

@@ -19,18 +19,18 @@ import java.util.Map;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.HashMap;
-import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.latch.LatchSupport;
 import com.sleepycat.je.latch.Latch;
+import com.sleepycat.je.StatsConfig;
 import com.sleepycat.je.latch.LatchStats;
 import com.sleepycat.je.dbi.*;
 
 // line 3 "../../../../LockManager.ump"
 // line 3 "../../../../LockManager_static.ump"
+// line 3 "../../../../Latches_LockManager.ump"
+// line 3 "../../../../MemoryBudget_LockManager.ump"
 // line 3 "../../../../Statistics_LockManager.ump"
 // line 3 "../../../../Statistics_LockManager_inner.ump"
-// line 3 "../../../../MemoryBudget_LockManager.ump"
-// line 3 "../../../../Latches_LockManager.ump"
 // line 3 "../../../../Derivative_Latches_Statistics_LockManager.ump"
 // line 3 "../../../../Derivative_Latches_Statistics_LockManager_inner.ump"
 public abstract class LockManager implements EnvConfigObserver
@@ -714,6 +714,15 @@ lockTableLatches[i].acquire();
 	return null;
   }
 
+  // line 10 "../../../../Latches_LockManager.ump"
+   private boolean checkNoLatchesHeld(boolean nonBlockingRequest){
+    if (nonBlockingRequest) {
+	    return true;
+	} else {
+	    return (LatchSupport.countLatchesHeld() == 0);
+	}
+  }
+
 
   /**
    * 
@@ -722,15 +731,6 @@ lockTableLatches[i].acquire();
   // line 15 "../../../../Statistics_LockManager.ump"
    public LockStats lockStat(StatsConfig config) throws DatabaseException{
     return new LockManager_lockStat(this, config).execute();
-  }
-
-  // line 10 "../../../../Latches_LockManager.ump"
-   private boolean checkNoLatchesHeld(boolean nonBlockingRequest){
-    if (nonBlockingRequest) {
-	    return true;
-	} else {
-	    return (LatchSupport.countLatchesHeld() == 0);
-	}
   }
   /*PLEASE DO NOT EDIT THIS CODE*/
   /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
@@ -917,17 +917,17 @@ lockTableLatches[i].acquire();
 	    MemoryBudget mb) throws DatabaseException ;
 // line 486 "../../../../LockManager.ump"
   abstract protected void dumpLockTable(LockStats stats) throws DatabaseException ;
-// line 7 "../../../../Statistics_LockManager.ump"
-  private long nRequests ;
-// line 9 "../../../../Statistics_LockManager.ump"
-  private long nWaits ;
+// line 7 "../../../../Latches_LockManager.ump"
+  protected Latch[] lockTableLatches ;
 // line 5 "../../../../MemoryBudget_LockManager.ump"
   static final long TOTAL_LOCK_OVERHEAD = MemoryBudget.LOCK_OVERHEAD + MemoryBudget.HASHMAP_ENTRY_OVERHEAD
 	    + MemoryBudget.LONG_OVERHEAD ;
 // line 8 "../../../../MemoryBudget_LockManager.ump"
   private static final long REMOVE_TOTAL_LOCK_OVERHEAD = 0 - TOTAL_LOCK_OVERHEAD ;
-// line 7 "../../../../Latches_LockManager.ump"
-  protected Latch[] lockTableLatches ;
+// line 7 "../../../../Statistics_LockManager.ump"
+  private long nRequests ;
+// line 9 "../../../../Statistics_LockManager.ump"
+  private long nWaits ;
 
   
 }

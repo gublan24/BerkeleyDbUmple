@@ -5,6 +5,7 @@ package com.sleepycat.je.log;
 import de.ovgu.cide.jakutil.*;
 
 // line 3 "../../../../LogResult.ump"
+// line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
 public class LogResult
 {
 
@@ -29,7 +30,10 @@ public class LogResult
   // line 10 "../../../../LogResult.ump"
   public  LogResult(long currentLsn, boolean wakeupCheckpointer, boolean wakeupCleaner){
     this.currentLsn = currentLsn;
-	  Label510: //this.hook510(wakeupCheckpointer);
+	  Label510:
+this.wakeupCheckpointer = wakeupCheckpointer;
+	//original(wakeupCheckpointer);
+ //this.hook510(wakeupCheckpointer);
 	  this.wakeupCleaner = wakeupCleaner;
   }
   
@@ -41,6 +45,8 @@ public class LogResult
   protected long currentLsn ;
 // line 7 "../../../../LogResult.ump"
   protected boolean wakeupCleaner ;
+// line 5 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
+  protected boolean wakeupCheckpointer ;
 
   
 }

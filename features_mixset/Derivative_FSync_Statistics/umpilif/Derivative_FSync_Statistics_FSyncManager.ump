@@ -23,31 +23,31 @@ class FSyncManager
     }
 
     void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException {
-	stats.setNFSyncs(nFSyncs);
-	stats.setNFSyncRequests(nFSyncRequests);
-	stats.setNFSyncTimeouts(nTimeouts);
-	if (config.getClear()) {
-	    nFSyncs = 0;
-	    nFSyncRequests = 0;
-	    nTimeouts = 0;
-	}
+			stats.setNFSyncs(nFSyncs);
+			stats.setNFSyncRequests(nFSyncRequests);
+			stats.setNFSyncTimeouts(nTimeouts);
+			if (config.getClear()) {
+					nFSyncs = 0;
+					nFSyncRequests = 0;
+					nTimeouts = 0;
+			}
     }
 
     after Label435: fsync(){
-	nFSyncRequests++;
-	//original();
+			nFSyncRequests++;
+
     }
 
     after Label436: fsync(){
-	synchronized (this) {
+			synchronized (this) {
 	    nTimeouts++;
 	}
-	//original();
+
     }
 
     after Label437: fsync(){
-	nFSyncs++;
-	//original();
+				nFSyncs++;
+
     }
 
 }

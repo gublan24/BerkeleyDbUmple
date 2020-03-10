@@ -15,9 +15,9 @@ import java.util.Iterator;
 import java.util.HashSet;
 
 // line 3 "../../../../BasicLocker.ump"
-// line 3 "../../../../Statistics_BasicLocker.ump"
 // line 3 "../../../../DeleteOp_BasicLocker.ump"
 // line 3 "../../../../INCompressor_BasicLocker.ump"
+// line 3 "../../../../Statistics_BasicLocker.ump"
 public class BasicLocker extends Locker
 {
 
@@ -323,6 +323,13 @@ public class BasicLocker extends Locker
     
   }
 
+  // line 6 "../../../../DeleteOp_BasicLocker.ump"
+   public void markDeleteAtTxnEnd(DatabaseImpl db, boolean deleteAtCommit) throws DatabaseException{
+    if (deleteAtCommit) {
+					db.deleteAndReleaseINs();
+			}
+  }
+
 
   /**
    * 
@@ -349,13 +356,6 @@ public class BasicLocker extends Locker
 					}
 			}
 			return stats;
-  }
-
-  // line 6 "../../../../DeleteOp_BasicLocker.ump"
-   public void markDeleteAtTxnEnd(DatabaseImpl db, boolean deleteAtCommit) throws DatabaseException{
-    if (deleteAtCommit) {
-					db.deleteAndReleaseINs();
-			}
   }
   
   //------------------------

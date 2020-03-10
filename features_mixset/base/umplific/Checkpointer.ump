@@ -108,9 +108,150 @@ class Checkpointer {
      */
     public synchronized void doCheckpoint(CheckpointConfig config, boolean flushAll, String invokingSource)
     throws DatabaseException {
-        new Checkpointer_doCheckpoint(this, config, flushAll, invokingSource).execute();
-    }
+			 if (envImpl.isReadOnly()) {
+						      return;
+						  }
 
+				if (!isRunnable(config)) {
+						return;
+				}
+
+						  /*
+						   * If there are cleaned files to be deleted, flush an extra level to
+						   * write out the parents of cleaned nodes.  This ensures that the node
+						   * will contain the LSN of a cleaned files.
+						   */
+						  boolean flushExtraLevel = false;
+						  Cleaner cleaner = envImpl.getCleaner();
+						  Set[] cleanerFiles = cleaner.getFilesAtCheckpointStart();
+						  if (cleanerFiles != null) {
+						      flushExtraLevel = true;
+						  }
+
+						  lastCheckpointMillis = System.currentTimeMillis();
+						  Label535: ;
+
+						  /* Get the next checkpoint id. */
+						  checkpointId++;
+						  Label534: ; 
+						  boolean success = false;
+						  boolean traced = false;
+      				Label522: ;
+
+						  int dirtyMapMemSize = 0;
+				      Label548: ;
+
+						  MemoryBudget mb = envImpl.getMemoryBudget();
+
+						  try {
+
+						/* 
+						 * Eviction can run during checkpoint as long as it follows the
+						 * same rules for using provisional logging and for propagating
+						 * logging of the checkpoint dirty set up the tree. We have to lock
+						 * out the evictor after the logging of checkpoint start until
+						 * we've selected the dirty set and decided on the highest level to
+						 * be flushed. See SR 11163, 11349.
+						 */
+						long checkpointStart = DbLsn.NULL_LSN;
+						long firstActiveLsn = DbLsn.NULL_LSN;
+						SortedMap dirtyMap = null;
+						Label547: {
+					/* Log the checkpoint start. */
+					CheckpointStart startEntry =
+							new CheckpointStart(checkpointId, invokingSource);
+					checkpointStart = logManager.log(startEntry);
+
+					/* 
+					 * Remember the first active LSN -- before this position in the
+					 * log, there are no active transactions at this point in time.
+					 */
+					firstActiveLsn = envImpl.getTxnManager().getFirstActiveLsn();
+
+					if (firstActiveLsn == DbLsn.NULL_LSN) {
+							firstActiveLsn = checkpointStart;
+					} else {
+							if (DbLsn.compareTo(checkpointStart, firstActiveLsn) < 0) {
+						firstActiveLsn = checkpointStart;
+							}
+					}
+					/* Find the dirty set. */
+					dirtyMap = selectDirtyINs(flushAll, flushExtraLevel);
+						}
+
+						      /* Add each level's references to the budget. */
+						int totalSize = 0;
+						Label551: ;
+						      for (Iterator i = dirtyMap.values().iterator(); i.hasNext();) {
+						          Set nodeSet = (Set) i.next();
+
+											Label552: ;
+
+
+						      }
+						Label550: ;
+
+						      /* Flush IN nodes. */
+						      boolean allowDeltas = !config.getMinimizeRecoveryTime();
+						      flushDirtyNodes(dirtyMap, flushAll, allowDeltas,
+						                      flushExtraLevel, checkpointStart);
+
+						      /*
+						       * Flush utilization info AFTER flushing IN nodes to reduce the
+						       * inaccuracies caused by the sequence FileSummaryLN-LN-BIN.
+						       */
+						      flushUtilizationInfo();
+
+						      CheckpointEnd endEntry =
+						          new CheckpointEnd(invokingSource,
+						                            checkpointStart,
+						                            envImpl.getRootLsn(),
+						                            firstActiveLsn,
+						                            Node.getLastId(),
+						                            envImpl.getDbMapTree().getLastDbId(),
+						                            envImpl.getTxnManager().getLastTxnId(),
+						                            checkpointId);
+
+						      /* 
+						       * Log checkpoint end and update state kept about the last
+						       * checkpoint location. Send a trace message *before* the
+						       * checkpoint end log entry. This is done so that the normal trace
+						       * message doesn't affect the time-based isRunnable() calculation,
+						       * which only issues a checkpoint if a log record has been written
+						       * since the last checkpoint.
+						       */
+						      Label523: ; 
+
+
+						      /*
+						       * Always flush to ensure that cleaned files are not referenced,
+						       * and to ensure that this checkpoint is not wasted if we crash.
+						       */
+						      lastCheckpointEnd = 
+						      	logManager.logForceFlush(endEntry,
+						      	                 	 true); // fsync required
+						      lastFirstActiveLsn = firstActiveLsn;
+						      Label536: ; 
+
+						/* 
+						 * Reset the highestFlushLevel so evictor activity knows there's no
+						 * further requirement for provisional logging. SR 11163.
+						 */
+						highestFlushLevel = IN.MIN_LEVEL;
+
+						      success = true;
+
+						      if (cleanerFiles != null) {
+						          cleaner.updateFilesAtCheckpointEnd(cleanerFiles);
+						      }
+						  } catch (DatabaseException e) {
+						     Label525: ;
+						      throw e;
+						  } finally {
+						      Label549: ;
+						       Label524: ;
+						  }
+					}
     /** 
      * Flush a FileSummaryLN node for each TrackedFileSummary that is currently active. Tell the UtilizationProfile about the updated file summary.
      */

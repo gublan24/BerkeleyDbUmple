@@ -2,7 +2,7 @@ namespace com.sleepycat.je.evictor;
 
 class Evictor
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.TestHook;
   depend com.sleepycat.je.utilint.DbLsn;
@@ -241,14 +241,14 @@ class Evictor
 	  try {	
 	    boolean envIsReadOnly = envImpl.isReadOnly();
 			if (target.latchNoWait(false)) {
-					//evictedBytes = this.hook374(inList, target, scanIter, envIsReadOnly, evictedBytes);
+
          Label374:
 				if (target instanceof BIN) {
 
-              Label385:							//this.hook385(target);
+              Label385:					;
 							evictedBytes = ((BIN) target).evictLNs();
 
-              Label383:	;						//this.hook383(evictedBytes);
+              Label383:	;						
 					}
 					if (evictedBytes == 0 && target.isEvictable()) {
 							Tree tree = target.getDatabase().getTree();
@@ -260,7 +260,7 @@ class Evictor
       } 
     }
     finally {
-      Label374_1: ;//		// end hook374
+      Label374_1: ;
     }
 
 			return evictedBytes;
@@ -274,12 +274,13 @@ class Evictor
 			long evictBytes = 0;
 			IN renewedChild = (IN) parent.getTarget(index);
       try{
-			Label375:			//evictBytes = this.hook375(child, parent, index, inlist, scanIter, envIsReadOnly, evictBytes);
-      Label378:	;		//this.hook378(parent);
+			Label375:			
+      Label378:	;	
 			long oldGenerationCount = child.getGeneration();
 			if ((renewedChild != null) && (renewedChild.getGeneration() <= oldGenerationCount)
 				&& renewedChild.latchNoWait(false)) {
-          Label379:					//evictBytes = this.hook379(parent, index, inlist, scanIter, envIsReadOnly, evictBytes, renewedChild);
+          Label379:				
+					try{
 					if (renewedChild.isEvictable()) {
 							long renewedChildLsn = DbLsn.NULL_LSN;
 							boolean newChildLsn = false;
@@ -297,21 +298,23 @@ class Evictor
 						scanIter.mark();
 						inlist.removeLatchAlreadyHeld(renewedChild);
 						scanIter.resetToMark();
-            Label389: 						//evictBytes = this.hook389(evictBytes, renewedChild);
+            Label389: 					
 						if (newChildLsn) {
 								parent.updateEntry(index, null, renewedChildLsn);
 						} else {
 								parent.updateEntry(index, (Node) null);
 						}
 
-            Label384:				;		//this.hook384();
+            Label384:				;		
 							}
 					}
-					// end of hook379
+					} finally {
+											Label379_1: ;  
+					}			
 			}
     }
     finally {
-      Label375_1: ;//		// end hook375
+      Label375_1: ;
     }
 
 			return evictBytes;
@@ -328,52 +331,6 @@ class Evictor
 	runnableHook = hook;
     }
 
- //   protected void hook373(EnvironmentImpl envImpl) throws DatabaseException {
-  //  }
 
-//    protected long hook374(INList inList, IN target, ScanIterator scanIter, boolean envIsReadOnly, long evictedBytes)
-//	    throws DatabaseException {
-	
-//	return evictedBytes;
-  //  }
-
-  //  protected long hook375(IN child, IN parent, int index, INList inlist, ScanIterator scanIter, boolean envIsReadOnly,
-	//    long evictBytes) throws DatabaseException {
-
-//	return evictBytes;
-  //  }
-
- //   protected void hook378(IN parent) throws DatabaseException {
-  //  }
-
- //   protected long hook379(IN parent, int index, INList inlist, ScanIterator scanIter, boolean envIsReadOnly,
-//	    long evictBytes, IN renewedChild) throws DatabaseException {
-
-//	return evictBytes;
-//    }
-
-//    protected void hook380(IN target) throws DatabaseException {
-//    }
-
-//    protected void hook383(long evictedBytes) throws DatabaseException {
-//    }
-
-//    protected void hook384() throws DatabaseException {
-//    }
-
-//    protected void hook385(IN target) throws DatabaseException {
-//    }
-
-//    protected boolean hook386(DatabaseImpl db, boolean b2) throws DatabaseException {
-//	return b2;
- //   }
-
-//    protected boolean hook387(DatabaseImpl db, boolean b) throws DatabaseException {
-//	return b;
-//    }
-
-//    protected long hook389(long evictBytes, IN renewedChild) throws DatabaseException {
-//	return evictBytes;
-//    }
 
 }

@@ -11,6 +11,7 @@ import java.io.File;
 
 // line 3 "../../../../CmdUtil.ump"
 // line 2 "../../../../loggingBase_CmdUtil.ump"
+// line 3 "../../../../LoggingDbLogHandler_CmdUtil.ump"
 public class CmdUtil
 {
 
@@ -98,6 +99,9 @@ public class CmdUtil
     EnvironmentConfig config = new EnvironmentConfig();
 	config.setReadOnly(readOnly);
 	Label853:
+config.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(), "false");
+	//original(config);
+
 	Label854:
 	Label855:
 config.setConfigParam(EnvironmentParams.JE_LOGGING_LEVEL.getName(), "SEVERE");

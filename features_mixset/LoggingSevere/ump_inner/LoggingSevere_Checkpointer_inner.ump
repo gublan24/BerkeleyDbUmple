@@ -1,11 +1,11 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingSevere/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-   static class Checkpointer_doCheckpoint {
-      after Label525: execute() {
-          Tracer.trace(_this.envImpl,"Checkpointer","doCheckpoint","checkpointId=" + _this.checkpointId,e);
+
+      after Label525: doCheckpoint(CheckpointConfig , boolean , String ) {
+          Tracer.trace(envImpl,"Checkpointer","doCheckpoint","checkpointId=" + checkpointId,e);
 
 
-      }
+      
     }
 }

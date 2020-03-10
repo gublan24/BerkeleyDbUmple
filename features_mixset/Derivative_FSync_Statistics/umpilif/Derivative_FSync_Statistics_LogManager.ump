@@ -3,8 +3,8 @@ namespace com.sleepycat.je.log;
 class LogManager
 {
     after Label497: loadStats(StatsConfig , EnvironmentStats ) {
-	fileManager.loadStats(config, stats);
-//	original(config, stats);
+			fileManager.loadStats(config, stats);
+
     }
 
 }
