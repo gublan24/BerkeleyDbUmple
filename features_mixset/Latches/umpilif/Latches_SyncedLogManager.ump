@@ -1,46 +1,52 @@
 namespace com.sleepycat.je.log;
 
-class SyncedLogManager
-{
-    protected void hook511(LoggableObject item, boolean isProvisional, boolean flushRequired, boolean forceNewLogFile,
-	    long oldNodeLsn, boolean marshallOutsideLatch, ByteBuffer marshalledBuffer, UtilizationTracker tracker)
-	    throws IOException, DatabaseException {
-	synchronized (logWriteLatch) {
-//	    original(item, isProvisional, flushRequired, forceNewLogFile, oldNodeLsn, marshallOutsideLatch,marshalledBuffer, tracker);
-	}
+class SyncedLogManager {
+
+    public SyncedLogManager(EnvironmentImpl envImpl,
+                            boolean readOnly)
+        throws DatabaseException {
+
+        super(envImpl, readOnly);
     }
 
-    protected void hook512() throws LogException, DatabaseException, IOException {
-	synchronized (logWriteLatch) {
-	    //original();
-	}
+    before logItem(LoggableObject ,
+                                boolean ,
+                                boolean ,
+                                boolean ,
+                                long ,
+                                boolean ,
+                                ByteBuffer ,
+                                UtilizationTracker )  {
+
+        synchronized (logWriteLatch) 
     }
 
-    protected void hook513(long file) throws DatabaseException {
-	synchronized (logWriteLatch) {
-	    //original(file);
-	}
+    after  Label512: flushInternal() {
+				synchronized (logWriteLatch)
+      
+    }
+    
+
+    before getUnflushableTrackedSummary(long ) {
+
+        synchronized (logWriteLatch) 
     }
 
-    protected void hook514(long lsn, LogEntryType type, UtilizationTracker tracker) throws DatabaseException {
-	synchronized (logWriteLatch) {
-	    //original(lsn, type, tracker);
-	}
+
+    after Label514: countObsoleteNode(long , LogEntryType ) {
+        synchronized (logWriteLatch) 
     }
 
-    protected void hook515(TrackedFileSummary[] summaries, UtilizationTracker tracker) throws DatabaseException {
-	synchronized (logWriteLatch) {
-	    //original(summaries, tracker);
-	}
+
+   after Label511: countObsoleteNodes(TrackedFileSummary ) {
+
+
+        synchronized (logWriteLatch) 
     }
 
-    /** 
-     * @see LogManager#countObsoleteINs
-     */
-    public void countObsoleteINs(List lsnList) throws DatabaseException {
-	synchronized (logWriteLatch) {
-	    //original(lsnList);
-	}
+   
+    after Label515: countObsoleteINs(List ) {
+        synchronized (logWriteLatch) 
     }
-
 }
+
