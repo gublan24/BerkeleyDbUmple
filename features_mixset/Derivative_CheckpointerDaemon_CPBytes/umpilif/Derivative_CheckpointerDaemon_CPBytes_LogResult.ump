@@ -1,12 +1,15 @@
 namespace com.sleepycat.je.log;
 
+
 class LogResult
 {
     protected boolean wakeupCheckpointer;
 
     after Label510: LogResult(long , boolean , boolean ) {
 	this.wakeupCheckpointer = wakeupCheckpointer;
-	//original(wakeupCheckpointer);
+
     }
 
 }
+
+

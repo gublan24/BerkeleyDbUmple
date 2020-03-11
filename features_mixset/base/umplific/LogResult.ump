@@ -2,16 +2,16 @@ namespace com.sleepycat.je.log;
 
 class LogResult
 {
-  depend de.ovgu.cide.jakutil.*;
+
   protected long currentLsn;
   protected boolean wakeupCleaner;
 
   LogResult(long currentLsn, boolean wakeupCheckpointer, boolean wakeupCleaner) {
 	  this.currentLsn = currentLsn;
-	  Label510: //this.hook510(wakeupCheckpointer);
+	  Label510:
 	  this.wakeupCleaner = wakeupCleaner;
   }
 
-//    protected void hook510(boolean wakeupCheckpointer) {}
+
 
 }

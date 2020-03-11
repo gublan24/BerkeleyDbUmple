@@ -37,7 +37,12 @@ use Verifier;
 use LoggingDbLogHandler;
 use FileHandleCache;
 use EnvironmentLocking;
+use CriticalEviction;
 
+
+//
+
+use Checksum ;
 
 mixset Base {    use base/umplific/Master.ump;    }      
 

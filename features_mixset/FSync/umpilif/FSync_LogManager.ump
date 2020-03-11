@@ -6,7 +6,7 @@ class LogManager
 	if (fsyncRequired) {
 	    fileManager.groupSync();
 	}
-	//original(fsyncRequired);
+
     }
 
 }

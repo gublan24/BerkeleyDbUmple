@@ -1,4 +1,6 @@
 // Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/LogManager.java
+
+/*
 namespace com.sleepycat.je.log;
 class LogManager {
    static class LogManager_getLogEntryFromLogSource {
@@ -62,3 +64,4 @@ class LogManager {
   //    }
     }
 }
+*/

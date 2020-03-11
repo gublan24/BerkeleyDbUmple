@@ -1,10 +1,11 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_CriticalEviction/com/sleepycat/je/cleaner/Cleaner.java
+
+
 namespace com.sleepycat.je.cleaner;
 class Cleaner {
-   static class Cleaner_processPending {
-      after Label86:execute() { // Label86 introduced by CriticalEviction_Cleaner_inner.ump
-        _this.env.getEvictor().doCriticalEviction();
-        //original();
-      }
+
+      after Label86: processPending() {
+        env.getEvictor().doCriticalEviction();
+
+      
     }
 }

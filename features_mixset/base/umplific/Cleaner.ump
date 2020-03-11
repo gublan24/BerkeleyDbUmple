@@ -2,7 +2,7 @@ namespace com.sleepycat.je.cleaner;
 
 class Cleaner {
  isA EnvConfigObserver;
- depend de.ovgu.cide.jakutil.*;
+
  depend com.sleepycat.je.utilint.Tracer;
  depend com.sleepycat.je.utilint.PropUtil;
  depend com.sleepycat.je.utilint.DbLsn;
@@ -76,12 +76,12 @@ class Cleaner {
  /** 
   * All files that are to-be-cleaning or being-cleaned. Used to perform proactive migration. Is read-only after assignment, so no synchronization is needed.
   */
- Set mustBeCleanedFiles = Collections.EMPTY_SET;
+ protected Set mustBeCleanedFiles = Collections.EMPTY_SET;
 
  /** 
   * All files that are below the minUtilization threshold. Used to perform clustering migration. Is read-only after assignment, so no synchronization is needed.
   */
- Set lowUtilizationFiles = Collections.EMPTY_SET;
+ protected Set lowUtilizationFiles = Collections.EMPTY_SET;
 
  private String name;
 
@@ -272,9 +272,40 @@ class Cleaner {
  /** 
   * If any LNs are pending, process them. This method should be called often enough to prevent the pending LN set from growing too large.
   */
- void processPending() throws DatabaseException {
-  new Cleaner_processPending(this).execute();
- }
+
+//  new Cleaner_processPending(this).execute();
+ 
+    void processPending()
+        throws DatabaseException {
+
+        DbTree dbMapTree = env.getDbMapTree();
+
+        LNInfo[] pendingLNs = fileSelector.getPendingLNs();
+        if (pendingLNs != null) {
+            TreeLocation location = new TreeLocation();
+
+            for (int i = 0; i < pendingLNs.length; i += 1) {
+                LNInfo info = pendingLNs[i];
+
+                DatabaseId dbId = info.getDbId();
+                DatabaseImpl db = dbMapTree.getDb(dbId, lockTimeout);
+
+                byte[] key = info.getKey();
+                byte[] dupKey = info.getDupKey();
+                LN ln = info.getLN();
+
+                /* Evict before processing each entry. */
+               Label114: ;
+
+                processPendingLN
+                    (ln, db, key, dupKey, location);
+            }
+        }
+
+        DatabaseId[] pendingDBs = fileSelector.getPendingDBs();
+    
+    }
+
 
  /** 
   * Processes a pending LN, getting the lock first to ensure that the overhead of retries is mimimal.
@@ -619,113 +650,6 @@ class Cleaner {
   }
  }
 
- //protected void hook88(long fileNumValue) throws DatabaseException {}
 
-// protected void hook89(DatabaseException DBE) throws DatabaseException {}
-
- /*  protected void hook90() throws DatabaseException {
-    }
-
-    protected void hook91(LN ln, boolean obsolete, boolean completed) throws DatabaseException {
-    }
-
-    protected void hook92(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln)
-	    throws DatabaseException {
-    }
-
-    protected void hook93(long lsn, String cleanAction, boolean obsolete, boolean migrated, boolean completed, LN ln)
-	    throws DatabaseException {
-    }
-*/
- // protected void hook94(DbConfigManager cm) throws DatabaseException {
- // }
- /*
-     protected void hook95(BIN bin, DIN parentDIN) throws DatabaseException {
-     }
-
-     protected void hook96() throws DatabaseException {
-     }
-
-     protected void hook97() throws DatabaseException {
-     }
-
-     protected void hook98() throws DatabaseException {
-     }
-
-     protected void hook99() throws DatabaseException {
-     }
-
-     protected void hook100() throws DatabaseException {
-     }
-
-     protected void hook101() {
-     }
-
-     protected void hook102() {
-     }
-
-     protected void hook103() {
-     }
-
-     protected void hook104() throws DatabaseException {
-     }
-
-     protected void hook105(boolean wasCleaned) throws DatabaseException {
-     }
-
-     protected void hook106(boolean wasCleaned) throws DatabaseException {
-     }
-
-     protected void hook107(boolean wasCleaned) throws DatabaseException {
-     }
-
-     protected void hook108(boolean wasCleaned) throws DatabaseException {
-     }
-
-     protected void hook109() throws DatabaseException {
-     }
-
-     protected void hook110(boolean wasCleaned) throws DatabaseException {
-     }
-
-     protected void hook111(boolean wasCleaned) throws DatabaseException {
-     }
- */
- //  protected boolean hook112(DatabaseImpl db, boolean c) throws DatabaseException {
- //return c;
- //  }
-
- //   protected void hook113(DatabaseImpl db) throws DatabaseException {
- //   }
-
- //    protected void hook115(Set safeFiles) throws DatabaseException {
- //
- //	for (Iterator i = safeFiles.iterator(); i.hasNext();) {
- //	    Long fileNum = (Long) i.next();
- //	    long fileNumValue = fileNum.longValue();
- //	    boolean deleted = false;
- //	    try {
- //		if (expunge) {
- //		    env.getFileManager().deleteFile(fileNumValue);
- //		} else {
- //		    env.getFileManager().renameFile(fileNumValue, FileManager.DEL_SUFFIX);
- //		}
- //		deleted = true;
- //	    } catch (DatabaseException e) {
- //		traceFileNotDeleted(e, fileNumValue);
- //	    } catch (IOException e) {
- //		traceFileNotDeleted(e, fileNumValue);
- //	    }
- //	    if (deleted) {
- //		this.hook88(fileNumValue);
- //		try {
- //		    profile.removeFile(fileNum);
- //		} finally {
- //		    fileSelector.removeDeletedFile(fileNum);
- //		}
- //	    }
- //	    this.hook96();
- //	}
- //    }
 
 }

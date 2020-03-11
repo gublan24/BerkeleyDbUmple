@@ -1,4 +1,4 @@
-namespace com.sleepycat.je.log;
+
 
 class LogManager
 {
@@ -9,7 +9,7 @@ class LogManager
     after Label502: LogManager(EnvironmentImpl , boolean ){
 
 	logWriteLatch = LatchSupport.makeLatch(DEBUG_NAME, envImpl);
-	//original(envImpl);
+
     }
 
     after Label503: logInternal(LoggableObject , boolean , boolean ,	 boolean , long , boolean , ByteBuffer , UtilizationTracker ) {
@@ -17,10 +17,10 @@ class LogManager
 	}
 
     after Label503_1: logInternal(LoggableObject , boolean , boolean ,	 boolean , long , boolean , ByteBuffer , UtilizationTracker ) {
-//try {	    usedTemporaryBuffer = original(marshalledBuffer, entrySize, currentLsn, usedTemporaryBuffer, useLogBuffer);} finally {
+
 	    useLogBuffer.release();
-	//}
-//	return usedTemporaryBuffer;
+
+
     }
 
 }

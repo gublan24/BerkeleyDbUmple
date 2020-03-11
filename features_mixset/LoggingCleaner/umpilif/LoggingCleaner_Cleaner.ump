@@ -9,7 +9,7 @@ class Cleaner
      */
     void trace(Level level, String action, Node node, long logLsn, boolean completed, boolean obsolete,
 	    boolean dirtiedMigrated) {
-	new Cleaner_trace(this, level, action, node, logLsn, completed, obsolete, dirtiedMigrated).execute();
+
     }
 
     after Label90: envConfigUpdate(DbConfigManager ) {

@@ -2,7 +2,7 @@ namespace com.sleepycat.je.log;
 
 class LogManager
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.TestHook;
   depend com.sleepycat.je.utilint.DbLsn;
@@ -158,8 +158,8 @@ class LogManager
 	} catch (IOException e) {
 	    throw new DatabaseException(Tracer.getStackTrace(e), e);
 	}
-	Label501:   ; //this.hook501(fsyncRequired);
-	Label499:   ; //this.hook499(logResult);
+	Label501:   ; 
+	Label499:   ; 
 	if (logResult.wakeupCleaner) {
 	    tracker.activateCleaner();
 	}
@@ -305,6 +305,93 @@ class LogManager
 	return getLogEntryFromLogSource(lsn, new FileSource(file, readBufferSize, fileManager));
     }
 
+ private LogEntry getLogEntryFromLogSource(long lsn,
+                                              LogSource logSource) 
+        throws DatabaseException {
+
+        try {
+
+    
+            long fileOffset = DbLsn.getFileOffset(lsn);
+            ByteBuffer entryBuffer = logSource.getBytes(fileOffset);
+            /* Read the checksum to move the buffer forward. */
+            ChecksumValidator validator = null;
+            long storedChecksum = 0;
+            Label507:   ; 
+            /* Read the header. */
+            byte loggableType = entryBuffer.get(); // log entry type
+            byte version = entryBuffer.get();      // version
+            /* Read the size, skipping over the prev offset. */
+            entryBuffer.position(entryBuffer.position() + PREV_BYTES);
+            int itemSize = LogUtils.readInt(entryBuffer);
+
+            /*
+             * Now that we know the size, read the rest of the entry
+             * if the first read didn't get enough.
+             */
+            if (entryBuffer.remaining() < itemSize) {
+                entryBuffer = logSource.getBytes(fileOffset + HEADER_BYTES,
+                                                 itemSize);
+                nRepeatFaultReads++;
+            }
+
+            /*
+             * Do entry validation. Run checksum before checking the entry
+             * type, it will be the more encompassing error.
+             */
+                        Label506:   ;
+
+
+            assert LogEntryType.isValidType(loggableType):
+                "Read non-valid log entry type: " + loggableType;
+
+            /* Read the entry. */
+            LogEntry logEntry = 
+                LogEntryType.findType(loggableType, version).getNewLogEntry();
+            logEntry.readEntry(entryBuffer, itemSize, version, true);
+
+            /* For testing only; generate a read io exception. */
+            if (readHook != null) {
+                readHook.doIOHook();
+            }
+
+            /* 
+             * Done with the log source, release in the finally clause.  Note
+             * that the buffer we get back from logSource is just a duplicated
+             * buffer, where the position and state are copied but not the
+             * actual data. So we must not release the logSource until we are
+             * done marshalling the data from the buffer into the object
+             * itself.
+             */
+            return logEntry;
+        } catch (DatabaseException e) {
+
+            /* 
+	     * Propagate DatabaseExceptions, we want to preserve any subtypes
+             * for downstream handling.
+             */
+            throw e;
+        } catch (ClosedChannelException e) {
+
+            /* 
+             * The channel should never be closed. It may be closed because
+             * of an interrupt received by another thread. See SR [#10463]
+             */
+            throw new RunRecoveryException(envImpl,
+                                           "Channel closed, may be "+
+                                           "due to thread interrupt",
+                                           e);
+        } catch (Exception e) {
+            throw new DatabaseException(e);
+        } finally {
+            if (logSource != null) {
+                logSource.release();
+            }
+        }
+    }
+
+
+
     /** 
      * Instantiate all the objects in the log entry at this LSN. This will release the log source at the first opportunity.
      * @param lsnlocation of entry in log
@@ -403,40 +490,6 @@ class LogManager
 	readHook = hook;
     }
 
-  //  protected void hook498(EnvironmentImpl envImpl) throws DatabaseException { }
 
-//    protected void hook499(LogResult logResult) throws DatabaseException { }
-    
-//protected boolean hook500(LoggableObject item, int entrySize, boolean wakeupCheckpointer)
-//	    throws IOException, DatabaseException {	return wakeupCheckpointer; }
-
-//    protected void hook501(boolean fsyncRequired) throws DatabaseException { }
-
-   // protected void hook502(EnvironmentImpl envImpl) throws DatabaseException {
- //   }
-
-//    protected boolean hook503(ByteBuffer marshalledBuffer, int entrySize, long currentLsn, boolean usedTemporaryBuffer,
-//	    LogBuffer useLogBuffer) throws IOException, DatabaseException, Exception {
-//	ByteBuffer useBuffer = useLogBuffer.getDataBuffer();
-//	if (useBuffer.capacity() - useBuffer.position() < entrySize) {
-//	    fileManager.writeLogBuffer(new LogBuffer(marshalledBuffer, currentLsn));
-//	    usedTemporaryBuffer = true;
-//	    assert useBuffer.position() == 0;
-//	    Label509: //this.hook509();
-//	} else {
-//	    useBuffer.put(marshalledBuffer);
-//	}
-//	return usedTemporaryBuffer;
-//    }
-
-//    protected static int hook504(int r) {
-//	return r;
- //   }
-
- //   protected void hook505(DbConfigManager configManager) throws DatabaseException {
- //   }
-
-//    protected void hook509() throws IOException, DatabaseException, Exception {
-//    }
 
 }

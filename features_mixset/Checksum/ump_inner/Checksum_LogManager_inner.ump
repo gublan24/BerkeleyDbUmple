@@ -1,22 +1,27 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Checksum/com/sleepycat/je/log/LogManager.java
+
 namespace com.sleepycat.je.log;
+
 class LogManager {
-   static class LogManager_getLogEntryFromLogSource {
-      after Label506: execute() {
-        if (_this.doChecksumOnRead) {
-          validator.update(_this.envImpl,entryBuffer,itemSize,false);
-          validator.validate(_this.envImpl,storedChecksum,lsn);
-        }
-        //original();
+
+    static final int HEADER_CONTENT_BYTES =        HEADER_BYTES - CHECKSUM_BYTES;
+
+      after Label506: getLogEntryFromLogSource(long , LogSource ) {
+
+        if (doChecksumOnRead) {
+                /* Check the checksum first. */
+                validator.update(envImpl, entryBuffer, itemSize, false);
+                validator.validate(envImpl, storedChecksum, lsn);
+            }
+
       }
-      after Label507: execute() {
-        validator=null;
-        storedChecksum=LogUtils.getUnsignedInt(entryBuffer);
-        if (_this.doChecksumOnRead) {
-          validator=new ChecksumValidator();
-          validator.update(_this.envImpl,entryBuffer,_this.HEADER_CONTENT_BYTES(),false);
-        }
-        //original();
+      after Label507: getLogEntryFromLogSource(long , LogSource ) {
+
+        storedChecksum=  LogUtils.getUnsignedInt(entryBuffer);
+            if (doChecksumOnRead) {
+                validator = new ChecksumValidator();
+                validator.update(envImpl, entryBuffer, HEADER_CONTENT_BYTES, false);
+            }
+
       }
-    }
+    
 }

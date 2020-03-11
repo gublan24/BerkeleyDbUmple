@@ -27,7 +27,7 @@ use CleanerFileReader_static.ump;
 use StatsFileReader_static.ump; 
 use FileReader_static.ump; 
 use FileManager_static.ump; 
-use LogManager_static.ump; 
+//use LogManager_static.ump; 
 use LogUtils_static.ump; 
 use Checkpointer_static.ump; 
 use RecoveryManager_static.ump; 
