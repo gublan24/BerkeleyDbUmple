@@ -69,7 +69,7 @@ class BIN {
      */
     before adjustCursorsForMutation(int, DBIN, int, CursorImpl) {
         assert this.isLatchOwner();
-        //original(binIndex, dupBin, dupBinIndex, excludeCursor);
+
     }
 
     after Label607: isValidForDelete() {
@@ -86,7 +86,7 @@ class BIN {
         if (needToLatch) {
             latch();
         }
-        //original(needToLatch);
+
     }
 
 }

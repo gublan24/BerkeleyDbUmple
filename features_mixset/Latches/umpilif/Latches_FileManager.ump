@@ -11,7 +11,7 @@ class FileManager
     }
 
     after Label454: getFileHandle(long ){
-		fileHandle.release();
+		fileCacheLatch.release();
 
     }
 

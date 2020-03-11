@@ -1098,21 +1098,7 @@ LabelGetFileHandle: ;
     public void close()
         throws IOException, DatabaseException {
 
-        if (envLock != null) {
-            envLock.release();
-        }
-
-        if (exclLock != null) {
-            exclLock.release();
-        }
-
-        if (channel != null) {
-            channel.close();
-        }
-
-        if (lockFile != null) {
-            lockFile.close();
-        }
+  
     }
 
     /**
@@ -1495,7 +1481,7 @@ LabelGetFileHandle: ;
      * 40       thread 1 finally comes along, but endOfLogRWFile is null--
      *          no need to fsync in that case, 0x0 got fsynced.
      */
-    class LogEndFileDescriptor {
+    inner class LogEndFileDescriptor {
 
 
 
