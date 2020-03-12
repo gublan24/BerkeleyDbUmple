@@ -8,9 +8,9 @@ class RootFlusher
     }
 
     after Label599_1: doWork(ChildReference ) {			
-//			try {original(root, rootIN);} finally {
+
 					rootIN.releaseLatch();
-	//		}
+
     }
 
 }

@@ -1,12 +1,17 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_CPBytes_CPTime/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-   static class Checkpointer_getWakeupPeriod {
-      after Label519: execute(){
-        if ((wakeupPeriod == 0) && (bytePeriod == 0)) {
-          throw new IllegalArgumentException(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL.getName() + " and " + EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL.getName()+ " cannot both be 0. ");
-        }
-     //   original();
+
+      after Label519: getWakeupPeriod(DbConfigManager ) {
+
+				if ((wakeupPeriod == 0) && (bytePeriod == 0)) {
+            throw new IllegalArgumentException
+                (EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL.getName() +
+                 " and " +
+                 EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL.getName() +
+                 " cannot both be 0. ");
+        }       
+
       }
-    }
+    
 }

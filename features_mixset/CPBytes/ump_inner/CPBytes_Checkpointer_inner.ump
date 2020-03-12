@@ -1,50 +1,31 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/CPBytes/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-   static class Checkpointer_getWakeupPeriod {
-      after Label540:execute() {
-		      if (bytePeriod == 0) {
-		        //original();
-		      }
+
+
+      after Label541: getWakeupPeriod(DbConfigManager ) {
+        bytePeriod = configManager.getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
+
       }
-      after Label541:execute() {
-        bytePeriod=configManager.getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
-        //original();
-      }
-    }
+    
   
-  static class Checkpointer_isRunnable {
-      after Label542:execute() {
-		      if (useBytesInterval != 0) {
-		        nextLsn=_this.envImpl.getFileManager().getNextLsn();
-		        if (DbLsn.getNoCleaningDistance(nextLsn,_this.lastCheckpointEnd,_this.logFileMax) >= useBytesInterval) {
-		                   return true; //throw new ReturnBoolean(true);
-		        }
-				 else {						               return false;}
-					}
-
-				//else {
-				//    original();
-				//	  }
+      after Label542: isRunnable(CheckpointConfig ) { 
+					  nextLsn = envImpl.getFileManager().getNextLsn();
+            if (DbLsn.getNoCleaningDistance(nextLsn, lastCheckpointEnd,
+						logFileMax) >=
+                    useBytesInterval) {
+                    return true;
+                } else 
+                        //{                    return false;}
       }
 
-      after Label543: execute() {
-				    if (config.getKBytes() != 0) {
-				      useBytesInterval=config.getKBytes() << 10;
-				    }
-					 else {
-								  throw new ReturnBoolean(false); // add hook542
-					 }
-      
+      after Label543: isRunnable(CheckpointConfig ) { 
+				      useBytesInterval = config.getKBytes() << 10;				       
      }
 
-      after Label544: execute() {
-        if (_this.logSizeBytesInterval != 0) {
-          useBytesInterval=_this.logSizeBytesInterval;
-        }
-//   else {
-//          original();
-//        }
+      after Label544: isRunnable(CheckpointConfig ) { 
+         useBytesInterval = logSizeBytesInterval;
+
       }
-    }
+    
 }

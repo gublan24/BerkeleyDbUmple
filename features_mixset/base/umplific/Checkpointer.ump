@@ -1,7 +1,8 @@
 namespace com.sleepycat.je.recovery;
 
 class Checkpointer {
-    depend de.ovgu.cide.jakutil.*;
+
+
     depend com.sleepycat.je.utilint.Tracer;
     depend com.sleepycat.je.utilint.PropUtil;
     depend com.sleepycat.je.utilint.DbLsn;
@@ -47,14 +48,17 @@ class Checkpointer {
     private long lastCheckpointEnd;
 
     private volatile int highestFlushLevel;
+		
+		strictness disable constructor;
+		strictness disable delete();
 
     public Checkpointer(EnvironmentImpl envImpl, long waitTime, String name) throws DatabaseException {
-        Label538:   ; //this.hook538(envImpl, waitTime, name);
+        Label538:   ; 
             this.envImpl = envImpl;
-        Label539:   ; //this.hook539(envImpl);
+        Label539:   ; 
             logFileMax = envImpl.getConfigManager().getLong(EnvironmentParams.LOG_FILE_MAX);
-        Label531:   ; //this.hook531();
-            Label545:   ; //this.hook545(waitTime);
+        Label531:   ; 
+            Label545:   ; 
             lastCheckpointMillis = 0;
         highestFlushLevel = IN.MIN_LEVEL;
         logManager = envImpl.getLogManager();
@@ -69,7 +73,27 @@ class Checkpointer {
      */
     public static long getWakeupPeriod(DbConfigManager configManager)
     throws IllegalArgumentException, DatabaseException {
-        return new Checkpointer_getWakeupPeriod(configManager).execute();
+      
+				long wakeupPeriod = 0; 
+        long bytePeriod = 0;
+
+				Label541: 
+        /* Checkpointing period must be set either by time or by log size. */
+        Label519: ;
+
+
+
+        /*
+         * Checkpointing by log size takes precendence over time based period.
+         */
+        if (bytePeriod == 0) {
+            return wakeupPeriod;
+        } else {
+            return 0;
+        }
+
+
+
     }
 
     /** 
@@ -97,7 +121,50 @@ class Checkpointer {
      * Determine whether a checkpoint should be run. 1. If the force parameter is specified, always checkpoint. 2. If the config object specifies time or log size, use that. 3. If the environment is configured to use log size based checkpointing, check the log. 4. Lastly, use time based checking.
      */
     private boolean isRunnable(CheckpointConfig config) throws DatabaseException {
-        return new Checkpointer_isRunnable(this, config).execute();
+  
+        /* Figure out if we're using log size or time to determine interval.*/
+        long useBytesInterval = 0;
+        long useTimeInterval = 0;
+        long nextLsn = DbLsn.NULL_LSN;
+        try {
+            if (config.getForce()) {
+                return true;
+            } else if (config.getKBytes() != 0) {
+                Label543: ;
+            } else if (config.getMinutes() != 0) {
+                // convert to millis
+                Label543: ; 
+            } else if (logSizeBytesInterval != 0) {
+                Label544: ; 
+            } else {
+                useTimeInterval = timeInterval;
+            }
+
+            /* 
+             * If our checkpoint interval is defined by log size, check on how
+             * much log has grown since the last checkpoint.
+             */
+            if (useBytesInterval != 0) {
+                Label542:
+								return false;
+            } else if (useTimeInterval != 0) {
+
+                /* 
+                 * Our checkpoint is determined by time.  If enough time has
+                 * passed and some log data has been written, do a checkpoint.
+                 */
+               Label542: ;
+								 {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } finally {
+            StringBuffer sb = new StringBuffer();
+						Label521: ;           
+      
+        }
     }
 
     /** 

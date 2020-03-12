@@ -1,35 +1,27 @@
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
- static class Checkpointer_getWakeupPeriod {
-  before execute() {
-   wakeupPeriod = PropUtil.microsToMillis(configManager.getLong(EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
-   //return original();
-  }
-  after Label540: execute() {
-   result += wakeupPeriod;
-   //original();
-  }
- }
- static class Checkpointer_isRunnable {
 
-  after Label542: execute() {
-   if (useTimeInterval != 0) {
-    lastUsedLsn = _this.envImpl.getFileManager().getLastUsedLsn();
-    if (((System.currentTimeMillis() - _this.lastCheckpointMillis) >= useTimeInterval) && (DbLsn.compareTo(lastUsedLsn, _this.lastCheckpointEnd) != 0)) {
-     return true;//throw new ReturnBoolean(true);
-    } else {
-     return false;//throw new ReturnBoolean(false);
-    }
-   } 
-//else {    return false; //throw new ReturnBoolean(false); // added from hook542()    }
+  before Label519: getWakeupPeriod(DbConfigManager )  {
+				wakeupPeriod = PropUtil.microsToMillis (configManager.getLong (EnvironmentParams.CHECKPOINTER_WAKEUP_INTERVAL));
+  }
+ 
+ 
+
+	after Label542: isRunnable(CheckpointConfig ) {
+								;
+								 long lastUsedLsn = envImpl.getFileManager().getLastUsedLsn();
+                if (((System.currentTimeMillis() - lastCheckpointMillis) >=
+                     useTimeInterval) &&
+                    (DbLsn.compareTo(lastUsedLsn, lastCheckpointEnd) != 0)) {
+                    return true;
+                } else
+   
   }
 
-  after Label543: execute() {
-   if (config.getMinutes() != 0) {
-    useTimeInterval = config.getMinutes() * 60 * 1000;
-   } else {
-    Label544: useTimeInterval = _this.timeInterval; // from hook544() 
-   }
-  }
- }
+  after Label543: isRunnable(CheckpointConfig ) {
+   useTimeInterval = config.getMinutes() * 60 * 1000;
+		}
+ 
+
+
 }
