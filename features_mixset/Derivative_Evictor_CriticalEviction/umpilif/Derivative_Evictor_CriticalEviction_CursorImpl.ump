@@ -12,7 +12,7 @@ class CursorImpl
      * Reset a cursor to an uninitialized state, but unlike close(), allow it to be used further.
      */
  after reset() {
-	//original();
+
 	if (allowEviction) {
 	    database.getDbEnvironment().getEvictor().doCriticalEviction();
 	}
@@ -23,7 +23,7 @@ class CursorImpl
      * @throws DatabaseExceptionif the cursor was previously closed.
      */
   after close()  {
-	//original();
+
 	if (allowEviction) {
 	    database.getDbEnvironment().getEvictor().doCriticalEviction();
 	}

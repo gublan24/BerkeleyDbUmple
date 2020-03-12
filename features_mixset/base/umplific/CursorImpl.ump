@@ -166,7 +166,7 @@ class CursorImpl {
             ret = this;
         } else {
             try {
-                Label206: //this.hook206();
+                Label206: 
                     ret = (CursorImpl) super.clone();
                 if (!retainNonTxnLocks) {
                     ret.locker = locker.newNonTxnLocker();
@@ -185,9 +185,10 @@ class CursorImpl {
             catch (CloneNotSupportedException cannotOccur) {
                 return null;
             } finally {
-                Label207: ;//this.hook207();
+                Label207: ;
             }
         }
+				Label_return:
         return ret;
     }
 
