@@ -18,7 +18,7 @@ class Checkpointer {
    
   }
 
-  after Label543: isRunnable(CheckpointConfig ) {
+  after Label543_1: isRunnable(CheckpointConfig ) {
    useTimeInterval = config.getMinutes() * 60 * 1000;
 		}
  

@@ -133,7 +133,7 @@ class Checkpointer {
                 Label543: ;
             } else if (config.getMinutes() != 0) {
                 // convert to millis
-                Label543: ; 
+                Label543_1: ; 
             } else if (logSizeBytesInterval != 0) {
                 Label544: ; 
             } else {
@@ -404,7 +404,7 @@ class Checkpointer {
                                                       in.getDupTreeKey()));
                     }
                 } finally {
-                    afterLabel530_1: ;
+                    Label530_1: ;
                 }
             }
 
