@@ -1,5 +1,6 @@
 namespace com.sleepycat.je;
 
+/*
 class Database {
 
    static class Database_truncate {
@@ -54,3 +55,4 @@ class Database {
 
     }
 }
+*/

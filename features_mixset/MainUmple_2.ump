@@ -42,6 +42,8 @@ use CriticalEviction;
 
 //
 
+use TruncateOp;
+
 use Checksum ;
 
 mixset Base {    use base/umplific/Master.ump;    }      

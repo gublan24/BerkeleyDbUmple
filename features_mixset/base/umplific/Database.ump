@@ -2,7 +2,7 @@ namespace com.sleepycat.je;
 
 class Database
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.TinyHashSet;
   depend com.sleepycat.je.txn.LockerFactory;

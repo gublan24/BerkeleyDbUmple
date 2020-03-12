@@ -1,7 +1,9 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/TransactionStats.java
+
 namespace com.sleepycat.je;
+
 class TransactionStats {
-  static class Active  {
+  
+	static class Active  {
 
   isA Serializable ;  
 

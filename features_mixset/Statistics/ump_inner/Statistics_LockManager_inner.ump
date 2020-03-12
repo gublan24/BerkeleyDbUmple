@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Statistics/com/sleepycat/je/txn/LockManager.java
+
 namespace com.sleepycat.je.txn;
 class LockManager {
   static class LockManager_lockStat {

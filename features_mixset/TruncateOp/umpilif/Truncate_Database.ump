@@ -6,8 +6,56 @@ class Database
     /** 
      * @deprecated It has not been possible to implement this method withcorrect transactional semantics without incurring a performance penalty on all Database operations. Truncate functionality has been moved to Environment.truncateDatabase(), which requires that all Database handles on the database are closed before the truncate operation can execute.
      */
-    public int truncate(Transaction txn, boolean countRecords) throws DatabaseException {
-	return new Database_truncate(this, txn, countRecords).execute();
+    public int truncate(Transaction txn, boolean countRecords)
+        throws DatabaseException {
+
+        checkEnv();
+        checkRequiredDbState(OPEN, "Can't call Database.truncate");
+        checkWritable("truncate");
+        Label39: ;
+
+
+
+
+        Locker locker = null;
+
+				Label40: ;
+        boolean operationOk = false;
+
+        try {
+            locker = LockerFactory.getWritableLocker
+                (envHandle, txn, isTransactional(), true /*retainLocks*/,
+                 null);
+
+            /* 
+	     * Pass true to always get a read lock on the triggers, so we are
+	     * sure that no secondaries are added during truncation.
+	     */
+            acquireTriggerListReadLock();
+            Label41: ;
+
+
+            /* Truncate primary. */
+            int count = truncateInternal(locker, countRecords);
+
+            /* Truncate secondaries. */
+            for (int i = 0; i < triggerList.size(); i += 1) {
+                Object obj = triggerList.get(i);
+                if (obj instanceof SecondaryTrigger) {
+                    SecondaryDatabase secDb = ((SecondaryTrigger) obj).getDb();
+                    secDb.truncateInternal(locker, false);
+                }
+            }
+
+            operationOk = true;
+            return count;
+        } finally {
+            if (locker != null) {
+                locker.operationEnd(operationOk);
+            }
+                      Label42: ;
+						
+        }
     }
 
     /** 
