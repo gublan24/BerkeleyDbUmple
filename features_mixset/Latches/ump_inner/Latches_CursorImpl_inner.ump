@@ -3,7 +3,7 @@ namespace com.sleepycat.je.dbi;
 
 class CursorImpl {
 
-        after Label244: latchBINs () {
+        after Label244: latchBIN() {
 
 				 	while (bin != null) {
 						BIN waitingOn = bin;
@@ -14,6 +14,21 @@ class CursorImpl {
 						waitingOn.releaseLatch();
 					}
 
+    		}
+
+
+
+        after Label246: latchDBIN() {
+            
+						while (dupBin != null) {
+						BIN waitingOn = dupBin;
+						waitingOn.latch();
+						if (dupBin == waitingOn) {
+							return dupBin;
+						}
+						waitingOn.releaseLatch();
+						}
+   
     		}
 
 
@@ -76,19 +91,6 @@ class CursorImpl {
         }
   
 
-        after Label246: latchDBIN() {
-            
-						while (dupBin != null) {
-						BIN waitingOn = dupBin;
-						waitingOn.latch();
-						if (dupBin == waitingOn) {
-							return dupBin;
-						}
-						waitingOn.releaseLatch();
-						}
-   
-    		}
-
 
 
 
@@ -121,5 +123,6 @@ class CursorImpl {
                 releaseBINs();
    
         }
+
     
 }
