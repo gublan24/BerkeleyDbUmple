@@ -1,5 +1,6 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Verifier/com/sleepycat/je/cleaner/VerifyUtils.java
+
 namespace com.sleepycat.je.cleaner;
+
 class VerifyUtils {
 
   static class GatherLSNs {

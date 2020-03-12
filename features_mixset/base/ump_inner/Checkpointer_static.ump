@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/recovery/Checkpointer.java
+
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
  static class CheckpointReference {
@@ -281,26 +281,5 @@ class Checkpointer {
 
 
 
-  //  protected void hook529() throws DatabaseException {
-  //  }
-  /*
-        after Label530: execute(){
-          if (in.getDirty()) {
-            level=new Integer(in.getLevel());
-            if (newDirtyMap.containsKey(level)) {
-              dirtySet=(Set)newDirtyMap.get(level);
-            }
-            else {
-              dirtySet=new HashSet();
-              newDirtyMap.put(level,dirtySet);
-            }
-            dirtySet.add(new CheckpointReference(in.getDatabase(),in.getNodeId(),in.containsDuplicates(),in.isDbRoot(),in.getMainTreeKey(),in.getDupTreeKey()));
-          }
-        }
-  */
-  //protected void hook553() throws DatabaseException {
-  //}
-  // protected void hook554() throws DatabaseException {
-  // }
  }
 }

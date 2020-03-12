@@ -1,6 +1,7 @@
+namespace com.sleepycat.je;
 
-//namespace com.sleepycat.je;
 class Database {
+
    static class Database_truncate {
       Database_truncate(    Database _this,    Transaction txn,    boolean countRecords){
         this._this=_this;
@@ -50,13 +51,6 @@ class Database {
       protected int count;
       protected Object obj;
       protected SecondaryDatabase secDb;
-   //   protected void hook39() throws DatabaseException {
-   //   }
-  //    protected void hook40() throws DatabaseException {
-    //  }
-  //    protected void hook41() throws DatabaseException {
-  //    }
-      //protected void hook42() throws DatabaseException {
-      //}
+
     }
 }
