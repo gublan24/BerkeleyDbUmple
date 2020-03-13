@@ -428,8 +428,33 @@ class Txn
      * Add lock to the appropriate queue.
      */
     void addLock(Long nodeId, Lock lock, LockType type, LockGrantType grantStatus) throws DatabaseException {
-	new Txn_addLock(this, nodeId, lock, type, grantStatus).execute();
+			      synchronized (this) {
+            int delta = 0;
+            if (type.isWriteLock()) {
+                if (writeInfo == null) {
+                    writeInfo = new HashMap();
+                    undoDatabases = new HashMap();
+                    Label818: ;
+                }
+
+                writeInfo.put(nodeId, 
+                              new WriteLockInfo(lock));
+                Label817: ;
+
+                
+                if ((grantStatus == LockGrantType.PROMOTION) ||
+                    (grantStatus == LockGrantType.WAIT_PROMOTION)) {
+                    readLocks.remove(lock);
+                    Label819: ;
+                }
+		Label816: ;
+
+            } else {
+                addReadLock(lock);
+            }
+        }
     }
+    
 
     private void addReadLock(Lock lock) {
 			int delta = 0;

@@ -1,26 +1,23 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/txn/Txn.java
+
 namespace com.sleepycat.je.txn;
 class Txn {
-  @MethodObject static class Txn_addLock {
-      after Label815:execute() {
-        delta=0;
-        //original();
+
+
+      after Label816: addLock(Long , Lock , LockType , LockGrantType )  {
+       updateMemoryUsage(delta);
+
       }
-      after Label816:execute() {
-        _this.updateMemoryUsage(delta);
-        //original();
+      after Label817: addLock(Long , Lock , LockType , LockGrantType )  {
+        delta += WRITE_LOCK_OVERHEAD;
+
       }
-      after Label817:execute() {
-        delta+=_this.WRITE_LOCK_OVERHEAD;
-        //original();
+      after Label818:  addLock(Long , Lock , LockType , LockGrantType )  {
+        delta += MemoryBudget.TWOHASHMAPS_OVERHEAD;
+
       }
-      after Label818:execute() {
-        delta+=MemoryBudget.TWOHASHMAPS_OVERHEAD;
-        //original();
-      }
-      after Label819:execute() {
-        delta-=_this.READ_LOCK_OVERHEAD;
-       // original();
+      after Label819: addLock(Long , Lock , LockType , LockGrantType )  {
+       delta -= READ_LOCK_OVERHEAD;
+
       }
     }
 }
