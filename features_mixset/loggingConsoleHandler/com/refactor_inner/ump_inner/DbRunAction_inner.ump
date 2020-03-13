@@ -1,10 +1,12 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/LoggingConsoleHandler_x/com/sleepycat/je/util/DbRunAction.java
+
 namespace com.sleepycat.je.util;
 class DbRunAction {
-   static class DbRunAction_main {
-      after Label848:execute(){
-        envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_CONSOLE.getName(),"true");
-        //original(); //@Abdulaziz aaa
+
+      after Label848: main(String ) {
+				 
+       envConfig.setConfigParam
+                (EnvironmentParams.JE_LOGGING_CONSOLE.getName(), "true");
+
       }
-    }
+    
 }

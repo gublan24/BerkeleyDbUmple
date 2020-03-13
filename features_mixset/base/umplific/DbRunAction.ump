@@ -26,7 +26,147 @@ class DbRunAction
     private static final int CHECKPOINT = 4;
 
     public static void main(String[] argv) {
-	new DbRunAction_main(argv).execute();
+	    long recoveryStart = 0;
+        long actionStart = 0;
+        long actionEnd = 0;
+
+        try {
+            int whichArg = 0;
+
+            if (argv.length == 0) {
+                usage();
+                System.exit(1);
+            }
+
+
+            String dbName = null;
+            int doAction = 0;
+            String envHome = "."; // default to current directory
+            boolean readOnly = false;
+
+            while (whichArg < argv.length) {
+                String nextArg = argv[whichArg];
+
+                if (nextArg.equals("-h")) {
+                    whichArg++;
+                    envHome = CmdUtil.getArg(argv, whichArg);
+                } else if (nextArg.equals("-a")) {
+                    whichArg++;
+                    String action = CmdUtil.getArg(argv, whichArg);
+                    if (action.equalsIgnoreCase("clean")) {
+                        doAction = CLEAN;
+                    } else if (action.equalsIgnoreCase("compress")) {
+                        Label840: ;
+                    } else if (action.equalsIgnoreCase("checkpoint")) {
+                        doAction = CHECKPOINT;
+                    } else if (action.equalsIgnoreCase("evict")) {
+                       Label846: ;
+                    } else if (action.equalsIgnoreCase("removedb")) {
+                        Label843: ;
+                    } else if (action.equalsIgnoreCase("dbstats")) {
+                        Label839:;
+
+                    } else {
+                        usage();
+                        System.exit(1);
+                    }
+                } else if (nextArg.equals("-ro")) {
+                    readOnly = true;
+                } else if (nextArg.equals("-s")) {
+                    dbName = argv[++whichArg];
+                } else {
+                    throw new IllegalArgumentException
+                        (nextArg + " is not a supported option.");
+                }
+                whichArg++;
+            }
+
+            /* Make an environment */
+            EnvironmentConfig envConfig = new EnvironmentConfig();
+
+            /* Do debug log to the console.*/
+            Label848: ;
+
+            /* Don't debug log to the database log. */
+            Label847: ;
+	
+
+            /* 
+             * If evicting, scan the given database first and don't run the
+             * background evictor.
+             */
+            Label845: ;
+
+
+                
+            recoveryStart = System.currentTimeMillis();
+
+            Environment env =
+		new Environment(new File(envHome), envConfig);
+
+            CheckpointConfig forceConfig = new CheckpointConfig();
+            forceConfig.setForce(true);
+            
+            actionStart = System.currentTimeMillis();
+            switch(doAction) {
+            case CLEAN:
+                /* Since this is batch cleaning, repeat until no progress. */
+                while (true) {
+                    int nFiles = env.cleanLog();
+                    System.out.println("Files cleaned: " + nFiles);
+                    if (nFiles == 0) {
+                        break;
+                    }
+                }
+                env.checkpoint(forceConfig);
+                break;
+            case COMPRESS:
+                Label840: ;
+                break;
+            case EVICT:
+                Label844: ;
+                break;
+            case CHECKPOINT:
+                env.checkpoint(forceConfig);
+                break;
+            case REMOVEDB:
+                Label842: ;
+
+                break;
+            case DBSTATS:
+	               Label838: ;
+                break;
+            }
+            actionEnd = System.currentTimeMillis();
+
+            env.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            usage();
+            System.exit(1);
+        } finally {
+            DecimalFormat f = new DecimalFormat();
+            f.setMaximumFractionDigits(2);
+
+            long recoveryDuration = actionStart - recoveryStart;
+            System.out.println("\nrecovery time = " +
+                               f.format(recoveryDuration) +
+                               " millis " +
+                               f.format((double)recoveryDuration/60000) +
+                               " minutes");
+
+            long actionDuration = actionEnd - actionStart;
+            System.out.println("action time = " +
+                               f.format(actionDuration) +
+                               " millis " +
+                               f.format(actionDuration/60000) +
+                               " minutes");
+
+        }
+    
     }
 
     private static String getSecs(long start, long end) {

@@ -2,7 +2,7 @@ namespace com.sleepycat.je.dbi;
 
 class TruncateResult
 {
-  depend de.ovgu.cide.jakutil.*;
+
     private DatabaseImpl db;
 
     private int count;

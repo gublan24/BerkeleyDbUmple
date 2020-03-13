@@ -12,34 +12,37 @@ class LockManager
      * Statistics
      */
     public LockStats lockStat(StatsConfig config) throws DatabaseException {
-			return new LockManager_lockStat(this, config).execute();
+	        LockStats stats = new LockStats();
+					Label769: ;
+		      
+		      return stats;
     }
 
     after Label774: (EnvironmentImpl ) {
 			nRequests = 0;
 			nWaits = 0;
-			//original();
+
     }
 
     before attemptLockInternal(Long , Locker , LockType , boolean , int ) {
 			nRequests++;
-			//return original(nodeId, locker, type, nonBlockingRequest, lockTableIndex);
+
     }
 
     after Label775: attemptLockInternal(Long , Locker , LockType , boolean , int ) {
 			nWaits++;
-			//original();
+
     }
 
     after Label776: dumpLockTableInternal(LockStats , int ) {
 			stats.accumulateNTotalLocks(lockTable.size());
-			//original(stats, lockTable);
+
     }
 
     after Label777: dumpLockTableInternal(LockStats , int ) {
 			stats.setNWaiters(stats.getNWaiters() + lock.nWaiters());
 			stats.setNOwners(stats.getNOwners() + lock.nOwners());
-			//original(stats, lock);
+
     }
 
     after Label778: dumpLockTableInternal(LockStats , int ) {
@@ -49,7 +52,7 @@ class LockManager
 			} else {
 					stats.setNReadLocks(stats.getNReadLocks() + 1);
 			}
-			//original(stats, info);
+
 				}
 
 }

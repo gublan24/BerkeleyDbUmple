@@ -1,20 +1,14 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/INCompressor/com/sleepycat/je/util/DbRunAction.java
+
 namespace com.sleepycat.je.util;
 class DbRunAction {
-  @MethodObject static class DbRunAction_main {
-      after Label840:  execute(){
-        if (doAction == COMPRESS) {
-          env.compress();
-        }
-        //original();
+
+      after Label840:  main(String ) {
+   			doAction = COMPRESS;
+
       }
-      after Label841:  execute(){
-        if (action.equalsIgnoreCase("compress")) {
-          doAction=COMPRESS;
-        }
- //  else {
-   //       original();
-     //   }
+      after Label841:  main(String ) {
+   		env.compress();	
+ 
       }
-    }
+    
 }

@@ -14,14 +14,14 @@ class CursorImpl
 		if (DEBUG) {
 			  verifyCursor(bin);
 		}
-		//original();
+
     }
 
     after Label277: getNextWithKeyChangeStatus(DatabaseEntry , DatabaseEntry ,	LockType , boolean , boolean ){
 			if (DEBUG) {
 					verifyCursor(dupBin);
 			}
-//			original();
+
     }
 
     after Label278: checkCursorState(boolean ) {
@@ -34,7 +34,7 @@ class CursorImpl
 				verifyCursor(dupBin);
 					}
 			}
-			//original();
+
 		}
 
 }

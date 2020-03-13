@@ -1,13 +1,16 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingDbLogHandler/com/sleepycat/je/util/DbRunAction.java
+
 namespace com.sleepycat.je.util;
 class DbRunAction {
-   static class DbRunAction_main {
-      after Label847: execute(){
-        if (readOnly) {
-          envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(),"false");
-          envConfig.setReadOnly(true);
-        }
-        //original(); 
+
+      after Label847: main(String ) {
+				 if (readOnly) {
+
+                envConfig.setConfigParam
+                    (EnvironmentParams.JE_LOGGING_DBLOG.getName(), "false");
+
+                envConfig.setReadOnly(true);
+            }
+
       }
-    }
+    
 }

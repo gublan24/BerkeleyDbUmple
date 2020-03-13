@@ -1,6 +1,7 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/util/DbRunAction.java
+
 namespace com.sleepycat.je.util;
 class DbRunAction {
+
    static class DbRunAction_doEvict {
       DbRunAction_doEvict(    Environment env){
         this.env=env;
@@ -25,31 +26,30 @@ class DbRunAction {
       protected long start;
       protected long end;
       protected DecimalFormat f;
-   //   protected void hook836() throws DatabaseException {
-   //   }
-  //    protected void hook837() throws DatabaseException {
-  //    }
+
     }
-   static class DbRunAction_main {
-      after Label844:execute(){
-        if (doAction == EVICT) {
-          preload(env,dbName);
-        }
-        //original();
+
+      after Label844:main(String ) {
+       preload(env, dbName);
+
       }
-      after Label845: execute() {
+      after Label845: main(String ) {
         if (doAction == EVICT) {
-          envConfig.setConfigParam(EnvironmentParams.ENV_RUN_EVICTOR.getName(),"false");
-          envConfig.setConfigParam(EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE.getName(),"1000");
-        }
-        //original();
+
+                envConfig.setConfigParam(
+                  EnvironmentParams.ENV_RUN_EVICTOR.getName(), "false");
+                envConfig.setConfigParam(
+                  EnvironmentParams.EVICTOR_CRITICAL_PERCENTAGE.getName(),
+                                          "1000");
+            }
+
       }
-      after Label846: execute(){
-        if (action.equalsIgnoreCase("evict")) {
+      after Label846: main(String ) {
+
           doAction=EVICT;
-          elseFlag = false; 
-        }
+
+        
   
       }
-    }
+    
 }

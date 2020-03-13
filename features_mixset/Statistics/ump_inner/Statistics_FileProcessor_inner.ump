@@ -23,7 +23,7 @@ class FileProcessor {
 
         after Label145: processFile(Long ) { 
           		nEntriesReadThisRun = reader.getNumRead();
-			nRepeatIteratorReadsThisRun = reader.getNRepeatIteratorReads();
+							nRepeatIteratorReadsThisRun = reader.getNRepeatIteratorReads();
 
         }
         after Label146: processFile(Long ) { 

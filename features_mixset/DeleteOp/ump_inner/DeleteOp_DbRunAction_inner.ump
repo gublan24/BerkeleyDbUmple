@@ -1,18 +1,18 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/DeleteOp/com/sleepycat/je/util/DbRunAction.java
+
 namespace com.sleepycat.je.util;
 class DbRunAction {
-   static class DbRunAction_main {
-      after Label842:execute() { 
-        if (doAction == REMOVEDB) {
-          removeAndClean(env,dbName);}
+
+      after Label842:  main(String ) {
+
+				removeAndClean(env, dbName);
       }
 
-      after Label843:execute() { 
-        if (action.equalsIgnoreCase("removedb")) {
+      after Label843:  main(String ) {
+
           doAction=REMOVEDB;
-          elseFlag = false; 
-        }
+
+        
 		
       }
-    }
+    
 }

@@ -42,14 +42,14 @@ class DbTree
 				DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
 				nameCursor.putCurrent(dataDbt, null, null);
 
-        Label296:				//this.hook296(locker, result, newDb);
+        Label296:				
 				return recordCount;
 					}
 			} catch (CloneNotSupportedException CNSE) {
 					throw new DatabaseException(CNSE);
 			} finally {
 					if (nameCursor != null) {
-				    Label294:						//this.hook294(nameCursor);
+				    Label294:						
 						nameCursor.close();
 					}
 			}
@@ -103,7 +103,7 @@ class DbTree
 				count = oldDatabase.countRecords();
 					}
 
-          Label297:	;				//this.hook297(locker, oldDatabase);
+          Label297:	;				
 					DatabaseEntry dataDbt = new DatabaseEntry(new byte[0]);
 					nameCursor.putCurrent(dataDbt, null, null);
 					return new TruncateResult(newDb, (int) count);
@@ -113,23 +113,11 @@ class DbTree
 					throw new DatabaseException(UEE);
 			} finally {
 
-					Label295:					//this.hook295(nameCursor);
+					Label295:				
+
 					nameCursor.close();
 			}
 				}
 
-  //  protected void hook294(CursorImpl nameCursor) throws DatabaseException {
-   // }
-
-//    protected void hook295(CursorImpl nameCursor) throws DatabaseException {
-//    }
-
- //   protected void hook296(Locker locker, NameLockResult result, DatabaseImpl newDb)
-	//    throws DatabaseException, CloneNotSupportedException {
-  //  }
-
- //   protected void hook297(Locker locker, DatabaseImpl oldDatabase)
-	//    throws DatabaseException, CloneNotSupportedException, UnsupportedEncodingException {
-    //}
 
 }

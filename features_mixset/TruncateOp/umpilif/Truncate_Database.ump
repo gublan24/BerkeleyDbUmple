@@ -67,7 +67,7 @@ class Database
 					throw new DatabaseException("couldn't find database - truncate");
 			}
 
-			Label43:			//this.hook43();
+			Label43:			
 			if (handleLocker.isHandleLockTransferrable()) {
 					handleLocker.transferHandleLock(this, locker, false);
 			}
@@ -82,7 +82,5 @@ class Database
 			}
     }
 
-//    protected void hook43() throws DatabaseException {
-//    }
 
 }

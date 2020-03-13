@@ -7,7 +7,7 @@ class DatabaseImpl {
         try {
               around_proceed:
         }
-   catch (   HaltPreloadException HPE) {
+   			catch (   HaltPreloadException HPE) {
           ret.status=HPE.getStatus();
         }
       }

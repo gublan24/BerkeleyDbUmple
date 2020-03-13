@@ -4,4 +4,4 @@ use Truncate_TruncateResult.ump;
 use Truncate_DbTree.ump;
 use Truncate_Database.ump;
 
-use ../ump_inner/Truncate_Master.ump;
+//use ../ump_inner/Truncate_Master.ump;
