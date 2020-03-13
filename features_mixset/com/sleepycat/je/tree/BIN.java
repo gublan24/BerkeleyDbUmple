@@ -487,7 +487,6 @@ updateMemorySize(getTarget(index), null);
   public void adjustCursorsForMutation(int binIndex, DBIN dupBin, int dupBinIndex, CursorImpl excludeCursor){
     // line 71 "../../../../Latches_BIN.ump"
     assert this.isLatchOwner();
-            //original(binIndex, dupBin, dupBinIndex, excludeCursor);
     // END OF UMPLE BEFORE INJECTION
     if (cursorSet != null) {
    Iterator iter = cursorSet.iterator();

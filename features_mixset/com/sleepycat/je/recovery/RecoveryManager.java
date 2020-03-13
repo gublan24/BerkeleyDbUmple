@@ -55,6 +55,7 @@ import com.sleepycat.je.latch.LatchSupport;
 // line 3 "../../../../Latches_RecoveryManager.ump"
 // line 3 "../../../../Evictor_RecoveryManager.ump"
 // line 3 "../../../../INCompressor_RecoveryManager.ump"
+// line 3 "../../../../Checksum_RecoveryManager.ump"
 // line 3 "../../../../Derivative_LoggingDbLogHandler_LoggingBase_RecoveryManager.ump"
 public class RecoveryManager
 {
@@ -312,7 +313,10 @@ env.invokeEvictor();
 	reader.addTargetType(LogEntryType.LOG_IN);
 	reader.addTargetType(LogEntryType.LOG_BIN);
 	reader.addTargetType(LogEntryType.LOG_IN_DELETE_INFO);
-	Label593://          ;  //this.hook593(reader);
+	Label593:
+reader.setAlwaysValidateChecksum(true);
+			//original(reader);
+//          ;  //this.hook593(reader);
 	try {
 	    info.numMapINs = 0;
 	    DbTree dbMapTree = env.getDbMapTree();

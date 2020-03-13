@@ -67,9 +67,7 @@ rootIN.latch(false);
 					}
 		//hook599
     Label599_1:
-//			try {original(root, rootIN);} finally {
-					rootIN.releaseLatch();
-	//		}
+rootIN.releaseLatch();
 
 		return null;
   }

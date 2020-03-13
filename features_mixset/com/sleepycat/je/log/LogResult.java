@@ -2,10 +2,9 @@
 /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.log;
-import de.ovgu.cide.jakutil.*;
 
 // line 3 "../../../../LogResult.ump"
-// line 3 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
+// line 4 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
 public class LogResult
 {
 
@@ -32,8 +31,7 @@ public class LogResult
     this.currentLsn = currentLsn;
 	  Label510:
 this.wakeupCheckpointer = wakeupCheckpointer;
-	//original(wakeupCheckpointer);
- //this.hook510(wakeupCheckpointer);
+
 	  this.wakeupCleaner = wakeupCleaner;
   }
   
@@ -45,7 +43,7 @@ this.wakeupCheckpointer = wakeupCheckpointer;
   protected long currentLsn ;
 // line 7 "../../../../LogResult.ump"
   protected boolean wakeupCleaner ;
-// line 5 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
+// line 6 "../../../../Derivative_CheckpointerDaemon_CPBytes_LogResult.ump"
   protected boolean wakeupCheckpointer ;
 
   

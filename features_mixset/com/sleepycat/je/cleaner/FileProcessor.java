@@ -47,8 +47,12 @@ import com.sleepycat.je.utilint.*;
 // line 4 "../../../../DeleteOp_FileProcessor_inner.ump"
 // line 3 "../../../../Statistics_FileProcessor.ump"
 // line 3 "../../../../Statistics_FileProcessor_inner.ump"
+// line 3 "../../../../Checksum_FileProcessor.ump"
+// line 3 "../../../../Checksum_FileProcessor_inner.ump"
 // line 3 "../../../../LoggingCleaner_FileProcessor.ump"
 // line 3 "../../../../LoggingCleaner_FileProcessor_inner.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor.ump"
+// line 4 "../../../../Derivative_Evictor_CriticalEviction_FileProcessor_inner.ump"
 public class FileProcessor extends DaemonThread
 {
 
@@ -557,7 +561,9 @@ cleaner.trace(cleaner.detailedTraceLevel, Cleaner.CLEAN_IN, inClone, lsn, comple
 			CleanerFileReader reader = new CleanerFileReader(env,
 					readBufferSize, DbLsn.NULL_LSN, fileNum);
 			/* Validate all entries before ever deleting a file. */
-			Label137: ;
+			Label137:
+reader.setAlwaysValidateChecksum(true);
+ ;
 
 			DbTree dbMapTree = env.getDbMapTree();
 			TreeLocation location = new TreeLocation();
@@ -627,7 +633,11 @@ if (isLN) {
 				}
 
 				/* Evict before processing each entry. */
-				Label119: ;
+				Label119:
+if (Cleaner.DO_CRITICAL_EVICTION) {
+					env.getEvictor().doCriticalEviction();
+				}
+ ;
 
 				/* The entry is not known to be obsolete -- process it now. */
 				if (isLN) {

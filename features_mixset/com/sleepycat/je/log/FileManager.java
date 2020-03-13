@@ -1,14 +1,7 @@
-/*-
- * See the file LICENSE for redistribution information.
- *
- * Copyright (c) 2002-2006
- *      Sleepycat Software.  All rights reserved.
- *
- * $Id: FileManager.java,v 1.155 2006/01/04 00:37:37 cwl Exp $
- */
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
 
 package com.sleepycat.je.log;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,7 +20,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.zip.Checksum;
-
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.EnvironmentStats;
 import com.sleepycat.je.RunRecoveryException;
@@ -43,119 +35,60 @@ import com.sleepycat.je.utilint.DbLsn;
 import com.sleepycat.je.utilint.HexFormatter;
 
 /**
+ * 
  * The FileManager presents the abstraction of one contiguous file.  It doles
  * out LSNs.
  */
-public class FileManager {
+// line 18 "../../../../FileManager.ump"
+// line 4 "../../../../FileManager_static.ump"
+// line 3 "../../../../Latches_FileManager.ump"
+// line 3 "../../../../EnvironmentLocking_FileManager.ump"
+// line 3 "../../../../FileHandleCache_FileManager.ump"
+// line 3 "../../../../Statistics_FileManager.ump"
+// line 3 "../../../../IO_FileManager.ump"
+// line 3 "../../../../IO_FileManager_inner.ump"
+// line 3 "../../../../ChunckedNIO_FileManager.ump"
+// line 3 "../../../../NIO_FileManager.ump"
+// line 3 "../../../../NIO_FileManager_inner.ump"
+// line 3 "../../../../FSync_FileManager.ump"
+// line 5 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+// line 3 "../../../../Derivative_FSync_Statistics_FileManager.ump"
+// line 2 "../../../../Derivative_IO_SynchronizedIO_FileManager_inner.ump"
+// line 3 "../../../../Derivative_NIO_ChunkedNIO_FileManager_inner.ump"
+public class FileManager
+{
 
-    public static class FileMode {
-        public static final FileMode READ_MODE = new FileMode("r");
-        public static final FileMode READWRITE_MODE = new FileMode("rw");
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
 
-        private String fileModeValue;
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
 
-        private FileMode(String fileModeValue) {
-            this.fileModeValue = fileModeValue;
-        }
+  public FileManager()
+  {}
 
-	public String getModeValue() {
-	    return fileModeValue;
-	}
-    }
+  //------------------------
+  // INTERFACE
+  //------------------------
 
-    static boolean IO_EXCEPTION_TESTING = false;
-    private static final String DEBUG_NAME = FileManager.class.getName();
-    /* The number of writes that have been performed. */
-    private static long writeCount = 0;
-    private static long stopOnWriteCount = Long.MAX_VALUE;
+  public void delete()
+  {}
 
-    public static final String JE_SUFFIX = ".jdb";  // regular log files
-    public static final String CIF_SUFFIX = ".cif";  // cleaner info files
-    public static final String DEL_SUFFIX = ".del";  // cleaned files
-    public static final String BAD_SUFFIX = ".bad";  // corrupt files
-    public static final String LOCK_SUFFIX = ".lck"; // lock files
-    static final String[] DEL_SUFFIXES = { DEL_SUFFIX };
-    static final String[] JE_SUFFIXES = { JE_SUFFIX };
-    private static final String[] JE_AND_DEL_SUFFIXES =
-    { JE_SUFFIX, DEL_SUFFIX };
 
-    /* May be set to false to speed unit tests. */
-    private boolean syncAtFileEnd = true;
-
-    private EnvironmentImpl envImpl;
-    private long maxFileSize;
-    private File dbEnvHome;
-
-    /* True if .del files should be included in the list of log files. */
-    private boolean includeDeletedFiles = false;
-
-    /* File cache */
-    private FileCache fileCache;
-    private Latch fileCacheLatch;
-
-    /* The channel and lock for the je.lck file. */
-    private RandomAccessFile lockFile;
-    private FileChannel channel;
-    private FileLock envLock;
-    private FileLock exclLock;
-
-    /* True if all files should be opened readonly. */
-    private boolean readOnly;
-
-    /* Handles onto log position */
-    private long currentFileNum;     // number of the current file
-    private long nextAvailableLsn;   // nextLSN is the next one available
-    private long lastUsedLsn;        // last LSN used in the current log file
-    private long prevOffset;         // Offset to use for the previous pointer
-    private boolean forceNewFile;    // Force new file on next write
-
-    /* 
-     * Saved versions of above.  Save this in case a write causes an
-     * IOException, we can back the log up to the last known good LSN.
-     */
-    private long savedCurrentFileNum;
-    private long savedNextAvailableLsn; // nextLSN is the next one available
-    private long savedLastUsedLsn;   // last LSN used in the current log file
-    private long savedPrevOffset;    // Offset to use for the previous pointer
-    private boolean savedForceNewFile;
-
-    /* endOfLog is used for writes and fsyncs to the end of the log. */
-    private LogEndFileDescriptor endOfLog;
-
-    /* group commit sync */
-    private FSyncManager syncManager;
-
-    /*
-     * When we bump the LSNs over to a new file, we must remember the last LSN
-     * of the previous file so we can set the prevOffset field of the file
-     * header appropriately. We have to save it in a map because there's a time
-     * lag between when we know what the last LSN is and when we actually do
-     * the file write, because LSN bumping is done before we get a write
-     * buffer.  This map is keyed by file num->last LSN.
-     */
-    private Map perFileLastUsedLsn;
-
-    /* Whether to use NIO for file I/O. */
-    private boolean useNIO;
-    
-    /*
-     * If non-0, do NIO in chunks of this size.
-     */
-    private long chunkedNIOSize = 0;
-
-    /**
-     * Set up the file cache and initialize the file manager to point to the
-     * beginning of the log.
-     * 
-     * @param configManager
-     * @param dbEnvHome environment home directory
-     */
-    public FileManager(EnvironmentImpl envImpl,
-                       File dbEnvHome,
-                       boolean readOnly)
-        throws DatabaseException {
-
-        this.envImpl = envImpl;
+  /**
+   * If non-0, do NIO in chunks of this size.
+   * 
+   * Set up the file cache and initialize the file manager to point to the
+   * beginning of the log.
+   * 
+   * @param configManager
+   * @param dbEnvHome environment home directory
+   */
+  // line 155 "../../../../FileManager.ump"
+   public  FileManager(EnvironmentImpl envImpl, File dbEnvHome, boolean readOnly) throws DatabaseException{
+    this.envImpl = envImpl;
         this.dbEnvHome = dbEnvHome;
         this.readOnly = readOnly;
 
@@ -164,8 +97,10 @@ public class FileManager {
         maxFileSize = configManager.getLong(EnvironmentParams.LOG_FILE_MAX);
 
       //  useNIO =  configManager.getBoolean(EnvironmentParams.LOG_USE_NIO);
-        chunkedNIOSize =
-	    configManager.getLong(EnvironmentParams.LOG_CHUNKED_NIO);
+        Label456:
+chunkedNIOSize =    configManager.getLong(EnvironmentParams.LOG_CHUNKED_NIO);
+ ;
+
       //  boolean directNIO =     configManager.getBoolean(EnvironmentParams.LOG_DIRECT_NIO);
 /*
         if (!useNIO && (chunkedNIOSize > 0 || directNIO)) {
@@ -179,12 +114,21 @@ public class FileManager {
         }
         */
 
-        lockEnvironment(readOnly, false);
+        Label467:
+lockEnvironment(readOnly, false);
+
+//
+ ;
 
         /* Cache of files. */
-        fileCache = new FileCache(configManager);
-        fileCacheLatch =
-	    LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
+        Label457:
+fileCache = new FileCache(configManager);
+ ; 
+        Label449:
+fileCacheLatch =LatchSupport.makeLatch(DEBUG_NAME + "_fileCache", envImpl);
+ ;
+
+
 
         if (!dbEnvHome.exists()) {
             throw new LogException("Environment home " + dbEnvHome +
@@ -207,117 +151,139 @@ public class FileManager {
             stopOnWriteCount = Long.parseLong(stopOnWriteProp);
         }
 
-        syncManager = new FSyncManager(envImpl);
-    }
+        Label452:
+syncManager = new FSyncManager(envImpl);
+ ;
+  }
 
-    /**
-     * Set the file manager's "end of log".
-     *
-     * @param nextAvailableLsn LSN to be used for the next log entry
-     * @param lastUsedLsn last LSN to have a valid entry, may be null
-     * @param prevOffset value to use for the prevOffset of the next entry.
-     *  If the beginning of the file, this is 0.
-     */
-    public void setLastPosition(long nextAvailableLsn,
-                                long lastUsedLsn,
-                                long prevOffset) {
-        this.lastUsedLsn = lastUsedLsn;
+
+  /**
+   * 
+   * Set the file manager's "end of log".
+   * 
+   * @param nextAvailableLsn LSN to be used for the next log entry
+   * @param lastUsedLsn last LSN to have a valid entry, may be null
+   * @param prevOffset value to use for the prevOffset of the next entry.
+   * If the beginning of the file, this is 0.
+   */
+  // line 223 "../../../../FileManager.ump"
+   public void setLastPosition(long nextAvailableLsn, long lastUsedLsn, long prevOffset){
+    this.lastUsedLsn = lastUsedLsn;
         perFileLastUsedLsn.put(new Long(DbLsn.getFileNumber(lastUsedLsn)),
                                new Long(lastUsedLsn));
         this.nextAvailableLsn = nextAvailableLsn;
         currentFileNum = DbLsn.getFileNumber(this.nextAvailableLsn);
         this.prevOffset = prevOffset;
 	saveLastPosition();
-    }
+  }
 
-    /*
-     * Cause the current LSN state to be saved in case we fail after we have
-     * bumped the lsn pointer but before we've successfully marshalled into the
-     * log buffer.
-     */
-    void saveLastPosition() {
-	savedNextAvailableLsn = nextAvailableLsn;
+
+  /**
+   * Cause the current LSN state to be saved in case we fail after we have
+   * bumped the lsn pointer but before we've successfully marshalled into the
+   * log buffer.
+   */
+  // line 238 "../../../../FileManager.ump"
+  public void saveLastPosition(){
+    savedNextAvailableLsn = nextAvailableLsn;
 	savedLastUsedLsn = lastUsedLsn;
 	savedPrevOffset = prevOffset;
         savedForceNewFile = forceNewFile;
         savedCurrentFileNum = currentFileNum;
-    }
+  }
 
-    void restoreLastPosition() {
-	nextAvailableLsn = savedNextAvailableLsn;
+  // line 246 "../../../../FileManager.ump"
+  public void restoreLastPosition(){
+    nextAvailableLsn = savedNextAvailableLsn;
 	lastUsedLsn = savedLastUsedLsn;
 	prevOffset = savedPrevOffset;
         forceNewFile = savedForceNewFile;
         currentFileNum = savedCurrentFileNum;
-    }
+  }
 
-    /**
-     * May be used to disable sync at file end to speed unit tests.
-     * Must only be used for unit testing, since log corruption may result.
-     */
-    public void setSyncAtFileEnd(boolean sync) {
-        syncAtFileEnd = sync;
-    }
 
-    /*
-     * File management
-     */
+  /**
+   * 
+   * May be used to disable sync at file end to speed unit tests.
+   * Must only be used for unit testing, since log corruption may result.
+   */
+  // line 258 "../../../../FileManager.ump"
+   public void setSyncAtFileEnd(boolean sync){
+    syncAtFileEnd = sync;
+  }
 
-    /**
-     * public for cleaner.
-     *
-     * @return the number of the first file in this environment.
-     */
-    public Long getFirstFileNum() {
-        return getFileNum(true);
-    }
 
-    public boolean getReadOnly() {
-	return readOnly;
-    }
+  /**
+   * File management
+   * 
+   * public for cleaner.
+   * 
+   * @return the number of the first file in this environment.
+   */
+  // line 271 "../../../../FileManager.ump"
+   public Long getFirstFileNum(){
+    return getFileNum(true);
+  }
 
-    /**
-     * @return the number of the last file in this environment.
-     */
-    public Long getLastFileNum() {
-        return getFileNum(false);
-    }
+  // line 275 "../../../../FileManager.ump"
+   public boolean getReadOnly(){
+    return readOnly;
+  }
 
-    /*
-     * For unit tests.
-     */
-    public long getCurrentFileNum() {
-	return currentFileNum;
-    }
 
-    public void setIncludeDeletedFiles(boolean includeDeletedFiles) {
-	this.includeDeletedFiles = includeDeletedFiles;
-    }
+  /**
+   * 
+   * @return the number of the last file in this environment.
+   */
+  // line 282 "../../../../FileManager.ump"
+   public Long getLastFileNum(){
+    return getFileNum(false);
+  }
 
-    /**
-     * Get all JE file numbers.
-     * @return an array of all JE file numbers.
-     */
-    public Long[] getAllFileNumbers() {
-        /* Get all the names in sorted order. */
+
+  /**
+   * For unit tests.
+   */
+  // line 289 "../../../../FileManager.ump"
+   public long getCurrentFileNum(){
+    return currentFileNum;
+  }
+
+  // line 293 "../../../../FileManager.ump"
+   public void setIncludeDeletedFiles(boolean includeDeletedFiles){
+    this.includeDeletedFiles = includeDeletedFiles;
+  }
+
+
+  /**
+   * 
+   * Get all JE file numbers.
+   * @return an array of all JE file numbers.
+   */
+  // line 301 "../../../../FileManager.ump"
+   public Long[] getAllFileNumbers(){
+    /* Get all the names in sorted order. */
         String[] names = listFiles(JE_SUFFIXES);
         Long[] nums = new Long[names.length];
         for (int i = 0; i < nums.length; i += 1) {
             nums[i] = getNumFromName(names[i]);
         }
         return nums;
-    }
+  }
 
-    /**
-     * Get the next file number before/after currentFileNum. 
-     * @param currentFileNum the file we're at right now. Note that
-     * it may not exist, if it's been cleaned and renamed.
-     * @param forward if true, we want the next larger file, if false
-     * we want the previous file
-     * @return null if there is no following file, or if filenum doesn't exist
-     */
-    public Long getFollowingFileNum(long currentFileNum, boolean forward) {
-        /* Get all the names in sorted order. */
+
+  /**
+   * 
+   * Get the next file number before/after currentFileNum. 
+   * @param currentFileNum the file we're at right now. Note that
+   * it may not exist, if it's been cleaned and renamed.
+   * @param forward if true, we want the next larger file, if false
+   * we want the previous file
+   * @return null if there is no following file, or if filenum doesn't exist
+   */
+  // line 319 "../../../../FileManager.ump"
+   public Long getFollowingFileNum(long currentFileNum, boolean forward){
+    /* Get all the names in sorted order. */
         String[] names = listFiles(JE_SUFFIXES);
 
         /* Search for the current file. */
@@ -355,24 +321,30 @@ public class FileManager {
         } else {
             return null;
         }
-    }
+  }
 
-    /**
-     * @return true if there are any files at all.
-     */
-    public boolean filesExist() {
-        String[] names = listFiles(JE_SUFFIXES);
+
+  /**
+   * 
+   * @return true if there are any files at all.
+   */
+  // line 363 "../../../../FileManager.ump"
+   public boolean filesExist(){
+    String[] names = listFiles(JE_SUFFIXES);
         return (names.length != 0);
-    }
+  }
 
-    /**
-     * Get the first or last file number in the set of je files.
-     * 
-     * @param first if true, get the first file, else get the last file
-     * @return the file number or null if no files exist
-     */
-    private Long getFileNum(boolean first) {
-        String[] names = listFiles(JE_SUFFIXES);
+
+  /**
+   * 
+   * Get the first or last file number in the set of je files.
+   * 
+   * @param first if true, get the first file, else get the last file
+   * @return the file number or null if no files exist
+   */
+  // line 374 "../../../../FileManager.ump"
+   private Long getFileNum(boolean first){
+    String[] names = listFiles(JE_SUFFIXES);
         if (names.length == 0) {
             return null;
         } else {
@@ -382,48 +354,60 @@ public class FileManager {
             }
             return getNumFromName(names[index]);
         }
-    }
+  }
 
-    /**
-     * Get the file number from a file name.
-     * 
-     * @param the file name
-     * @return the file number
-     */
-    private Long getNumFromName(String fileName) {
-        String fileNumber = fileName.substring(0, fileName.indexOf("."));
+
+  /**
+   * 
+   * Get the file number from a file name.
+   * 
+   * @param the file name
+   * @return the file number
+   */
+  // line 393 "../../../../FileManager.ump"
+   private Long getNumFromName(String fileName){
+    String fileNumber = fileName.substring(0, fileName.indexOf("."));
         return new Long(Long.parseLong(fileNumber, 16));
-    }
+  }
 
-    /**
-     * Find je files. Return names sorted in ascending fashion.
-     * 
-     * @param suffix which type of file we're looking for
-     * @return array of file names
-     */
-    String[] listFiles(String[] suffixes) {
-        String[] fileNames = dbEnvHome.list(new JEFileFilter(suffixes));
+
+  /**
+   * 
+   * Find je files. Return names sorted in ascending fashion.
+   * 
+   * @param suffix which type of file we're looking for
+   * @return array of file names
+   */
+  // line 404 "../../../../FileManager.ump"
+  public String[] listFiles(String [] suffixes){
+    String[] fileNames = dbEnvHome.list(new JEFileFilter(suffixes));
         Arrays.sort(fileNames);
         return fileNames;
-    }
+  }
 
-    /**
-     * Find je files, flavor for unit test support.
-     * 
-     * @param suffix which type of file we're looking for
-     * @return array of file names
-     */
-    public static String[] listFiles(File envDirFile, String[] suffixes) {
-        String[] fileNames = envDirFile.list(new JEFileFilter(suffixes));
+
+  /**
+   * 
+   * Find je files, flavor for unit test support.
+   * 
+   * @param suffix which type of file we're looking for
+   * @return array of file names
+   */
+  // line 416 "../../../../FileManager.ump"
+   public static  String[] listFiles(File envDirFile, String [] suffixes){
+    String[] fileNames = envDirFile.list(new JEFileFilter(suffixes));
         Arrays.sort(fileNames);
         return fileNames;
-    }
+  }
 
-    /**
-     * @return the full file name and path for the nth je file.
-     */
-    String[] getFullFileNames(long fileNum) {
-	if (includeDeletedFiles) {
+
+  /**
+   * 
+   * @return the full file name and path for the nth je file.
+   */
+  // line 425 "../../../../FileManager.ump"
+  public String[] getFullFileNames(long fileNum){
+    if (includeDeletedFiles) {
 	    int nSuffixes = JE_AND_DEL_SUFFIXES.length;
 	    String[] ret = new String[nSuffixes];
 	    for (int i = 0; i < nSuffixes; i++) {
@@ -435,47 +419,56 @@ public class FileManager {
 	    return new String[]
                 { getFullFileName(getFileName(fileNum, JE_SUFFIX)) };
 	}
-    }
+  }
 
-    /**
-     * @return the full file name and path for the given file number and
-     * suffix.
-     */
-    public String getFullFileName(long fileNum, String suffix) {
-        return getFullFileName(getFileName(fileNum, suffix));
-    }
 
-    /**
-     * @return the full file name and path for this file name.
-     */
-    private String getFullFileName(String fileName) {
-        return dbEnvHome + File.separator + fileName;
-    }
+  /**
+   * 
+   * @return the full file name and path for the given file number and
+   * 
+   */
+  // line 444 "../../../../FileManager.ump"
+   public String getFullFileName(long fileNum, String suffix){
+    return getFullFileName(getFileName(fileNum, suffix));
+  }
 
-    /**
-     * @return the file name for the nth file.
-     */
-    public static String getFileName(long fileNum, String suffix) {
 
-        /* 
+  /**
+   * 
+   * @return the full file name and path for this file name.
+   */
+  // line 451 "../../../../FileManager.ump"
+   private String getFullFileName(String fileName){
+    return dbEnvHome + File.separator + fileName;
+  }
+
+
+  /**
+   * 
+   * @return the file name for the nth file.
+   */
+  // line 459 "../../../../FileManager.ump"
+   public static  String getFileName(long fileNum, String suffix){
+    /* 
          * HexFormatter generates a 0 padded string starting with 0x.  We want
          * the right most 8 digits, so start at 10.
          */
         return (HexFormatter.formatLong(fileNum).substring(10) + suffix);
-    }
+  }
 
-    /**
-     * Rename this file to NNNNNNNN.suffix. If that file already exists, try
-     * NNNNNNNN.suffix.1, etc. Used for deleting files or moving corrupt files
-     * aside.
-     * 
-     * @param fileNum the file we want to move
-     * @param newSuffix the new file suffix
-     */
-    public void renameFile(long fileNum, String newSuffix)
-        throws DatabaseException, IOException {
 
-        int repeatNum = 0;
+  /**
+   * 
+   * Rename this file to NNNNNNNN.suffix. If that file already exists, try
+   * NNNNNNNN.suffix.1, etc. Used for deleting files or moving corrupt files
+   * aside.
+   * 
+   * @param fileNum the file we want to move
+   * @param newSuffix the new file suffix
+   */
+  // line 477 "../../../../FileManager.ump"
+   public void renameFile(long fileNum, String newSuffix) throws DatabaseException,IOException{
+    int repeatNum = 0;
         boolean renamed = false;
         while (!renamed) {
             String generation = "";
@@ -489,7 +482,10 @@ public class FileManager {
                 repeatNum++;
             } else {
                 String oldFileName = getFullFileNames(fileNum)[0];
-                clearFileCache(fileNum);
+                Label458:
+clearFileCache(fileNum);
+   ;
+
                 File oldFile = new File(oldFileName);
                 if (oldFile.renameTo(targetFile)) {
                     renamed = true;
@@ -499,47 +495,54 @@ public class FileManager {
                 }
             }
         }
-    }
+  }
 
-    /**
-     * Delete log file NNNNNNNN.
-     * 
-     * @param fileNum the file we want to move
-     */
-    public void deleteFile(long fileNum)
-        throws DatabaseException, IOException {
 
-	String fileName = getFullFileNames(fileNum)[0];
-	clearFileCache(fileNum);
-	File file = new File(fileName);
-	boolean done = file.delete();
-	if (!done) {
-	    throw new LogException
-		("Couldn't delete " + file);
-	}
-    }
+  /**
+   * 
+   * Delete log file NNNNNNNN.
+   * 
+   * @param fileNum the file we want to move
+   */
+  // line 512 "../../../../FileManager.ump"
+   public void deleteFile(long fileNum) throws DatabaseException,IOException{
+    String fileName = getFullFileNames(fileNum)[0];
+									Label459:
+clearFileCache(fileNum);
+   ;
 
-    /**
-     * Return a read only file handle that corresponds the this file number.
-     * Retrieve it from the cache or open it anew and validate the file header.
-     * This method takes a latch on this file, so that the file descriptor will
-     * be held in the cache as long as it's in use.  When the user is done with
-     * the file, the latch must be released.
-     *
-     * @param fileNum which file
-     * @return the file handle for the existing or newly created file
-     */
-    FileHandle getFileHandle(long fileNum)
-        throws LogException, DatabaseException  {
+					File file = new File(fileName);
+					boolean done = file.delete();
+					if (!done) {
+							throw new LogException
+						("Couldn't delete " + file);
+					}
+  }
 
-        /* Check the file cache for this file. */
+
+  /**
+   * 
+   * Return a read only file handle that corresponds the this file number.
+   * Retrieve it from the cache or open it anew and validate the file header.
+   * This method takes a latch on this file, so that the file descriptor will
+   * be held in the cache as long as it's in use.  When the user is done with
+   * the file, the latch must be released.
+   * 
+   * @param fileNum which file
+   * @return the file handle for the existing or newly created file
+   */
+  // line 536 "../../../../FileManager.ump"
+  public FileHandle getFileHandle(long fileNum) throws LogException,DatabaseException{
+    /* Check the file cache for this file. */
         Long fileId = new Long(fileNum);
         FileHandle fileHandle = null;
 
         /**
          * Loop until we get an open FileHandle.
          */
-        while (true) {
+        Label460:
+while (true)
+ {
 
             /*
              * The file cache is intentionally not latched here so that it's
@@ -547,29 +550,40 @@ public class FileManager {
              * handle that we get back is really still open after we latch it
              * down below.
              */
-            fileHandle = fileCache.get(fileId);
+            Label462:
+fileHandle = fileCache.get(fileId);
+ ;
 
             /* The file wasn't in the cache. */
             if (fileHandle == null) {
-                fileCacheLatch.acquire();
+
+LabelGetFileHandle:
+fileCacheLatch.acquire();
+ ;
+
                 try {
                     /* Check the file cache again under the latch. */
                     fileHandle = fileCache.get(fileId);
                     if (fileHandle == null) {
 
-                        fileHandle =
-			    makeFileHandle(fileNum, FileMode.READ_MODE);
+                        fileHandle =		    makeFileHandle(fileNum, FileMode.READ_MODE);
 
                         /* Put it into the cache. */
-                        fileCache.add(fileId, fileHandle);
+                        Label464:
+fileCache.add(fileId, fileHandle);
+ ;
                     }
                 } finally {
-                    fileCacheLatch.release();
+                    Label454:
+fileCacheLatch.release();
+ ;
                 }
             }
 
             /* Get latch before returning */
-            fileHandle.latch();
+            
+fileHandle.latch();
+Label453: ;
 
             /*
              * We may have obtained this file handle outside the file cache
@@ -577,19 +591,22 @@ public class FileManager {
              * it's not, then loop back and try again.
              */
             if (fileHandle.getFile() == null) {
-                fileHandle.release();
+               LabelGetFileHandle_2:
+fileHandle.release();
+ ;
             } else {
-                break;
+                Label460_1:
+break;
+
             }
         }
 
         return fileHandle;
-    }
+  }
 
-    private FileHandle makeFileHandle(long fileNum, FileMode mode)
-        throws DatabaseException {
-
-        String[] fileNames = getFullFileNames(fileNum);
+  // line 594 "../../../../FileManager.ump"
+   private FileHandle makeFileHandle(long fileNum, FileMode mode) throws DatabaseException{
+    String[] fileNames = getFullFileNames(fileNum);
         RandomAccessFile newFile = null;
         String fileName = null;
         try {
@@ -677,13 +694,16 @@ public class FileManager {
             throw new DatabaseException
 		("Couldn't open file " + fileName + ": " + t, t);
         }
-    }
+  }
 
-    /**
-     * Close this file and eat any exceptions. Used in catch clauses.
-     */
-    private void closeFileInErrorCase(RandomAccessFile file) {
-        try {
+
+  /**
+   * 
+   * Close this file and eat any exceptions. Used in catch clauses.
+   */
+  // line 688 "../../../../FileManager.ump"
+   private void closeFileInErrorCase(RandomAccessFile file){
+    try {
             if (file != null) {
                 file.close();
             }
@@ -694,21 +714,20 @@ public class FileManager {
              * Couldn't close file, oh well.
 	     */
         }
-    }
+  }
 
-    /**
-     * Read the given je log file and validate the header. 
-     *
-     * @throws DatabaseException if the file header isn't valid
-     *
-     * @return whether the file header has an old version number.
-     */
-    private boolean readAndValidateFileHeader(RandomAccessFile file,
-                                              String fileName,
-                                              long fileNum)
-        throws DatabaseException, IOException {
 
-        /* 
+  /**
+   * 
+   * Read the given je log file and validate the header. 
+   * 
+   * @throws DatabaseException if the file header isn't valid
+   * 
+   * @return whether the file header has an old version number.
+   */
+  // line 713 "../../../../FileManager.ump"
+   private boolean readAndValidateFileHeader(RandomAccessFile file, String fileName, long fileNum) throws DatabaseException,IOException{
+    /* 
          * Read the file header from this file. It's always the first log
          * entry.
          */
@@ -717,17 +736,16 @@ public class FileManager {
             logManager.getLogEntry(DbLsn.makeLsn(fileNum, 0), file);
         FileHeader header = (FileHeader) headerEntry.getMainItem();
         return header.validate(fileName, fileNum);
-    }
+  }
 
-    /**
-     * Write a proper file header to the given file.
-     */
-    private void writeFileHeader(RandomAccessFile file,
-                                 String fileName,
-                                 FileHeader header)
-        throws DatabaseException, IOException {
 
-	/*
+  /**
+   * 
+   * Write a proper file header to the given file.
+   */
+  // line 732 "../../../../FileManager.ump"
+   private void writeFileHeader(RandomAccessFile file, String fileName, FileHeader header) throws DatabaseException,IOException{
+    /*
 	 * Fail loudly if the environment is invalid.  A RunRecoveryException
 	 * must have occurred.
 	 */
@@ -777,44 +795,47 @@ public class FileManager {
 		 " was created with an incomplete header. Only " +
 		 bytesWritten + " bytes were written.");
         }
-    }
+  }
 
-    /**
-     * @return the prevOffset field stored in the file header.
-     */
-    long getFileHeaderPrevOffset(long fileNum) 
-        throws IOException, DatabaseException {
-        
-        LogEntry headerEntry = 
+
+  /**
+   * 
+   * @return the prevOffset field stored in the file header.
+   */
+  // line 790 "../../../../FileManager.ump"
+  public long getFileHeaderPrevOffset(long fileNum) throws IOException,DatabaseException{
+    LogEntry headerEntry = 
             envImpl.getLogManager().getLogEntry(DbLsn.makeLsn(fileNum, 0));
         FileHeader header = (FileHeader) headerEntry.getMainItem();
         return header.getLastEntryInPrevFileOffset();
-    }
+  }
 
-    /*
-     * Support for writing new log entries
-     */
 
-    /**
-     * @return the file offset of the last LSN that was used. For constructing
-     * the headers of log entries. If the last LSN that was used was in a
-     * previous file, or this is the very first LSN of the whole system, return
-     * 0.
-     */
-    long getPrevEntryOffset() {
-        return prevOffset;
-    }
+  /**
+   * Support for writing new log entries
+   * 
+   * @return the file offset of the last LSN that was used. For constructing
+   * the headers of log entries. If the last LSN that was used was in a
+   * previous file, or this is the very first LSN of the whole system, return
+   * 0.
+   */
+  // line 807 "../../../../FileManager.ump"
+  public long getPrevEntryOffset(){
+    return prevOffset;
+  }
 
-    /**
-     * Increase the current log position by "size" bytes. Move the prevOffset
-     * pointer along.
-     * 
-     * @param size is an unsigned int
-     * @return true if we flipped to the next log file.
-     */
-    boolean bumpLsn(long size) {
 
-        /* Save copy of initial lsn state. */
+  /**
+   * 
+   * Increase the current log position by "size" bytes. Move the prevOffset
+   * pointer along.
+   * 
+   * @param size is an unsigned int
+   * @return true if we flipped to the next log file.
+   */
+  // line 819 "../../../../FileManager.ump"
+  public boolean bumpLsn(long size){
+    /* Save copy of initial lsn state. */
         saveLastPosition();
 
         boolean flippedFiles = false;
@@ -850,16 +871,17 @@ public class FileManager {
 			  (DbLsn.getFileOffset(lastUsedLsn) + size));
 
         return flippedFiles;
-    }
+  }
 
-    /**
-     * Write out a log buffer to the file.
-     * @param fullBuffer buffer to write
-     */
-    void writeLogBuffer(LogBuffer fullBuffer)
-        throws DatabaseException {
 
-	/*
+  /**
+   * 
+   * Write out a log buffer to the file.
+   * @param fullBuffer buffer to write
+   */
+  // line 864 "../../../../FileManager.ump"
+  public void writeLogBuffer(LogBuffer fullBuffer) throws DatabaseException{
+    /*
 	 * Fail loudly if the environment is invalid.  A RunRecoveryException
 	 * must have occurred.
 	 */
@@ -895,15 +917,7 @@ public class FileManager {
                  * Check that we do not overwrite unless the file only contains
                  * a header [#11915] [#12616].
                  */
-                assert 
-		    (DbLsn.getFileOffset(firstLsn) >= file.length() ||
-                     file.length() == firstLogEntryOffset()) :
-                        "FileManager would overwrite non-empty file 0x" +
-                        Long.toHexString(DbLsn.getFileNumber(firstLsn)) +
-                        " lsnOffset=0x" +
-                        Long.toHexString(DbLsn.getFileOffset(firstLsn)) +
-                        " fileLength=0x" +
-                        Long.toHexString(file.length());
+  							 Label465:   ;
 
                 if (IO_EXCEPTION_TESTING) {
 		    throw new IOException("generated for testing");
@@ -936,34 +950,28 @@ public class FileManager {
 		 * rewritten.  See [11271].
 		 */
 		abortCommittedTxns(data);
-		try {
-		    if (IO_EXCEPTION_TESTING) {
-			throw new IOException("generated for testing");
-		    }
-		    writeToFile(file, data, DbLsn.getFileOffset(firstLsn));
-		} catch (IOException IOE2) {
-		   
-		    throw new DatabaseException(IOE2);
-		}
-	    }
+		Label466:   ;
+
+
 
 	    assert EnvironmentImpl.maybeForceYield();
         }
     }
+  }
 
-    /**
-     * Write a buffer to a file at a given offset, using NIO if so configured.
-     */
-    private int writeToFile(RandomAccessFile file,
-                            ByteBuffer data,
-                            long destOffset)
-	throws IOException, DatabaseException {
 
-        int totalBytesWritten = 0;
+  /**
+   * 
+   * Write a buffer to a file at a given offset, using NIO if so configured.
+   */
+  // line 949 "../../../../FileManager.ump"
+   private int writeToFile(RandomAccessFile file, ByteBuffer data, long destOffset) throws IOException,DatabaseException{
+    int totalBytesWritten = 0;
         if (useNIO) {
             FileChannel channel = file.getChannel();
 
-            if (chunkedNIOSize > 0) {
+        Label446:
+if (chunkedNIOSize > 0) {
 
                 /*
                  * We can't change the limit without impacting readers that
@@ -1004,6 +1012,8 @@ public class FileManager {
                  */
                 totalBytesWritten = channel.write(data, destOffset);
             }
+ ;
+
         } else {
 
             /*
@@ -1013,8 +1023,13 @@ public class FileManager {
              * object is needed because two threads may call seek() on the same
              * file object.
              */
-            synchronized (file) {
-                assert data.hasArray();
+
+                Label445_1:
+Label447:
+synchronized (file) {
+				
+
+            assert data.hasArray();
                 assert data.arrayOffset() == 0;
 
                 int pos = data.position();
@@ -1023,23 +1038,29 @@ public class FileManager {
                 file.write(data.array(), pos, size);
                 data.position(pos + size);
                 totalBytesWritten = size;
-            }
+            
+
+        }
+Label447_1: ;//
+ ;
+								
+            
         }
         return totalBytesWritten;
-    }
- 
-    /**
-     * Read a buffer from a file at a given offset, using NIO if so configured.
-     */
-    void readFromFile(RandomAccessFile file,
-                      ByteBuffer readBuffer,
-                      long offset)
- 	throws IOException {
- 
-        if (useNIO) {
+  }
+
+
+  /**
+   * 
+   * Read a buffer from a file at a given offset, using NIO if so configured.
+   */
+  // line 980 "../../../../FileManager.ump"
+  public void readFromFile(RandomAccessFile file, ByteBuffer readBuffer, long offset) throws IOException{
+    if (useNIO) {
             FileChannel channel = file.getChannel();
 
-            if (chunkedNIOSize > 0) {
+      Label445:
+if (chunkedNIOSize > 0) {
 
                 /*
                  * Read a chunk at a time to prevent large direct memory
@@ -1066,6 +1087,7 @@ public class FileManager {
                  */
                 channel.read(readBuffer, offset);
             }
+ ;
         } else {
 
             /*
@@ -1075,8 +1097,13 @@ public class FileManager {
              * object is needed because two threads may call seek() on the same
              * file object.
              */
-            synchronized (file) {
-                assert readBuffer.hasArray();
+
+                Label446_1:
+Label448:
+synchronized (file) {
+					
+
+       					assert readBuffer.hasArray();
                 assert readBuffer.arrayOffset() == 0;
 
                 int pos = readBuffer.position();
@@ -1086,18 +1113,29 @@ public class FileManager {
                 if (bytesRead > 0) {
                     readBuffer.position(pos + bytesRead);
                 }
-            }
-        }
-    }
+           
 
-    /*
-     * Iterate through a buffer looking for commit records.  Change all commit
-     * records to abort records.
-     */
-    private void abortCommittedTxns(ByteBuffer data) {
-	final byte commitType = LogEntryType.LOG_TXN_COMMIT.getTypeNum();
+        }
+Label448_1: ;
+ ;
+
+
+            
+        }
+  }
+
+
+  /**
+   * Iterate through a buffer looking for commit records.  Change all commit
+   * records to abort records.
+   */
+  // line 1006 "../../../../FileManager.ump"
+   private void abortCommittedTxns(ByteBuffer data){
+    final byte commitType = LogEntryType.LOG_TXN_COMMIT.getTypeNum();
 	final byte abortType = LogEntryType.LOG_TXN_ABORT.getTypeNum();
-	data.position(0);
+	Label461:
+data.position(0);
+ ;
 
   	while (data.remaining() > 0) {
 	    int recStartPos = data.position();
@@ -1132,114 +1170,125 @@ public class FileManager {
 	    data.position(itemDataStartPos + itemSize);
   	}
 	data.position(0);
-    }
+  }
 
-    /**
-     * FSync the end of the log.
-     */
-    void syncLogEnd()
-        throws DatabaseException {
 
-        try {
+  /**
+   * 
+   * FSync the end of the log.
+   */
+  // line 1051 "../../../../FileManager.ump"
+  public void syncLogEnd() throws DatabaseException{
+    try {
             endOfLog.force();
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-    }
+  }
 
-    /**
-     * Sync the end of the log, close off this log file. Should only be called
-     * under the log write latch.
-     */
-    void syncLogEndAndFinishFile()
-        throws DatabaseException, IOException {
-        
-        if (syncAtFileEnd) {
+
+  /**
+   * 
+   * Sync the end of the log, close off this log file. Should only be called
+   * under the log write latch.
+   */
+  // line 1065 "../../../../FileManager.ump"
+  public void syncLogEndAndFinishFile() throws DatabaseException,IOException{
+    if (syncAtFileEnd) {
             syncLogEnd();
         }
         endOfLog.close();
-    }
+  }
 
-    /**
-     * Flush a file using the group sync mechanism, trying to amortize off
-     * other syncs.
-     */
-    void groupSync()
-        throws DatabaseException {
 
-        syncManager.fsync();
-    }
+  /**
+   * 
+   * Flush a file using the group sync mechanism, trying to amortize off
+   * other syncs.
+   */
+  // line 1078 "../../../../FileManager.ump"
+  public void groupSync() throws DatabaseException{
+    syncManager.fsync();
+  }
 
-    /**
-     * Close all file handles and empty the cache.
-     */
-    public void clear()
-        throws IOException, DatabaseException {
 
-        fileCacheLatch.acquire();
-        try {
-            fileCache.clear();
+  /**
+   * 
+   * Close all file handles and empty the cache.
+   */
+  // line 1087 "../../../../FileManager.ump"
+   public void clear() throws IOException,DatabaseException{
+    // line 23 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
+    try {
+    				Label451:
+fileCache.clear();
+ ;
         } finally {
-            fileCacheLatch.release();
+                Label451_1:
+fileCacheLatch.release();
+ ;
         }
-
         endOfLog.close();
-    }
+  }
 
-    /**
-     * Clear the file lock.
-     */
-    public void close()
-        throws IOException, DatabaseException {
 
-        if (envLock != null) {
-            envLock.release();
-        }
+  /**
+   * 
+   * Clear the file lock.
+   */
+  // line 1102 "../../../../FileManager.ump"
+   public void close() throws IOException,DatabaseException{
+    // line 77 "../../../../EnvironmentLocking_FileManager.ump"
+    if (envLock != null) {
+    	    envLock.release();
+    	}
+    	if (exclLock != null) {
+    	    exclLock.release();
+    	}
+    	if (channel != null) {
+    	    channel.close();
+    	}
+    	if (lockFile != null) {
+    	    lockFile.close();
+    	}
+    // END OF UMPLE BEFORE INJECTION
+    
+  }
 
-        if (exclLock != null) {
-            exclLock.release();
-        }
 
-        if (channel != null) {
-            channel.close();
-        }
-
-        if (lockFile != null) {
-            lockFile.close();
-        }
-    }
-
-    /**
-     * Lock the environment.  Return true if the lock was acquired.  If
-     * exclusive is false, then this implements a single writer, multiple
-     * reader lock.  If exclusive is true, then implement an exclusive lock.
-     *
-     * There is a lock file and there are two regions of the lock file: byte 0,
-     * and byte 1.  Byte 0 is the exclusive writer process area of the lock
-     * file.  If an environment is opened for write, then it attempts to take
-     * an exclusive write lock on byte 0.  Byte 1 is the shared reader process
-     * area of the lock file.  If an environment is opened for read-only, then
-     * it attempts to take a shared lock on byte 1.  This is how we implement
-     * single writer, multi reader semantics.
-     *
-     * The cleaner, each time it is invoked, attempts to take an exclusive lock
-     * on byte 1.  The owning process already either has an exclusive lock on
-     * byte 0, or a shared lock on byte 1.  This will necessarily conflict with
-     * any shared locks on byte 1, even if it's in the same process and there
-     * are no other holders of that shared lock.  So if there is only one
-     * read-only process, it will have byte 1 for shared access, and the
-     * cleaner can not run in it because it will attempt to get an exclusive
-     * lock on byte 1 (which is already locked for shared access by itself).
-     * If a write process comes along and tries to run the cleaner, it will
-     * attempt to get an exclusive lock on byte 1.  If there are no other
-     * reader processes (with shared locks on byte 1), and no other writers
-     * (which are running cleaners on with exclusive locks on byte 1), then the
-     * cleaner will run.
-     */
-    public boolean lockEnvironment(boolean readOnly, boolean exclusive)
-        throws DatabaseException {
-
-        try {
+  /**
+   * 
+   * Lock the environment.  Return true if the lock was acquired.  If
+   * exclusive is false, then this implements a single writer, multiple
+   * reader lock.  If exclusive is true, then implement an exclusive lock.
+   * 
+   * There is a lock file and there are two regions of the lock file: byte 0,
+   * and byte 1.  Byte 0 is the exclusive writer process area of the lock
+   * file.  If an environment is opened for write, then it attempts to take
+   * an exclusive write lock on byte 0.  Byte 1 is the shared reader process
+   * area of the lock file.  If an environment is opened for read-only, then
+   * it attempts to take a shared lock on byte 1.  This is how we implement
+   * single writer, multi reader semantics.
+   * 
+   * The cleaner, each time it is invoked, attempts to take an exclusive lock
+   * on byte 1.  The owning process already either has an exclusive lock on
+   * byte 0, or a shared lock on byte 1.  This will necessarily conflict with
+   * any shared locks on byte 1, even if it's in the same process and there
+   * are no other holders of that shared lock.  So if there is only one
+   * read-only process, it will have byte 1 for shared access, and the
+   * cleaner can not run in it because it will attempt to get an exclusive
+   * lock on byte 1 (which is already locked for shared access by itself).
+   * If a write process comes along and tries to run the cleaner, it will
+   * attempt to get an exclusive lock on byte 1.  If there are no other
+   * reader processes (with shared locks on byte 1), and no other writers
+   * (which are running cleaners on with exclusive locks on byte 1), then the
+   * cleaner will run.
+   */
+  // line 1134 "../../../../FileManager.ump"
+   public boolean lockEnvironment(boolean readOnly, boolean exclusive) throws DatabaseException{
+    try {
 	    if (checkEnvHomePermissions(readOnly)) {
 		return true;
 	    }
@@ -1286,31 +1335,31 @@ public class FileManager {
             throw new LogException(IOE.toString());
         }
         return true;
-    }
+  }
 
-    public void releaseExclusiveLock()
-        throws DatabaseException {
-
-        try {
+  // line 1186 "../../../../FileManager.ump"
+   public void releaseExclusiveLock() throws DatabaseException{
+    try {
             if (exclLock != null) {
                 exclLock.release();
             }
         } catch (IOException IOE) {
             throw new DatabaseException(IOE);
         }
-    }
+  }
 
-    /**
-     * Ensure that if the environment home dir is on readonly media or in a
-     * readonly directory that the environment has been opened for readonly
-     * access.
-     *
-     * @return true if the environment home dir is readonly.
-     */
-    private boolean checkEnvHomePermissions(boolean readOnly)
-	throws DatabaseException {
 
-	boolean envDirIsReadOnly = !dbEnvHome.canWrite();
+  /**
+   * 
+   * Ensure that if the environment home dir is on readonly media or in a
+   * readonly directory that the environment has been opened for readonly
+   * 
+   * 
+   * @return true if the environment home dir is readonly.
+   */
+  // line 1205 "../../../../FileManager.ump"
+   private boolean checkEnvHomePermissions(boolean readOnly) throws DatabaseException{
+    boolean envDirIsReadOnly = !dbEnvHome.canWrite();
 	if (envDirIsReadOnly &&
 	    !readOnly) {
 	    throw new DatabaseException
@@ -1321,21 +1370,22 @@ public class FileManager {
 	}
 
 	return envDirIsReadOnly;
-    }
+  }
 
-    /**
-     * Truncate a log at this position. Used by recovery to a timestamp
-     * utilities and by recovery to set the end-of-log position.
-     *
-     * <p>This method forces a new log file to be written next, if the last
-     * file (the file truncated to) has an old version in its header.  This
-     * ensures that when the log is opened by an old version of JE, a version
-     * incompatibility will be detected.  [#11243]</p>
-     */
-    public void truncateLog(long fileNum, long offset)
-        throws IOException, DatabaseException  {
 
-        FileHandle handle = makeFileHandle(fileNum, FileMode.READWRITE_MODE);
+  /**
+   * 
+   * Truncate a log at this position. Used by recovery to a timestamp
+   * utilities and by recovery to set the end-of-log position.
+   * 
+   * <p>This method forces a new log file to be written next, if the last
+   * file (the file truncated to) has an old version in its header.  This
+   * ensures that when the log is opened by an old version of JE, a version
+   * incompatibility will be detected.  [#11243]</p>
+   */
+  // line 1230 "../../../../FileManager.ump"
+   public void truncateLog(long fileNum, long offset) throws IOException,DatabaseException{
+    FileHandle handle = makeFileHandle(fileNum, FileMode.READWRITE_MODE);
         RandomAccessFile file = handle.getFile();
 
         try {
@@ -1347,99 +1397,572 @@ public class FileManager {
         if (handle.isOldHeaderVersion()) {
             forceNewFile = true;
         }
-    }
+  }
 
-    /**
-     * Set the flag that causes a new file to be written before the next write.
-     */
-    void forceNewLogFile() {
-	forceNewFile = true;
-    }
 
-    /**
-     * Return the offset of the first log entry after the file header.
-     */
+  /**
+   * 
+   * Set the flag that causes a new file to be written before the next write.
+   */
+  // line 1248 "../../../../FileManager.ump"
+  public void forceNewLogFile(){
+    forceNewFile = true;
+  }
 
-    /**
-     * @return the size in bytes of the file header log entry.
-     */
-    public static int firstLogEntryOffset() {
-        return FileHeader.entrySize() + LogManager.HEADER_BYTES;
-    } 
 
-    /**
-     * Return the next available LSN in the log. Note that this is
-     * unsynchronized, so is only valid as an approximation of log size.
-     */
-    public long getNextLsn() {
-        return nextAvailableLsn;
-    }
+  /**
+   * 
+   * Return the offset of the first log entry after the file header.
+   * 
+   * @return the size in bytes of the file header log entry.
+   */
+  // line 1259 "../../../../FileManager.ump"
+   public static  int firstLogEntryOffset(){
+    return FileHeader.entrySize() + LogManager.HEADER_BYTES;
+  }
 
-    /**
-     * Return the last allocated LSN in the log. Note that this is
-     * unsynchronized, so if it is called outside the log write latch it is
-     * only valid as an approximation of log size.
-     */
-    public long getLastUsedLsn() {
-        return lastUsedLsn;
-    }
 
-    /*
-     * fsync stats.
-     */
-    public long getNFSyncs() {
-        return syncManager.getNFSyncs();
-    }
+  /**
+   * 
+   * Return the next available LSN in the log. Note that this is
+   * unsynchronized, so is only valid as an approximation of log size.
+   */
+  // line 1267 "../../../../FileManager.ump"
+   public long getNextLsn(){
+    return nextAvailableLsn;
+  }
 
-    public long getNFSyncRequests() {
-        return syncManager.getNFSyncRequests();
-    }
 
-    public long getNFSyncTimeouts() {
-        return syncManager.getNTimeouts();
-    }
+  /**
+   * 
+   * Return the last allocated LSN in the log. Note that this is
+   * unsynchronized, so if it is called outside the log write latch it is
+   * only valid as an approximation of log size.
+   */
+  // line 1276 "../../../../FileManager.ump"
+   public long getLastUsedLsn(){
+    return lastUsedLsn;
+  }
 
-    void loadStats(StatsConfig config, EnvironmentStats stats) 
-        throws DatabaseException {
 
-        syncManager.loadStats(config, stats);
-    }
+  /**
+   * fsync stats.
+   */
+  // line 1283 "../../../../FileManager.ump"
+   public long getNFSyncs(){
+    return syncManager.getNFSyncs();
+  }
 
-    /*
-     * Unit test support
-     */
+  // line 1287 "../../../../FileManager.ump"
+   public long getNFSyncRequests(){
+    return syncManager.getNFSyncRequests();
+  }
 
-    /*
-     * @return ids of files in cache
-     */
-    Set getCacheKeys() {
-        return fileCache.getCacheKeys();
-    }
+  // line 1291 "../../../../FileManager.ump"
+   public long getNFSyncTimeouts(){
+    return syncManager.getNTimeouts();
+  }
 
-    /**
-     * Clear a file out of the file cache regardless of mode type.
-     */
-    private void clearFileCache(long fileNum)
-        throws IOException, DatabaseException {
+  // line 1297 "../../../../FileManager.ump"
+  public void loadStats(StatsConfig config, EnvironmentStats stats) throws DatabaseException{
+    syncManager.loadStats(config, stats);
+  }
 
-        fileCacheLatch.acquire();
-        try {
-            fileCache.remove(fileNum);
-        } finally {
-            fileCacheLatch.release();
+
+  /**
+   * Unit test support
+   * @return ids of files in cache
+   */
+  // line 1308 "../../../../FileManager.ump"
+  public Set getCacheKeys(){
+    return fileCache.getCacheKeys();
+  }
+
+  // line 1620 "../../../../FileManager.ump"
+   private void generateRunRecoveryException(RandomAccessFile file, ByteBuffer data, long destOffset) throws DatabaseException,IOException{
+    if (runRecoveryExceptionThrown) {
+            try {
+                throw new Exception("Write after RunRecoveryException");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-    }
+        runRecoveryExceptionCounter += 1;
+        if (runRecoveryExceptionCounter >= RUNRECOVERY_EXCEPTION_MAX) {
+            runRecoveryExceptionCounter = 0;
+        }
+        if (runRecoveryExceptionRandom == null) {
+            runRecoveryExceptionRandom = new Random(System.currentTimeMillis());
+        }
+        if (runRecoveryExceptionCounter ==
+            runRecoveryExceptionRandom.nextInt(RUNRECOVERY_EXCEPTION_MAX)) {
+            int len = runRecoveryExceptionRandom.nextInt(data.remaining());
+            if (len > 0) {
+                byte[] a = new byte[len];
+                data.get(a, 0, len);
+                ByteBuffer buf = ByteBuffer.wrap(a);
+                writeToFile(file, buf, destOffset);
+            }
+            runRecoveryExceptionThrown = true;
+		throw new RunRecoveryException
+		    (envImpl, "Randomly generated for testing");
+        }
+  }
 
-    /*
-     * The file cache keeps N RandomAccessFile objects cached for file
-     * access. The cache consists of two parts: a Hashtable that doesn't
-     * require extra synchronization, for the most common access, and a linked
-     * list of files to support cache administration. Looking up a file from
-     * the hash table doesn't require extra latching, but adding or deleting a
-     * file does.
-     */ 
-    private static class FileCache {
-        private Map fileMap;            // Long->file
+
+  /**
+   * 
+   * Clear a file out of the file cache regardless of mode type.
+   */
+  // line 15 "../../../../FileHandleCache_FileManager.ump"
+   private void clearFileCache(long fileNum) throws IOException,DatabaseException{
+    // line 42 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.acquire();
+    // END OF UMPLE BEFORE INJECTION
+    fileCache.remove(fileNum);
+    // line 59 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+    fileCacheLatch.release();
+    // END OF UMPLE AFTER INJECTION
+  }
+  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  /**
+   * 
+   * The LogEndFileDescriptor is used to write and fsync the end of the log.
+   * Because the JE log is append only, there is only one logical R/W file
+   * descriptor for the whole environment. This class actually implements two
+   * RandomAccessFile instances, one for writing and one for fsyncing, so the
+   * two types of operations don't block each other.
+   * 
+   * The write file descriptor is considered the master.  Manipulation of
+   * this class is done under the log write latch. Here's an explanation of
+   * why the log write latch is sufficient to safeguard all operations.
+   * 
+   * There are two types of callers who may use this file descriptor: the
+   * thread that is currently writing to the end of the log and any threads
+   * that are fsyncing on behalf of the FSyncManager.
+   * 
+   * The writing thread appends data to the file and fsyncs the file when we
+   * flip over to a new log file.  The file is only instantiated at the point
+   * that it must do so -- which is either when the first fsync is required
+   * by JE or when the log file is full and we flip files.  Therefore, the
+   * writing thread has two actions that change this descriptor -- we
+   * initialize the file descriptor for the given log file at the first write
+   * to the file, and we close the file descriptor when the log file is full.
+   * Therefore is a period when there is no log descriptor -- when we have
+   * not yet written a log buffer into a given log file.
+   * 
+   * The fsyncing threads ask for the log end file descriptor asynchronously,
+   * but will never modify it.  These threads may arrive at the point when
+   * the file descriptor is null, and therefore skip their fysnc, but that is
+   * fine because it means a writing thread already flipped that target file
+   * and has moved on to the next file.
+   * 
+   * Time     Activity
+   * 10       thread 1 writes log entry A into file 0x0, issues fsync 
+   * outside of log write latch, yields the processor
+   * 20       thread 2 writes log entry B, piggybacks off thread 1
+   * 30       thread 3 writes log entry C, but no room left in that file,
+   * so it flips the log, and fsyncs file 0x0, all under the log
+   * write latch. It nulls out endOfLogRWFile, moves onto file 
+   * 0x1, but doesn't create the file yet.
+   * 40       thread 1 finally comes along, but endOfLogRWFile is null--
+   * no need to fsync in that case, 0x0 got fsynced.
+   */
+  // line 1484 "../../../../FileManager.ump"
+  // line 6 "../../../../FileManager_static.ump"
+  public class LogEndFileDescriptor
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public LogEndFileDescriptor()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+  
+    /**
+     * 
+     * getWritableFile must be called under the log write latch.
+     */
+    // line 1494 "../../../../FileManager.ump"
+    public RandomAccessFile getWritableFile(long fileNumber) throws RunRecoveryException{
+      try {
+  
+                  if (endOfLogRWFile == null) {
+  
+                      /* 
+                       * We need to make a file descriptor for the end of the
+                       * log.  This is guaranteed to be called under the log
+                       * write latch.
+                       */
+                      endOfLogRWFile =
+                          makeFileHandle(fileNumber,
+                                         FileMode.READWRITE_MODE).getFile();
+                      endOfLogSyncFile =
+                          makeFileHandle(fileNumber,
+                                         FileMode.READWRITE_MODE).getFile();
+                  }
+              
+                  return endOfLogRWFile;
+              } catch (Exception e) {
+  
+                  /* 
+                   * If we can't get a write channel, we need to go into
+                   * RunRecovery state.
+                   */
+                  throw new RunRecoveryException(envImpl, e);
+              }
+    }
+  
+  
+    /**
+     * 
+     * FSync the log file that makes up the end of the log.
+     */
+    // line 1528 "../../../../FileManager.ump"
+    public void force() throws DatabaseException,IOException{
+      /* 
+               * Get a local copy of the end of the log file descriptor, it could
+               * change. No need to latch, no harm done if we get an old file
+               * descriptor, because we forcibly fsync under the log write latch
+               * when we switch files.
+               * 
+               * If there is no current end file descriptor, we know that the log
+               * file has flipped to a new file since the fsync was issued.
+               */
+              RandomAccessFile file = endOfLogSyncFile;
+              if (file != null) {
+              
+                  FileChannel channel = file.getChannel();
+                  try {
+                      channel.force(false);
+                  } catch (ClosedChannelException e) {
+  
+                      /* 
+                       * The channel should never be closed. It may be closed
+                       * because of an interrupt received by another thread. See
+                       * SR [#10463]
+                       */
+                      throw new RunRecoveryException
+  			(envImpl,
+  			 "Channel closed, may be due to thread interrupt",
+  			 e);
+                  } 
+              
+  		assert EnvironmentImpl.maybeForceYield();
+              }
+    }
+  
+  
+    /**
+     * 
+     * Close the end of the log file descriptor. Use atomic assignment to
+     * ensure that we won't force and close on the same descriptor.
+     */
+    // line 1567 "../../../../FileManager.ump"
+    public void close() throws IOException{
+      IOException firstException = null;
+              if (endOfLogRWFile != null) {
+                  RandomAccessFile file = endOfLogRWFile;
+  
+                  /* 
+                   * Null out so that other threads know endOfLogRWFile is no
+                   * longer available.
+                   */
+                  endOfLogRWFile = null;
+                  try {
+                      file.close();
+                  } catch (IOException e) {
+                      /* Save this exception, so we can try the second close. */
+                      firstException = e;
+                  }
+              }
+              if (endOfLogSyncFile != null) {
+                  RandomAccessFile file = endOfLogSyncFile;
+  
+                  /* 
+                   * Null out so that other threads know endOfLogSyncFile is no
+                   * longer available.
+                   */
+                  endOfLogSyncFile = null;
+                  file.close();
+              }
+  
+              if (firstException != null) {
+                  throw firstException;
+              }
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 7 "../../../../FileManager_static.ump"
+    private RandomAccessFile endOfLogRWFile=null ;
+  // line 8 "../../../../FileManager_static.ump"
+    private RandomAccessFile endOfLogSyncFile=null ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 66 "../../../../FileManager_static.ump"
+  // line 4 "../../../../NIO_FileManager_inner.ump"
+  public static class FileManager_writeToFile
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public FileManager_writeToFile()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 68 "../../../../FileManager_static.ump"
+    public  FileManager_writeToFile(FileManager _this, RandomAccessFile file, ByteBuffer data, long destOffset){
+      this._this=_this;
+          this.file=file;
+          this.data=data;
+          this.destOffset=destOffset;
+    }
+  
+    // line 74 "../../../../FileManager_static.ump"
+    public int execute() throws IOException,DatabaseException{
+      totalBytesWritten=0;
+          Label455:
+  channel=file.getChannel();
+          //original();
+   ;//this.hook455();
+          Label445:
+  totalBytesWritten=channel.write(data,destOffset);
+          //original();
+   ;//this.hook445();
+          Label445_1: ;//
+          return totalBytesWritten;
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 80 "../../../../FileManager_static.ump"
+    protected FileManager _this ;
+  // line 81 "../../../../FileManager_static.ump"
+    protected RandomAccessFile file ;
+  // line 82 "../../../../FileManager_static.ump"
+    protected ByteBuffer data ;
+  // line 83 "../../../../FileManager_static.ump"
+    protected long destOffset ;
+  // line 84 "../../../../FileManager_static.ump"
+    protected int totalBytesWritten ;
+  // line 85 "../../../../FileManager_static.ump"
+    protected FileChannel channel ;
+  // line 86 "../../../../FileManager_static.ump"
+    protected ByteBuffer useData ;
+  // line 87 "../../../../FileManager_static.ump"
+    protected int origLimit ;
+  // line 88 "../../../../FileManager_static.ump"
+    protected int bytesWritten ;
+  // line 89 "../../../../FileManager_static.ump"
+    protected int pos ;
+  // line 90 "../../../../FileManager_static.ump"
+    protected int size ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 96 "../../../../FileManager_static.ump"
+  // line 15 "../../../../NIO_FileManager_inner.ump"
+  public static class FileManager_readFromFile
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public FileManager_readFromFile()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 98 "../../../../FileManager_static.ump"
+    public  FileManager_readFromFile(FileManager _this, RandomAccessFile file, ByteBuffer readBuffer, long offset){
+      this._this=_this;
+          this.file=file;
+          this.readBuffer=readBuffer;
+          this.offset=offset;
+    }
+  
+    // line 104 "../../../../FileManager_static.ump"
+    public void execute() throws IOException{
+      // line 17 "../../../../NIO_FileManager_inner.ump"
+      channel=file.getChannel();
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      Label446:
+  channel.read(readBuffer,offset);
+          //original();
+   ;//this.hook446();
+          Label446_1: ; //
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 107 "../../../../FileManager_static.ump"
+    protected FileManager _this ;
+  // line 108 "../../../../FileManager_static.ump"
+    protected RandomAccessFile file ;
+  // line 109 "../../../../FileManager_static.ump"
+    protected ByteBuffer readBuffer ;
+  // line 110 "../../../../FileManager_static.ump"
+    protected long offset ;
+  // line 111 "../../../../FileManager_static.ump"
+    protected FileChannel channel ;
+  // line 112 "../../../../FileManager_static.ump"
+    protected int readLength ;
+  // line 113 "../../../../FileManager_static.ump"
+    protected long currentPosition ;
+  // line 114 "../../../../FileManager_static.ump"
+    protected int bytesRead1 ;
+  // line 115 "../../../../FileManager_static.ump"
+    protected int pos ;
+  // line 116 "../../../../FileManager_static.ump"
+    protected int size ;
+  // line 117 "../../../../FileManager_static.ump"
+    protected int bytesRead2 ;
+  
+    
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 53 "../../../../FileManager.ump"
+  public static class FileMode 
+  {
+    public static final FileMode READ_MODE = new FileMode("r");
+        public static final FileMode READWRITE_MODE = new FileMode("rw");
+
+        private String fileModeValue;
+
+        private FileMode(String fileModeValue) {
+            this.fileModeValue = fileModeValue;
+        }
+
+	public String getModeValue() {
+	    return fileModeValue;
+	}
+  }
+// line 68 "../../../../FileManager.ump"
+  static boolean IO_EXCEPTION_TESTING = false ;
+// line 69 "../../../../FileManager.ump"
+  private static final String DEBUG_NAME = FileManager.class.getName() ;
+// line 71 "../../../../FileManager.ump"
+  private static long writeCount = 0 ;
+// line 72 "../../../../FileManager.ump"
+  private static long stopOnWriteCount = Long.MAX_VALUE ;
+// line 74 "../../../../FileManager.ump"
+  public static final String JE_SUFFIX = ".jdb" ;
+// line 75 "../../../../FileManager.ump"
+  public static final String CIF_SUFFIX = ".cif" ;
+// line 76 "../../../../FileManager.ump"
+  public static final String DEL_SUFFIX = ".del" ;
+// line 77 "../../../../FileManager.ump"
+  public static final String BAD_SUFFIX = ".bad" ;
+// line 78 "../../../../FileManager.ump"
+  public static final String LOCK_SUFFIX = ".lck" ;
+// line 79 "../../../../FileManager.ump"
+  static final String[] DEL_SUFFIXES = {DEL_SUFFIX};
+// line 80 "../../../../FileManager.ump"
+  static final String[] JE_SUFFIXES = {JE_SUFFIX};
+// line 81 "../../../../FileManager.ump"
+  private static final String[] JE_AND_DEL_SUFFIXES = {JE_SUFFIX, DEL_SUFFIX};
+// line 85 "../../../../FileManager.ump"
+  private boolean syncAtFileEnd = true ;
+// line 87 "../../../../FileManager.ump"
+  private EnvironmentImpl envImpl ;
+// line 88 "../../../../FileManager.ump"
+  private long maxFileSize ;
+// line 89 "../../../../FileManager.ump"
+  private File dbEnvHome ;
+// line 92 "../../../../FileManager.ump"
+  private boolean includeDeletedFiles = false ;
+// line 100 "../../../../FileManager.ump"
+  private boolean readOnly ;
+// line 103 "../../../../FileManager.ump"
+  private long currentFileNum ;
+// line 104 "../../../../FileManager.ump"
+  private long nextAvailableLsn ;
+// line 105 "../../../../FileManager.ump"
+  private long lastUsedLsn ;
+// line 106 "../../../../FileManager.ump"
+  private long prevOffset ;
+// line 107 "../../../../FileManager.ump"
+  private boolean forceNewFile ;
+// line 113 "../../../../FileManager.ump"
+  private long savedCurrentFileNum ;
+// line 114 "../../../../FileManager.ump"
+  private long savedNextAvailableLsn ;
+// line 115 "../../../../FileManager.ump"
+  private long savedLastUsedLsn ;
+// line 116 "../../../../FileManager.ump"
+  private long savedPrevOffset ;
+// line 117 "../../../../FileManager.ump"
+  private boolean savedForceNewFile ;
+// line 120 "../../../../FileManager.ump"
+  private LogEndFileDescriptor endOfLog ;
+// line 133 "../../../../FileManager.ump"
+  private Map perFileLastUsedLsn ;
+// line 136 "../../../../FileManager.ump"
+  private boolean useNIO ;
+
+// line 1324 "../../../../FileManager.ump"
+  private static class FileCache 
+  {
+    private Map fileMap;            // Long->file
         private LinkedList fileList;    // list of file numbers
         private int fileCacheSize;
 
@@ -1554,212 +2077,33 @@ public class FileManager {
         private Set getCacheKeys() {
             return fileMap.keySet();
         }
-    }
+  }
+// line 1605 "../../../../FileManager.ump"
+  static boolean RUNRECOVERY_EXCEPTION_TESTING = false ;
+// line 1607 "../../../../FileManager.ump"
+  private static final int RUNRECOVERY_EXCEPTION_MAX = 100 ;
+// line 1609 "../../../../FileManager.ump"
+  private int runRecoveryExceptionCounter = 0 ;
+// line 1611 "../../../../FileManager.ump"
+  private boolean runRecoveryExceptionThrown = false ;
+// line 1613 "../../../../FileManager.ump"
+  private Random runRecoveryExceptionRandom = null ;
+// line 5 "../../../../EnvironmentLocking_FileManager.ump"
+  private RandomAccessFile lockFile ;
+// line 7 "../../../../EnvironmentLocking_FileManager.ump"
+  private FileChannel channel ;
+// line 9 "../../../../EnvironmentLocking_FileManager.ump"
+  private FileLock envLock ;
+// line 11 "../../../../EnvironmentLocking_FileManager.ump"
+  private FileLock exclLock ;
+// line 5 "../../../../FileHandleCache_FileManager.ump"
+  private FileCache fileCache ;
+// line 5 "../../../../ChunckedNIO_FileManager.ump"
+  private long chunkedNIOSize = 0 ;
+// line 5 "../../../../FSync_FileManager.ump"
+  private FSyncManager syncManager ;
+// line 7 "../../../../Derivative_Latches_FileHandleCache_FileManager.ump"
+  private Latch fileCacheLatch ;
 
-    /**
-     * The LogEndFileDescriptor is used to write and fsync the end of the log.
-     * Because the JE log is append only, there is only one logical R/W file
-     * descriptor for the whole environment. This class actually implements two
-     * RandomAccessFile instances, one for writing and one for fsyncing, so the
-     * two types of operations don't block each other.
-     * 
-     * The write file descriptor is considered the master.  Manipulation of
-     * this class is done under the log write latch. Here's an explanation of
-     * why the log write latch is sufficient to safeguard all operations.
-     *
-     * There are two types of callers who may use this file descriptor: the
-     * thread that is currently writing to the end of the log and any threads
-     * that are fsyncing on behalf of the FSyncManager.
-     *
-     * The writing thread appends data to the file and fsyncs the file when we
-     * flip over to a new log file.  The file is only instantiated at the point
-     * that it must do so -- which is either when the first fsync is required
-     * by JE or when the log file is full and we flip files.  Therefore, the
-     * writing thread has two actions that change this descriptor -- we
-     * initialize the file descriptor for the given log file at the first write
-     * to the file, and we close the file descriptor when the log file is full.
-     * Therefore is a period when there is no log descriptor -- when we have
-     * not yet written a log buffer into a given log file.
-     *
-     * The fsyncing threads ask for the log end file descriptor asynchronously,
-     * but will never modify it.  These threads may arrive at the point when
-     * the file descriptor is null, and therefore skip their fysnc, but that is
-     * fine because it means a writing thread already flipped that target file
-     * and has moved on to the next file.
-     *
-     * Time     Activity
-     * 10       thread 1 writes log entry A into file 0x0, issues fsync 
-     *          outside of log write latch, yields the processor
-     * 20       thread 2 writes log entry B, piggybacks off thread 1
-     * 30       thread 3 writes log entry C, but no room left in that file,
-     *          so it flips the log, and fsyncs file 0x0, all under the log
-     *          write latch. It nulls out endOfLogRWFile, moves onto file 
-     *          0x1, but doesn't create the file yet.
-     * 40       thread 1 finally comes along, but endOfLogRWFile is null--
-     *          no need to fsync in that case, 0x0 got fsynced.
-     */
-    class LogEndFileDescriptor {
-        private RandomAccessFile endOfLogRWFile = null; 
-        private RandomAccessFile endOfLogSyncFile = null; 
-
-        /** 
-         * getWritableFile must be called under the log write latch. 
-         */
-        RandomAccessFile getWritableFile(long fileNumber) 
-            throws RunRecoveryException {
-
-            try {
-
-                if (endOfLogRWFile == null) {
-
-                    /* 
-                     * We need to make a file descriptor for the end of the
-                     * log.  This is guaranteed to be called under the log
-                     * write latch.
-                     */
-                    endOfLogRWFile =
-                        makeFileHandle(fileNumber,
-                                       FileMode.READWRITE_MODE).getFile();
-                    endOfLogSyncFile =
-                        makeFileHandle(fileNumber,
-                                       FileMode.READWRITE_MODE).getFile();
-                }
-            
-                return endOfLogRWFile;
-            } catch (Exception e) {
-
-                /* 
-                 * If we can't get a write channel, we need to go into
-                 * RunRecovery state.
-                 */
-                throw new RunRecoveryException(envImpl, e);
-            }
-        }
-
-        /**
-         * FSync the log file that makes up the end of the log.
-         */
-        void force()
-            throws DatabaseException, IOException {
-
-            /* 
-             * Get a local copy of the end of the log file descriptor, it could
-             * change. No need to latch, no harm done if we get an old file
-             * descriptor, because we forcibly fsync under the log write latch
-             * when we switch files.
-             * 
-             * If there is no current end file descriptor, we know that the log
-             * file has flipped to a new file since the fsync was issued.
-             */
-            RandomAccessFile file = endOfLogSyncFile;
-            if (file != null) {
-            
-                FileChannel channel = file.getChannel();
-                try {
-                    channel.force(false);
-                } catch (ClosedChannelException e) {
-
-                    /* 
-                     * The channel should never be closed. It may be closed
-                     * because of an interrupt received by another thread. See
-                     * SR [#10463]
-                     */
-                    throw new RunRecoveryException
-			(envImpl,
-			 "Channel closed, may be due to thread interrupt",
-			 e);
-                } 
-            
-		assert EnvironmentImpl.maybeForceYield();
-            }
-        }
-
-        /**
-         * Close the end of the log file descriptor. Use atomic assignment to
-         * ensure that we won't force and close on the same descriptor.
-         */
-        void close()
-            throws IOException {
-
-            IOException firstException = null;
-            if (endOfLogRWFile != null) {
-                RandomAccessFile file = endOfLogRWFile;
-
-                /* 
-                 * Null out so that other threads know endOfLogRWFile is no
-                 * longer available.
-                 */
-                endOfLogRWFile = null;
-                try {
-                    file.close();
-                } catch (IOException e) {
-                    /* Save this exception, so we can try the second close. */
-                    firstException = e;
-                }
-            }
-            if (endOfLogSyncFile != null) {
-                RandomAccessFile file = endOfLogSyncFile;
-
-                /* 
-                 * Null out so that other threads know endOfLogSyncFile is no
-                 * longer available.
-                 */
-                endOfLogSyncFile = null;
-                file.close();
-            }
-
-            if (firstException != null) {
-                throw firstException;
-            }
-        }
-    }
-
-    /*
-     * Generate IOExceptions for testing.
-     */
-
-    /* Testing switch. */
-    static boolean RUNRECOVERY_EXCEPTION_TESTING = false;
-    /* Max write counter value. */
-    private static final int RUNRECOVERY_EXCEPTION_MAX = 100;
-    /* Current write counter value. */
-    private int runRecoveryExceptionCounter = 0;
-    /* Whether an exception has been thrown. */
-    private boolean runRecoveryExceptionThrown = false;
-    /* Random number generator. */
-    private Random runRecoveryExceptionRandom = null;
-
-    private void generateRunRecoveryException(RandomAccessFile file,
-                                              ByteBuffer data,
-                                              long destOffset)
-        throws DatabaseException, IOException {
-
-        if (runRecoveryExceptionThrown) {
-            try {
-                throw new Exception("Write after RunRecoveryException");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        runRecoveryExceptionCounter += 1;
-        if (runRecoveryExceptionCounter >= RUNRECOVERY_EXCEPTION_MAX) {
-            runRecoveryExceptionCounter = 0;
-        }
-        if (runRecoveryExceptionRandom == null) {
-            runRecoveryExceptionRandom = new Random(System.currentTimeMillis());
-        }
-        if (runRecoveryExceptionCounter ==
-            runRecoveryExceptionRandom.nextInt(RUNRECOVERY_EXCEPTION_MAX)) {
-            int len = runRecoveryExceptionRandom.nextInt(data.remaining());
-            if (len > 0) {
-                byte[] a = new byte[len];
-                data.get(a, 0, len);
-                ByteBuffer buf = ByteBuffer.wrap(a);
-                writeToFile(file, buf, destOffset);
-            }
-            runRecoveryExceptionThrown = true;
-		throw new RunRecoveryException
-		    (envImpl, "Randomly generated for testing");
-        }
-    }
+  
 }

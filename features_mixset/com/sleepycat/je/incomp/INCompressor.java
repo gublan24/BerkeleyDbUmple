@@ -38,6 +38,7 @@ import com.sleepycat.je.utilint.*;
 
 // line 3 "../../../../INCompressor_INCompressor.ump"
 // line 3 "../../../../INCompressor_INCompressor_inner.ump"
+// line 3 "../../../../Derivative_INCompressor_Evictor_CriticalEviction_INCompressor.ump"
 // line 3 "../../../../Derivative_INCompressor_DeleteOp_INCompressor.ump"
 // line 3 "../../../../Derivative_Verifier_INCompressor_INCompressor.ump"
 // line 3 "../../../../Derivative_Statistics_INCompressor_INCompressor.ump"
@@ -556,7 +557,10 @@ dbClosedBinsThisRun++;
  ; //this.hook412();
 					return false;
 			}
-			Label391: ; //this.hook391();
+			Label391:
+env.getEvictor().doCriticalEviction();
+	//original();
+ ; //this.hook391();
 			binSearch.bin = searchForBIN(binSearch.db, binRef);
 			if ((binSearch.bin == null) || binSearch.bin.getNodeId() != binRef.getNodeId()) {
 					Label399:

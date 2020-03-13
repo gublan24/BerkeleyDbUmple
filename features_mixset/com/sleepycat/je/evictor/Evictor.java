@@ -34,8 +34,11 @@ import com.sleepycat.je.utilint.*;
 // line 3 "../../../../Evictor_Evictor.ump"
 // line 3 "../../../../Evictor_Evictor_inner.ump"
 // line 3 "../../../../Derivative_Evictor_EvictorDaemon_Evictor.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_Evictor.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
 // line 3 "../../../../Derivative_Evictor_MemoryBudget_Evictor.ump"
 // line 3 "../../../../Derivative_Evictor_MemoryBudget_Evictor_inner.ump"
+// line 3 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
 // line 3 "../../../../Derivative_DeleteOp_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_INCompressor_Evictor_Evictor.ump"
 // line 3 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
@@ -460,6 +463,16 @@ parent.releaseLatch();
 
   /**
    * 
+   * Do a check on whether synchronous eviction is needed.
+   */
+  // line 9 "../../../../Derivative_Evictor_CriticalEviction_Evictor.ump"
+   public void doCriticalEviction() throws DatabaseException{
+    new Evictor_doCriticalEviction(this).execute();
+  }
+
+
+  /**
+   * 
    * Load stats.
    */
   // line 27 "../../../../Derivative_Statistics_Evictor_Evictor.ump"
@@ -850,6 +863,73 @@ parent.releaseLatch();
     protected StringBuffer sb ;
   // line 142 "../../../../Evictor_Evictor_inner.ump"
     protected boolean result ;
+  
+    
+  }  /*PLEASE DO NOT EDIT THIS CODE*/
+  /*This code was generated using the UMPLE 1.29.1.4260.b21abf3a3 modeling language!*/
+  
+  
+  
+  // line 4 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+  // line 4 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
+  public static class Evictor_doCriticalEviction
+  {
+  
+    //------------------------
+    // MEMBER VARIABLES
+    //------------------------
+  
+    //------------------------
+    // CONSTRUCTOR
+    //------------------------
+  
+    public Evictor_doCriticalEviction()
+    {}
+  
+    //------------------------
+    // INTERFACE
+    //------------------------
+  
+    public void delete()
+    {}
+  
+    // line 6 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    public  Evictor_doCriticalEviction(Evictor _this){
+      this._this=_this;
+    }
+  
+    // line 9 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    public void execute() throws DatabaseException{
+      // line 6 "../../../../Derivative_Evictor_MemoryBudget_CriticalEviction_Evictor_inner.ump"
+      mb=_this.envImpl.getMemoryBudget();
+              currentUsage=mb.getCacheMemoryUsage();
+              maxMem=mb.getCacheBudget();
+              over=currentUsage - maxMem;
+              if (over > mb.getCriticalThreshold()) {
+                if (_this.DEBUG) {
+                  System.out.println("***critical detected:" + over);
+                }
+                _this.doEvict(_this.SOURCE_CRITICAL,true);
+              }
+              //original();
+      // END OF UMPLE BEFORE INJECTION
+      
+    }
+    
+    //------------------------
+    // DEVELOPER CODE - PROVIDED AS-IS
+    //------------------------
+    
+    // line 10 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    protected Evictor _this ;
+  // line 11 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    protected MemoryBudget mb ;
+  // line 12 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    protected long currentUsage ;
+  // line 13 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    protected long maxMem ;
+  // line 14 "../../../../Derivative_Evictor_CriticalEviction_Evictor_inner.ump"
+    protected long over ;
   
     
   }  

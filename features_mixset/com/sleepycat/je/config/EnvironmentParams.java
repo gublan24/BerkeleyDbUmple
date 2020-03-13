@@ -19,6 +19,7 @@ import java.io.File;
 // line 3 "../../../../CPTime_EnvironmentParams.ump"
 // line 3 "../../../../CPBytes_EnvironmentParams.ump"
 // line 3 "../../../../CheckpointerDaemon_EnvironmentParams.ump"
+// line 3 "../../../../Checksum_EnvironmentParams.ump"
 // line 3 "../../../../FSync_EnvironmentParams.ump"
 // line 3 "../../../../LoggingCleaner_EnvironmentParams.ump"
 // line 3 "../../../../LoggingEvictor_EnvironmentParams.ump"
@@ -408,6 +409,9 @@ public class EnvironmentParams
   public static final IntConfigParam CHECKPOINTER_RETRY = new IntConfigParam("je.checkpointer.deadlockRetry",
 	    new Integer(0), new Integer(Integer.MAX_VALUE), new Integer(3), false,
 	    "# The number of times to retry a checkpoint if it runs into a deadlock.") ;
+// line 5 "../../../../Checksum_EnvironmentParams.ump"
+  public static final BooleanConfigParam LOG_CHECKSUM_READ = new BooleanConfigParam("je.log.checksumRead", true,
+	    false, "# If true, perform a checksum check when reading entries from log.") ;
 // line 5 "../../../../FSync_EnvironmentParams.ump"
   public static final LongConfigParam LOG_FSYNC_TIMEOUT = new LongConfigParam("je.log.fsyncTimeout", new Long(10000L),
 	    null, new Long(500000L), false, "# Timeout limit for group file sync, in microseconds.") ;

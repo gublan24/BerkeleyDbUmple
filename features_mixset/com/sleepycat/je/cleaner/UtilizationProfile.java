@@ -52,6 +52,8 @@ import com.sleepycat.je.dbi.*;
 // line 3 "../../../../Evictor_UtilizationProfile.ump"
 // line 4 "../../../../Evictor_UtilizationProfile_inner.ump"
 // line 3 "../../../../DeleteOp_UtilizationProfile.ump"
+// line 3 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile.ump"
+// line 4 "../../../../Derivative_Evictor_CriticalEviction_UtilizationProfile_inner.ump"
 public class UtilizationProfile implements EnvConfigObserver
 {
 
@@ -513,7 +515,10 @@ public class UtilizationProfile implements EnvConfigObserver
 	    }
 	    OperationStatus status = OperationStatus.SUCCESS;
 	    while (status == OperationStatus.SUCCESS) {
-		Label173:           ;  //this.hook173();
+		Label173:
+env.getEvictor().doCriticalEviction();
+	//original();
+           ;  //this.hook173();
 		FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		if (ln != null) {
 		    if (fileNumVal != ln.getFileNumber(keyEntry.getData())) {
@@ -670,7 +675,10 @@ cursor.releaseBINs();
             while (status == OperationStatus.SUCCESS) {
 
                 /* Perform eviction once per operation. */
-        		Label174:           ;  
+        		Label174:
+env.getEvictor().doCriticalEviction();
+	//original();
+           ;  
 
                 FileSummaryLN ln = (FileSummaryLN)
                     cursor.getCurrentLN(LockType.NONE);
@@ -802,7 +810,9 @@ Label194:
                 while (status == OperationStatus.SUCCESS) {
 
                     /* Perform eviction once per operation. */
-                    Label176: ;
+                    Label176:
+env.getEvictor().doCriticalEviction();
+ ;
 
 
                     FileSummaryLN ln = (FileSummaryLN)
@@ -1037,7 +1047,10 @@ cursor.releaseBINs();
 	    if (cursor.positionFirstOrLast(true, null)) {
 		OperationStatus status = cursor.getCurrentAlreadyLatched(key, data, LockType.NONE, true);
 		while (status == OperationStatus.SUCCESS) {
-		    Label175:           ;  //this.hook175();
+		    Label175:
+env.getEvictor().doCriticalEviction();
+	//original();
+           ;  //this.hook175();
 		    FileSummaryLN ln = (FileSummaryLN) cursor.getCurrentLN(LockType.NONE);
 		    if (ln != null) {
 			long fileNumVal = ln.getFileNumber(key.getData());

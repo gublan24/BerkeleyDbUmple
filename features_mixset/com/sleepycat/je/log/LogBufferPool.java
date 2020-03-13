@@ -47,7 +47,6 @@ public class LogBufferPool
 	this.envImpl = envImpl;
 	Label485:
 bufferPoolLatch = LatchSupport.makeLatch(DEBUG_NAME + "_FullLatch", envImpl);
-	//original(envImpl);
    ; //this.hook485(envImpl);
 	DbConfigManager configManager = envImpl.getConfigManager();
 	runInMemory = configManager.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY);
