@@ -2,7 +2,7 @@
 namespace com.sleepycat.je.log;
 class FileManager {
 
-      after Label445: readFromFile(RandomAccessFile ,  ByteBuffer ,  long ) {
+      after Label445_after: readFromFile(RandomAccessFile ,  ByteBuffer ,  long ) {
 
       if (chunkedNIOSize > 0) {
 
@@ -24,18 +24,14 @@ class FileManager {
       
                     currentPosition += bytesRead;
                 }
-            } else {
-
-                /*
-                 * Perform a single read using NIO.
-                 */
-                channel.read(readBuffer, offset);
-            }
+            } else // channel.read(readBuffer, offset);
+            
       
     }
 
       after Label446: writeToFile(RandomAccessFile , ByteBuffer ,  long ) {
-    if (chunkedNIOSize > 0) {
+
+		    if (chunkedNIOSize > 0) {
 
                 /*
                  * We can't change the limit without impacting readers that
@@ -69,13 +65,11 @@ class FileManager {
                     destOffset += bytesWritten;
                     totalBytesWritten += bytesWritten;
                 }
-            } else {
+            } else  //Perform a single write using NIO.
+               
 
-                /*
-                 * Perform a single write using NIO.
-                 */
-                totalBytesWritten = channel.write(data, destOffset);
-            }
+
+            
     
       }
     

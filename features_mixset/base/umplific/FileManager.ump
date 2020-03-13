@@ -948,9 +948,11 @@ LabelGetFileHandle: ;
 
         int totalBytesWritten = 0;
         if (useNIO) {
-            FileChannel channel = file.getChannel();
+            FileChannel channel;
+						Label455: ;
 
-        Label446: ;
+
+						
 
         } else {
 
@@ -963,6 +965,7 @@ LabelGetFileHandle: ;
              */
 
                 Label445_1: ;
+
 								
             
         }
@@ -978,9 +981,8 @@ LabelGetFileHandle: ;
  	throws IOException {
  
         if (useNIO) {
-            FileChannel channel = file.getChannel();
-
-      Label445: ;
+            FileChannel channel ;
+      			Label445: ;
         } else {
 
             /*
