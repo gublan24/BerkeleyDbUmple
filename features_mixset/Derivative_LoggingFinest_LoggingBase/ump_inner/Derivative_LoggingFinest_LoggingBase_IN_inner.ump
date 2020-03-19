@@ -1,18 +1,19 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFinest_LoggingBase/com/sleepycat/je/tree/IN.java
+
 namespace com.sleepycat.je.tree;
 class IN {
-   static class IN_traceDelete {
-      before execute(){
-        logger=_this.databaseImpl.getDbEnvironment().getLogger();
+
+      after execute(){
+       Logger logger = databaseImpl.getDbEnvironment().getLogger();
         if (logger.isLoggable(level)) {
-          sb=new StringBuffer();
-          sb.append(_this.TRACE_DELETE);
-          sb.append(" in=").append(_this.getNodeId());
-          sb.append(" index=");
-          sb.append(index);
-          logger.log(level,sb.toString());
+            StringBuffer sb = new StringBuffer();
+            sb.append(TRACE_DELETE);
+            sb.append(" in=").append(getNodeId());
+            sb.append(" index=");
+            sb.append(index);
+            logger.log(level, sb.toString());
         }
-        //original();
+
+        
       }
-    }
+    
 }

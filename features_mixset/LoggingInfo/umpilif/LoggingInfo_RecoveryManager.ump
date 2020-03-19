@@ -4,15 +4,15 @@ class RecoveryManager
 {
     after Label573: recover(boolean ) {
 
-	Tracer.trace(Level.INFO, env, "There are " + preparedTxns.size() + " prepared but unfinished txns.");
-	//original();
+			Tracer.trace(Level.INFO, env, "There are " + preparedTxns.size() + " prepared but unfinished txns.");
+
     }
 
     after Label574: undoLNs(RecoveryInfo , Set ){
 
-	Tracer.trace(Level.INFO, env, "Found unfinished prepare record: id: " + reader.getTxnPrepareId() + " Xid: "
-		+ reader.getTxnPrepareXid());
-	//original(reader);
+			Tracer.trace(Level.INFO, env, "Found unfinished prepare record: id: " + reader.getTxnPrepareId() + " Xid: "
+				+ reader.getTxnPrepareXid());
+
     }
 
 }

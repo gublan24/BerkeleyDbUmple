@@ -3,13 +3,12 @@ namespace com.sleepycat.je.util;
 class DbDump
 {
   after dump() {
-//	original();
-	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbDump.dump of " + dbName + " ending");
+		Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbDump.dump of " + dbName + " ending");
     }
 
   after Label834: dump(){
-	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbDump.dump of " + dbName + " starting");
-//	original();
+		Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbDump.dump of " + dbName + " starting");
+
     }
 
 }

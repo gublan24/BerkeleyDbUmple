@@ -1,38 +1,36 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFinest_LoggingBase/com/sleepycat/je/Cursor.java
+
 namespace com.sleepycat.je;
 class Cursor {
-   static class Cursor_trace {
-      before execute(){
-        if (_this.logger.isLoggable(level)) {
-          sb=new StringBuffer();
-          sb.append(methodName);
-          _this.traceCursorImpl(sb);
-          if (key != null) {
-            sb.append(" key=").append(key.dumpData());
-          }
-          if (data != null) {
-            sb.append(" data=").append(data.dumpData());
-          }
-          if (lockMode != null) {
-            sb.append(" lockMode=").append(lockMode);
-          }
-          _this.logger.log(level,sb.toString());
+
+      after trace(Level , String , DatabaseEntry  , DatabaseEntry , LockMode ) {
+        
+ 				if (logger.isLoggable(level)) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(methodName);
+            traceCursorImpl(sb);
+            if (key != null) {
+                sb.append(" key=").append(key.dumpData());
+            }
+            if (data != null) {
+                sb.append(" data=").append(data.dumpData());
+            }
+            if (lockMode != null) {
+                sb.append(" lockMode=").append(lockMode);
+            }
+            logger.log(level, sb.toString());
         }
-       // original();
-      }
+      
     }
-   static class Cursor_trace2 {
-      before execute(){
-        if (_this.logger.isLoggable(level)) {
-          sb=new StringBuffer();
-          sb.append(methodName);
-          _this.traceCursorImpl(sb);
-          if (lockMode != null) {
-            sb.append(" lockMode=").append(lockMode);
-          }
-          _this.logger.log(level,sb.toString());
+
+      after trace(Level , String , LockMode ) {
+        if (logger.isLoggable(level)) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(methodName);
+            traceCursorImpl(sb);
+            if (lockMode != null) {
+                sb.append(" lockMode=").append(lockMode);
+            }
+            logger.log(level, sb.toString());
         }
-       // original();
-      }
-    }
+     }
 }

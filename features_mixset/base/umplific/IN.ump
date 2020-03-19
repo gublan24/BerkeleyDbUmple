@@ -890,7 +890,42 @@ class IN {
   * @return true if the entry was successfully deleted, false if it was notfound.
   */
  public boolean deleteEntry(int index, boolean maybeValidate) throws DatabaseException {
-  return new IN_deleteEntry(this, index, maybeValidate).execute();
+					if (nEntries == 0) {
+							return false;
+					}
+
+								/* Check the subtree validation only if maybeValidate is true. */
+								assert maybeValidate ? 
+								    validateSubtreeBeforeDelete(index) :
+								    true;
+
+					if (index < nEntries) {
+							int oldLSNArraySize;
+							Label649: ;
+
+
+							/* LSNArray.setElement can mutate to an array of longs. */
+							for (int i = index; i < nEntries - 1; i++) {
+						setEntryInternal(i + 1, i);
+							}
+							clearEntry(nEntries - 1);
+							Label648: ;
+
+							nEntries--;
+							setDirty(true);
+							setProhibitNextDelta();
+
+							/* 
+							 * Note that we don't have to adjust cursors for delete, since
+							 * there should be nothing pointing at this record.
+							 */
+							Label616: ;
+
+							return true;
+					} else {
+							return false;
+					}
+
  }
 
  /** 

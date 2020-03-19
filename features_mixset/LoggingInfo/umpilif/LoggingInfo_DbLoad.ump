@@ -3,14 +3,13 @@ namespace com.sleepycat.je.util;
 class DbLoad
 {
    before load() {
+			Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbLoad.load of " + dbName + " starting");
 
-	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbLoad.load of " + dbName + " starting");
-	//return original();
     }
 
   after Label835: load() {
-	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbLoad.load of " + dbName + " ending.");
-	//original();
+		Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbLoad.load of " + dbName + " ending.");
+
     }
 
 }

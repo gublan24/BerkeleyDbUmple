@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/tree/IN.java
+
 namespace com.sleepycat.je.tree;
 class IN {
   
@@ -7,22 +7,20 @@ class IN {
         ;
 				long newSize = computeMemorySize();
             updateMemorySize(oldMemorySize, newSize);
-
       }
     
 
-  @MethodObject static class IN_deleteEntry {
-      after Label648:execute(){
-        _this.updateMemorySize(oldLSNArraySize,_this.computeLsnOverhead());
-        //original();
+      after Label648:deleteEntry(int , boolean ) { 
+				updateMemorySize(oldLSNArraySize, computeLsnOverhead());
+
       }
-      after Label649: execute(){
-        _this.updateMemorySize(_this.getEntryInMemorySize(index),0);
-        oldLSNArraySize=_this.computeLsnOverhead();
-        //original();
+      after Label649: deleteEntry(int , boolean ) { 
+       updateMemorySize(getEntryInMemorySize(index), 0);
+       oldLSNArraySize = computeLsnOverhead();
+
       }
-    }
-  @MethodObject static class IN_trackProvisionalObsolete {
+    
+   static class IN_trackProvisionalObsolete {
       after execute(){
         //original();
         if (memDelta != 0) {

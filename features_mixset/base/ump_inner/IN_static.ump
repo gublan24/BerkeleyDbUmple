@@ -204,46 +204,7 @@ class IN {
   //    protected void hook646() throws DatabaseException {}
 //      protected void hook647() throws DatabaseException {}
     }
-   static class IN_deleteEntry {
-      IN_deleteEntry(    IN _this,    int index,    boolean maybeValidate){
-        this._this=_this;
-        this.index=index;
-        this.maybeValidate=maybeValidate;
-      }
-      boolean execute() throws DatabaseException {
-        if (_this.nEntries == 0) {
-          return false;
-        }
-        assert maybeValidate ? _this.validateSubtreeBeforeDelete(index) : true;
-        if (index < _this.nEntries) {
-          //this.hook649();
-          Label649:   ;
-          for (int i=index; i < _this.nEntries - 1; i++) {
-            _this.setEntryInternal(i + 1,i);
-          }
-          _this.clearEntry(_this.nEntries - 1);
-          //this.hook648();
-          Label648:   ;
-          _this.nEntries--;
-          _this.setDirty(true);
-          _this.setProhibitNextDelta();
-          Label616:   ; //this.hook616();
-          return true;
-        }
-   else {
-          return false;
-        }
-      }
-      protected IN _this;
-      protected int index;
-      protected boolean maybeValidate;
-      protected int oldLSNArraySize;
-//      protected void hook616() throws DatabaseException {}
-      //protected void hook648() throws DatabaseException {
-      //}
-     // protected void hook649() throws DatabaseException {
-      //}
-    }
+
    static class IN_validateSubtreeBeforeDelete {
       IN_validateSubtreeBeforeDelete(    IN _this,    int index){
         this._this=_this;

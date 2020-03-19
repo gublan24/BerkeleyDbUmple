@@ -1,17 +1,18 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFinest_LoggingBase/com/sleepycat/je/SecondaryDatabase.java
+
 namespace com.sleepycat.je;
 class SecondaryDatabase {
-   inner class SecondaryDatabase_trace {
-      before  execute()  {
-        logger=envHandle.getEnvironmentImpl().getLogger();
+
+      after  trace(Level , String )  {
+        Logger logger = envHandle.getEnvironmentImpl().getLogger();
         if (logger.isLoggable(level)) {
-          sb=new StringBuffer();
-          sb.append(methodName);
-          sb.append(" name=").append(_this.getDebugName());
-          sb.append(" primary=").append(_this.primaryDb.getDebugName());
-          logger.log(level,sb.toString());
+            StringBuffer sb = new StringBuffer();
+            sb.append(methodName);
+            sb.append(" name=").append(getDebugName());
+            sb.append(" primary=").append(primaryDb.getDebugName());
+
+            logger.log(level, sb.toString());
         }
 
-      }
+      
     }
 }

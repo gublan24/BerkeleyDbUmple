@@ -3,8 +3,8 @@ namespace com.sleepycat.je.cleaner;
 class FileProcessor
 {
     after Label121: doClean(boolean , boolean , boolean ) {
-	Tracer.trace(Level.INFO, env, traceMsg);
-//	original(traceMsg);
+			Tracer.trace(Level.INFO, env, traceMsg);
+
     }
 
 }

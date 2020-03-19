@@ -6,121 +6,123 @@ class Cursor
      * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
      */
     void trace(Level level, String methodName, DatabaseEntry key , DatabaseEntry data, LockMode lockMode) {
-	new Cursor_trace(this, level, methodName, key, data, lockMode).execute();
+
     }
 
     /** 
      * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
      */
     void trace(Level level, String methodName, LockMode lockMode) {
-	new Cursor_trace2(this, level, methodName, lockMode).execute();
+
+      
+	
     }
 
     after Label0: count() {
 
 	trace(Level.FINEST, "Cursor.count: ", null);
-	//original();
+
     }
 
     after Label1: delete(){
 
 	trace(Level.FINEST, "Cursor.delete: ", null);
-	//original();
+
     }
 
 
     after Label2: put(DatabaseEntry , DatabaseEntry ){
 	trace(Level.FINEST, "Cursor.put: ", key, data, null);
-	//original(key, data);
+
     }
 
     after Label3: putNoOverwrite(DatabaseEntry , DatabaseEntry )
 		{
 
 	trace(Level.FINEST, "Cursor.putNoOverwrite: ", key, data, null);
-	//original(key, data);
+
     }
 
     after Label4: putNoDupData(DatabaseEntry , DatabaseEntry ) {
 	trace(Level.FINEST, "Cursor.putNoDupData: ", key, data, null);
-	//original(key, data);
+
     }
 
     after Label5:  putCurrent(DatabaseEntry ) {
 	trace(Level.FINEST, "Cursor.putCurrent: ", null, data, null);
-	//original(data);
+
     }
 
     after Label6: getCurrent(DatabaseEntry , DatabaseEntry , LockMode ){
 	trace(Level.FINEST, "Cursor.getCurrent: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label7: getFirst(DatabaseEntry , DatabaseEntry , LockMode ) {
 	trace(Level.FINEST, "Cursor.getFirst: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label8: getLast(DatabaseEntry , DatabaseEntry , LockMode ){
 	trace(Level.FINEST, "Cursor.getLast: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label9: getNext(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getNext: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label10:  getNextDup(DatabaseEntry , DatabaseEntry , LockMode ){
 	trace(Level.FINEST, "Cursor.getNextDup: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label11: getNextNoDup(DatabaseEntry , DatabaseEntry , LockMode ){
 	trace(Level.FINEST, "Cursor.getNextNoDup: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label12: getPrev(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getPrev: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label13: getPrevDup(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getPrevDup: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label14: getPrevNoDup(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getPrevNoDup: ", lockMode);
-	//original(lockMode);
+
     }
 
     after Label15: getSearchKey(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getSearchKey: ", key, null, lockMode);
-	//original(key, lockMode);
+
     }
 
     after Label16: getSearchKeyRange(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getSearchKeyRange: ", key, null, lockMode);
-	//original(key, lockMode);
+
     }
 
     after Label17: getSearchBoth(DatabaseEntry , DatabaseEntry , LockMode ){
 
 	trace(Level.FINEST, "Cursor.getSearchBoth: ", key, data, lockMode);
-	//original(key, data, lockMode);
+
     }
 
     after Label18: getSearchBothRange(DatabaseEntry , DatabaseEntry , LockMode ){
 	trace(Level.FINEST, "Cursor.getSearchBothRange: ", key, data, lockMode);
-	//original(key, data, lockMode);
+
     }
 
 }
