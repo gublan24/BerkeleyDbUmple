@@ -5,8 +5,8 @@ class Cleaner
     protected int lookAheadCacheSize;
 
     after Label94:  envConfigUpdate(DbConfigManager ) {
-	lookAheadCacheSize = cm.getInt(EnvironmentParams.CLEANER_LOOK_AHEAD_CACHE_SIZE);
-//	original(cm);
+			lookAheadCacheSize = cm.getInt(EnvironmentParams.CLEANER_LOOK_AHEAD_CACHE_SIZE);
+
     }
 
 }

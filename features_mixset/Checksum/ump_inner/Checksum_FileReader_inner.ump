@@ -1,23 +1,24 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Checksum/com/sleepycat/je/log/FileReader.java
+
 namespace com.sleepycat.je.log;
 class FileReader {
-   static class FileReader_readNextEntry {
-      after Label474: execute() {
-        if (doValidate) {
-          _this.validateChecksum(dataBuffer);
-        }
-        //original();
+
+      after Label474: readNextEntry()  {
+     if (doValidate) {
+                    validateChecksum(dataBuffer);
+                }
+
       }
-      after Label475: execute() {
-        collectData|=doValidate;
-        if (doValidate) {
-          _this.startChecksum(dataBuffer);
-        }
-        //original();
+      after Label475: readNextEntry()  {
+
+         if (doValidate) {
+                    startChecksum(dataBuffer);
+                }
+
       }
-      after Label476: execute() {
-        doValidate=_this.doValidateChecksum && (isTargetEntry || _this.alwaysValidateChecksum);
-        //original();
+      after Label476: readNextEntry() {
+         doValidate = doValidateChecksum &&
+                    (isTargetEntry || alwaysValidateChecksum);
+
       }
-    }
+    
 }

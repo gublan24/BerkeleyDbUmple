@@ -2,7 +2,7 @@ namespace com.sleepycat.je.log;
 
 class FileReader
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
@@ -139,7 +139,86 @@ class FileReader
      * @return true if an element has been read
      */
     public boolean readNextEntry() throws DatabaseException, IOException {
-	return new FileReader_readNextEntry(this).execute();
+        boolean foundEntry = false;
+        try {
+            while ((!eof) && (!foundEntry)) {
+
+                /* Read the next header. */
+                getLogEntryInReadBuffer();
+                ByteBuffer dataBuffer =
+                    readData(LogManager.HEADER_BYTES, true);
+
+                readHeader(dataBuffer);
+
+                boolean isTargetEntry = isTargetEntry(currentEntryTypeNum,
+                                                      currentEntryTypeVersion);
+                boolean doValidate = flase;
+								Label476:;
+                boolean collectData = doValidate || isTargetEntry;
+
+                /* Initialize the checksum with the header. */
+               Label475: ;
+
+
+                /*
+                 * Read in the body of the next entry. Note that even if this
+                 * isn't a targetted entry, we have to move the buffer position
+                 * along.
+                 */
+                dataBuffer = readData(currentEntrySize, collectData);
+
+                /*
+                 * We've read an entry. Move up our offsets if we're moving
+                 * forward. If we're moving backwards, we set our offset before
+                 * we read the header, because we knew where the entry started.
+                 */
+                if (forward) {
+                    currentEntryOffset = nextEntryOffset;
+                    nextEntryOffset +=
+                        LogManager.HEADER_BYTES + currentEntrySize;
+                }
+
+                /* Validate the log entry checksum. */
+                Label474: ;
+
+
+                if (isTargetEntry) {
+
+                    /*
+                     * For a target entry, call the subclass reader's
+                     * processEntry method to do whatever we need with the
+                     * entry.  It returns true if this entry is one that should
+                     * be returned.  Note that some entries, although targetted
+                     * and read, are not returned.
+                     */
+                    if (processEntry(dataBuffer)) {
+                        foundEntry = true;
+                        nRead++;
+                    }
+                } else if (collectData) {
+
+                    /*
+                     * For a non-target entry that was validated, the buffer is
+                     * positioned at the start of the entry; skip over it.
+                     */
+                    threadSafeBufferPosition
+                        (dataBuffer,
+                         threadSafeBufferPosition(dataBuffer) +
+                         currentEntrySize);
+                }
+            }
+        } catch (EOFException e) {
+            eof = true;
+        } catch (DatabaseException e) {
+            eof = true;
+            /* Report on error. */
+            LogEntryType problemType =
+                LogEntryType.findType(currentEntryTypeNum,
+				      currentEntryTypeVersion);
+            Label468: ;
+            throw e;
+        }
+        return foundEntry;
     }
 
     protected boolean resyncReader(long nextGoodRecordPostCorruption, boolean dumpCorruptedBounds)
@@ -188,7 +267,7 @@ class FileReader
 		    }
 		}
 		FileHandle fileHandle = fileManager.getFileHandle(readBufferFileNum);
-		Label469:   ; //this.hook469(fileHandle);
+		Label469:   ; 
 		try
 		{
 			readBuffer.clear();
@@ -196,7 +275,7 @@ class FileReader
 			assert EnvironmentImpl.maybeForceYield();
 		}
 		finally {
-					Label469_1:   ;//fileHandle.release();
+					Label469_1:   ;
 			}
 		readBufferFileEnd = readBufferFileStart + threadSafeBufferPosition(readBuffer);
 		threadSafeBufferFlip(readBuffer);
@@ -351,7 +430,7 @@ class FileReader
 	    throw new DatabaseException(
 		    "Problem in fillReadBuffer, readBufferFileNum = " + readBufferFileNum + ": " + e.getMessage());
 	} finally {
-	    Label471:   ; //this.hook471(fileHandle);
+	    Label471:   ;
 	}
     }
 
@@ -402,30 +481,5 @@ class FileReader
 	}
     }
 
-/*    protected void hook469(FileHandle fileHandle) throws IOException, DatabaseException, EOFException {
-try
-{
-	readBuffer.clear();
-	fileManager.readFromFile(fileHandle.getFile(), readBuffer, readBufferFileStart);
-	assert EnvironmentImpl.maybeForceYield();
-}
-finally {
-	    //fileHandle.release();
-	}    
-}
-*/
 
-/*
-    protected void hook470(FileHandle fileHandle) throws DatabaseException, EOFException, IOException {
-    }
-
-    protected void hook471(FileHandle fileHandle) throws DatabaseException, EOFException {
-    }
-
-    protected void hook472() throws IOException, DatabaseException {
-    }
-
-    protected void hook473(EnvironmentImpl env) throws IOException, DatabaseException {
-    }
-*/
 }

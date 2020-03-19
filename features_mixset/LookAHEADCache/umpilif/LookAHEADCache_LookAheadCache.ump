@@ -2,10 +2,11 @@ namespace com.sleepycat.je.cleaner;
 
 class LookAheadCache
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.dbi.MemoryBudget;
   depend java.util.TreeMap;
   depend java.util.SortedMap;
+
     private SortedMap map;
 
     private int maxMem;
@@ -32,13 +33,13 @@ class LookAheadCache
     void add(Long lsnOffset, LNInfo info) {
 	map.put(lsnOffset, info);
 	usedMem++;
-	Label166: ;//this.hook166(info);
+	Label166: ;
     }
 
     LNInfo remove(Long offset) {
 	LNInfo info = (LNInfo) map.remove(offset);
 	if (info != null) {
-	    Label167: ;//this.hook167(info);
+	    Label167: ;
 	}
 	return info;
     }

@@ -1,5 +1,6 @@
 
 namespace com.sleepycat.je.cleaner;
+
 class FileProcessor {
 
  
@@ -10,7 +11,7 @@ class FileProcessor {
 
       }
 
-      after Label133:processLN(Long , TreeLocation , Long , LNInfo , LookAheadCache , Map ) {
+      after Label133: processLN(Long , TreeLocation , Long , LNInfo , LookAheadCache , Map ) {
 
 					if (!isDupCountLN) {
 								for (int i = 0; i < bin.getNEntries(); i += 1) {
@@ -69,9 +70,6 @@ class FileProcessor {
 					}
 
       }
-      after Label131: execute() {
-        p=lookAheadCache;
-        //original();
-      }
+
     
 }
