@@ -7,54 +7,52 @@ class RecoveryManager
      */
     private void traceINDeleteReplay(long nodeId, long logLsn, boolean found, boolean deleted, int index,
 	    boolean isDuplicate) {
-	new RecoveryManager_traceINDeleteReplay(this, nodeId, logLsn, found, deleted, index, isDuplicate).execute();
+
+
+
     }
 
-  /*
-    protected static void hook555(Level traceLevel, DatabaseImpl db, TreeLocation location, LN lnFromLog, long logLsn,
-	    long abortLsn, boolean found, boolean replaced, boolean success) throws DatabaseException {
-    }
-  */
+
 
   after Label578: RecoveryManager(EnvironmentImpl ) {
 	detailedTraceLevel = Tracer.parseLevel(env, EnvironmentParams.JE_LOGGING_LEVEL_RECOVERY);
-	//original(env);
+
     }
 
     after Label579:  replayINDelete(DatabaseImpl , long , boolean , byte , byte , long ){
 	traceINDeleteReplay(nodeId, logLsn, found, deleted, result.index, containsDuplicates);
-	//original(nodeId, containsDuplicates, logLsn, found, deleted, result);
+
     }
 
     after Label580: replaceOrInsertRoot(DatabaseImpl , IN , long ){
 	trace(detailedTraceLevel, db, TRACE_ROOT_REPLACE, success, inFromLog, lsn, null, true,
 		rootUpdater.getReplaced(), rootUpdater.getInserted(), rootUpdater.getOriginalLsn(), DbLsn.NULL_LSN, -1);
-	//original(db, inFromLog, lsn, success, rootUpdater);
+
     }
 
     after Label581: replaceOrInsertDuplicateRoot(DatabaseImpl , DIN , long ) {
 
 	trace(detailedTraceLevel, db, TRACE_DUP_ROOT_REPLACE, success, inFromLog, lsn, parent, found, replaced,
 		inserted, origLsn, DbLsn.NULL_LSN, index);
-	//original(db, inFromLog, lsn, found, inserted, replaced, origLsn, parent, index, success);
+
     }
 
     after Label582: replaceOrInsertChild(DatabaseImpl , IN , long , long , List , boolean ) {
 	trace(detailedTraceLevel, db, TRACE_IN_REPLACE, success, inFromLog, logLsn, result.parent,
 		result.exactParentFound, replaced, inserted, origLsn, DbLsn.NULL_LSN, result.index);
-	//original(db, inFromLog, logLsn, inserted, replaced, origLsn, success, result);
+
     }
 
     after Label583:  redo(DatabaseImpl , TreeLocation , LN , byte , byte , long ,	  RecoveryInfo ) {
 	trace(detailedTraceLevel, db, TRACE_LN_REDO, success, lnFromLog, logLsn, location.bin, found, replaced,
 		inserted, location.childLsn, DbLsn.NULL_LSN, location.index);
-	//original(db, location, lnFromLog, logLsn, found, replaced, inserted, success);
+
     }
 
 
   after Label584: undo(Level , DatabaseImpl , TreeLocation , LN , byte ,
 	    byte , long , long , boolean , RecoveryInfo , boolean ){
-	    Label555: ;//hook555(traceLevel, db, location, lnFromLog, logLsn, abortLsn, found, replaced, success);
+	    Label555: ;
 	
     }
 

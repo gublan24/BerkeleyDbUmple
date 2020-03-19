@@ -2,5 +2,5 @@ use LoggingRecovery_EnvironmentParams.ump;
 use LoggingRecovery_RecoveryManager.ump;
 
  // adding inner elements ; 
-use ../ump_inner/LoggingRecovery_RecoveryManager_inner.ump;
+//use ../ump_inner/LoggingRecovery_RecoveryManager_inner.ump;
 

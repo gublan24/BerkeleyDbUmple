@@ -4,19 +4,19 @@ class RecoveryManager
 {
     after Label575: recover(boolean ) {
 	Tracer.trace(env, "RecoveryManager", "recover", "Couldn't recover", e);
-	//original(e);
+
     }
 
     after Label576: replaceOrInsert(DatabaseImpl , IN , long , long , boolean ) {
 
 	Tracer.trace(db.getDbEnvironment(), "RecoveryManager", "replaceOrInsert",
 		" lsnFromLog:" + DbLsn.getNoFormatString(logLsn) + " " + trace, e);
-	//original(db, logLsn, e, trace);
+
     }
 
     after Label577: trace(Level , DatabaseImpl , String , boolean , Node , long , IN , boolean , boolean , boolean , long , long , int ) {
 	Tracer.trace(env, "RecoveryManager", method, "last LSN = " + badLsnString, origException);
-	//original(method, origException, badLsnString);
+
     }
 
 }
