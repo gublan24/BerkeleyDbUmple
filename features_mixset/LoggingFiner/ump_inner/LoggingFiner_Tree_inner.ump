@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFiner/com/sleepycat/je/tree/Tree.java
+
 namespace com.sleepycat.je.tree;
 class Tree {
    static class Tree_traceInsertDuplicate {

@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFiner/com/sleepycat/je/dbi/CursorImpl.java
+
 namespace com.sleepycat.je.dbi;
 class CursorImpl {
    static class CursorImpl_trace {
