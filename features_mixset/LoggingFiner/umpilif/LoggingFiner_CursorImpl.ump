@@ -6,17 +6,17 @@ class CursorImpl
      * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.
      */
     private void trace(Level level, String changeType, BIN theBin, LN ln, int lnIndex, long oldLsn, long newLsn) {
-	new CursorImpl_trace(this, level, changeType, theBin, ln, lnIndex, oldLsn, newLsn).execute();
+
     }
 
     after Label204: delete(boolean ) {
 
-	trace(Level.FINER, TRACE_DELETE, targetBin, ln, targetIndex, oldLsn, newLsn);
+			trace(Level.FINER, TRACE_DELETE, targetBin, ln, targetIndex, oldLsn, newLsn);
 
     }
 
     after Label205: putCurrent(DatabaseEntry , DatabaseEntry , DatabaseEntry ) {
-	trace(Level.FINER, TRACE_MOD, targetBin, ln, targetIndex, oldLsn, newLsn);
+			trace(Level.FINER, TRACE_MOD, targetBin, ln, targetIndex, oldLsn, newLsn);
 
     }
 

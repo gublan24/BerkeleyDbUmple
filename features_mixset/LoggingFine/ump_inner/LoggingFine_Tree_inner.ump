@@ -1,58 +1,6 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFine/com/sleepycat/je/tree/Tree.java
+
 namespace com.sleepycat.je.tree;
 class Tree {
-   static class Tree_traceMutate {
-      Tree_traceMutate(    Tree _this,    Level level,    BIN theBin,    LN existingLn,    LN newLn,    long newLsn,    DupCountLN dupCountLN,    long dupRootLsn,    DIN dupRoot,    long ddinLsn,    DBIN dupBin,    long dbinLsn){
-        this._this=_this;
-        this.level=level;
-        this.theBin=theBin;
-        this.existingLn=existingLn;
-        this.newLn=newLn;
-        this.newLsn=newLsn;
-        this.dupCountLN=dupCountLN;
-        this.dupRootLsn=dupRootLsn;
-        this.dupRoot=dupRoot;
-        this.ddinLsn=ddinLsn;
-        this.dupBin=dupBin;
-        this.dbinLsn=dbinLsn;
-      }
-      void execute(){
-      }
-      protected Tree _this;
-      protected Level level;
-      protected BIN theBin;
-      protected LN existingLn;
-      protected LN newLn;
-      protected long newLsn;
-      protected DupCountLN dupCountLN;
-      protected long dupRootLsn;
-      protected DIN dupRoot;
-      protected long ddinLsn;
-      protected DBIN dupBin;
-      protected long dbinLsn;
-      protected Logger logger;
-      protected StringBuffer sb;
-    }
-   static class Tree_traceSplitRoot {
-      Tree_traceSplitRoot(    Tree _this,    Level level,    String splitType,    IN newRoot,    long newRootLsn,    IN oldRoot,    long oldRootLsn){
-        this._this=_this;
-        this.level=level;
-        this.splitType=splitType;
-        this.newRoot=newRoot;
-        this.newRootLsn=newRootLsn;
-        this.oldRoot=oldRoot;
-        this.oldRootLsn=oldRootLsn;
-      }
-      void execute(){
-      }
-      protected Tree _this;
-      protected Level level;
-      protected String splitType;
-      protected IN newRoot;
-      protected long newRootLsn;
-      protected IN oldRoot;
-      protected long oldRootLsn;
-      protected Logger logger;
-      protected StringBuffer sb;
-    }
+
+
 }

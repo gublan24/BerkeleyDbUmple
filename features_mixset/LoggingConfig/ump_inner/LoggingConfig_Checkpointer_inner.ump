@@ -1,7 +1,7 @@
 
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
-   static class Checkpointer_doCheckpoint {
+
       after Label522: doCheckpoint(CheckpointConfig , boolean , String ) {
         traced=false;
 
@@ -18,5 +18,5 @@ class Checkpointer {
         }
 
       }
-    }
+    
 }

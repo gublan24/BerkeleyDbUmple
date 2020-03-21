@@ -4,13 +4,8 @@ class DbRunAction {
 
       after Label847: main(String ) {
 				 if (readOnly) {
-
-                envConfig.setConfigParam
-                    (EnvironmentParams.JE_LOGGING_DBLOG.getName(), "false");
-
+                envConfig.setConfigParam(EnvironmentParams.JE_LOGGING_DBLOG.getName(), "false");
                 envConfig.setReadOnly(true);
             }
-
       }
-    
 }
