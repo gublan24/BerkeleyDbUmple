@@ -1,10 +1,10 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/dbi/EnvironmentImpl.java
+
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
-   static class EnvironmentImpl_createDaemons {
-      before execute() {
-        _this.evictor=new Evictor(_this,"Evictor");
-        //original();
-      }
+
+      after  createDaemons() {
+	/* The cleaner is not time-based so no wakeup interval is used. */
+					cleaner = new Cleaner(this, "Cleaner");
+      
     }
 }

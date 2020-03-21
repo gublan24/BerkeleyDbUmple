@@ -1,11 +1,9 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/CPTime/com/sleepycat/je/dbi/EnvironmentImpl.java
+
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
-  static class EnvironmentImpl_createDaemons {
-      after Label329:execute(){
 
-        checkpointerWakeupTime=Checkpointer.getWakeupPeriod(_this.configManager);
-        //original();
+      after Label329:createDaemons(){
+						checkpointerWakeupTime =	            Checkpointer.getWakeupPeriod(configManager);
       }
-    }
+    
 }

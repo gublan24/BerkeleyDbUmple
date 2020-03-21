@@ -2,11 +2,11 @@
 namespace com.sleepycat.je.tree;
 class IN {
 
-      after Label636:splitInternal(IN , int , int , int ) {
+      after Label636: splitInternal(IN , int , int , int ) {
         	    if (deletedEntrySeen) {
-		databaseImpl.getDbEnvironment().
-		    addToCompressorQueue(binRef, false);
-	    }
+									databaseImpl.getDbEnvironment().
+											addToCompressorQueue(binRef, false);
+										}
 
       }
     

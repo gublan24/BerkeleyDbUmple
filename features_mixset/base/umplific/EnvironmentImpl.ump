@@ -194,7 +194,29 @@ throw e;
      * Read configurations for daemons, instantiate.
      */
     private void createDaemons() throws DatabaseException {
-	new EnvironmentImpl_createDaemons(this).execute();
+      /* Evictor */
+        evictor = new Evictor(this, "Evictor");
+
+        /* Checkpointer */
+
+        /*
+         * Make sure that either log-size-based or time-based checkpointing
+         * is enabled.
+         */
+        long checkpointerWakeupTime;
+				Label329: ;
+        
+        checkpointer = new Checkpointer(this, 
+                                        checkpointerWakeupTime,
+                                        "Checkpointer");
+
+        /* INCompressor */
+   long compressorWakeupInterval;
+		Label332: ;
+      
+
+
+
     }
 
     /** 

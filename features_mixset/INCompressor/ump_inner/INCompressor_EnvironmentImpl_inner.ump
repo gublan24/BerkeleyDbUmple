@@ -1,11 +1,12 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/INCompressor/com/sleepycat/je/dbi/EnvironmentImpl.java
+
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
-   static class EnvironmentImpl_createDaemons {
-      after Label332: execute(){
-        compressorWakeupInterval=PropUtil.microsToMillis(_this.configManager.getLong(EnvironmentParams.COMPRESSOR_WAKEUP_INTERVAL));
-        _this.inCompressor=new INCompressor(_this,compressorWakeupInterval,"INCompressor");
-       // original();
+
+      after Label332: createDaemons(){
+						 compressorWakeupInterval = PropUtil.microsToMillis		(configManager.getLong	(EnvironmentParams.COMPRESSOR_WAKEUP_INTERVAL));
+									inCompressor = new INCompressor(this, compressorWakeupInterval,          "INCompressor");
+
+
       }
-    }
+    
 }

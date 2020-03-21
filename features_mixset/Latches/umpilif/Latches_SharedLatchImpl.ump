@@ -185,7 +185,7 @@ class SharedLatchImpl
 
 
      
-    private static class Owner {
+    private static class Owner { // This class is not added by FeatureHouse
 
         static final int SHARED = 0;
         static final int EXCLUSIVE = 1;

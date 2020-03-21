@@ -1294,9 +1294,10 @@ Label234_1: ;
 						 * queue.
 						 */
 						if (targetBin.isEntryPendingDeleted(targetIndex)) {
-					EnvironmentImpl envImpl = database.getDbEnvironment();
-					envImpl.addToCompressorQueue
-							(targetBin, new Key(targetBin.getKey(targetIndex)), false);
+					EnvironmentImpl envImpl ;
+					Label280: ;
+
+
 						}
 
 						      /* If fetchTarget returns null, a deleted LN was cleaned. */
@@ -1388,7 +1389,7 @@ Label234_1: ;
 
 				}
   }
-     //   return new CursorImpl_fetchCurrent(this, foundKey, foundData, lockType, first).execute();
+
     
 
     /** 

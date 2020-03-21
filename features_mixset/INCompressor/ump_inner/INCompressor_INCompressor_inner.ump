@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/INCompressor/com/sleepycat/je/incomp/INCompressor.java
+
 namespace com.sleepycat.je.incomp;
 	class INCompressor {
 		static class BINSearch {
