@@ -967,8 +967,9 @@ class RecoveryManager
     private static void trace(Level level, DatabaseImpl database, String debugType, boolean success, Node node,
 	    long logLsn, IN parent, boolean found, boolean replaced, boolean inserted, long replacedLsn, long abortLsn,
 	    int index) {
-	new RecoveryManager_trace(level, database, debugType, success, node, logLsn, parent, found, replaced, inserted,
-		replacedLsn, abortLsn, index).execute();
+
+
+
     }
 
     private void traceAndThrowException(long badLsn, String method, Exception origException) throws DatabaseException {
@@ -976,150 +977,6 @@ class RecoveryManager
 	Label577:           ;  //this.hook577(method, origException, badLsnString);
 	throw new DatabaseException("last LSN=" + badLsnString, origException);
     }
-/*
-    protected void hook556() throws DatabaseException, IOException {
-    }
 
-    protected void hook557(DatabaseImpl db) throws DatabaseException {
-    }
-
-    protected void hook558() throws DatabaseException, IOException {
-    }
-
-    protected void hook559() throws DatabaseException, IOException {
-    }
-
-    protected void hook560() throws DatabaseException, IOException {
-    }
-
-    protected void hook561(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook562(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook563() throws IOException, DatabaseException {
-    }
-
-    protected void hook564(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook565(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook566(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook567(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook568(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook569(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook570(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook571(long start, long end) throws IOException, DatabaseException {
-    }
-
-    protected void hook572() throws IOException, DatabaseException {
-    }
-
-    protected void hook573() throws DatabaseException, IOException {
-    }
-
-    protected void hook574(LNFileReader reader) throws IOException, DatabaseException, Exception {
-    }
-
-    protected void hook575(IOException e) throws DatabaseException {
-    }
-
-    protected void hook576(DatabaseImpl db, long logLsn, Exception e, String trace) throws DatabaseException {
-    }
-
-    protected void hook577(String method, Exception origException, String badLsnString) throws DatabaseException {
-    }
-
-    protected void hook578(EnvironmentImpl env) throws DatabaseException {
-    }
-
-    protected void hook579(long nodeId, boolean containsDuplicates, long logLsn, boolean found, boolean deleted,
-	    SearchResult result) throws DatabaseException {
-    }
-
-    protected void hook580(DatabaseImpl db, IN inFromLog, long lsn, boolean success, RootUpdater rootUpdater)
-	    throws DatabaseException {
-    }
-
-    protected void hook581(DatabaseImpl db, DIN inFromLog, long lsn, boolean found, boolean inserted, boolean replaced,
-	    long origLsn, IN parent, int index, boolean success) throws DatabaseException {
-    }
-
-    protected void hook582(DatabaseImpl db, IN inFromLog, long logLsn, boolean inserted, boolean replaced, long origLsn,
-	    boolean success, SearchResult result) throws DatabaseException {
-    }
-
-    protected void hook583(DatabaseImpl db, TreeLocation location, LN lnFromLog, long logLsn, boolean found,
-	    boolean replaced, boolean inserted, boolean success) throws DatabaseException {
-    }
-
-    protected static void hook584(Level traceLevel, DatabaseImpl db, TreeLocation location, LN lnFromLog,
-	    byte[] mainKey, byte[] dupKey, long logLsn, long abortLsn, boolean abortKnownDeleted, RecoveryInfo info,
-	    boolean splitsAllowed, boolean found, boolean replaced, boolean success) throws DatabaseException {
-	  }
-*/
-  //  protected void hook585(IN in) throws DatabaseException {
-    //}
-
-/*
-    protected void hook586(RecoveryInfo info, LNFileReader reader, TreeLocation location, LN ln, long logLsn,
-	    long abortLsn, boolean abortKnownDeleted, DatabaseImpl db)
-	    throws IOException, DatabaseException, Exception {
-	undo(detailedTraceLevel, db, location, ln, reader.getKey(), reader.getDupTreeKey(), logLsn, abortLsn,
-		abortKnownDeleted, info, true);
-    }
-*/
-  //  protected void hook587(IN inFromLog, long logLsn) throws DatabaseException {
-   // }
-
-//    protected void hook588(SearchResult result) throws DatabaseException {
- //   }
-
-  //  protected void hook589(IN parent) throws DatabaseException {
-  //  }
-
- //   protected void hook590(SearchResult result) throws DatabaseException {
-  //  }
-
-    //protected void hook591(TreeLocation location) throws DatabaseException {
-   // }
-
-/*    protected static boolean hook592(TreeLocation location, long logLsn, long abortLsn, boolean replaced,
-	    DIN duplicateRoot) throws DatabaseException {
-			if (DbLsn.compareTo(logLsn, location.childLsn) == 0) {
-					duplicateRoot.updateDupCountLNRefAndNullTarget(abortLsn);
-					replaced = true;
-			}
-			return replaced;
-    }
-*/
-    //protected void hook593(INFileReader reader) throws IOException, DatabaseException {
-    //}
-
-//    protected void hook594(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {   }
-
-//    protected static void hook595(DatabaseImpl db, TreeLocation location, byte[] deletedKey) throws DatabaseException {  }
-
-  //  protected void hook596() throws IOException, DatabaseException {
-  //  }
-
-  //  protected void hook597() throws IOException, DatabaseException, Exception {
-  //  }
-
-  //  protected void hook598() throws IOException, DatabaseException, Exception {
-  //  }
 
 }

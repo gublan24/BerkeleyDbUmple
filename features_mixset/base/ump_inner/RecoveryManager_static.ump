@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/recovery/RecoveryManager.java
+
 namespace com.sleepycat.je.recovery;
 class RecoveryManager {
   static class TxnNodeId {
@@ -41,39 +41,5 @@ class RecoveryManager {
         return null;
       }
     }
-   static class RecoveryManager_trace {
-      RecoveryManager_trace(    Level level,    DatabaseImpl database,    String debugType,    boolean success,    Node node,    long logLsn,    IN parent,    boolean found,    boolean replaced,    boolean inserted,    long replacedLsn,    long abortLsn,    int index){
-        this.level=level;
-        this.database=database;
-        this.debugType=debugType;
-        this.success=success;
-        this.node=node;
-        this.logLsn=logLsn;
-        this.parent=parent;
-        this.found=found;
-        this.replaced=replaced;
-        this.inserted=inserted;
-        this.replacedLsn=replacedLsn;
-        this.abortLsn=abortLsn;
-        this.index=index;
-      }
-      void execute(){
-      }
-      protected Level level;
-      protected DatabaseImpl database;
-      protected String debugType;
-      protected boolean success;
-      protected Node node;
-      protected long logLsn;
-      protected IN parent;
-      protected boolean found;
-      protected boolean replaced;
-      protected boolean inserted;
-      protected long replacedLsn;
-      protected long abortLsn;
-      protected int index;
-      protected Logger logger;
-      protected Level useLevel;
-      protected StringBuffer sb;
-    }
+
 }

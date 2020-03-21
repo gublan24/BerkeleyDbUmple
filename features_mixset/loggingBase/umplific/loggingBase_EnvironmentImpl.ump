@@ -8,8 +8,30 @@ class EnvironmentImpl
      * Initialize the debugging logging system. Note that publishing to the database log is not permitted until we've initialized the file manager in recovery. We can't log safely before that.
      */
     private Logger initLogger(File envHome) throws DatabaseException {
-	return new EnvironmentImpl_initLogger(this, envHome).execute();
+    Logger logger = Logger.getAnonymousLogger();
+
+        /*
+         * Disable handlers inherited from parents, we want JE to control its
+         * own behavior. Add our handlers based on configuration
+         */
+        logger.setUseParentHandlers(false);
+
+        /* Set the logging level. */
+        Level level =
+	    Tracer.parseLevel(this, EnvironmentParams.JE_LOGGING_LEVEL);
+        logger.setLevel(level);
+
+        /* Log to console. */
+        LabelExecute_loggingBase: ;
+
+
+        /* Log to text file. */
+        Handler fileHandler = null;
+     
+
+        return logger;
     }
+    
 
     /** 
      * Close down the logger.
