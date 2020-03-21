@@ -290,8 +290,122 @@ private void processLN(Long fileNum, TreeLocation location, Long offset,
   */
  private void processLN(Long fileNum, TreeLocation location, Long offset, LNInfo info, Object lookAheadCachep,
   Map dbCache) throws DatabaseException {
-  new FileProcessor_processLN(this, fileNum, location, offset, info, lookAheadCachep, dbCache).execute();
- }
+
+
+        /* Get the first LN from the queue. */
+        Long offset; 
+        LNInfo info; 
+				Label132: ;
+        LN ln = info.getLN();
+        byte[] key = info.getKey();
+        byte[] dupKey = info.getDupKey();
+
+        long logLsn = DbLsn.makeLsn
+            (fileNum.longValue(), offset.longValue());
+
+        DatabaseImpl db = env.getDbMapTree().getDb
+            (info.getDbId(), cleaner.lockTimeout, dbCache);
+
+        /* Status variables are used to generate debug tracing info. */
+        boolean processedHere = true; // The LN was cleaned here.
+        boolean obsolete = false;     // The LN is no longer in use.
+        boolean completed = false;    // This method completed.
+
+        BIN bin = null;
+        DIN parentDIN = null;      // for DupCountLNs
+        try {
+
+            /* 
+             * If the DB is gone, this LN is obsolete.  If delete cleanup is in
+             * progress, put the DB into the DB pending set; this LN will be
+             * declared deleted after the delete cleanup is finished.
+             */
+						boolean ifFlag = (db == null);
+						Label157: ;
+            if ( ifFlag ) {
+                Label158: ;
+
+                Label148: ;
+
+                obsolete = true;
+                completed = true;
+                return;
+            }
+
+            Tree tree = db.getTree();
+            assert tree != null;
+
+            /*
+	     * Search down to the bottom most level for the parent of this LN.
+	     */
+            boolean parentFound = tree.getParentBINForChildLN
+                (location, key, dupKey, ln,
+                 false,  // splitsAllowed
+                 true,   // findDeletedEntries
+                 false,  // searchDupTree
+                 Cleaner.UPDATE_GENERATION);
+            bin = location.bin;
+            int index = location.index;
+
+            if (!parentFound) {
+                Label149: ;
+		obsolete = true;
+                completed = true;
+		return;
+            }
+
+	    /*
+	     * Now we're at the parent for this LN, whether BIN, DBIN or DIN.
+	     * If knownDeleted, LN is deleted and can be purged.
+	     */
+	    if (bin.isEntryKnownDeleted(index)) {
+		Label150: ;
+		obsolete = true;
+		completed = true;
+                return;
+	    }
+
+            /*
+             * Determine whether the parent is the current BIN, or in the case
+             * of a DupCountLN, a DIN.  Get the tree LSN in either case.
+             */
+            boolean isDupCountLN = ln.containsDuplicates();
+            long treeLsn;
+	    if (isDupCountLN) {
+		parentDIN = (DIN) bin.fetchTarget(index);
+		parentDIN.latch(Cleaner.UPDATE_GENERATION);
+                ChildReference dclRef = parentDIN.getDupCountLNRef();
+                treeLsn = dclRef.getLsn();
+	    } else {
+                treeLsn = bin.getLsn(index);
+	    }
+
+            /* Process this LN that was found in the tree. */
+            processedHere = false;
+            processFoundLN(info, logLsn, treeLsn, bin, index, parentDIN);
+            completed = true;
+
+            /*
+             * For all other non-deleted LNs in this BIN, lookup their LSN
+             * in the LN queue and process any matches.
+             */
+						Label133: ;
+     
+
+            return;
+        } finally {
+            if (parentDIN != null) {
+                parentDIN.releaseLatchIfOwner();
+            }
+
+            if (bin != null) {
+                bin.releaseLatchIfOwner();
+            }
+
+            Label126: ;
+
+        }
+    }
 
  /** 
   * Processes an LN that was found in the tree. Lock the LN's node ID and then set the entry's MIGRATE flag if the LSN of the LN log entry is the active LSN in the tree.

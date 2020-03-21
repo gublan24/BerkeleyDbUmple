@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/txn/Txn.java
+
 namespace com.sleepycat.je.txn;
 class Txn {
   static class DatabaseCleanupInfo {
@@ -7,18 +7,5 @@ class Txn {
      
     }
 
-    inner class Txn_traceCommit {
-      Txn_traceCommit(    Txn _this,    int numWriteLocks,    int numReadLocks){
-        this._this=_this;
-        this.numWriteLocks=numWriteLocks;
-        this.numReadLocks=numReadLocks;
-      }
-      void execute(){
-      }
-      protected Txn _this;
-      protected int numWriteLocks;
-      protected int numReadLocks;
-      protected Logger logger;
-      protected StringBuffer sb;
-    }
+
 }

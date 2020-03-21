@@ -1,16 +1,16 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_LoggingFine_LoggingBase/com/sleepycat/je/recovery/RecoveryManager.java
+
 namespace com.sleepycat.je.recovery;
 class RecoveryManager {
-   static class RecoveryManager_traceRootDeletion {
-      before execute(){
-        logger=database.getDbEnvironment().getLogger();
+
+  after traceRootDeletion(Level , DatabaseImpl ) {
+        Logger logger = database.getDbEnvironment().getLogger();
         if (logger.isLoggable(level)) {
-          sb=new StringBuffer();
-          sb.append(TRACE_ROOT_DELETE);
-          sb.append(" Dbid=").append(database.getId());
-          logger.log(level,sb.toString());
+            StringBuffer sb = new StringBuffer();
+            sb.append(TRACE_ROOT_DELETE);
+            sb.append(" Dbid=").append(database.getId());
+            logger.log(level, sb.toString());
         }
-       // original();
-      }
-    }
+
+  }
+    
 }

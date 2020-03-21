@@ -790,7 +790,7 @@ class Txn
      * Send trace messages to the java.util.logger. Don't rely on the logger alone to conditionalize whether we send this message, we don't even want to construct the message if the level is not enabled.  The string construction can be numerous enough to show up on a performance profile.
      */
     private void traceCommit(int numWriteLocks, int numReadLocks) {
-	new Txn_traceCommit(this, numWriteLocks, numReadLocks).execute();
+      
     }
 
     int getInMemorySize() {

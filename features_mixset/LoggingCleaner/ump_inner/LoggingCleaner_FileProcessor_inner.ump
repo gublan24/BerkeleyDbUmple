@@ -1,12 +1,15 @@
 
 namespace com.sleepycat.je.cleaner;
 class FileProcessor {
-   static class FileProcessor_processLN {
-      after Label126: execute() {
-        if (processedHere) {
-          _this.cleaner.trace(_this.cleaner.detailedTraceLevel,Cleaner.CLEAN_LN,ln,logLsn,completed,obsolete,false);
-        }
-       // original();
+
+      after Label126: processLN(Long , TreeLocation , Long , LNInfo , Object , Map )  {
+        
+					if (processedHere) {
+										      cleaner.trace
+										          (cleaner.detailedTraceLevel, Cleaner.CLEAN_LN, ln, logLsn,
+										           completed, obsolete, false /*migrated*/);
+										  }
+
       }
-    }
+    
 }

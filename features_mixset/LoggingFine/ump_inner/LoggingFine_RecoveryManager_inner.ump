@@ -1,16 +1,5 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/LoggingFine/com/sleepycat/je/recovery/RecoveryManager.java
+
 namespace com.sleepycat.je.recovery;
 class RecoveryManager {
-   static class RecoveryManager_traceRootDeletion {
-      RecoveryManager_traceRootDeletion(    Level level,    DatabaseImpl database){
-        this.level=level;
-        this.database=database;
-      }
-      void execute(){
-      }
-      protected Level level;
-      protected DatabaseImpl database;
-      protected Logger logger;
-      protected StringBuffer sb;
-    }
+ 
 }

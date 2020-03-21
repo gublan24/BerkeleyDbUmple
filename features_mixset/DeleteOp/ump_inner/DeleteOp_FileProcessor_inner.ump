@@ -2,17 +2,17 @@
 namespace com.sleepycat.je.cleaner;
 
 class FileProcessor {
-   static class FileProcessor_processLN {
-      after Label157: execute() {
-        b|=db.isDeleted();
-        //original();
+
+      after Label157: processLN(Long , TreeLocation , Long , LNInfo , Object , Map )  {
+        ifFlag= ifFlag || db.isDeleted();
+        
       }
 			
-			after Label158: execute() {
-        _this.cleaner.addPendingDB(db);
-        //original();
+			after Label158:  processLN(Long , TreeLocation , Long , LNInfo , Object , Map )  {
+       cleaner.addPendingDB(db);
+
       }
-    }
+    
    
 
    
