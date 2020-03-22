@@ -3,13 +3,12 @@ namespace com.sleepycat.je.util;
 class DbStat
 {
     after Label849: stats(PrintStream ){
-	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbStat.stats of " + dbName + " ending");
-	//original();
+			Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbStat.stats of " + dbName + " ending");
+
     }
 
     after Label850: stats(PrintStream ){
-	Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbStat.stats of " + dbName + " starting");
-	//original();
+				Tracer.trace(Level.INFO, DbInternal.envGetEnvironmentImpl(env), "DbStat.stats of " + dbName + " starting");
     }
 
 }

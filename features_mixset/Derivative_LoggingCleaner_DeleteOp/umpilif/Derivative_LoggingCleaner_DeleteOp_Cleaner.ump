@@ -4,7 +4,6 @@ class Cleaner
 {
   after Label85: addPendingDB(DatabaseImpl ) {
 	Tracer.trace(detailedTraceLevel, env, "CleanAddPendingDB " + id);
-	//original(id);
     }
 
 }

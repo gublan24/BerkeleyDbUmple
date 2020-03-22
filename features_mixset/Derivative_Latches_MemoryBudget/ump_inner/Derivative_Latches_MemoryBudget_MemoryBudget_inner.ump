@@ -1,12 +1,5 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Latches_MemoryBudget/com/sleepycat/je/dbi/MemoryBudget.java
+
 namespace com.sleepycat.je.dbi;
 class MemoryBudget {
-/*
-   static class MemoryBudget_sinit {
-      after Label348:execute(){
-        isJVM14=(LatchSupport.getJava5LatchClass() == null);
-        //original();
-      }
-    }
-*/
+
 }

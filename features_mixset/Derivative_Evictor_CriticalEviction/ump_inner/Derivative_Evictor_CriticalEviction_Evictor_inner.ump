@@ -1,16 +1,5 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_CriticalEviction/com/sleepycat/je/evictor/Evictor.java
+
 namespace com.sleepycat.je.evictor;
 class Evictor {
-   static class Evictor_doCriticalEviction {
-      Evictor_doCriticalEviction(    Evictor _this){
-        this._this=_this;
-      }
-      void execute() throws DatabaseException {
-      }
-      protected Evictor _this;
-      protected MemoryBudget mb;
-      protected long currentUsage;
-      protected long maxMem;
-      protected long over;
-    }
+   
 }

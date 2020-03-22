@@ -1,19 +1,21 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_MemoryBudget_CriticalEviction/com/sleepycat/je/evictor/Evictor.java
+
 namespace com.sleepycat.je.evictor;
 class Evictor {
-   static class Evictor_doCriticalEviction {
-      before execute() {
-        mb=_this.envImpl.getMemoryBudget();
-        currentUsage=mb.getCacheMemoryUsage();
-        maxMem=mb.getCacheBudget();
-        over=currentUsage - maxMem;
+
+     after doCriticalEviction () {
+
+     MemoryBudget mb = envImpl.getMemoryBudget();
+        long currentUsage  = mb.getCacheMemoryUsage();
+        long maxMem = mb.getCacheBudget();
+        long over = currentUsage - maxMem;
+        
         if (over > mb.getCriticalThreshold()) {
-          if (_this.DEBUG) {
-            System.out.println("***critical detected:" + over);
-          }
-          _this.doEvict(_this.SOURCE_CRITICAL,true);
-        }
-        //original();
+            if (DEBUG) {
+                System.out.println("***critical detected:" + over);
+            }
+            doEvict(SOURCE_CRITICAL, true /*evictDuringShutdown*/);
+        }        
+
       }
-    }
+    
 }

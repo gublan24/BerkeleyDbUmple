@@ -18,37 +18,37 @@ class LatchImpl
 
     after Label422:acquire(){
 	stats.nAcquiresSelfOwned++;
-	//original();
+
     }
 
     after Label423:acquire(){
 	stats.nAcquiresNoWaiters++;
-	//original();
+
     }
 
     after Label424:acquire(){
 	stats.nAcquiresWithContention++;
-	//original();
+
     }
 
-    after Label425: acquireNoWait(){ //synchronized boolean acquireNoWait()
+    after Label425: acquireNoWait(){ 
 	stats.nAcquiresSelfOwned++;
-	//original();
+
     }
 
-    after Label426: acquireNoWait(){ //synchronized boolean acquireNoWait()
+    after Label426: acquireNoWait(){ 
 	stats.nAcquireNoWaitSuccessful++;
-	//original();
+
     }
 
-    after Label427: acquireNoWait(){ //synchronized boolean acquireNoWait()
+    after Label427: acquireNoWait(){ 
 	stats.nAcquireNoWaitUnsuccessful++;
-	//original();
+
     }
 
     after Label428: doRelease(boolean ) {
 	stats.nReleases++;
-	//original();
+
     }
 
 }

@@ -9,8 +9,8 @@ class LogBufferPool
     }
 
     after Label484: loadStats(StatsConfig , EnvironmentStats ){
-	bufferPoolLatch.acquire();
-	//original();
+			bufferPoolLatch.acquire();
+
     }
 
 }

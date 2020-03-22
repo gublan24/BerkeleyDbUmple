@@ -3,8 +3,8 @@ namespace com.sleepycat.je.dbi;
 class DbTree
 {
     after Label291:  verify(VerifyConfig , PrintStream ) {
-	cursor.releaseBINs();
-//	original(cursor);
+			cursor.releaseBINs();
+
     }
 
 }

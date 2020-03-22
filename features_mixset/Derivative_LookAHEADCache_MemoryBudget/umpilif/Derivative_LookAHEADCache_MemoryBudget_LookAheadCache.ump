@@ -3,20 +3,20 @@ namespace com.sleepycat.je.cleaner;
 class LookAheadCache
 {
     LookAheadCache(int lookAheadCacheSize) {
-	usedMem = MemoryBudget.TREEMAP_OVERHEAD;
+			usedMem = MemoryBudget.TREEMAP_OVERHEAD;
     }
 
     after Label166:add(Long , LNInfo ) {
-	usedMem += info.getMemorySize();
-	usedMem += MemoryBudget.TREEMAP_ENTRY_OVERHEAD - 1;
-	//original(info);
+			usedMem += info.getMemorySize();
+			usedMem += MemoryBudget.TREEMAP_ENTRY_OVERHEAD - 1;
+
     }
 
     after Label167: remove(Long ) {
-	usedMem--;
-	usedMem -= info.getMemorySize();
-	usedMem -= MemoryBudget.TREEMAP_ENTRY_OVERHEAD + 1;
-	//original(info);
+			usedMem--;
+			usedMem -= info.getMemorySize();
+			usedMem -= MemoryBudget.TREEMAP_ENTRY_OVERHEAD + 1;
+
     }
 
 }

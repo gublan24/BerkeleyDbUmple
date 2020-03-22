@@ -3,9 +3,7 @@ namespace com.sleepycat.je;
 
 class Database {
 
-
       after Label39:  truncate(Transaction , boolean ) { 
-
 				Tracer.trace(Level.FINEST, 
                      envHandle.getEnvironmentImpl(),
                      "Database.truncate: txnId=" + 

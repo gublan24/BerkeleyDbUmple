@@ -5,8 +5,8 @@ class FileProcessor {
       after Label116: processFile(Long ) { 
         
 				if (Cleaner.DO_CRITICAL_EVICTION) {
-			env.getEvictor().doCriticalEviction();
-		}
+					env.getEvictor().doCriticalEviction();
+				}
 
       }
     

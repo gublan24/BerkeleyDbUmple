@@ -6,8 +6,8 @@ class Tracer
      * Logger method for recording an exception and stacktrace.
      */
     before trace(EnvironmentImpl , String , String , String, Throwable ) {
-	envImpl.getLogger().logp(Level.SEVERE, sourceClass, sourceMethod, msg + "\n" + Tracer.getStackTrace(t));
-	//original(envImpl, sourceClass, sourceMethod, msg, t);
+				envImpl.getLogger().logp(Level.SEVERE, sourceClass, sourceMethod, msg + "\n" + Tracer.getStackTrace(t));
+
     }
 
 }

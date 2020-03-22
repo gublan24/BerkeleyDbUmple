@@ -7,8 +7,7 @@ class IN
      */
     private void traceSplit(Level level, IN parent, IN newSibling, long parentLsn, long myNewLsn, long newSiblingLsn,
 	    int splitIndex, int idKeyIndex, int childIndex) {
-	new IN_traceSplit(this, level, parent, newSibling, parentLsn, myNewLsn, newSiblingLsn, splitIndex, idKeyIndex,
-		childIndex).execute();
+        
     }
 
 }

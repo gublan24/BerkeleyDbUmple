@@ -3,7 +3,7 @@ namespace com.sleepycat.je.cleaner;
 class Cleaner
 {
     after Label87: deleteSafeToDeleteFiles(){ 
-	Tracer.trace(Level.SEVERE, env,	"Cleaner has " + safeFiles.size() + " files not deleted because of read-only processes.");
+			Tracer.trace(Level.SEVERE, env,	"Cleaner has " + safeFiles.size() + " files not deleted because of read-only processes.");
 
     }
 

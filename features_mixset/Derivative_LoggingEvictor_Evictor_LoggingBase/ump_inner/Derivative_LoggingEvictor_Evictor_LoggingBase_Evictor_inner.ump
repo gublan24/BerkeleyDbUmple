@@ -23,10 +23,7 @@ class Evictor {
 
 
       }
-    
-
-
-
+   
       after Label372: isRunnable(String ) { 
 				logger = envImpl.getLogger();
         if (logger.isLoggable(detailedTraceLevel)) {

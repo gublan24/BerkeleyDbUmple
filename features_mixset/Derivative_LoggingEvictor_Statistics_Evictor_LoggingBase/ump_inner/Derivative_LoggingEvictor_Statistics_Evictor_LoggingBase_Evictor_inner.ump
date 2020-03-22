@@ -5,7 +5,7 @@ class Evictor {
 
       after Label369: evictBatch(String , long ) {
         msg +=" Evictor: pass=" + nEvictPasses ;
-        msg+ =        " nNodesSelected=" + nNodesSelectedThisRun +
+        msg +=" nNodesSelected=" + nNodesSelectedThisRun +
                              " nEvicted=" + nNodesEvictedThisRun +
                              " nBINsStripped=" + nBINsStrippedThisRun ;
 

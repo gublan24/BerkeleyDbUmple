@@ -5,8 +5,8 @@ class Evictor
     private Level detailedTraceLevel;
 
     after Label373: Evictor(EnvironmentImpl , String ){
-	detailedTraceLevel = Tracer.parseLevel(envImpl, EnvironmentParams.JE_LOGGING_LEVEL_EVICTOR);
-	//original(envImpl);
+			detailedTraceLevel = Tracer.parseLevel(envImpl, EnvironmentParams.JE_LOGGING_LEVEL_EVICTOR);
+
     }
 
 }

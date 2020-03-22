@@ -19,6 +19,7 @@ class Database {
     
 
       after  trace(Level , String , Transaction , DatabaseEntry , DatabaseEntry ,  LockMode ) { 
+
 				if (logger.isLoggable(level)) {
             StringBuffer sb = new StringBuffer();
             sb.append(methodName);
@@ -33,7 +34,7 @@ class Database {
                 sb.append(" lockMode=").append(lockMode);
             }
             logger.log(level, sb.toString());
-        }
+        	}
  
     }
 }

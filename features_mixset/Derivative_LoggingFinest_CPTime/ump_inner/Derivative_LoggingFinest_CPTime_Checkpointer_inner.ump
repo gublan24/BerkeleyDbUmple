@@ -2,9 +2,7 @@
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
 
-      after Label518: isRunnable(CheckpointConfig ) {// introduced in LoggingFinest/Checkpointer_inner.ump
+      after Label518: isRunnable(CheckpointConfig ) {
         sb.append(" time interval=").append(useTimeInterval);
-
-      
     }
 }

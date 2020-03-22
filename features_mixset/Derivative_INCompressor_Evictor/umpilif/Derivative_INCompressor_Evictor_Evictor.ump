@@ -4,7 +4,7 @@ class Evictor
 {
     after Label385: evict(INList , IN , ScanIterator ){
 	envImpl.lazyCompress(target);
-	//original(target);
+
     }
 
 }

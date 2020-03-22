@@ -3,8 +3,8 @@ namespace com.sleepycat.je.incomp;
 class INCompressor
 {
     after Label415:  findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
-	close |= binSearch.db.isDeleted();
-	//return original(binSearch, close);
+			close |= binSearch.db.isDeleted();
+
     }
 
 }

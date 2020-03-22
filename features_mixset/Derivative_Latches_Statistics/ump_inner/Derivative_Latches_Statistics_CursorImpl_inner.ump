@@ -4,8 +4,7 @@ class CursorImpl {
 
       after Label200: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {   
         latchBIN();
-        
-        
+    
       }
 
 			after Label200_1: getNextDuplicate(DatabaseEntry , DatabaseEntry , LockType ,  boolean , boolean ) {  

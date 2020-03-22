@@ -2,7 +2,7 @@ namespace com.sleepycat.je.dbi;
 
 class EnvironmentImpl
 {
-    after Label311: doClose(boolean ){ //Label311 introduced in CheckLeaks_EnvironemtImpl.ump
+    after Label311: doClose(boolean ){ 
 	LatchSupport.clearNotes();
 
     }

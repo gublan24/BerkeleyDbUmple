@@ -2,9 +2,7 @@
 namespace com.sleepycat.je.recovery;
 class Checkpointer {
 
-      after Label517: isRunnable(CheckpointConfig ) {  // label introduced in loggingFinestCheckpointer_inner
+      after Label517: isRunnable(CheckpointConfig ) {  
         sb.append("size interval=").append(useBytesInterval);
-
-      
     }
 }

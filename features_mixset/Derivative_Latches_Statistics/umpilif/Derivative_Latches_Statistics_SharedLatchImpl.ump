@@ -4,31 +4,31 @@ class SharedLatchImpl
 {
     private LatchStats stats = new LatchStats();
 
-    after Label429:  acquireExclusive() {  //synchronized void acquireExclusive()
+    after Label429:  acquireExclusive() {  
 
 	stats.nAcquiresNoWaiters++;
-	//original();
+
     }
 
-    after Label430:  acquireExclusive() {  //synchronized void acquireExclusive()
+    after Label430:  acquireExclusive() {  
 	stats.nAcquiresWithContention++;
-	//original();
+
     }
 
     after Label431:  acquireExclusiveNoWait() {
 	stats.nAcquiresNoWaiters++;
-	//original();
+
     }
 
     after Label432:acquireShared() {
 
 	stats.nAcquireSharedSuccessful++;
-	//original();
+
     }
 
-    after Label433: release() { // synchronized void release() 
+    after Label433: release() { 
 	stats.nReleases++;
-	//original();
+
     }
 
 }

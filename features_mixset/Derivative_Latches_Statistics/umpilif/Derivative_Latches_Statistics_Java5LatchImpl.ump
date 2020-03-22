@@ -23,32 +23,32 @@ class Java5LatchImpl
 	} else {
 	    stats.nAcquiresNoWaiters++;
 	}
-	//original();
+	
     }
 
     after Label417:acquire() {
 	stats.nAcquiresSelfOwned++;
-	//original();
+	
     }
 
     after Label418:acquireNoWait() {
 	stats.nAcquiresSelfOwned++;
-	//original();
+	
     }
 
     after Label419:acquireNoWait() {
 	stats.nAcquireNoWaitSuccessful++;
-	//original();
+	
     }
 
     after Label420:acquireNoWait() {
 	stats.nAcquireNoWaitUnsuccessful++;
-	//original();
+	
     }
 
     after Label421:doRelease(boolean ) {
 	stats.nReleases++;
-	//original();
+	
     }
 
 }

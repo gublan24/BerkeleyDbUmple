@@ -1,7 +1,7 @@
 
 namespace com.sleepycat.je.evictor;
-class Evictor {
 
+class Evictor {
       after Label370: isRunnable(String ) { 
             sb.append(" doRun=").append(doRun);
             sb.append(" JEusedBytes=").append(formatter.format(currentUsage));

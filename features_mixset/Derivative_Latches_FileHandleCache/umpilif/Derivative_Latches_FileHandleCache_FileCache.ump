@@ -5,7 +5,7 @@ class FileCache
     around Label438-Label438_1:  add(Long , FileHandle ){
 
 			if (evictTarget.latchNoWait()) {
-					around_proceed: //original(iter, done, evictId, evictTarget);
+					around_proceed: 
 			}
     }
 
@@ -16,25 +16,25 @@ class FileCache
     }
 
     after Label440_1:clear(){
-//	try {	    original(iter, fileHandle);} finally {
+
 	    fileHandle.release();
-//	}
+
     }
 
 
     after Label441:add(Long, FileHandle ){
 	evictTarget.release();
-	//original(evictTarget);
+
     }
 
     after Label442: remove(long ){
 	evictTarget.latch();
-	//original(evictTarget);
+
     }
 
     after Label443: clear(){
 	fileHandle.latch();
-	//original(fileHandle);
+
     }
 
 }
