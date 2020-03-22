@@ -1,16 +1,17 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Statistics_MemoryBudget/com/sleepycat/je/util/DbCacheSize.java
+
 namespace com.sleepycat.je.util;
 class DbCacheSize {
-   static class DbCacheSize_insertRecords {
-      after Label833:  DbCacheSize_insertRecords(PrintStream , Environment , Database , long , int , int , boolean ) {
-        stats=env.getStats(null);
-        if (stats.getNNodesScanned() > 0) {
-          out.println("*** Ran out of cache memory at record " + i + " -- try increasing the Java heap size ***");
-          return; //throw new ReturnVoid();
+
+      after Label833:  insertRecords(PrintStream , Environment , Database , long , int , int , boolean ) {
+      	stats = env.getStats(null);
+    		if (stats.getNNodesScanned() > 0) {
+                    out.println("*** Ran out of cache memory at record " + i +
+                                " -- try increasing the Java heap size ***");
+                    return;
         }
-       // original();
+
       }
-    }
+    
 }
 
 

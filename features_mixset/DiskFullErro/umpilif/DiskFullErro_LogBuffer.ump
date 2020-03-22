@@ -17,8 +17,7 @@ class LogBuffer
     }
 
   after reinit(){
-	//original();
-	rewriteAllowed = false;
+			rewriteAllowed = false;
     }
 
 }

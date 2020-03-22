@@ -2,12 +2,9 @@ namespace com.sleepycat.je.cleaner;
 
 class Cleaner
 {
+  after Label115:deleteSafeToDeleteFiles(){
 
-
-
-    after Label115:deleteSafeToDeleteFiles(){
 	    if (!env.getFileManager().lockEnvironment(false, true)) {
-
       Label87: 
 	    return; 
 	    }
@@ -18,6 +15,4 @@ class Cleaner
     env.getFileManager().releaseExclusiveLock();
   }
   
-
-
 }

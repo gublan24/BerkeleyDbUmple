@@ -67,7 +67,6 @@ class FileManager
     after Label467: FileManager(EnvironmentImpl , File , boolean)  {
 						lockEnvironment(readOnly, false);
 
-//
     }
 
     /** 

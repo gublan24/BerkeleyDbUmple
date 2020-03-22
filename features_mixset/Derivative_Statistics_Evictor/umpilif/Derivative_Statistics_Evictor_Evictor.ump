@@ -24,41 +24,41 @@ class Evictor
      * Load stats.
      */
     public void loadStats(StatsConfig config, EnvironmentStats stat) throws DatabaseException {
-	stat.setNEvictPasses(nEvictPasses);
-	stat.setNNodesSelected(nNodesSelected);
-	stat.setNNodesScanned(nNodesScanned);
-	stat.setNNodesExplicitlyEvicted(nNodesEvicted);
-	stat.setNBINsStripped(nBINsStripped);
-	stat.setRequiredEvictBytes(currentRequiredEvictBytes);
-	if (config.getClear()) {
-	    nEvictPasses = 0;
-	    nNodesSelected = 0;
-	    nNodesScanned = 0;
-	    nNodesEvicted = 0;
-	    nBINsStripped = 0;
-	}
+			stat.setNEvictPasses(nEvictPasses);
+			stat.setNNodesSelected(nNodesSelected);
+			stat.setNNodesScanned(nNodesScanned);
+			stat.setNNodesExplicitlyEvicted(nNodesEvicted);
+			stat.setNBINsStripped(nBINsStripped);
+			stat.setRequiredEvictBytes(currentRequiredEvictBytes);
+			if (config.getClear()) {
+					nEvictPasses = 0;
+					nNodesSelected = 0;
+					nNodesScanned = 0;
+					nNodesEvicted = 0;
+					nBINsStripped = 0;
+			}
     }
 
     after Label380: selectIN(INList , ScanIterator ){
-	if (target != null) {
-	    nNodesSelectedThisRun++;
-	    nNodesSelected++;
-	}
-	//original(target);
+			if (target != null) {
+					nNodesSelectedThisRun++;
+					nNodesSelected++;
+			}
+
     }
 
     after Label383:  evict(INList , IN , ScanIterator ){
-	if (evictedBytes > 0) {
-	    nBINsStrippedThisRun++;
-	    nBINsStripped++;
-	}
-	//original(evictedBytes);
+				if (evictedBytes > 0) {
+						nBINsStrippedThisRun++;
+						nBINsStripped++;
+				}
+
     }
 
     after Label384: evictIN(IN , IN , int , INList , ScanIterator , boolean ){
-	nNodesEvictedThisRun++;
-	nNodesEvicted++;
-	//original();
+			nNodesEvictedThisRun++;
+			nNodesEvicted++;
+
     }
 
 }

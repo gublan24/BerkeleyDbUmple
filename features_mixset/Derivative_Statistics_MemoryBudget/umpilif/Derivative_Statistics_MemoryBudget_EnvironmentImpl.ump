@@ -3,9 +3,8 @@ namespace com.sleepycat.je.dbi;
 class EnvironmentImpl
 {
   after Label316: loadStats(StatsConfig ){
+		memoryBudget.loadStats(config, stats);
 
-	memoryBudget.loadStats(config, stats);
-	//original(config, stats);
     }
 
 }

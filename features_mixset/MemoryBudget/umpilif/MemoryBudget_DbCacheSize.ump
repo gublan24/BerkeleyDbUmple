@@ -2,7 +2,7 @@ namespace com.sleepycat.je.util;
 
 class DbCacheSize
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.CmdUtil;
   depend com.sleepycat.je.dbi.MemoryBudget;
   depend com.sleepycat.je.OperationStatus;
@@ -280,7 +280,50 @@ class DbCacheSize
 
     private static void insertRecords(PrintStream out, Environment env, Database db, long records, int keySize,
 	    int dataSize, boolean randomKeys) throws DatabaseException {
-	new DbCacheSize_insertRecords(out, env, db, records, keySize, dataSize, randomKeys).execute();
+    		DatabaseEntry key = new DatabaseEntry();
+        DatabaseEntry data = new DatabaseEntry(new byte[dataSize]);
+        BigInteger bigInt = BigInteger.ZERO;
+        Random rnd = new Random(123);
+
+        for (int i = 0; i < records; i += 1) {
+
+            if (randomKeys) {
+                byte[] a = new byte[keySize];
+                rnd.nextBytes(a);
+                key.setData(a);
+            } else {
+                bigInt = bigInt.add(BigInteger.ONE);
+                byte[] a = bigInt.toByteArray();
+                if (a.length < keySize) {
+                    byte[] a2 = new byte[keySize];
+                    System.arraycopy(a, 0, a2, a2.length - a.length, a.length);
+                    a = a2;
+                } else if (a.length > keySize) {
+                    out.println("*** Key doesn't fit value=" + bigInt +
+                                " byte length=" + a.length);
+                    return;
+                }
+                key.setData(a);
+            }
+
+            OperationStatus status = db.putNoOverwrite(null, key, data);
+            if (status == OperationStatus.KEYEXIST && randomKeys) {
+                i -= 1;
+                out.println("Random key already exists -- retrying");
+                continue;
+            }
+            if (status != OperationStatus.SUCCESS) {
+                out.println("*** " + status);
+                return;
+            }
+
+            if (i % 10000 == 0) {
+                EnvironmentStats stats; 
+            		Label833: ;
+                out.print(".");
+                out.flush();
+            }
+        }
     }
 
     private static void preloadRecords(final PrintStream out, final Database db) throws DatabaseException {
@@ -307,10 +350,6 @@ class DbCacheSize
 	}
     }
 
-  //  protected static void hook831(PrintStream out, Environment env) throws DatabaseException {
-  //  }
 
-  //  protected static void hook832(PrintStream out, Environment env) throws DatabaseException {
-  //  }
 
 }

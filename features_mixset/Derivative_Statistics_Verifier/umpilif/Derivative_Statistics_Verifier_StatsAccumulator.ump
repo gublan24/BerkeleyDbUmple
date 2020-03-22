@@ -6,28 +6,28 @@ class StatsAccumulator
     }
 
     after Label363: processIN(IN , Long , int ) {
-	verifyNode(node);
-	//original(node);
+			verifyNode(node);
+
     }
 
     after Label364: processBIN(BIN , Long , int ) {
 	verifyNode(node);
-	//original(node);
+
     }
 
     after Label365: processDIN(DIN , Long , int ) {
 	verifyNode(node);
-	//original(node);
+
     }
 
     after Label366: processDBIN(DBIN , Long , int ) {
 	verifyNode(node);
-	//original(node);
+
     }
 
     after Label367: processDupCountLN(DupCountLN , Long ) {
 	verifyNode(node);
-	//original(node);
+
     }
 
 }

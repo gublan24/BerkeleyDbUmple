@@ -4,7 +4,7 @@ class DbTree
 {
     around Label292_1-Label292: verify(VerifyConfig , PrintStream ) {
     	synchronized (envImpl.getINCompressor()) {
-  	    around_proceed: //ret = original(config, out, ret);
+  	    around_proceed: 
 			}
     }
 

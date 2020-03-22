@@ -1,33 +1,8 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/CheckLeaks/com/sleepycat/je/dbi/EnvironmentImpl.java
+
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
   depend com.sleepycat.je.StatsConfig;
   depend com.sleepycat.je.TransactionStats;
 
-   static class EnvironmentImpl_checkLeaks {
-      EnvironmentImpl_checkLeaks(    EnvironmentImpl _this){
-        this._this=_this;
-      }
-      void execute() throws DatabaseException {
-        if (!_this.configManager.getBoolean(EnvironmentParams.ENV_CHECK_LEAKS)) {
-          return;
-        }
-        clean=true;
-        Label313: //this.hook313();
-        Label312: //this.hook312();
-        assert clean : "Lock, transaction, or latch left behind at environment close";
-      }
 
-      protected EnvironmentImpl _this;
-      protected boolean clean;
-      protected StatsConfig statsConfig;
-      protected LockStats lockStat;
-      protected TransactionStats txnStat;
-      protected TransactionStats.Active[] active;
-      
-      //protected void hook312() throws DatabaseException {
-      //}
-      //protected void hook313() throws DatabaseException {
-      //}
-    }
 }

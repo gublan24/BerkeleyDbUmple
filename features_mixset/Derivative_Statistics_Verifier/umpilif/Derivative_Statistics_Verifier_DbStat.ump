@@ -6,7 +6,7 @@ class DbStat
   
   strictness disallow constructor;
 
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.CmdUtil;
   depend com.sleepycat.je.StatsConfig;
@@ -113,7 +113,7 @@ class DbStat
 	    DatabaseStats stats = db.getStats(statsConfig);
 	    out.println(stats);
 	    db.close();
-	    Label849: ;//this.hook849();
+	    Label849: ;
 	} catch (DatabaseException DE) {
 	    return false;
 	}

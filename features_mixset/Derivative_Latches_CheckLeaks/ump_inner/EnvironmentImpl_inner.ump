@@ -1,14 +1,15 @@
 
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
-   static class EnvironmentImpl_checkLeaks {
-      after Label312: execute(){ //Label312 introduced in CheckLeaks_EnvironmentImp_inner.ump
+
+      after Label312: checkLeaks(){ 
+      
         if (LatchSupport.countLatchesHeld() > 0) {
-          clean=false;
-          System.out.println("Some latches held at env close.");
-          LatchSupport.dumpLatchesHeld();
+            clean = false;
+            System.out.println("Some latches held at env close.");
+            LatchSupport.dumpLatchesHeld();
         }
 
       }
-    }
+    
 }

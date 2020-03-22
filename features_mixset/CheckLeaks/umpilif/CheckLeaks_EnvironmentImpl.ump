@@ -6,7 +6,19 @@ class EnvironmentImpl
      * Debugging support. Check for leaked locks and transactions.
      */
     private void checkLeaks() throws DatabaseException {
-			new EnvironmentImpl_checkLeaks(this).execute();
+	        /* Only enabled if this check leak flag is true. */
+        if (!configManager.getBoolean(EnvironmentParams.ENV_CHECK_LEAKS)) {
+            return;
+        }
+
+        boolean clean = true;
+				StatsConfig statsConfig;
+				Label313: ;
+
+				Label312: ;
+
+        assert clean:
+            "Lock, transaction, or latch left behind at environment close";
     }
 
 

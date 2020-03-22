@@ -3,8 +3,8 @@ namespace com.sleepycat.je;
 class Database
 {
     after Label37:  verify(VerifyConfig ) {
-	databaseImpl.checkIsDeleted("verify");
-//	original();
+			databaseImpl.checkIsDeleted("verify");
+
     }
 
 }

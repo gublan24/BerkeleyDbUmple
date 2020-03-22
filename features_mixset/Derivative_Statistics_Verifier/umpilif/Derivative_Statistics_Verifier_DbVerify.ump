@@ -2,7 +2,7 @@ namespace com.sleepycat.je.util;
 
 class DbVerify
 {
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.CmdUtil;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
@@ -166,7 +166,7 @@ class DbVerify
 		if (db != null) {
 		    db.close();
 		}
-		Label852: ;//this.hook852(envImpl);
+		Label852: ;
 	    }
 	    closeEnv();
 	} catch (DatabaseException DE) {
@@ -179,9 +179,5 @@ class DbVerify
 	}
 	return ret;
     }
-
-//    protected void hook851(EnvironmentImpl envImpl) throws DatabaseException {}
-
-//    protected void hook852(EnvironmentImpl envImpl) throws DatabaseException {  }
 
 }

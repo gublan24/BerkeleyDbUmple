@@ -18,11 +18,11 @@ class INCompressor
 	    BIN bin = searchForBIN(db, binRef);
 	    if (bin != null) {
 		bin.verifyCursors();
-		Label390: ;//this.hook390(bin);
+		Label390: ;
 	    }
 	}
     }
 
-//    protected void hook390(BIN bin) throws DatabaseException { }
+
 
 }

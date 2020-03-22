@@ -82,67 +82,65 @@ class INCompressor
 
     after Label403:  nDeadlockRetries() {
 	wokenUp++;
-	//original();
+	
     }
 
     after Label404: doCompress(){
 
 	resetPerRunCounters();
-	//original();
+	
     }
 
     after Label405: doCompress() {
-// synchronized void doCompress()
-
 	accumulatePerRunCounters();
-	//original();
+	
     }
 
     after Label406: pruneBIN(DatabaseImpl , BINReference , byte , boolean ,	    byte , UtilizationTracker ){
 	processedBinsThisRun++;
-	//original();
+	
     }
 
     after Label407: pruneBIN(DatabaseImpl , BINReference , byte , boolean ,
 	    byte , UtilizationTracker ){
 	nonEmptyBinsThisRun++;
-	//original();
+	
     }
 
     after Label408: pruneBIN(DatabaseImpl , BINReference , byte , boolean ,	    byte , UtilizationTracker ){
 
 	cursorsBinsThisRun++;
-	//original();
+	
     }
 
     after Label409:lazyCompress(IN ){
 	lazyProcessed++;
-	//original();
+	
     }
 
     after Label410:lazyCompress(IN ){
 	lazySplit++;
-	//original();
+	
     }
 
     after Label411:lazyCompress(IN ){
 	lazyEmpty++;
-	//original();
+	
     }
 
     after Label412: findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
 	dbClosedBinsThisRun++;
-	//original();
+	
     }
 
     after Label413: findDBAndBIN(BINSearch , BINReference , DbTree , Map ){
 	splitBinsThisRun++;
-	//original();
+	
     }
 
     after Label414: compressBin(DatabaseImpl , BIN , BINReference , UtilizationTracker ){
 	cursorsBinsThisRun++;
-	//original();
+	
     }
 
 }

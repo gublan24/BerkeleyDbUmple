@@ -1,28 +1,34 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Statistics_CheckLeaks/com/sleepycat/je/dbi/EnvironmentImpl.java
+
 namespace com.sleepycat.je.dbi;
 class EnvironmentImpl {
-   static class EnvironmentImpl_checkLeaks {
-      after Label313:execute(){ // Label313 introduced in CheckLeaks_Environment.ump
-        statsConfig=new StatsConfig();
+
+  after Label313: checkLeaks()
+  {
+       statsConfig = new StatsConfig();
+
+        /* Fast stats will not return NTotalLocks below. */
         statsConfig.setFast(false);
-        lockStat=_this.lockStat(statsConfig);
+
+        LockStats lockStat = lockStat(statsConfig);
         if (lockStat.getNTotalLocks() != 0) {
-          clean=false;
-          System.out.println("Problem: " + lockStat.getNTotalLocks() + " locks left");
-          _this.txnManager.getLockManager().dump();
-        }
-        txnStat=_this.txnStat(statsConfig);
+            clean = false;
+            System.out.println("Problem: " + lockStat.getNTotalLocks() +
+                               " locks left");
+            txnManager.getLockManager().dump();
+        } 
+
+        TransactionStats txnStat = txnStat(statsConfig);
         if (txnStat.getNActive() != 0) {
-          clean=false;
-          System.out.println("Problem: " + txnStat.getNActive() + " txns left");
-          active=txnStat.getActiveTxns();
-          if (active != null) {
-            for (int i=0; i < active.length; i+=1) {
-              System.out.println(active[i]);
+            clean = false;
+            System.out.println("Problem: " + txnStat.getNActive() +
+                               " txns left");
+            TransactionStats.Active[] active = txnStat.getActiveTxns();
+            if (active != null) {
+                for (int i = 0; i < active.length; i += 1) {
+                    System.out.println(active[i]);
+                }
             }
-          }
         }
-  //      original();
-      }
-    }
+
+  }
 }

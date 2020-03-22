@@ -4,7 +4,7 @@ class EnvironmentImpl
 {
     after Label315: loadStats(StatsConfig ){
 	evictor.loadStats(config, stats);
-	//original(config, stats);
+
     }
 
 }
