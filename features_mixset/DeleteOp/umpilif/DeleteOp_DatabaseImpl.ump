@@ -68,12 +68,12 @@ class DatabaseImpl
 
     after Label288:DatabaseImpl(String , DatabaseId , EnvironmentImpl , DatabaseConfig ){
 			deleteState = NOT_DELETED;
-			//original();
+			
     }
 
     after Label289:DatabaseImpl() {
 			deleteState = NOT_DELETED;
-			//original();
+			
     }
 
 }

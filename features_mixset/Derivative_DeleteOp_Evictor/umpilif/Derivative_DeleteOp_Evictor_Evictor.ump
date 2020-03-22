@@ -4,12 +4,12 @@ class Evictor
 {
   after Label386: selectIN(INList , ScanIterator ){
 	b2 = db.isDeleted();
-	//return original(db, b2);
+
     }
 
   after Label387: selectIN(INList , ScanIterator ){
 	b |= db.isDeleteFinished();
-	//return original(db, b);
+
     }
 
 }

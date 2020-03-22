@@ -10,8 +10,21 @@ class Txn
      * @param mb environment memory budget.
      */
     public void markDeleteAtTxnEnd(DatabaseImpl dbImpl, boolean deleteAtCommit) throws DatabaseException {
-			new Txn_markDeleteAtTxnEnd(this, dbImpl, deleteAtCommit).execute();
+
+        synchronized (this) {
+            int delta = 0;
+            if (deletedDatabases == null) {
+                deletedDatabases = new HashSet();
+                Label798: ;
+            }
+
+            deletedDatabases.add(new DatabaseCleanupInfo(dbImpl,
+                                                         deleteAtCommit));
+		       Label796: ;
+        }
     }
+
+    
 
     private void setDeletedDatabaseState(boolean isCommit) throws DatabaseException {
 			if (deletedDatabases != null) {
@@ -47,22 +60,22 @@ class Txn
 
     after Label805:commit(byte ){
 			cleanupDatabaseImpls(true);
-		//	original();
+
     }
 
     after Label806:commit(byte ){
 			setDeletedDatabaseState(true);
-			//original();
+			
     }
 
     after Label807:abortInternal(boolean , boolean ){
 			cleanupDatabaseImpls(false);
-			//original();
+			
 		}
 
     after Label808:abortInternal(boolean , boolean ){
 			setDeletedDatabaseState(false);
-			//original();
+			
     }
 
 }

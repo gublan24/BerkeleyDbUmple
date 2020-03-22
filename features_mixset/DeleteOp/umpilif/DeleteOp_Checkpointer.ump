@@ -7,7 +7,7 @@ class Checkpointer
 			if (!(targetRef.db.isDeleted())) {
 					flushIN(targetRef, dirtyMap, currentLevel.intValue(), logProvisionally, allowDeltas, checkpointStart);
 			}
-			//original(dirtyMap, allowDeltas, checkpointStart, currentLevel, logProvisionally, targetRef);
+
     }
 
 }

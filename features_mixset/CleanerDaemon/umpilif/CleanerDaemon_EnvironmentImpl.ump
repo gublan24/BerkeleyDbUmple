@@ -15,11 +15,11 @@ class EnvironmentImpl
     after Label333:runOrPauseDaemons(DbConfigManager ){
 			cleaner.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_CLEANER)
 				&& !mgr.getBoolean(EnvironmentParams.LOG_MEMORY_ONLY));
-			//original(mgr);
+
     }
 
     after requestShutdownDaemons() {
-	//original();
+
 	if (cleaner != null) {
 	    cleaner.requestShutdown();
 	}
@@ -30,7 +30,7 @@ class EnvironmentImpl
      */
   before shutdownDaemons()  {
 	shutdownCleaner();
-//	original();
+
     }
 
 }

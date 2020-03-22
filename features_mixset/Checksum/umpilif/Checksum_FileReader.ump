@@ -39,12 +39,12 @@ class FileReader {
         if (doValidateChecksum) {
             cksumValidator = new ChecksumValidator();
         }
-        ////original();
+
     }
 
     after Label473:  FileReader(EnvironmentImpl , int , boolean , long , Long ,	 long , long ) {
         this.doValidateChecksum = env.getLogManager().getChecksumOnRead();
-        //original(env);
+
     }
 
 }

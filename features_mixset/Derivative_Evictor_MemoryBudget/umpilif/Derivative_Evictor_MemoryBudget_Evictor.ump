@@ -5,7 +5,7 @@ class Evictor
    after Label389: evictIN(IN , IN , int , INList , ScanIterator , boolean )
    {
 	evictBytes = renewedChild.getInMemorySize();
-	//return original(evictBytes, renewedChild);
+
     }
 
 }

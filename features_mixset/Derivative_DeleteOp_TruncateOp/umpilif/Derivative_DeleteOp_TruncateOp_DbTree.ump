@@ -5,12 +5,12 @@ class DbTree
   after Label296: truncate(Locker , String , boolean ){
 	locker.markDeleteAtTxnEnd(result.dbImpl, true);
 	locker.markDeleteAtTxnEnd(newDb, false);
-//	original(locker, result, newDb);
+
     }
 
   after Label297: truncate(Locker , String , boolean ){
 	locker.markDeleteAtTxnEnd(oldDatabase, true);
-	//original(locker, oldDatabase);
+
     }
 
 }

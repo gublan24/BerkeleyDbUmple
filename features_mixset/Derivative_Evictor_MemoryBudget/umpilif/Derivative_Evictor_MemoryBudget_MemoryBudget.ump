@@ -13,7 +13,7 @@ class MemoryBudget
      * @param incrementnote that increment may be negative.
      */
     after updateTreeMemoryUsage(long ) {
-				//original(increment);
+
 				if (getCacheMemoryUsage() > cacheBudget) {
 						envImpl.alertEvictor();
 				}
@@ -24,14 +24,14 @@ class MemoryBudget
      * @param incrementnote that increment may be negative.
      */
     after updateMiscMemoryUsage(long ) {
-			//original(increment);
+
 			if (getCacheMemoryUsage() > cacheBudget) {
 					envImpl.alertEvictor();
 			}
     }
 
     after updateLockMemoryUsage(long , int ) {
-			//original(increment, lockTableIndex);
+
 			if (getCacheMemoryUsage() > cacheBudget) {
 					envImpl.alertEvictor();
 			}

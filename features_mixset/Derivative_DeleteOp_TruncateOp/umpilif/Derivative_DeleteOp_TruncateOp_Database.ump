@@ -4,7 +4,7 @@ class Database
 {
     after Label43: truncate(Transaction , boolean ){
 	databaseImpl.checkIsDeleted("truncate");
-	//original();
+
     }
 
 }

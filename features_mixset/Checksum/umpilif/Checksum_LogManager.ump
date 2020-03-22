@@ -14,13 +14,13 @@ class LogManager {
 
     after Label504: HEADER_CONTENT_BYTES() {
         r -= CHECKSUM_BYTES;
-        //return original(r);
+
     }
 
     after Label505:LogManager(EnvironmentImpl , boolean ) {
 
         doChecksumOnRead = configManager.getBoolean(EnvironmentParams.LOG_CHECKSUM_READ);
-        //original(configManager);
+
     }
 
 }

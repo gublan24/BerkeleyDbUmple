@@ -4,7 +4,7 @@ class UtilizationProfile
 {
     after Label186:verifyLsnIsObsolete(long ){
 			b |= db.isDeleted();
-			//return original(db, b);
+
     }
 
 }

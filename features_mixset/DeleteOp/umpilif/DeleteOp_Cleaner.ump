@@ -10,22 +10,21 @@ class Cleaner
 					DatabaseId id = db.getId();
 					if (fileSelector.addPendingDB(id)) {
 
-							Label85: ;							//this.hook85(id);
+							Label85: ;							
 					}
 			}
     }
 
-  //  protected void hook85(DatabaseId id) {
-  //  }
+
 
     after Label112:processPendingLN(LN , DatabaseImpl , byte  , byte , TreeLocation ){
 			c = c || db.isDeleted();
-			//return original(db, c);
+
     }
 
   after Label113:processPendingLN(LN , DatabaseImpl , byte , byte , TreeLocation ){
 			addPendingDB(db);
-			//original(db);
+
     }
 
 }

@@ -18,13 +18,11 @@ class DbTree
 					}
 			} finally {
 					if (nameCursor != null) {
-							Label293://this.hook293(nameCursor);
+							Label293: ;
 							nameCursor.close();
 					}
 			}
     }
 
-   // protected void hook293(CursorImpl nameCursor) throws DatabaseException {
- //   }
 
 }

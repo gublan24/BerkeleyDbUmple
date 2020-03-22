@@ -5,20 +5,20 @@ class LogManager
     private CheckpointMonitor checkpointMonitor;
 
     after Label498: LogManager(EnvironmentImpl , boolean ){
-	checkpointMonitor = new CheckpointMonitor(envImpl);
-	//original(envImpl);
+			checkpointMonitor = new CheckpointMonitor(envImpl);
+
     }
 
     after Label499:log(LoggableObject , boolean , boolean , boolean ,  boolean , long ){
-	if (logResult.wakeupCheckpointer) {
-	    checkpointMonitor.activate();
-	}
-	//original(logResult);
+			if (logResult.wakeupCheckpointer) {
+					checkpointMonitor.activate();
+			}
+
     }
 
    after Label500: logInternal(LoggableObject , boolean , boolean , boolean , long , boolean , ByteBuffer  ,	UtilizationTracker ) {
-	wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
-	//return //original(item, entrySize, wakeupCheckpointer);
+			wakeupCheckpointer = checkpointMonitor.recordLogWrite(entrySize, item);
+
     }
 
 }

@@ -6,7 +6,7 @@ class Checkpointer
 
     after Label539: Checkpointer(EnvironmentImpl , long , String ){
 			logSizeBytesInterval = envImpl.getConfigManager().getLong(EnvironmentParams.CHECKPOINTER_BYTES_INTERVAL);
-			//original(envImpl);
+
     }
 
 }

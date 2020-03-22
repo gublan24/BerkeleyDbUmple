@@ -4,7 +4,7 @@ class EnvironmentImpl
 {
   after Label317: runOrPauseDaemons(DbConfigManager ){
 	evictor.runOrPause(mgr.getBoolean(EnvironmentParams.ENV_RUN_EVICTOR));
-	//original(mgr);
+
     }
 
 }

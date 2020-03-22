@@ -7,7 +7,7 @@ class Checkpointer
     after Label545:Checkpointer(EnvironmentImpl , long , String ){
 
 			timeInterval = waitTime;
-//			original(waitTime);
+
     }
 
 }

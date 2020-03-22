@@ -4,7 +4,7 @@ class Checkpointer
 {
     after Label520: flushDirtyNodes(SortedMap , boolean , boolean , boolean ,        long ){
 	envImpl.getEvictor().doCriticalEviction();
-	//original();
+
     }
 
 }

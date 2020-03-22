@@ -4,17 +4,17 @@ class Database
 {
     after Label55:preload(long ){
 			databaseImpl.checkIsDeleted("preload");
-			//original();
+			
     }
 
     after Label56:preload(long , long ){
 			databaseImpl.checkIsDeleted("preload");
-			//original();
+			
     }
 
     after Label57: preload(PreloadConfig ) {
 			databaseImpl.checkIsDeleted("preload");
-			//original();
+			
     }
 
 }
