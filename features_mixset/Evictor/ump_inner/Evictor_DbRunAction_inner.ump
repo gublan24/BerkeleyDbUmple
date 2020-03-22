@@ -2,32 +2,7 @@
 namespace com.sleepycat.je.util;
 class DbRunAction {
 
-   static class DbRunAction_doEvict {
-      DbRunAction_doEvict(    Environment env){
-        this.env=env;
-      }
-      void execute() throws DatabaseException {
-        envImpl=DbInternal.envGetEnvironmentImpl(env);
-        Label837:        //this.hook837();
-        c=new EnvironmentMutableConfig();
-        Label836:        //this.hook836();
-        env.setMutableConfig(c);
-        start=System.currentTimeMillis();
-        env.evictMemory();
-        end=System.currentTimeMillis();
-        f=new DecimalFormat();
-        f.setMaximumFractionDigits(2);
-        System.out.println("evict time=" + f.format(end - start));
-      }
-      protected Environment env;
-      protected EnvironmentImpl envImpl;
-      protected long cacheUsage;
-      protected EnvironmentMutableConfig c;
-      protected long start;
-      protected long end;
-      protected DecimalFormat f;
 
-    }
 
       after Label844:main(String ) {
        preload(env, dbName);

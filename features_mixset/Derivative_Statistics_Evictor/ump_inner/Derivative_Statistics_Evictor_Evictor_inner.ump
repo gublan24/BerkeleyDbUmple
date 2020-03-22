@@ -1,21 +1,18 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Statistics_Evictor/com/sleepycat/je/evictor/Evictor.java
+
 namespace com.sleepycat.je.evictor;
 class Evictor {
-   static class Evictor_evictBatch {
-      before execute() {
-        _this.nNodesSelectedThisRun=0;
-        _this.nNodesEvictedThisRun=0;
-       // return original();
-      }
-      after Label381: execute() { 
 
-        _this.nBINsStrippedThisRun=0;
-        _this.nEvictPasses++;
-       // original();
+      before evictBatch(String , long ) {
+      	nNodesSelectedThisRun = 0;
+        nNodesEvictedThisRun = 0;
+    		nBINsStrippedThisRun = 0;
+        nEvictPasses++;
+
       }
-      after Label382: execute() { 
-        _this.nNodesScanned+=_this.nNodesScannedThisRun;
-        //original();
+ 
+      before Label377: evictBatch(String , long ) {
+            nNodesScanned += nNodesScannedThisRun;
+
       }
-    }
+    
 }

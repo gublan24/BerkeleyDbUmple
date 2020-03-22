@@ -1,6 +1,8 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Evictor/com/sleepycat/je/evictor/Evictor.java
+
 namespace com.sleepycat.je.evictor;
+
 class Evictor {
+
   static  class EvictProfile {
       private List candidates=new ArrayList();
       public boolean count(    IN target){
@@ -48,101 +50,5 @@ class Evictor {
         iter.remove();
       }
     }
-   static class Evictor_evictBatch {
-      Evictor_evictBatch(    Evictor _this,    String source,    long requiredEvictBytes){
-        this._this=_this;
-        this.source=source;
-        this.requiredEvictBytes=requiredEvictBytes;
-      }
-      long execute() throws DatabaseException {
-        _this.nNodesScannedThisRun=0;
 
-        Label381:        //this.hook381();
-        assert _this.evictProfile.clear();
-        nBatchSets=0;
-        finished=false;
-        evictBytes=0;
-        evictBytes+=_this.envImpl.getUtilizationTracker().evictMemory();
-        inList=_this.envImpl.getInMemoryINs();
-
-        Label376:        //this.hook376();
-        inListStartSize=inList.getSize();
-        try {
-          if (inListStartSize == 0) {
-            _this.nextNode=null;
-            return 0;
-          }
-   else {
-            if (_this.nextNode == null) {
-              _this.nextNode=inList.first();
-            }
-          }
-          scanIter=new ScanIterator(_this.nextNode,inList);
-          while ((evictBytes < requiredEvictBytes) && (_this.nNodesScannedThisRun <= inListStartSize)) {
-            target=_this.selectIN(inList,scanIter);
-            if (target == null) {
-              break;
-            }
-   else {
-              assert _this.evictProfile.count(target);
-              evictBytes+=_this.evict(inList,target,scanIter);
-            }
-            nBatchSets++;
-          }
-          _this.nextNode=scanIter.mark();
-          finished=true;
-        }
-    finally {
-
-         	Label382:    ;     // this.hook382();
-          Label377:   ;      // this.hook377();
-          Label371:  ;        //this.hook371();
-        }
-        return evictBytes;
-      }
-      protected Evictor _this;
-      protected String source;
-      protected long requiredEvictBytes;
-      protected int nBatchSets;
-      protected boolean finished;
-      protected long evictBytes;
-      protected INList inList;
-      protected int inListStartSize;
-      protected ScanIterator scanIter;
-      protected IN target;
-      protected Logger logger;
-      protected String msg;
-
-    }
-   static class Evictor_isRunnable {
-      Evictor_isRunnable(    Evictor _this,    String source){
-        this._this=_this;
-        this.source=source;
-      }
-      boolean execute() throws DatabaseException {
-        mb=_this.envImpl.getMemoryBudget();
-        Label388:        //this.hook388();
-
-        Label372:        //this.hook372();
-        result=false;
-        return result;
-      }
-      protected Evictor _this;
-      protected String source;
-      protected MemoryBudget mb;
-      protected long currentUsage;
-      protected long maxMem;
-      protected boolean doRun;
-      protected Logger logger;
-      protected Runtime r;
-      protected long totalBytes;
-      protected long freeBytes;
-      protected long usedBytes;
-      protected StringBuffer sb;
-      protected boolean result;
- //     protected void hook372() throws DatabaseException {
- //     }
- //     protected void hook388() throws DatabaseException {
- //     }
-    }
 }

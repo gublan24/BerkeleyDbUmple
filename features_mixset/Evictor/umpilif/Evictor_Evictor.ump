@@ -129,14 +129,106 @@ class Evictor
      * @return the number of bytes evicted, or zero if no progress was made.
      */
     long evictBatch(String source, long requiredEvictBytes) throws DatabaseException {
-	return new Evictor_evictBatch(this, source, requiredEvictBytes).execute();
+
+        nNodesScannedThisRun = 0;
+    
+
+        assert evictProfile.clear(); // intentional side effect
+        int nBatchSets = 0;
+        boolean finished = false;
+        long evictBytes = 0;
+
+        /* Evict utilization tracking info without holding the INList latch. */
+        evictBytes += envImpl.getUtilizationTracker().evictMemory();
+
+        INList inList = envImpl.getInMemoryINs();
+        Label376: ;
+
+        int inListStartSize = inList.getSize();
+
+        try {
+
+            /* 
+             * Setup the round robin iterator. Note that because critical
+             * eviction is now called during recovery, when the INList is
+             * sometimes abruptly cleared, nextNode may not be null when the
+             * INList is empty.
+             */
+            if (inListStartSize == 0) {
+                nextNode = null;
+                return 0;
+            } else {
+                if (nextNode == null) {
+                    nextNode = inList.first();
+                }
+            }
+
+            ScanIterator scanIter = new ScanIterator(nextNode, inList);
+
+            /*
+             * Keep evicting until we've freed enough memory or we've visited
+             * the maximum number of nodes allowed. Each iteration of the while
+             * loop is called an eviction batch.
+             *
+             * In order to prevent endless evicting and not keep the INList
+             * major latch for too long, limit this run to one pass over the IN
+             * list.
+             */
+            while ((evictBytes < requiredEvictBytes) &&
+                   (nNodesScannedThisRun <= inListStartSize)) {
+
+                IN target = selectIN(inList, scanIter);
+
+                if (target == null) {
+                    break;
+                } else {
+                    assert evictProfile.count(target);//intentional side effect
+                    evictBytes += evict(inList, target, scanIter);
+                }
+                nBatchSets++;
+            }
+
+            /*
+             * At the end of the scan, look at the next element in the INList
+             * and put it in nextNode for the next time we scan the INList.
+             */
+            nextNode = scanIter.mark();
+            finished = true;
+
+        } finally {
+
+            Label377: ;
+
+
+            Logger logger; 
+						String msg = "";
+						Label371: ;
+			
+        }
+
+        return evictBytes;
     }
 
     /** 
      * Return true if eviction should happen.
      */
     boolean isRunnable(String source) throws DatabaseException {
-	return new Evictor_isRunnable(this, source).execute();
+
+			  MemoryBudget mb ;
+        long currentUsage;
+        long maxMem ;
+        boolean doRun = false;
+        /* If running, figure out how much to evict. */
+				Label388: ;
+
+        /* 
+         * This trace message is expensive, only generate if tracing at this
+         * level is enabled.
+         */
+				Logger logger;
+        Label372: ;
+
+        return doRun;
     }
 
     /** 

@@ -1,24 +1,24 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_MemoryBudget/com/sleepycat/je/cleaner/UtilizationTracker.java
+
 namespace com.sleepycat.je.cleaner;
 class UtilizationTracker {
-   static class UtilizationTracker_evictMemory {
-      after Label196: execute() {
+
+      after Label196: evictMemory()  {
 
         b2&=totalBytes > mb.getTrackerBudget();
-        //original();
+
       }
-      after Label197: execute() {
+      after Label197: evictMemory()  {
         b1&=mem > largestBytes;
-        //original();
+
       }
-      after Label198: execute() {
-        mem=tfs.getMemorySize();
-        totalBytes+=mem;
-        //original();
+      after Label198: evictMemory()  {
+        mem= = tfs.getMemorySize();
+            totalBytes += mem;
+
       }
-      after Label199: execute() {
-        largestBytes=mem;
-        //original();
+      after Label199: evictMemory() {
+       largestBytes = mem;
+
       }
-    }
+    
 }

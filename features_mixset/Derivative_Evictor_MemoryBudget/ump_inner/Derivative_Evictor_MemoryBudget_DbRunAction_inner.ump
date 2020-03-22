@@ -1,14 +1,14 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Evictor_MemoryBudget/com/sleepycat/je/util/DbRunAction.java
+
 namespace com.sleepycat.je.util;
 class DbRunAction {
-   static class DbRunAction_doEvict {
-      after Label836: execute(){
-        c.setCacheSize(cacheUsage / 2);
-        //original();
+
+      after Label836: doEvict(Environment ) {
+					c.setCacheSize(cacheUsage/2);
+
       }
-      after Label837: execute(){
-        cacheUsage=envImpl.getMemoryBudget().getCacheMemoryUsage();
-        //original();
+      after Label837: doEvict(Environment ) {
+        cacheUsage = envImpl.getMemoryBudget().getCacheMemoryUsage();
+
       }
-    }
+    
 }

@@ -1,19 +1,17 @@
-// //original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/Derivative_Latches_Evictor/com/sleepycat/je/evictor/Evictor.java
+
 namespace com.sleepycat.je.evictor;
 class Evictor {
-   static class Evictor_evictBatch {
-      after execute() {
-        //long result=//original();
-        assert LatchSupport.countLatchesHeld() == 0 : "latches held = " + LatchSupport.countLatchesHeld();
-      //  return result;
+
+      after evictBatch(String , long ) {
+        assert LatchSupport.countLatchesHeld() == 0: "latches held = " +   LatchSupport.countLatchesHeld();
       }
-      after Label376:  execute(){
-        inList.latchMajor();
-        //original();
+      after Label376: evictBatch(String , long ) {
+					inList.latchMajor();
+
       }
-      after Label377: execute(){
+      after Label377: evictBatch(String , long ) {
         inList.releaseMajorLatch();
-        //original();
+
       }
-    }
+    
 }

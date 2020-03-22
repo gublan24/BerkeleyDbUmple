@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/FSync/com/sleepycat/je/log/FSyncManager.java
+
 namespace com.sleepycat.je.log;
 class FSyncManager {
   static class FSyncGroup {

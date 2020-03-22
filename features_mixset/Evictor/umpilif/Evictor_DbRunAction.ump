@@ -5,7 +5,25 @@ class DbRunAction
     private static final int EVICT = 3;
 
     private static void doEvict(Environment env) throws DatabaseException {
-			new DbRunAction_doEvict(env).execute();
+
+    /* push the cache size down by half to force eviction. */
+        EnvironmentImpl envImpl = DbInternal.envGetEnvironmentImpl(env);
+        long cacheUsage ;
+				Label837: ;
+
+        EnvironmentMutableConfig c = new EnvironmentMutableConfig();
+        Label836: ;
+
+        env.setMutableConfig(c);
+
+        long start = System.currentTimeMillis();
+        env.evictMemory();
+        long end = System.currentTimeMillis();
+
+        DecimalFormat f = new DecimalFormat();
+        f.setMaximumFractionDigits(2);
+        System.out.println("evict time=" + f.format(end-start));
+			
     }
 
 }
