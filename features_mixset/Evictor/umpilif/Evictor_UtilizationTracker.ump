@@ -36,15 +36,17 @@ class UtilizationTracker
             TrackedFileSummary tfs = a[i];
             int mem = 0 ;
 						Label198: ;
-
-            if (mem > largestBytes && tfs.getAllowFlush()) {
+   					boolean b1 = tfs.getAllowFlush();
+						Label197: ;
+            if (b1) {
                 Label199: ;
 
                 bestFile = tfs;
             }
         }
-
-        if (bestFile != null && totalBytes > mb.getTrackerBudget()) {
+        boolean b2 = ( bestFile != null );
+				Label196: ;
+        if ( b2 ) {
             env.getUtilizationProfile().flushFileSummary(bestFile);
             totalEvicted += largestBytes;
         }

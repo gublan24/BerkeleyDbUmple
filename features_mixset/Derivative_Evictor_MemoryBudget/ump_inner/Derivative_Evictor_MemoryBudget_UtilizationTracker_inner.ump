@@ -4,15 +4,14 @@ class UtilizationTracker {
 
       after Label196: evictMemory()  {
 
-        b2&=totalBytes > mb.getTrackerBudget();
+        b2 &= totalBytes > mb.getTrackerBudget();
 
       }
       after Label197: evictMemory()  {
-        b1&=mem > largestBytes;
-
+        b1 &= (mem > largestBytes ) ; 
       }
       after Label198: evictMemory()  {
-        mem= = tfs.getMemorySize();
+        mem = tfs.getMemorySize();
             totalBytes += mem;
 
       }
