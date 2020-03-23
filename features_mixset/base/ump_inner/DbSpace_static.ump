@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/util/DbSpace.java
+
 namespace com.sleepycat.je.util;
 class DbSpace {
   static class Summary  {

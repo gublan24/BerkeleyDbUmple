@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/log/LogUtils.java
+
 namespace com.sleepycat.je.log;
 class LogUtils {
 

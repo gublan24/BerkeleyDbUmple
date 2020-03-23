@@ -63,58 +63,6 @@ class FileManager {
         }
       }
     }
-   static class FileManager_writeToFile {
-      FileManager_writeToFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer data,    long destOffset){
-        this._this=_this;
-        this.file=file;
-        this.data=data;
-        this.destOffset=destOffset;
-      }
-      int execute() throws IOException, DatabaseException {
-        totalBytesWritten=0;
-        Label455: ;//this.hook455();
-        Label445: ;//this.hook445();
-        Label445_1: ;//
-        return totalBytesWritten;
-      }
-      protected FileManager _this;
-      protected RandomAccessFile file;
-      protected ByteBuffer data;
-      protected long destOffset;
-      protected int totalBytesWritten;
-      protected FileChannel channel;
-      protected ByteBuffer useData;
-      protected int origLimit;
-      protected int bytesWritten;
-      protected int pos;
-      protected int size;
-    //  protected void hook445() throws IOException, DatabaseException {
-     // }
-     // protected void hook455() throws IOException, DatabaseException {
-     // }
-    }
-   static class FileManager_readFromFile {
-      FileManager_readFromFile(    FileManager _this,    RandomAccessFile file,    ByteBuffer readBuffer,    long offset){
-        this._this=_this;
-        this.file=file;
-        this.readBuffer=readBuffer;
-        this.offset=offset;
-      }
-      void execute() throws IOException {
-        Label446: ;//this.hook446();
-        Label446_1: ; //
-      }
-      protected FileManager _this;
-      protected RandomAccessFile file;
-      protected ByteBuffer readBuffer;
-      protected long offset;
-      protected FileChannel channel;
-      protected int readLength;
-      protected long currentPosition;
-      protected int bytesRead1;
-      protected int pos;
-      protected int size;
-      protected int bytesRead2;
-//      protected void hook446() throws IOException { }
-    }
+
+  
 }

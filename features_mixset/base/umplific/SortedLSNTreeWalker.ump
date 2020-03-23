@@ -112,8 +112,8 @@ class SortedLSNTreeWalker
 	    Label358_1: ;
 	return foundSome;
     }
-//	return new SortedLSNTreeWalker_extractINsForDb(this, inList).execute();
- //   }
+
+
 
     /** 
      * Find all non-resident nodes, and execute the callback. The root IN's LSN is not returned to the callback.

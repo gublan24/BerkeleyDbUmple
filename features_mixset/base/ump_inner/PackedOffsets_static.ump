@@ -1,11 +1,10 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/PackedOffsets.java
+
 namespace com.sleepycat.je.cleaner;
 class PackedOffsets {
   inner class Iterator {
       private int index;
       private long priorVal;
-     // private Iterator(){
-     // }
+
       boolean hasNext(){
         return data != null && index < data.length;
       }

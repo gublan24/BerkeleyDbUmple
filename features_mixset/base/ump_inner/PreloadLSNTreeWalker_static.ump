@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/PreloadLSNTreeWalker.java
+
 namespace com.sleepycat.je.dbi;
 class PreloadLSNTreeWalker {
   static class INEntry {

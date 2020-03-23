@@ -1,4 +1,4 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/cleaner/OffsetList.java
+
 namespace com.sleepycat.je.cleaner;
 class OffsetList {
   static class Segment {
@@ -6,9 +6,7 @@ class OffsetList {
       private Segment next;
       private int[] values = new int[SEGMENT_CAPACITY];
 
-//      public Segment(){
-//        values=new int[SEGMENT_CAPACITY];
- //     }
+
       /** 
    * Call this method on the tail.  The new tail is returned, if
    * allocating a new tail is necessary.

@@ -1,5 +1,5 @@
 
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/javaFiles/base_x/com/sleepycat/je/dbi/DbTree.java
+
 namespace com.sleepycat.je.dbi;
 class DbTree {
   static class RewriteMapLN {
