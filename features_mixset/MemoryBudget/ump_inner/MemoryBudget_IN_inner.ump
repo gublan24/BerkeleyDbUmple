@@ -20,122 +20,115 @@ class IN {
 
       }
     
-   static class IN_trackProvisionalObsolete {
-      after execute(){
-        //original();
-        if (memDelta != 0) {
-          _this.changeMemorySize(memDelta);
+
+      after trackProvisionalObsolete(IN , long , long ) {
+
+         if (memDelta != 0) {
+            changeMemorySize(memDelta);
         }
       }
-      after Label651:execute() {
-        child.changeMemorySize(0 - childMemDelta);
-        memDelta+=childMemDelta;
-        //original();
+      after Label651: trackProvisionalObsolete(IN , long , long ) {
+              child.changeMemorySize(0 - childMemDelta);
+            	memDelta += childMemDelta;
+
       }
-      after Label652: execute() {
-        childMemDelta=child.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        //original();
+      after Label652: trackProvisionalObsolete(IN , long , long ) {
+       childMemDelta = child.provisionalObsolete.size() *
+                                MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
       }
-       after Label653: execute() {
-        memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        //original();
+       after Label653: trackProvisionalObsolete(IN , long , long ) {
+					memDelta += MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
       }
-      after Label654: execute(){
-        memDelta+=MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-       // original();
+      after Label654: trackProvisionalObsolete(IN , long , long ) {
+				memDelta += MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
       }
-    }
-  @MethodObject static class IN_insertEntry1 {
-      after Label645:execute() {
-        _this.updateMemorySize(0,_this.getEntryInMemorySize(index));
-        //original();
+    
+
+      after Label645: insertEntry1(ChildReference ) {
+					updateMemorySize(0, getEntryInMemorySize(index));
+
       }
-      after Label646:execute() {
-        _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
-        //original();
+      after Label646: insertEntry1(ChildReference ) {
+					changeMemorySize(computeLsnOverhead() - oldSize);
+
       }
-      after Label647:execute() {
-        oldSize=_this.computeLsnOverhead();
-        //original();
+      after Label647: insertEntry1(ChildReference ) { 
+					oldSize = computeLsnOverhead();
       }
-    }
-  @MethodObject static class IN_updateEntryCompareKey {
-      before execute(){
-        oldSize=_this.getEntryInMemorySize(idx);
-        //original();
-      }
-      after Label644: execute() {
-        newSize=_this.getEntryInMemorySize(idx);
-        _this.updateMemorySize(oldSize,newSize);
-        //original();
-      }
-    }
-  @MethodObject static class IN_updateEntry {
-      before execute(){
-        oldSize=_this.getEntryInMemorySize(idx);
-        //original();
+    
+
+      before updateEntryCompareKey(int , Node , long , byte ) {
+        		long oldSize = getEntryInMemorySize(idx);
+
       }
 
-   after execute(){
-        newSize=_this.getEntryInMemorySize(idx);
-        _this.updateMemorySize(oldSize,newSize);
+  after Label644: updateEntryCompareKey(int , Node , long , byte ) {
+				;
+				long newSize = getEntryInMemorySize(idx);
+				updateMemorySize(oldSize, newSize);
+  }
+   
+  before updateEntry(int , Node ) {
+       	long oldSize = getEntryInMemorySize(idx);
+  }
+
+  after updateEntry(int , Node ) {
+     long newSize = getEntryInMemorySize(idx);
+     updateMemorySize(oldSize, newSize);
+   }
+    
+  before setLsn(int , long ) {
+     int oldSize = computeLsnOverhead();
+  }
+  after Label639: setLsn(int , long ) {
+    changeMemorySize(computeLsnOverhead() - oldSize);
+  }
+    
+
+  before updateEntry(int , Node , long , byte ) {
+        	long oldSize = getEntryInMemorySize(idx);
       }
-    }
-  @MethodObject static class IN_setLsn {
-      before execute(){
-        oldSize=_this.computeLsnOverhead();
-        //original();
+  after Label642: updateEntry(int , Node , long , byte ) {
+				;
+				long newSize = getEntryInMemorySize(idx);
+        updateMemorySize(oldSize, newSize);
+
       }
-      after Label639: execute(){
-        _this.changeMemorySize(_this.computeLsnOverhead() - oldSize);
-        //original();
+
+  before updateEntry(int , Node , long ) {
+			long oldSize = getEntryInMemorySize(idx);
+
+  }
+      after Label643: updateEntry(int , Node , long ) {
+			;
+     	long newSize = getEntryInMemorySize(idx);
+        updateMemorySize(oldSize, newSize);
+
       }
-    }
-  @MethodObject static class IN_updateEntry2 {
-      before execute(){
-        oldSize=_this.getEntryInMemorySize(idx);
-        //original();
+    
+  
+
+      after Label655: flushProvisionalObsolete(LogManager ) {
+        changeMemorySize(0 - memDelta);
+
       }
-      after Label642: execute() {
-        newSize=_this.getEntryInMemorySize(idx);
-        _this.updateMemorySize(oldSize,newSize);
-       // original();
+      after Label656: flushProvisionalObsolete(LogManager ) {
+    							memDelta = provisionalObsolete.size() *
+                           MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
       }
-    }
-  @MethodObject static class IN_flushProvisionalObsolete {
-      after Label655: execute() {
-        _this.changeMemorySize(0 - memDelta);
-        //original();
+    
+
+
+      before  setEntry(int , Node , byte , long , byte ) {
+    	long oldSize = getEntryInMemorySize(idx);
       }
-      after Label656: execute() {
-        memDelta=_this.provisionalObsolete.size() * MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
-        //original();
+      after Label640: setEntry(int , Node , byte , long , byte ) {IN_setEntry
+				newSize = getEntryInMemorySize(idx);
+				updateMemorySize(oldSize, newSize);
       }
-    }
-  @MethodObject static class IN_updateEntry3 {
-      before execute(){
-        oldSize=_this.getEntryInMemorySize(idx);
-        //original();
+      after Label641: setEntry(int , Node , byte , long , byte ) {
+	    oldSize = 0;
+
       }
-      after Label643: execute() {
-        newSize=_this.getEntryInMemorySize(idx);
-        _this.updateMemorySize(oldSize,newSize);
-        //original();
-      }
-    }
-  @MethodObject static class IN_setEntry {
-      before execute(){
-        oldSize=_this.getEntryInMemorySize(idx);
-        //original();
-      }
-      after Label640: execute() {
-        newSize=_this.getEntryInMemorySize(idx);
-        _this.updateMemorySize(oldSize,newSize);
-        //original();
-      }
-      after Label641: execute() {
-        oldSize=0;
-        //original();
-      }
-    }
+    
 }

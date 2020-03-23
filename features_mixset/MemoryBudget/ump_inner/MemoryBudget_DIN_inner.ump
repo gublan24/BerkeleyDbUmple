@@ -1,25 +1,25 @@
-// Original file:/home/abdulaziz/Desktop/BerkeleyDb/ALL_FEATURE/features/MemoryBudget/com/sleepycat/je/tree/DIN.java
+
 namespace com.sleepycat.je.tree;
 class DIN {
-  @MethodObject static class DIN_updateDupCountLNRefAndNullTarget {
-      after execute(){
-        //original();
-        newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
-        _this.updateMemorySize(oldSize,newSize);
+
+      after updateDupCountLNRefAndNullTarget(long ) {
+
+        long newSize = getEntryInMemorySize(dupCountLNRef.getKey(), dupCountLNRef.getTarget());
+        updateMemorySize(oldSize, newSize);
       }
-      after Label614:execute(){
-        oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
-        //original();
+      after Label614: updateDupCountLNRefAndNullTarget(long ) {
+        oldSize = getEntryInMemorySize(dupCountLNRef.getKey(),  dupCountLNRef.getTarget());
+        
       }
-    }
-  @MethodObject static class DIN_updateDupCountLN {
-      before execute(){
-        oldSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
+    
+
+      before updateDupCountLN(Node ) {
+        long oldSize = getEntryInMemorySize(dupCountLNRef.getKey(),	dupCountLNRef.getTarget());
       }
 
-      after execute(){
-        newSize=_this.getEntryInMemorySize(_this.dupCountLNRef.getKey(),_this.dupCountLNRef.getTarget());
-        _this.updateMemorySize(oldSize,newSize);
+      after updateDupCountLN(Node ) {
+        long newSize = getEntryInMemorySize(dupCountLNRef.getKey(),  dupCountLNRef.getTarget());
+        updateMemorySize(oldSize, newSize);
       }
-    }
+    
 }

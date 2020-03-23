@@ -52,9 +52,12 @@ class INList
     
 
     private void addAndSetMemory(Set set, IN in) {
-			new INList_addAndSetMemory(this, set, in).execute();
-    }
+        boolean addOk  = set.add(in);
 
+        assert addOk : "failed adding in " + in.getNodeId();
+
+       
+    }
     /** 
      * An IN is getting evicted or is displaced by recovery.  Caller is responsible for acquiring the major latch before calling this and releasing it when they're done.
      */

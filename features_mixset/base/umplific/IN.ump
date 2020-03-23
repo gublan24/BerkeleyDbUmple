@@ -460,8 +460,12 @@ class IN {
   * Sets the idx'th target LSN.
   */
  public void setLsn(int idx, long lsn) {
-  new IN_setLsn(this, idx, lsn).execute();
- }
+
+	/* setLsnElement can mutate to an array of longs. */
+	setLsnElement(idx, lsn);
+	Label639: ;
+  entryStates[idx] |= DIRTY_BIT;
+  }
 
  long[] getEntryLsnLongArray() {
   return entryLsnLongArray;
@@ -718,29 +722,56 @@ class IN {
   * Set the idx'th entry of this node.
   */
  public void setEntry(int idx, Node target, byte[] keyVal, long lsn, byte state) {
-  new IN_setEntry(this, idx, target, keyVal, lsn, state).execute();
- }
+
+	int newNEntries = idx + 1;
+  if (newNEntries > nEntries) {
+
+	    /*
+	     * If the new entry is going to bump nEntries, then we don't need
+	     * the size and LSN accounting included in oldSize.
+	     */
+      nEntries = newNEntries;
+			Label641: ;
+  }
+	entryTargets[idx] = target;
+	entryKeyVals[idx] = keyVal;
+	setLsnElement(idx, lsn);
+	entryStates[idx] = state;
+	long newSize;
+	Label640: ;
+        setDirty(true);
+    }
 
  /** 
   * Update the idx'th entry of this node. Note: does not dirty the node.
   */
  public void updateEntry(int idx, Node node) {
-  new IN_updateEntry(this, idx, node).execute();
- }
 
+	setTarget(idx, node);
+	
+  }
  /** 
   * Update the idx'th entry of this node.
   */
  public void updateEntry(int idx, Node node, long lsn) {
-  new IN_updateEntry2(this, idx, node, lsn).execute();
- }
+
+	setLsn(idx, lsn);
+	setTarget(idx, node);
+	Label643: ;
+        setDirty(true);
+  }
 
  /** 
   * Update the idx'th entry of this node.
   */
  public void updateEntry(int idx, Node node, long lsn, byte[] key) {
-  new IN_updateEntry3(this, idx, node, lsn, key).execute();
- }
+
+	setLsn(idx, lsn);
+	setTarget(idx, node);
+	setKey(idx, key);
+	Label642: ;
+  setDirty(true);
+  }
 
  /** 
   * Update the idx'th entry of this node.
@@ -771,8 +802,18 @@ class IN {
   * Update the idx'th entry of this node.  Only update the key if the new key is less than the existing key.
   */
  private void updateEntryCompareKey(int idx, Node node, long lsn, byte[] key) {
-  new IN_updateEntryCompareKey(this, idx, node, lsn, key).execute();
+
+		setLsn(idx, lsn);
+		setTarget(idx, node);
+		byte[] existingKey = getKey(idx);
+		int s = Key.compareKeys(key, existingKey, getKeyComparator());
+		if (s < 0) {
+			  setKey(idx, key);
+		}
+		Label644: ;
+		setDirty(true);
  }
+
 
  /** 
   * Returns whether the given key is greater than or equal to the first key in the IN and less than or equal to the last key in the IN.  This method is used to determine whether a key to be inserted belongs in this IN, without doing a tree search.  If false is returned it is still possible that the key belongs in this IN, but a tree search must be performed to find out.
@@ -863,8 +904,62 @@ class IN {
   * @throws InconsistentNodeException if the node is full (it should havebeen split earlier).
   */
  public int insertEntry1(ChildReference entry) throws DatabaseException {
-  return new IN_insertEntry1(this, entry).execute();
- }
+		if (nEntries >= entryTargets.length) {
+			  compress(null, true);
+		}
+
+		if (nEntries < entryTargets.length) {
+			  byte[] key = entry.getKey();
+
+			  /* 
+			   * Search without requiring an exact match, but do let us know the
+			   * index of the match if there is one.
+			   */
+			  int index = findEntry(key, true, false);
+
+			  if (index >= 0 && (index & EXACT_MATCH) != 0) {
+
+			/* 
+			 * There is an exact match.  Don't insert; let the caller
+			 * decide what to do with this duplicate.
+			 */
+			return index;
+			  } else {
+
+			/* 
+			 * There was no key match, so insert to the right of this
+			 * entry.
+			 */
+			index++;
+			  }
+
+			  /* We found a spot for insert, shift entries as needed. */
+			  if (index < nEntries) {
+			int oldSize ;
+			Label647: ;
+			/* 
+			 * Adding elements to the LSN array can change the space used.
+			 */
+			shiftEntriesRight(index);
+			Label646: ;
+
+			  }
+			  entryTargets[index] = entry.getTarget();
+			  entryKeyVals[index] = entry.getKey();
+			  setLsnElement(index, entry.getLsn());
+			  entryStates[index] = entry.getState();
+			  nEntries++;
+			  adjustCursorsForInsert(index);
+			  Label645: ;
+
+			  setDirty(true);
+			  return (index | INSERT_SUCCESS);
+		} else {
+			  throw new InconsistentNodeException
+			("Node " + getNodeId() +
+			 " should have been split before calling insertEntry");
+		}
+    }
 
  /** 
   * Deletes the ChildReference with the key arg from this IN.  Assumes this node is already latched by the caller. This seems to only be used by INTest.
@@ -1547,15 +1642,61 @@ Label636: ;
   * Adds the given obsolete LSNs and any tracked obsolete LSNs for the given child IN to this IN's tracking list.  This method is called to track obsolete LSNs when a child IN is logged provisionally.  Such LSNs cannot be considered obsolete until an ancestor IN is logged non-provisionally.
   */
  void trackProvisionalObsolete(IN child, long obsoleteLsn1, long obsoleteLsn2) {
-  new IN_trackProvisionalObsolete(this, child, obsoleteLsn1, obsoleteLsn2).execute();
- }
+       int memDelta = 0;
+
+        if (child.provisionalObsolete != null) {
+
+            int childMemDelta = 0;
+						Label652: ;
+
+            if (provisionalObsolete != null) {
+                provisionalObsolete.addAll(child.provisionalObsolete);
+            } else {
+                provisionalObsolete = child.provisionalObsolete;
+            }
+            child.provisionalObsolete = null;
+
+    				Label651: ;
+        }
+
+        if (obsoleteLsn1 != DbLsn.NULL_LSN || obsoleteLsn2 != DbLsn.NULL_LSN) {
+
+            if (provisionalObsolete == null) {
+                provisionalObsolete = new ArrayList();
+            }
+
+            if (obsoleteLsn1 != DbLsn.NULL_LSN) {
+                provisionalObsolete.add(new Long(obsoleteLsn1));
+                Label653: ;
+
+            }
+
+            if (obsoleteLsn2 != DbLsn.NULL_LSN) {
+                provisionalObsolete.add(new Long(obsoleteLsn2));
+                Label654: ;
+
+            }
+        }
+
+  
+    }
 
  /** 
   * Adds the provisional obsolete tracking information in this node to the live tracker.  This method is called when this node is logged non-provisionally.
   */
  void flushProvisionalObsolete(LogManager logManager) throws DatabaseException {
-  new IN_flushProvisionalObsolete(this, logManager).execute();
- }
+        if (provisionalObsolete != null) {
+
+            int memDelta;
+						Label656: ; 
+
+
+            logManager.countObsoleteINs(provisionalObsolete);
+            provisionalObsolete = null;
+
+            Label655: ;
+        }
+    }
 
  /** 
   * @see LoggableObject#getLogType

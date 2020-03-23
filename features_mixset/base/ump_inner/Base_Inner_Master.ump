@@ -1,3 +1,6 @@
+use Txn_static.ump; 
+use Tree_static.ump; 
+/*
 use OffsetList_static.ump; 
 use FileProcessor_static.ump; 
 use UtilizationProfile_static.ump; 
@@ -5,7 +8,7 @@ use Cleaner_static.ump;
 use TrackedFileSummary_static.ump; 
 use PackedOffsets_static.ump; 
 use DIN_static.ump; 
-use Tree_static.ump; 
+
 use IN_static.ump; 
 use DbRunAction_static.ump; 
 use DbSpace_static.ump; 
@@ -20,7 +23,7 @@ use DatabaseImpl_static.ump;
 use DbTree_static.ump; 
 use LockInfo_static.ump; 
 use LockManager_static.ump; 
-use Txn_static.ump; 
+
 use TinyHashSet_static.ump; 
 use EventTrace_static.ump; 
 use CleanerFileReader_static.ump; 
@@ -33,3 +36,4 @@ use Checkpointer_static.ump;
 use RecoveryManager_static.ump; 
 use Database_static.ump; 
 use StoredClassCatalog_static.ump; 
+*/

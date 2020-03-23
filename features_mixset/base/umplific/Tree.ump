@@ -87,8 +87,8 @@ class Tree {
      */
     after constructor{
         init(null);
-        //maxMainTreeEntriesPerNode = 0;
-        //maxDupTreeEntriesPerNode = 0;
+
+
     }
 
     /** 
@@ -918,8 +918,6 @@ Label716_1: ;
         return insertTarget;        
 
 
-
-//return new Tree_searchSplitsAllowed(this, key, nid, updateGeneration).execute();
     }
 
     /** 
@@ -1097,29 +1095,24 @@ Label716_1: ;
                 child = (IN) parent.fetchTarget(index);
                 child.latch(updateGeneration);
                 if (child.needsSplitting()) {
-                    Label739:; //this.hook739(parent, child);
+                    Label739:; 
                     throw splitRequiredException;
                 }
                 if (child.getNodeId() == nid) {
-                    Label740:; //this.hook740(child);
-                    return parent; //throw new ReturnObject(parent);
+                    Label740: ; 
+                    return parent; 
                 }
-                Label738: ; //this.hook738(parent);
+                Label738: ; 
                 parent = child;
             } while (!(parent instanceof BIN));
 
-            //hook698
+
             } catch (DatabaseException e) {
                        Label698_1:            
             throw e;
         }
 
-            return parent; //throw new ReturnObject(parent);
-               
-// throw ReturnHack.returnObject;
-//        } catch (ReturnObject r) {
-  //          return (IN) r.value;
-  //      }
+            return parent; 
     }
 
     /** 

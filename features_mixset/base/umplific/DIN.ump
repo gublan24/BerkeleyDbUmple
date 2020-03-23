@@ -112,14 +112,22 @@ class DIN
      * Assign the Dup Count LN node.  Does not dirty the DIN.
      */
     public void updateDupCountLN(Node target) {
-	new DIN_updateDupCountLN(this, target).execute();
+
+        dupCountLNRef.setTarget(target);
+
+
     }
 
     /** 
      * Update Dup Count LN.
      */
     public void updateDupCountLNRefAndNullTarget(long newLsn) {
-	new DIN_updateDupCountLNRefAndNullTarget(this, newLsn).execute();
+        setDirty(true);
+        long oldSize;
+				Label614: ;
+        dupCountLNRef.setTarget(null);
+        dupCountLNRef.setLsn(newLsn);
+
     }
 
     /** 

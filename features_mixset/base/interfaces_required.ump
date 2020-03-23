@@ -1,24 +1,23 @@
 
 
-// add the missing interfaces; file implements them have no implement keyword as in the original files
+// add the missing interfaces and classes providesd by java:
  
+external interface Checksum	{	}
+external interface Comparable	{	}
+external interface Comparator	{	}
+external interface FilenameFilter	{	}
 
-external interface 	  Checksum	{	}
-external interface 	  Comparable	{	}
-external interface 	  Comparator	{	}
-external interface 	  FilenameFilter	{	}
+external interface Runnable	{	}
 
-external interface 	  Runnable	{	}
+external interface TreeNodeProcessor	{	}
 
-external interface 	  TreeNodeProcessor	{	}
+external interface XAResource	{	}
+external interface Xid	{	}
 
-external interface 	  XAResource	{	}
-external  interface	  Xid	{	}
-
-external  interface	  Iterator	{	}
+external interface Iterator	{	}
 
 //extrenal classes : 
-external Handler { }  // class TraceLogHandler extends Handler
+external Handler { }  
 external Exception	{	}
 external RuntimeException	{	}
 external InputStream {  }
@@ -26,7 +25,7 @@ external OutputStream	{	}
 external IOException	{	}
 external ObjectOutputStream	{	}
 external ObjectInputStream	{	}
-external  	  TreeMap	{	}
+external TreeMap	{	}
 
 external ReentrantReadWriteLock { }
 

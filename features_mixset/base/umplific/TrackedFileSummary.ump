@@ -3,7 +3,7 @@ namespace com.sleepycat.je.cleaner;
 class TrackedFileSummary
 {
   isA FileSummary;
-  depend de.ovgu.cide.jakutil.*;
+
   depend com.sleepycat.je.dbi.MemoryBudget;
     private UtilizationTracker tracker;
 
@@ -19,9 +19,9 @@ class TrackedFileSummary
      * Creates an empty tracked summary.
      */
     TrackedFileSummary(UtilizationTracker tracker, long fileNum, boolean trackDetail) {
-	this.tracker = tracker;
-	this.fileNum = fileNum;
-	this.trackDetail = trackDetail;
+			this.tracker = tracker;
+			this.fileNum = fileNum;
+			this.trackDetail = trackDetail;
     }
 
     /** 
@@ -51,7 +51,7 @@ class TrackedFileSummary
     public void reset() {
 			obsoleteOffsets = null;
 			tracker.resetFile(this);
-			//this.hook168();
+		
 			Label168:   ;
       super.reset();
     }
@@ -60,7 +60,22 @@ class TrackedFileSummary
      * Tracks the given offset as obsolete or non-obsolete. <p>Must be called under the log write latch.</p>
      */
     void trackObsolete(long offset) {
-	new TrackedFileSummary_trackObsolete(this, offset).execute();
+        if (!trackDetail) {
+            return;
+        }
+        int adjustMem = 0;
+        if (obsoleteOffsets == null) {
+            obsoleteOffsets = new OffsetList();
+            Label171: ;
+
+        }
+        if (obsoleteOffsets.add(offset, tracker.getEnvironment().isOpen())) {
+            Label172: ;
+
+        }
+        if (adjustMem != 0) {
+            updateMemoryBudget(adjustMem);
+        }
     }
 
     /** 
@@ -71,7 +86,7 @@ class TrackedFileSummary
 	if (other.obsoleteOffsets != null) {
 	    if (obsoleteOffsets != null) {
 		if (obsoleteOffsets.merge(other.obsoleteOffsets)) {
-		    //this.hook169();
+
         Label169:   ;
 		}
 	    } else {
@@ -102,10 +117,5 @@ class TrackedFileSummary
 	}
     }
 
-//    protected void hook168() {
-//    }
-
-//    protected void hook169() {
-//    }
 
 }
