@@ -1,6 +1,0 @@
-<!ELEMENT people_list (person*)>
-<!ELEMENT person (name, birthdate?, gender?, socialsecuritynumber?)>
-<!ELEMENT name (#PCDATA)>
-<!ELEMENT birthdate (#PCDATA)>
-<!ELEMENT gender (#PCDATA)>
-<!ELEMENT socialsecuritynumber (#PCDATA)>

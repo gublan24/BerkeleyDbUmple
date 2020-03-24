@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[EdgeIfc]:types/TypeDeclaration:EdgeIfc:bodyDeclarations/MethodDeclaration:void:setWeight:[int]" features="6"/><key name="//CompilationUnit[EdgeIfc]:types/TypeDeclaration:EdgeIfc:bodyDeclarations/MethodDeclaration:int:getWeight:[]" features="6"/></annotations>
