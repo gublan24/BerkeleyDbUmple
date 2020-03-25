@@ -1,5 +1,0 @@
-
-
-Delete function should not be generated for the MemoryBudget_CursorImp.ump:
-  public void delete()
- public OperationStatus delete() throws DatabaseException{

@@ -1,0 +1,148 @@
+// Feature Interaction 
+
+
+mixset   LoggingConsoleHandler
+						{    mixset LoggingBase { use Feature_Interaction/Derivative_LoggingConsoleHandler_LoggingBase/umpilif/Derivative_LoggingConsoleHandler_LoggingBase_Master.ump;    }   } 
+
+mixset      LoggingDbLogHandler
+						{    mixset LoggingBase { use Feature_Interaction/Derivative_LoggingDbLogHandler_LoggingBase/umpilif/Derivative_LoggingDbLogHandler_LoggingBase_Master.ump;    }  } 
+
+mixset      LoggingFileHandler
+						{    mixset LoggingBase {   use Feature_Interaction/Derivative_LoggingFileHandler_LoggingBase/umpilif/Derivative_LoggingFileHandler_LoggingBase_Master.ump;    }   }
+
+mixset      LoggingRecovery
+						{    mixset LoggingBase {    use Feature_Interaction/Derivative_LoggingRecovery_LoggingBase/umpilif/Derivative_LoggingRecovery_LoggingBase_Master.ump;    }  }
+
+mixset      LoggingSevere
+						{    mixset LoggingBase { use Feature_Interaction/Derivative_LoggingSevere_LoggingBase/umpilif/Derivative_LoggingSevere_LoggingBase_Master.ump;    }  }
+
+mixset      LoggingFine
+            {    mixset LoggingBase { use Feature_Interaction/Derivative_LoggingFine_LoggingBase/umpilif/Derivative_LoggingFine_LoggingBase_Master.ump;    } }
+
+mixset      LoggingFiner {    mixset LoggingBase {     use Feature_Interaction/Derivative_LoggingFiner_LoggingBase/umpilif/Derivative_LoggingFiner_LoggingBase_Master.ump;    }     }
+
+mixset      LoggingFinest {    
+						mixset LoggingBase {     use Feature_Interaction/Derivative_LoggingFinest_LoggingBase/umpilif/Derivative_LoggingFinest_LoggingBase_Master.ump;    }      
+						mixset   TruncateOp {    use Feature_Interaction/Derivative_LoggingFinest_TruncateOp/umpilif/Derivative_LoggingFinest_TruncateOp_Master.ump;    }     
+						mixset  CPBytes    {    use Feature_Interaction/Derivative_LoggingFinest_CPBytes/umpilif/Derivative_LoggingFinest_CPBytes_Master.ump;    }  
+						mixset  CPTime    {    use Feature_Interaction/Derivative_LoggingFinest_CPTime/umpilif/Derivative_LoggingFinest_CPTime_Master.ump;    }       
+
+						}
+
+mixset      LoggingSevere { mixset EnvironmentLocking {    
+																				use Feature_Interaction/Derivative_LoggingSevere_EnvironmentLocking/umpilif/Derivative_LoggingSevere_EnvironmentLocking_Master.ump; }     }
+
+mixset      Latches { mixset FileHandleCache {    use Feature_Interaction/Derivative_Latches_FileHandleCache/umpilif/Derivative_Latches_FileHandleCache_Master.ump;   }     }
+
+mixset      Evictor { 
+
+							mixset EvictorDaemon {    use Feature_Interaction/Derivative_Evictor_EvictorDaemon/umpilif/Derivative_Evictor_EvictorDaemon_Master.ump;    }     
+							mixset CriticalEviction {    
+											use Feature_Interaction/Derivative_Evictor_CriticalEviction/umpilif/Derivative_Evictor_CriticalEviction_Master.ump;   
+											mixset  LookAHEADCache    {    
+															use Feature_Interaction/Derivative_LookAHEADCache_Evictor_CriticalEviction/umpilif/Derivative_LookAHEADCache_Evictor_CriticalEviction_Master.ump;    }   
+						 }
+							mixset MemoryBudget  {    
+										use Feature_Interaction/Derivative_Evictor_MemoryBudget/umpilif/Derivative_Evictor_MemoryBudget_Master.ump;   
+										mixset  CriticalEviction    {   
+														 use Feature_Interaction/Derivative_Evictor_MemoryBudget_CriticalEviction/umpilif/Derivative_Evictor_MemoryBudget_CriticalEviction_Master.ump;    }      
+							}
+							mixset DeleteOp   {    use Feature_Interaction/Derivative_DeleteOp_Evictor/umpilif/Derivative_DeleteOp_Evictor_Master.ump;    }   
+							mixset INCompressor   {    use Feature_Interaction/Derivative_INCompressor_Evictor/umpilif/Derivative_INCompressor_Evictor_Master.ump;    
+
+								mixset  CriticalEviction    {  
+																				  use Feature_Interaction/Derivative_INCompressor_Evictor_CriticalEviction/umpilif/Derivative_INCompressor_Evictor_CriticalEviction_Master.ump;    }     
+
+							}    
+							mixset Statistics     {    use Feature_Interaction/Derivative_Statistics_Evictor/umpilif/Derivative_Statistics_Evictor_Master.ump;    }   
+							mixset LoggingEvictor     {    
+											use Feature_Interaction/Derivative_LoggingEvictor_Evictor/umpilif/Derivative_LoggingEvictor_Evictor_Master.ump;    }   
+											mixset LoggingBase     {   
+												mixset Statistics     {    
+use Feature_Interaction/Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase/umpilif/Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase_Master.ump;    }     
+												mixset MemoryBudget  {   
+ use Feature_Interaction/Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase/umpilif/Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase_Master.ump; }     
+											use Feature_Interaction/Derivative_LoggingEvictor_Evictor_LoggingBase/umpilif/Derivative_LoggingEvictor_Evictor_LoggingBase_Master.ump;      
+											}
+							    
+        
+ 						
+}
+
+mixset      MemoryBudget{    
+								mixset DeleteOp  {	use Feature_Interaction/Derivative_DeleteOp_MemoryBudget/umpilif/Derivative_DeleteOp_MemoryBudget_Master.ump;    }
+								mixset Statistics     {    use Feature_Interaction/Derivative_Statistics_MemoryBudget/umpilif/Derivative_Statistics_MemoryBudget_Master.ump;    }         
+								mixset Latches     {    use Feature_Interaction/Derivative_Latches_MemoryBudget/umpilif/Derivative_Latches_MemoryBudget_Master.ump;    }   
+								mixset LookAHEADCache {    use Feature_Interaction/Derivative_LookAHEADCache_MemoryBudget/umpilif/Derivative_LookAHEADCache_MemoryBudget_Master.ump;    } 
+								mixset LoggingInfo {    use Feature_Interaction/Derivative_LoggingInfo_MemoryBudget/umpilif/Derivative_LoggingInfo_MemoryBudget_Master.ump;    }   
+
+         
+					 }
+
+mixset      Latches {    
+										mixset  Evictor { use Feature_Interaction/Derivative_Latches_Evictor/umpilif/Derivative_Latches_Evictor_Master.ump;    }  
+										mixset  TruncateOp    {    use Feature_Interaction/Derivative_Latches_TruncateOp/umpilif/Derivative_Latches_TruncateOp_Master.ump;    }   
+										mixset  RenameOp    {    use Feature_Interaction/Derivative_Latches_RenameOp/umpilif/Derivative_Latches_RenameOp_Master.ump;    }  
+										mixset  FSync    {    use Feature_Interaction/Derivative_FSync_Latches/umpilif/Derivative_FSync_Latches_Master.ump;    } 
+										mixset  DeleteOp    {    use Feature_Interaction/Derivative_Latches_DeleteOp/umpilif/Derivative_Latches_DeleteOpMaster.ump;    }            
+  					}
+
+
+
+
+mixset   DeleteOp   {    
+					mixset  TruncateOp { use Feature_Interaction/Derivative_DeleteOp_TruncateOp/umpilif/Derivative_DeleteOp_TruncateOp_Master.ump;    }  
+					mixset  INCompressor    {    use Feature_Interaction/Derivative_INCompressor_DeleteOp/umpilif/Derivative_INCompressor_DeleteOp_Master.ump;    }  
+					mixset  LoggingCleaner    {    use Feature_Interaction/Derivative_LoggingCleaner_DeleteOp/umpilif/Derivative_LoggingCleaner_DeleteOp_Master.ump;    }   
+					mixset  Statistics    {    use Feature_Interaction/Derivative_Statistics_DeleteOp/umpilif/Derivative_Statistics_DeleteOp_Master.ump;    }          
+
+}
+
+
+mixset      INCompressor {    
+						mixset Verifier { 
+									use Feature_Interaction/Derivative_Verifier_INCompressor/umpilif/Derivative_Verifier_INCompressor_Master.ump;    
+									mixset  Statistics    {    use Feature_Interaction/Derivative_Statistics_Verifier_INCompressor/umpilif/Derivative_Statistics_Verifier_INCompressor_Master.ump;    }     
+						}     
+						mixset Statistics     {    use Feature_Interaction/Derivative_Statistics_INCompressor/umpilif/Derivative_Statistics_INCompressor_Master.ump;    }     
+						mixset  Latches    {    
+										use Feature_Interaction/Derivative_Latches_INCompressor/umpilif/Derivative_Latches_INCompressor_Master.ump;  
+										mixset  Verifier    {    use Feature_Interaction/Derivative_Latches_Verifier_INCompressor/umpilif/Derivative_Latches_Verifier_INCompressor_Master.ump;    }     
+					  }     
+						mixset LoggingFine     {    use Feature_Interaction/Derivative_LoggingFine_INCompressor/umpilif/Derivative_LoggingFine_INCompressor_Master.ump;    }   
+}
+
+
+
+mixset Statistics {    
+
+			mixset Verifier { 
+							use Feature_Interaction/Derivative_Statistics_Verifier/umpilif/Derivative_Statistics_Verifier_Master.ump;  
+							mixset  DeleteOp    {    use Feature_Interaction/Derivative_Statistics_Verifier_DeleteOp/umpilif/Derivative_Statistics_Verifier_DeleteOp_Master.ump;    }     
+							mixset  Latches   {    use Feature_Interaction/Derivative_Latches_Statistics_Verifier/umpilif/Derivative_Latches_Statistics_Verifier_Master.ump;    }     
+							mixset  LoggingInfo    {    use Feature_Interaction/Derivative_LoggingInfo_Statistics_Verifier/umpilif/Derivative_LoggingInfo_Statistics_Verifier_Master.ump;    }     
+		  }     
+
+			mixset  CheckLeaks    {    use Feature_Interaction/Derivative_Statistics_CheckLeaks/umpilif/Derivative_Statistics_CheckLeaks_Master.ump;    }     
+
+			mixset  Latches    {    use Feature_Interaction/Derivative_Latches_Statistics/umpilif/Derivative_Latches_Statistics_Master.ump;    }      
+
+			mixset  LookAHEADCache    {    use Feature_Interaction/Derivative_LookAHEADCache_Statistics/umpilif/Derivative_LookAHEADCache_Statistics_Master.ump;    }     
+
+			mixset  FSync    {    use Feature_Interaction/Derivative_FSync_Statistics/umpilif/Derivative_FSync_Statistics_Master.ump;    }     
+
+			mixset  LoggingConfig    {    use Feature_Interaction/Derivative_LoggingConfig_Statistics/umpilif/Derivative_LoggingConfig_Statistics_Master.ump;    }  
+}
+
+mixset CPBytes { mixset CPTime {    use Feature_Interaction/Derivative_CPBytes_CPTime/umpilif/Derivative_CPBytes_CPTime_Master.ump;    }     }
+
+mixset  IO  { mixset SynchronizedIO    {    use Feature_Interaction/Derivative_IO_SynchronizedIO/ump_inner/Derivative_IO_SynchronizedIO_Master_inner.ump;    }      }
+
+mixset  NIO  { mixset ChunkedNIO    {    use Feature_Interaction/Derivative_NIO_ChunkedNIO/umpilif/Derivative_NIO_ChunkedNIO_Master.ump;    }      }     
+
+mixset   CheckpointerDaemon { mixset CPBytes   {    use Feature_Interaction/Derivative_CheckpointerDaemon_CPBytes/umpilif/Derivative_CheckpointerDaemon_CPBytes_Master.ump;    }     }
+
+
+
+
+
