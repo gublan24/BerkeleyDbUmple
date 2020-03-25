@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class DatabaseUtil
 {
-  depend de.ovgu.cide.jakutil.*;
     /** 
      * Throw an exception if the parameter is null.
      */

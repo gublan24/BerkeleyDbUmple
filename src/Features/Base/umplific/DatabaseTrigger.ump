@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 interface DatabaseTrigger
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.txn.Locker;
     /** 
      * Notifies the trigger that it has been added and will start receiving update notifications.

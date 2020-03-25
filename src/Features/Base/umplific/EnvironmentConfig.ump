@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class EnvironmentConfig
 {
   isA EnvironmentMutableConfig;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.config.EnvironmentParams;
   depend com.sleepycat.je.config.ConfigParam;
   depend java.util.Properties;

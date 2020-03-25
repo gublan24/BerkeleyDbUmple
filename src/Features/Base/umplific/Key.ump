@@ -3,7 +3,6 @@ namespace com.sleepycat.je.tree;
 class Key
 {
   isA Comparable;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend java.util.Comparator;
     public static boolean DUMP_BINARY = true;

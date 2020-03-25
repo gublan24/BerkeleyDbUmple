@@ -4,7 +4,6 @@ class IOExceptionWrapper
 {
   isA ExceptionWrapper;
   isA IOException;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.IOException;
     private Throwable e;
 

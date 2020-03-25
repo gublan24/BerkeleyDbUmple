@@ -2,7 +2,6 @@ namespace com.sleepycat.util;
 
 interface ExceptionWrapper
 {
-  depend de.ovgu.cide.jakutil.*;
     /** 
      * Returns the nested exception or null if none is present.
      * @return the nested exception or null if none is present.

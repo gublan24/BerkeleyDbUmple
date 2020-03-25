@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 interface DaemonRunner
 {
-  depend de.ovgu.cide.jakutil.*;
     void runOrPause(boolean run);
 
     void requestShutdown();

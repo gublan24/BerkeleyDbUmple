@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class DatabaseEntry
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.TreeUtils;
     private byte[] data;
 

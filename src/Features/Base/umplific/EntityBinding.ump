@@ -2,7 +2,6 @@ namespace com.sleepycat.bind;
 
 interface EntityBinding
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
     /** 
      * Converts key and data entry buffers into an entity Object.

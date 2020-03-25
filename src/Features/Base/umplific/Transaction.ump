@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class Transaction
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.PropUtil;
   depend com.sleepycat.je.txn.Txn;
   depend com.sleepycat.je.txn.Locker;

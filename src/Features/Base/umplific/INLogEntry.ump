@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log.entry;
 class INLogEntry
 {
   isA LogEntry,LoggableObject,NodeLogEntry,INContainingEntry;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.log.LoggableObject;

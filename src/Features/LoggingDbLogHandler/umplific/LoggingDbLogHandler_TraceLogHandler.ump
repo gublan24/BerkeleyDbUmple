@@ -5,7 +5,6 @@ class TraceLogHandler
   isA Handler;
 
 
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.DatabaseException;

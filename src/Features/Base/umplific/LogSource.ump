@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 interface LogSource
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
   depend java.nio.ByteBuffer;
   depend java.io.IOException;

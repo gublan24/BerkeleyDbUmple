@@ -4,7 +4,6 @@ class TupleTupleKeyCreator
 {
   isA SecondaryKeyCreator,ForeignKeyNullifier;
   isA TupleBase;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.SecondaryKeyCreator;
   depend com.sleepycat.je.SecondaryDatabase;
   depend com.sleepycat.je.ForeignKeyNullifier;

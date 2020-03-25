@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 interface WithRootLatched
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
     /** 
      * doWork is called while the tree's root latch is held.

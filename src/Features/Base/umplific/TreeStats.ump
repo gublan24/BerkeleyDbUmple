@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 class TreeStats
 {
-  depend de.ovgu.cide.jakutil.*;
     /** 
      * Number of times the root was split.
      */

@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class LockStats
 {
   isA Serializable;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.Serializable;
 
 }

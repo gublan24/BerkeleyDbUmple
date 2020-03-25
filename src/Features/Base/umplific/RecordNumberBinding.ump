@@ -3,7 +3,6 @@ namespace com.sleepycat.bind;
 class RecordNumberBinding
 {
   isA EntryBinding;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend com.sleepycat.compat.DbCompat;
  

@@ -3,7 +3,6 @@ namespace com.sleepycat.je.utilint;
 class DbScavenger
 {
   isA DbDump;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.util.DbDump;
   depend com.sleepycat.je.tree.NameLN;
   depend com.sleepycat.je.tree.MapLN;

@@ -3,7 +3,6 @@ namespace com.sleepycat.je.config;
 class IntConfigParam
 {
   isA ConfigParam;
-  depend de.ovgu.cide.jakutil.*;
     private static final String DEBUG_NAME = IntConfigParam.class.getName();
 
     private Integer min;

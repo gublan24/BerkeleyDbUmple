@@ -3,7 +3,6 @@ namespace com.sleepycat.je.txn;
 class TxnCommit
 {
   isA TxnEnd;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.log.LogEntryType;
     public TxnCommit(long id, long lastLsn) {
 	super(id, lastLsn);

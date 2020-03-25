@@ -2,7 +2,6 @@ namespace com.sleepycat.je.util;
 
 class DbRecover
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.CmdUtil;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend java.io.File;

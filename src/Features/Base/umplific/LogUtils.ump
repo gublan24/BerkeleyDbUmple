@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 class LogUtils
 {
-  depend de.ovgu.cide.jakutil.*;
   depend javax.transaction.xa.Xid;
   depend java.sql.Timestamp;
   depend java.nio.ByteBuffer;

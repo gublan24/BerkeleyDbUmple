@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class SecondaryTrigger
 {
   isA DatabaseTrigger;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.txn.Locker;
     private SecondaryDatabase secDb;
 

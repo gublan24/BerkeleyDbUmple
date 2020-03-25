@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class ForeignKeyDeleteAction
 {
-  depend de.ovgu.cide.jakutil.*;
     private String name;
 
     /** 

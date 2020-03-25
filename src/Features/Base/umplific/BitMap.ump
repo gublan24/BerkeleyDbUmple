@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class BitMap
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.util.Map;
   depend java.util.Iterator;
   depend java.util.HashMap;

@@ -3,7 +3,6 @@ namespace com.sleepycat.je.config;
 class ShortConfigParam
 {
   isA ConfigParam;
-  depend de.ovgu.cide.jakutil.*;
     private static final String DEBUG_NAME = ShortConfigParam.class.getName();
 
     private Short min;

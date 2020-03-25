@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class PreloadStatus
 {
   isA Serializable;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.Serializable;
     private String statusName;
 

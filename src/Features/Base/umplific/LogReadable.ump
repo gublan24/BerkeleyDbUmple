@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 interface LogReadable
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.nio.ByteBuffer;
     /** 
      * Initialize this object from the data in itemBuf.

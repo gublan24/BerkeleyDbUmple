@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log;
 class LNFileReader
 {
   isA FileReader;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.txn.TxnPrepare;
   depend com.sleepycat.je.txn.TxnCommit;
   depend com.sleepycat.je.txn.TxnAbort;

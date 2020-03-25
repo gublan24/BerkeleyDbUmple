@@ -2,7 +2,6 @@ namespace com.sleepycat.bind.serial;
 
 class SerialBase
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.FastOutputStream;
      int outputBufferSize = 0 ;
 

@@ -1,7 +1,6 @@
 namespace com.sleepycat.je;
 
 class StatsConfig {
-    depend de.ovgu.cide.jakutil.*;
     depend java.io.PrintStream;
     static StatsConfig DEFAULT = new StatsConfig();
 

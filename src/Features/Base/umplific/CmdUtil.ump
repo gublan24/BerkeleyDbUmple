@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class CmdUtil
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.config.EnvironmentParams;
   depend com.sleepycat.je.EnvironmentConfig;

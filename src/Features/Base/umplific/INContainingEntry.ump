@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log.entry;
 
 interface INContainingEntry
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.dbi.DatabaseId;

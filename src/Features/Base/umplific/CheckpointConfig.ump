@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class CheckpointConfig
 {
-  depend de.ovgu.cide.jakutil.*;
     public final static CheckpointConfig DEFAULT = new CheckpointConfig();
 
     private boolean force = false;

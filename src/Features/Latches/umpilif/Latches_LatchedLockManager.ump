@@ -3,7 +3,6 @@ namespace com.sleepycat.je.txn;
 class LatchedLockManager
 {
   isA LockManager;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.latch.Latch;
   depend com.sleepycat.je.dbi.MemoryBudget;
   depend com.sleepycat.je.dbi.EnvironmentImpl;

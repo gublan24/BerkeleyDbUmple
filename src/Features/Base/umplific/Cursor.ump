@@ -1,7 +1,6 @@
 namespace com.sleepycat.je;
 
 class Cursor {
-    depend de.ovgu.cide.jakutil.*;
     depend com.sleepycat.je.utilint.InternalException;
     depend com.sleepycat.je.txn.LockerFactory;
     depend com.sleepycat.je.txn.Locker;

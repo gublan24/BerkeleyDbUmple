@@ -3,7 +3,6 @@ namespace com.sleepycat.je.utilint;
 class NotImplementedYetException
 {
   isA RuntimeException;
-  depend de.ovgu.cide.jakutil.*;
   
     public NotImplementedYetException(String message) {
 	super(message);

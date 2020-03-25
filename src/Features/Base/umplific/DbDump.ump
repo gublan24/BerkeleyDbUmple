@@ -2,7 +2,6 @@ namespace com.sleepycat.je.util;
 
 class DbDump
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.DbScavenger;
   depend com.sleepycat.je.utilint.CmdUtil;

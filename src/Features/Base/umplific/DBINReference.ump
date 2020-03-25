@@ -3,7 +3,6 @@ namespace com.sleepycat.je.tree;
 class DBINReference
 {
   isA BINReference;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.DatabaseId;
     private byte[] dupKey;
 

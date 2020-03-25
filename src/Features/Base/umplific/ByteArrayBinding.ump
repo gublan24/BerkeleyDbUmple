@@ -3,7 +3,6 @@ namespace com.sleepycat.bind;
 class ByteArrayBinding
 {
   isA EntryBinding;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
     private static byte[] ZERO_LENGTH_BYTE_ARRAY = new byte[0];
 

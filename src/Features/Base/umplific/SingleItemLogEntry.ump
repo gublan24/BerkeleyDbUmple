@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log.entry;
 class SingleItemLogEntry
 {
   isA LogEntry;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.log.LogReadable;
   depend com.sleepycat.je.DatabaseException;
   depend java.nio.ByteBuffer;

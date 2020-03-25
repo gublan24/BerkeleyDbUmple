@@ -2,7 +2,6 @@ namespace com.sleepycat.je.txn;
 
 class LockGrantType
 {
-  depend de.ovgu.cide.jakutil.*;
     private String name;
 
     public static final LockGrantType NEW = new LockGrantType("NEW");

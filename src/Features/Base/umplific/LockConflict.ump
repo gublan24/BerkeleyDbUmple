@@ -2,7 +2,6 @@ namespace com.sleepycat.je.txn;
 
 class LockConflict
 {
-  depend de.ovgu.cide.jakutil.*;
     static final LockConflict ALLOW = new LockConflict(true, false);
 
     static final LockConflict BLOCK = new LockConflict(false, false);

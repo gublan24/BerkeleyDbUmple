@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.tuple;
 class TupleInput
 {
   isA FastInputStream;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.UtfOps;
   depend com.sleepycat.util.FastInputStream;
     /** 

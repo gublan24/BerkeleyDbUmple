@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.tuple;
 class BooleanBinding
 {
   isA TupleBinding;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
     private static final int BOOLEAN_SIZE = 1;
 

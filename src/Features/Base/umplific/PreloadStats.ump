@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class PreloadStats
 {
   isA Serializable;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.Serializable;
     /** 
      * Internal use only.

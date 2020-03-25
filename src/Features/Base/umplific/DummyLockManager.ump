@@ -3,7 +3,6 @@ namespace com.sleepycat.je.txn;
 class DummyLockManager
 {
   isA LockManager;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.MemoryBudget;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.dbi.DatabaseImpl;

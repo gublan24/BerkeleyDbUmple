@@ -4,7 +4,6 @@ interface NodeLogEntry
 {
 
 
-  depend de.ovgu.cide.jakutil.* ;
 
   isA LogEntry;
 

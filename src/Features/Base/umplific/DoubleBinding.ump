@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.tuple;
 class DoubleBinding
 {
   isA TupleBinding;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
     private static final int DOUBLE_SIZE = 8;
 

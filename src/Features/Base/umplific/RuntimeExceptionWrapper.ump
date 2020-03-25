@@ -4,7 +4,6 @@ class RuntimeExceptionWrapper
 {
   isA ExceptionWrapper;
   isA RuntimeException;
-  depend de.ovgu.cide.jakutil.*;
     private Throwable e;
 
     public RuntimeExceptionWrapper(Throwable e) {

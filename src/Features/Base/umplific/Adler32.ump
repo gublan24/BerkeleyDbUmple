@@ -3,7 +3,6 @@ namespace com.sleepycat.je.utilint;
 class Adler32
 {
   isA Checksum;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend java.util.zip.Checksum;
     private long adler = 1;

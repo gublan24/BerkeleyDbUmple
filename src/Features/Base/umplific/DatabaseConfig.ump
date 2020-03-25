@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class DatabaseConfig
 {
   isA Cloneable;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.DatabaseImpl;
   depend java.util.Comparator;
     public static final DatabaseConfig DEFAULT = new DatabaseConfig();

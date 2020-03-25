@@ -2,7 +2,6 @@ namespace com.sleepycat.je.dbi;
 
 class GetMode
 {
-  depend de.ovgu.cide.jakutil.*;
     private String name;
 
     private boolean forward;

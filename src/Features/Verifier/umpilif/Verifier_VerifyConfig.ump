@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class VerifyConfig
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.PrintStream;
     static VerifyConfig DEFAULT = new VerifyConfig();
 

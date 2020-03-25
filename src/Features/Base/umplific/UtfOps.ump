@@ -2,7 +2,6 @@ namespace com.sleepycat.util;
 
 class UtfOps
 {
-  depend de.ovgu.cide.jakutil.*;
     private static byte[] EMPTY_BYTES = {};
 
     private static String EMPTY_STRING = "";

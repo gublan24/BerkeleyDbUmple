@@ -3,7 +3,6 @@ namespace com.sleepycat.je.incomp;
 class INCompressor
 {
   isA DaemonThread;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.PropUtil;
   depend com.sleepycat.je.utilint.DaemonThread;

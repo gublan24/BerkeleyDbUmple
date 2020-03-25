@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class DbLsn
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.TreeUtils;
   depend com.sleepycat.je.log.LogReadable;
   depend com.sleepycat.je.log.FileManager;

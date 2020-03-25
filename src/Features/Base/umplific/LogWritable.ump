@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 interface LogWritable
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.nio.ByteBuffer;
     /** 
      * @return number of bytes used to store this object.

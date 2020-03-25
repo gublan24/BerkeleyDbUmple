@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.serial;
 class SerialSerialBinding
 {
   isA EntityBinding;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend com.sleepycat.bind.EntityBinding;
     private SerialBinding keyBinding;

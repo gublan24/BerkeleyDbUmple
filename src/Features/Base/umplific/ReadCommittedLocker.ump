@@ -3,7 +3,6 @@ namespace com.sleepycat.je.txn;
 class ReadCommittedLocker
 {
   isA BuddyLocker;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.Key;
   depend com.sleepycat.je.tree.BIN;
   depend com.sleepycat.je.dbi.EnvironmentImpl;

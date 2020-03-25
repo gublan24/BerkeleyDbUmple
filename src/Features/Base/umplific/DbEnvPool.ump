@@ -2,7 +2,6 @@ namespace com.sleepycat.je.dbi;
 
 class DbEnvPool
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.EnvironmentConfig;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.Map;

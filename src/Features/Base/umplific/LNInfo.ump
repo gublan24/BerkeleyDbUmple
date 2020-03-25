@@ -2,7 +2,6 @@ namespace com.sleepycat.je.cleaner;
 
 class LNInfo
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.LN;
   depend com.sleepycat.je.dbi.MemoryBudget;
   depend com.sleepycat.je.dbi.DatabaseId;

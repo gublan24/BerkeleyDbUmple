@@ -3,7 +3,6 @@ namespace com.sleepycat.je.tree;
 class TreeIterator
 {
   isA Iterator;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.NoSuchElementException;
   depend java.util.Iterator;

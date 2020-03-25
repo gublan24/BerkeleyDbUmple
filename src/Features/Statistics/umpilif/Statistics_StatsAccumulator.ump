@@ -3,7 +3,6 @@ namespace com.sleepycat.je.dbi;
 class StatsAccumulator
 {
 		isA TreeWalkerStatsAccumulator;
-		depend de.ovgu.cide.jakutil.*;
 		depend com.sleepycat.je.tree.TreeWalkerStatsAccumulator;
 		depend com.sleepycat.je.tree.Node;
 		depend com.sleepycat.je.tree.IN;

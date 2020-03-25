@@ -4,7 +4,6 @@ class TupleTupleBinding
 {
   isA EntityBinding;
   isA TupleBase;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend com.sleepycat.bind.EntityBinding;
     /** 

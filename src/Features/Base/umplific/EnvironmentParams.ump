@@ -2,7 +2,6 @@ namespace com.sleepycat.je.config;
 
 class EnvironmentParams
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.util.TreeSet;
   depend java.util.Map;
   depend java.util.Iterator;

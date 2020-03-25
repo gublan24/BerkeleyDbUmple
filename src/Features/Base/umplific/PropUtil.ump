@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class PropUtil
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
   depend java.util.Set;
   depend java.util.Properties;

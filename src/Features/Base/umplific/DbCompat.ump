@@ -2,7 +2,6 @@ namespace com.sleepycat.compat;
 
 class DbCompat
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.TransactionConfig;
   depend com.sleepycat.je.Transaction;
   depend com.sleepycat.je.SecondaryDatabase;

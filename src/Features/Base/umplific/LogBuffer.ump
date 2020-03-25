@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 class LogBuffer {
     isA LogSource;
-    depend de.ovgu.cide.jakutil.*;
     depend com.sleepycat.je.utilint.DbLsn;
     depend com.sleepycat.je.dbi.EnvironmentImpl;
     depend com.sleepycat.je.DatabaseException;

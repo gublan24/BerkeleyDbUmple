@@ -2,7 +2,6 @@ namespace com.sleepycat.je.txn;
 
 class LockerFactory
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.dbi.DatabaseImpl;
   depend com.sleepycat.je.TransactionConfig;

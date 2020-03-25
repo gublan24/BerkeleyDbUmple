@@ -3,7 +3,6 @@ namespace com.sleepycat.je.latch;
 class LatchNotHeldException
 {
   isA LatchException;
-  depend de.ovgu.cide.jakutil.*;
    
 
     public LatchNotHeldException(String message) {

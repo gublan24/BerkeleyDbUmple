@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class TinyHashSet
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.util.Set;
   depend java.util.NoSuchElementException;
   depend java.util.Iterator;

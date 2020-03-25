@@ -2,7 +2,6 @@ namespace com.sleepycat.util;
 
 class ExceptionUnwrapper
 {
-  depend de.ovgu.cide.jakutil.*;
     /** 
      * Unwraps an Exception and returns the underlying Exception, or throws an Error if the underlying Throwable is an Error.
      * @param e is the Exception to unwrap.

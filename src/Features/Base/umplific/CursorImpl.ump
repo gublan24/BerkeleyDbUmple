@@ -8,7 +8,6 @@ class CursorImpl {
     strictness disable delete();
 
 
-    depend de.ovgu.cide.jakutil.*;
     depend com.sleepycat.je.utilint.TestHookExecute;
     depend com.sleepycat.je.utilint.TestHook;
     depend com.sleepycat.je.utilint.DbLsn;

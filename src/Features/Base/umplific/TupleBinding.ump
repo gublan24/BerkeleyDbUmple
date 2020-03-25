@@ -4,7 +4,6 @@ class TupleBinding
 {
   isA EntryBinding;
   isA TupleBase;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend com.sleepycat.bind.EntryBinding;
   depend java.util.Map;

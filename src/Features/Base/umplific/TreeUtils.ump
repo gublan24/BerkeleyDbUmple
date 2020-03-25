@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 class TreeUtils
 {
-  depend de.ovgu.cide.jakutil.*;
     static private final String SPACES = "                                " + "                                "
 	    + "                                " + "                                ";
 

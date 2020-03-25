@@ -4,7 +4,6 @@ class TransactionStats {
 
     isA Serializable;
 
-    depend de.ovgu.cide.jakutil.*;
     depend java.util.Date;
     depend java.io.Serializable;
     /** 

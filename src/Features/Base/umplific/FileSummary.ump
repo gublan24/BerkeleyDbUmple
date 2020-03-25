@@ -3,7 +3,6 @@ namespace com.sleepycat.je.cleaner;
 class FileSummary
 {
   isA LogWritable,LogReadable;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.log.LogWritable;
   depend com.sleepycat.je.log.LogUtils;
   depend com.sleepycat.je.log.LogReadable;

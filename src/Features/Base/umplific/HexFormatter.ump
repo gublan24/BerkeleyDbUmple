@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class HexFormatter
 {
-  depend de.ovgu.cide.jakutil.*;
     static public String formatLong(long l) {
 	StringBuffer sb = new StringBuffer();
 	sb.append(Long.toHexString(l));

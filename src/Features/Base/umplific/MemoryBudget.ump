@@ -3,7 +3,6 @@ namespace com.sleepycat.je.dbi;
 class MemoryBudget
 {
   isA EnvConfigObserver;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.tree.DIN;
   depend com.sleepycat.je.tree.DBIN;

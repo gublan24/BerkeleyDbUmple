@@ -3,7 +3,6 @@ namespace com.sleepycat.je.utilint;
 class LevelOrderedINMap
 {
   isA TreeMap;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.IN;
   depend java.util.TreeMap;
   depend java.util.Set;

@@ -3,7 +3,6 @@ namespace com.sleepycat.je.txn;
 class TxnAbort
 {
   isA TxnEnd;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.log.LogEntryType;
     public TxnAbort(long id, long lastLsn) {
 	super(id, lastLsn);

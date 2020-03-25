@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log.entry;
 interface LogEntry
 {
 
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
   depend java.nio.ByteBuffer;
 

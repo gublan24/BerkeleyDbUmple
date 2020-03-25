@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class LockNotGrantedException
 {
   isA DeadlockException;
-  depend de.ovgu.cide.jakutil.*;
     //public LockNotGrantedException() {
 	//super();
    // }

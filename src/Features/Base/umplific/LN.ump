@@ -4,7 +4,6 @@ class LN
 {
   isA LoggableObject,LogReadable;
   isA Node;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.txn.WriteLockInfo;
   depend com.sleepycat.je.txn.Txn;

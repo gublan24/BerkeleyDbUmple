@@ -7,7 +7,6 @@ class Txn
   isA Locker;
 
 
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.Tracer;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.tree.TreeLocation;

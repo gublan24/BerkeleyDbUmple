@@ -3,7 +3,6 @@ namespace com.sleepycat.util;
 class FastInputStream
 {
   isA InputStream;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.InputStream;
   depend java.io.IOException;
     protected int len;

@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 class LogBufferPool
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.dbi.DbConfigManager;
   depend com.sleepycat.je.config.EnvironmentParams;

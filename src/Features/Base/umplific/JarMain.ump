@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class JarMain
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.lang.reflect.Method;
     private static final String USAGE = "usage: java <utility> [options...]";
 

@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 interface TreeWalkerStatsAccumulator
 {
-  depend de.ovgu.cide.jakutil.*;
     public void processIN(IN node, Long nid, int level);
 
     public void processBIN(BIN node, Long nid, int level);

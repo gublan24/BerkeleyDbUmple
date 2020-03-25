@@ -2,7 +2,6 @@ namespace com.sleepycat.je.log;
 
 class LogEntryType
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.log.entry.SingleItemLogEntry;
   depend com.sleepycat.je.log.entry.LogEntry;
   depend com.sleepycat.je.log.entry.LNLogEntry;

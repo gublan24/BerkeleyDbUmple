@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class SecondaryConfig
 {
   isA DatabaseConfig;
-  depend de.ovgu.cide.jakutil.*;
     static SecondaryConfig DEFAULT = new SecondaryConfig();
 
     private boolean allowPopulate;

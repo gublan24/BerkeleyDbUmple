@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.serial;
 class SerialOutput
 {
   isA ObjectOutputStream;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.RuntimeExceptionWrapper;
   depend com.sleepycat.je.DatabaseException;
   depend java.io.OutputStream;

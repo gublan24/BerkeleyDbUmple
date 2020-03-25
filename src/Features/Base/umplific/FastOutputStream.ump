@@ -3,7 +3,6 @@ namespace com.sleepycat.util;
 class FastOutputStream
 {
   isA OutputStream;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.UnsupportedEncodingException;
   depend java.io.OutputStream;
   depend java.io.IOException;

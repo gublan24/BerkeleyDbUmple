@@ -4,7 +4,6 @@ class SerialBinding
 {
   isA EntryBinding;
   isA SerialBase;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.RuntimeExceptionWrapper;
   depend com.sleepycat.util.FastOutputStream;
   depend com.sleepycat.util.FastInputStream;

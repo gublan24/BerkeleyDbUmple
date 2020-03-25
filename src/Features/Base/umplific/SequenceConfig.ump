@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class SequenceConfig
 {
-  depend de.ovgu.cide.jakutil.*;
     public static final SequenceConfig DEFAULT = new SequenceConfig();
 
     private int cacheSize = 0;

@@ -2,7 +2,6 @@ namespace com.sleepycat.je.cleaner;
 
 class OffsetList
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.Tracer;
     static final int SEGMENT_CAPACITY = 100;
 

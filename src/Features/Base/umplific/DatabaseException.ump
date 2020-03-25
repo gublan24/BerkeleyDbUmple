@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class DatabaseException
 {
   isA Exception;
-  depend de.ovgu.cide.jakutil.*;
 
 ////    public DatabaseException() {
 //	super();

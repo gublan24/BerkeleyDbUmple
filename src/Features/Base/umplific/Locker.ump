@@ -2,7 +2,6 @@ namespace com.sleepycat.je.txn;
 
 class Locker
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.Key;
   depend com.sleepycat.je.tree.BINReference;
   depend com.sleepycat.je.tree.BIN;

@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class SequenceStats
 {
-  depend de.ovgu.cide.jakutil.*;
     private int nGets;
 
     private int nCachedGets;

@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class BtreeStats
 {
 		isA DatabaseStats;
-		depend de.ovgu.cide.jakutil.*;
 
     private long binCount;
 

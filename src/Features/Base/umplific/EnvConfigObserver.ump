@@ -2,7 +2,6 @@ namespace com.sleepycat.je.dbi;
 
 interface EnvConfigObserver
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
     /** 
      * Notifies the observer that one or more mutable properties have been changed.

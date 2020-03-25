@@ -2,7 +2,6 @@ namespace com.sleepycat.bind.tuple;
 
 interface MarshalledTupleKeyEntity
 {
-  depend de.ovgu.cide.jakutil.*;
     /** 
      * Extracts the entity's primary key and writes it to the key output.
      * @param keyOutputis the output tuple.

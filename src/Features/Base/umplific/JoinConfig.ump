@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class JoinConfig
 {
   isA Cloneable;
-  depend de.ovgu.cide.jakutil.*;
     static JoinConfig DEFAULT = new JoinConfig();
 
     private boolean noSort;

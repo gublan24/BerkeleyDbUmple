@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 interface TestHook
 {
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.IOException;
     public void doIOHook() throws IOException;
 

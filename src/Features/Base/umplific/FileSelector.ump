@@ -2,7 +2,6 @@ namespace com.sleepycat.je.cleaner;
 
 class FileSelector
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.LN;
   depend com.sleepycat.je.dbi.DatabaseId;
   depend com.sleepycat.je.DatabaseException;

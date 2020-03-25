@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log;
 class LatchedLogManager
 {
   isA LogManager;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.cleaner.UtilizationTracker;
   depend com.sleepycat.je.cleaner.TrackedFileSummary;

@@ -4,7 +4,6 @@ class BINDeltaLogEntry
 {
   isA INContainingEntry;
   isA SingleItemLogEntry;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.tree.BINDelta;
   depend com.sleepycat.je.dbi.EnvironmentImpl;

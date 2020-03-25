@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.tuple;
 class TupleTupleMarshalledBinding
 {
   isA TupleTupleBinding;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.RuntimeExceptionWrapper;
     private Class cls;
 

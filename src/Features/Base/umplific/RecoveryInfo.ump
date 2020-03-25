@@ -2,7 +2,6 @@ namespace com.sleepycat.je.recovery;
 
 class RecoveryInfo
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
     public long lastUsedLsn = DbLsn.NULL_LSN;
 

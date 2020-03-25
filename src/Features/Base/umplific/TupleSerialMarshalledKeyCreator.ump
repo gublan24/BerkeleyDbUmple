@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.serial;
 class TupleSerialMarshalledKeyCreator
 {
   isA TupleSerialKeyCreator;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.bind.tuple.TupleOutput;
   depend com.sleepycat.bind.tuple.TupleInput;
   depend com.sleepycat.bind.tuple.MarshalledTupleKeyEntity;

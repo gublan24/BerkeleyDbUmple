@@ -2,7 +2,6 @@ namespace com.sleepycat.je.utilint;
 
 class EventTrace
 {
-  depend de.ovgu.cide.jakutil.*;
     static private int MAX_EVENTS = 100;
 
     static public final boolean TRACE_EVENTS = false;

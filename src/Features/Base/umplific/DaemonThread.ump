@@ -6,7 +6,6 @@ class DaemonThread
   
   abstract;
   
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.DeadlockException;
   depend com.sleepycat.je.DatabaseException;

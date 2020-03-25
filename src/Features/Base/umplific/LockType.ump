@@ -2,7 +2,6 @@ namespace com.sleepycat.je.txn;
 
 class LockType
 {
-  depend de.ovgu.cide.jakutil.*;
     /** 
      * Lock types.  Indexes must be kept manually synchronized in the matrixes below.
      */

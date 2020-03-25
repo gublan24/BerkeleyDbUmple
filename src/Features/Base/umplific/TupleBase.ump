@@ -2,7 +2,6 @@ namespace com.sleepycat.bind.tuple;
 
 class TupleBase
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
     private int outputBufferSize = 0 ;
 

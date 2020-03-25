@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 class BINReference
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.DatabaseId;
   depend java.util.Set;
   depend java.util.Iterator;

@@ -3,7 +3,6 @@ namespace com.sleepycat.je.dbi;
 class DatabaseImpl
 {
   isA LogWritable,LogReadable,Cloneable;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.TestHook;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.utilint.CmdUtil;

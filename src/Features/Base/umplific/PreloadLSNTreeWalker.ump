@@ -3,7 +3,6 @@ namespace com.sleepycat.je.dbi;
 class PreloadLSNTreeWalker
 {
   isA SortedLSNTreeWalker;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.WithRootLatched;
   depend com.sleepycat.je.tree.Node;
   depend com.sleepycat.je.tree.IN;

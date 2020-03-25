@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.serial;
 class SerialSerialKeyCreator
 {
   isA SecondaryKeyCreator,ForeignKeyNullifier;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.SecondaryKeyCreator;
   depend com.sleepycat.je.SecondaryDatabase;
   depend com.sleepycat.je.ForeignKeyNullifier;

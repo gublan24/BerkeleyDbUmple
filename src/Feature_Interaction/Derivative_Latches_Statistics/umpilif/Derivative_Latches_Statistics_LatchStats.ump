@@ -3,7 +3,6 @@ namespace com.sleepycat.je.latch;
 class LatchStats
 {
   isA Cloneable,Serializable;
-  depend de.ovgu.cide.jakutil.*;
   depend java.io.Serializable;
     public int nAcquiresNoWaiters = 0;
 

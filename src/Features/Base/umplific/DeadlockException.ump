@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class DeadlockException
 {
   isA DatabaseException;
-  depend de.ovgu.cide.jakutil.*;
     //public DeadlockException() {
 	//super();
  //   }

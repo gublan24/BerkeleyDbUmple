@@ -2,7 +2,6 @@ namespace com.sleepycat.je;
 
 class LockMode
 {
-  depend de.ovgu.cide.jakutil.*;
     private String lockModeName;
 
     /** 

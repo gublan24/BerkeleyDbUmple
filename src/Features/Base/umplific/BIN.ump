@@ -3,7 +3,6 @@ namespace com.sleepycat.je.tree;
 class BIN {
  isA LoggableObject;
  isA IN;
- depend de.ovgu.cide.jakutil.*;
  depend com.sleepycat.je.utilint.TinyHashSet;
  depend com.sleepycat.je.utilint.DbLsn;
  depend com.sleepycat.je.txn.LockType;
@@ -492,7 +491,6 @@ class BIN {
  }
 
  /** 
-  * Decide how to log this node. BINs may be logged provisionally. If logging a delta, return an null for the LSN.
   */
  protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional,
   boolean proactiveMigration, IN parent) throws DatabaseException {
@@ -520,7 +518,6 @@ class BIN {
  }
 
  /** 
-  * Decide whether to log a full or partial BIN, depending on the ratio of the delta size to full BIN size, and the number of deltas that have been logged since the last full.
   * @return true if we should log the deltas of this BIN
   */
  private boolean doDeltaLog(BINDelta deltaInfo) throws DatabaseException {

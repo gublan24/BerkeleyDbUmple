@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 class IN {
  isA Comparable, LoggableObject, LogReadable;
  isA Node;
- depend de.ovgu.cide.jakutil.*;
  depend com.sleepycat.je.utilint.Tracer;
  depend com.sleepycat.je.utilint.DbLsn;
  depend com.sleepycat.je.log.entry.INLogEntry;
@@ -921,7 +920,6 @@ class IN {
 
 			/* 
 			 * There is an exact match.  Don't insert; let the caller
-			 * decide what to do with this duplicate.
 			 */
 			return index;
 			  } else {
@@ -1620,7 +1618,6 @@ Label636: ;
  }
 
  /** 
-  * Decide how to log this node. INs are always logged in full.  Migration never performed since it only applies to BINs.
   */
  protected long logInternal(LogManager logManager, boolean allowDeltas, boolean isProvisional,
   boolean proactiveMigration, IN parent) throws DatabaseException {

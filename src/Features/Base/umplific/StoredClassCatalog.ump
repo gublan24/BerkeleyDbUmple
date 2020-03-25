@@ -3,7 +3,6 @@ namespace com.sleepycat.bind.serial;
 class StoredClassCatalog
 {
   isA ClassCatalog;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.util.UtfOps;
   depend com.sleepycat.util.RuntimeExceptionWrapper;
   depend com.sleepycat.je.OperationStatus;

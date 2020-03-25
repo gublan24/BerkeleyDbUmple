@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class PreloadConfig
 {
   isA Cloneable;
-  depend de.ovgu.cide.jakutil.*;
     public static final PreloadConfig DEFAULT = new PreloadConfig();
 
     private long maxBytes;

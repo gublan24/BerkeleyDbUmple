@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 class TrackingInfo
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
     private long lsn;
 

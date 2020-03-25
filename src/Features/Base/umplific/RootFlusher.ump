@@ -3,7 +3,6 @@ namespace com.sleepycat.je.recovery;
 class RootFlusher
 {
   isA WithRootLatched;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.tree.WithRootLatched;
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.tree.ChildReference;

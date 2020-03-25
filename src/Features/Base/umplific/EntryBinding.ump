@@ -2,7 +2,6 @@ namespace com.sleepycat.bind;
 
 interface EntryBinding
 {
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
     /** 
      * Converts a entry buffer into an Object.

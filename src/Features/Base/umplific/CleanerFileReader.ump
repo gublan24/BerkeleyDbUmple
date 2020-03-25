@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log;
 class CleanerFileReader
 {
   isA FileReader;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.tree.LN;
   depend com.sleepycat.je.tree.IN;

@@ -4,7 +4,6 @@ class TupleSerialBinding
 {
   isA EntityBinding;
   isA TupleBase;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseEntry;
   depend com.sleepycat.bind.tuple.TupleOutput;
   depend com.sleepycat.bind.tuple.TupleInput;

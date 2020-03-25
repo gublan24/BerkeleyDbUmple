@@ -3,7 +3,6 @@ namespace com.sleepycat.je.tree;
 class CursorsExistException
 {
   isA Exception;
-  depend de.ovgu.cide.jakutil.*;
     public static final CursorsExistException CURSORS_EXIST = new CursorsExistException();
 
   //  private CursorsExistException() {

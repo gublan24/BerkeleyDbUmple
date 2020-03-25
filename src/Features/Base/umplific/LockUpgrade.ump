@@ -2,7 +2,6 @@ namespace com.sleepycat.je.txn;
 
 class LockUpgrade
 {
-  depend de.ovgu.cide.jakutil.*;
     static final LockUpgrade ILLEGAL = new LockUpgrade(null, false, true);
 
     static final LockUpgrade EXISTING = new LockUpgrade(null, false, false);

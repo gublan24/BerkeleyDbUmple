@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log;
 class JEFileFilter
 {
   isA FilenameFilter;
-  depend de.ovgu.cide.jakutil.*;
   depend java.util.StringTokenizer;
   depend java.io.FilenameFilter;
   depend java.io.File;

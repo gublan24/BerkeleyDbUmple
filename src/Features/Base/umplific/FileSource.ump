@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log;
 class FileSource
 {
   isA LogSource;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.DatabaseException;
   depend java.nio.ByteBuffer;

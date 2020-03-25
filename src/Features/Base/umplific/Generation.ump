@@ -2,7 +2,6 @@ namespace com.sleepycat.je.tree;
 
 class Generation
 {
-  depend de.ovgu.cide.jakutil.*;
     static private long nextGeneration = 0;
 
     static long getNextGeneration() {

@@ -3,7 +3,6 @@ namespace com.sleepycat.je;
 class DatabaseNotFoundException
 {
   isA DatabaseException;
-  depend de.ovgu.cide.jakutil.*;
 
   //  public DatabaseNotFoundException() {
 //	super();

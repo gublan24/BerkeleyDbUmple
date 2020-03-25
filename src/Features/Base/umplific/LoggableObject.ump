@@ -3,7 +3,6 @@ namespace com.sleepycat.je.log;
 interface LoggableObject
 {
 
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.DatabaseException;
 
   isA LogWritable;

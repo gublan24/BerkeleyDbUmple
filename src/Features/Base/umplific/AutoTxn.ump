@@ -3,7 +3,6 @@ namespace com.sleepycat.je.txn;
 class AutoTxn
 {
   isA Txn;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.dbi.EnvironmentImpl;
   depend com.sleepycat.je.TransactionConfig;
   depend com.sleepycat.je.DatabaseException;

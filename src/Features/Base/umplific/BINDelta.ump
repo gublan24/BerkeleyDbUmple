@@ -3,7 +3,6 @@ namespace com.sleepycat.je.tree;
 class BINDelta
 {
   isA LoggableObject,LogReadable;
-  depend de.ovgu.cide.jakutil.*;
   depend com.sleepycat.je.utilint.DbLsn;
   depend com.sleepycat.je.log.LoggableObject;
   depend com.sleepycat.je.log.LogUtils;
