@@ -306,12 +306,12 @@ class INCompressor
 					} else {
 				tree.delete(idKey, tracker);
 					}
-					Label406: ; //this.hook406();
+					Label406: ; 
 			} catch (NodeNotEmptyException NNEE) {
-					Label407: ; //this.hook407();
+					Label407: ; 
 			} catch (CursorsExistException e) {
 					addBinRefToQueue(binRef, false);
-					Label408: ; //this.hook408();
+					Label408: ; 
 					requeued = true;
 			}
 			return requeued;
@@ -353,15 +353,15 @@ class INCompressor
 	    Tree tree = db.getTree();
 	    IN in = tree.search(mainKey, SearchType.NORMAL, -1, null, false);
 	    if (in == null) {
-		return null;
+				return null;
 	    }
 	    if (dupKey == null) {
-		return (BIN) in;
+					return (BIN) in;
 	    }
 	    DIN duplicateRoot = null;
 	    DBIN duplicateBin = null;
 	    BIN bin = (BIN) in;
-	    Label397: ; //this.hook397(mainKey, dupKey, tree, duplicateRoot, duplicateBin, bin);
+	    Label397: ; 
       int index = bin.findEntry(mainKey, false, true);
 			if (index >= 0) {
 					Node node = null;
@@ -369,26 +369,25 @@ class INCompressor
 				node = bin.fetchTarget(index);
 					}
 					if (node == null) {
-				Label400: ; //this.hook400(bin);
-				throw new ReturnObject(null);
+				Label400: ; 
+				return null;
 					}
 					if (node.containsDuplicates()) {
 				duplicateRoot = (DIN) node;
-				Label401: ; //this.hook401(duplicateRoot, bin);
+				Label401: ; 
 				duplicateBin = (DBIN) tree.searchSubTree(duplicateRoot, dupKey, SearchType.NORMAL, -1, null, false);
-				throw new ReturnObject(duplicateBin);
+				return duplicateBin;
 					} else {
-				throw new ReturnObject(bin);
+								return bin;
 					}
 			} else {
-					Label402: ; //this.hook402(bin);
-					throw new ReturnObject(null);
+					Label402: ; 
 			}
-      //End of hook397
 
-	} catch (ReturnObject r) {
-hook397_1: ;
-	    return (BIN) r.value;
+
+	} finally {
+			hook397_1: ;
+
 	}
     }
 

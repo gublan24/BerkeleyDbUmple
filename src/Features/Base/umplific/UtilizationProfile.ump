@@ -829,11 +829,10 @@ Label194: ;
 	try {
 	    locker = new BasicLocker(env);
 	    cursor = new CursorImpl(fileSummaryDb, locker);
-	    //           ;  //this.hook189(cursor);
+
       Label189:   ;
 	    OperationStatus status = cursor.putLN(keyBytes, ln, false);
-	    Label177:           ;  //this.hook177(fileNum, sequence, status);
-	    //           ;  //this.hook188(cursor);
+	    Label177:           ;  
       Label188:   ;
 	} finally {
 	    if (cursor != null) {
@@ -876,7 +875,7 @@ Label194: ;
 				}
 			    }
 			}
-			//           ;  //this.hook190(cursor);
+
       Label190:   ;
 			status = cursor.getNext(key, data, LockType.NONE, true, false);
 		    }
@@ -907,12 +906,12 @@ Label194: ;
 	    DatabaseId dbId = entry.getDbId();
 	    DatabaseImpl db = env.getDbMapTree().getDb(dbId);
 	    boolean b = db == null;
-	    Label186:   ; //b =            ;  //this.hook186(db, b);
+	    Label186:   ; 
 	    if (b) {
 		return true;
 	    }
 
-	    Label180:           ;  //this.hook180(lsn, entry, db, bin);
+	    Label180:           ;  
 			Tree tree = db.getTree();
 			TreeLocation location = new TreeLocation();
 			boolean parentFound = tree.getParentBINForChildLN(location, entry.getKey(), entry.getDupKey(), entry.getLN(), false, true, false, false);
@@ -929,12 +928,10 @@ Label194: ;
 			}
 			System.err.println("lsn " + DbLsn.getNoFormatString(lsn) + " was found in tree.");
 		return false;
-   //end hook180
 
-	   // throw ReturnHack.returnBoolean;
-	} catch (ReturnBoolean r) {
-	    Label180_1:   ;           ;
-	    return r.value;
+	} finally {
+	    Label180_1:   ;           
+
 	}
     }
 

@@ -117,12 +117,11 @@ class IN {
                            MemoryBudget.LONG_LIST_PER_ITEM_OVERHEAD;
       }
     
-
-
       before  setEntry(int , Node , byte , long , byte ) {
     	long oldSize = getEntryInMemorySize(idx);
       }
-      after Label640: setEntry(int , Node , byte , long , byte ) {IN_setEntry
+
+      after Label640: setEntry(int , Node , byte , long , byte ) {
 				newSize = getEntryInMemorySize(idx);
 				updateMemorySize(oldSize, newSize);
       }

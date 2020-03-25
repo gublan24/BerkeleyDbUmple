@@ -72,10 +72,11 @@ class TrackedFileSummary
         if (obsoleteOffsets.add(offset, tracker.getEnvironment().isOpen())) {
             Label172: ;
 
-        }
-        if (adjustMem != 0) {
-            updateMemoryBudget(adjustMem);
-        }
+       }		
+
+				Label_trackObsolete: ;
+
+ 
     }
 
     /** 

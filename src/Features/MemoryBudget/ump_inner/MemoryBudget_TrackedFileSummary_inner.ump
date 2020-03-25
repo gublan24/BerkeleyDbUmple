@@ -3,7 +3,7 @@
 namespace com.sleepycat.je.cleaner;
 class TrackedFileSummary {
 
-      after trackObsolete(long ) {
+      after Label_trackObsolete: trackObsolete(long ) {
     
        if (adjustMem != 0) {
             updateMemoryBudget(adjustMem);

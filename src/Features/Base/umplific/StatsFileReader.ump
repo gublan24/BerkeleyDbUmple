@@ -16,7 +16,8 @@ class StatsFileReader
   depend java.nio.ByteBuffer;
   depend java.io.IOException;
   depend com.sleepycat.je.log.entry.LogEntry;
-   
+  depend com.sleepycat.je.log.CleanerFileReader.EntryInfo;
+
  private Map entryInfoMap;
 
     private long totalLogBytes;

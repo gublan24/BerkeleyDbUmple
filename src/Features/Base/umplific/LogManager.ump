@@ -315,7 +315,6 @@ class LogManager
             long fileOffset = DbLsn.getFileOffset(lsn);
             ByteBuffer entryBuffer = logSource.getBytes(fileOffset);
             /* Read the checksum to move the buffer forward. */
-            ChecksumValidator validator = null;
             long storedChecksum = 0;
             Label507:   ; 
             /* Read the header. */
@@ -406,7 +405,7 @@ class LogManager
             ByteBuffer entryBuffer = logSource.getBytes(fileOffset);
 
             /* Read the checksum to move the buffer forward. */
-            ChecksumValidator validator = null;
+
 			      Label507: ;
 
             /* Read the header. */

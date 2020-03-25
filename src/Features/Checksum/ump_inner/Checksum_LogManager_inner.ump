@@ -15,7 +15,8 @@ class LogManager {
 
       }
       after Label507: getLogEntryFromLogSource(long , LogSource ) {
-
+				;
+        ChecksumValidator validator = null;
         storedChecksum=  LogUtils.getUnsignedInt(entryBuffer);
             if (doChecksumOnRead) {
                 validator = new ChecksumValidator();

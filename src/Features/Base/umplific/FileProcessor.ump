@@ -292,8 +292,7 @@ private void processLN(Long fileNum, TreeLocation location, Long offset,
 
 
         /* Get the first LN from the queue. */
-        Long offset; 
-        LNInfo info; 
+
 				Label132: ;
         LN ln = info.getLN();
         byte[] key = info.getKey();

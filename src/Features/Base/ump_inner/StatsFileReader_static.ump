@@ -6,11 +6,11 @@ class StatsFileReader {
 
 
   static class EntryInfo {
-      int count = 0;
-      int provisionalCount =0;
-      long totalBytes = 0 ;
-      int minBytes = 0;
-      int maxBytes = 0;
+      public int count = 0;
+      public int provisionalCount =0;
+      public long totalBytes = 0 ;
+      public int minBytes = 0;
+      public int maxBytes = 0;
 
     }
 

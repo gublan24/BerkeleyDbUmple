@@ -7,7 +7,7 @@ class CleanerFileReader
   depend com.sleepycat.je.tree.LN;
   depend com.sleepycat.je.tree.IN;
   depend com.sleepycat.je.log.entry.LogEntry;
-  depend com.sleepycat.je.log.StatsFileReader.EntryInfo;
+//  depend com.sleepycat.je.log.StatsFileReader.EntryInfo;
   depend com.sleepycat.je.log.entry.LNLogEntry;
   depend com.sleepycat.je.log.entry.INLogEntry;
   depend com.sleepycat.je.dbi.EnvironmentImpl;

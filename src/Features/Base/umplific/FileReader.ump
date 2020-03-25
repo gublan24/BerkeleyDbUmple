@@ -152,7 +152,7 @@ class FileReader
 
                 boolean isTargetEntry = isTargetEntry(currentEntryTypeNum,
                                                       currentEntryTypeVersion);
-                boolean doValidate = flase;
+                boolean doValidate = false;
 								Label476:;
                 boolean collectData = doValidate || isTargetEntry;
 
