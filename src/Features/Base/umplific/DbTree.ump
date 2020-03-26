@@ -143,7 +143,7 @@ class DbTree
 	Locker autoTxn = null;
 	try {
 	    nameCursor = new CursorImpl(nameDatabase, locker);
-	    //this.hook307(allowEviction, nameCursor);
+
       Label307: ;
 	    LN nameLN = new NameLN(newId);
 	    nameCursor.putLN(databaseName.getBytes("UTF-8"), nameLN, false);
@@ -641,44 +641,6 @@ class DbTree
 	nameDatabase.getTree().dump();
     }
 
-   /* protected void hook299(CursorImpl cursor) throws DatabaseException {
-    }
 
-    protected void hook300(NameLockResult result) throws DatabaseException, UnsupportedEncodingException {
-    }
-
-    protected void hook301(NameLockResult result) throws DatabaseException {
-    }
-
-    protected void hook302(NameLockResult result) throws DatabaseException {
-    }
-
-    protected void hook303(CursorImpl nameCursor) throws DatabaseException, UnsupportedEncodingException {
-    }
-
-    protected void hook304(CursorImpl idCursor) throws DatabaseException {
-    }
-
-    protected void hook305(CursorImpl cursor) throws DatabaseException {
-    }
-*/
-
-  //  protected void hook306(boolean allowEviction, CursorImpl idCursor)
-	//    throws DatabaseException, UnsupportedEncodingException {
-  //  }
-
-  //  protected void hook307(boolean allowEviction, CursorImpl nameCursor)
-	 //   throws DatabaseException, UnsupportedEncodingException {
-   // }
-
-  //  protected void hook308(boolean allowEviction, CursorImpl nameCursor)
-	//    throws DatabaseException, UnsupportedEncodingException {
-  //  }
-
-  //  protected void hook309(boolean allowEviction, CursorImpl idCursor) throws DatabaseException {
-  //  }
-
-  //  protected void hook310(boolean allowEviction, CursorImpl idCursor) throws DatabaseException {
-  //  }
 
 }

@@ -498,7 +498,7 @@ private void processLN(Long fileNum, TreeLocation location, Long offset,
      Label151:   ; //this.hook151();
       obsolete = true;
      completed = true;
-     return; //throw new ReturnVoid();
+     return; 
     }
    Tree tree = db.getTree();
    assert tree != null;

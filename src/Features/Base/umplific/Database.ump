@@ -653,72 +653,11 @@ class Database
 							}
 						}
 				finally {
-									hook54_1: ;//releaseTriggerListReadLock();
+									hook54_1: ;
 							}
-    //End of hook54
-    }
-
-/*
-    protected void hook44() throws DatabaseException {
-    }
-
-    protected void hook45(Transaction txn, DatabaseEntry key) throws DatabaseException {
-    }
-
-    protected void hook46(Transaction txn, CursorConfig cursorConfig) throws DatabaseException {
-    }
-
-    protected void hook47(Transaction txn, DatabaseEntry key) throws DatabaseException {
-    }
-
-    protected void hook48(Transaction txn, DatabaseEntry key, LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook49(Transaction txn, DatabaseEntry key, DatabaseEntry data, LockMode lockMode)
-	    throws DatabaseException {
-    }
-
-    protected void hook50(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException {
-    }
-
-    protected void hook51(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException {
-    }
-
-    protected void hook52(Transaction txn, DatabaseEntry key, DatabaseEntry data) throws DatabaseException {
-    }
-*/
-
-/*    protected void hook53(List list) throws DatabaseException {
-			try {
-				for (int i = 0; i < triggerList.size(); i += 1) {
-						Object obj = triggerList.get(i);
-						if (obj instanceof SecondaryTrigger) {
-					list.add(((SecondaryTrigger) obj).getDb());
-						}
-				}
-			}
-		  finally {
-Label53:   ;//
-			}
 
     }
-*/
-  /*  protected void hook54(Locker locker, DatabaseEntry priKey, DatabaseEntry oldData, DatabaseEntry newData)
-	    throws DatabaseException {
-	for (int i = 0; i < triggerList.size(); i += 1) {
-	    DatabaseTrigger trigger = (DatabaseTrigger) triggerList.get(i);
-	    trigger.databaseUpdated(this, locker, priKey, oldData, newData);
-	}
-    }
-*/
 
-//    protected void hook55() throws DatabaseException {
-//    }
 
-//    protected void hook56() throws DatabaseException {
-//    }
-
- //   protected void hook57() throws DatabaseException {
-  //  }
 
 }

@@ -18,7 +18,7 @@ class LockManager
 		      return stats;
     }
 
-    after Label774: (EnvironmentImpl ) {
+    after Label774: LockManager(EnvironmentImpl ) {
 			nRequests = 0;
 			nWaits = 0;
 

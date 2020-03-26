@@ -33,30 +33,20 @@ class PreloadLSNTreeWalker
     }
 
     protected Node fetchLSN(long lsn) throws DatabaseException {
-	//try {
+
 	    INEntry inEntry = (INEntry) lsnINMap.remove(new Long(lsn));
 	    assert (inEntry != null);
 	    IN in = inEntry.in;
-	    Label352: ; //this.hook352(lsn, inEntry, in);
+	    Label352: ; 
 			int index = inEntry.index;
 			if (in.isEntryKnownDeleted(inEntry.index) || in.getLsn(inEntry.index) != lsn) {
-					return null; //throw new ReturnObject(null);
+					return null;
 			}	    
-      Label352_1: ;// 
+      Label352_1: ;
 			return in.fetchTarget(inEntry.index);
 			}
-	    //throw ReturnHack.returnObject;
-	//} catch (ReturnObject r) {
 
-	//    return (Node) r.value;}
     }
 
-/*    protected void hook352(long lsn, INEntry inEntry, IN in) throws DatabaseException {
-	int index = inEntry.index;
-	if (in.isEntryKnownDeleted(index) || in.getLsn(index) != lsn) {
-	    throw new ReturnObject(null);
-	}
-	throw new ReturnObject(in.fetchTarget(index));
-    }
-*/
+
 }

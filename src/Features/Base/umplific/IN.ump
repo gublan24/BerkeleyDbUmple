@@ -1977,36 +1977,6 @@ Label636: ;
   return "IN";
  }
 
- // protected void hook618(EnvironmentImpl env) {
- // }
 
- /*    protected void hook619(boolean updateGeneration) throws DatabaseException {
- 		if (updateGeneration) {
- 			  setGeneration();
- 		}
- 		throw new ReturnBoolean(true);
-     }
- */
- protected void hook620() throws DatabaseException {}
-
- protected void hook621() throws DatabaseException {}
-
- protected void hook622() throws DatabaseException {}
-
- protected void hook623() throws DatabaseException {}
-
- protected void hook624() throws DatabaseException {}
-
- protected void hook625(Node child) throws DatabaseException {}
-
- protected void hook626() throws DatabaseException {}
-
- protected void hook627() throws DatabaseException {}
-
- //  protected void hook637() throws DatabaseException {
- // }
-
- //   protected void hook638(Node node) throws DatabaseException, LogFileNotFoundException, Exception {
- //    }
 
 }

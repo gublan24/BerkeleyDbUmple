@@ -796,55 +796,5 @@ class Txn
 	return inMemorySize;
     }
 
-    /** 
-     * Store information about a DatabaseImpl that will have to be purged at transaction commit or abort. This handles cleanup after operations like Environment.truncateDatabase,  Environment.removeDatabase. Cleanup like this is done outside the usual transaction commit or node undo processing, because the mapping tree is always AutoTxn'ed to avoid deadlock and is  essentially  non-transactional
-     */
-    //protected void hook799(int numReadLocks, int numWriteLocks, boolean openCursors) throws DatabaseException {}
 
-  //  protected void hook800(Throwable t) throws DatabaseException, Throwable {}
-
-//    protected void hook801(Long nodeId, long undoLsn, DatabaseException e) throws DatabaseException {}
-
-/*    protected void hook802(long undoLsn, TreeLocation location, LNLogEntry undoEntry, LN undoLN, DatabaseImpl db,
-	    long abortLsn, boolean abortKnownDeleted) throws DatabaseException, RuntimeException {
-	RecoveryManager.undo(Level.FINER, db, location, undoLN, undoEntry.getKey(), undoEntry.getDupKey(), undoLsn,
-		abortLsn, abortKnownDeleted, null, false);
-    }
-  //  protected void hook803() throws DatabaseException, RunRecoveryException, Throwable {
-  //  }
-
-  //  protected void hook804() throws DatabaseException {
-  //  }
-
-  //  protected void hook805() throws DatabaseException, RunRecoveryException, Throwable {
-  //  }
-
-   // protected void hook806() throws DatabaseException, RunRecoveryException, Throwable {
-   // }
-
-   // protected void hook807() throws DatabaseException {
-   // }
-
-    //protected void hook808() throws DatabaseException {
-    //}
-
-    protected void hook809() throws DatabaseException {
-    }
-
-    protected void hook810(int delta) {
-    }
-
-    protected int hook811(int delta) {
-	return delta;
-    }
-
-    protected void hook812() throws DatabaseException {
-    }
-
-    protected void hook813() throws DatabaseException {
-    }
-
-    protected void hook814() {
-    }
-*/
 }

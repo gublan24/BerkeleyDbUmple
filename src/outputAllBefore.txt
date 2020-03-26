@@ -1,0 +1,64 @@
+before evictBatch(
+before Label377: evictBatch(
+before trace(
+before trace(
+before clear(
+before clearFileCache(
+before evictLNs(
+before load(
+before shutdownDaemons(
+before Label538: Checkpointer(
+before findParent(
+before verify(
+before flushBINToBeRemoved(
+before flushDBINToBeRemoved(
+before  Label212: count(
+before addToQueue(
+before getQueueSize(
+before Label453:getFileHandle(
+before addCursor(
+before removeCursor(
+before adjustCursors(
+before adjustCursorsForInsert(
+before adjustCursorsForMutation(
+before removeLatchAlreadyHeld(
+before remove(
+before tailSet(
+before first(
+before iterator(
+before clear(
+before logMapTreeRoot(
+before rewriteMapTreeRoot(
+before init(
+before setRoot(
+before logTreeRemoval(
+before logItem(
+before getUnflushableTrackedSummary(
+before Label821: TxnManager(
+before  registerTxn(
+before unRegisterTxn(
+before reinit(
+before registerLsn(
+before containsLsn(
+before acquireTriggerListReadLock(
+before acquireTriggerListWriteLock(
+before setDupCountLN(
+before updateEntry(
+before rebuildINList(
+before Label552: doCheckpoint(
+before clearCache(
+before updateEntryCompareKey(
+before updateEntry(
+before setLsn(
+before updateEntry(
+before updateEntry(
+before  setEntry(
+before updateDupCountLN(
+before attemptLockInternal(
+before loadStats(
+before processLN(
+before close(
+before Label519: getWakeupPeriod(
+before shutdownDaemons(
+before trace(
+before  init(

@@ -63,20 +63,5 @@ class TreeIterator
 	    index = -1;
 	}
     }
-/*
-    protected void hook755() throws DatabaseException {
-    }
 
-    protected void hook756() throws DatabaseException {
-    }
-
-    protected void hook757() {
-    }
-
-    protected void hook758() throws DatabaseException {
-    }
-
-    protected void hook759() {
-    }
-*/
 }

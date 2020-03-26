@@ -25,7 +25,15 @@ casecasing calls:
  around fragments introduces 0 new labels 
  before fragments introduces 0 new labels 
 ===================================================
+This ifo. after deleting all static classes:
 
+after (all types): 911
+  after labels : 846
+  after method : 65
+before (all types): 64
+ before labels: 7
+around (all have opening-closing labels): 21
+============================
 
 FeatureHouse:
 Marked places

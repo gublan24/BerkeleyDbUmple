@@ -583,44 +583,6 @@ class LockManager
 	return null;
     }
 
-    /** 
-     * This is just a struct to hold a multi-value return.
-     */
-  //  protected void hook770() throws DatabaseException {
-  //  }
 
- //   protected void hook771(EnvironmentImpl envImpl, int i) throws DatabaseException {
-   // }
-
-   // protected void hook772(boolean nonBlockingRequest) throws DeadlockException, DatabaseException {
-   // }
-
-//    protected void hook773(StringBuffer sb, int i) throws DatabaseException {
-//	dumpToStringNoLatch(sb, i);
-  //  }
-
-  //  protected void hook774() throws DatabaseException {
-  //  }
-
-   // protected void hook775() throws DatabaseException {
- //   }
-
-   // protected void hook776(LockStats stats, Map lockTable) {
-   // }
-
-    //protected void hook777(LockStats stats, Lock lock) {
-    //}
-
-    //protected void hook778(LockStats stats, LockInfo info) {
-    //}
-
-    //protected void hook779(DbConfigManager configMgr) throws DatabaseException {
-    //}
-
-    //protected void hook780(int lockTableIndex) throws DatabaseException {
-    //}
-
-  //  protected void hook781(int lockTableIndex) throws DatabaseException {
-  //  }
 
 }

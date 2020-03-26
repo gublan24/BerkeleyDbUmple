@@ -487,46 +487,6 @@ class SecondaryCursor
 	DatabaseUtil.checkForNullDbt(data, "data", false);
     }
 
-    protected void hook65() throws DatabaseException {
-    }
-
-    protected void hook66(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook67(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook68(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook69(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook70(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook71(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook72(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook73(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook74(LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook75(DatabaseEntry key, LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook76(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook77(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException {
-    }
-
-    protected void hook78(DatabaseEntry key, DatabaseEntry data, LockMode lockMode) throws DatabaseException {
-    }
+ 
 
 }
