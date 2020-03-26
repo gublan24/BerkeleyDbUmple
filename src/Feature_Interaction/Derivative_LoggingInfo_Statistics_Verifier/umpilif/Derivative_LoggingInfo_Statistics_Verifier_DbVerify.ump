@@ -2,7 +2,7 @@ namespace com.sleepycat.je.util;
 
 class DbVerify
 {
-    after Label851 verify(PrintStream ) {
+    after Label851: verify(PrintStream ) {
 				Tracer.trace(Level.INFO, envImpl, "DbVerify.verify of " + dbName + " starting");
 
     }
