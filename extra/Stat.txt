@@ -28,10 +28,11 @@ casecasing calls:
 This ifo. after deleting all static classes:
 
 after (all types): 911
-  after labels : 846
-  after method : 65
+  after labels : 846, 854
+  after method : 65, 57
 before (all types): 64
  before labels: 7
+  after method : 57
 around (all have opening-closing labels): 21
 ============================
 
