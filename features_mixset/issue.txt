@@ -1,1 +1,0 @@
-- Delete method (generated) has different return type. Aspect can not help in this matter. WHAT TO DO.

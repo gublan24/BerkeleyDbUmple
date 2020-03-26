@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.tree.MapLN]:types/TypeDeclaration:MapLN:bodyDeclarations/MethodDeclaration:void:makeDeleted:[]:body/Block[1]:statements/ExpressionStatement:expression/MethodInvocation:arguments/BooleanLiteral" features="13"/></annotations>

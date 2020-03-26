@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.txn.ReadCommittedLocker]:types/TypeDeclaration:ReadCommittedLocker:bodyDeclarations/MethodDeclaration:void:addDeleteInfo:[BIN;Key]" features="27"/><key name="//CompilationUnit[com.sleepycat.je.txn.ReadCommittedLocker]:types/TypeDeclaration:ReadCommittedLocker:bodyDeclarations/MethodDeclaration:void:ReadCommittedLocker:[EnvironmentImpl;Locker]:body/Block[1]:statements/AssertStatement" features="1"/></annotations>

@@ -1,2 +1,0 @@
-CLI_linux.hs ist ein Parser und einfacher Kommandozeileninterpreter mit einem SimpleLineEditor für Arith 
-CLI.hs ist das gleiche, nur ohne SimpleLineEditor (die Windows-Version des GHCI scheint ihn nicht zu haben)

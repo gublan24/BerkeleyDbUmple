@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.txn.AutoTxn]:imports/ImportDeclaration:com.sleepycat.je.TransactionConfig" features="1"/><key name="//CompilationUnit[com.sleepycat.je.txn.AutoTxn]" features="1"/></annotations>

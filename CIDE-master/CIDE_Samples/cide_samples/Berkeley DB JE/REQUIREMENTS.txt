@@ -1,4 +1,0 @@
-requires guidsl feature model
-requires JDT extension
-
-set memory to 1 GB (otherwise runs extremely slow)

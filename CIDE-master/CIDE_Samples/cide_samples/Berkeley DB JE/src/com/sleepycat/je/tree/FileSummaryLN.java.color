@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.tree.FileSummaryLN]" features="39"/><key name="//CompilationUnit[com.sleepycat.je.tree.FileSummaryLN]:imports/ImportDeclaration:com.sleepycat.je.cleaner.FileSummary" features="39"/><key name="//CompilationUnit[com.sleepycat.je.tree.FileSummaryLN]:imports/ImportDeclaration:com.sleepycat.je.cleaner.TrackedFileSummary" features="39"/></annotations>

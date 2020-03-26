@@ -1,4 +1,0 @@
-//-
-
-//rename 's/^/DeleteOp_/' *
-

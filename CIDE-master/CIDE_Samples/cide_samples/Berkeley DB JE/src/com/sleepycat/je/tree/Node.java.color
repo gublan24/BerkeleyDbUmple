@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.tree.Node]:types/TypeDeclaration:Node:bodyDeclarations/MethodDeclaration:void:accountForSubtreeRemoval:[INList;UtilizationTracker]:parameters/SingleVariableDeclaration:tracker" features="39"/><key name="//CompilationUnit[com.sleepycat.je.tree.Node]:imports/ImportDeclaration:com.sleepycat.je.cleaner.UtilizationTracker" features="39"/></annotations>

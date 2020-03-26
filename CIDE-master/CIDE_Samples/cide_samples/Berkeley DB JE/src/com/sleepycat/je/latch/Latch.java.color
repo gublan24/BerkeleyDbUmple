@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.latch.Latch]" features="13"/><key name="//CompilationUnit[com.sleepycat.je.latch.Latch]:types/TypeDeclaration:Latch:bodyDeclarations/MethodDeclaration:LatchStats:getLatchStats:[]" features="20"/></annotations>

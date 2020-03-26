@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE annotations SYSTEM "annotations.dtd">
-<annotations><key name="//CompilationUnit[com.sleepycat.je.txn.BuddyLocker]:types/TypeDeclaration:BuddyLocker:bodyDeclarations/MethodDeclaration:Txn:getTxnLocker:[]" features="1"/></annotations>
