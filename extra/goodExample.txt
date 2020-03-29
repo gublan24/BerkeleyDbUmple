@@ -1,4 +1,0 @@
-Latches_CursorImp.ump;
-
-The count method use try catch to obain multipe values for a method after adding code fragments of other feature.
-    public int count(LockType lockType) throws DatabaseException {  
