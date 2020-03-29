@@ -27,7 +27,7 @@ This project is split into many smaller subprojects; the folder hierarchy is exp
  * **src**/
 The src folder includes the source code of Berkeley DB in Umple format. The src folder contains the **Features**/ and their interaction in **Feature_Interaction**/. 
  * **alternative_imp**/
- The alternative_imp folder contains the original source code of Berkeley DB JE, [CIDE](https://github.com/ckaestne/CIDE/tree/master/CIDE_Samples/cide_samples/Berkeley%20DB%20JE) implementation, and FeatureHouse Implementation.  
+ The alternative_imp folder contains the original source code of Berkeley DB JE, [CIDE](https://github.com/ckaestne/CIDE/tree/master/CIDE_Samples/cide_samples/Berkeley%20DB%20JE) implementation, and [FeatureHouse](https://github.com/FeatureIDE/FeatureIDE/tree/develop/plugins/de.ovgu.featureide.examples/featureide_examples/BerkeleyDB-FH-Java) Implementation.  
  * **umplificator**/ 
 It includes a jar file "umplificator.jar" that we've used to reverse engineer Java code to Umple. 
 
