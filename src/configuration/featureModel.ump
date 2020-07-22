@@ -15,7 +15,7 @@ require subfeature [Persistance];
 require subfeature [ConcurrTrans];
 require subfeature [opt Logging];
 
-use FeatureDepend.ump;
+use featureDepend.ump;
 
 mixset Base{  }
 

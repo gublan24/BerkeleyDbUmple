@@ -1,0 +1,102 @@
+
+use configuration/featureModel.ump;
+use configuration/SPLVariaintConfig.ump;
+
+
+
+mixset Base {    use features/Base/umplific/Master.ump;    }      
+
+mixset LoggingBase   {    use features/loggingBase/umplific/Master.ump;    }      
+ 
+mixset LoggingConsoleHandler     {    use features/loggingConsoleHandler/umplific/Master.ump;    }
+
+mixset LoggingDbLogHandler     {    use features/LoggingDbLogHandler/umplific/Master.ump;    }
+
+mixset LoggingFileHandler     {    use features/LoggingFileHandler/umpilif/Master.ump;    }
+
+mixset Latches    {    use features/Latches/umpilif/Master.ump;    }
+
+mixset EnvironmentLocking     {    use features/EnvironmentLocking/umpilif/Master.ump;    }
+
+mixset  DiskFullErro    {    use features/DiskFullErro/umpilif/Master.ump;    }
+
+mixset FileHandleCache     {    use features/FileHandleCache/umpilif/Master.ump;    }
+
+mixset  CriticalEviction    {    use features/CriticalEviction/umpilif/Master.ump;    }
+
+mixset  MemoryBudget    {    use features/MemoryBudget/umpilif/Master.ump;    }
+
+mixset  Evictor    {    use features/Evictor/umpilif/Master.ump;    }
+
+mixset  RenameOp     {    use features/RenameOp/umpilif/Master.ump;    }
+
+mixset TruncateOp     {    use features/TruncateOp/umpilif/Master.ump;    }
+
+mixset  DeleteOp    {    use features/DeleteOp/umpilif/Master.ump;    }
+
+mixset  CleanerDaemon    {    use features/CleanerDaemon/umpilif/Master.ump;    }
+
+mixset  INCompressor    {    use features/INCompressor/umpilif/Master.ump;    }
+
+mixset  CPTime    {    use features/CPTime/umpilif/Master.ump;    }
+
+mixset  CPBytes    {    use features/CPBytes/umpilif/Master.ump;    }
+
+mixset  CheckpointerDaemon    {    use features/CheckpointerDaemon/umpilif/Master.ump;    }
+
+mixset   Verifier   {    use features/Verifier/umpilif/Master.ump;    }
+
+mixset  CheckLeaks    {    use features/CheckLeaks/umpilif/Master.ump;    }
+
+mixset Statistics     {    use features/Statistics/umpilif/Master.ump;    }
+
+mixset   IO   {    use features/IO/umpilif/Master.ump;    }
+
+mixset  ChunkedNIO    {    use features/ChunkedNIO/umpilif/Master.ump;    }
+
+mixset  NIO    {    use features/NIO/umpilif/Master.ump;    }  
+ 
+mixset Checksum     {    use features/Checksum/umpilif/Master.ump;    }
+
+mixset LookAHEADCache     {    use features/LookAHEADCache/umpilif/LookAHEADCache_Master.ump;    }
+
+mixset  FSync    {    use features/FSync/umpilif/FSync_Master.ump;    }
+
+mixset  LoggingCleaner    {    use features/LoggingCleaner/umpilif/LoggingCleaner_Master.ump;    }
+
+mixset LoggingEvictor     {    use features/LoggingEvictor/umpilif/LoggingEvictor_Master.ump;    }
+
+mixset LoggingRecovery    {    use features/LoggingRecovery/umpilif/LoggingRecovery_Master.ump;    }
+
+mixset LoggingSevere     {    use features/LoggingSevere/umpilif/LoggingSevere_Master.ump;    }
+
+mixset  LoggingInfo    {    use features/LoggingInfo/umpilif/LoggingInfo_Master.ump;    }
+
+mixset LoggingConfig     {    use features/LoggingConfig/umpilif/LoggingConfig_Master.ump;    }
+
+mixset LoggingFine     {    use features/LoggingFine/umpilif/LoggingFine_Master.ump;    }
+
+mixset LoggingFiner     {    use features/LoggingFiner/umpilif/LoggingFiner_Master.ump;    }
+
+mixset  LoggingFinest    {    use features/LoggingFinest/umpilif/LoggingFinest_Master.ump;    }
+
+
+use feature_interaction/Feature_Interaction_Master.ump;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

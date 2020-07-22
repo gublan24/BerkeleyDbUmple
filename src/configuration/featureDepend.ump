@@ -1,3 +1,5 @@
+// Feature dependency file included in FeatureModel.ump.
+
 mixset Evictor { require[MemoryBudget]; }  
 
 mixset EvictorDaemon { require[MemoryBudget]; }
