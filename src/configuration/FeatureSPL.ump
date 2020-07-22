@@ -5,6 +5,7 @@
   using AspectJ,” in 11th International Software Product Line Conference
   (SPLC 2007), 2007, pp. 223–232.
 */
+
 require subfeature [Base];
 require subfeature [Ops];
 require subfeature [opt MemoryBudget];
@@ -13,6 +14,8 @@ require subfeature [opt Statistics];
 require subfeature [Persistance];
 require subfeature [ConcurrTrans];
 require subfeature [opt Logging];
+
+use FeatureDepend.ump;
 
 mixset Base{  }
 
