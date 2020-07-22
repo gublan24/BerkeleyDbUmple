@@ -1,17 +1,18 @@
 /*
   This is the feature model for BerkeleyDB SPL in Umple.
+  The feature model is taken from:
+  C. Kastner, S. Apel, and D. Batory, “A case study implementing features
+  using AspectJ,” in 11th International Software Product Line Conference
+  (SPLC 2007), 2007, pp. 223–232.
 */
-
-require [Base];
-require [Ops];
-require [opt MemoryBudget];
-require [BTree];
-require [opt Statistics];
-require [Persistance];
-require [ConcurrTrans];
-require [opt Logging];
-
-//require [opt DERIVATIVES];
+require subfeature [Base];
+require subfeature [Ops];
+require subfeature [opt MemoryBudget];
+require subfeature [BTree];
+require subfeature [opt Statistics];
+require subfeature [Persistance];
+require subfeature [ConcurrTrans];
+require subfeature [opt Logging];
 
 mixset Base{  }
 
@@ -19,7 +20,7 @@ mixset MemoryBudget { }
 
 mixset Ops {
 
- require [opt TruncateOp opt RenameOp opt DeleteOP];
+ require subfeature [opt TruncateOp opt RenameOp opt DeleteOP];
 
  mixset TruncateOp { } 
  
@@ -30,15 +31,15 @@ mixset Ops {
 
 mixset BTree {
   
-  require [opt INCompressor opt IEvictor opt  Verifier]; 
+  require subfeature [opt INCompressor opt IEvictor opt  Verifier]; 
 
   mixset INCompressor { }
   
   mixset IEvictor {
   
-    require [Evictor];
+    require subfeature [Evictor];
 
-    require [opt CriticalEviction opt EvictorDaemon];
+    require subfeature [opt CriticalEviction opt EvictorDaemon];
 
     mixset Evictor { }
 
@@ -55,46 +56,46 @@ mixset Statistics { }
 
 mixset Persistance{
 
-  require [IICLeaner];
-  require [opt FileHandleCache];
-  require [opt DiskFullErro];
-  require [Checkpointer];
-  require [opt EnvironmentLocking];
-  require [IIO];
+  require subfeature [IICLeaner];
+  require subfeature [opt FileHandleCache];
+  require subfeature [opt DiskFullErro];
+  require subfeature [Checkpointer];
+  require subfeature [opt EnvironmentLocking];
+  require subfeature [IIO];
 
   mixset IIO {
-  require[NewIO xor OldIO];
+  require subfeature [NewIO xor OldIO];
 
   mixset NewIO {
-    require [opt DirectNIO];
-    require [NIOAccess];
+    require subfeature [opt DirectNIO];
+    require subfeature [NIOAccess];
     mixset DirectNIO { }
     mixset NIOAccess {  
-      require [NIO xor ChunckedNIO];
+      require subfeature [NIO xor ChunckedNIO];
       mixset NIO { }
       mixset ChunckedNIO { }
     } 
    
   }
   mixset OldIO { 
-    require [opt SynchronizedIO];
-    require [IO];
+    require subfeature [opt SynchronizedIO];
+    require subfeature [IO];
 
     mixset SynchronizedIO { } 
     mixset IO {
     }
   
 }
-  require[OldIO];
+
 
 }
-  require [opt Checksum];
+  require subfeature [opt Checksum];
 
 
   mixset IICLeaner {
-  require [opt LookAHEADCache];
-  require [Cleaner];
-  require [opt CleanerDaemon];
+  require subfeature  [opt LookAHEADCache];
+  require subfeature  [Cleaner];
+  require subfeature [opt CleanerDaemon];
 
   mixset LookAHEADCache{ }
   mixset Cleaner{ }
@@ -108,11 +109,11 @@ mixset Persistance{
 
   mixset Checkpointer {
 
-  require [opt CPBytes];
+  require subfeature [opt CPBytes];
 
-  require [opt CPTime];
+  require subfeature [opt CPTime];
 
-  require [opt CheckpointerDaemon]; 
+  require subfeature  [opt CheckpointerDaemon]; 
 
   mixset CPBytes { }
 
@@ -127,30 +128,29 @@ mixset Persistance{
 
 mixset ConcurrTrans
 {
-  require [opt Latches opt Transactions opt CheckLeaks opt FSync ];
+  require subfeature [opt Latches opt Transactions opt CheckLeaks opt FSync ];
   mixset Latches {  }
   mixset Transactions  {   }
   mixset CheckLeaks {  }
   mixset FSync {  }
 }
 
-//require [opt Logging];
 
 mixset Logging {
 
-  require [LoggingBase];
-  require [ opt  LoggingFiner     
+  require subfeature [LoggingBase];
+  require subfeature [ opt  LoggingFiner     
      opt  LoggingConfig    
-		 opt  LoggingSevere    
-	   opt  LoggingEvictor    
-	   opt  LoggingCleaner    
-		 opt  LoggingRecovery    
-		 opt  LoggingDbLogHandler    
-	   opt  LoggingConsoleHandler    
-		 opt  LoggingInfo    
-	   opt  LoggingFileHandler    
-	   opt  LoggingFine    
-		 opt  LoggingFinest ];
+     opt  LoggingSevere    
+     opt  LoggingEvictor    
+     opt  LoggingCleaner    
+     opt  LoggingRecovery    
+     opt  LoggingDbLogHandler    
+     opt  LoggingConsoleHandler    
+     opt  LoggingInfo    
+     opt  LoggingFileHandler    
+     opt  LoggingFine    
+     opt  LoggingFinest ];
     
   mixset  LoggingFiner { }   
   mixset  LoggingConfig  { } 
@@ -167,397 +167,3 @@ mixset Logging {
   mixset  LoggingFinest  { } 
 				
 }
-
-// Constraints :
-
-mixset Evictor { require[MemoryBudget]; }  //Evictor or EvictorDaemon  or LookAHEADCache => MemoryBudget
-
-mixset EvictorDaemon { require[MemoryBudget]; }
-
-mixset LookAHEADCache { require[MemoryBudget]; }
-   
-mixset CriticalEviction { require[INCompressor]; }  // CriticalEviction	=>	INCompressor 
-
-mixset CPBytes{ require[CPTime]; } //	CPBytes => CPTime
-
-mixset DeleteOp { require [Evictor and INCompressor and MemoryBudget]; } //DeleteOp ==> Evictor and INCompressor and MemoryBudget
-
-mixset MemoryBudget { require [Evictor and Latches]; } //MemoryBudget ==> Evictor and Latches
- 
-mixset TruncateOp { require[DeleteOp]; } // TruncateOp ==> DeleteOp
-
-mixset Verifier{  require[INCompressor];    }  // Verifier ==> INCompressor
-
-mixset   Derivative_LoggingEvictor_Statistics_Evictor_LoggingBase  {  require [LoggingEvictor and Statistics and Evictor and LoggingBase];} 
-
-mixset   Derivative_LoggingEvictor_Evictor_MemoryBudget_LoggingBase  {   require [ LoggingEvictor and Evictor and MemoryBudget and LoggingBase ]; } 
-
-mixset   Derivative_LoggingInfo_Statistics_Verifier  {    require [ LoggingInfo and Statistics and Verifier]; } 
-
-mixset   Derivative_Latches_Statistics_Verifier  { require [ Latches and Statistics and Verifier]; } 
-
-mixset   Derivative_Latches_Verifier_INCompressor  { require [ Latches and Verifier and INCompressor ]; }
- 
-mixset   Derivative_Statistics_Verifier_INCompressor  { require [ Statistics and Verifier and INCompressor  ]; }
- 
-mixset   Derivative_Statistics_Verifier_DeleteOp  { require [ Statistics and Verifier and DeleteOp ]; } 
-
-mixset   Derivative_LookAHEADCache_Evictor_CriticalEviction  {  require [ LookAHEADCache and Evictor and CriticalEviction]; } 
-
-mixset   Derivative_INCompressor_Evictor_CriticalEviction  {  require [ INCompressor and Evictor and CriticalEviction]; } 
-  
-mixset   Derivative_Evictor_MemoryBudget_CriticalEviction  {  require [ Evictor and MemoryBudget and CriticalEviction]; } 
-  
-mixset   Derivative_LoggingEvictor_Evictor_LoggingBase  {  require [ LoggingEvictor and Evictor and LoggingBase]; } 
-  
-mixset   Derivative_FSync_Latches  {  require [ FSync and Latches]; } 
-  
-mixset   Derivative_NIO_ChunkedNIO  {  require [ NIO and ChunkedNIO]; } 
-  
-mixset   Derivative_IO_SynchronizedIO  {  require [ IO and SynchronizedIO]; } 
-
-mixset   Derivative_LoggingConfig_Statistics  {  require [ LoggingConfig and Statistics]; } 
-
-mixset   Derivative_FSync_Statistics  {  require [ FSync and Statistics]; } 
-
-mixset   Derivative_LookAHEADCache_Statistics  {  require [ LookAHEADCache and Statistics]; } 
-
-mixset   Derivative_Latches_Statistics  {  require [ Latches and Statistics]; } 
-
-mixset   Derivative_Latches_CheckLeaks  {  require [ Latches and CheckLeaks]; } 
-
-mixset   Derivative_Statistics_CheckLeaks  {  require [ Statistics and CheckLeaks]; } 
-
-mixset   Derivative_Statistics_Verifier  {  require [ Statistics and Verifier]; } 
-
-mixset   Derivative_LoggingFinest_CPBytes  {  require [ LoggingFinest and CPBytes]; } 
-
-mixset   Derivative_CheckpointerDaemon_CPBytes  {  require [ CheckpointerDaemon and CPBytes]; } 
-
-mixset   Derivative_LoggingFinest_CPTime  {  require [ LoggingFinest and CPTime]; } 
-
-mixset   Derivative_CPBytes_CPTime  {  require [ CPBytes and CPTime]; } 
-
-mixset   Derivative_LoggingFine_INCompressor  {  require [ LoggingFine and INCompressor]; } 
-
-mixset   Derivative_Latches_INCompressor  {  require [ Latches and INCompressor]; } 
-
-mixset   Derivative_Statistics_INCompressor  {  require [ Statistics and INCompressor]; } 
-
-mixset   Derivative_Verifier_INCompressor  {  require [ Verifier and INCompressor]; } 
-
-mixset   Derivative_LoggingCleaner_DeleteOp  {  require [ LoggingCleaner and DeleteOp]; } 
-
-mixset   Derivative_Latches_DeleteOp  {  require [ Latches and DeleteOp]; } 
-
-mixset   Derivative_Statistics_DeleteOp  {  require [ Statistics and DeleteOp]; } 
-
-mixset   Derivative_INCompressor_DeleteOp  {  require [ INCompressor and DeleteOp]; } 
-
-mixset   Derivative_LoggingFinest_TruncateOp  {  require [ LoggingFinest and TruncateOp ]; } 
-
-mixset   Derivative_Latches_TruncateOp  {  require [ LoggingFinest and TruncateOp]; } 
-
-mixset   Derivative_DeleteOp_TruncateOp  {  require [ DeleteOp and TruncateOp]; } 
-
-mixset   Derivative_Latches_RenameOp  {  require [ Latches and RenameOp]; } 
-
-mixset   Derivative_LoggingEvictor_Evictor  {  require [ LoggingEvictor and Evictor]; } 
-
-mixset   Derivative_Latches_Evictor  {  require [ Latches and Evictor]; } 
-
-mixset   Derivative_Statistics_Evictor  { require [ Statistics and Evictor]; } 
-
-mixset   Derivative_INCompressor_Evictor  {  require [ INCompressor and Evictor]; } 
-
-mixset   Derivative_DeleteOp_Evictor  {  require [ DeleteOp and Evictor]; } 
-
-mixset   Derivative_LoggingInfo_MemoryBudget  {  require [ LoggingInfo and MemoryBudget]; } 
-
-mixset   Derivative_LookAHEADCache_MemoryBudget  { require [ LookAHEADCache and MemoryBudget]; } 
-
-mixset   Derivative_Latches_MemoryBudget  {  require [ Latches and MemoryBudget]; } 
-
-mixset   Derivative_Statistics_MemoryBudget  {  require [ Statistics and MemoryBudget]; } 
-
-mixset   Derivative_DeleteOp_MemoryBudget  {  require [ DeleteOp and MemoryBudget]; } 
-
-mixset   Derivative_Evictor_MemoryBudget  {  require [ Evictor and MemoryBudget]; } 
-
-mixset   Derivative_Evictor_CriticalEviction  {  require [ Evictor and CriticalEviction]; } 
-
-mixset   Derivative_Evictor_EvictorDaemon  {  require [ Evictor and EvictorDaemon]; } 
-
-mixset   Derivative_Latches_FileHandleCache  {  require [ Latches and FileHandleCache]; } 
-
-mixset   Derivative_LoggingSevere_EnvironmentLocking  {require [ LoggingSevere and EnvironmentLocking  ]; } 
-
-mixset   Derivative_LoggingFinest_LoggingBase  { require [ LoggingFinest and LoggingBase ]; } 
-
-mixset   Derivative_LoggingFiner_LoggingBase  { require [ LoggingFiner and LoggingBase ]; } 
-
-mixset   Derivative_LoggingFine_LoggingBase  {  require [ LoggingFine and LoggingBase]; } 
-
-mixset   Derivative_LoggingSevere_LoggingBase  { require [ LoggingSevere and LoggingBase  ]; } 
-
-mixset   Derivative_LoggingRecovery_LoggingBase  { require [ LoggingRecovery and LoggingBase ]; }
-
-mixset   Derivative_LoggingCleaner_LoggingBase  { require [ LoggingCleaner and LoggingBase]; } 
-
-mixset   Derivative_LoggingFileHandler_LoggingBase  { require [ LoggingFileHandler and LoggingBase ]; } 
-
-mixset   Derivative_LoggingDbLogHandler_LoggingBase  { require [ LoggingDbLogHandler and LoggingBase  ]; } 
-
-mixset   Derivative_LoggingConsoleHandler_LoggingBase  { require [ LoggingConsoleHandler and LoggingBase ]; } 
-
-
-/*
-
-
-
-use Base;
-
-use MemoryBudget;
-
-use DeleteOp;
-
-use Evictor;
-
-use INCompressor;
-
-use CleanerDaemon;
-
-//use CPTime;
-
-use LoggingBase;
-
-use Latches;
-
-use LoggingEvictor;
-
-use FSync;
-
-use SynchronizedIO;
-
-use NIO;  use IO; use ChunkedNIO;
-
-use BTree;
-
-use Persistance;
-
-use Checkpointer;
-
-use ConcurrTrans;
-
-use IIO;
-
-use OldIO;
-
-//
-
-use Statistics;
-//use CPBytes;
-use CheckpointerDaemon;
-use EvictorDaemon;
-use LoggingCleaner;
-use Verifier;
-use LoggingDbLogHandler;
-use FileHandleCache;
-use EnvironmentLocking;
-
-use Ops;
-
-require [Base];
-require [Ops];
-require [opt MemoryBudget];
-require [BTree];
-require [opt Statistics];
-require [Persistance];
-require [ConcurrTrans];
-require [opt Logging];
-
-//require [opt DERIVATIVES];
-
-mixset Base{  }
-
-mixset MemoryBudget { }
-
-mixset Ops {
-
- require [opt TruncateOp opt RenameOp opt DeleteOP];
-
- mixset TruncateOp { } 
- 
- mixset RenameOp { }
- 
- mixset DeleteOP { } 
-}
-
-mixset BTree {
-  
-  require [opt INCompressor opt IEvictor opt  Verifier]; 
-
-  mixset INCompressor { }
-  
-  mixset IEvictor {
-  
-    require [Evictor];
-
-    require [opt CriticalEviction opt EvictorDaemon];
-
-    mixset Evictor { }
-
-    mixset CriticalEviction { }
-
-    mixset EvictorDaemon { }
-  }
-
-  mixset Verifier { }
- 
-}
-
-mixset Statistics { }
-
-mixset Persistance{
-
- // require [IICLeaner];
-  require [opt FileHandleCache];
-  require [opt DiskFullErro];
-  require [Checkpointer];
-  require [opt EnvironmentLocking];
-  require [IIO];
-
-  mixset IIO {
-  require[NewIO xor OldIO];
-
-  mixset NewIO {
-    require [opt DirectNIO];
-    require [NIOAccess];
-    mixset DirectNIO { }
-    mixset NIOAccess {  
-      require [NIO xor ChunckedNIO];
-      mixset NIO { }
-      mixset ChunckedNIO { }
-    } 
-   
-  }
-  mixset OldIO { 
-    require [opt SynchronizedIO];
-    require [IO];
-
-    mixset SynchronizedIO { } 
-    mixset IO {
-    }
-  
-}
-  require[OldIO];
-
-}
-  require [opt Checksum];
-
-
-  mixset IICLeaner {
-  require [opt LookAHEADCache];
-  require [Cleaner];
-  require [opt CleanerDaemon];
-
-  mixset LookAHEADCache{ }
-  mixset Cleaner{ }
-  mixset CleanerDaemon{ }
-   
-  }
-  
-  mixset FileHandleCache { }
-
-  mixset DiskfullErro{ }
-
-  mixset Checkpointer {
-
-  require [opt CPBytes];
-
-  require [opt CPTime];
-
-  require [opt CheckpointerDaemon]; 
-
-  mixset CPBytes { }
-
-  mixset CPTime  { }
-
-  mixset CheckpointerDaemon { }
-  
-  }
- 
-
-}
-
-mixset ConcurrTrans
-{
-  require [opt Latches opt Transactions opt CheckLeaks opt FSync ];
-  mixset Latches {  }
-  mixset Transactions  {   }
-  mixset CheckLeaks {  }
-  mixset FSync {  }
-}
-
-//require [opt Logging];
-
-mixset Logging {
-
-  require [LoggingBase];
-  require [ opt  LoggingFiner     
-     opt  LoggingConfig    
-		 opt  LoggingSevere    
-	   opt  LoggingEvictor    
-	   opt  LoggingCleaner    
-		 opt  LoggingRecovery    
-		 opt  LoggingDbLogHandler    
-	   opt  LoggingConsoleHandler    
-		 opt  LoggingInfo    
-	   opt  LoggingFileHandler    
-	   opt  LoggingFine    
-		 opt  LoggingFinest ];
-    
-  mixset  LoggingFiner { }   
-  mixset  LoggingConfig  { } 
-  mixset  LoggingSevere  { } 
-  mixset  LoggingEvictor  { } 
-  mixset  LoggingCleaner  { } 
-  mixset  LoggingRecovery  { } 
-  mixset  LoggingDbLogHandler  { } 
-  mixset  LoggingConsoleHandler  { } 
-  mixset  LoggingInfo  { } 
-  mixset  LoggingBase  { } 
-  mixset  LoggingFileHandler  { } 
-  mixset  LoggingFine  { } 
-  mixset  LoggingFinest  { } 
-				
-}
-
-// Constraints :
-
-mixset Evictor { require[MemoryBudget]; }  //Evictor or EvictorDaemon  or LookAHEADCache => MemoryBudget
-
-mixset EvictorDaemon { require[MemoryBudget]; }
-
-mixset LookAHEADCache { require[MemoryBudget]; }
-   
-mixset CriticalEviction { require[INCompressor]; }  // CriticalEviction	=>	INCompressor 
-
-mixset CPBytes{ require[CPTime]; } //	CPBytes => CPTime
-
-mixset DeleteOp { require [Evictor and INCompressor and MemoryBudget]; } //DeleteOp ==> Evictor and INCompressor and MemoryBudget
-
-mixset MemoryBudget { require [Evictor and Latches]; } //MemoryBudget ==> Evictor and Latches
- 
-mixset TruncateOp { require[DeleteOp]; } // TruncateOp ==> DeleteOp
-
-mixset Verifier{  require[INCompressor];    }  // Verifier ==> INCompressor
-
-
-
-
-
-
-*/
-
-
