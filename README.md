@@ -11,7 +11,7 @@ There two simple requirements :
 
  
 ## Usage
- Use Umple command line : `java -jar UMPLE_JAR_DIR/umple.jar BerkeleyDb_DIR/src/MainUmpleMaster.ump` to generate an SPL variant. Where UMPLE_JAR_DIR is the directory containing umple.jar and BerkeleyDb_DIR is the directory containing this repo code. 
+ Use Umple command line : `java -jar UMPLE_JAR_DIR/umple.jar BerkeleyDb_DIR/src/umpleMaster.ump` to generate an SPL variant. Where UMPLE_JAR_DIR is the directory containing umple.jar and BerkeleyDb_DIR is the directory containing this repo code. The SPL variant is specified in 'src/configuration/SPLVariaintConfig.ump'. 
  
 To run Berkelely DB JE 3.0.12 (Code generated in Java), there are three requirements: 
  1. ant (you can use ant-1.8.2.jar).  
