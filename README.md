@@ -2,7 +2,7 @@
 # Berkeley DB (Umple)
 
 ## Description
-This repo offers Umple SPL (compositional) version of Berkeley DB JE. It was refactored from a version written in FeatureHouse. Mixsets are used to represent features of the SPL of Berkeley DB. Initial translation to Umple was accomplished by Umplificator. Then we transformed each feature’s fragments written in FeatureHouse code into mixset fragments.
+This repo offers an SPL compositional version of Berkeley DB JE writen in Umple. It was refactored from a FeatureHouse implementaion. Mixsets are used to represent the features of the Berkeley DB. Initial translation to Umple was accomplished by Umplificator. Then each each feature’s fragments are refactored into mixset fragments.
 
 ##  Installation
 There two simple requirements : 
