@@ -1,4 +1,4 @@
-commands used to extract info:
+grep commands used to extract info:
 ===================================================
 *** return workarounds 
 commands: 
